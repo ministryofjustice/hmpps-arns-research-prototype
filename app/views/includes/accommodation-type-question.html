@@ -1,0 +1,160 @@
+{# Set qIndex (1–5). First copy uses original IDs/names for form JS. #}
+{% set suffix = qIndex if qIndex > 1 else "" %}
+{% set accommodationName = "accommodation" if qIndex == 1 else "accommodation" ~ qIndex %}
+
+<div class="assessment-layout__question-block">
+  {% include "includes/assessment-question-header.html" %}
+
+  <div class="govuk-form-group">
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+        {{ questionTitle }}
+      </legend>
+
+      <div class="govuk-radios" data-module="govuk-radios">
+
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="accommodation_settled{{ suffix }}" name="{{ accommodationName }}" type="radio" value="Settled" data-aria-controls="settled-conditional{{ suffix }}">
+          <label class="govuk-label govuk-radios__label" for="accommodation_settled{{ suffix }}">Settled</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="settled-conditional{{ suffix }}">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-visually-hidden">Settled accommodation type</legend>
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="settled_homeowner{{ suffix }}" name="settled_type{{ suffix }}" type="radio" value="Homeowner">
+                <label class="govuk-label govuk-radios__label" for="settled_homeowner{{ suffix }}">Homeowner</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="settled_friends_family{{ suffix }}" name="settled_type{{ suffix }}" type="radio" value="Living with friends or family">
+                <label class="govuk-label govuk-radios__label" for="settled_friends_family{{ suffix }}">Living with friends or family</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="settled_renting_private{{ suffix }}" name="settled_type{{ suffix }}" type="radio" value="Renting privately">
+                <label class="govuk-label govuk-radios__label" for="settled_renting_private{{ suffix }}">Renting privately</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="settled_renting_social{{ suffix }}" name="settled_type{{ suffix }}" type="radio" value="Renting from social, local authority or other">
+                <label class="govuk-label govuk-radios__label" for="settled_renting_social{{ suffix }}">Renting from social, local authority or other</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="settled_healthcare{{ suffix }}" name="settled_type{{ suffix }}" type="radio" value="Residential healthcare">
+                <label class="govuk-label govuk-radios__label" for="settled_healthcare{{ suffix }}">Residential healthcare</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="settled_supported{{ suffix }}" name="settled_type{{ suffix }}" type="radio" value="Supported accommodation">
+                <label class="govuk-label govuk-radios__label" for="settled_supported{{ suffix }}">Supported accommodation</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="settled_unknown{{ suffix }}" name="settled_type{{ suffix }}" type="radio" value="Unknown" data-aria-controls="settled-unknown-details-conditional{{ suffix }}">
+                <label class="govuk-label govuk-radios__label" for="settled_unknown{{ suffix }}">Unknown</label>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="settled-unknown-details-conditional{{ suffix }}">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="settled_unknown_details{{ suffix }}">Give details (optional)</label>
+                  <div class="govuk-hint">You can enter up to 2,000 characters</div>
+                  <textarea class="govuk-textarea" id="settled_unknown_details{{ suffix }}" name="settled_unknown_details{{ suffix }}" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="accommodation_temporary{{ suffix }}" name="{{ accommodationName }}" type="radio" value="Temporary" data-aria-controls="temporary-conditional{{ suffix }}">
+          <label class="govuk-label govuk-radios__label" for="accommodation_temporary{{ suffix }}">Temporary</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="temporary-conditional{{ suffix }}">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-visually-hidden">Temporary accommodation type</legend>
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="temporary_approved_premises{{ suffix }}" name="temporary_type{{ suffix }}" type="radio" value="Approved premises">
+                <label class="govuk-label govuk-radios__label" for="temporary_approved_premises{{ suffix }}">Approved premises</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="temporary_cas2{{ suffix }}" name="temporary_type{{ suffix }}" type="radio" value="Community Accommodation Service Tier 2 (CAS2)">
+                <label class="govuk-label govuk-radios__label" for="temporary_cas2{{ suffix }}">Community Accommodation Service Tier 2 (CAS2)</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="temporary_cas3{{ suffix }}" name="temporary_type{{ suffix }}" type="radio" value="Community Accommodation Service Tier 3 (CAS3)">
+                <label class="govuk-label govuk-radios__label" for="temporary_cas3{{ suffix }}">Community Accommodation Service Tier 3 (CAS3)</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="temporary_immigration{{ suffix }}" name="temporary_type{{ suffix }}" type="radio" value="Immigration accommodation" aria-describedby="temporary_immigration-hint{{ suffix }}">
+                <label class="govuk-label govuk-radios__label" for="temporary_immigration{{ suffix }}">Immigration accommodation</label>
+                <div id="temporary_immigration-hint{{ suffix }}" class="govuk-hint govuk-radios__hint">
+                  <p class="govuk-!-margin-bottom-2">This includes:</p>
+                  <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+                    <li>Schedule 10 – Home Office provides accommodation under the Immigration Act 2016</li>
+                    <li>Section 4 – Home Office provides accommodation for those on immigration bail, prior to the Immigration Act 2016</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="temporary_short_term{{ suffix }}" name="temporary_type{{ suffix }}" type="radio" value="Short term accommodation" aria-describedby="temporary_short_term-hint{{ suffix }}">
+                <label class="govuk-label govuk-radios__label" for="temporary_short_term{{ suffix }}">Short term accommodation</label>
+                <div id="temporary_short_term-hint{{ suffix }}" class="govuk-hint govuk-radios__hint">Includes living with friends or family, or in a hotel</div>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="temporary_unknown{{ suffix }}" name="temporary_type{{ suffix }}" type="radio" value="Unknown" data-aria-controls="temporary-unknown-details-conditional{{ suffix }}">
+                <label class="govuk-label govuk-radios__label" for="temporary_unknown{{ suffix }}">Unknown</label>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="temporary-unknown-details-conditional{{ suffix }}">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="temporary_unknown_details{{ suffix }}">Give details (optional)</label>
+                  <div class="govuk-hint">You can enter up to 2,000 characters</div>
+                  <textarea class="govuk-textarea" id="temporary_unknown_details{{ suffix }}" name="temporary_unknown_details{{ suffix }}" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="accommodation_none{{ suffix }}" name="{{ accommodationName }}" type="radio" value="No accommodation" data-aria-controls="none-conditional{{ suffix }}">
+          <label class="govuk-label govuk-radios__label" for="accommodation_none{{ suffix }}">No accommodation</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="none-conditional{{ suffix }}">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-visually-hidden">No accommodation type</legend>
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="none_campsite{{ suffix }}" name="none_type{{ suffix }}" type="radio" value="Campsite">
+                <label class="govuk-label govuk-radios__label" for="none_campsite{{ suffix }}">Campsite</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="none_emergency_hostel{{ suffix }}" name="none_type{{ suffix }}" type="radio" value="Emergency hostel">
+                <label class="govuk-label govuk-radios__label" for="none_emergency_hostel{{ suffix }}">Emergency hostel</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="none_homeless{{ suffix }}" name="none_type{{ suffix }}" type="radio" value="Homeless">
+                <label class="govuk-label govuk-radios__label" for="none_homeless{{ suffix }}">Homeless <span class="govuk-hint govuk-!-display-inline">(includes squatting)</span></label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="none_rough_sleeping{{ suffix }}" name="none_type{{ suffix }}" type="radio" value="Rough sleeping">
+                <label class="govuk-label govuk-radios__label" for="none_rough_sleeping{{ suffix }}">Rough sleeping</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="none_shelter{{ suffix }}" name="none_type{{ suffix }}" type="radio" value="Shelter">
+                <label class="govuk-label govuk-radios__label" for="none_shelter{{ suffix }}">Shelter</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="none_unknown{{ suffix }}" name="none_type{{ suffix }}" type="radio" value="Unknown" data-aria-controls="none-unknown-details-conditional{{ suffix }}">
+                <label class="govuk-label govuk-radios__label" for="none_unknown{{ suffix }}">Unknown</label>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="none-unknown-details-conditional{{ suffix }}">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="none_unknown_details{{ suffix }}">Give details (optional)</label>
+                  <div class="govuk-hint">You can enter up to 2,000 characters</div>
+                  <textarea class="govuk-textarea" id="none_unknown_details{{ suffix }}" name="none_unknown_details{{ suffix }}" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+      </div>
+    </fieldset>
+  </div>
+</div>

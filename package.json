@@ -1,12 +1,18 @@
 {
+  "name": "hmpps-arns-prison-prototype",
+  "description": "GOV.UK Prototype Kit prototype for the CSRP assessment (ARNS service)",
   "scripts": {
     "dev": "govuk-prototype-kit dev",
     "serve": "govuk-prototype-kit serve",
     "start": "govuk-prototype-kit start"
   },
+  "engines": {
+    "node": ">=24"
+  },
   "dependencies": {
     "@govuk-prototype-kit/common-templates": "3.0.0",
+    "@ministryofjustice/frontend": "^9.0.0",
     "govuk-frontend": "6.1.0",
-    "govuk-prototype-kit": "13.20.0"
+    "govuk-prototype-kit": "13.20.1"
   }
 }

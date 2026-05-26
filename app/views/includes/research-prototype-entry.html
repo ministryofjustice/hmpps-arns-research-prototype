@@ -1,0 +1,9 @@
+{# Set href, title, and hint before including #}
+<li class="assessment-research-prototypes__item">
+  <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
+    <a href="{{ href }}" class="govuk-link"{% if clearSessionOnStart %} data-clear-session-on-start{% endif %}>{{ title }}</a>
+  </h2>
+  {% if hint %}
+    <p class="govuk-hint govuk-!-margin-top-0 govuk-!-margin-bottom-0">{{ hint }}</p>
+  {% endif %}
+</li>

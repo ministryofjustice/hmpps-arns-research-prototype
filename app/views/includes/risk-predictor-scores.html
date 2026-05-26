@@ -1,0 +1,23 @@
+{# Combined serious reoffending predictor only #}
+{% set offenderFirstName = offenderFirstName or "Alex" %}
+
+<div class="risk-predictor-scores govuk-body" data-module="risk-predictor-scores">
+
+  <section class="risk-predictor-scores__section" role="region" aria-labelledby="csrp-heading">
+    <p class="govuk-!-margin-top-0 govuk-!-margin-bottom-4">
+      Fewer than 1 in 100 people (0.89%) with a similar profile to {{ offenderFirstName }} will get a sanction for a
+      seriously harmful offence they commit within two years. This puts {{ offenderFirstName }} in the low risk band.
+    </p>
+    <div class="risk-predictor-scores__scale">
+      <img
+        class="risk-predictor-scores__scale-image"
+        src="/public/images/scale.png"
+        alt="A linear gauge chart showing the Combined serious reoffending predictor score is 0.89%. This is in the LOW band. Below 1% is low, 1% to below 3% is medium, 3% to below 6.9% is high, 6.9% to 25% or above is very high."
+        width="1648"
+        height="552"
+        decoding="async"
+      >
+    </div>
+  </section>
+
+</div>

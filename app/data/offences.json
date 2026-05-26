@@ -1,0 +1,352 @@
+[
+  {
+    "id": "category-theft",
+    "label": "Theft offences",
+    "code": "TH",
+    "category": "Theft and handling stolen goods",
+    "subOffenceCount": 4,
+    "searchTerms": ["theft", "th", "steal", "stolen"],
+    "subOffences": [
+      { "id": "th68001", "label": "Theft from a shop", "code": "TH68001" },
+      { "id": "th68002", "label": "Theft from employer", "code": "TH68002" },
+      { "id": "th68003", "label": "Theft of a motor vehicle", "code": "TH68003" },
+      { "id": "th68004", "label": "Handling stolen goods", "code": "TH68004" }
+    ]
+  },
+  {
+    "id": "category-burglary",
+    "label": "Burglary offences",
+    "code": "BU",
+    "category": "Burglary",
+    "subOffenceCount": 3,
+    "searchTerms": ["burglary", "bu", "break in"],
+    "subOffences": [
+      { "id": "bu86001", "label": "Burglary in a dwelling", "code": "BU86001" },
+      { "id": "bu86002", "label": "Burglary in a building other than a dwelling", "code": "BU86002" },
+      { "id": "bu86003", "label": "Aggravated burglary", "code": "BU86003" }
+    ]
+  },
+  {
+    "id": "category-robbery",
+    "label": "Robbery offences",
+    "code": "RO",
+    "category": "Robbery",
+    "subOffenceCount": 3,
+    "searchTerms": ["robbery", "ro", "mugging"],
+    "subOffences": [
+      { "id": "ro71001", "label": "Robbery of personal property", "code": "RO71001" },
+      { "id": "ro71002", "label": "Robbery of business property", "code": "RO71002" },
+      { "id": "ro71003", "label": "Robbery involving a weapon", "code": "RO71003" }
+    ]
+  },
+  {
+    "id": "category-assault",
+    "label": "Assault offences",
+    "code": "AS",
+    "category": "Violence against the person",
+    "subOffenceCount": 5,
+    "searchTerms": ["assault", "as", "violence", "battery"],
+    "subOffences": [
+      { "id": "as61101", "label": "Common assault", "code": "AS61101" },
+      { "id": "as61102", "label": "Assault by beating", "code": "AS61102" },
+      { "id": "as61103", "label": "Assault occasioning actual bodily harm", "code": "AS61103" },
+      { "id": "as61104", "label": "Assault with intent to resist arrest", "code": "AS61104" },
+      { "id": "as61105", "label": "Assault on an emergency worker", "code": "AS61105" }
+    ]
+  },
+  {
+    "id": "category-drugs",
+    "label": "Drug offences",
+    "code": "MD",
+    "category": "Drugs",
+    "subOffenceCount": 6,
+    "searchTerms": ["drugs", "md", "cannabis", "cocaine", "possession", "supply"],
+    "subOffences": [
+      { "id": "md71501", "label": "Possession of a controlled drug (Class A)", "code": "MD71501" },
+      { "id": "md71502", "label": "Possession of a controlled drug (Class B)", "code": "MD71502" },
+      { "id": "md71503", "label": "Possession of a controlled drug (Class C)", "code": "MD71503" },
+      { "id": "md71504", "label": "Supply of a controlled drug", "code": "MD71504" },
+      { "id": "md71505", "label": "Production of a controlled drug", "code": "MD71505" },
+      { "id": "md71506", "label": "Importation of a controlled drug", "code": "MD71506" }
+    ]
+  },
+  {
+    "id": "category-public-order",
+    "label": "Public order offences",
+    "code": "PO",
+    "category": "Public order",
+    "subOffenceCount": 4,
+    "searchTerms": ["public order", "po", "disorder", "affray"],
+    "subOffences": [
+      { "id": "po81001", "label": "Affray", "code": "PO81001" },
+      { "id": "po81002", "label": "Violent disorder", "code": "PO81002" },
+      { "id": "po81003", "label": "Threatening behaviour", "code": "PO81003" },
+      { "id": "po81004", "label": "Breach of a criminal behaviour order", "code": "PO81004" }
+    ]
+  },
+  {
+    "id": "category-driving",
+    "label": "Driving offences",
+    "code": "DR",
+    "category": "Motoring",
+    "subOffenceCount": 5,
+    "searchTerms": ["driving", "dr", "motoring", "vehicle", "disqualified"],
+    "subOffences": [
+      { "id": "dr91001", "label": "Driving whilst disqualified", "code": "DR91001" },
+      { "id": "dr91002", "label": "Driving without insurance", "code": "DR91002" },
+      { "id": "dr91003", "label": "Driving without a licence", "code": "DR91003" },
+      { "id": "dr91004", "label": "Dangerous driving", "code": "DR91004" },
+      { "id": "dr91005", "label": "Failure to provide a specimen", "code": "DR91005" }
+    ]
+  },
+  {
+    "id": "category-fraud",
+    "label": "Fraud offences",
+    "code": "FR",
+    "category": "Fraud",
+    "subOffenceCount": 4,
+    "searchTerms": ["fraud", "fr", "false accounting", "benefit"],
+    "subOffences": [
+      { "id": "fr92001", "label": "Fraud by false representation", "code": "FR92001" },
+      { "id": "fr92002", "label": "Fraud by failing to disclose information", "code": "FR92002" },
+      { "id": "fr92003", "label": "Benefit fraud", "code": "FR92003" },
+      { "id": "fr92004", "label": "Possession of articles for use in fraud", "code": "FR92004" }
+    ]
+  },
+  {
+    "id": "category-criminal-damage",
+    "label": "Criminal damage offences",
+    "code": "CD",
+    "category": "Criminal damage",
+    "subOffenceCount": 3,
+    "searchTerms": ["criminal damage", "cd", "arson", "vandalism"],
+    "subOffences": [
+      { "id": "cd93001", "label": "Criminal damage to property", "code": "CD93001" },
+      { "id": "cd93002", "label": "Arson", "code": "CD93002" },
+      { "id": "cd93003", "label": "Racially or religiously aggravated criminal damage", "code": "CD93003" }
+    ]
+  },
+  {
+    "id": "category-weapons",
+    "label": "Weapons offences",
+    "code": "WP",
+    "category": "Weapons",
+    "subOffenceCount": 4,
+    "searchTerms": ["weapons", "wp", "knife", "blade", "firearm"],
+    "subOffences": [
+      { "id": "wp94001", "label": "Possession of an offensive weapon", "code": "WP94001" },
+      { "id": "wp94002", "label": "Possession of a bladed article", "code": "WP94002" },
+      { "id": "wp94003", "label": "Possession of a firearm", "code": "WP94003" },
+      { "id": "wp94004", "label": "Threatening with a bladed article", "code": "WP94004" }
+    ]
+  },
+  {
+    "id": "category-harassment",
+    "label": "Harassment and stalking offences",
+    "code": "HS",
+    "category": "Harassment and stalking",
+    "subOffenceCount": 3,
+    "searchTerms": ["harassment", "hs", "stalking", "coercive"],
+    "subOffences": [
+      { "id": "hs95001", "label": "Harassment", "code": "HS95001" },
+      { "id": "hs95002", "label": "Stalking", "code": "HS95002" },
+      { "id": "hs95003", "label": "Controlling or coercive behaviour", "code": "HS95003" }
+    ]
+  },
+  {
+    "id": "of61101",
+    "label": "Common assault",
+    "code": "OF61101",
+    "category": "Violence against the person",
+    "searchTerms": ["common assault", "of61101", "assault"]
+  },
+  {
+    "id": "of61201",
+    "label": "Wounding with intent",
+    "code": "OF61201",
+    "category": "Violence against the person",
+    "searchTerms": ["wounding", "of61201", "gbh"]
+  },
+  {
+    "id": "of61301",
+    "label": "Manslaughter",
+    "code": "OF61301",
+    "category": "Violence against the person",
+    "searchTerms": ["manslaughter", "of61301"]
+  },
+  {
+    "id": "of61401",
+    "label": "Murder",
+    "code": "OF61401",
+    "category": "Violence against the person",
+    "searchTerms": ["murder", "of61401"]
+  },
+  {
+    "id": "of62001",
+    "label": "Threats to kill",
+    "code": "OF62001",
+    "category": "Violence against the person",
+    "searchTerms": ["threats to kill", "of62001"]
+  },
+  {
+    "id": "of63001",
+    "label": "Kidnapping",
+    "code": "OF63001",
+    "category": "Violence against the person",
+    "searchTerms": ["kidnapping", "of63001"]
+  },
+  {
+    "id": "of64001",
+    "label": "False imprisonment",
+    "code": "OF64001",
+    "category": "Violence against the person",
+    "searchTerms": ["false imprisonment", "of64001"]
+  },
+  {
+    "id": "sx70101",
+    "label": "Sexual assault",
+    "code": "SX70101",
+    "category": "Sexual offences",
+    "searchTerms": ["sexual assault", "sx70101"]
+  },
+  {
+    "id": "sx70201",
+    "label": "Rape",
+    "code": "SX70201",
+    "category": "Sexual offences",
+    "searchTerms": ["rape", "sx70201"]
+  },
+  {
+    "id": "sx70301",
+    "label": "Sexual activity with a child",
+    "code": "SX70301",
+    "category": "Sexual offences",
+    "searchTerms": ["sexual activity", "sx70301", "child"]
+  },
+  {
+    "id": "sx70401",
+    "label": "Indecent images offence",
+    "code": "SX70401",
+    "category": "Sexual offences",
+    "searchTerms": ["indecent images", "sx70401"]
+  },
+  {
+    "id": "cy80101",
+    "label": "Breach of a restraining order",
+    "code": "CY80101",
+    "category": "Breach offences",
+    "searchTerms": ["restraining order", "cy80101", "breach"]
+  },
+  {
+    "id": "cy80201",
+    "label": "Breach of a non-molestation order",
+    "code": "CY80201",
+    "category": "Breach offences",
+    "searchTerms": ["non-molestation", "cy80201", "breach"]
+  },
+  {
+    "id": "cy80301",
+    "label": "Breach of bail conditions",
+    "code": "CY80301",
+    "category": "Breach offences",
+    "searchTerms": ["bail", "cy80301", "breach"]
+  },
+  {
+    "id": "cy80401",
+    "label": "Failure to surrender to bail",
+    "code": "CY80401",
+    "category": "Breach offences",
+    "searchTerms": ["surrender", "cy80401", "bail"]
+  },
+  {
+    "id": "im90101",
+    "label": "Obstruction of a police officer",
+    "code": "IM90101",
+    "category": "Miscellaneous",
+    "searchTerms": ["obstruction", "im90101", "police"]
+  },
+  {
+    "id": "im90201",
+    "label": "Escape from lawful custody",
+    "code": "IM90201",
+    "category": "Miscellaneous",
+    "searchTerms": ["escape", "im90201", "custody"]
+  },
+  {
+    "id": "im90301",
+    "label": "Perverting the course of justice",
+    "code": "IM90301",
+    "category": "Miscellaneous",
+    "searchTerms": ["perverting", "im90301", "justice"]
+  },
+  {
+    "id": "im90401",
+    "label": "Witness intimidation",
+    "code": "IM90401",
+    "category": "Miscellaneous",
+    "searchTerms": ["witness", "im90401", "intimidation"]
+  },
+  {
+    "id": "im90501",
+    "label": "Absconding from lawful custody",
+    "code": "IM90501",
+    "category": "Miscellaneous",
+    "searchTerms": ["absconding", "im90501"]
+  },
+  {
+    "id": "im90601",
+    "label": "Failure to comply with a supervision requirement",
+    "code": "IM90601",
+    "category": "Miscellaneous",
+    "searchTerms": ["supervision", "im90601", "probation"]
+  },
+  {
+    "id": "fa96001",
+    "label": "Going equipped for theft",
+    "code": "FA96001",
+    "category": "Theft and handling stolen goods",
+    "searchTerms": ["going equipped", "fa96001", "theft"]
+  },
+  {
+    "id": "fa96002",
+    "label": "Making off without payment",
+    "code": "FA96002",
+    "category": "Theft and handling stolen goods",
+    "searchTerms": ["making off", "fa96002", "payment"]
+  },
+  {
+    "id": "co97001",
+    "label": "Blackmail",
+    "code": "CO97001",
+    "category": "Miscellaneous",
+    "searchTerms": ["blackmail", "co97001"]
+  },
+  {
+    "id": "co97002",
+    "label": "Conspiracy to commit an offence",
+    "code": "CO97002",
+    "category": "Miscellaneous",
+    "searchTerms": ["conspiracy", "co97002"]
+  },
+  {
+    "id": "co97003",
+    "label": "Attempting to commit an offence",
+    "code": "CO97003",
+    "category": "Miscellaneous",
+    "searchTerms": ["attempting", "co97003", "attempt"]
+  },
+  {
+    "id": "co97004",
+    "label": "Aiding and abetting an offence",
+    "code": "CO97004",
+    "category": "Miscellaneous",
+    "searchTerms": ["aiding", "abetting", "co97004"]
+  },
+  {
+    "id": "co97005",
+    "label": "Incitement to commit an offence",
+    "code": "CO97005",
+    "category": "Miscellaneous",
+    "searchTerms": ["incitement", "co97005"]
+  }
+]

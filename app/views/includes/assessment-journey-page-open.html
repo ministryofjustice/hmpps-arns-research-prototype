@@ -1,0 +1,18 @@
+<div class="assessment-layout">
+  {% if backLinkHref %}
+  <a href="{{ backLinkHref }}" class="govuk-back-link govuk-!-margin-bottom-4">{{ backLinkText | default('Back') }}</a>
+  {% endif %}
+  {% include "includes/assessment-offender-header.html" %}
+  {% if not hideJourneyServiceHeader %}
+  {% include "includes/assessment-service-header-journey.html" %}
+  {% endif %}
+
+  <div class="govuk-grid-row assessment-layout__content-row{% if hideSideNav %} assessment-layout__content-row--no-nav{% endif %}">
+    {% if not hideSideNav %}
+    <div class="govuk-grid-column-one-third-from-desktop assessment-layout__nav-column">
+      <div class="assessment-layout__nav-sticky">
+        {% include "includes/assessment-side-navigation.html" %}
+      </div>
+    </div>
+    {% endif %}
+    <div class="{% if hideSideNav %}govuk-grid-column-full{% else %}govuk-grid-column-two-thirds-from-desktop{% endif %}">
