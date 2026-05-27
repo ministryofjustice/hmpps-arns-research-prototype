@@ -1,0 +1,61 @@
+<details class="govuk-details govuk-!-margin-top-6 govuk-!-margin-bottom-0">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">If you are unsure if an offence is classed as violent</span>
+  </summary>
+  <div class="govuk-details__text">
+    <div data-module="violent-offence-check">
+      <h3 class="govuk-heading-s govuk-!-margin-top-0 govuk-!-margin-bottom-4">Enter the offence name</h3>
+
+      <div class="violent-offence-check__search-row" data-violent-check-search>
+        <div
+          class="offence-autocomplete offence-autocomplete--check"
+          data-offence-search-check
+        >
+          <div data-offence-search-panel>
+            <div class="govuk-form-group offence-autocomplete__combobox govuk-!-margin-bottom-0">
+              <label class="govuk-label govuk-visually-hidden" for="violent-offence-check-search-input">
+                Enter the offence name
+              </label>
+              <input
+                class="govuk-input"
+                id="violent-offence-check-search-input"
+                name="violent_offence_check_search"
+                type="text"
+                spellcheck="false"
+                autocomplete="off"
+                role="combobox"
+                aria-autocomplete="list"
+                aria-expanded="false"
+                aria-controls="violent-offence-check-search-listbox"
+                data-offence-search-input
+              >
+              <ul
+                id="violent-offence-check-search-listbox"
+                class="offence-autocomplete__menu"
+                role="listbox"
+                data-offence-search-listbox
+                hidden
+              ></ul>
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="govuk-button govuk-button--secondary violent-offence-check__check-button"
+          data-violent-check-submit
+          data-module="govuk-button"
+        >
+          Check offence
+        </button>
+      </div>
+
+      <div class="violent-offence-check__result" data-violent-check-result hidden>
+        <p class="govuk-body govuk-!-margin-bottom-2">
+          <strong data-violent-check-offence-name></strong>
+        </p>
+        <p class="violent-offence-check__classification govuk-!-margin-bottom-0">Not classified as violent</p>
+      </div>
+    </div>
+  </div>
+</details>

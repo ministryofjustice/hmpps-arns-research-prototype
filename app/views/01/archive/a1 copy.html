@@ -1,0 +1,35 @@
+{% extends "layouts/assessment.html" %}
+
+{% set pageName = "Accommodation – type before custody" %}
+{% set activeSection = "accommodation" %}
+{% set sectionTitle = "Accommodation" %}
+{% set questionTitle = "What type of accommodation did Alex have before custody?" %}
+{% set statusTag = "Incomplete" %}
+
+{% block content %}
+
+{% include "includes/assessment-page-open.html" %}
+
+<div id="accommodation-a1-error-summary" class="govuk-error-summary" data-module="govuk-error-summary" tabindex="-1" hidden>
+  <div role="alert">
+    <h2 class="govuk-error-summary__title">There is a problem</h2>
+    <div class="govuk-error-summary__body"></div>
+  </div>
+</div>
+
+<form id="accommodation-a1-form" novalidate>
+
+  {% for qIndex in range(1, 6) %}
+    {% include "includes/accommodation-type-question.html" %}
+    {% if qIndex < 5 %}
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible assessment-layout__question-divider">
+    {% endif %}
+  {% endfor %}
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

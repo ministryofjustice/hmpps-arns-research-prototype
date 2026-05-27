@@ -1,0 +1,99 @@
+{# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
+
+<div class="offence-autocomplete__selected-box govuk-!-margin-bottom-8" data-csrp-previous-offence hidden>
+  <div class="offence-autocomplete__selected-name-row">
+    <p class="govuk-body offence-autocomplete__selected-label govuk-!-margin-bottom-0" data-csrp-previous-offence-label></p>
+    <a class="govuk-link offence-autocomplete__change-link" href="a1.html#csrp-current-offence" data-csrp-change-offence>Change offence</a>
+  </div>
+  <p class="govuk-body offence-autocomplete__selected-code govuk-!-margin-bottom-0" data-csrp-previous-offence-code hidden></p>
+</div>
+
+<h2 id="csrp-first-sanction-age" class="govuk-heading-m csrp-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  How old was {{ offenderFirstName }} when they received their first sanction?
+</h2>
+
+<div class="govuk-form-group govuk-!-margin-bottom-8">
+  <label class="govuk-label govuk-visually-hidden" for="first-sanction-age">
+    How old was {{ offenderFirstName }} when they received their first sanction?
+  </label>
+  <input
+    class="govuk-input govuk-input--width-4"
+    id="first-sanction-age"
+    name="first_sanction_age"
+    type="text"
+    inputmode="numeric"
+    autocomplete="off"
+  >
+</div>
+
+<h2 id="csrp-total-sanctions" class="govuk-heading-m csrp-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  How many sanctions does {{ offenderFirstName }} have in total for all offences?
+</h2>
+
+<p id="total-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
+  Include convictions, conditional discharges, absolute discharges, cautions, reprimands, final warnings, and the current offence.
+</p>
+
+<div class="govuk-form-group govuk-!-margin-bottom-8">
+  <label class="govuk-label govuk-visually-hidden" for="total-sanctions">
+    How many sanctions does {{ offenderFirstName }} have in total for all offences?
+  </label>
+  <input
+    class="govuk-input govuk-input--width-4"
+    id="total-sanctions"
+    name="total_sanctions"
+    type="text"
+    inputmode="numeric"
+    autocomplete="off"
+    aria-describedby="total-sanctions-hint"
+  >
+</div>
+
+<h2 id="csrp-violent-sanctions" class="govuk-heading-m csrp-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  How many of {{ offenderFirstName }}'s total sanctions involved violent offences?
+</h2>
+
+<div class="govuk-form-group govuk-!-margin-bottom-0">
+  <label class="govuk-label govuk-visually-hidden" for="violent-sanctions-other">
+    How many of {{ offenderFirstName }}'s total sanctions involved violent offences?
+  </label>
+  <input
+    class="govuk-input govuk-input--width-4"
+    id="violent-sanctions-other"
+    name="violent_sanctions_other"
+    type="text"
+    inputmode="numeric"
+    autocomplete="off"
+  >
+</div>
+
+{% include "includes/violent-offence-check.html" %}
+
+<h2 id="csrp-sexual-offence" class="govuk-heading-m csrp-question-anchor govuk-!-margin-top-8 govuk-!-margin-bottom-2">
+  Has {{ offenderFirstName }} ever committed a sexual or sexually motivated offence?
+</h2>
+
+<div class="govuk-form-group">
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      Has {{ offenderFirstName }} ever committed a sexual or sexually motivated offence?
+    </legend>
+    <div id="sexual-offence-hint" class="govuk-hint">
+      This includes their current offence.
+    </div>
+    <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="sexual-offence-yes" name="sexual_offence" type="radio" value="yes" aria-describedby="sexual-offence-hint">
+        <label class="govuk-label govuk-radios__label" for="sexual-offence-yes">Yes</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="sexual-offence-no" name="sexual_offence" type="radio" value="no">
+        <label class="govuk-label govuk-radios__label" for="sexual-offence-no">No</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="sexual-offence-unknown" name="sexual_offence" type="radio" value="unknown">
+        <label class="govuk-label govuk-radios__label" for="sexual-offence-unknown">Unknown</label>
+      </div>
+    </div>
+  </fieldset>
+</div>

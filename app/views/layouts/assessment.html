@@ -1,0 +1,31 @@
+{#
+  CSRP assessment pages – hides Manage your prototype and Clear data in the footer
+#}
+
+{% extends "layouts/csrp-branded.njk" %}
+
+{% set bodyClasses = "assessment-page" %}
+
+{% from "govuk/components/footer/macro.njk" import govukFooter %}
+
+{% block govukFooter %}
+  {{ govukFooter({
+    meta: {
+      items: [],
+      visuallyHiddenTitle: "Footer links"
+    }
+  }) }}
+{% endblock %}
+
+{% block footer %}
+  {% if pluginVersionSatisfies("govuk-frontend", ">=6.0.0") %}
+    {{ super() }}
+  {% else %}
+    {{ govukFooter({
+      meta: {
+        items: [],
+        visuallyHiddenTitle: "Footer links"
+      }
+    }) }}
+  {% endif %}
+{% endblock %}

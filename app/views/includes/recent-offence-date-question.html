@@ -1,0 +1,36 @@
+{# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
+
+<h2 id="csrp-recent-offence-date" class="govuk-heading-m csrp-question-anchor govuk-!-margin-top-6 govuk-!-margin-bottom-2">
+  What is the date of {{ offenderFirstName }}'s most recent offence?
+</h2>
+
+<div class="govuk-form-group">
+  <fieldset class="govuk-fieldset" role="group" aria-describedby="recent-offence-date-hint">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      What is the date of {{ offenderFirstName }}'s most recent offence?
+    </legend>
+    <div id="recent-offence-date-hint" class="govuk-hint">
+      For example, 27 3 2024
+    </div>
+    <div class="govuk-date-input" id="recent-offence-date" data-autofill-date="yesterday">
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="recent-offence-date-day">Day</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="recent-offence-date-day" name="recent_offence_date_day" type="text" inputmode="numeric" autocomplete="off" data-date-part="day">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="recent-offence-date-month">Month</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="recent-offence-date-month" name="recent_offence_date_month" type="text" inputmode="numeric" autocomplete="off" data-date-part="month">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="recent-offence-date-year">Year</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="recent-offence-date-year" name="recent_offence_date_year" type="text" inputmode="numeric" autocomplete="off" data-date-part="year">
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>

@@ -1,0 +1,12 @@
+<div class="assessment-layout assessment-home-page-open">
+  {% include "includes/assessment-service-header.html" %}
+
+  <div class="govuk-grid-row assessment-layout__content-row{% if hideSideNav %} assessment-layout__content-row--no-nav{% endif %}">
+    {% if not hideSideNav %}
+    <div class="govuk-grid-column-one-third-from-desktop assessment-layout__nav-column">
+      <div class="assessment-layout__nav-sticky">
+        {% include "includes/assessment-side-navigation.html" %}
+      </div>
+    </div>
+    {% endif %}
+    <div class="{% if hideSideNav %}govuk-grid-column-full{% else %}govuk-grid-column-two-thirds-from-desktop{% endif %}">

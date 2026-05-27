@@ -1,0 +1,32 @@
+{% extends "layouts/assessment.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set offenderFullName = "Alex Smith" %}
+{% set pageName = "Risk predictor score" %}
+{% set activeSection = "section-1" %}
+{% set pageHeading = "Risk predictor score" %}
+{% set statusTag = "Complete" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<a href="a7.html" class="govuk-back-link govuk-!-margin-bottom-4">Back</a>
+
+{% include "includes/assessment-question-header.html" %}
+
+<div class="risk-predictor-scores__page-hint govuk-!-margin-top-2 govuk-!-margin-bottom-6">
+  <h2 class="govuk-heading-m govuk-!-margin-bottom-0" id="csrp-heading">Combined serious reoffending predictor</h2>
+  <strong class="govuk-tag govuk-tag--grey">Static</strong>
+</div>
+
+{% include "includes/risk-predictor-scores.html" %}
+
+<div class="risk-predictor-scores__actions govuk-!-margin-top-8">
+  <a class="govuk-button govuk-button--secondary" href="a7.html" data-csrp-return-to-assessment data-module="govuk-button">Return to assessment</a>
+  <button type="button" class="govuk-button" id="csrp-mark-section-complete" data-module="govuk-button">Mark this section complete</button>
+</div>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

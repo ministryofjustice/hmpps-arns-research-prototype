@@ -1,0 +1,27 @@
+{% extends "layouts/assessment.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Check your answers" %}
+{% set activeSection = "section-1" %}
+{% set pageHeading = "Check your answers" %}
+{% set statusTag = "Incomplete" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<a href="a5.html" class="govuk-back-link govuk-!-margin-bottom-4" id="csrp-a7-back">Back</a>
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="csrp-a7-form" novalidate>
+
+  <div id="csrp-summary-list" class="csrp-summary-list govuk-!-margin-top-6" data-offender-first-name="{{ offenderFirstName }}"></div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Calculate score</button>
+
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}
