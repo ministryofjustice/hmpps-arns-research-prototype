@@ -1,6 +1,6 @@
-# CSRP assessment prototype
+# Tiering assessment prototype
 
-Prototype for the **CSRP assessment** (service name in the header: **ARNS**).
+Prototype for the **Tiering assessment** (service name in the header: **ARNS**).
 
 ## Requirements
 

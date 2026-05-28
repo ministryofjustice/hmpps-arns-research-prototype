@@ -1,12 +1,12 @@
 //
-// Build GOV.UK summary list rows from CSRP session data (grouped by page)
+// Build GOV.UK summary list rows from Tiering session data (grouped by page)
 //
 
-import { CSRP_CHANGE_ANCHORS, csrpChangeHref } from './csrp-change-scroll.js'
-import { formatDateFromParts } from './csrp-assessment-session.js'
+import { TIERING_CHANGE_ANCHORS, tieringChangeHref } from './tiering-change-scroll.js'
+import { formatDateFromParts } from './tiering-assessment-session.js'
 
 const NOT_PROVIDED_HTML =
-  '<span class="csrp-summary-list__not-provided">Not provided</span>'
+  '<span class="tiering-summary-list__not-provided">Not provided</span>'
 
 export const formatChoice = (value) => {
   if (!value) return null
@@ -41,7 +41,7 @@ const renderSummaryRows = (rows) =>
     )
     .join('')
 
-export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') => {
+export const buildTieringSummarySections = (session, offenderFirstName = 'Alex') => {
   const name = offenderFirstName
   const sections = []
 
@@ -55,7 +55,7 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
     return {
       key,
       value: display,
-      changeHref: csrpChangeHref(changeHref, changeAnchor),
+      changeHref: tieringChangeHref(changeHref, changeAnchor),
       changeHidden: changeHidden || key
     }
   }
@@ -73,7 +73,7 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
         'a1.html',
         `What is ${name}'s current offence?`,
         true,
-        CSRP_CHANGE_ANCHORS.currentOffence
+        TIERING_CHANGE_ANCHORS.currentOffence
       )
     )
   } else {
@@ -84,7 +84,7 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
         'a1.html',
         `What is ${name}'s current offence?`,
         false,
-        CSRP_CHANGE_ANCHORS.currentOffence
+        TIERING_CHANGE_ANCHORS.currentOffence
       )
     )
   }
@@ -96,7 +96,7 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
       'a1.html',
       `What is the date of ${name}'s current conviction?`,
       false,
-      CSRP_CHANGE_ANCHORS.convictionDate
+      TIERING_CHANGE_ANCHORS.convictionDate
     )
   )
 
@@ -111,7 +111,7 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
         'a2.html',
         `How old was ${name} when they received their first sanction?`,
         false,
-        CSRP_CHANGE_ANCHORS.firstSanctionAge
+        TIERING_CHANGE_ANCHORS.firstSanctionAge
       ),
       createRow(
         `How many sanctions does ${name} have in total for all offences?`,
@@ -119,7 +119,7 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
         'a2.html',
         `How many sanctions does ${name} have in total for all offences?`,
         false,
-        CSRP_CHANGE_ANCHORS.totalSanctions
+        TIERING_CHANGE_ANCHORS.totalSanctions
       ),
       createRow(
         `How many of ${name}'s total sanctions involved violent offences?`,
@@ -127,7 +127,7 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
         'a2.html',
         `How many of ${name}'s total sanctions involved violent offences?`,
         false,
-        CSRP_CHANGE_ANCHORS.violentSanctions
+        TIERING_CHANGE_ANCHORS.violentSanctions
       ),
       createRow(
         `Has ${name} ever committed a sexual or sexually motivated offence?`,
@@ -135,7 +135,7 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
         'a2.html',
         `Has ${name} ever committed a sexual or sexually motivated offence?`,
         false,
-        CSRP_CHANGE_ANCHORS.sexualOffence
+        TIERING_CHANGE_ANCHORS.sexualOffence
       )
     ]
   })
@@ -150,7 +150,7 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
           'a3.html',
           `Does ${name}'s current offence have a sexual motivation?`,
           false,
-          CSRP_CHANGE_ANCHORS.sexualMotivation
+          TIERING_CHANGE_ANCHORS.sexualMotivation
         ),
         createRow(
           `Does ${name}'s current offence involve actual or attempted direct contact against a victim who was a stranger?`,
@@ -158,7 +158,7 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
           'a3.html',
           `Does ${name}'s current offence involve actual or attempted direct contact against a victim who was a stranger?`,
           false,
-          CSRP_CHANGE_ANCHORS.strangerContact
+          TIERING_CHANGE_ANCHORS.strangerContact
         ),
         createRow(
           `What is the date of ${name}'s most recent sanction involving a sexual or sexually motivated offence?`,
@@ -166,7 +166,7 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
           'a3.html',
           `What is the date of ${name}'s most recent sanction involving a sexual or sexually motivated offence?`,
           false,
-          CSRP_CHANGE_ANCHORS.sexualSanctionDate
+          TIERING_CHANGE_ANCHORS.sexualSanctionDate
         ),
         createRow(
           `How many sanctions does ${name} have for contact adult sexual or sexually motivated offences?`,
@@ -174,7 +174,7 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
           'a3.html',
           `How many sanctions does ${name} have for contact adult sexual or sexually motivated offences?`,
           false,
-          CSRP_CHANGE_ANCHORS.contactAdultSanctions
+          TIERING_CHANGE_ANCHORS.contactAdultSanctions
         ),
         createRow(
           `How many sanctions does ${name} have for direct contact child sexual or sexually motivated offences?`,
@@ -182,7 +182,7 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
           'a3.html',
           `How many sanctions does ${name} have for direct contact child sexual or sexually motivated offences?`,
           false,
-          CSRP_CHANGE_ANCHORS.contactChildSanctions
+          TIERING_CHANGE_ANCHORS.contactChildSanctions
         ),
         createRow(
           `How many sanctions does ${name} have for indecent child image or indirect contact child sexual or sexually motivated offences?`,
@@ -190,7 +190,7 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
           'a3.html',
           `How many sanctions does ${name} have for indecent child image or indirect contact child sexual or sexually motivated offences?`,
           false,
-          CSRP_CHANGE_ANCHORS.indirectChildSanctions
+          TIERING_CHANGE_ANCHORS.indirectChildSanctions
         ),
         createRow(
           `How many sanctions does ${name} have for other non-contact sexual or sexually motivated offences?`,
@@ -198,7 +198,7 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
           'a3.html',
           `How many sanctions does ${name} have for other non-contact sexual or sexually motivated offences?`,
           false,
-          CSRP_CHANGE_ANCHORS.nonContactSanctions
+          TIERING_CHANGE_ANCHORS.nonContactSanctions
         )
       ]
     })
@@ -213,7 +213,7 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
         'a4.html',
         `What is the earliest date ${name} could next be in the community once they've received their sentence?`,
         false,
-        CSRP_CHANGE_ANCHORS.communityDate
+        TIERING_CHANGE_ANCHORS.communityDate
       )
     ]
   })
@@ -228,7 +228,7 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
         'a5.html',
         `Since ${communityDateLabel}, has ${name} committed any offences?`,
         false,
-        CSRP_CHANGE_ANCHORS.offencesSinceCommunity
+        TIERING_CHANGE_ANCHORS.offencesSinceCommunity
       )
     ]
   })
@@ -243,7 +243,7 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
           'a6.html',
           `What is the date of ${name}'s most recent offence?`,
           false,
-          CSRP_CHANGE_ANCHORS.recentOffenceDate
+          TIERING_CHANGE_ANCHORS.recentOffenceDate
         )
       ]
     })
@@ -252,14 +252,14 @@ export const buildCsrpSummarySections = (session, offenderFirstName = 'Alex') =>
   return sections
 }
 
-export const renderCsrpSummaryList = (container, session, offenderFirstName = 'Alex') => {
+export const renderTieringSummaryList = (container, session, offenderFirstName = 'Alex') => {
   if (!container) return
 
-  const sections = buildCsrpSummarySections(session, offenderFirstName)
+  const sections = buildTieringSummarySections(session, offenderFirstName)
   container.innerHTML = sections
     .map(
       ({ title, rows }) => `
-  <section class="csrp-summary-section govuk-!-margin-bottom-6">
+  <section class="tiering-summary-section govuk-!-margin-bottom-6">
     <h2 class="govuk-heading-m govuk-!-margin-bottom-3">${escapeHtml(title)}</h2>
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">${renderSummaryRows(rows)}</dl>
   </section>`

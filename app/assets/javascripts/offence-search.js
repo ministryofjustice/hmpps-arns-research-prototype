@@ -1,11 +1,12 @@
 //
-// Offence autocomplete – prototype search for CSRP assessment
+// Offence autocomplete – prototype search for Tiering assessment
 // Data: /api/offences (app/data/offences.json)
 //
 
-import { captureCheckAnswersEditSnapshot, isCsrpCheckAnswersEdit } from './csrp-change-scroll.js'
-import { getA1FieldsFromForm } from './csrp-journey.js'
-import { getCsrpAssessmentSession } from './csrp-assessment-session.js'
+import { captureCheckAnswersEditSnapshot, isTieringCheckAnswersEdit } from './tiering-change-scroll.js'
+import { getA1FieldsFromForm } from './tiering-journey.js'
+import { getTieringAssessmentSession } from './tiering-assessment-session.js'
+import { trackTelemetryOffenceSearch } from './tiering-session-telemetry.js'
 
 const offenceSearchMatches = (item, query) => {
   const q = query.trim().toLowerCase()
@@ -273,6 +274,16 @@ window.initOffenceSearch = async (container) => {
     clearListbox()
     setExpanded(false)
     input.setAttribute('aria-describedby', 'current-offence-search-hint')
+
+    trackTelemetryOffenceSearch({
+      action: 'select',
+      query: {
+        id: selection.id,
+        label: selection.label,
+        code: selection.code || '',
+        source: 'search'
+      }
+    })
   }
 
   const selectOption = (option) => {
@@ -346,8 +357,34 @@ window.initOffenceSearch = async (container) => {
     if (sub) selectOption(sub)
   }
 
+  let searchTrackTimeout
+  let lastLoggedSearchQuery = ''
+
   input.addEventListener('input', () => {
     if (!dataReady) return
+
+    const query = input.value.trim()
+
+    if (!query) {
+      lastLoggedSearchQuery = ''
+    } else {
+      clearTimeout(searchTrackTimeout)
+      searchTrackTimeout = setTimeout(() => {
+        const currentQuery = input.value.trim()
+        if (!currentQuery || currentQuery === lastLoggedSearchQuery) return
+
+        lastLoggedSearchQuery = currentQuery
+        const resultCount = browseParent
+          ? getSubOffenceOptions(browseParent, currentQuery).length
+          : getMatches(currentQuery).length
+
+        trackTelemetryOffenceSearch({
+          query: currentQuery,
+          resultCount,
+          action: 'search'
+        })
+      }, 700)
+    }
 
     if (browseParent) {
       showSubOffenceList(browseParent, input.value)
@@ -464,7 +501,7 @@ window.initOffenceSearch = async (container) => {
   }
 
   if (dataReady && !isCheckMode) {
-    const session = getCsrpAssessmentSession()
+    const session = getTieringAssessmentSession()
 
     if (session.currentOffence) {
       showSelected(session.currentOffence)
@@ -480,8 +517,8 @@ window.initOffenceSearch = async (container) => {
       if (yearInput && convictionDate.year) yearInput.value = convictionDate.year
     }
 
-    if (isCsrpCheckAnswersEdit()) {
-      const a1Form = document.getElementById('csrp-a1-form')
+    if (isTieringCheckAnswersEdit()) {
+      const a1Form = document.getElementById('tiering-a1-form')
       if (a1Form) captureCheckAnswersEditSnapshot(getA1FieldsFromForm(a1Form))
     }
   }

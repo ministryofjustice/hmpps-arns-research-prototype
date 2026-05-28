@@ -3,8 +3,10 @@
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Sexual offending" %}
 {% set activeSection = "section-1" %}
-{% set pageHeading = offenderFirstName ~ "'s sexual or sexually motivated offending" %}
+{% set pageHeading = "Sexual or sexually motivated offending" %}
 {% set statusTag = "Incomplete" %}
+{% set tieringTelemetryPage = "a3" %}
+{% set tieringTelemetryPageLabel = "Sexual offending" %}
 
 {% block content %}
 
@@ -14,7 +16,7 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="csrp-a3-form" novalidate>
+<form id="tiering-a3-form" novalidate>
 
   {% include "includes/sexual-offending-questions.html" %}
 

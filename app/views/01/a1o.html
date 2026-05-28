@@ -3,21 +3,23 @@
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Select an offence" %}
 {% set activeSection = "section-1" %}
-{% set pageHeading = "Select an offence" %}
 {% set statusTag = "Incomplete" %}
 {% set hideSideNav = true %}
 {% set hideJourneyServiceHeader = true %}
 {% set hideOffenderViewAnswers = true %}
 {% set compactPageHeader = true %}
 {% set backLinkHref = 'a1.html' %}
+{% set offenceBrowseToggleHref = 'a1o2.html' %}
+{% set tieringTelemetryPage = "a1o" %}
+{% set tieringTelemetryPageLabel = "Browse all offences" %}
 
 {% block content %}
 
 {% include "includes/assessment-journey-page-open.html" %}
 
-{% include "includes/assessment-question-header.html" %}
+{% include "includes/offence-browse-heading.html" %}
 
-<form id="csrp-a1o-form" class="govuk-!-margin-top-3" novalidate>
+<form id="tiering-a1o-form" class="govuk-!-margin-top-3" novalidate>
 
   <table class="govuk-table offences-all-table govuk-!-margin-bottom-6">
       <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">
@@ -37,20 +39,7 @@
       </tbody>
     </table>
 
-  <input type="hidden" name="current_offence_id" value="" data-offence-selected-id>
-
-  <div class="govuk-inset-text govuk-!-margin-bottom-6" data-offence-selected-summary hidden>
-    <p class="govuk-body govuk-!-margin-bottom-1"><strong>Selected offence</strong></p>
-    <p class="govuk-body govuk-!-margin-bottom-1" data-offence-selected-summary-label></p>
-    <p class="govuk-body govuk-!-margin-bottom-0" data-offence-selected-summary-code hidden></p>
-  </div>
-
-  <div class="offences-all-page__actions">
-    <button type="submit" class="govuk-button" data-module="govuk-button" data-offence-confirm-button disabled>
-      Save and continue
-    </button>
-    <a class="govuk-button govuk-button--secondary" href="a1.html" data-csrp-return-to-a1 data-module="govuk-button">Cancel</a>
-  </div>
+  {% include "includes/offence-browse-form-footer.html" %}
 
 </form>
 

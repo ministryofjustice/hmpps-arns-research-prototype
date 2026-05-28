@@ -4,20 +4,20 @@
 
 import {
   captureCheckAnswersEditSnapshot,
-  completeCsrpPageAndContinue,
-  isCsrpCheckAnswersEdit
-} from './csrp-change-scroll.js'
-import { getA5FieldsFromForm } from './csrp-journey.js'
+  completeTieringPageAndContinue,
+  isTieringCheckAnswersEdit
+} from './tiering-change-scroll.js'
+import { getA5FieldsFromForm } from './tiering-journey.js'
 import {
   formatDateFromParts,
-  getCsrpAssessmentSession
-} from './csrp-assessment-session.js'
+  getTieringAssessmentSession
+} from './tiering-assessment-session.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  const form = document.getElementById('csrp-a5-form')
+  const form = document.getElementById('tiering-a5-form')
   if (!form) return
 
-  const session = getCsrpAssessmentSession()
+  const session = getTieringAssessmentSession()
   const formattedDate = formatDateFromParts(session.communityDate || {})
 
   if (!formattedDate) {
@@ -35,7 +35,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
     if (input) input.checked = true
   }
 
-  if (isCsrpCheckAnswersEdit()) {
+  if (isTieringCheckAnswersEdit()) {
     captureCheckAnswersEditSnapshot(getA5FieldsFromForm(form))
   }
 
@@ -45,7 +45,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
     const newFields = getA5FieldsFromForm(form)
     const offencesSinceCommunity = newFields.offencesSinceCommunity
 
-    window.location.href = completeCsrpPageAndContinue(
+    window.location.href = completeTieringPageAndContinue(
       'a5',
       offencesSinceCommunity === 'yes' ? 'a6.html' : 'a7.html',
       newFields

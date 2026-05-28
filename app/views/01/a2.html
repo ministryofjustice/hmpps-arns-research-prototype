@@ -3,8 +3,10 @@
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Offending history" %}
 {% set activeSection = "section-1" %}
-{% set pageHeading = offenderFirstName ~ "'s offending history" %}
+{% set pageHeading = "Offending history" %}
 {% set statusTag = "Incomplete" %}
+{% set tieringTelemetryPage = "a2" %}
+{% set tieringTelemetryPageLabel = "Offending history" %}
 
 {% block content %}
 
@@ -14,7 +16,7 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="csrp-a2-form" novalidate>
+<form id="tiering-a2-form" novalidate>
 
   {% include "includes/offending-history-questions.html" %}
 
