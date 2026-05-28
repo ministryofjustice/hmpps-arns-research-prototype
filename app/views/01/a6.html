@@ -4,6 +4,8 @@
 {% set pageName = "Most recent offence date" %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
+{% set tieringTelemetryPage = "a6" %}
+{% set tieringTelemetryPageLabel = "Offences since community (details)" %}
 
 {% block content %}
 
@@ -11,7 +13,7 @@
 
 <a href="a5.html" class="govuk-back-link govuk-!-margin-bottom-4">Back</a>
 
-<form id="csrp-a6-form" novalidate>
+<form id="tiering-a6-form" novalidate>
 
   {% include "includes/recent-offence-date-question.html" %}
 

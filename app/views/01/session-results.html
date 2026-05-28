@@ -1,0 +1,57 @@
+{% extends "layouts/assessment.html" %}
+
+{% set serviceHeaderTitle = "Tiering assessment" %}
+{% set hideSideNav = true %}
+{% set hideJourneyServiceHeader = true %}
+{% set hideOffenderViewAnswers = true %}
+{% set hideOffenderHeader = true %}
+{% set backLinkHref = "a8.html" %}
+{% set backLinkText = "Back to risk predictor score" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div class="tiering-session-results__header govuk-!-margin-bottom-6">
+  <div class="tiering-session-results__header-row">
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Session results</h1>
+    <div class="tiering-session-results__header-links">
+      <a href="#" class="govuk-link tiering-session-results__download" id="tiering-session-results-download">Download as PDF</a>
+    </div>
+  </div>
+  <p class="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-0">
+    Anonymous research summary for this prototype session.
+  </p>
+</div>
+
+<div id="tiering-session-results-summary" class="tiering-session-results__summary" data-session-results>
+  <p class="govuk-body">Loading session results…</p>
+</div>
+
+<div id="tiering-session-results-metrics">
+  <h2 class="govuk-heading-m govuk-!-margin-top-8">Detailed metrics</h2>
+
+  <table class="govuk-table tiering-session-results__table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">Metric</th>
+        <th scope="col" class="govuk-table__header">Result</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body" id="tiering-session-results-table-body">
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell" colspan="2">Loading…</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h2 class="govuk-heading-m govuk-!-margin-top-8">Previous sessions</h2>
+
+<div id="tiering-session-results-history" class="tiering-session-results__history">
+  <p class="govuk-body">Loading session history…</p>
+</div>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

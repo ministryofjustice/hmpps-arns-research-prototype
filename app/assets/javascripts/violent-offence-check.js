@@ -37,6 +37,16 @@ window.GOVUKPrototypeKit.documentReady(() => {
     checkButton.addEventListener('click', runCheck)
 
     if (input) {
+      const seedFraud = () => {
+        if (input.value.trim()) return
+        input.value = 'Fraud'
+        // Trigger matching list/options in the autocomplete.
+        input.dispatchEvent(new Event('input', { bubbles: true }))
+      }
+
+      input.addEventListener('focus', seedFraud)
+      input.addEventListener('click', seedFraud)
+
       input.addEventListener('keydown', (event) => {
         if (event.key !== 'Enter') return
 

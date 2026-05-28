@@ -1,7 +1,7 @@
 {# Set serviceHeaderTitle and optional serviceHeaderHint before including #}
 <div class="govuk-grid-row assessment-service-header">
   <div class="govuk-grid-column-full">
-    <h2 class="govuk-heading-l govuk-!-margin-bottom-2">{{ serviceHeaderTitle | default("CSRP assessment") }}</h2>
+    <h2 class="govuk-heading-l govuk-!-margin-bottom-2">{{ serviceHeaderTitle | default("Tiering assessment") }}</h2>
     {% if serviceHeaderHint %}
       <p class="govuk-hint govuk-!-margin-top-0 govuk-!-margin-bottom-4">{{ serviceHeaderHint }}</p>
     {% endif %}

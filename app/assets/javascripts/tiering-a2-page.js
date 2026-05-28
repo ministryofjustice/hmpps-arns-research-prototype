@@ -4,20 +4,20 @@
 
 import {
   captureCheckAnswersEditSnapshot,
-  completeCsrpPageAndContinue,
-  isCsrpCheckAnswersEdit
-} from './csrp-change-scroll.js'
-import { getA2FieldsFromForm } from './csrp-journey.js'
-import { getCsrpAssessmentSession } from './csrp-assessment-session.js'
+  completeTieringPageAndContinue,
+  isTieringCheckAnswersEdit
+} from './tiering-change-scroll.js'
+import { getA2FieldsFromForm } from './tiering-journey.js'
+import { getTieringAssessmentSession } from './tiering-assessment-session.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  const form = document.getElementById('csrp-a2-form')
+  const form = document.getElementById('tiering-a2-form')
   if (!form) return
 
-  const session = getCsrpAssessmentSession()
-  const previousOffence = document.querySelector('[data-csrp-previous-offence]')
-  const previousLabel = document.querySelector('[data-csrp-previous-offence-label]')
-  const previousCode = document.querySelector('[data-csrp-previous-offence-code]')
+  const session = getTieringAssessmentSession()
+  const previousOffence = document.querySelector('[data-tiering-previous-offence]')
+  const previousLabel = document.querySelector('[data-tiering-previous-offence-label]')
+  const previousCode = document.querySelector('[data-tiering-previous-offence-code]')
 
   if (session.currentOffence && previousOffence) {
     previousOffence.hidden = false
@@ -50,11 +50,11 @@ window.GOVUKPrototypeKit.documentReady(() => {
     if (sexualOffenceInput) sexualOffenceInput.checked = true
   }
 
-  if (isCsrpCheckAnswersEdit()) {
+  if (isTieringCheckAnswersEdit()) {
     captureCheckAnswersEditSnapshot(getA2FieldsFromForm(form))
   }
 
-  if (!isCsrpCheckAnswersEdit()) {
+  if (!isTieringCheckAnswersEdit()) {
     const autofillOnFocus = [
       { input: fields.firstSanctionAge, value: '23' },
       { input: fields.totalSanctions, value: '6' },
@@ -75,7 +75,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
     const newFields = getA2FieldsFromForm(form)
     const sexualOffence = newFields.sexualOffence
 
-    window.location.href = completeCsrpPageAndContinue(
+    window.location.href = completeTieringPageAndContinue(
       'a2',
       sexualOffence === 'yes' ? 'a3.html' : 'a4.html',
       newFields
