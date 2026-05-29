@@ -8,6 +8,7 @@ import {
   isTieringCheckAnswersEdit
 } from './tiering-change-scroll.js'
 import { getA2FieldsFromForm } from './tiering-journey.js'
+import { formatOffenceCodeLabel } from './tiering-offence-browse.js'
 import { getTieringAssessmentSession } from './tiering-assessment-session.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
@@ -23,10 +24,9 @@ window.GOVUKPrototypeKit.documentReady(() => {
     previousOffence.hidden = false
     if (previousLabel) previousLabel.textContent = session.currentOffence.label
     if (previousCode) {
-      previousCode.textContent = session.currentOffence.code
-        ? `Offence code: ${session.currentOffence.code}`
-        : ''
-      previousCode.hidden = !session.currentOffence.code
+      const codeLabel = formatOffenceCodeLabel(session.currentOffence)
+      previousCode.textContent = codeLabel
+      previousCode.hidden = !codeLabel
     }
   }
 

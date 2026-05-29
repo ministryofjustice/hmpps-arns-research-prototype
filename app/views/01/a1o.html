@@ -21,23 +21,11 @@
 
 <form id="tiering-a1o-form" class="govuk-!-margin-top-3" novalidate>
 
-  <table class="govuk-table offences-all-table govuk-!-margin-bottom-6">
-      <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">
-        Offences
-      </caption>
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th scope="col" class="govuk-table__header">Offence name</th>
-          <th scope="col" class="govuk-table__header">Code</th>
-          <th scope="col" class="govuk-table__header offences-all-table__action-header"><span class="govuk-visually-hidden">Action</span></th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body" data-offences-table-body>
-        <tr>
-          <td class="govuk-table__cell" colspan="3">Loading offences…</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="offence-browse-accordions govuk-!-margin-bottom-6" data-offence-accordions>
+    <p class="govuk-body">Loading offences…</p>
+  </div>
+
+  <div data-offence-pagination hidden></div>
 
   {% include "includes/offence-browse-form-footer.html" %}
 

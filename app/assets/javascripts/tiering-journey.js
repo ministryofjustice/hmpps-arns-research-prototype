@@ -18,7 +18,9 @@ export const normaliseOffence = (offence) => {
   return {
     id: normaliseString(offence.id),
     label: normaliseString(offence.label),
-    code: normaliseString(offence.code)
+    code: normaliseString(offence.code),
+    subcode: normaliseString(offence.subcode),
+    fullCode: normaliseString(offence.fullCode)
   }
 }
 
@@ -120,7 +122,8 @@ export const getContinueHrefAfterCheckAnswersEdit = (currentPage, beforeSession,
 export const getA1FieldsFromForm = (form) => {
   const offenceId = form.querySelector('[data-offence-selected-id]')?.value
   const offenceLabel = form.querySelector('[data-offence-selected-label]')?.textContent?.trim()
-  const offenceCode = form.querySelector('[data-offence-selected-meta]')?.textContent?.trim() || ''
+  const offenceCode = form.querySelector('[data-offence-selected-code]')?.value?.trim() || ''
+  const offenceSubcode = form.querySelector('[data-offence-selected-subcode]')?.value?.trim() || ''
 
   return {
     currentOffence: normaliseOffence(
@@ -128,7 +131,9 @@ export const getA1FieldsFromForm = (form) => {
         ? {
             id: offenceId,
             label: offenceLabel,
-            code: offenceCode.replace(/^Offence code:\s*/i, '')
+            code: offenceCode,
+            subcode: offenceSubcode,
+            fullCode: offenceCode && offenceSubcode ? `${offenceCode}${offenceSubcode}` : offenceCode
           }
         : null
     ),

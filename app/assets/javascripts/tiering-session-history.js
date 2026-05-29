@@ -1,5 +1,5 @@
 //
-// Persisted session history (local server log)
+// Persist session completion events to the local server log
 //
 
 import { analyseSessionTelemetry, getSessionTelemetry, getTelemetrySessionId } from './tiering-session-telemetry.js'
@@ -63,21 +63,3 @@ export const recordSectionComplete = () => {
 
   sendEvent({ sessionId, type: 'sectionComplete', consent: telemetry.consent })
 }
-
-export const fetchSessionHistory = async () => {
-  const response = await fetch('/api/telemetry/history', { credentials: 'same-origin' })
-  if (!response.ok) return []
-  const json = await response.json()
-  return json.sessions || []
-}
-
-export const deleteSessionFromHistory = async (sessionId) => {
-  const response = await fetch('/api/telemetry/delete', {
-    method: 'POST',
-    credentials: 'same-origin',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ sessionId })
-  })
-  return response.ok
-}
-
