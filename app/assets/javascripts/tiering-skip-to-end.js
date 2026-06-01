@@ -17,7 +17,13 @@ window.GOVUKPrototypeKit.documentReady(async () => {
 
   setTieringAssessmentSession({
     // a1
-    currentOffence: { id: 'fr92001', label: 'Fraud by false representation', code: 'FR92001' },
+    currentOffence: {
+      id: '04600',
+      label: 'Stealing from shops and stalls (shoplifting)',
+      code: '046',
+      subcode: '00',
+      fullCode: '04600'
+    },
     convictionDate: { day: '27', month: '3', year: '2024' },
 
     // a2

@@ -30,7 +30,11 @@ const emptyTelemetry = () => ({
     searches: [],
     selections: []
   },
-  sideNavClicks: []
+  sideNavClicks: [],
+  riskPredictors: {
+    detailsOpened: [],
+    tabSwitches: []
+  }
 })
 
 export const getSessionTelemetry = () => {
@@ -188,6 +192,72 @@ export const trackTelemetrySideNavClick = (sectionLabel, isDisabled) => {
       at: Date.now()
     })
   })
+}
+
+const ensureRiskPredictorsTelemetry = (data) => {
+  if (!data.riskPredictors) {
+    data.riskPredictors = { detailsOpened: [], tabSwitches: [] }
+  }
+  if (!Array.isArray(data.riskPredictors.detailsOpened)) {
+    data.riskPredictors.detailsOpened = []
+  }
+  if (!Array.isArray(data.riskPredictors.tabSwitches)) {
+    data.riskPredictors.tabSwitches = []
+  }
+}
+
+export const trackTelemetryRiskPredictorDetailsOpen = (predictorId, predictorLabel) => {
+  if (!isTelemetryRecordingEnabled()) return
+  updateTelemetry((data) => {
+    ensureRiskPredictorsTelemetry(data)
+    const id = String(predictorId || '').trim()
+    if (!id) return
+    const alreadyRecorded = data.riskPredictors.detailsOpened.some((item) => item.id === id)
+    if (alreadyRecorded) return
+    data.riskPredictors.detailsOpened.push({
+      id,
+      label: predictorLabel || id,
+      at: Date.now()
+    })
+  })
+}
+
+export const trackTelemetryRiskPredictorTabSwitch = (fromTab, toTab) => {
+  if (!isTelemetryRecordingEnabled()) return
+  const from = fromTab === 'answers' ? 'answers' : 'scores'
+  const to = toTab === 'answers' ? 'answers' : 'scores'
+  if (from === to) return
+
+  updateTelemetry((data) => {
+    ensureRiskPredictorsTelemetry(data)
+    data.riskPredictors.tabSwitches.push({ from, to, at: Date.now() })
+  })
+}
+
+export const buildRiskPredictorsSection = (data) => {
+  ensureRiskPredictorsTelemetry(data)
+  const opened = data.riskPredictors.detailsOpened
+  if (!opened.length) return null
+
+  const rows = [
+    {
+      metric: 'Predictor details were opened in this order',
+      listItems: opened.map((item, index) => `${index + 1}. ${item.label}`),
+      highlight: false
+    }
+  ]
+
+  const tabSwitches = data.riskPredictors.tabSwitches
+  if (tabSwitches.length) {
+    const switchCount = tabSwitches.length
+    rows.unshift({
+      metric: 'Switched between Scores and Answers tabs',
+      value: `Yes (${switchCount} time${switchCount === 1 ? '' : 's'})`,
+      highlight: switchCount > 2
+    })
+  }
+
+  return { title: 'Risk predictors', rows }
 }
 
 export const finaliseTelemetrySession = () => {
@@ -384,6 +454,7 @@ export const analyseSessionTelemetry = () => {
     band,
     insights,
     categories,
+    riskPredictorsSection: buildRiskPredictorsSection(data),
     formatDuration
   }
 }

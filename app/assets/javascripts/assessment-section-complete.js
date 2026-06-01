@@ -3,7 +3,6 @@
 //
 
 import { getTieringAssessmentSession, setTieringAssessmentSession } from './tiering-assessment-session.js'
-import { recordSectionComplete } from './tiering-session-history.js'
 import { trackTelemetryMilestone } from './tiering-session-telemetry.js'
 
 export const isSection1Complete = () => getTieringAssessmentSession().section1Complete === true
@@ -12,7 +11,6 @@ export const markSection1Complete = () => {
   hideMarkSectionCompleteButton()
   setTieringAssessmentSession({ section1Complete: true })
   trackTelemetryMilestone('markSectionComplete')
-  recordSectionComplete()
   applySection1CompleteUi()
 }
 

@@ -4,6 +4,7 @@
 
 import { TIERING_CHANGE_ANCHORS, tieringChangeHref } from './tiering-change-scroll.js'
 import { formatDateFromParts } from './tiering-assessment-session.js'
+import { formatOffenceCodeLabel } from './tiering-offence-browse.js'
 
 const NOT_PROVIDED_HTML =
   '<span class="tiering-summary-list__not-provided">Not provided</span>'
@@ -63,8 +64,9 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
   const a1Rows = []
 
   if (session.currentOffence?.label) {
-    const offenceValue = session.currentOffence.code
-      ? `${escapeHtml(session.currentOffence.label)}<br>Offence code: ${escapeHtml(session.currentOffence.code)}`
+    const codeLabel = formatOffenceCodeLabel(session.currentOffence)
+    const offenceValue = codeLabel
+      ? `${escapeHtml(session.currentOffence.label)}<br>${escapeHtml(codeLabel)}`
       : escapeHtml(session.currentOffence.label)
     a1Rows.push(
       createRow(

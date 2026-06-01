@@ -16,7 +16,9 @@
   <div class="tiering-session-results__header-row">
     <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Session results</h1>
     <div class="tiering-session-results__header-links">
-      <a href="#" class="govuk-link tiering-session-results__download" id="tiering-session-results-download">Download as PDF</a>
+      <button type="button" class="govuk-button tiering-session-results__download" id="tiering-session-results-download" data-module="govuk-button" hidden>
+        Download as PDF
+      </button>
     </div>
   </div>
   <p class="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-0">
@@ -26,6 +28,23 @@
 
 <div id="tiering-session-results-summary" class="tiering-session-results__summary" data-session-results>
   <p class="govuk-body">Loading session results…</p>
+</div>
+
+<div id="tiering-session-results-risk-predictors" class="tiering-session-results__risk-predictors" hidden>
+  <h2 class="govuk-heading-m govuk-!-margin-top-8">Risk predictors</h2>
+  <table class="govuk-table tiering-session-results__table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">Metric</th>
+        <th scope="col" class="govuk-table__header">Result</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body" id="tiering-session-results-risk-predictors-body">
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell" colspan="2">Loading…</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <div id="tiering-session-results-metrics">
@@ -44,12 +63,6 @@
       </tr>
     </tbody>
   </table>
-</div>
-
-<h2 class="govuk-heading-m govuk-!-margin-top-8">Previous sessions</h2>
-
-<div id="tiering-session-results-history" class="tiering-session-results__history">
-  <p class="govuk-body">Loading session history…</p>
 </div>
 
 {% include "includes/assessment-page-close.html" %}

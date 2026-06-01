@@ -535,7 +535,11 @@ body.assessment-page {
   }
 
   &__col--code {
-    width: 10rem;
+    width: 5rem;
+  }
+
+  &__col--subcode {
+    width: 5rem;
   }
 
   &__col--action {
@@ -543,8 +547,10 @@ body.assessment-page {
   }
 
   &__header--code,
-  .govuk-table__cell:nth-child(2) {
-    width: 10rem;
+  &__header--subcode,
+  .govuk-table__cell:nth-child(2),
+  .govuk-table__cell:nth-child(3) {
+    width: 5rem;
     white-space: nowrap;
   }
 
@@ -567,9 +573,38 @@ body.assessment-page {
 }
 
 .offences-all-table {
+  table-layout: fixed;
+  width: 100%;
+
+  &__col--name {
+    width: auto;
+  }
+
+  &__col--code,
+  &__col--subcode {
+    width: 5rem;
+  }
+
+  &__col--action {
+    width: 13rem;
+  }
+
+  &__header--code,
+  &__header--subcode,
+  .govuk-table__cell:nth-child(2),
+  .govuk-table__cell:nth-child(3) {
+    width: 5rem;
+    white-space: nowrap;
+  }
+
+  &__header--name,
+  .govuk-table__cell:nth-child(1) {
+    overflow-wrap: anywhere;
+  }
+
   &__action-header,
   &__action-cell {
-    width: 1%;
+    width: 13rem;
     text-align: right;
     white-space: nowrap;
   }
@@ -578,10 +613,158 @@ body.assessment-page {
     background-color: #ffdd00;
 
     .govuk-table__cell:nth-child(1),
-    .govuk-table__cell:nth-child(2) {
+    .govuk-table__cell:nth-child(2),
+    .govuk-table__cell:nth-child(3) {
       font-weight: 700;
     }
   }
+
+  &__inline-actions {
+    .govuk-table__cell {
+      border-top: 0;
+    }
+  }
+
+  &__inline-actions-cell {
+    background-color: #fff9e6;
+    border-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 15px;
+    vertical-align: top;
+  }
+
+  &__inline-actions-inner {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    gap: 15px;
+    padding-top: 15px;
+    padding-bottom: 0;
+  }
+
+  &__inline-actions-inner .govuk-button {
+    margin-bottom: 0;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+}
+
+.offence-browse-accordions {
+  .offence-browse-accordion {
+    margin-bottom: 0;
+
+    &.govuk-accordion {
+      margin-bottom: 0;
+    }
+
+    .govuk-accordion__show-all {
+      margin-bottom: 5px;
+      padding: 2px 2px 4px 0;
+      line-height: 1.25;
+    }
+
+    .govuk-accordion__section-button {
+      display: flex;
+      align-items: baseline;
+      gap: 15px;
+      font-size: 19px;
+      line-height: 1.25;
+      padding-top: 8px;
+      padding-bottom: 0;
+      border-bottom: 0;
+      width: 100%;
+      text-align: left;
+    }
+
+    .govuk-accordion__section-heading-text-divider {
+      display: none;
+    }
+
+    .govuk-accordion__section-toggle,
+    .govuk-accordion__section-heading-text,
+    .govuk-accordion__section-summary {
+      margin-bottom: 0;
+    }
+
+    .govuk-accordion__section-heading-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .govuk-accordion__section-heading-text-focus {
+      display: block;
+    }
+
+    .offence-browse-accordion__code {
+      flex: 0 0 5rem;
+      width: 5rem;
+      text-align: right;
+      color: #505a5f;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+
+    .govuk-accordion__section-toggle {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+      font-size: 16px;
+      line-height: 1.25;
+      white-space: nowrap;
+    }
+
+    .govuk-accordion__section--expanded .govuk-accordion__section-button {
+      padding-bottom: 0;
+    }
+
+    .govuk-accordion__section-content {
+      padding-top: 10px;
+      padding-bottom: 15px;
+    }
+  }
+
+  .offence-browse-accordion__section {
+    // Keep expanded category titles visible while scrolling long offence lists.
+    &.govuk-accordion__section--expanded .offence-browse-accordion__header {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background-color: #ffffff;
+      padding-bottom: 0;
+    }
+  }
+
+  .offence-browse-accordion__header-layout {
+    line-height: 1.25;
+  }
+
+  .offence-browse-accordion__title {
+    display: inline;
+  }
+
+  .offence-browse-accordion__count {
+    display: inline;
+    margin-left: 6px;
+    color: #505a5f;
+    font-weight: 400;
+    line-height: 1.25;
+  }
+
+  .offence-browse-accordion__table {
+    margin-bottom: 0;
+  }
+}
+
+.offence-browse-tabs {
+  &__panel {
+    padding-top: 0;
+  }
+}
+
+.offence-browse-pagination {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 // Risk predictor scores (ARNS scale bars)
@@ -606,6 +789,23 @@ body.assessment-page {
 
 .tiering-mark-section-complete--hidden {
   display: none !important;
+}
+
+.govuk-back-to-top {
+  margin-bottom: 15px;
+
+  .govuk-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 19px;
+  }
+}
+
+.govuk-back-to-top__icon {
+  flex-shrink: 0;
+  width: 13px;
+  height: 17px;
 }
 
 .risk-predictor-scores {
@@ -803,14 +1003,14 @@ body.assessment-page {
 .tiering-session-results__header-row {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 15px;
 }
 
 .tiering-session-results__download {
-  font-weight: 700;
   white-space: nowrap;
+  margin-bottom: 0;
 }
 
 .tiering-session-results__header-links {
@@ -880,64 +1080,6 @@ body.assessment-page {
   }
 }
 
-.tiering-session-results__history {
-  font-size: 19px;
-
-  .govuk-table__header,
-  .govuk-table__cell {
-    font-size: 19px;
-  }
-}
-
-.tiering-session-results__history-table {
-  table-layout: fixed;
-
-  th:nth-child(1),
-  td:nth-child(1) {
-    width: 34%;
-  }
-
-  th:nth-child(2),
-  td:nth-child(2) {
-    width: 24%;
-  }
-
-  th:nth-child(3),
-  td:nth-child(3) {
-    width: 24%;
-  }
-
-  th:nth-child(4),
-  td:nth-child(4) {
-    width: 18%;
-  }
-}
-
-.tiering-session-results__history-session-cell {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.tiering-session-results__history-session-label {
-  overflow-wrap: anywhere;
-}
-
-.tiering-session-results__history-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-
-.tiering-session-results__history-actions .govuk-link,
-.tiering-session-results__history-table .govuk-table__header .govuk-link {
-  font-weight: 400;
-}
-
-.tiering-session-results__history-details-row td {
-  background: #f8f8f8;
-}
-
 .tiering-footer-session-links {
   margin: 15px 0;
   text-align: left;
@@ -977,19 +1119,5 @@ body.assessment-page {
 
   .tiering-session-results__summary {
     break-inside: avoid;
-  }
-
-  // Ensure all previous-session results are visible when printing
-  .tiering-session-results__history-details-row {
-    display: table-row !important;
-  }
-
-  .tiering-session-results__history-details-row[hidden] {
-    display: table-row !important;
-  }
-
-  // Hide interactive controls in print
-  .tiering-session-results__history-actions {
-    display: none !important;
   }
 }
