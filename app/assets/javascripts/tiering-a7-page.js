@@ -3,7 +3,6 @@
 //
 
 import { getTieringAssessmentSession, setTieringAssessmentSession } from './tiering-assessment-session.js'
-import { recordCalculateScore } from './tiering-session-history.js'
 import { trackTelemetryMilestone } from './tiering-session-telemetry.js'
 import { renderTieringSummaryList } from './tiering-summary.js'
 
@@ -31,7 +30,6 @@ window.GOVUKPrototypeKit.documentReady(() => {
     event.preventDefault()
     trackTelemetryMilestone('calculatedScore')
     setTieringAssessmentSession({ scoreCalculated: true })
-    recordCalculateScore()
     window.location.href = 'a8.html'
   })
 })

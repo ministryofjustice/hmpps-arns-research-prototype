@@ -7,6 +7,9 @@ node_modules/
 migrate.log
 usage-data-config.json
 
+# Local telemetry log (session data lives in sessionStorage only)
+app/data/telemetry-log.jsonl
+
 # General ignores
 .DS_Store
 .idea
