@@ -1,8 +1,8 @@
 //
-// Research prototypes home – clear session when starting CSRP assessment
+// Research prototypes home – clear session when starting Tiering assessment
 //
 
-import { clearPrototypeDataForCsrp } from './csrp-assessment-session.js'
+import { clearPrototypeDataForTiering } from './tiering-assessment-session.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
   document.querySelectorAll('[data-clear-session-on-start]').forEach((link) => {
@@ -11,7 +11,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
       const href = link.getAttribute('href')
       if (!href) return
 
-      await clearPrototypeDataForCsrp()
+      await clearPrototypeDataForTiering()
       window.location.href = href
     })
   })

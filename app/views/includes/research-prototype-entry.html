@@ -1,9 +1,42 @@
 {# Set href, title, and hint before including #}
 <li class="assessment-research-prototypes__item">
-  <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
-    <a href="{{ href }}" class="govuk-link"{% if clearSessionOnStart %} data-clear-session-on-start{% endif %}>{{ title }}</a>
-  </h2>
-  {% if hint %}
-    <p class="govuk-hint govuk-!-margin-top-0 govuk-!-margin-bottom-0">{{ hint }}</p>
+  <div class="assessment-research-prototypes__title-row">
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
+      <a href="{{ href }}" class="govuk-link"{% if clearSessionOnStart %} data-clear-session-on-start{% endif %}>{{ title }}</a>
+    </h2>
+    {% if titleTagText %}
+      <strong class="govuk-tag assessment-research-prototypes__title-tag">{{ titleTagText }}</strong>
+    {% endif %}
+  </div>
+  {% if hint or skipToEndHref %}
+    <div class="assessment-research-prototypes__hint-row">
+      {% if hint %}
+        <p class="govuk-hint govuk-!-margin-top-0 govuk-!-margin-bottom-2">{{ hint }}</p>
+      {% endif %}
+      {% if skipToEndHref %}
+        <p class="govuk-body govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+          <a class="govuk-link assessment-research-prototypes__skip-link" href="{{ skipToEndHref }}">
+            <span class="assessment-research-prototypes__skip-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" width="14" height="14" focusable="false" aria-hidden="true">
+                <path d="M4 10h10.2l-3.6-3.6 1.4-1.4L18 10l-6 6-1.4-1.4 3.6-3.6H4z" fill="currentColor"></path>
+              </svg>
+            </span>
+            <span>Skip to the end</span>
+          </a>
+        </p>
+      {% endif %}
+    </div>
+  {% endif %}
+  {% if hintDetailsHtml %}
+    <details class="govuk-details govuk-!-margin-top-4 govuk-!-margin-bottom-0">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">What this prototype shows</span>
+      </summary>
+      <div class="govuk-details__text">
+        {{ hintDetailsHtml | safe }}
+      </div>
+    </details>
+    <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-top-7 govuk-!-margin-bottom-9">
+    <div class="govuk-!-padding-bottom-6"></div>
   {% endif %}
 </li>

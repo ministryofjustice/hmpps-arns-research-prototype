@@ -1,6 +1,6 @@
 {
   "name": "hmpps-arns-prison-prototype",
-  "description": "GOV.UK Prototype Kit prototype for the CSRP assessment (ARNS service)",
+  "description": "GOV.UK Prototype Kit prototype for the Tiering assessment (ARNS service)",
   "scripts": {
     "dev": "govuk-prototype-kit dev",
     "serve": "govuk-prototype-kit serve",

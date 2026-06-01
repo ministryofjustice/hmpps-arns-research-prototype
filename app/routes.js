@@ -20,3 +20,5 @@ router.get('/api/offences', (req, res) => {
     res.type('application/json').send(data)
   })
 })
+
+module.exports = router

@@ -4,22 +4,22 @@
 
 import {
   captureCheckAnswersEditSnapshot,
-  completeCsrpPageAndContinue,
-  getCsrpBackLinkHref,
-  isCsrpCheckAnswersEdit
-} from './csrp-change-scroll.js'
-import { getA4FieldsFromForm } from './csrp-journey.js'
-import { getCsrpAssessmentSession } from './csrp-assessment-session.js'
+  completeTieringPageAndContinue,
+  getTieringBackLinkHref,
+  isTieringCheckAnswersEdit
+} from './tiering-change-scroll.js'
+import { getA4FieldsFromForm } from './tiering-journey.js'
+import { getTieringAssessmentSession } from './tiering-assessment-session.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  const form = document.getElementById('csrp-a4-form')
+  const form = document.getElementById('tiering-a4-form')
   if (!form) return
 
-  const session = getCsrpAssessmentSession()
-  const backLink = document.getElementById('csrp-a4-back')
+  const session = getTieringAssessmentSession()
+  const backLink = document.getElementById('tiering-a4-back')
 
   if (backLink) {
-    backLink.href = getCsrpBackLinkHref(
+    backLink.href = getTieringBackLinkHref(
       session.sexualOffence === 'yes' ? 'a3.html' : 'a2.html'
     )
   }
@@ -34,7 +34,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
     if (yearInput && session.communityDate.year) yearInput.value = session.communityDate.year
   }
 
-  if (isCsrpCheckAnswersEdit()) {
+  if (isTieringCheckAnswersEdit()) {
     captureCheckAnswersEditSnapshot(getA4FieldsFromForm(form))
   }
 
@@ -43,6 +43,6 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
     const newFields = getA4FieldsFromForm(form)
 
-    window.location.href = completeCsrpPageAndContinue('a4', 'a5.html', newFields)
+    window.location.href = completeTieringPageAndContinue('a4', 'a5.html', newFields)
   })
 })

@@ -1,11 +1,13 @@
 //
-// Offence autocomplete – prototype search for CSRP assessment
+// Offence autocomplete – prototype search for Tiering assessment
 // Data: /api/offences (app/data/offences.json)
 //
 
-import { captureCheckAnswersEditSnapshot, isCsrpCheckAnswersEdit } from './csrp-change-scroll.js'
-import { getA1FieldsFromForm } from './csrp-journey.js'
-import { getCsrpAssessmentSession } from './csrp-assessment-session.js'
+import { captureCheckAnswersEditSnapshot, isTieringCheckAnswersEdit } from './tiering-change-scroll.js'
+import { getA1FieldsFromForm } from './tiering-journey.js'
+import { getTieringAssessmentSession } from './tiering-assessment-session.js'
+import { formatOffenceCodeLabel } from './tiering-offence-browse.js'
+import { trackTelemetryOffenceSearch } from './tiering-session-telemetry.js'
 
 const offenceSearchMatches = (item, query) => {
   const q = query.trim().toLowerCase()
@@ -14,7 +16,11 @@ const offenceSearchMatches = (item, query) => {
   const haystack = [
     item.label,
     item.code,
+    item.subcode,
+    item.fullCode,
     item.category,
+    item.code && item.subcode ? `${item.code} ${item.subcode}` : '',
+    item.code && item.subcode ? `${item.code}${item.subcode}` : '',
     ...(item.searchTerms || [])
   ]
     .filter(Boolean)
@@ -25,8 +31,14 @@ const offenceSearchMatches = (item, query) => {
 }
 
 const offenceSearchFormatMeta = (item) => {
-  if (item.subOffenceCount && item.subOffenceCount > 0) {
+  if (item.type === 'parent' && item.subOffenceCount > 1) {
     return `(${item.subOffenceCount} offences)`
+  }
+  if (item.code && item.subcode) {
+    return `${item.code} / ${item.subcode}`
+  }
+  if (item.fullCode) {
+    return item.fullCode
   }
   if (item.code) {
     return item.code
@@ -57,6 +69,8 @@ const offenceSearchBuildIndex = (offences) => {
     id: offence.id,
     label: offence.label,
     code: offence.code,
+    subcode: '00',
+    fullCode: `${offence.code}00`,
     category: offence.category,
     subOffenceCount: offence.subOffenceCount || 0,
     subOffences: offence.subOffences || [],
@@ -69,10 +83,21 @@ const offenceSearchBuildIndex = (offences) => {
       id: sub.id,
       label: sub.label,
       code: sub.code,
+      subcode: sub.subcode,
+      fullCode: sub.fullCode,
       category: offence.category,
       parentId: offence.id,
       parentLabel: offence.label,
-      searchTerms: [sub.label, sub.code, offence.label, offence.code, ...(offence.searchTerms || [])]
+      searchTerms: [
+        sub.label,
+        sub.code,
+        sub.subcode,
+        sub.fullCode,
+        offence.label,
+        offence.code,
+        ...(sub.searchTerms || []),
+        ...(offence.searchTerms || [])
+      ]
     }))
   )
 
@@ -85,10 +110,12 @@ const offenceSearchMapSubOptions = (parent, subOffences) =>
     id: sub.id,
     label: sub.label,
     code: sub.code,
+    subcode: sub.subcode,
+    fullCode: sub.fullCode,
     category: parent.category,
     parentId: parent.id,
     parentLabel: parent.label,
-    searchTerms: [sub.label, sub.code]
+    searchTerms: [sub.label, sub.code, sub.subcode, sub.fullCode]
   }))
 
 window.initOffenceSearch = async (container) => {
@@ -102,6 +129,8 @@ window.initOffenceSearch = async (container) => {
   const selectedLabel = container.querySelector('[data-offence-selected-label]')
   const selectedMeta = container.querySelector('[data-offence-selected-meta]')
   const hiddenInput = container.querySelector('[data-offence-selected-id]')
+  const hiddenCodeInput = container.querySelector('[data-offence-selected-code]')
+  const hiddenSubcodeInput = container.querySelector('[data-offence-selected-subcode]')
   const changeLink = container.querySelector('[data-offence-change]')
 
   if (!input || !listbox || !searchPanel) return
@@ -237,6 +266,8 @@ window.initOffenceSearch = async (container) => {
     clearListbox()
     setExpanded(false)
     if (hiddenInput) hiddenInput.value = ''
+    if (hiddenCodeInput) hiddenCodeInput.value = ''
+    if (hiddenSubcodeInput) hiddenSubcodeInput.value = ''
     input.setAttribute('aria-describedby', 'current-offence-search-hint')
     input.focus()
   }
@@ -265,14 +296,27 @@ window.initOffenceSearch = async (container) => {
     selectedPanel.hidden = false
     if (selectedLabel) selectedLabel.textContent = selection.label
     if (selectedMeta) {
-      selectedMeta.textContent = selection.code ? `Offence code: ${selection.code}` : ''
-      selectedMeta.hidden = !selection.code
+      const codeLabel = formatOffenceCodeLabel(selection)
+      selectedMeta.textContent = codeLabel
+      selectedMeta.hidden = !codeLabel
     }
     if (hiddenInput) hiddenInput.value = selection.id
+    if (hiddenCodeInput) hiddenCodeInput.value = selection.code || ''
+    if (hiddenSubcodeInput) hiddenSubcodeInput.value = selection.subcode || ''
     browseParent = null
     clearListbox()
     setExpanded(false)
     input.setAttribute('aria-describedby', 'current-offence-search-hint')
+
+    trackTelemetryOffenceSearch({
+      action: 'select',
+      query: {
+        id: selection.id,
+        label: selection.label,
+        code: selection.code || '',
+        source: 'search'
+      }
+    })
   }
 
   const selectOption = (option) => {
@@ -282,7 +326,8 @@ window.initOffenceSearch = async (container) => {
       return
     }
 
-    const hasSubOffences = option.type === 'parent' && option.subOffences && option.subOffences.length > 0
+    const hasSubOffences =
+      option.type === 'parent' && option.subOffenceCount && option.subOffenceCount > 1
 
     if (hasSubOffences) {
       showSubOffenceList(option)
@@ -292,7 +337,9 @@ window.initOffenceSearch = async (container) => {
     showSelected({
       id: option.id,
       label: option.label,
-      code: option.code || ''
+      code: option.code || '',
+      subcode: option.subcode || '',
+      fullCode: option.fullCode || ''
     })
   }
 
@@ -330,7 +377,9 @@ window.initOffenceSearch = async (container) => {
           type: 'sub',
           id: sub.id,
           label: sub.label,
-          code: sub.code
+          code: sub.code,
+          subcode: sub.subcode,
+          fullCode: sub.fullCode
         })
       }
       return
@@ -346,8 +395,34 @@ window.initOffenceSearch = async (container) => {
     if (sub) selectOption(sub)
   }
 
+  let searchTrackTimeout
+  let lastLoggedSearchQuery = ''
+
   input.addEventListener('input', () => {
     if (!dataReady) return
+
+    const query = input.value.trim()
+
+    if (!query) {
+      lastLoggedSearchQuery = ''
+    } else {
+      clearTimeout(searchTrackTimeout)
+      searchTrackTimeout = setTimeout(() => {
+        const currentQuery = input.value.trim()
+        if (!currentQuery || currentQuery === lastLoggedSearchQuery) return
+
+        lastLoggedSearchQuery = currentQuery
+        const resultCount = browseParent
+          ? getSubOffenceOptions(browseParent, currentQuery).length
+          : getMatches(currentQuery).length
+
+        trackTelemetryOffenceSearch({
+          query: currentQuery,
+          resultCount,
+          action: 'search'
+        })
+      }, 700)
+    }
 
     if (browseParent) {
       showSubOffenceList(browseParent, input.value)
@@ -440,7 +515,9 @@ window.initOffenceSearch = async (container) => {
           type: 'sub',
           id: sub.id,
           label: sub.label,
-          code: sub.code
+          code: sub.code,
+          subcode: sub.subcode,
+          fullCode: sub.fullCode
         })
       }
       return
@@ -464,7 +541,7 @@ window.initOffenceSearch = async (container) => {
   }
 
   if (dataReady && !isCheckMode) {
-    const session = getCsrpAssessmentSession()
+    const session = getTieringAssessmentSession()
 
     if (session.currentOffence) {
       showSelected(session.currentOffence)
@@ -480,8 +557,8 @@ window.initOffenceSearch = async (container) => {
       if (yearInput && convictionDate.year) yearInput.value = convictionDate.year
     }
 
-    if (isCsrpCheckAnswersEdit()) {
-      const a1Form = document.getElementById('csrp-a1-form')
+    if (isTieringCheckAnswersEdit()) {
+      const a1Form = document.getElementById('tiering-a1-form')
       if (a1Form) captureCheckAnswersEditSnapshot(getA1FieldsFromForm(a1Form))
     }
   }

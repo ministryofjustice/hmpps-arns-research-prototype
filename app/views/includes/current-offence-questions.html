@@ -1,6 +1,6 @@
 {# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
 
-<h2 id="csrp-current-offence" class="govuk-heading-m csrp-question-anchor govuk-!-margin-top-6 govuk-!-margin-bottom-2">
+<h2 id="tiering-current-offence" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-6 govuk-!-margin-bottom-2">
   What is {{ offenderFirstName }}'s current offence?
 </h2>
 
@@ -11,7 +11,7 @@
 >
   <div data-offence-search-panel>
     <p id="current-offence-search-hint" class="govuk-hint govuk-!-margin-bottom-4">
-      Search the name of an offence, an offence code or subcode
+      Search for the name of an offence, an offence code or subcode.
     </p>
     <div class="govuk-form-group offence-autocomplete__combobox">
       <label class="govuk-label govuk-visually-hidden" for="current-offence-search-input">
@@ -40,7 +40,7 @@
       ></ul>
     </div>
     <p class="govuk-body govuk-!-margin-top-3 govuk-!-margin-bottom-0">
-      <a class="govuk-link" href="a1o.html" data-csrp-offence-browse-link>View all offences</a>
+      <a class="govuk-link" href="a1o.html" data-tiering-offence-browse-link>View all offences</a>
     </p>
   </div>
 
@@ -51,21 +51,20 @@
     </div>
     <p class="govuk-body offence-autocomplete__selected-code govuk-!-margin-bottom-0" data-offence-selected-meta hidden></p>
     <input type="hidden" name="current_offence_id" value="" data-offence-selected-id>
+    <input type="hidden" name="current_offence_code" value="" data-offence-selected-code>
+    <input type="hidden" name="current_offence_subcode" value="" data-offence-selected-subcode>
   </div>
 </div>
 
-<h2 id="csrp-conviction-date" class="govuk-heading-m csrp-question-anchor govuk-!-margin-top-8 govuk-!-margin-bottom-4">
+<h2 id="tiering-conviction-date" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-8 govuk-!-margin-bottom-4">
   What is the date of {{ offenderFirstName }}'s current conviction?
 </h2>
 
 <div class="govuk-form-group">
-  <fieldset class="govuk-fieldset" role="group" aria-describedby="current-conviction-date-hint">
+  <fieldset class="govuk-fieldset" role="group">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
       What is the date of {{ offenderFirstName }}'s current conviction?
     </legend>
-    <div id="current-conviction-date-hint" class="govuk-hint">
-      For example, 27 3 2024
-    </div>
     <div class="govuk-date-input" id="current-conviction-date">
       <div class="govuk-date-input__item">
         <div class="govuk-form-group">

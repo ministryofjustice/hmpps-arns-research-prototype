@@ -1,8 +1,10 @@
-<div class="assessment-layout">
+<div class="assessment-layout"{% if tieringTelemetryPage %} data-tiering-telemetry-page="{{ tieringTelemetryPage }}" data-tiering-telemetry-page-label="{{ tieringTelemetryPageLabel | default(tieringTelemetryPage) }}"{% endif %}>
   {% if backLinkHref %}
   <a href="{{ backLinkHref }}" class="govuk-back-link govuk-!-margin-bottom-4">{{ backLinkText | default('Back') }}</a>
   {% endif %}
+  {% if not hideOffenderHeader %}
   {% include "includes/assessment-offender-header.html" %}
+  {% endif %}
   {% if not hideJourneyServiceHeader %}
   {% include "includes/assessment-service-header-journey.html" %}
   {% endif %}

@@ -1,0 +1,11 @@
+{# Offence browse A/B – interactive title toggles between a1o and a1o2 #}
+<div class="assessment-layout__section assessment-layout__section--compact offence-browse-heading govuk-!-margin-bottom-6">
+  <div class="assessment-layout__row assessment-layout__row--tight">
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-0">
+      <a href="{{ offenceBrowseToggleHref }}" class="offence-browse-variant-toggle">{{ offenceBrowseTitle | default('Select an offence') }}</a>
+    </h1>
+    {% if statusTag %}
+      <strong class="govuk-tag govuk-tag--grey assessment-layout__status-tag" aria-hidden="true">{{ statusTag }}</strong>
+    {% endif %}
+  </div>
+</div>

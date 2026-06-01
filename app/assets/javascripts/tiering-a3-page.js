@@ -4,11 +4,11 @@
 
 import {
   captureCheckAnswersEditSnapshot,
-  completeCsrpPageAndContinue,
-  isCsrpCheckAnswersEdit
-} from './csrp-change-scroll.js'
-import { getA3FieldsFromForm } from './csrp-journey.js'
-import { getCsrpAssessmentSession } from './csrp-assessment-session.js'
+  completeTieringPageAndContinue,
+  isTieringCheckAnswersEdit
+} from './tiering-change-scroll.js'
+import { getA3FieldsFromForm } from './tiering-journey.js'
+import { getTieringAssessmentSession } from './tiering-assessment-session.js'
 
 const restoreRadio = (form, name, value) => {
   if (!value) return
@@ -17,10 +17,10 @@ const restoreRadio = (form, name, value) => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  const form = document.getElementById('csrp-a3-form')
+  const form = document.getElementById('tiering-a3-form')
   if (!form) return
 
-  const session = getCsrpAssessmentSession()
+  const session = getTieringAssessmentSession()
 
   if (session.sexualOffence !== 'yes') {
     window.location.href = 'a2.html'
@@ -60,11 +60,11 @@ window.GOVUKPrototypeKit.documentReady(() => {
     textFields.nonContactSanctions.value = session.nonContactSanctions
   }
 
-  if (isCsrpCheckAnswersEdit()) {
+  if (isTieringCheckAnswersEdit()) {
     captureCheckAnswersEditSnapshot(getA3FieldsFromForm(form))
   }
 
-  if (!isCsrpCheckAnswersEdit()) {
+  if (!isTieringCheckAnswersEdit()) {
     const autofillOnFocus = [
       { input: textFields.contactAdultSanctions, value: '2' },
       { input: textFields.contactChildSanctions, value: '1' },
@@ -85,6 +85,6 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
     const newFields = getA3FieldsFromForm(form)
 
-    window.location.href = completeCsrpPageAndContinue('a3', 'a4.html', newFields)
+    window.location.href = completeTieringPageAndContinue('a3', 'a4.html', newFields)
   })
 })

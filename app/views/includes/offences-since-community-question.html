@@ -1,6 +1,6 @@
 {# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
 
-<h2 id="csrp-offences-since-community" class="govuk-heading-m csrp-question-anchor govuk-!-margin-top-6 govuk-!-margin-bottom-2">
+<h2 id="tiering-offences-since-community" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-6 govuk-!-margin-bottom-2">
   Since <span data-community-date-display>that date</span>, has {{ offenderFirstName }} committed any offences?
 </h2>
 
@@ -18,8 +18,8 @@
         <input class="govuk-radios__input" id="offences-since-community-no" name="offences_since_community" type="radio" value="no">
         <label class="govuk-label govuk-radios__label" for="offences-since-community-no">No</label>
       </div>
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="offences-since-community-unknown" name="offences_since_community" type="radio" value="unknown">
+      <div class="govuk-radios__item" hidden aria-hidden="true" style="display: none;">
+        <input class="govuk-radios__input" id="offences-since-community-unknown" name="offences_since_community" type="radio" value="unknown" disabled>
         <label class="govuk-label govuk-radios__label" for="offences-since-community-unknown">Unknown</label>
       </div>
     </div>

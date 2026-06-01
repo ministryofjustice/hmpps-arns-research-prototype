@@ -1,24 +1,26 @@
 //
-// CSRP section 1 complete state (side nav tick + hide mark-complete button)
+// Tiering section 1 complete state (side nav tick + hide mark-complete button)
 //
 
-import { getCsrpAssessmentSession, setCsrpAssessmentSession } from './csrp-assessment-session.js'
+import { getTieringAssessmentSession, setTieringAssessmentSession } from './tiering-assessment-session.js'
+import { trackTelemetryMilestone } from './tiering-session-telemetry.js'
 
-export const isSection1Complete = () => getCsrpAssessmentSession().section1Complete === true
+export const isSection1Complete = () => getTieringAssessmentSession().section1Complete === true
 
 export const markSection1Complete = () => {
   hideMarkSectionCompleteButton()
-  setCsrpAssessmentSession({ section1Complete: true })
+  setTieringAssessmentSession({ section1Complete: true })
+  trackTelemetryMilestone('markSectionComplete')
   applySection1CompleteUi()
 }
 
 const hideMarkSectionCompleteButton = () => {
-  const markBtn = document.getElementById('csrp-mark-section-complete')
+  const markBtn = document.getElementById('tiering-mark-section-complete')
   if (!markBtn) return
 
   markBtn.hidden = true
   markBtn.setAttribute('aria-hidden', 'true')
-  markBtn.classList.add('csrp-mark-section-complete--hidden')
+  markBtn.classList.add('tiering-mark-section-complete--hidden')
 
   const actions = markBtn.closest('.risk-predictor-scores__actions')
   if (actions) actions.classList.add('risk-predictor-scores__actions--section-complete')
@@ -35,11 +37,11 @@ export const resetSection1CompleteUi = () => {
     if (item) item.classList.remove('moj-side-navigation__item--complete')
   })
 
-  const markBtn = document.getElementById('csrp-mark-section-complete')
+  const markBtn = document.getElementById('tiering-mark-section-complete')
   if (markBtn) {
     markBtn.hidden = false
     markBtn.removeAttribute('aria-hidden')
-    markBtn.classList.remove('csrp-mark-section-complete--hidden')
+    markBtn.classList.remove('tiering-mark-section-complete--hidden')
   }
 
   document.querySelectorAll('.risk-predictor-scores__actions').forEach((actions) => {
@@ -67,7 +69,7 @@ export const applySection1CompleteUi = () => {
 }
 
 export const clearSection1CompleteSession = () => {
-  setCsrpAssessmentSession({ section1Complete: false })
+  setTieringAssessmentSession({ section1Complete: false })
 }
 
 export const clearSection1Complete = () => {

@@ -146,6 +146,46 @@ $desktop: 48.0625em;
   padding: 0;
   list-style: none;
 
+  &__title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 15px;
+  }
+
+  &__title-tag {
+    flex: 0 0 auto;
+    background-color: #d2e2f1;
+    color: #0b0c0c;
+  }
+
+  &__hint-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 15px;
+
+    // Keep default GOV.UK spacing but allow flex alignment
+    > * {
+      margin: 0;
+    }
+  }
+
+  &__skip-link {
+    white-space: nowrap;
+    margin-top: 2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__skip-icon {
+    display: inline-flex;
+    width: 14px;
+    height: 14px;
+    flex: 0 0 14px;
+  }
+
   &__item {
     margin-bottom: 30px;
     padding-bottom: 30px;
@@ -223,6 +263,10 @@ body.assessment-page {
       text-decoration: underline;
     }
 
+    a:not([href]) {
+      cursor: default;
+    }
+
     &--active {
       a,
       a:link,
@@ -233,7 +277,8 @@ body.assessment-page {
         font-weight: bold;
       }
 
-      a:hover {
+      a:hover,
+      a:not([href]):hover {
         text-decoration: none;
       }
     }
@@ -445,15 +490,81 @@ body.assessment-page {
 }
 
 // Check your answers – empty values
-.csrp-question-anchor {
+.tiering-question-anchor {
   scroll-margin-top: 20px;
 }
 
-.csrp-summary-list__not-provided {
+.tiering-summary-list__not-provided {
   color: #505a5f;
 }
 
-// Browse all offences page (a1o)
+// Browse all offences pages (a1o / a1o2 A-B test)
+.offence-browse-variant-toggle {
+  &,
+  &:link,
+  &:visited,
+  &:hover,
+  &:active,
+  &:focus {
+    color: #0b0c0c;
+  }
+
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus {
+    background-color: #ffdd00;
+    box-shadow: 0 -2px #ffdd00, 0 4px #0b0c0c;
+    text-decoration: underline;
+  }
+}
+
+.offence-browse-tabs {
+  // Fixed column layout so Code / Action stay aligned when switching tabs (sized for Other offences)
+  &__table {
+    margin-bottom: 0;
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  &__col--name {
+    width: auto;
+  }
+
+  &__col--code {
+    width: 5rem;
+  }
+
+  &__col--subcode {
+    width: 5rem;
+  }
+
+  &__col--action {
+    width: 9.5rem;
+  }
+
+  &__header--code,
+  &__header--subcode,
+  .govuk-table__cell:nth-child(2),
+  .govuk-table__cell:nth-child(3) {
+    width: 5rem;
+    white-space: nowrap;
+  }
+
+  &__header--action,
+  .offences-all-table__action-cell {
+    width: 9.5rem;
+  }
+
+  &__header--name,
+  .govuk-table__cell:nth-child(1) {
+    overflow-wrap: anywhere;
+  }
+}
+
 .offences-all-page__actions {
   display: flex;
   flex-direction: column;
@@ -462,9 +573,38 @@ body.assessment-page {
 }
 
 .offences-all-table {
+  table-layout: fixed;
+  width: 100%;
+
+  &__col--name {
+    width: auto;
+  }
+
+  &__col--code,
+  &__col--subcode {
+    width: 5rem;
+  }
+
+  &__col--action {
+    width: 13rem;
+  }
+
+  &__header--code,
+  &__header--subcode,
+  .govuk-table__cell:nth-child(2),
+  .govuk-table__cell:nth-child(3) {
+    width: 5rem;
+    white-space: nowrap;
+  }
+
+  &__header--name,
+  .govuk-table__cell:nth-child(1) {
+    overflow-wrap: anywhere;
+  }
+
   &__action-header,
   &__action-cell {
-    width: 1%;
+    width: 13rem;
     text-align: right;
     white-space: nowrap;
   }
@@ -473,10 +613,158 @@ body.assessment-page {
     background-color: #ffdd00;
 
     .govuk-table__cell:nth-child(1),
-    .govuk-table__cell:nth-child(2) {
+    .govuk-table__cell:nth-child(2),
+    .govuk-table__cell:nth-child(3) {
       font-weight: 700;
     }
   }
+
+  &__inline-actions {
+    .govuk-table__cell {
+      border-top: 0;
+    }
+  }
+
+  &__inline-actions-cell {
+    background-color: #fff9e6;
+    border-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 15px;
+    vertical-align: top;
+  }
+
+  &__inline-actions-inner {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    gap: 15px;
+    padding-top: 15px;
+    padding-bottom: 0;
+  }
+
+  &__inline-actions-inner .govuk-button {
+    margin-bottom: 0;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+}
+
+.offence-browse-accordions {
+  .offence-browse-accordion {
+    margin-bottom: 0;
+
+    &.govuk-accordion {
+      margin-bottom: 0;
+    }
+
+    .govuk-accordion__show-all {
+      margin-bottom: 5px;
+      padding: 2px 2px 4px 0;
+      line-height: 1.25;
+    }
+
+    .govuk-accordion__section-button {
+      display: flex;
+      align-items: baseline;
+      gap: 15px;
+      font-size: 19px;
+      line-height: 1.25;
+      padding-top: 8px;
+      padding-bottom: 0;
+      border-bottom: 0;
+      width: 100%;
+      text-align: left;
+    }
+
+    .govuk-accordion__section-heading-text-divider {
+      display: none;
+    }
+
+    .govuk-accordion__section-toggle,
+    .govuk-accordion__section-heading-text,
+    .govuk-accordion__section-summary {
+      margin-bottom: 0;
+    }
+
+    .govuk-accordion__section-heading-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .govuk-accordion__section-heading-text-focus {
+      display: block;
+    }
+
+    .offence-browse-accordion__code {
+      flex: 0 0 5rem;
+      width: 5rem;
+      text-align: right;
+      color: #505a5f;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+
+    .govuk-accordion__section-toggle {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+      font-size: 16px;
+      line-height: 1.25;
+      white-space: nowrap;
+    }
+
+    .govuk-accordion__section--expanded .govuk-accordion__section-button {
+      padding-bottom: 0;
+    }
+
+    .govuk-accordion__section-content {
+      padding-top: 10px;
+      padding-bottom: 15px;
+    }
+  }
+
+  .offence-browse-accordion__section {
+    // Keep expanded category titles visible while scrolling long offence lists.
+    &.govuk-accordion__section--expanded .offence-browse-accordion__header {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background-color: #ffffff;
+      padding-bottom: 0;
+    }
+  }
+
+  .offence-browse-accordion__header-layout {
+    line-height: 1.25;
+  }
+
+  .offence-browse-accordion__title {
+    display: inline;
+  }
+
+  .offence-browse-accordion__count {
+    display: inline;
+    margin-left: 6px;
+    color: #505a5f;
+    font-weight: 400;
+    line-height: 1.25;
+  }
+
+  .offence-browse-accordion__table {
+    margin-bottom: 0;
+  }
+}
+
+.offence-browse-tabs {
+  &__panel {
+    padding-top: 0;
+  }
+}
+
+.offence-browse-pagination {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 // Risk predictor scores (ARNS scale bars)
@@ -499,18 +787,192 @@ body.assessment-page {
   }
 }
 
-.csrp-mark-section-complete--hidden {
+.tiering-mark-section-complete--hidden {
   display: none !important;
+}
+
+.govuk-back-to-top {
+  margin-bottom: 15px;
+
+  .govuk-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 19px;
+  }
+}
+
+.govuk-back-to-top__icon {
+  flex-shrink: 0;
+  width: 13px;
+  height: 17px;
 }
 
 .risk-predictor-scores {
   &__section {
-    padding-bottom: 30px;
+    // Padding cannot be negative; control separator spacing explicitly instead.
+    // Keep this small and remove bottom margins from the section's last element.
+    padding-bottom: 5px;
+
+    // GOV.UK components often add bottom margins; avoid extra whitespace before the separator.
+    > :last-child {
+      margin-bottom: 0;
+    }
+
+    > .risk-predictor-scores__details {
+      margin-bottom: 0;
+    }
 
     &--border {
       border-bottom: 1px solid #b1b4b6;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
+  }
+
+  // Ensure GOV.UK bullet lists keep their standard indentation inside the predictor content.
+  .govuk-list--bullet {
+    padding-left: 40px;
+    list-style-position: outside;
+    list-style-type: disc;
+  }
+
+  // Match GOV.UK body size (19px) for predictor details headings.
+  &__details-heading {
+    font-size: 19px;
+    line-height: 1.3157894737; // GOV.UK body line-height for 19px
+  }
+
+  // Predictor details toggle (match accordion toggle style)
+  &__details-summary {
+    // GOV.UK adds left padding for its default disclosure icon; we hide that icon,
+    // so remove the padding to align the custom circle+label to the left.
+    padding-left: 0;
+
+    // Some browsers apply extra indentation to summary; ensure it's flush-left.
+    margin-left: 0;
+    margin-bottom: 15px;
+
+    // Remove the default browser disclosure triangle/marker (the "first arrow")
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::marker {
+      content: '';
+    }
+
+    // Hide the default GOV.UK Details disclosure triangle/arrow
+    // (we use the circle icon instead).
+    &::before {
+      display: none !important;
+      content: none !important;
+    }
+
+    .risk-predictor-scores__details-toggle {
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 2px 6px 2px 2px;
+      border-radius: 0;
+    }
+
+    .risk-predictor-scores__details-toggle-text {
+      color: inherit;
+      text-decoration: none;
+      position: relative;
+      top: 5px;
+      margin-left: -5px;
+    }
+
+    .risk-predictor-scores__details-toggle-icon {
+      display: inline-flex;
+      width: 30px;
+      height: 30px;
+      flex: 0 0 30px;
+      margin-top: 5px; // move the circle down slightly
+    }
+
+    svg {
+      display: block;
+    }
+
+    // Hover background should only appear on mouse hover (not on focus),
+    // so the GOV.UK yellow focus styling remains visible for keyboard users.
+    &:hover .risk-predictor-scores__details-toggle {
+      background: #f3f2f1;
+      color: #0b0c0c; // GOV.UK black
+    }
+
+    &:hover .risk-predictor-scores__details-toggle-icon circle {
+      fill: #0b0c0c;
+      stroke: #0b0c0c;
+    }
+
+    &:hover .risk-predictor-scores__details-toggle-icon .risk-predictor-scores__details-toggle-chevron {
+      stroke: #ffffff;
+    }
+  }
+
+  // When expanded ("Hide details" state), hover is allowed only when the summary
+  // is not focused (so focus styling is never obscured).
+  &__details[open] .risk-predictor-scores__details-summary:hover .risk-predictor-scores__details-toggle {
+    background: #f3f2f1;
+  }
+
+  // On focus, use the "black" version (text black, filled circle, white chevron).
+  // This works with the GOV.UK yellow focus styling (we don't add a grey background).
+  .risk-predictor-scores__details-summary:focus .risk-predictor-scores__details-toggle,
+  .risk-predictor-scores__details-summary:focus-visible .risk-predictor-scores__details-toggle,
+  .risk-predictor-scores__details-summary:focus-within .risk-predictor-scores__details-toggle {
+    background: transparent;
+    color: #0b0c0c;
+  }
+
+  .risk-predictor-scores__details-summary:focus .risk-predictor-scores__details-toggle-icon circle,
+  .risk-predictor-scores__details-summary:focus-visible .risk-predictor-scores__details-toggle-icon circle,
+  .risk-predictor-scores__details-summary:focus-within .risk-predictor-scores__details-toggle-icon circle {
+    fill: #0b0c0c;
+    stroke: #0b0c0c;
+  }
+
+  .risk-predictor-scores__details-summary:focus .risk-predictor-scores__details-toggle-icon .risk-predictor-scores__details-toggle-chevron,
+  .risk-predictor-scores__details-summary:focus-visible .risk-predictor-scores__details-toggle-icon .risk-predictor-scores__details-toggle-chevron,
+  .risk-predictor-scores__details-summary:focus-within .risk-predictor-scores__details-toggle-icon .risk-predictor-scores__details-toggle-chevron {
+    stroke: #ffffff;
+  }
+
+  // When expanded, match GOV.UK spacing scale (same as govuk-!-margin-top-3)
+  // between the summary control ("Show details") and the content.
+  &__details .govuk-details__text {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  // Toggle link text: show "Show details" until open
+  &__details-hide {
+    display: none;
+  }
+
+  &__details[open] &__details-show {
+    display: none;
+  }
+
+  &__details[open] &__details-hide {
+    display: inline;
+  }
+
+  // Keep the chevron static (no rotate/animation on open/close)
+  .risk-predictor-scores__details-toggle-chevron {
+    transition: none;
+    transform: none;
+  }
+
+  // Flip chevron when open (Hide details state), but without animating.
+  &__details[open] .risk-predictor-scores__details-toggle-chevron {
+    transform-origin: 12px 12px;
+    transform: rotate(180deg);
   }
 
   &__header {
@@ -518,6 +980,7 @@ body.assessment-page {
     flex-wrap: wrap;
     align-items: center;
     gap: 15px;
+    justify-content: space-between;
   }
 
   &__scale {
@@ -533,5 +996,128 @@ body.assessment-page {
     max-width: 100%;
     height: auto;
     min-width: 0;
+  }
+}
+
+// Session results (research telemetry)
+.tiering-session-results__header-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.tiering-session-results__download {
+  white-space: nowrap;
+  margin-bottom: 0;
+}
+
+.tiering-session-results__header-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.tiering-session-results__summary {
+  border: 1px solid #b1b4b6;
+  padding: 20px 25px;
+  background: #f3f2f1;
+
+  &--smooth {
+    border-left: 5px solid #00703c;
+
+    .tiering-session-results__rating-title {
+      color: #00703c !important; // GOV.UK green
+    }
+  }
+
+  &--friction {
+    border-left: 5px solid #f47738;
+
+    .tiering-session-results__rating-title {
+      color: #f47738 !important; // GOV.UK orange
+    }
+  }
+
+  &--high-friction {
+    border-left: 5px solid #d4351c;
+
+    .tiering-session-results__rating-title {
+      color: #d4351c !important; // GOV.UK red
+    }
+  }
+}
+
+.tiering-session-results__rating-title {
+  font-weight: 700;
+}
+
+.tiering-session-results__warning {
+  color: #d4351c;
+  font-weight: 700;
+}
+
+.tiering-session-results__category-row {
+  .govuk-table__header {
+    background: #f3f2f1;
+    border-bottom: 2px solid #b1b4b6;
+    font-size: 19px;
+    padding-top: 20px;
+    padding-bottom: 12px;
+  }
+
+  &:not(:first-child) .govuk-table__header {
+    padding-top: 28px;
+  }
+}
+
+.tiering-session-results__table {
+  .govuk-table__header--sub {
+    font-weight: 400;
+    padding-left: 20px;
+  }
+}
+
+.tiering-footer-session-links {
+  margin: 15px 0;
+  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+}
+
+.tiering-footer-session-links__link {
+  font-weight: 400;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.tiering-footer-session-links__icon {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+}
+
+.tiering-footer-session-links__icon svg {
+  display: block;
+}
+
+@media print {
+  .govuk-header,
+  .govuk-back-link,
+  .assessment-side-navigation,
+  .tiering-session-results__download,
+  .govuk-footer__navigation {
+    display: none !important;
+  }
+
+  .tiering-session-results__summary {
+    break-inside: avoid;
   }
 }

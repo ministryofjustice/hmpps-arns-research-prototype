@@ -2,8 +2,8 @@
 <nav class="moj-side-navigation assessment-side-navigation" aria-label="Assessment sections">
   <ul class="moj-side-navigation__list">
     <li class="moj-side-navigation__item{% if activeSection == "section-1" %} moj-side-navigation__item--active{% endif %}">
-      <a href="/01/a1.html" class="assessment-side-navigation__link" data-section="section-1"{% if activeSection == "section-1" %} aria-current="location"{% endif %}>
-        <span class="assessment-side-navigation__link-text">CSRP - section 1</span>
+      <a{% if activeSection != "section-1" %} href="/01/a1.html"{% endif %} class="assessment-side-navigation__link" data-section="section-1"{% if activeSection == "section-1" %} aria-current="location"{% endif %}>
+        <span class="assessment-side-navigation__link-text">Tiering</span>
         <span class="assessment-side-navigation__complete-icon" data-section-complete="section-1" aria-hidden="true">
           <svg class="assessment-side-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
             <circle cx="12" cy="12" r="12" fill="#1d70b8"/>
