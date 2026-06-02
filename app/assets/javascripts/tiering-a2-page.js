@@ -2,6 +2,7 @@
 // a2 – offending history (restore session from a1)
 //
 
+import { initFirstSanctionDate } from './first-sanction-date.js'
 import {
   captureCheckAnswersEditSnapshot,
   completeTieringPageAndContinue,
@@ -14,6 +15,8 @@ import { getTieringAssessmentSession } from './tiering-assessment-session.js'
 window.GOVUKPrototypeKit.documentReady(() => {
   const form = document.getElementById('tiering-a2-form')
   if (!form) return
+
+  initFirstSanctionDate()
 
   const session = getTieringAssessmentSession()
   const previousOffence = document.querySelector('[data-tiering-previous-offence]')
@@ -30,20 +33,13 @@ window.GOVUKPrototypeKit.documentReady(() => {
     }
   }
 
-  const fields = {
-    firstSanctionAge: form.querySelector('#first-sanction-age'),
-    totalSanctions: form.querySelector('#total-sanctions'),
-    violentSanctions: form.querySelector('#violent-sanctions-other')
+  if (session.totalSanctions) {
+    const totalSanctions = form.querySelector('#total-sanctions')
+    if (totalSanctions) totalSanctions.value = session.totalSanctions
   }
-
-  if (session.firstSanctionAge && fields.firstSanctionAge) {
-    fields.firstSanctionAge.value = session.firstSanctionAge
-  }
-  if (session.totalSanctions && fields.totalSanctions) {
-    fields.totalSanctions.value = session.totalSanctions
-  }
-  if (session.violentSanctions && fields.violentSanctions) {
-    fields.violentSanctions.value = session.violentSanctions
+  if (session.violentSanctions) {
+    const violentSanctions = form.querySelector('#violent-sanctions-other')
+    if (violentSanctions) violentSanctions.value = session.violentSanctions
   }
   if (session.sexualOffence) {
     const sexualOffenceInput = form.querySelector(`input[name="sexual_offence"][value="${session.sexualOffence}"]`)
@@ -56,9 +52,8 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   if (!isTieringCheckAnswersEdit()) {
     const autofillOnFocus = [
-      { input: fields.firstSanctionAge, value: '23' },
-      { input: fields.totalSanctions, value: '6' },
-      { input: fields.violentSanctions, value: '2' }
+      { input: form.querySelector('#total-sanctions'), value: '6' },
+      { input: form.querySelector('#violent-sanctions-other'), value: '2' }
     ]
 
     autofillOnFocus.forEach(({ input, value }) => {
@@ -72,7 +67,16 @@ window.GOVUKPrototypeKit.documentReady(() => {
   form.addEventListener('submit', (event) => {
     event.preventDefault()
 
-    const newFields = getA2FieldsFromForm(form)
+    const newFields = {
+      ...getA2FieldsFromForm(form),
+      firstSanctionDateEditMode: false
+    }
+
+    if (!isTieringCheckAnswersEdit()) {
+      if (!newFields.totalSanctions) newFields.totalSanctions = '6'
+      if (!newFields.violentSanctions) newFields.violentSanctions = '2'
+    }
+
     const sexualOffence = newFields.sexualOffence
 
     window.location.href = completeTieringPageAndContinue(

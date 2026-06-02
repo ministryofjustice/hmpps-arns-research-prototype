@@ -12,6 +12,20 @@ export const markSection1Complete = () => {
   setTieringAssessmentSession({ section1Complete: true })
   trackTelemetryMilestone('markSectionComplete')
   applySection1CompleteUi()
+
+  window.scrollTo(0, 0)
+}
+
+const setA8BackLinkVisible = (visible) => {
+  const backLink = document.getElementById('tiering-a8-back')
+  if (!backLink) return
+
+  backLink.classList.toggle('assessment-layout__back-link--hidden', !visible)
+  if (visible) {
+    backLink.removeAttribute('aria-hidden')
+  } else {
+    backLink.setAttribute('aria-hidden', 'true')
+  }
 }
 
 const hideMarkSectionCompleteButton = () => {
@@ -28,13 +42,14 @@ const hideMarkSectionCompleteButton = () => {
 
 export const resetSection1CompleteUi = () => {
   document.querySelectorAll('[data-section-complete="section-1"]').forEach((icon) => {
-    icon.classList.remove('assessment-side-navigation__complete-icon--visible')
+    icon.classList.remove('assessment-section-navigation__complete-icon--visible')
     icon.setAttribute('aria-hidden', 'true')
   })
 
   document.querySelectorAll('[data-section="section-1"]').forEach((link) => {
-    const item = link.closest('.moj-side-navigation__item')
-    if (item) item.classList.remove('moj-side-navigation__item--complete')
+    const item =
+      link.closest('.moj-side-navigation__item') || link.closest('.govuk-service-navigation__item')
+    if (item) item.classList.remove('assessment-section-navigation__item--complete')
   })
 
   const markBtn = document.getElementById('tiering-mark-section-complete')
@@ -47,6 +62,8 @@ export const resetSection1CompleteUi = () => {
   document.querySelectorAll('.risk-predictor-scores__actions').forEach((actions) => {
     actions.classList.remove('risk-predictor-scores__actions--section-complete')
   })
+
+  setA8BackLinkVisible(true)
 }
 
 export const applySection1CompleteUi = () => {
@@ -56,16 +73,18 @@ export const applySection1CompleteUi = () => {
   }
 
   document.querySelectorAll('[data-section-complete="section-1"]').forEach((icon) => {
-    icon.classList.add('assessment-side-navigation__complete-icon--visible')
+    icon.classList.add('assessment-section-navigation__complete-icon--visible')
     icon.setAttribute('aria-hidden', 'false')
   })
 
   document.querySelectorAll('[data-section="section-1"]').forEach((link) => {
-    const item = link.closest('.moj-side-navigation__item')
-    if (item) item.classList.add('moj-side-navigation__item--complete')
+    const item =
+      link.closest('.moj-side-navigation__item') || link.closest('.govuk-service-navigation__item')
+    if (item) item.classList.add('assessment-section-navigation__item--complete')
   })
 
   hideMarkSectionCompleteButton()
+  setA8BackLinkVisible(false)
 }
 
 export const clearSection1CompleteSession = () => {

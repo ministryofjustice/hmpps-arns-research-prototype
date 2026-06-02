@@ -75,7 +75,7 @@
   <section class="risk-predictor-scores__section risk-predictor-scores__section--border" role="region" aria-labelledby="vrp-heading" data-risk-predictor-id="vrp" data-risk-predictor-label="Violent reoffending predictor">
     <div class="risk-predictor-scores__header">
       <h3 class="govuk-heading-m govuk-!-margin-bottom-0" id="vrp-heading">Violent reoffending predictor</h3>
-      <strong class="govuk-tag govuk-tag--grey">Dynamic</strong>
+      <strong class="govuk-tag govuk-tag--grey">Static</strong>
     </div>
     <p class="govuk-!-margin-top-3 govuk-!-margin-bottom-4">
       About 1 in 3 people (34.56%) with a similar profile to {{ offenderFirstName }} will get a sanction for a violent
@@ -125,7 +125,7 @@
         </ul>
         <p class="govuk-body">
           To check if a specific offence is classed as violent, go to the
-          <a class="govuk-link" href="https://equip-portal.equip.service.justice.gov.uk/CtrlWebIsapi.dll/app/documents/C025AF635DB44965AC7B629E5538CB5B/master">full list of violent offences (EQUip)</a>.
+          <a class="govuk-link" href="https://equip-portal.equip.service.justice.gov.uk/CtrlWebIsapi.dll/app/documents/C025AF635DB44965AC7B629E5538CB5B/master" data-tiering-inactive-link>full list of violent offences (EQUip)</a>.
         </p>
 
         <h4 class="govuk-heading-m risk-predictor-scores__details-heading">How we calculate the score</h4>
@@ -165,7 +165,7 @@
   <section class="risk-predictor-scores__section risk-predictor-scores__section--border" role="region" aria-labelledby="tiering-heading" data-risk-predictor-id="combined-serious" data-risk-predictor-label="Combined serious reoffending predictor">
     <div class="risk-predictor-scores__header">
       <h3 class="govuk-heading-m govuk-!-margin-bottom-0" id="tiering-heading">Combined serious reoffending predictor</h3>
-      <strong class="govuk-tag govuk-tag--grey">Dynamic</strong>
+      <strong class="govuk-tag govuk-tag--grey">Static</strong>
     </div>
     <p class="govuk-!-margin-top-3 govuk-!-margin-bottom-4">
       Fewer than 1 in 100 people (0.89%) with a similar profile to {{ offenderFirstName }} will get a sanction for a
@@ -310,6 +310,7 @@
     <div class="risk-predictor-scores__header">
       <h3 class="govuk-heading-m govuk-!-margin-bottom-0" id="dtiering-heading">Direct contact – sexual reoffending predictor</h3>
     </div>
+    <div data-risk-predictor-score-content>
     <p class="govuk-!-margin-top-3 govuk-!-margin-bottom-4">
       About 83 in 100 people (83.1%) with a similar profile to {{ offenderFirstName }} will get a sanction for a direct
       contact sexual offence they commit within two years. This puts {{ offenderFirstName }} in the very high risk band.
@@ -333,45 +334,7 @@
         </span>
       </summary>
       <div class="govuk-details__text">
-        <h4 class="govuk-heading-m risk-predictor-scores__details-heading">What this score predicts</h4>
-        <p class="govuk-body">
-          The Direct contact – sexual reoffending predictor predicts the risk of the following offences with an adult victim:
-        </p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li>rape or attempted rape</li>
-          <li>sexual assault</li>
-          <li>causing a female to engage in sexual activity without consent</li>
-          <li>sex with an adult relative</li>
-          <li>sexual activity with someone with a mental disorder or learning disability, including ‘breach of trust’ offences</li>
-          <li>abduction (under the Sexual Offences 1956 Act)</li>
-          <li>trafficking for sexual exploitation</li>
-          <li>administering a substance with intent to engage in a sexual activity</li>
-        </ul>
-        <p class="govuk-body">It also predicts the risk of the following offences with a child victim:</p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li>rape or attempted rape</li>
-          <li>assault by penetration</li>
-          <li>sexual assault</li>
-          <li>causing a female to engage in sexual activity without consent</li>
-          <li>sexual activity with a child family member</li>
-          <li>inciting a child family member to engage in sexual activity</li>
-          <li>abuse of trust sexual offences</li>
-          <li>abduction (under the Sexual Offences 1956 Act, not the Child Abduction Act 1984)</li>
-        </ul>
-        <p class="govuk-body">
-          It does not predict other sexual offences that do not involve actual or attempted physical contact with a live human victim. For example:
-        </p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li>possession of extreme pornographic images</li>
-          <li>exposure</li>
-          <li>voyeurism</li>
-          <li>sending a photograph or film of genitals</li>
-          <li>sharing or threatening to share an intimate photograph or film</li>
-        </ul>
-        <p class="govuk-body">
-          Further guidance about the offences it does not predict is available as an annex to the
-          <a class="govuk-link" href="https://equip-portal.equip.service.justice.gov.uk/CtrlWebIsapi.dll/app/documents/091B36B5CE134AC5B45D06A30D09F8B9/master">Understanding risk predictors - actuarial risk assessment instruments (ARAI) user guidance (EQUip)</a>.
-        </p>
+        {% include "includes/direct-contact-sexual-what-score-predicts.html" %}
         <h4 class="govuk-heading-m risk-predictor-scores__details-heading">How we calculate the score</h4>
         <p class="govuk-body">
           We only calculate a Direct contact – sexual reoffending predictor score for men with a known history of sexual or sexually motivated offending.
@@ -391,12 +354,15 @@
         </ul>
       </div>
     </details>
+    </div>
+    {% include "includes/risk-predictor-empty-state.html" %}
   </section>
 
   <section class="risk-predictor-scores__section risk-predictor-scores__section--border" role="region" aria-labelledby="iitiering-heading" data-risk-predictor-id="indirect-contact-sexual" data-risk-predictor-label="Images and indirect contact – sexual reoffending predictor">
     <div class="risk-predictor-scores__header">
       <h3 class="govuk-heading-m govuk-!-margin-bottom-0" id="iitiering-heading">Images and indirect contact – sexual reoffending predictor</h3>
     </div>
+    <div data-risk-predictor-score-content>
     <p class="govuk-!-margin-top-3 govuk-!-margin-bottom-4">
       {{ offenderFirstName }} is in the low risk category for getting a sanction for an indirect sexual contact offence
       they commit within two years (placeholder content).
@@ -420,33 +386,7 @@
         </span>
       </summary>
       <div class="govuk-details__text">
-        <h4 class="govuk-heading-m risk-predictor-scores__details-heading">What this score predicts</h4>
-        <p class="govuk-body">The Images and indirect contact – sexual reoffending predictor predicts the risk of:</p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li>causing or inciting a child to engage in sexual activity</li>
-          <li>engaging in sexual activity in the presence of a child under 13 (offender aged 18 or over)</li>
-          <li>causing a child under 13 to watch a sexual act (offender aged 18 or over)</li>
-          <li>meeting a child following sexual grooming</li>
-          <li>sexual communication with a child</li>
-          <li>taking, permitting to be taken or making indecent photographs or pseudo photographs of children</li>
-          <li>distributing or publishing indecent photographs or pseudo photographs of children</li>
-          <li>possession of an indecent photograph of a child</li>
-          <li>possessing prohibited images of children</li>
-        </ul>
-        <p class="govuk-body">
-          It does not predict other sexual offences that do not involve actual or attempted physical contact with a live human victim. For example:
-        </p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li>possession of extreme pornographic images</li>
-          <li>exposure</li>
-          <li>voyeurism</li>
-          <li>sending a photograph or film of genitals</li>
-          <li>sharing or threatening to share an intimate photograph or film</li>
-        </ul>
-        <p class="govuk-body">
-          Further guidance about the offences it does not predict is available as an annex to the
-          <a class="govuk-link" href="https://equip-portal.equip.service.justice.gov.uk/CtrlWebIsapi.dll/app/documents/091B36B5CE134AC5B45D06A30D09F8B9/master">Understanding risk predictors - actuarial risk assessment instruments (ARAI) user guidance (EQUip)</a>.
-        </p>
+        {% include "includes/indirect-contact-sexual-what-score-predicts.html" %}
         <h4 class="govuk-heading-m risk-predictor-scores__details-heading">How we calculate the score</h4>
         <p class="govuk-body">
           We only calculate an Images and indirect contact – sexual reoffending predictor score for men with a known history of sexual or sexually motivated offending.
@@ -490,6 +430,8 @@
         </table>
       </div>
     </details>
+    </div>
+    {% include "includes/risk-predictor-empty-state.html" %}
   </section>
 
   <div class="govuk-back-to-top govuk-!-margin-top-6">

@@ -15,7 +15,7 @@ export const escapeOffenceHtml = (text) =>
 
 export const formatOffenceCodeLabel = (offence) => {
   if (offence.code && offence.subcode) {
-    return `Offence code: ${offence.code}, Subcode: ${offence.subcode}`
+    return `Offence code: ${offence.code}, subcode: ${offence.subcode}`
   }
   if (offence.fullCode) {
     return `Offence code: ${offence.fullCode}`
@@ -411,6 +411,8 @@ export const initOffenceBrowseForm = ({
       }
     })
 
+    const session = getTieringAssessmentSession()
+
     setTieringAssessmentSession({
       currentOffence: {
         id: selectedOffence.id,
@@ -418,7 +420,8 @@ export const initOffenceBrowseForm = ({
         code: selectedOffence.code || '',
         subcode: selectedOffence.subcode || '',
         fullCode: selectedOffence.fullCode || ''
-      }
+      },
+      convictionDateEditMode: session.convictionDateEditMode === true
     })
 
     window.location.href = withFromCheckAnswers('a1.html')

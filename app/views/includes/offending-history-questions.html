@@ -8,22 +8,44 @@
   <p class="govuk-body offence-autocomplete__selected-code govuk-!-margin-bottom-0" data-tiering-previous-offence-code hidden></p>
 </div>
 
-<h2 id="tiering-first-sanction-age" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
-  How old was {{ offenderFirstName }} when they received their first sanction?
+<h2 id="tiering-first-sanction-date" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  What is the date of {{ offenderFirstName }}'s first sanction?
 </h2>
 
-<div class="govuk-form-group govuk-!-margin-bottom-8">
-  <label class="govuk-label govuk-visually-hidden" for="first-sanction-age">
-    How old was {{ offenderFirstName }} when they received their first sanction?
-  </label>
-  <input
-    class="govuk-input govuk-input--width-4"
-    id="first-sanction-age"
-    name="first_sanction_age"
-    type="text"
-    inputmode="numeric"
-    autocomplete="off"
-  >
+<div class="tiering-system-value govuk-!-margin-bottom-8" data-first-sanction-date-selected>
+  <div class="tiering-system-value__row">
+    <p class="govuk-body tiering-system-value__text govuk-!-margin-bottom-0" data-first-sanction-date-display></p>
+    <a class="govuk-link tiering-system-value__change" href="#tiering-first-sanction-date" data-first-sanction-date-change>Change</a>
+  </div>
+  <p class="tiering-system-value__source">Source: Police national computer (PNC)</p>
+</div>
+
+<div class="govuk-form-group govuk-!-margin-bottom-8" data-first-sanction-date-edit>
+  <fieldset class="govuk-fieldset" role="group">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      What is the date of {{ offenderFirstName }}'s first sanction?
+    </legend>
+    <div class="govuk-date-input" id="first-sanction-date">
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="first-sanction-date-day">Day</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="first-sanction-date-day" name="first_sanction_date_day" type="text" inputmode="numeric" autocomplete="off">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="first-sanction-date-month">Month</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="first-sanction-date-month" name="first_sanction_date_month" type="text" inputmode="numeric" autocomplete="off">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="first-sanction-date-year">Year</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="first-sanction-date-year" name="first_sanction_date_year" type="text" inputmode="numeric" autocomplete="off">
+        </div>
+      </div>
+    </div>
+  </fieldset>
 </div>
 
 <h2 id="tiering-total-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">

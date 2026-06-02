@@ -1,6 +1,6 @@
 {# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
 
-<h2 id="tiering-current-offence" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-6 govuk-!-margin-bottom-2">
+<h2 id="tiering-current-offence" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-4 govuk-!-margin-bottom-2">
   What is {{ offenderFirstName }}'s current offence?
 </h2>
 
@@ -60,7 +60,15 @@
   What is the date of {{ offenderFirstName }}'s current conviction?
 </h2>
 
-<div class="govuk-form-group">
+<div class="tiering-system-value" data-conviction-date-selected>
+  <div class="tiering-system-value__row">
+    <p class="govuk-body tiering-system-value__text govuk-!-margin-bottom-0" data-conviction-date-display></p>
+    <a class="govuk-link tiering-system-value__change" href="#tiering-conviction-date" data-conviction-date-change>Change</a>
+  </div>
+  <p class="tiering-system-value__source">Source: Police national computer (PNC)</p>
+</div>
+
+<div class="govuk-form-group" data-conviction-date-edit>
   <fieldset class="govuk-fieldset" role="group">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
       What is the date of {{ offenderFirstName }}'s current conviction?

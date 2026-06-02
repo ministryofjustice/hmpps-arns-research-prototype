@@ -108,12 +108,12 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
     title: 'Offending history',
     rows: [
       createRow(
-        `How old was ${name} when they received their first sanction?`,
-        session.firstSanctionAge,
+        `What is the date of ${name}'s first sanction?`,
+        formatDateFromParts(session.firstSanctionDate || {}),
         'a2.html',
-        `How old was ${name} when they received their first sanction?`,
+        `What is the date of ${name}'s first sanction?`,
         false,
-        TIERING_CHANGE_ANCHORS.firstSanctionAge
+        TIERING_CHANGE_ANCHORS.firstSanctionDate
       ),
       createRow(
         `How many sanctions does ${name} have in total for all offences?`,
@@ -242,7 +242,7 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
         createRow(
           `What is the date of ${name}'s most recent offence?`,
           formatDateFromParts(session.recentOffenceDate || {}),
-          'a6.html',
+          'a5.html',
           `What is the date of ${name}'s most recent offence?`,
           false,
           TIERING_CHANGE_ANCHORS.recentOffenceDate
