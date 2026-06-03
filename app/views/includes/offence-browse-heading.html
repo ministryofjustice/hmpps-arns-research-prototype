@@ -1,5 +1,5 @@
-{# Offence browse variants – title link cycles a1o → a1o2 → a1o3 → a1o #}
-<div class="assessment-layout__section assessment-layout__section--compact offence-browse-heading{% if offenceBrowseSortFilter %} offence-browse-heading--with-sort{% endif %}{% if not offenceBrowseSortFilter %} govuk-!-margin-bottom-6{% endif %}">
+{# Offence browse variants – title link toggles a1o ↔ a1o3 #}
+<div class="assessment-layout__section assessment-layout__section--compact offence-browse-heading{% if offenceBrowseSortFilter %} offence-browse-heading--with-sort{% elif offenceBrowseRestartSearch %} offence-browse-heading--with-restart{% endif %}{% if not offenceBrowseSortFilter and not offenceBrowseRestartSearch %} govuk-!-margin-bottom-6{% endif %}">
   <div class="offence-browse-heading__top assessment-layout__row assessment-layout__row--tight">
     <h1 class="govuk-heading-l govuk-!-margin-bottom-0">
       <a href="{{ offenceBrowseToggleHref }}" class="offence-browse-variant-toggle">{{ offenceBrowseTitle | default('Find an offence') }}</a>
@@ -7,12 +7,18 @@
     {% if offenceBrowseSortFilter %}
       <div class="offence-browse-heading__sort">
         <div class="govuk-form-group offence-browse-heading__sort-field govuk-!-margin-bottom-0">
-          <label class="govuk-label offence-browse-heading__sort-label" for="offence-sort-by">Sort by</label>
+          <label class="govuk-label offence-browse-heading__sort-label" for="offence-sort-by">Filter by</label>
           <select class="govuk-select" id="offence-sort-by" name="offence-sort-by" data-offence-sort-by>
             <option value="">Select a category</option>
           </select>
         </div>
       </div>
+    {% elif offenceBrowseRestartSearch %}
+      <a
+        href="{{ offenceBrowseRestartHref or 'a1o3.html' }}"
+        class="govuk-button govuk-button--secondary offence-browse-heading__restart"
+        data-offence-restart-search
+      >Restart search</a>
     {% elif statusTag %}
       <strong class="govuk-tag govuk-tag--grey assessment-layout__status-tag" aria-hidden="true">{{ statusTag }}</strong>
     {% endif %}

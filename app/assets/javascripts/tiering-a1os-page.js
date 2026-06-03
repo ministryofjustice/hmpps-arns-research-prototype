@@ -68,7 +68,11 @@ window.GOVUKPrototypeKit.documentReady(() => {
     getTableBodies: () => document.querySelectorAll('[data-offences-table-body]'),
     telemetrySource: 'search-results',
     browseContext,
-    returnUrl
+    returnUrl,
+    onStartNewSearch: () => {
+      browse.clearSelection()
+      renderPage(1, { scrollToTop: true })
+    }
   })
 
   if (!browse || !accordionsRoot || !paginationRoot) return
@@ -89,7 +93,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
     if (countEl) countEl.textContent = formatSearchResultCount(totalCount)
 
     if (!groups.length) {
-      accordionsRoot.innerHTML = '<p class="govuk-body">No offences found.</p>'
+      accordionsRoot.innerHTML = ''
       paginationRoot.hidden = true
       paginationRoot.innerHTML = ''
       browse.clearSelection()
@@ -102,14 +106,14 @@ window.GOVUKPrototypeKit.documentReady(() => {
       page
     )
 
-    browse.clearSelection()
     accordionsRoot.innerHTML = renderOffenceAccordion(pageGroups, 'offence-browse-a1os', {
-      rememberExpanded: false
+      rememberExpanded: false,
+      selectedId: browse.getSelectedId()
     })
     initOffenceBrowseAccordion(accordionsRoot.querySelector('.offence-browse-accordion'), {
       rememberExpanded: false
     })
-    browse.bindSelectLinks(accordionsRoot)
+    browse.bindOffenceRadios(accordionsRoot)
 
     if (totalPages > 1) {
       paginationRoot.hidden = false

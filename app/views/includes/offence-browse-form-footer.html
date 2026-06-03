@@ -1,1 +1,20 @@
-<input type="hidden" name="current_offence_id" value="" data-offence-selected-id>
+</fieldset>
+
+<div
+  class="offence-browse-selection-summary"
+  data-offence-selection-summary
+  role="status"
+  aria-live="polite"
+  aria-atomic="true"
+  hidden
+>
+  <p class="govuk-body offence-browse-selection-summary__label govuk-!-margin-bottom-1">Selected offence:</p>
+  <p class="govuk-body offence-browse-selection-summary__value govuk-!-margin-bottom-0" data-offence-selection-summary-value></p>
+  <p class="govuk-body offence-browse-selection-summary__new-search govuk-!-margin-top-3 govuk-!-margin-bottom-0">
+    <a href="#" class="govuk-link" data-offence-start-new-search>Start a new search</a>
+  </p>
+</div>
+
+<button type="submit" class="govuk-button offence-browse-save" data-module="govuk-button" data-offence-save-continue>
+  Save and continue
+</button>

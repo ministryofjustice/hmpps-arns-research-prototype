@@ -19,6 +19,7 @@ import {
 import {
   buildOffenceSearchIndex,
   filterOffenceBrowseGroupsByCategory,
+  getOffenceSearchMatches,
   OFFENCE_BROWSE_SORT_CATEGORIES,
   offenceMatchesSearchQuery
 } from './offences-data.js'
@@ -134,9 +135,11 @@ window.initOffenceSearch = async (container, options = {}) => {
 
   // Empty data-offence-search-check="" is falsy via dataset; use hasAttribute instead
   const isCheckMode = container.hasAttribute('data-offence-search-check')
+  const isNoSuggest = container.hasAttribute('data-offence-search-no-suggest')
   const requiresSelectedPanel = !isCheckMode && !isCategoryScope
   const input = container.querySelector('[data-offence-search-input]')
   const listbox = container.querySelector('[data-offence-search-listbox]')
+  const searchSubmitButton = container.querySelector('[data-offence-search-submit]')
   const searchPanel = container.querySelector('[data-offence-search-panel]')
   const selectedPanel = container.querySelector('[data-offence-search-selected]')
   const selectedLabel = container.querySelector('[data-offence-selected-label]')
@@ -147,7 +150,7 @@ window.initOffenceSearch = async (container, options = {}) => {
   const hiddenSubcodeInput = container.querySelector('[data-offence-selected-subcode]')
   const changeLink = container.querySelector('[data-offence-change]')
 
-  if (!input || !listbox || !searchPanel) {
+  if (!input || !searchPanel || (!isNoSuggest && !listbox)) {
     delete container.dataset.offenceSearchInitializing
     return
   }
@@ -160,6 +163,7 @@ window.initOffenceSearch = async (container, options = {}) => {
   let pendingCheckSelection = null
 
   let index = { parents: [], subs: [], all: [] }
+  let offencesGroups = []
   let activeIndex = -1
   let browseParent = null
   let dataReady = false
@@ -180,6 +184,7 @@ window.initOffenceSearch = async (container, options = {}) => {
       }
 
       index = buildOffenceSearchIndex(offences)
+      offencesGroups = offences
       if (!isCategoryOffencesScope) {
         window.OFFENCE_SEARCH_DATA = offences
       }
@@ -187,26 +192,35 @@ window.initOffenceSearch = async (container, options = {}) => {
       container.dataset.offenceSearchReady = 'true'
     }
   } catch (error) {
-    listbox.innerHTML =
-      '<li class="offence-autocomplete__results-status" role="presentation">Offence list could not be loaded</li>'
-    listbox.hidden = false
-    input.setAttribute('aria-expanded', 'true')
+    if (listbox) {
+      listbox.innerHTML =
+        '<li class="offence-autocomplete__results-status" role="presentation">Offence list could not be loaded</li>'
+      listbox.hidden = false
+      input.setAttribute('aria-expanded', 'true')
+    }
     container.dataset.offenceSearchReady = 'true'
     delete container.dataset.offenceSearchInitializing
     return
   }
 
   const setExpanded = (expanded) => {
+    if (isNoSuggest || !listbox) return
     input.setAttribute('aria-expanded', expanded ? 'true' : 'false')
     listbox.hidden = !expanded
   }
 
   const resizeSearchInput = () => {
+    if (isNoSuggest) {
+      input.style.height = '40px'
+      return
+    }
+
     input.style.height = 'auto'
     input.style.height = `${Math.max(40, input.scrollHeight)}px`
   }
 
   const clearListbox = () => {
+    if (!listbox) return
     listbox.innerHTML = ''
     activeIndex = -1
     input.removeAttribute('aria-activedescendant')
@@ -378,13 +392,11 @@ window.initOffenceSearch = async (container, options = {}) => {
       return getCategoryMatchResults(query)
     }
 
-    const parentMatches = index.parents.filter((item) => offenceMatchesSearchQuery(item, q))
-    const subMatches = index.subs.filter((item) => offenceMatchesSearchQuery(item, q))
-    const allMatches = [...parentMatches, ...subMatches]
+    const { items, totalCount } = getOffenceSearchMatches(offencesGroups, query)
 
     return {
-      items: allMatches.slice(0, OFFENCE_SEARCH_RESULTS_LIMIT),
-      totalCount: allMatches.length
+      items: items.slice(0, OFFENCE_SEARCH_RESULTS_LIMIT),
+      totalCount
     }
   }
 
@@ -589,8 +601,18 @@ window.initOffenceSearch = async (container, options = {}) => {
   }
 
   const navigateToSearchResults = () => {
+    persistA1ConvictionDateState()
     const url = getSearchResultsUrl(input.value)
     if (!url) return
+
+    const query = input.value.trim()
+    if (query && isNoSuggest) {
+      trackTelemetryOffenceSearch({
+        query,
+        action: 'search'
+      })
+    }
+
     window.location.assign(url)
   }
 
@@ -641,7 +663,7 @@ window.initOffenceSearch = async (container, options = {}) => {
   input.addEventListener('input', () => {
     resizeSearchInput()
 
-    if (!dataReady) return
+    if (isNoSuggest || !dataReady) return
 
     const query = input.value.trim()
 
@@ -674,120 +696,134 @@ window.initOffenceSearch = async (container, options = {}) => {
     renderQueryMatches(input.value)
   })
 
-  input.addEventListener('keydown', (event) => {
-    const items = getSelectableOptions()
+  if (isNoSuggest) {
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault()
+        navigateToSearchResults()
+      }
+    })
 
-    if (event.key === 'ArrowDown') {
+    searchSubmitButton?.addEventListener('click', (event) => {
       event.preventDefault()
-      if (listbox.hidden && (input.value.trim() || isCategoryScope)) {
-        if (browseParent) {
-          showSubOffenceList(browseParent, input.value)
-        } else {
-          renderQueryMatches(input.value)
+      navigateToSearchResults()
+    })
+  } else {
+    input.addEventListener('keydown', (event) => {
+      const items = getSelectableOptions()
+
+      if (event.key === 'ArrowDown') {
+        event.preventDefault()
+        if (listbox.hidden && (input.value.trim() || isCategoryScope)) {
+          if (browseParent) {
+            showSubOffenceList(browseParent, input.value)
+          } else {
+            renderQueryMatches(input.value)
+          }
+        }
+        if (!listbox.hidden && items.length) highlightOption(1)
+      }
+
+      if (event.key === 'ArrowUp') {
+        event.preventDefault()
+        if (!listbox.hidden && items.length) highlightOption(-1)
+      }
+
+      if (event.key === 'Enter' && !event.shiftKey) {
+        if (!listbox.hidden && activeIndex >= 0) {
+          event.preventDefault()
+          event.stopPropagation()
+          activateHighlighted()
+        } else if (!listbox.hidden) {
+          event.preventDefault()
         }
       }
-      if (!listbox.hidden && items.length) highlightOption(1)
-    }
 
-    if (event.key === 'ArrowUp') {
-      event.preventDefault()
-      if (!listbox.hidden && items.length) highlightOption(-1)
-    }
-
-    if (event.key === 'Enter' && !event.shiftKey) {
-      if (!listbox.hidden && activeIndex >= 0) {
-        event.preventDefault()
-        event.stopPropagation()
-        activateHighlighted()
-      } else if (!listbox.hidden) {
-        event.preventDefault()
+      if (event.key === 'Escape') {
+        if (browseParent) {
+          browseParent = null
+          renderQueryMatches(input.value)
+          return
+        }
+        clearListbox()
+        setExpanded(false)
+        input.setAttribute('aria-describedby', searchHintId())
       }
-    }
+    })
 
-    if (event.key === 'Escape') {
+    input.addEventListener('focus', () => {
+      if (!dataReady) return
+      if (!input.value.trim() && !isCategoryScope) return
+
       if (browseParent) {
-        browseParent = null
-        renderQueryMatches(input.value)
+        showSubOffenceList(browseParent, input.value)
         return
       }
-      clearListbox()
-      setExpanded(false)
-      input.setAttribute('aria-describedby', searchHintId())
-    }
-  })
 
-  input.addEventListener('focus', () => {
-    if (!dataReady) return
-    if (!input.value.trim() && !isCategoryScope) return
+      renderQueryMatches(input.value)
+    })
 
-    if (browseParent) {
-      showSubOffenceList(browseParent, input.value)
-      return
-    }
-
-    renderQueryMatches(input.value)
-  })
-
-  document.addEventListener('click', (event) => {
-    const clickedInside = event.composedPath().includes(container)
-    if (!clickedInside) {
-      setExpanded(false)
-    }
-  })
-
-  // Keep focus on the input and stop the outside-click handler closing the menu
-  // before the option click is handled (the option node is removed during render).
-  listbox.addEventListener('mousedown', (event) => {
-    const optionEl = event.target.closest('[role="option"]')
-    if (optionEl?.dataset.optionType === 'view-all') {
-      event.preventDefault()
-      navigateToSearchResults()
-      return
-    }
-    event.preventDefault()
-  })
-
-  listbox.addEventListener('click', (event) => {
-    event.stopPropagation()
-
-    const optionEl = event.target.closest('[role="option"]')
-    if (!optionEl) return
-
-    if (optionEl.dataset.optionType === 'back') {
-      selectOption({ type: 'back' })
-      return
-    }
-
-    if (optionEl.dataset.optionType === 'view-all') {
-      navigateToSearchResults()
-      return
-    }
-
-    const optionId = optionEl.dataset.optionId
-
-    if (browseParent) {
-      const sub = browseParent.subOffences.find((item) => item.id === optionId)
-      if (sub) {
-        selectOption(
-          offenceSelectionFromOption({
-            type: 'sub',
-            ...sub,
-            isViolentOffence: sub.isViolentOffence
-          })
-        )
+    document.addEventListener('click', (event) => {
+      const clickedInside = event.composedPath().includes(container)
+      if (!clickedInside) {
+        setExpanded(false)
       }
-      return
-    }
+    })
 
-    const parent = index.parents.find((item) => item.id === optionId)
-    if (parent) {
-      selectOption(parent)
-      return
-    }
+    // Keep focus on the input and stop the outside-click handler closing the menu
+    // before the option click is handled (the option node is removed during render).
+    listbox.addEventListener('mousedown', (event) => {
+      const optionEl = event.target.closest('[role="option"]')
+      if (optionEl?.dataset.optionType === 'view-all') {
+        event.preventDefault()
+        navigateToSearchResults()
+        return
+      }
+      event.preventDefault()
+    })
 
-    const sub = index.subs.find((item) => item.id === optionId)
-    if (sub) selectOption(sub)
-  })
+    listbox.addEventListener('click', (event) => {
+      event.stopPropagation()
+
+      const optionEl = event.target.closest('[role="option"]')
+      if (!optionEl) return
+
+      if (optionEl.dataset.optionType === 'back') {
+        selectOption({ type: 'back' })
+        return
+      }
+
+      if (optionEl.dataset.optionType === 'view-all') {
+        navigateToSearchResults()
+        return
+      }
+
+      const optionId = optionEl.dataset.optionId
+
+      if (browseParent) {
+        const sub = browseParent.subOffences.find((item) => item.id === optionId)
+        if (sub) {
+          selectOption(
+            offenceSelectionFromOption({
+              type: 'sub',
+              ...sub,
+              isViolentOffence: sub.isViolentOffence
+            })
+          )
+        }
+        return
+      }
+
+      const parent = index.parents.find((item) => item.id === optionId)
+      if (parent) {
+        selectOption(parent)
+        return
+      }
+
+      const sub = index.subs.find((item) => item.id === optionId)
+      if (sub) selectOption(sub)
+    })
+  }
 
   if (changeLink) {
     changeLink.addEventListener('click', (event) => {

@@ -1,5 +1,5 @@
 //
-// a1 – pre-populated conviction date with optional change
+// a1 – conviction date inputs (optional OASys summary on other pages)
 //
 
 import { TIERING_CHANGE_ANCHORS } from './tiering-change-scroll.js'
@@ -25,7 +25,7 @@ const setDateInputValues = (parts) => {
 }
 
 const showConvictionDateEdit = (selectedBox, editPanel) => {
-  selectedBox.classList.add(SUMMARY_HIDDEN_CLASS)
+  if (selectedBox) selectedBox.classList.add(SUMMARY_HIDDEN_CLASS)
   editPanel.classList.add(EDIT_OPEN_CLASS)
   document.getElementById('current-conviction-date-day')?.focus()
 }
@@ -41,6 +41,7 @@ const showConvictionDateSelected = (selectedBox, editPanel, display, parts) => {
 
 export const isConvictionDateEditPanelOpen = () => {
   const editPanel = document.querySelector('[data-conviction-date-edit]')
+  if (editPanel?.hasAttribute('data-conviction-date-input-only')) return true
   return Boolean(editPanel?.classList.contains(EDIT_OPEN_CLASS))
 }
 
@@ -53,7 +54,7 @@ export const getConvictionDatePartsFromDom = () =>
 
 /** Keep date values and edit/summary mode across offence changes and page loads */
 export const persistConvictionDateState = ({ editing } = {}) => {
-  if (!document.querySelector('[data-conviction-date-selected]')) return
+  if (!document.querySelector('[data-conviction-date-edit]')) return
 
   const updates = {}
   const parts = getConvictionDatePartsFromDom()
@@ -77,8 +78,17 @@ const isConvictionDateEditMode = (session = getTieringAssessmentSession()) =>
   session.convictionDateEditMode === true ||
   window.location.hash.slice(1) === TIERING_CHANGE_ANCHORS.convictionDate
 
-const getConvictionDatePartsForDisplay = (session = getTieringAssessmentSession()) => {
+const getConvictionDatePartsForDisplay = (
+  session = getTieringAssessmentSession(),
+  { inputOnly = false } = {}
+) => {
   const stored = normaliseDateParts(session.convictionDate || {})
+
+  if (inputOnly) {
+    if (stored.day || stored.month || stored.year) return stored
+    return { day: '', month: '', year: '' }
+  }
+
   return isDateComplete(stored) ? stored : getDefaultConvictionDateParts()
 }
 
@@ -87,12 +97,20 @@ export const applyConvictionDateUi = () => {
   const editPanel = document.querySelector('[data-conviction-date-edit]')
   const display = document.querySelector('[data-conviction-date-display]')
 
-  if (!selectedBox || !editPanel || !display) return
+  if (!editPanel) return
 
   const session = getTieringAssessmentSession()
-  const parts = getConvictionDatePartsForDisplay(session)
+  const inputOnly = editPanel.hasAttribute('data-conviction-date-input-only')
+  const parts = getConvictionDatePartsForDisplay(session, { inputOnly })
 
   setDateInputValues(parts)
+
+  if (inputOnly) {
+    editPanel.classList.add(EDIT_OPEN_CLASS)
+    return
+  }
+
+  if (!selectedBox || !display) return
 
   if (isConvictionDateEditMode(session)) {
     showConvictionDateEdit(selectedBox, editPanel)
@@ -106,11 +124,28 @@ export const initConvictionDate = () => {
   const editPanel = document.querySelector('[data-conviction-date-edit]')
   const display = document.querySelector('[data-conviction-date-display]')
   const changeLink = document.querySelector('[data-conviction-date-change]')
+  const inputOnly = editPanel?.hasAttribute('data-conviction-date-input-only')
 
-  if (!selectedBox || !editPanel || !display || !changeLink) return
+  if (!editPanel) return
 
   applyConvictionDateUi()
-  persistConvictionDateState()
+
+  if (inputOnly) {
+    ;['current-conviction-date-day', 'current-conviction-date-month', 'current-conviction-date-year'].forEach(
+      (id) => {
+        document.getElementById(id)?.addEventListener('input', () => {
+          persistConvictionDateState()
+        })
+      }
+    )
+
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) applyConvictionDateUi()
+    })
+    return
+  }
+
+  if (!selectedBox || !display || !changeLink) return
 
   changeLink.addEventListener('click', (event) => {
     event.preventDefault()

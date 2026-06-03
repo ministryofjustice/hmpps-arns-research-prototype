@@ -1,5 +1,5 @@
 //
-// Shared “Sort by” category dropdown for offence browse pages (a1o, a1o3)
+// Shared “Filter by” category dropdown for offence browse pages (a1o, a1o3)
 //
 
 import { OFFENCE_BROWSE_SORT_CATEGORIES } from './offences-data.js'

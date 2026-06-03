@@ -50,7 +50,10 @@ window.GOVUKPrototypeKit.documentReady(() => {
     getTableBodies: () => document.querySelectorAll('[data-offences-table-body]'),
     telemetrySource: 'browse-a',
     browseContext,
-    returnUrl
+    returnUrl,
+    onStartNewSearch: () => {
+      setActiveCategory('')
+    }
   })
 
   if (!browse || !accordionsRoot || !paginationRoot) return
@@ -89,6 +92,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   const setActiveCategory = (category) => {
     activeCategory = category || ''
+    browse.clearSelection()
     updateCategoryFilterBar()
     renderPage(1, { scrollToTop: true })
   }
@@ -97,14 +101,14 @@ window.GOVUKPrototypeKit.documentReady(() => {
     const displayGroups = getDisplayGroups()
     const { items, currentPage, totalPages } = paginateOffenceBrowseGroups(displayGroups, page)
 
-    browse.clearSelection()
     accordionsRoot.innerHTML = renderOffenceAccordion(items, 'offence-browse-a1o', {
-      rememberExpanded: false
+      rememberExpanded: false,
+      selectedId: browse.getSelectedId()
     })
     initOffenceBrowseAccordion(accordionsRoot.querySelector('.offence-browse-accordion'), {
       rememberExpanded: false
     })
-    browse.bindSelectLinks(accordionsRoot)
+    browse.bindOffenceRadios(accordionsRoot)
 
     if (totalPages > 1) {
       paginationRoot.hidden = false
@@ -133,6 +137,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
     .then((groups) => {
       allGroups = groups
       browse.registerOffences(flattenOffenceSubOffences(groups))
+      browse.restoreSelection()
       renderPage(1)
     })
     .catch((error) => {

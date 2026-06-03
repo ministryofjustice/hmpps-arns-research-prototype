@@ -7,9 +7,11 @@ import {
   completeTieringPageAndContinue,
   isTieringCheckAnswersEdit
 } from './tiering-change-scroll.js'
-import { applyA3PrototypeDefaults, getA3FieldsFromForm } from './tiering-journey.js'
+import {
+  applyA3SexualOffendingDefaults,
+  getA3SexualOffendingFieldsFromForm
+} from './tiering-journey.js'
 import { getTieringAssessmentSession } from './tiering-assessment-session.js'
-import { initTieringInactiveLinks } from './tiering-inactive-links.js'
 
 const restoreRadio = (form, name, value) => {
   if (!value) return
@@ -28,8 +30,6 @@ window.GOVUKPrototypeKit.documentReady(() => {
     return
   }
 
-  initTieringInactiveLinks(form)
-
   restoreRadio(form, 'sexual_motivation', session.sexualMotivation)
   restoreRadio(form, 'stranger_contact', session.strangerContact)
 
@@ -43,55 +43,19 @@ window.GOVUKPrototypeKit.documentReady(() => {
     if (yearInput && session.sexualSanctionDate.year) yearInput.value = session.sexualSanctionDate.year
   }
 
-  const textFields = {
-    contactAdultSanctions: form.querySelector('#contact-adult-sanctions'),
-    contactChildSanctions: form.querySelector('#contact-child-sanctions'),
-    indirectChildSanctions: form.querySelector('#indirect-child-sanctions'),
-    nonContactSanctions: form.querySelector('#non-contact-sanctions')
-  }
-
-  if (session.contactAdultSanctions && textFields.contactAdultSanctions) {
-    textFields.contactAdultSanctions.value = session.contactAdultSanctions
-  }
-  if (session.contactChildSanctions && textFields.contactChildSanctions) {
-    textFields.contactChildSanctions.value = session.contactChildSanctions
-  }
-  if (session.indirectChildSanctions && textFields.indirectChildSanctions) {
-    textFields.indirectChildSanctions.value = session.indirectChildSanctions
-  }
-  if (session.nonContactSanctions && textFields.nonContactSanctions) {
-    textFields.nonContactSanctions.value = session.nonContactSanctions
-  }
-
   if (isTieringCheckAnswersEdit()) {
-    captureCheckAnswersEditSnapshot(getA3FieldsFromForm(form))
-  }
-
-  if (!isTieringCheckAnswersEdit()) {
-    const autofillOnFocus = [
-      { input: textFields.contactAdultSanctions, value: '2' },
-      { input: textFields.contactChildSanctions, value: '1' },
-      { input: textFields.indirectChildSanctions, value: '1' },
-      { input: textFields.nonContactSanctions, value: '3' }
-    ]
-
-    autofillOnFocus.forEach(({ input, value }) => {
-      if (!input) return
-      input.addEventListener('focus', () => {
-        input.value = value
-      })
-    })
+    captureCheckAnswersEditSnapshot(getA3SexualOffendingFieldsFromForm(form))
   }
 
   form.addEventListener('submit', (event) => {
     event.preventDefault()
 
-    let newFields = getA3FieldsFromForm(form)
+    let newFields = getA3SexualOffendingFieldsFromForm(form)
 
     if (!isTieringCheckAnswersEdit()) {
-      newFields = applyA3PrototypeDefaults(newFields, session)
+      newFields = applyA3SexualOffendingDefaults(newFields, session)
     }
 
-    window.location.href = completeTieringPageAndContinue('a3', 'a4.html', newFields)
+    window.location.href = completeTieringPageAndContinue('a3', 'a3dc.html', newFields)
   })
 })

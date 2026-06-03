@@ -1,5 +1,5 @@
 //
-// Shared offence browse behaviour (a1o accordions and a1o2 tabs)
+// Shared offence browse behaviour (a1o accordions and related browse pages)
 //
 
 import { isTieringCheckAnswersEdit, withFromCheckAnswers } from './tiering-change-scroll.js'
@@ -54,7 +54,7 @@ export const formatOffenceGroupCount = (count) => {
   return `(${total} ${word})`
 }
 
-export const OFFENCE_BROWSE_PAGE_SIZE = 30
+export const OFFENCE_BROWSE_PAGE_SIZE = 20
 
 const PAGINATION_PREV_ICON = `<svg class="govuk-pagination__icon govuk-pagination__icon--prev" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
         <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
@@ -181,24 +181,50 @@ export const initOffenceBrowsePagination = (root, onPageChange) => {
   })
 }
 
-export const renderOffenceTableRows = (offences) =>
+export const offenceRadioId = (offenceId) =>
+  `offence-${String(offenceId).replace(/[^a-zA-Z0-9_-]/g, '-')}`
+
+export const renderOffenceTableRows = (offences, selectedId = '') =>
   offences
-    .map(
-      (offence) => `
-    <tr class="offences-all-table__row" data-offence-row data-offence-id="${escapeOffenceHtml(offence.id)}">
-      <td class="govuk-table__cell">${escapeOffenceHtml(offence.label)}</td>
-      <td class="govuk-table__cell">${escapeOffenceHtml(offence.code || '')}</td>
-      <td class="govuk-table__cell">${escapeOffenceHtml(offence.subcode || '')}</td>
-      <td class="govuk-table__cell offences-all-table__action-cell">
-        <a class="govuk-link" href="#" data-select-offence data-offence-id="${escapeOffenceHtml(offence.id)}">
-          Use this offence<span class="govuk-visually-hidden">, ${escapeOffenceHtml(offence.label)}</span>
-        </a>
+    .map((offence) => {
+      const radioId = offenceRadioId(offence.id)
+      const isChecked = offence.id === selectedId
+      const checkedAttr = isChecked ? ' checked' : ''
+
+      return `
+    <tr class="offences-all-table__row offences-all-table__row--selectable" data-offence-row data-offence-id="${escapeOffenceHtml(offence.id)}">
+      <td class="govuk-table__cell offences-all-table__name-cell">
+        <div class="govuk-radios govuk-radios--small offences-all-table__radio">
+          <div class="govuk-radios__item">
+            <input
+              class="govuk-radios__input"
+              id="${escapeOffenceHtml(radioId)}"
+              name="current_offence_id"
+              type="radio"
+              value="${escapeOffenceHtml(offence.id)}"
+              data-select-offence${checkedAttr}
+            >
+            <label class="govuk-label govuk-radios__label offences-all-table__name-label" for="${escapeOffenceHtml(radioId)}">
+              ${escapeOffenceHtml(offence.label)}<span class="govuk-visually-hidden">, code ${escapeOffenceHtml(offence.code || '')}, subcode ${escapeOffenceHtml(offence.subcode || '')}</span>
+            </label>
+          </div>
+        </div>
+      </td>
+      <td class="govuk-table__cell offences-all-table__code-cell">
+        <label class="offences-all-table__cell-label" for="${escapeOffenceHtml(radioId)}">
+          <span aria-hidden="true">${escapeOffenceHtml(offence.code || '')}</span>
+        </label>
+      </td>
+      <td class="govuk-table__cell offences-all-table__subcode-cell">
+        <label class="offences-all-table__cell-label" for="${escapeOffenceHtml(radioId)}">
+          <span aria-hidden="true">${escapeOffenceHtml(offence.subcode || '')}</span>
+        </label>
       </td>
     </tr>`
-    )
+    })
     .join('')
 
-const renderOffenceTable = (offences) => `
+const renderOffenceTable = (offences, selectedId = '') => `
   <table class="govuk-table offences-all-table offence-browse-accordion__table">
     <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">
       Offences in this category
@@ -207,29 +233,27 @@ const renderOffenceTable = (offences) => `
       <col class="offences-all-table__col offences-all-table__col--name">
       <col class="offences-all-table__col offences-all-table__col--code">
       <col class="offences-all-table__col offences-all-table__col--subcode">
-      <col class="offences-all-table__col offences-all-table__col--action">
     </colgroup>
     <thead class="govuk-table__head">
       <tr class="govuk-table__row">
         <th scope="col" class="govuk-table__header offences-all-table__header--name">Offence name</th>
         <th scope="col" class="govuk-table__header offences-all-table__header--code">Code</th>
         <th scope="col" class="govuk-table__header offences-all-table__header--subcode">Subcode</th>
-        <th scope="col" class="govuk-table__header offences-all-table__action-header"><span class="govuk-visually-hidden">Action</span></th>
       </tr>
     </thead>
     <tbody class="govuk-table__body" data-offences-table-body>
       ${
         offences.length
-          ? renderOffenceTableRows(offences)
+          ? renderOffenceTableRows(offences, selectedId)
           : `
       <tr>
-        <td class="govuk-table__cell" colspan="4">No offences in this category.</td>
+        <td class="govuk-table__cell" colspan="3">No offences in this category.</td>
       </tr>`
       }
     </tbody>
   </table>`
 
-export const renderOffenceAccordionSections = (groups, accordionId) =>
+export const renderOffenceAccordionSections = (groups, accordionId, selectedId = '') =>
   groups
     .map(
       (group, index) => {
@@ -249,7 +273,7 @@ export const renderOffenceAccordionSections = (groups, accordionId) =>
         </h2>
       </div>
       <div id="${escapeOffenceHtml(accordionId)}-content-${index + 1}" class="govuk-accordion__section-content offence-browse-accordion__content">
-        ${renderOffenceTable(group.subOffences || [])}
+        ${renderOffenceTable(group.subOffences || [], selectedId)}
       </div>
     </div>`
       }
@@ -263,11 +287,23 @@ export const renderOffenceAccordion = (groups, accordionId, options = {}) => {
 
   const rememberExpandedAttr =
     options.rememberExpanded === false ? ' data-remember-expanded="false"' : ''
+  const selectedId = options.selectedId || ''
 
   return `
     <div class="govuk-accordion offence-browse-accordion" data-module="govuk-accordion" id="${escapeOffenceHtml(accordionId)}"${rememberExpandedAttr}>
-      ${renderOffenceAccordionSections(groups, accordionId)}
+      ${renderOffenceAccordionSections(groups, accordionId, selectedId)}
     </div>`
+}
+
+export const syncOffenceAccordionSectionInert = (root) => {
+  if (!root || !('inert' in HTMLElement.prototype)) return
+
+  root.querySelectorAll('.govuk-accordion__section').forEach((section) => {
+    const content = section.querySelector('.govuk-accordion__section-content')
+    if (!content) return
+
+    content.inert = !section.classList.contains('govuk-accordion__section--expanded')
+  })
 }
 
 export const initOffenceBrowseAccordion = (root, options = {}) => {
@@ -292,6 +328,12 @@ export const initOffenceBrowseAccordion = (root, options = {}) => {
 
     button.insertBefore(code, toggle)
     code.dataset.repositioned = 'true'
+  })
+
+  syncOffenceAccordionSectionInert(root)
+
+  root.addEventListener('click', () => {
+    requestAnimationFrame(() => syncOffenceAccordionSectionInert(root))
   })
 
   root.dataset.accordionReady = 'true'
@@ -355,17 +397,33 @@ export const initOffenceBrowseForm = ({
   getTableBodies,
   telemetrySource = 'browse',
   browseContext = 'current-offence',
-  returnUrl = 'a1.html'
+  returnUrl = 'a1.html',
+  onStartNewSearch = null
 }) => {
   if (!form) return null
 
-  const hiddenInput = form.querySelector('[data-offence-selected-id]')
+  const errorSummary = form.querySelector('[data-offence-browse-error-summary]')
+  const fieldset = form.querySelector('#offence-browse-fieldset')
+  const selectionSummary = form.querySelector('[data-offence-selection-summary]')
+  const selectionSummaryValue = form.querySelector('[data-offence-selection-summary-value]')
 
   if (browseContext !== OFFENCE_SEARCH_RESULTS_BROWSE_CONTEXT) {
     trackTelemetryOffenceSearch({ action: 'browse-open' })
   }
 
   initOffenceBrowseVariantLinks()
+
+  const startNewSearchLink = form.querySelector('[data-offence-start-new-search]')
+  if (startNewSearchLink) {
+    startNewSearchLink.addEventListener('click', (event) => {
+      event.preventDefault()
+      if (typeof onStartNewSearch === 'function') {
+        onStartNewSearch()
+        return
+      }
+      clearSelection()
+    })
+  }
 
   if (isTieringCheckAnswersEdit()) {
     const backLink = document.querySelector('.assessment-layout .govuk-back-link')
@@ -375,90 +433,125 @@ export const initOffenceBrowseForm = ({
   let selectedOffence = null
   let offences = []
 
-  const getBodies = () => {
-    const bodies = getTableBodies()
-    return bodies ? Array.from(bodies) : []
+  const getSelectedId = () => selectedOffence?.id || ''
+
+  const formatSelectionOffenceLine = (offence) => {
+    const codePart =
+      offence.code && offence.subcode ? `${offence.code}/${offence.subcode}` : offence.fullCode || ''
+    return codePart ? `${offence.label} (${codePart})` : offence.label
   }
 
-  const removeInlineActions = () => {
-    document.querySelectorAll('[data-offence-inline-actions]').forEach((row) => row.remove())
+  const updateSelectionSummary = () => {
+    if (!selectionSummary || !selectionSummaryValue) return
+
+    if (selectedOffence) {
+      selectionSummaryValue.textContent = formatSelectionOffenceLine(selectedOffence)
+      selectionSummary.hidden = false
+      return
+    }
+
+    selectionSummaryValue.textContent = ''
+    selectionSummary.hidden = true
   }
 
-  const insertInlineActions = (selectedRow) => {
-    removeInlineActions()
+  const clearSelectionError = () => {
+    if (errorSummary) errorSummary.hidden = true
+    fieldset?.classList.remove('govuk-fieldset--error')
+  }
 
-    const actionsRow = document.createElement('tr')
-    actionsRow.className = 'offences-all-table__inline-actions'
-    actionsRow.dataset.offenceInlineActions = ''
-    actionsRow.innerHTML = `
-      <td class="govuk-table__cell offences-all-table__inline-actions-cell" colspan="4">
-        <div class="offences-all-table__inline-actions-inner">
-          <button type="button" class="govuk-button govuk-button--secondary" data-offence-deselect data-module="govuk-button">Cancel</button>
-          <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
-        </div>
-      </td>`
+  const showSelectionError = () => {
+    if (errorSummary) {
+      errorSummary.hidden = false
+      errorSummary.focus()
+    }
 
-    selectedRow.insertAdjacentElement('afterend', actionsRow)
+    fieldset?.classList.add('govuk-fieldset--error')
   }
 
   const clearSelection = () => {
     selectedOffence = null
-    if (hiddenInput) hiddenInput.value = ''
 
-    getBodies().forEach((tableBody) => {
-      tableBody.querySelectorAll('[data-offence-row]').forEach((row) => {
-        row.classList.remove('offences-all-table__row--selected')
-      })
+    form.querySelectorAll('[data-select-offence]').forEach((radio) => {
+      radio.checked = false
     })
 
-    removeInlineActions()
+    updateSelectionSummary()
+    clearSelectionError()
   }
 
-  const setSelected = (offence) => {
+  const setSelected = (offence, { scrollToRow = false } = {}) => {
+    if (!offence?.id) return
+
     selectedOffence = offence
-    if (hiddenInput) hiddenInput.value = offence.id
+    clearSelectionError()
 
-    let selectedRow = null
-
-    getBodies().forEach((tableBody) => {
-      tableBody.querySelectorAll('[data-offence-row]').forEach((row) => {
-        const isSelected = row.dataset.offenceId === offence.id
-        row.classList.toggle('offences-all-table__row--selected', isSelected)
-        if (isSelected) selectedRow = row
-      })
+    form.querySelectorAll('[data-select-offence]').forEach((radio) => {
+      radio.checked = radio.value === offence.id
     })
 
-    if (selectedRow) {
-      insertInlineActions(selectedRow)
-      selectedRow.scrollIntoView({ block: 'nearest' })
+    updateSelectionSummary()
+
+    if (scrollToRow) {
+      const selectedRow = form.querySelector(`[data-offence-row][data-offence-id="${CSS.escape(offence.id)}"]`)
+      selectedRow?.scrollIntoView({ block: 'nearest' })
     }
   }
 
-  const bindSelectLinks = (root) => {
-    root.querySelectorAll('[data-select-offence]').forEach((link) => {
-      link.addEventListener('click', (event) => {
-        event.preventDefault()
-        const offence = offences.find((item) => item.id === link.dataset.offenceId)
+  const syncRadioSelection = () => {
+    const selectedId = getSelectedId()
+
+    form.querySelectorAll('[data-select-offence]').forEach((radio) => {
+      radio.checked = radio.value === selectedId
+    })
+
+    updateSelectionSummary()
+  }
+
+  const bindOffenceRadios = (root) => {
+    root.querySelectorAll('[data-select-offence]').forEach((radio) => {
+      radio.addEventListener('change', () => {
+        if (!radio.checked) return
+
+        const offence = offences.find((item) => item.id === radio.value)
         if (offence) setSelected(offence)
       })
     })
+
+    root.querySelectorAll('[data-offence-row]').forEach((row) => {
+      row.addEventListener('click', (event) => {
+        const radio = row.querySelector('[data-select-offence]')
+        if (!radio || radio.disabled) return
+        if (event.target === radio) return
+
+        if (!radio.checked) {
+          radio.checked = true
+          radio.dispatchEvent(new Event('change', { bubbles: true }))
+        }
+      })
+    })
+
+    syncRadioSelection()
   }
 
   const renderIntoBody = (tableBody, bodyOffences) => {
     if (!bodyOffences.length) {
       tableBody.innerHTML = `
     <tr>
-      <td class="govuk-table__cell" colspan="4">No offences in this category.</td>
+      <td class="govuk-table__cell" colspan="3">No offences in this category.</td>
     </tr>`
       return
     }
 
-    tableBody.innerHTML = renderOffenceTableRows(bodyOffences)
-    bindSelectLinks(tableBody)
+    tableBody.innerHTML = renderOffenceTableRows(bodyOffences, getSelectedId())
+    bindOffenceRadios(tableBody)
   }
 
   const registerOffences = (list) => {
     offences = list
+
+    if (selectedOffence && !offences.some((item) => item.id === selectedOffence.id)) {
+      clearSelection()
+    }
   }
 
   const restoreSelection = () => {
@@ -476,49 +569,40 @@ export const initOffenceBrowseForm = ({
     if (offence) setSelected(offence)
   }
 
-  form.addEventListener('click', (event) => {
-    if (event.target.closest('[data-offence-deselect]')) {
-      event.preventDefault()
-      clearSelection()
-    }
-  })
-
   form.addEventListener('submit', (event) => {
-    const a1o3SearchView = document.querySelector('[data-offence-a1o3-search-view]')
-    const searchSaveActions = document.querySelector('[data-offence-search-submit-actions]')
-    if (
-      a1o3SearchView &&
-      !a1o3SearchView.hidden &&
-      searchSaveActions &&
-      !searchSaveActions.hidden
-    ) {
+    event.preventDefault()
+
+    const checkedRadio = form.querySelector('[data-select-offence]:checked')
+    const offence =
+      selectedOffence ||
+      (checkedRadio ? offences.find((item) => item.id === checkedRadio.value) : null)
+
+    if (!offence) {
+      showSelectionError()
       return
     }
-
-    event.preventDefault()
-    if (!selectedOffence) return
 
     if (browseContext === VIOLENT_OFFENCE_CHECK_BROWSE_CONTEXT) {
       trackTelemetryOffenceSearch({
         action: 'select',
         query: {
-          id: selectedOffence.id,
-          label: selectedOffence.label,
-          code: selectedOffence.code || '',
-          subcode: selectedOffence.subcode || '',
-          fullCode: selectedOffence.fullCode || '',
+          id: offence.id,
+          label: offence.label,
+          code: offence.code || '',
+          subcode: offence.subcode || '',
+          fullCode: offence.fullCode || '',
           source: telemetrySource
         }
       })
 
       setTieringAssessmentSession({
         violentOffenceCheckPending: {
-          id: selectedOffence.id,
-          label: selectedOffence.label,
-          code: selectedOffence.code || '',
-          subcode: selectedOffence.subcode || '',
-          fullCode: selectedOffence.fullCode || '',
-          isViolentOffence: Boolean(selectedOffence.isViolentOffence)
+          id: offence.id,
+          label: offence.label,
+          code: offence.code || '',
+          subcode: offence.subcode || '',
+          fullCode: offence.fullCode || '',
+          isViolentOffence: Boolean(offence.isViolentOffence)
         },
         violentOffenceCheckBrowse: false
       })
@@ -528,7 +612,7 @@ export const initOffenceBrowseForm = ({
     }
 
     persistTieringCurrentOffenceAndReturn({
-      offence: selectedOffence,
+      offence,
       returnUrl,
       telemetrySource
     })
@@ -540,51 +624,12 @@ export const initOffenceBrowseForm = ({
     restoreSelection,
     setSelected,
     clearSelection,
-    bindSelectLinks,
+    syncRadioSelection,
+    bindOffenceRadios,
+    getSelectedId,
     showLoadError: (container) => {
       container.innerHTML =
         '<p class="govuk-body">Offence list could not be loaded. Try refreshing the page.</p>'
     }
   }
-}
-
-/** Simple tab switching for dynamically rendered offence category tabs */
-export const initOffenceBrowseTabs = (root) => {
-  if (!root) return
-
-  root.setAttribute('data-module', 'govuk-tabs')
-
-  const tabLinks = root.querySelectorAll('.govuk-tabs__tab')
-  const panels = root.querySelectorAll('.govuk-tabs__panel')
-
-  if (!tabLinks.length || !panels.length) return
-
-  const showPanel = (panelId) => {
-    tabLinks.forEach((link) => {
-      const href = link.getAttribute('href') || ''
-      const isSelected = href === `#${panelId}`
-      link.closest('.govuk-tabs__list-item')?.classList.toggle(
-        'govuk-tabs__list-item--selected',
-        isSelected
-      )
-      link.setAttribute('aria-selected', isSelected ? 'true' : 'false')
-    })
-
-    panels.forEach((panel) => {
-      const isVisible = panel.id === panelId
-      panel.classList.toggle('govuk-tabs__panel--hidden', !isVisible)
-      panel.setAttribute('aria-hidden', isVisible ? 'false' : 'true')
-    })
-  }
-
-  tabLinks.forEach((link) => {
-    link.addEventListener('click', (event) => {
-      event.preventDefault()
-      const panelId = (link.getAttribute('href') || '').replace(/^#/, '')
-      if (panelId) showPanel(panelId)
-    })
-  })
-
-  const initialPanelId = (tabLinks[0].getAttribute('href') || '').replace(/^#/, '')
-  if (initialPanelId) showPanel(initialPanelId)
 }

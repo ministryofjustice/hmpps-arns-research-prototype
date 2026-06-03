@@ -1,59 +1,24 @@
 //
-// a2 – offending history (restore session from a1)
+// a2 – offending history
 //
 
-import { initFirstSanctionDate } from './first-sanction-date.js'
 import {
   captureCheckAnswersEditSnapshot,
   completeTieringPageAndContinue,
   isTieringCheckAnswersEdit
 } from './tiering-change-scroll.js'
 import { getA2FieldsFromForm } from './tiering-journey.js'
-import {
-  applyOffenceViolentTag,
-  formatOffenceCodeLabel,
-  lookupOffenceIsViolent
-} from './tiering-offence-browse.js'
 import { getTieringAssessmentSession } from './tiering-assessment-session.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
   const form = document.getElementById('tiering-a2-form')
   if (!form) return
 
-  initFirstSanctionDate()
-
   const session = getTieringAssessmentSession()
-  const previousOffence = document.querySelector('[data-tiering-previous-offence]')
-  const previousLabel = document.querySelector('[data-tiering-previous-offence-label]')
-  const previousCode = document.querySelector('[data-tiering-previous-offence-code]')
-  const previousViolentTag = previousOffence?.querySelector('[data-offence-violent-tag]')
+  const firstSanctionAge = form.querySelector('#first-sanction-age')
 
-  if (session.currentOffence && previousOffence) {
-    previousOffence.hidden = false
-    if (previousLabel) previousLabel.textContent = session.currentOffence.label
-    if (previousCode) {
-      const codeLabel = formatOffenceCodeLabel(session.currentOffence)
-      previousCode.textContent = codeLabel
-      previousCode.hidden = !codeLabel
-    }
-    const applyPreviousViolentTag = () => {
-      const isViolent =
-        session.currentOffence.isViolentOffence === true ||
-        lookupOffenceIsViolent(session.currentOffence.id)
-      applyOffenceViolentTag(previousViolentTag, isViolent)
-    }
-
-    applyPreviousViolentTag()
-
-    if (session.currentOffence.isViolentOffence !== true && !window.OFFENCE_SEARCH_DATA) {
-      fetch('/api/offences')
-        .then((response) => (response.ok ? response.json() : []))
-        .then((offences) => {
-          window.OFFENCE_SEARCH_DATA = offences
-          applyPreviousViolentTag()
-        })
-        .catch(() => {})
-    }
+  if (session.firstSanctionAge && firstSanctionAge) {
+    firstSanctionAge.value = session.firstSanctionAge
   }
 
   if (session.totalSanctions) {
@@ -73,29 +38,13 @@ window.GOVUKPrototypeKit.documentReady(() => {
     captureCheckAnswersEditSnapshot(getA2FieldsFromForm(form))
   }
 
-  if (!isTieringCheckAnswersEdit()) {
-    const autofillOnFocus = [
-      { input: form.querySelector('#total-sanctions'), value: '6' },
-      { input: form.querySelector('#violent-sanctions-other'), value: '2' }
-    ]
-
-    autofillOnFocus.forEach(({ input, value }) => {
-      if (!input) return
-      input.addEventListener('focus', () => {
-        input.value = value
-      })
-    })
-  }
-
   form.addEventListener('submit', (event) => {
     event.preventDefault()
 
-    const newFields = {
-      ...getA2FieldsFromForm(form),
-      firstSanctionDateEditMode: false
-    }
+    const newFields = getA2FieldsFromForm(form)
 
     if (!isTieringCheckAnswersEdit()) {
+      if (!newFields.firstSanctionAge) newFields.firstSanctionAge = '16'
       if (!newFields.totalSanctions) newFields.totalSanctions = '6'
       if (!newFields.violentSanctions) newFields.violentSanctions = '2'
     }

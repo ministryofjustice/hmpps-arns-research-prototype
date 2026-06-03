@@ -9,7 +9,7 @@
 {% set hideOffenderViewAnswers = true %}
 {% set compactPageHeader = true %}
 {% set backLinkHref = 'a1.html' %}
-{% set offenceBrowseToggleHref = 'a1o2.html' %}
+{% set offenceBrowseToggleHref = 'a1o3.html' %}
 {% set tieringTelemetryPage = "a1o" %}
 {% set tieringTelemetryPageLabel = "Browse all offences" %}
 {% set offenceBrowseSortFilter = true %}
@@ -28,6 +28,8 @@
 </div>
 
 <form id="tiering-a1o-form" class="govuk-!-margin-top-3" novalidate>
+
+  {% include "includes/offence-browse-form-open.html" %}
 
   <div class="offence-browse-accordions govuk-!-margin-bottom-6" data-offence-accordions>
     <p class="govuk-body">Loading offences…</p>

@@ -108,12 +108,12 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
     title: 'Offending history',
     rows: [
       createRow(
-        `What is the date of ${name}'s first sanction?`,
-        formatDateFromParts(session.firstSanctionDate || {}),
+        `What was ${name}'s age at first sanction?`,
+        session.firstSanctionAge,
         'a2.html',
-        `What is the date of ${name}'s first sanction?`,
+        `What was ${name}'s age at first sanction?`,
         false,
-        TIERING_CHANGE_ANCHORS.firstSanctionDate
+        TIERING_CHANGE_ANCHORS.firstSanctionAge
       ),
       createRow(
         `How many sanctions does ${name} have in total for all offences?`,
@@ -169,11 +169,17 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
           `What is the date of ${name}'s most recent sanction involving a sexual or sexually motivated offence?`,
           false,
           TIERING_CHANGE_ANCHORS.sexualSanctionDate
-        ),
+        )
+      ]
+    })
+
+    sections.push({
+      title: 'Direct contact',
+      rows: [
         createRow(
           `How many sanctions does ${name} have for contact adult sexual or sexually motivated offences?`,
           session.contactAdultSanctions,
-          'a3.html',
+          'a3dc.html',
           `How many sanctions does ${name} have for contact adult sexual or sexually motivated offences?`,
           false,
           TIERING_CHANGE_ANCHORS.contactAdultSanctions
@@ -181,15 +187,21 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
         createRow(
           `How many sanctions does ${name} have for direct contact child sexual or sexually motivated offences?`,
           session.contactChildSanctions,
-          'a3.html',
+          'a3dc.html',
           `How many sanctions does ${name} have for direct contact child sexual or sexually motivated offences?`,
           false,
           TIERING_CHANGE_ANCHORS.contactChildSanctions
-        ),
+        )
+      ]
+    })
+
+    sections.push({
+      title: 'Indirect contact',
+      rows: [
         createRow(
           `How many sanctions does ${name} have for indecent child image or indirect contact child sexual or sexually motivated offences?`,
           session.indirectChildSanctions,
-          'a3.html',
+          'a3ic.html',
           `How many sanctions does ${name} have for indecent child image or indirect contact child sexual or sexually motivated offences?`,
           false,
           TIERING_CHANGE_ANCHORS.indirectChildSanctions
@@ -197,7 +209,7 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
         createRow(
           `How many sanctions does ${name} have for other non-contact sexual or sexually motivated offences?`,
           session.nonContactSanctions,
-          'a3.html',
+          'a3ic.html',
           `How many sanctions does ${name} have for other non-contact sexual or sexually motivated offences?`,
           false,
           TIERING_CHANGE_ANCHORS.nonContactSanctions
@@ -221,35 +233,34 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
   })
 
   const communityDateLabel = formatDateFromParts(session.communityDate || {}) || 'that date'
-  sections.push({
-    title: 'Offences since community date',
-    rows: [
-      createRow(
-        `Since ${communityDateLabel}, has ${name} committed any offences?`,
-        formatChoice(session.offencesSinceCommunity),
-        'a5.html',
-        `Since ${communityDateLabel}, has ${name} committed any offences?`,
-        false,
-        TIERING_CHANGE_ANCHORS.offencesSinceCommunity
-      )
-    ]
-  })
+  const offencesSinceCommunityRows = [
+    createRow(
+      `Since ${communityDateLabel}, has ${name} committed any offences?`,
+      formatChoice(session.offencesSinceCommunity),
+      'a5.html',
+      `Since ${communityDateLabel}, has ${name} committed any offences?`,
+      false,
+      TIERING_CHANGE_ANCHORS.offencesSinceCommunity
+    )
+  ]
 
   if (session.offencesSinceCommunity === 'yes') {
-    sections.push({
-      title: 'Most recent offence date',
-      rows: [
-        createRow(
-          `What is the date of ${name}'s most recent offence?`,
-          formatDateFromParts(session.recentOffenceDate || {}),
-          'a5.html',
-          `What is the date of ${name}'s most recent offence?`,
-          false,
-          TIERING_CHANGE_ANCHORS.recentOffenceDate
-        )
-      ]
-    })
+    offencesSinceCommunityRows.push(
+      createRow(
+        `What is the date of ${name}'s most recent offence?`,
+        formatDateFromParts(session.recentOffenceDate || {}),
+        'a5.html',
+        `What is the date of ${name}'s most recent offence?`,
+        false,
+        TIERING_CHANGE_ANCHORS.recentOffenceDate
+      )
+    )
   }
+
+  sections.push({
+    title: 'Offences since community date',
+    rows: offencesSinceCommunityRows
+  })
 
   return sections
 }

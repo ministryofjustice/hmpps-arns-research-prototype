@@ -1,13 +1,14 @@
 {% extends "layouts/assessment.html" %}
 
 {% set offenderFirstName = "Alex" %}
-{% set pageName = "Sexual offending" %}
+{% set pageName = "Direct contact" %}
 {% set activeSection = "section-1" %}
-{% set pageHeading = "Sexual or sexually motivated offending" %}
+{% set pageHeading = "Direct contact" %}
 {% set statusTag = "Incomplete" %}
-{% set tieringTelemetryPage = "a3" %}
-{% set tieringTelemetryPageLabel = "Sexual offending" %}
-{% set backLinkHref = "a2.html" %}
+{% set tieringTelemetryPage = "a3dc" %}
+{% set tieringTelemetryPageLabel = "Direct contact" %}
+{% set backLinkHref = "a3.html" %}
+{% set backLinkId = "tiering-a3dc-back" %}
 
 {% block content %}
 
@@ -15,9 +16,9 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-a3-form" novalidate>
+<form id="tiering-a3dc-form" novalidate>
 
-  {% include "includes/sexual-offending-questions.html" %}
+  {% include "includes/direct-contact-questions.html" %}
 
   <button type="submit" class="govuk-button govuk-!-margin-top-9" data-module="govuk-button">Save and continue</button>
 

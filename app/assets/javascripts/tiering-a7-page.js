@@ -1,33 +1,11 @@
 //
-// a7 – check your answers (summary list from session)
+// a7 – legacy check your answers (redirects to a8 Answers tab)
 //
 
-import { getTieringAssessmentSession, setTieringAssessmentSession } from './tiering-assessment-session.js'
-import { redirectIfTieringJourneyIncomplete, syncTieringSessionBeforeCheckAnswers } from './tiering-journey.js'
-import { trackTelemetryMilestone } from './tiering-session-telemetry.js'
-import { renderTieringSummaryList } from './tiering-summary.js'
+import { getTieringResultsAnswersHref } from './tiering-journey.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  const form = document.getElementById('tiering-a7-form')
-  if (!form) return
+  if (!document.getElementById('tiering-a7-form')) return
 
-  const session = syncTieringSessionBeforeCheckAnswers()
-  const summaryList = document.getElementById('tiering-summary-list')
-  const backLink = document.getElementById('tiering-a7-back')
-  const offenderFirstName = summaryList?.dataset.offenderFirstName || 'Alex'
-
-  if (redirectIfTieringJourneyIncomplete(session)) return
-
-  if (backLink) {
-    backLink.href = 'a5.html'
-  }
-
-  renderTieringSummaryList(summaryList, session, offenderFirstName)
-
-  form.addEventListener('submit', (event) => {
-    event.preventDefault()
-    trackTelemetryMilestone('calculatedScore')
-    setTieringAssessmentSession({ scoreCalculated: true })
-    window.location.href = 'a8.html'
-  })
+  window.location.replace(getTieringResultsAnswersHref())
 })

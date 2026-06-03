@@ -2,7 +2,9 @@
 
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Offences since community date" %}
-{% set pageHeading = "Offences since community date" %}
+{% set pageHeadingHtml = 'Since <span data-community-date-display>that date</span>, has ' ~ offenderFirstName ~ ' committed any offences?' %}
+{% set pageHeadingId = "tiering-offences-since-community" %}
+{% set pageHeadingClass = "tiering-question-anchor" %}
 {% set compactPageHeader = true %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
@@ -19,10 +21,6 @@
 <form id="tiering-a5-form" novalidate>
 
   {% include "includes/offences-since-community-question.html" %}
-
-  <div id="tiering-recent-offence-date-panel" hidden>
-    {% include "includes/recent-offence-date-question.html" %}
-  </div>
 
   <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
 

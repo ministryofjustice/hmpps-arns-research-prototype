@@ -2,28 +2,20 @@
 // Shared offence list data for search and browse-all table
 //
 
-/** OASys offence categories for a1o “Sort by” filter (keep in sync with app/data/offence-browse-categories.json) */
+/** OASys offence categories for browse filters (keep in sync with app/data/offence-browse-categories.json) */
 export const OFFENCE_BROWSE_SORT_CATEGORIES = [
-  'Violence against the person',
-  'Acquisitive violence',
-  'Public order and harassment',
-  'Sexual (not against child)',
-  'Sexual (against child)',
-  'Drunkenness',
-  'Burglary (domestic)',
-  'Burglary (other)',
-  'Theft (non-motor)',
-  'Handling stolen goods',
-  'Fraud and forgery',
-  'Absconding/bail',
-  'Vehicle-related theft',
-  'Welfare fraud',
-  'Motoring offences',
-  'Drink driving',
+  'Burglary',
   'Criminal damage',
-  'Drug import/export/production',
-  'Drug possession/supply',
-  'Other offences'
+  'Drug offences',
+  'Fraud and forgery',
+  'Indictable motoring offences',
+  'Other indictable',
+  'Other summary offences',
+  'Robbery',
+  'Sexual offences',
+  'Summary motoring offences',
+  'Theft and handling',
+  'Violence against the person'
 ]
 
 export const filterOffenceBrowseGroupsByCategory = (groups, category) => {
@@ -31,26 +23,178 @@ export const filterOffenceBrowseGroupsByCategory = (groups, category) => {
   return groups.filter((group) => group.category === category)
 }
 
-export const offenceMatchesSearchQuery = (item, query) => {
-  const q = query.trim().toLowerCase()
-  if (!q) return false
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
-  const haystack = [
-    item.label,
+const isFraudCategory = (category = '') => category.toLowerCase().includes('fraud and forgery')
+
+const isFraudRelatedQuery = (query = '') => /\bfraud/.test(query.trim().toLowerCase())
+
+const hasFraudRelatedLabel = (text = '') =>
+  /\bfraud(?:s|ulent|ul)?\b|\bdefraud\b/i.test(text || '')
+
+const getGroupLabelForSearch = (item) => item.parentLabel || item.label || ''
+
+/** Parent group title has no fraud link – only a sub-offence label matched. */
+const isIncidentalFraudMatch = (item, query) => {
+  if (!isFraudRelatedQuery(query)) return false
+  if (isFraudCategory(item.category)) return false
+  return !hasFraudRelatedLabel(getGroupLabelForSearch(item))
+}
+
+const getFraudSearchSortTier = (item, query) => {
+  if (!isFraudRelatedQuery(query)) return 0
+  if (isFraudCategory(item.category)) return 0
+  if (hasFraudRelatedLabel(getGroupLabelForSearch(item))) return 1
+  return 2
+}
+
+const getGroupFraudSearchSortTier = (group, query) => {
+  if (!isFraudRelatedQuery(query)) return 0
+  if (isFraudCategory(group.category)) return 0
+  if (hasFraudRelatedLabel(group.label)) return 1
+  return 2
+}
+
+export const scoreOffenceSearchMatch = (item, query) => {
+  const q = query.trim().toLowerCase()
+  if (!q) return 0
+
+  const label = (item.label || '').toLowerCase()
+  const category = (item.category || '').toLowerCase()
+  const codeHaystack = [
     item.code,
     item.subcode,
     item.fullCode,
-    item.category,
     item.code && item.subcode ? `${item.code} ${item.subcode}` : '',
-    item.code && item.subcode ? `${item.code}${item.subcode}` : '',
-    ...(item.searchTerms || [])
+    item.code && item.subcode ? `${item.code}${item.subcode}` : ''
   ]
     .filter(Boolean)
     .join(' ')
     .toLowerCase()
 
-  return haystack.includes(q)
+  if (codeHaystack.includes(q)) return 1000
+
+  let score = 0
+
+  if (label.includes(q)) score += 100
+  if (new RegExp(`\\b${escapeRegExp(q)}`, 'i').test(label)) score += 50
+
+  if (category.includes(q)) score += 80
+
+  if (isFraudRelatedQuery(q)) {
+    if (isFraudCategory(item.category)) score += 200
+    if (hasFraudRelatedLabel(item.label)) score += 250
+  }
+
+  const termsHaystack = (item.searchTerms || []).join(' ').toLowerCase()
+  if (termsHaystack.includes(q) && !label.includes(q) && !category.includes(q)) {
+    score += 10
+  }
+
+  if (isIncidentalFraudMatch(item, query)) {
+    score = Math.min(score, 40)
+  }
+
+  return score
 }
+
+export const offenceMatchesSearchQuery = (item, query) =>
+  scoreOffenceSearchMatch(item, query) > 0
+
+const preferFraudParentGroup = (item, query) => {
+  if (item.type !== 'parent') return 0
+  if (!isFraudRelatedQuery(query)) return 0
+  if (!hasFraudRelatedLabel(item.label)) return 0
+  if ((item.subOffenceCount || 0) <= 1) return 0
+  return 100
+}
+
+const compareOffenceSearchMatches = (a, b, query) => {
+  const tierA = getFraudSearchSortTier(a, query)
+  const tierB = getFraudSearchSortTier(b, query)
+  if (tierA !== tierB) return tierA - tierB
+
+  if (tierA === 2) {
+    const codeDiff = (b.code || '').localeCompare(a.code || '', undefined, { numeric: true })
+    if (codeDiff !== 0) return codeDiff
+  }
+
+  const scoreA = scoreOffenceSearchMatch(a, query) + preferFraudParentGroup(a, query)
+  const scoreB = scoreOffenceSearchMatch(b, query) + preferFraudParentGroup(b, query)
+  const scoreDiff = scoreB - scoreA
+  if (scoreDiff !== 0) return scoreDiff
+
+  const labelDiff = (a.label || '').localeCompare(b.label || '', undefined, { sensitivity: 'base' })
+  if (labelDiff !== 0) return labelDiff
+
+  return (a.code || '').localeCompare(b.code || '', undefined, { numeric: true })
+}
+
+const sortOffenceSearchMatches = (items, query) =>
+  [...items].sort((a, b) => compareOffenceSearchMatches(a, b, query))
+
+const buildGroupSearchItem = (group, sub = null) => {
+  if (sub) {
+    return {
+      label: sub.label,
+      code: sub.code,
+      subcode: sub.subcode,
+      fullCode: sub.fullCode,
+      category: group.category,
+      parentLabel: group.label,
+      searchTerms: [
+        sub.label,
+        sub.code,
+        sub.subcode,
+        sub.fullCode,
+        group.label,
+        group.code,
+        ...(sub.searchTerms || []),
+        ...(group.searchTerms || [])
+      ]
+    }
+  }
+
+  return {
+    label: group.label,
+    code: group.code,
+    subcode: '00',
+    fullCode: `${group.code}00`,
+    category: group.category,
+    searchTerms: group.searchTerms || []
+  }
+}
+
+const scoreOffenceGroupSearchMatch = (group, query) => {
+  let score = scoreOffenceSearchMatch(buildGroupSearchItem(group), query)
+
+  for (const sub of group.subOffences || []) {
+    score = Math.max(score, scoreOffenceSearchMatch(buildGroupSearchItem(group, sub), query))
+  }
+
+  if (isFraudRelatedQuery(query) && hasFraudRelatedLabel(group.label)) {
+    score += 150
+  }
+
+  return score
+}
+
+const sortOffenceSearchGroups = (groups, query) =>
+  [...groups].sort((a, b) => {
+    const tierA = getGroupFraudSearchSortTier(a, query)
+    const tierB = getGroupFraudSearchSortTier(b, query)
+    if (tierA !== tierB) return tierA - tierB
+
+    if (tierA === 2) {
+      const codeDiff = b.code.localeCompare(a.code, undefined, { numeric: true })
+      if (codeDiff !== 0) return codeDiff
+    }
+
+    const scoreDiff = scoreOffenceGroupSearchMatch(b, query) - scoreOffenceGroupSearchMatch(a, query)
+    if (scoreDiff !== 0) return scoreDiff
+
+    return a.code.localeCompare(b.code, undefined, { numeric: true })
+  })
 
 export const buildOffenceSearchIndex = (offences) => {
   const parents = offences.map((offence) => {
@@ -104,77 +248,51 @@ export const getOffenceSearchMatches = (groups, query) => {
   if (!q) return { items: [], totalCount: 0, groups: [] }
 
   const { parents, subs } = buildOffenceSearchIndex(groups)
-  const parentMatches = parents.filter((item) => offenceMatchesSearchQuery(item, q))
-  const subMatches = subs.filter((item) => offenceMatchesSearchQuery(item, q))
+  const parentMatches = sortOffenceSearchMatches(
+    parents.filter((item) => offenceMatchesSearchQuery(item, q)),
+    q
+  )
+  const subMatches = sortOffenceSearchMatches(
+    subs.filter((item) => offenceMatchesSearchQuery(item, q)),
+    q
+  )
 
-  const filteredGroups = groups
-    .map((group) => {
-      const parentItem = {
-        label: group.label,
-        code: group.code,
-        subcode: '00',
-        fullCode: `${group.code}00`,
-        category: group.category,
-        searchTerms: group.searchTerms || []
-      }
-      const parentMatchesGroup = offenceMatchesSearchQuery(parentItem, q)
-      const matchingSubs = (group.subOffences || []).filter((sub) =>
-        offenceMatchesSearchQuery(
-          {
-            label: sub.label,
-            code: sub.code,
-            subcode: sub.subcode,
-            fullCode: sub.fullCode,
-            category: group.category,
-            searchTerms: [
-              sub.label,
-              sub.code,
-              sub.subcode,
-              sub.fullCode,
-              group.label,
-              group.code,
-              ...(sub.searchTerms || []),
-              ...(group.searchTerms || [])
-            ]
-          },
-          q
+  const filteredGroups = sortOffenceSearchGroups(
+    groups
+      .map((group) => {
+        const parentItem = buildGroupSearchItem(group)
+        const parentMatchesGroup = offenceMatchesSearchQuery(parentItem, q)
+        const matchingSubs = (group.subOffences || []).filter((sub) =>
+          offenceMatchesSearchQuery(buildGroupSearchItem(group, sub), q)
         )
-      )
 
-      if (parentMatchesGroup) return group
+        if (parentMatchesGroup) return group
 
-      if (matchingSubs.length) {
-        return {
-          ...group,
-          subOffences: matchingSubs,
-          subOffenceCount: matchingSubs.length
+        if (matchingSubs.length) {
+          return {
+            ...group,
+            subOffences: matchingSubs,
+            subOffenceCount: matchingSubs.length
+          }
         }
-      }
 
-      return null
-    })
-    .filter(Boolean)
+        return null
+      })
+      .filter(Boolean),
+    q
+  )
+
+  const items = sortOffenceSearchMatches([...parentMatches, ...subMatches], q)
 
   return {
-    items: [...parentMatches, ...subMatches],
-    totalCount: parentMatches.length + subMatches.length,
+    items,
+    totalCount: items.length,
     groups: filteredGroups
   }
 }
 
 export const filterOffenceBrowseGroupsBySearch = (groups, query) =>
   getOffenceSearchMatches(groups, query).groups
-
-export const PRIMARY_OFFENCE_TABS = [
-  { id: 'theft', label: 'Theft' },
-  { id: 'burglary', label: 'Burglary' },
-  { id: 'robbery', label: 'Robbery' },
-  { id: 'violence', label: 'Violence' },
-  { id: 'drugs', label: 'Drugs' },
-  { id: 'public-order', label: 'Public order' },
-  { id: 'motoring', label: 'Motoring' },
-  { id: 'other-offences', label: 'Other offences' }
-]
 
 const sortGroups = (list) =>
   [...list].sort((a, b) => a.code.localeCompare(b.code, undefined, { numeric: true }))
@@ -206,15 +324,4 @@ export const fetchOffenceBrowseGroups = async () => {
 export const fetchOffenceSubOffences = async () => {
   const groups = await fetchOffenceBrowseGroups()
   return flattenOffenceSubOffences(groups)
-}
-
-/** Eight category tabs for offence browse variant B (a1o2) */
-export const fetchOffenceCategoryTabs = async () => {
-  const groups = await fetchOffenceBrowseGroups()
-
-  return PRIMARY_OFFENCE_TABS.map((tab) => ({
-    id: tab.id,
-    label: tab.label,
-    groups: sortGroups(groups.filter((group) => group.tabId === tab.id))
-  }))
 }

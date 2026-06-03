@@ -7,26 +7,22 @@
 {% set idPrefix = "current-offence-search" %}
 {% set inputName = "current_offence_search" %}
 {% set labelText = "What is " ~ offenderFirstName ~ "'s current offence?" %}
-{% set hintText = "Search for the name of an offence or an offence code and subcode." %}
 {% set checkMode = false %}
 {% set modifierClass = "govuk-!-margin-bottom-6" %}
 {% set showBrowseLink = true %}
+{% set browseLinkText = "Find an offence" %}
 {% set showSelectedPanel = true %}
+{% set showViolentTag = false %}
+{% set searchManual = true %}
+{% set searchNoSuggest = true %}
+{% set showSearchButton = true %}
 {% include "includes/offence-search-field.html" %}
 
 <h2 id="tiering-conviction-date" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-8 govuk-!-margin-bottom-4">
   What is the date of {{ offenderFirstName }}'s current conviction?
 </h2>
 
-<div class="tiering-system-value" data-conviction-date-selected>
-  <div class="tiering-system-value__row">
-    <p class="govuk-body tiering-system-value__text govuk-!-margin-bottom-0" data-conviction-date-display></p>
-    <a class="govuk-link tiering-system-value__change" href="#tiering-conviction-date" data-conviction-date-change>Change</a>
-  </div>
-  <p class="tiering-system-value__source">Source: Offender assessment system (OASys)</p>
-</div>
-
-<div class="govuk-form-group" data-conviction-date-edit>
+<div class="govuk-form-group" data-conviction-date-edit data-conviction-date-input-only>
   <fieldset class="govuk-fieldset" role="group">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
       What is the date of {{ offenderFirstName }}'s current conviction?

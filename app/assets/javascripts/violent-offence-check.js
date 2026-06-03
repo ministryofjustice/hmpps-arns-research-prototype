@@ -32,6 +32,14 @@ const persistViolentOffenceChecks = (selections) => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
+  document.querySelectorAll('.violent-offence-check-details--static').forEach((details) => {
+    details.open = false
+
+    details.querySelector('summary')?.addEventListener('click', (event) => {
+      event.preventDefault()
+    })
+  })
+
   document.querySelectorAll('[data-module="violent-offence-check"]').forEach(async (container) => {
     const searchRoot = container.querySelector('[data-module="offence-search"][data-offence-search-check]')
     const checkButton = container.querySelector('[data-violent-check-submit]')
@@ -94,7 +102,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
       pendingSelection = null
       if (input) {
         input.value = ''
-        input.setAttribute('aria-describedby', 'violent-offence-check-search-hint')
+        input.removeAttribute('aria-describedby')
         searchHandle?.resizeSearchInput?.()
       }
       if (listbox) {
