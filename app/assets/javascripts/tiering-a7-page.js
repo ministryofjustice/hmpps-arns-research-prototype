@@ -3,6 +3,7 @@
 //
 
 import { getTieringAssessmentSession, setTieringAssessmentSession } from './tiering-assessment-session.js'
+import { redirectIfTieringJourneyIncomplete, syncTieringSessionBeforeCheckAnswers } from './tiering-journey.js'
 import { trackTelemetryMilestone } from './tiering-session-telemetry.js'
 import { renderTieringSummaryList } from './tiering-summary.js'
 
@@ -10,18 +11,15 @@ window.GOVUKPrototypeKit.documentReady(() => {
   const form = document.getElementById('tiering-a7-form')
   if (!form) return
 
-  const session = getTieringAssessmentSession()
+  const session = syncTieringSessionBeforeCheckAnswers()
   const summaryList = document.getElementById('tiering-summary-list')
   const backLink = document.getElementById('tiering-a7-back')
   const offenderFirstName = summaryList?.dataset.offenderFirstName || 'Alex'
 
-  if (!session.offencesSinceCommunity) {
-    window.location.href = 'a5.html'
-    return
-  }
+  if (redirectIfTieringJourneyIncomplete(session)) return
 
   if (backLink) {
-    backLink.href = session.offencesSinceCommunity === 'yes' ? 'a6.html' : 'a5.html'
+    backLink.href = 'a5.html'
   }
 
   renderTieringSummaryList(summaryList, session, offenderFirstName)

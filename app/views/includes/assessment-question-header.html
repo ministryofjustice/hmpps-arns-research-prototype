@@ -1,13 +1,14 @@
-{# Page title only: set pageHeading (and optionally statusTag) #}
+{# Page title only: set pageHeading (and optionally statusTag) – shown when journey service header is hidden #}
 {# Section + question: set sectionTitle, questionTitle (and optionally statusTag) #}
+{% if hideJourneyServiceHeader or (not pageHeading and (sectionTitle or questionTitle)) %}
 <div class="assessment-layout__section{% if compactPageHeader %} assessment-layout__section--compact{% endif %}">
   <div class="assessment-layout__row assessment-layout__row--tight">
-    {% if pageHeading %}
+    {% if pageHeading and hideJourneyServiceHeader %}
       <h1 class="govuk-heading-l govuk-!-margin-bottom-0">{{ pageHeading }}</h1>
-    {% else %}
+    {% elif sectionTitle and not pageHeading %}
       <p class="govuk-caption-l govuk-!-margin-bottom-0">{{ sectionTitle }}</p>
     {% endif %}
-    {% if statusTag %}
+    {% if statusTag and hideJourneyServiceHeader %}
       <strong class="govuk-tag govuk-tag--grey assessment-layout__status-tag" aria-hidden="true">{{ statusTag }}</strong>
     {% endif %}
   </div>
@@ -15,3 +16,4 @@
     <h1 class="govuk-heading-l govuk-!-margin-bottom-0">{{ questionTitle }}</h1>
   {% endif %}
 </div>
+{% endif %}

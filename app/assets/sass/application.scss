@@ -28,6 +28,22 @@ $desktop: 48.0625em;
     }
   }
 
+  > .govuk-back-link.assessment-layout__back-link {
+    margin-bottom: 25px;
+
+    &--hidden {
+      display: none !important;
+    }
+  }
+
+  > .govuk-back-link.assessment-layout__back-link + .assessment-offender-header {
+    margin-top: 0;
+  }
+
+  > .govuk-back-link.assessment-layout__back-link--hidden + .assessment-offender-header {
+    margin-top: 25px;
+  }
+
   .assessment-offender-header {
     margin-top: 30px;
   }
@@ -50,8 +66,48 @@ $desktop: 48.0625em;
     margin-top: 0;
   }
 
+  .assessment-service-header__title-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    min-width: 0;
+  }
+
+  .assessment-service-header__section-caption {
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .assessment-service-header__title-group .govuk-heading-l {
+    margin: 0;
+    margin-top: -16px;
+  }
+
+  .assessment-service-header .assessment-layout__row--tight {
+    align-items: flex-end;
+
+    @media (max-width: $tablet) {
+      align-items: flex-start;
+    }
+  }
+
+  .assessment-service-header .govuk-section-break--l {
+    margin-top: 0;
+    margin-bottom: 25px;
+  }
+
+  .assessment-service-header__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 15px;
+  }
+
   &__status-tag {
-    visibility: hidden;
+    // Hidden in the prototype; must not reserve flex space or page titles wrap early
+    display: none;
   }
 
   &__row {
@@ -207,6 +263,97 @@ body.assessment-page {
   }
 }
 
+// Section navigation – service header (default) and optional side nav
+.assessment-section-navigation__complete-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  line-height: 0;
+  opacity: 0;
+  visibility: hidden;
+
+  &--visible {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.assessment-section-navigation__tick {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.assessment-service-navigation {
+  @media (min-width: $tablet) {
+    .govuk-service-navigation__item {
+      padding-top: 15px;
+      padding-bottom: 15px;
+      line-height: 1.5263157895; // 29 ÷ 19 – GOV.UK service navigation bar height
+    }
+
+    .govuk-service-navigation__item--active {
+      padding-bottom: 11px; // 15px minus 4px active border
+      border-bottom-width: 4px;
+    }
+  }
+
+  @media (max-width: $tablet) {
+    .govuk-service-navigation__item {
+      padding-top: 3px;
+    }
+
+    .govuk-service-navigation__list {
+      margin-bottom: 5px;
+    }
+  }
+
+  // Tiering link (data-section, not extra class – govuk already sets class on <a>)
+  a[data-section="section-1"].govuk-service-navigation__link {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    vertical-align: bottom;
+
+    .govuk-service-navigation__active-fallback {
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      font-weight: inherit;
+    }
+
+    &:has(.assessment-section-navigation__complete-icon--visible) {
+      column-gap: 8px;
+
+      .govuk-service-navigation__active-fallback {
+        column-gap: 8px;
+      }
+    }
+  }
+
+  .assessment-section-navigation__label,
+  .assessment-section-navigation__complete-icon--visible {
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  // Hide tick from layout until section is complete (opacity alone still reserves space)
+  .assessment-section-navigation__complete-icon {
+    display: none;
+    flex-shrink: 0;
+
+    &--visible {
+      display: inline-block;
+    }
+  }
+
+  .assessment-section-navigation__complete-icon--visible,
+  .assessment-section-navigation__tick {
+    width: 16px;
+    height: 16px;
+  }
+}
+
 // Side navigation – always vertical (overrides MoJ horizontal scroll on mobile)
 .assessment-side-navigation.moj-side-navigation {
   display: block;
@@ -232,31 +379,11 @@ body.assessment-page {
       cursor: pointer;
     }
 
-    .assessment-side-navigation__link {
+    .assessment-section-navigation__link {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-    }
-
-    .assessment-side-navigation__complete-icon {
-      flex-shrink: 0;
-      width: 18px;
-      height: 18px;
-      line-height: 0;
-      opacity: 0;
-      visibility: hidden;
-
-      &--visible {
-        opacity: 1;
-        visibility: visible;
-      }
-    }
-
-    .assessment-side-navigation__tick {
-      display: block;
-      width: 18px;
-      height: 18px;
     }
 
     a:hover {
@@ -286,10 +413,75 @@ body.assessment-page {
 }
 
 // Offence autocomplete (Home Office long-list pattern)
+// Values supplied by another system (not entered on this page) – distinct from grey user selections
+.tiering-system-value {
+  padding: 10px 15px;
+  background: #e8f1fb;
+  border-left: 4px solid #1d70b8;
+
+  &__source {
+    margin: 5px 0 0;
+    font-size: 1rem; // 16px – smaller than 19px date above
+    line-height: 1.25;
+    color: #505a5f;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+  }
+
+  &__text {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    font-size: 1.1875rem;
+    line-height: 1.3157894737;
+  }
+
+  &__change {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 1.1875rem;
+    line-height: 1.3157894737;
+  }
+}
+
+// Pre-pop date edit panels – hidden by default (do not rely on [hidden] on .govuk-form-group)
+[data-conviction-date-edit],
+[data-first-sanction-date-edit] {
+  display: none;
+}
+
+[data-conviction-date-edit].tiering-system-value__edit--open,
+[data-first-sanction-date-edit].tiering-system-value__edit--open {
+  display: block;
+}
+
+[data-conviction-date-selected].tiering-system-value--summary-hidden,
+[data-first-sanction-date-selected].tiering-system-value--summary-hidden {
+  display: none;
+}
+
 .offence-autocomplete {
   &__combobox {
     position: relative;
     margin-bottom: 0;
+  }
+
+  &__input {
+    display: block;
+    width: 100%;
+    min-height: 40px;
+    overflow: hidden;
+    resize: none;
+    line-height: 1.25;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    overflow-wrap: break-word;
+    vertical-align: top;
   }
 
   &__menu {
@@ -326,7 +518,7 @@ body.assessment-page {
   &__results-status {
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 3;
     margin: 0;
     padding: 10px 15px;
     color: #505a5f;
@@ -361,9 +553,12 @@ body.assessment-page {
     }
 
     &--back {
+      position: sticky;
+      z-index: 2;
       grid-template-columns: 1fr;
       background: #f3f2f1;
       color: #0b0c0c;
+      box-shadow: 0 1px 0 #b1b4b6;
 
       .offence-autocomplete__option-label {
         display: flex;
@@ -376,6 +571,32 @@ body.assessment-page {
       &.offence-autocomplete__option--focused {
         background: #1d70b8;
         color: #fff;
+      }
+    }
+
+    &--view-all {
+      grid-template-columns: 1fr;
+      background: #f3f2f1;
+      color: #0b0c0c;
+      border-top: 1px solid #b1b4b6;
+
+      .offence-autocomplete__option-label {
+        font-weight: 400;
+      }
+
+      .offence-autocomplete__view-all-label {
+        color: #1d70b8;
+        text-decoration: underline;
+      }
+
+      &:hover,
+      &.offence-autocomplete__option--focused {
+        background: #1d70b8;
+        color: #fff;
+
+        .offence-autocomplete__view-all-label {
+          color: #fff;
+        }
       }
     }
   }
@@ -404,10 +625,17 @@ body.assessment-page {
     font-size: 1.1875rem;
   }
 
+  &__selected-panel-wrap {
+    &[hidden] {
+      display: none !important;
+    }
+  }
+
   &__selected-box {
     padding: 15px;
-    background: #f3f2f1;
+    background: #f7f7f7;
     border: 1px solid #b1b4b6;
+    box-shadow: 0 2px 0 #b1b4b6;
   }
 
   &__selected-name-row {
@@ -435,7 +663,7 @@ body.assessment-page {
   }
 
   &__selected-code {
-    color: #0b0c0c;
+    color: #505a5f;
     font-size: 1.1875rem;
     line-height: 1.3157894737;
   }
@@ -446,26 +674,96 @@ body.assessment-page {
   }
 }
 
+// Shared grid layout for selected offence cards (a1, a2 previous offence, violent check)
+.offence-selected-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  column-gap: 15px;
+  row-gap: 10px;
+  align-items: start;
+
+  &[hidden] {
+    display: none !important;
+  }
+
+  &__label {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+    font-size: 1.1875rem;
+    line-height: 1.3157894737;
+    font-weight: 700;
+  }
+
+  &__tag {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    margin: 0;
+  }
+
+  &__code {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 0;
+    color: #505a5f;
+    font-size: 1.1875rem;
+    line-height: 1.3157894737;
+  }
+
+  &__action {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: end;
+    align-self: baseline;
+    font-size: 1.1875rem;
+    line-height: 1.3157894737;
+    white-space: nowrap;
+  }
+}
+
+// Allow offence autocomplete menus to extend outside the details panel
+.violent-offence-check-details {
+  overflow: visible;
+
+  .govuk-details__text {
+    overflow: visible;
+  }
+}
+
 .violent-offence-check {
+  overflow: visible;
+
   &__search-row {
     display: flex;
     align-items: flex-start;
     gap: 15px;
     margin-bottom: 0;
+    overflow: visible;
 
     .offence-autocomplete--check {
-      width: 50%;
-      flex: none;
+      flex: 1;
+      min-width: 0;
+      overflow: visible;
     }
 
     .offence-autocomplete__combobox {
+      position: relative;
       max-width: 100%;
+      margin-bottom: 0;
+      overflow: visible;
+    }
+
+    .offence-autocomplete__menu {
+      z-index: 50;
     }
   }
 
   &__check-button {
     flex-shrink: 0;
     margin-top: 0;
+    margin-bottom: 0;
     background-color: #f3f2f1;
     box-shadow: 0 2px 0 #929191;
 
@@ -474,18 +772,99 @@ body.assessment-page {
     }
   }
 
-  &__result {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid #b1b4b6;
+  &__selected-section {
+    margin-top: 0;
   }
 
-  &__classification {
-    margin: 0;
-    font-size: 1.1875rem;
-    line-height: 1.3157894737;
-    font-weight: 700;
-    color: #00703c;
+  &__selected-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+}
+
+// a8 – content page pagination (prev/next on one row)
+.tiering-assessment-pagination {
+  align-self: stretch;
+  width: 100%;
+  margin-top: 45px;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 0;
+
+  .govuk-pagination__prev,
+  .govuk-pagination__next {
+    flex: 1 1 50%;
+    max-width: 50%;
+    min-width: 0;
+    float: none;
+    padding: 10px 15px;
+
+    .govuk-pagination__link {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      min-height: 100%;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .govuk-pagination__link-title {
+      display: inline-flex;
+      align-items: center;
+      column-gap: 5px;
+
+      &::after {
+        content: none;
+        display: none;
+      }
+    }
+
+    .govuk-pagination__link-label {
+      display: block;
+    }
+
+    .govuk-pagination__icon {
+      float: none;
+      flex-shrink: 0;
+      margin: 0;
+    }
+  }
+
+  .govuk-pagination__prev {
+    padding-left: 0;
+
+    .govuk-pagination__link {
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .govuk-pagination__link-title {
+      flex-direction: row-reverse;
+      justify-content: flex-start;
+    }
+  }
+
+  .govuk-pagination__prev + .govuk-pagination__next {
+    border-top: 0;
+    padding-right: 0;
+  }
+
+  .govuk-pagination__next {
+    .govuk-pagination__link {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .govuk-pagination__link-title {
+      justify-content: flex-end;
+    }
+
+    .govuk-pagination__link-label {
+      text-align: right;
+    }
   }
 }
 
@@ -494,11 +873,228 @@ body.assessment-page {
   scroll-margin-top: 20px;
 }
 
+.tiering-question-category {
+  margin-bottom: 30px;
+}
+
+.tiering-question-category:not(:first-of-type) {
+  margin-top: 45px;
+  padding-top: 25px;
+  border-top: 1px solid #b1b4b6;
+}
+
+.tiering-question-category__tag {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.25;
+  padding: 5px 10px 4px;
+}
+
 .tiering-summary-list__not-provided {
   color: #505a5f;
 }
 
+// Offence search results page (a1os)
+.offence-search-results-heading {
+  &__row {
+    align-items: flex-start;
+    margin-bottom: 0;
+  }
+
+  &__title {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__restart {
+    flex-shrink: 0;
+    margin-bottom: 0;
+    margin-top: 0;
+    white-space: nowrap;
+  }
+}
+
 // Browse all offences pages (a1o / a1o2 A-B test)
+.offence-browse-heading {
+  scroll-margin-top: 20px;
+
+  &--with-sort {
+    margin-bottom: 15px;
+
+    .offence-browse-heading__top {
+      width: 100%;
+    }
+  }
+
+  &__top {
+    align-items: flex-end;
+    margin-bottom: 0;
+
+    @media (max-width: $tablet) {
+      align-items: flex-start;
+    }
+  }
+
+  &__sort {
+    flex-shrink: 0;
+    margin-left: auto;
+    // Align with accordion right edge (cancel GOV.UK grid column padding)
+    margin-right: -15px;
+    width: fit-content;
+    max-width: calc(100% + 15px);
+  }
+
+  &__sort-field {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 15px;
+    width: fit-content;
+    max-width: 100%;
+    margin-bottom: 0;
+  }
+
+  &__sort-label {
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+
+  &__sort-field .govuk-select {
+    width: auto;
+    min-width: 12.5rem;
+    max-width: 100%;
+    margin-bottom: 0;
+    field-sizing: content;
+  }
+
+  &__sort-measure {
+    position: absolute;
+    visibility: hidden;
+    white-space: nowrap;
+    pointer-events: none;
+    height: 0;
+    overflow: hidden;
+  }
+
+  @media (max-width: $tablet) {
+    &__sort {
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+      max-width: 100%;
+    }
+
+    &__sort-field {
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    &__sort-field .govuk-select {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+    }
+  }
+}
+
+.offence-browse-category-filter {
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  &__view-all {
+    font-size: 19px;
+    line-height: 1.3157894737;
+    flex-shrink: 0;
+  }
+}
+
+.offence-a1o3-category-select {
+  width: 100%;
+}
+
+// Category chosen – box until offence selected, then plain text (a1o3)
+.offence-autocomplete--category {
+  .offence-autocomplete__category-select-display-wrap {
+    &[hidden] {
+      display: none !important;
+    }
+  }
+
+  .offence-autocomplete__category-select-display {
+    appearance: none;
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    min-height: 40px;
+    margin: 0;
+    padding: 5px 44px 5px 12px;
+    border: 2px solid #0b0c0c;
+    border-radius: 0;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32'%3E%3Cpath fill='%230b0c0c' d='M16 22 6 12l1.4-1.4 8.6 8.6 8.6-8.6L26 12z'/%3E%3C/svg%3E");
+    background-position: right 8px center;
+    background-repeat: no-repeat;
+    background-size: 12px;
+    color: #0b0c0c;
+    font-family: "GDS Transport", arial, sans-serif;
+    font-size: 1.1875rem;
+    line-height: 1.25;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover:not(:disabled):not(.offence-autocomplete__category-select-display--inactive) {
+      border-color: #0b0c0c;
+    }
+
+    &:focus:not(:disabled):not(.offence-autocomplete__category-select-display--inactive) {
+      outline: 3px solid transparent;
+      box-shadow: 0 0 0 2px #fff, 0 0 0 5px #0b0c0c;
+    }
+
+    &:disabled,
+    &--inactive {
+      min-height: 0;
+      padding: 0;
+      border: 0;
+      background: none;
+      box-shadow: none;
+      color: #505a5f;
+      cursor: default;
+      background-image: none;
+
+      &:hover {
+        border: 0;
+      }
+
+      &:focus {
+        box-shadow: none;
+        outline: none;
+      }
+    }
+  }
+}
+
+.offence-category-offences-search {
+  margin-top: govuk-spacing(2);
+
+  &:has(#offence-category-offences-search [data-offence-search-selected]:not([hidden])) {
+    [data-offence-search-in-category-heading] {
+      display: none !important;
+    }
+  }
+}
+
+[data-offence-search-in-category-heading][hidden] {
+  display: none !important;
+}
+
 .offence-browse-variant-toggle {
   &,
   &:link,
@@ -809,6 +1405,41 @@ body.assessment-page {
 }
 
 .risk-predictor-scores {
+  &__summary {
+    margin-bottom: 40px;
+  }
+
+  &__summary-points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__summary-point {
+    font-size: 19px;
+    line-height: 1.3157894737;
+    margin-bottom: 0;
+
+    & + & {
+      margin-top: 12px;
+    }
+  }
+
+  &__summary-tag {
+    margin-left: 4px;
+    vertical-align: baseline;
+    white-space: nowrap;
+  }
+
+  &__empty {
+    padding-bottom: 30px;
+  }
+
+  &__empty-label {
+    color: #0b0c0c;
+    margin-bottom: 0;
+  }
+
   &__section {
     // Padding cannot be negative; control separator spacing explicitly instead.
     // Keep this small and remove bottom margins from the section's last element.
@@ -826,6 +1457,14 @@ body.assessment-page {
     &--border {
       border-bottom: 1px solid #b1b4b6;
       margin-bottom: 20px;
+    }
+
+    &--not-applicable {
+      padding-bottom: 0;
+
+      > :last-child {
+        margin-bottom: 0;
+      }
     }
   }
 
@@ -1112,6 +1751,7 @@ body.assessment-page {
   .govuk-header,
   .govuk-back-link,
   .assessment-side-navigation,
+  .assessment-service-navigation,
   .tiering-session-results__download,
   .govuk-footer__navigation {
     display: none !important;

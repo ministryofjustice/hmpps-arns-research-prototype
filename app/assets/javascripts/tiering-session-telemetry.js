@@ -5,6 +5,11 @@
 import { getTieringAssessmentSession } from './tiering-assessment-session.js'
 import { getUnansweredTieringQuestions } from './tiering-journey.js'
 
+// Temporary: set to true to show the agree screen and footer session-results links.
+export const SESSION_TELEMETRY_UI_ENABLED = false
+
+export const isSessionTelemetryUiEnabled = () => SESSION_TELEMETRY_UI_ENABLED
+
 const TELEMETRY_KEY = 'tieringSessionTelemetry'
 
 const makeSessionId = () => {

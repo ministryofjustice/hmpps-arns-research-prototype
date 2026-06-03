@@ -15,12 +15,37 @@ export const escapeOffenceHtml = (text) =>
 
 export const formatOffenceCodeLabel = (offence) => {
   if (offence.code && offence.subcode) {
-    return `Offence code: ${offence.code}, Subcode: ${offence.subcode}`
+    return `Offence code: ${offence.code}, subcode: ${offence.subcode}`
   }
   if (offence.fullCode) {
     return `Offence code: ${offence.fullCode}`
   }
   return offence.code ? `Offence code: ${offence.code}` : ''
+}
+
+export const lookupOffenceIsViolent = (offenceId) => {
+  const offences = window.OFFENCE_SEARCH_DATA
+  if (!offences?.length || !offenceId) return false
+
+  for (const group of offences) {
+    const match = (group.subOffences || []).find((sub) => sub.id === offenceId)
+    if (match) return Boolean(match.isViolentOffence)
+  }
+
+  return false
+}
+
+export const applyOffenceViolentTag = (tagEl, isViolentOffence) => {
+  if (!tagEl) return
+
+  const isViolent = Boolean(isViolentOffence)
+  tagEl.textContent = isViolent ? 'Violent offence' : 'Not violent'
+  tagEl.className = `govuk-tag offence-selected-card__tag ${isViolent ? 'govuk-tag--red' : 'govuk-tag--green'}`
+  tagEl.hidden = false
+}
+
+export const clearOffenceViolentTag = (tagEl) => {
+  if (tagEl) tagEl.hidden = true
 }
 
 export const formatOffenceGroupCount = (count) => {
@@ -231,24 +256,29 @@ export const renderOffenceAccordionSections = (groups, accordionId) =>
     )
     .join('')
 
-export const renderOffenceAccordion = (groups, accordionId) => {
+export const renderOffenceAccordion = (groups, accordionId, options = {}) => {
   if (!groups.length) {
     return '<p class="govuk-body">No offences found.</p>'
   }
 
+  const rememberExpandedAttr =
+    options.rememberExpanded === false ? ' data-remember-expanded="false"' : ''
+
   return `
-    <div class="govuk-accordion offence-browse-accordion" data-module="govuk-accordion" id="${escapeOffenceHtml(accordionId)}">
+    <div class="govuk-accordion offence-browse-accordion" data-module="govuk-accordion" id="${escapeOffenceHtml(accordionId)}"${rememberExpandedAttr}>
       ${renderOffenceAccordionSections(groups, accordionId)}
     </div>`
 }
 
-export const initOffenceBrowseAccordion = (root) => {
+export const initOffenceBrowseAccordion = (root, options = {}) => {
+  const { rememberExpanded = true } = options
+
   if (!root || root.dataset.accordionReady === 'true') return
 
   try {
     if (window.GOVUKFrontend?.Accordion) {
       // GOV.UK Frontend v6 initialises in the constructor (no .init() method).
-      new window.GOVUKFrontend.Accordion(root)
+      new window.GOVUKFrontend.Accordion(root, { rememberExpanded })
     }
   } catch (error) {
     console.error('Offence browse accordion could not be initialised:', error)
@@ -274,16 +304,67 @@ export const initOffenceBrowseVariantLinks = () => {
   })
 }
 
+export const VIOLENT_OFFENCE_CHECK_BROWSE_CONTEXT = 'violent-offence-check'
+
+export const OFFENCE_SEARCH_RESULTS_BROWSE_CONTEXT = 'search-results'
+
+/** Save current offence to session and return to a1 (or other returnUrl). */
+export const persistTieringCurrentOffenceAndReturn = ({
+  offence,
+  returnUrl = 'a1.html',
+  telemetrySource = 'browse',
+  preserveConvictionDateEditMode = true
+}) => {
+  if (!offence?.id) return false
+
+  trackTelemetryOffenceSearch({
+    action: 'select',
+    query: {
+      id: offence.id,
+      label: offence.label || '',
+      code: offence.code || '',
+      subcode: offence.subcode || '',
+      fullCode: offence.fullCode || '',
+      source: telemetrySource
+    }
+  })
+
+  const session = getTieringAssessmentSession()
+  const updates = {
+    currentOffence: {
+      id: offence.id,
+      label: offence.label || '',
+      code: offence.code || '',
+      subcode: offence.subcode || '',
+      fullCode: offence.fullCode || '',
+      isViolentOffence: Boolean(offence.isViolentOffence)
+    }
+  }
+
+  if (preserveConvictionDateEditMode) {
+    updates.convictionDateEditMode = session.convictionDateEditMode === true
+  }
+
+  setTieringAssessmentSession(updates)
+  window.location.href = withFromCheckAnswers(returnUrl)
+  return true
+}
+
 export const initOffenceBrowseForm = ({
   form,
   getTableBodies,
-  telemetrySource = 'browse'
+  telemetrySource = 'browse',
+  browseContext = 'current-offence',
+  returnUrl = 'a1.html'
 }) => {
   if (!form) return null
 
-  const hiddenInput = document.querySelector('[data-offence-selected-id]')
+  const hiddenInput = form.querySelector('[data-offence-selected-id]')
 
-  trackTelemetryOffenceSearch({ action: 'browse-open' })
+  if (browseContext !== OFFENCE_SEARCH_RESULTS_BROWSE_CONTEXT) {
+    trackTelemetryOffenceSearch({ action: 'browse-open' })
+  }
+
   initOffenceBrowseVariantLinks()
 
   if (isTieringCheckAnswersEdit()) {
@@ -381,6 +462,13 @@ export const initOffenceBrowseForm = ({
   }
 
   const restoreSelection = () => {
+    if (
+      browseContext === VIOLENT_OFFENCE_CHECK_BROWSE_CONTEXT ||
+      browseContext === OFFENCE_SEARCH_RESULTS_BROWSE_CONTEXT
+    ) {
+      return
+    }
+
     const session = getTieringAssessmentSession()
     if (!session.currentOffence?.id) return
 
@@ -396,32 +484,54 @@ export const initOffenceBrowseForm = ({
   })
 
   form.addEventListener('submit', (event) => {
+    const a1o3SearchView = document.querySelector('[data-offence-a1o3-search-view]')
+    const searchSaveActions = document.querySelector('[data-offence-search-submit-actions]')
+    if (
+      a1o3SearchView &&
+      !a1o3SearchView.hidden &&
+      searchSaveActions &&
+      !searchSaveActions.hidden
+    ) {
+      return
+    }
+
     event.preventDefault()
     if (!selectedOffence) return
 
-    trackTelemetryOffenceSearch({
-      action: 'select',
-      query: {
-        id: selectedOffence.id,
-        label: selectedOffence.label,
-        code: selectedOffence.code || '',
-        subcode: selectedOffence.subcode || '',
-        fullCode: selectedOffence.fullCode || '',
-        source: telemetrySource
-      }
-    })
+    if (browseContext === VIOLENT_OFFENCE_CHECK_BROWSE_CONTEXT) {
+      trackTelemetryOffenceSearch({
+        action: 'select',
+        query: {
+          id: selectedOffence.id,
+          label: selectedOffence.label,
+          code: selectedOffence.code || '',
+          subcode: selectedOffence.subcode || '',
+          fullCode: selectedOffence.fullCode || '',
+          source: telemetrySource
+        }
+      })
 
-    setTieringAssessmentSession({
-      currentOffence: {
-        id: selectedOffence.id,
-        label: selectedOffence.label,
-        code: selectedOffence.code || '',
-        subcode: selectedOffence.subcode || '',
-        fullCode: selectedOffence.fullCode || ''
-      }
-    })
+      setTieringAssessmentSession({
+        violentOffenceCheckPending: {
+          id: selectedOffence.id,
+          label: selectedOffence.label,
+          code: selectedOffence.code || '',
+          subcode: selectedOffence.subcode || '',
+          fullCode: selectedOffence.fullCode || '',
+          isViolentOffence: Boolean(selectedOffence.isViolentOffence)
+        },
+        violentOffenceCheckBrowse: false
+      })
 
-    window.location.href = withFromCheckAnswers('a1.html')
+      window.location.href = withFromCheckAnswers(returnUrl)
+      return
+    }
+
+    persistTieringCurrentOffenceAndReturn({
+      offence: selectedOffence,
+      returnUrl,
+      telemetrySource
+    })
   })
 
   return {

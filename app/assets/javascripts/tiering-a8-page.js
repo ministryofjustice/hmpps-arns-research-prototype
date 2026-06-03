@@ -4,11 +4,13 @@
 
 import { markSection1Complete } from './assessment-section-complete.js'
 import { getTieringAssessmentSession } from './tiering-assessment-session.js'
+import { redirectIfTieringJourneyIncomplete } from './tiering-journey.js'
 import { insertTieringSessionFooterLinks } from './tiering-footer-session-links.js'
 import {
   trackTelemetryRiskPredictorDetailsOpen,
   trackTelemetryRiskPredictorTabSwitch
 } from './tiering-session-telemetry.js'
+import { initTieringInactiveLinks } from './tiering-inactive-links.js'
 import { renderTieringSummaryList } from './tiering-summary.js'
 
 const easeOutCubic = (progress) => 1 - (1 - progress) ** 3
@@ -54,7 +56,24 @@ const initRiskPredictorBackToTop = () => {
 
   link.addEventListener('click', (event) => {
     event.preventDefault()
-    scrollToTopWithEaseOut(document.getElementById('top'))
+    scrollToTopWithEaseOut()
+  })
+}
+
+const SEXUAL_PREDICTOR_IDS = ['direct-contact-sexual', 'indirect-contact-sexual']
+
+const hasSexualOffenceHistory = (session) => session.sexualOffence === 'yes'
+
+const applySexualPredictorEmptyStates = (session) => {
+  if (hasSexualOffenceHistory(session)) return
+
+  SEXUAL_PREDICTOR_IDS.forEach((predictorId) => {
+    const section = document.querySelector(`[data-risk-predictor-id="${predictorId}"]`)
+    if (!section) return
+
+    section.querySelector('[data-risk-predictor-score-content]')?.setAttribute('hidden', '')
+    section.querySelector('[data-risk-predictor-empty]')?.removeAttribute('hidden')
+    section.classList.add('risk-predictor-scores__section--not-applicable')
   })
 }
 
@@ -95,12 +114,11 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   const session = getTieringAssessmentSession()
 
-  if (!session.offencesSinceCommunity) {
-    window.location.href = 'a7.html'
-    return
-  }
+  if (redirectIfTieringJourneyIncomplete(session)) return
 
   insertTieringSessionFooterLinks()
+  applySexualPredictorEmptyStates(session)
+  initTieringInactiveLinks()
   initRiskPredictorBackToTop()
   initRiskPredictorTelemetry()
 

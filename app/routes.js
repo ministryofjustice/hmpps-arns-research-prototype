@@ -10,6 +10,15 @@ const govukPrototypeKit = require('govuk-prototype-kit')
 const router = govukPrototypeKit.requests.setupRouter()
 
 const offencesDataPath = path.join(__dirname, 'data', 'offences.json')
+const offenceBrowseCategoriesPath = path.join(__dirname, 'data', 'offence-browse-categories.json')
+const offenceBrowseCategories = JSON.parse(
+  fs.readFileSync(offenceBrowseCategoriesPath, 'utf8')
+)
+
+router.use((req, res, next) => {
+  res.locals.offenceBrowseCategories = offenceBrowseCategories
+  next()
+})
 
 router.get('/api/offences', (req, res) => {
   fs.readFile(offencesDataPath, 'utf8', (error, data) => {

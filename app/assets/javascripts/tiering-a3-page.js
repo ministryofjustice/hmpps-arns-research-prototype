@@ -7,8 +7,9 @@ import {
   completeTieringPageAndContinue,
   isTieringCheckAnswersEdit
 } from './tiering-change-scroll.js'
-import { getA3FieldsFromForm } from './tiering-journey.js'
+import { applyA3PrototypeDefaults, getA3FieldsFromForm } from './tiering-journey.js'
 import { getTieringAssessmentSession } from './tiering-assessment-session.js'
+import { initTieringInactiveLinks } from './tiering-inactive-links.js'
 
 const restoreRadio = (form, name, value) => {
   if (!value) return
@@ -26,6 +27,8 @@ window.GOVUKPrototypeKit.documentReady(() => {
     window.location.href = 'a2.html'
     return
   }
+
+  initTieringInactiveLinks(form)
 
   restoreRadio(form, 'sexual_motivation', session.sexualMotivation)
   restoreRadio(form, 'stranger_contact', session.strangerContact)
@@ -83,7 +86,11 @@ window.GOVUKPrototypeKit.documentReady(() => {
   form.addEventListener('submit', (event) => {
     event.preventDefault()
 
-    const newFields = getA3FieldsFromForm(form)
+    let newFields = getA3FieldsFromForm(form)
+
+    if (!isTieringCheckAnswersEdit()) {
+      newFields = applyA3PrototypeDefaults(newFields, session)
+    }
 
     window.location.href = completeTieringPageAndContinue('a3', 'a4.html', newFields)
   })

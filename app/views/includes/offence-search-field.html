@@ -1,0 +1,106 @@
+{# Shared offence autocomplete (a1 current offence, a2 violent offence check, etc.)
+   idPrefix – root id, e.g. current-offence-search
+   inputName – name attribute for the text input
+   labelText – visually hidden label
+   hintText – hint copy (optional)
+   checkMode – if true, adds data-offence-search-check (no inline selected panel)
+   modifierClass – extra classes on root, e.g. offence-autocomplete--check
+#}
+
+<div
+  class="offence-autocomplete{% if modifierClass %} {{ modifierClass }}{% endif %}"
+  data-module="offence-search"
+  {% if checkMode %}data-offence-search-check="true"{% endif %}
+  {% if searchManual %}data-offence-search-manual="true"{% endif %}
+  {% if searchScope %}data-offence-search-scope="{{ searchScope }}"{% endif %}
+  {% if searchCategory %}data-offence-search-category="{{ searchCategory }}"{% endif %}
+  id="{{ idPrefix }}"
+>
+  <div data-offence-search-panel>
+    {% if hintCategoryList %}
+    <div id="{{ idPrefix }}-hint" class="govuk-hint govuk-!-margin-bottom-4">
+      {% if hintIntro %}
+      <p class="govuk-!-margin-bottom-2">{{ hintIntro }}</p>
+      {% endif %}
+      <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        {% for category in hintCategoryList %}
+        <li>{{ category }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% elif hintText %}
+    <p id="{{ idPrefix }}-hint" class="govuk-hint govuk-!-margin-bottom-4">
+      {{ hintText }}
+    </p>
+    {% endif %}
+    <div class="govuk-form-group offence-autocomplete__combobox{% if checkMode %} govuk-!-margin-bottom-0{% endif %}">
+      <label class="govuk-label govuk-visually-hidden" for="{{ idPrefix }}-input">
+        {{ labelText }}
+      </label>
+      <textarea
+        class="govuk-input offence-autocomplete__input"
+        id="{{ idPrefix }}-input"
+        name="{{ inputName }}"
+        rows="1"
+        spellcheck="false"
+        autocomplete="off"
+        role="combobox"
+        aria-autocomplete="list"
+        aria-expanded="false"
+        aria-controls="{{ idPrefix }}-listbox"
+        aria-describedby="{{ idPrefix }}-hint"
+        data-offence-search-input
+      ></textarea>
+      <ul
+        id="{{ idPrefix }}-listbox"
+        class="offence-autocomplete__menu"
+        role="listbox"
+        data-offence-search-listbox
+        hidden
+      ></ul>
+    </div>
+    {% if showBrowseLink %}
+    <p class="govuk-body govuk-!-margin-top-3 govuk-!-margin-bottom-0">
+      <a
+        class="govuk-link"
+        href="{{ browseLinkHref or 'a1o.html' }}"
+        {% if violentBrowseLink %}data-violent-offence-browse-link{% else %}data-tiering-offence-browse-link{% endif %}
+      >View all offences</a>
+    </p>
+    {% endif %}
+  </div>
+
+  {# selectedPanelStyle 'dropdown' is only for category pickers – reset it on other includes #}
+  {% if showSelectedPanel and selectedPanelStyle == 'dropdown' %}
+  <div class="offence-autocomplete__category-select-display-wrap" data-offence-search-selected hidden>
+    {% if selectedPanelHeading %}
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-2">{{ selectedPanelHeading }}</h2>
+    {% endif %}
+    <button
+      type="button"
+      class="offence-autocomplete__category-select-display"
+      data-offence-change
+      aria-label="Change offence category"
+    >
+      <span class="offence-autocomplete__category-select-display__text" data-offence-selected-label></span>
+    </button>
+  </div>
+  {% elif showSelectedPanel %}
+  <div class="offence-autocomplete__selected-panel-wrap" data-offence-search-selected hidden>
+    {% if selectedPanelHeading %}
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-2">{{ selectedPanelHeading }}</h2>
+    {% endif %}
+    <div class="offence-autocomplete__selected-box offence-selected-card">
+      <p class="govuk-body offence-autocomplete__selected-label offence-selected-card__label govuk-!-margin-bottom-0" data-offence-selected-label></p>
+      <strong class="govuk-tag offence-selected-card__tag" data-offence-violent-tag hidden></strong>
+      <p class="govuk-body offence-autocomplete__selected-code offence-selected-card__code govuk-!-margin-bottom-0" data-offence-selected-meta hidden></p>
+      <a class="govuk-link offence-selected-card__action" href="#" data-offence-change>{{ changeLinkText | default('Delete offence') }}</a>
+      {% if showOffenceHiddenFields != false %}
+      <input type="hidden" name="current_offence_id" value="" data-offence-selected-id>
+      <input type="hidden" name="current_offence_code" value="" data-offence-selected-code>
+      <input type="hidden" name="current_offence_subcode" value="" data-offence-selected-subcode>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+</div>

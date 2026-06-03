@@ -1,9 +1,11 @@
 {#
   Tiering assessment pages – hides Manage your prototype and Clear data in the footer
+  Side nav: set showAssessmentSideNav to true in app/config.json (or hideSideNav = false on a page)
 #}
 
 {% extends "layouts/tiering-branded.njk" %}
 
+{% set hideSideNav = hideSideNav if hideSideNav is defined else (not showAssessmentSideNav) %}
 {% set bodyClasses = "assessment-page" %}
 
 {% from "govuk/components/footer/macro.njk" import govukFooter %}

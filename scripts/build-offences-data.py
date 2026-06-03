@@ -5,6 +5,7 @@ import csv
 import json
 import re
 from pathlib import Path
+from typing import Optional, Tuple
 
 ROOT = Path(__file__).resolve().parents[1]
 CSV_PATH = ROOT / "app/assets/doc/Offences MOJ.csv"
@@ -37,57 +38,228 @@ def parse_numeric_code(code: str):
         return None
 
 
-def infer_tab_id(code: str, label: str) -> str:
-    numeric = parse_numeric_code(code)
-    lower = label.lower()
+OASYS_OFFENCE_CATEGORIES = [
+    "Violence against the person",
+    "Acquisitive violence",
+    "Public order and harassment",
+    "Sexual (not against child)",
+    "Sexual (against child)",
+    "Drunkenness",
+    "Burglary (domestic)",
+    "Burglary (other)",
+    "Theft (non-motor)",
+    "Handling stolen goods",
+    "Fraud and forgery",
+    "Absconding/bail",
+    "Vehicle-related theft",
+    "Welfare fraud",
+    "Motoring offences",
+    "Drink driving",
+    "Criminal damage",
+    "Drug import/export/production",
+    "Drug possession/supply",
+    "Other offences",
+]
 
-    if numeric is not None:
-        if 28 <= numeric <= 32:
-            return "burglary"
-        if numeric == 34:
-            return "robbery"
-        if (39 <= numeric <= 49) or numeric in {54, 130, 131}:
-            return "theft"
-        if numeric in {77, 92, 193}:
-            return "drugs"
-        if 802 <= numeric <= 825:
-            return "motoring"
-        if 1 <= numeric <= 15:
-            return "violence"
-        if 103 <= numeric <= 105:
-            return "violence"
-        if 64 <= numeric <= 66:
-            return "public-order"
-        if 140 <= numeric <= 142:
-            return "public-order"
-        if numeric in {125, 145, 162}:
-            return "public-order"
+CATEGORY_TO_TAB_ID = {
+    "Violence against the person": "violence",
+    "Acquisitive violence": "robbery",
+    "Public order and harassment": "public-order",
+    "Drunkenness": "public-order",
+    "Burglary (domestic)": "burglary",
+    "Burglary (other)": "burglary",
+    "Theft (non-motor)": "theft",
+    "Handling stolen goods": "theft",
+    "Vehicle-related theft": "theft",
+    "Motoring offences": "motoring",
+    "Drink driving": "motoring",
+    "Drug import/export/production": "drugs",
+    "Drug possession/supply": "drugs",
+}
+
+SEXUAL_PARENT_CODES = set(range(16, 28)) | {70, 71, 72, 73, 74, 86, 88, 175, 503, 504}
+
+CHILD_SEXUAL_HINTS = (
+    "child under 13",
+    "child under 16",
+    "under 13",
+    "under 16",
+    "male child",
+    "female child",
+    "against a child",
+    "against child",
+    "children through",
+    "child family member",
+    "gross indecency with children",
+    "indecent photographs of children",
+    "indecent photo",
+    "child porn",
+    "infant",
+)
+
+DRINK_DRIVE_HINTS = (
+    "alcohol",
+    "drink",
+    "drunk",
+    "unfit through drink",
+    "unfit through drugs",
+    "prescribed limit",
+    "breath",
+    "blood alcohol",
+)
+
+DRUG_SUPPLY_HINTS = (
+    "import",
+    "export",
+    "production",
+    "produce",
+    "supply",
+    "suppl",
+    "traffick",
+    "cultivat",
+    "manufactur",
+    "production",
+)
+
+
+def offence_text(code: str, label: str, description: str = "") -> Tuple[Optional[int], str]:
+    return parse_numeric_code(code), f"{label} {description}".lower()
+
+
+def is_sexual_against_child(numeric: Optional[int], text: str) -> bool:
+    if any(hint in text for hint in CHILD_SEXUAL_HINTS):
+        return True
+    if numeric in {11, 13, 71, 72, 74}:
+        return True
+    return False
+
+
+def is_sexual_offence(numeric: Optional[int], text: str) -> bool:
+    if numeric in SEXUAL_PARENT_CODES:
+        return True
+    return any(
+        word in text
+        for word in (
+            "sexual",
+            "rape",
+            "indecent",
+            "buggery",
+            "gross indecency",
+            "sopo",
+            "sex offender",
+            "sexual harm",
+        )
+    )
+
+
+def infer_oasys_category(code: str, label: str, description: str = "") -> str:
+    numeric, text = offence_text(code, label, description)
+
+    if numeric is not None and 802 <= numeric <= 825:
+        if numeric == 803 or any(hint in text for hint in DRINK_DRIVE_HINTS):
+            return "Drink driving"
+        return "Motoring offences"
 
     if re.match(r"^8\d{2}$", code):
-        return "motoring"
-    if "burglary" in lower:
-        return "burglary"
-    if "robbery" in lower or "blackmail" in lower:
-        return "robbery"
-    if "steal" in lower or "theft" in lower or "handling stolen" in lower:
-        return "theft"
-    if "drug" in lower:
-        return "drugs"
-    if "motor" in lower or "driving" in lower or "vehicle" in lower:
-        return "motoring"
-    if any(word in lower for word in ("assault", "murder", "manslaughter", "wound")):
-        return "violence"
-    if "drunk" in lower or "disorder" in lower or "public order" in lower:
-        return "public-order"
+        if code == "803" or any(hint in text for hint in DRINK_DRIVE_HINTS):
+            return "Drink driving"
+        return "Motoring offences"
 
-    return "other-offences"
+    if numeric in {77, 92, 193} or (
+        numeric is not None and "misuse of drugs" in text
+    ) or (
+        "controlled drug" in text
+        and "forgery" not in text
+        and (numeric is None or numeric < 500)
+    ):
+        if any(hint in text for hint in DRUG_SUPPLY_HINTS):
+            return "Drug import/export/production"
+        if numeric == 193:
+            return "Drug import/export/production"
+        return "Drug possession/supply"
 
+    if is_sexual_offence(numeric, text):
+        if is_sexual_against_child(numeric, text):
+            return "Sexual (against child)"
+        return "Sexual (not against child)"
 
-def infer_category(tab_id: str) -> str:
-    for tab in PRIMARY_OFFENCE_TABS:
-        if tab["id"] == tab_id:
-            return tab["categories"][0]
+    if numeric in {151, 152} or "social security" in text:
+        return "Welfare fraud"
+
+    if numeric in {80, 83} or "abscond" in text or (
+        "bail" in text and numeric is not None and numeric < 200
+    ):
+        return "Absconding/bail"
+
+    if numeric in {28, 29} or ("burglary" in text and "dwelling" in text):
+        return "Burglary (domestic)"
+
+    if numeric in {30, 31, 32} or "burglary" in text:
+        return "Burglary (other)"
+
+    if numeric == 54 or "handling stolen" in text:
+        return "Handling stolen goods"
+
+    if numeric in {37, 48, 126, 130, 131} or (
+        ("motor vehicle" in text or "vehicle" in text)
+        and ("steal" in text or "taking" in text or "theft" in text)
+    ):
+        return "Vehicle-related theft"
+
+    if numeric in {34, 35, 36} or "robbery" in text or "blackmail" in text or "kidnap" in text:
+        return "Acquisitive violence"
+
+    if numeric in {56, 57, 58, 59, 149} or "criminal damage" in text or "arson" in text:
+        return "Criminal damage"
+
+    if numeric in {50, 51, 52, 53, 55, 60, 61, 114, 814} or (
+        "fraud" in text or "forgery" in text or "false accounting" in text
+    ):
+        return "Fraud and forgery"
+
+    if numeric in {140, 141, 142, 143} or (
+        "drunkenness" in text and "driving" not in text
+    ):
+        return "Drunkenness"
+
+    if numeric in {64, 65, 66, 103, 104, 105, 125, 145, 162} or (
+        "public order" in text
+        or "riot" in text
+        or "violent disorder" in text
+        or "harassment" in text
+        or "intimidation" in text
+        or "disorderly behaviour" in text
+    ):
+        return "Public order and harassment"
+
+    if (numeric is not None and 39 <= numeric <= 47) or numeric == 33 or (
+        "steal" in text or "theft" in text or "shoplifting" in text
+    ):
+        return "Theft (non-motor)"
+
+    if (numeric is not None and 1 <= numeric <= 15) or numeric in {109, 111}:
+        return "Violence against the person"
+
+    if numeric in {103, 104, 105} or any(
+        word in text for word in ("murder", "manslaughter", "assault", "wound", "cruelty")
+    ):
+        return "Violence against the person"
+
     return "Other offences"
+
+
+def infer_tab_id(code: str, label: str, description: str = "") -> str:
+    category = infer_oasys_category(code, label, description)
+    return CATEGORY_TO_TAB_ID.get(category, "other-offences")
+
+
+def infer_group_category(
+    code: str, parent_label: str, parent_description: str, sub_records: list
+) -> str:
+    combined_description = parent_description
+    for item in sub_records:
+        combined_description += f" {item['description']} {item['label']}"
+    return infer_oasys_category(code, parent_label, combined_description)
 
 
 def build_search_terms(label, code, subcode, full_code, description=""):
@@ -128,8 +300,16 @@ def read_offences_csv(path: Path):
                 f"(found: {', '.join(reader.fieldnames)})"
             )
 
+        violent_key = headers.get("violent offence")
+
         for row in reader:
-            yield normalise_full_code(row.get(code_key)), str(row.get(description_key) or "").strip()
+            full_code = normalise_full_code(row.get(code_key))
+            description = str(row.get(description_key) or "").strip()
+            is_violent = False
+            if violent_key:
+                value = str(row.get(violent_key) or "").strip().lower()
+                is_violent = value in ("yes", "y", "true", "1")
+            yield full_code, description, is_violent
 
 
 def main():
@@ -138,7 +318,7 @@ def main():
 
     records = []
 
-    for full_code, description in read_offences_csv(CSV_PATH):
+    for full_code, description, is_violent in read_offences_csv(CSV_PATH):
         if not re.match(r"^[0-9A-Z]{5}$", full_code):
             continue
 
@@ -148,15 +328,16 @@ def main():
         if not label:
             continue
 
-        records.append(
-            {
-                "fullCode": full_code,
-                "code": code,
-                "subcode": subcode,
-                "label": label,
-                "description": description,
-            }
-        )
+        record = {
+            "fullCode": full_code,
+            "code": code,
+            "subcode": subcode,
+            "label": label,
+            "description": description,
+        }
+        if is_violent:
+            record["isViolentOffence"] = True
+        records.append(record)
 
     by_code = {}
     for record in records:
@@ -171,44 +352,33 @@ def main():
         )
 
         parent_label = parent_record["label"] if parent_record else sub_records[0]["label"]
-        tab_id = infer_tab_id(code, parent_label)
-        category = infer_category(tab_id)
+        parent_description = (
+            parent_record["description"] if parent_record else sub_records[0]["description"]
+        )
+        category = infer_group_category(code, parent_label, parent_description, sub_records)
+        tab_id = CATEGORY_TO_TAB_ID.get(category, "other-offences")
 
-        sub_offences = []
-        for item in sub_records:
-            sub_offences.append(
-                {
-                    "id": item["fullCode"].lower(),
-                    "label": item["label"],
-                    "code": item["code"],
-                    "subcode": item["subcode"],
-                    "fullCode": item["fullCode"],
-                    "description": item["description"],
-                    "searchTerms": build_search_terms(
-                        item["label"], item["code"], item["subcode"], item["fullCode"], item["description"]
-                    ),
-                }
-            )
+        def offence_entry(item):
+            entry = {
+                "id": item["fullCode"].lower(),
+                "label": item["label"],
+                "code": item["code"],
+                "subcode": item["subcode"],
+                "fullCode": item["fullCode"],
+                "description": item["description"],
+                "searchTerms": build_search_terms(
+                    item["label"], item["code"], item["subcode"], item["fullCode"], item["description"]
+                ),
+            }
+            if item.get("isViolentOffence"):
+                entry["isViolentOffence"] = True
+            return entry
+
+        sub_offences = [offence_entry(item) for item in sub_records]
 
         selectable = []
         if parent_record:
-            selectable.append(
-                {
-                    "id": parent_record["fullCode"].lower(),
-                    "label": parent_record["label"],
-                    "code": parent_record["code"],
-                    "subcode": parent_record["subcode"],
-                    "fullCode": parent_record["fullCode"],
-                    "description": parent_record["description"],
-                    "searchTerms": build_search_terms(
-                        parent_record["label"],
-                        parent_record["code"],
-                        parent_record["subcode"],
-                        parent_record["fullCode"],
-                        parent_record["description"],
-                    ),
-                }
-            )
+            selectable.append(offence_entry(parent_record))
         selectable.extend(sub_offences)
 
         if not selectable:
@@ -236,11 +406,14 @@ def main():
     OUTPUT_PATH.write_text(json.dumps(offences, indent=2) + "\n", encoding="utf-8")
 
     tab_counts = {}
+    category_counts = {}
     for offence in offences:
         tab_counts[offence["tabId"]] = tab_counts.get(offence["tabId"], 0) + 1
+        category_counts[offence["category"]] = category_counts.get(offence["category"], 0) + 1
 
     print(f"Wrote {len(offences)} offence groups to {OUTPUT_PATH}")
     print("Tab counts:", tab_counts)
+    print("Category counts:", dict(sorted(category_counts.items())))
 
 
 if __name__ == "__main__":

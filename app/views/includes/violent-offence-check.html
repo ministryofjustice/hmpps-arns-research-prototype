@@ -1,4 +1,4 @@
-<details class="govuk-details govuk-!-margin-top-6 govuk-!-margin-bottom-0">
+<details class="govuk-details govuk-!-margin-top-6 govuk-!-margin-bottom-0 violent-offence-check-details" id="violent-offence-check">
   <summary class="govuk-details__summary">
     <span class="govuk-details__summary-text">Check if an offence is classed as violent</span>
   </summary>
@@ -6,39 +6,19 @@
     <div data-module="violent-offence-check">
       <h3 class="govuk-heading-s govuk-!-margin-top-0 govuk-!-margin-bottom-4">Enter the offence name</h3>
 
+      <p id="violent-offence-check-search-hint" class="govuk-hint govuk-!-margin-bottom-4">
+        Search for the name of an offence or an offence code and subcode.
+      </p>
+
       <div class="violent-offence-check__search-row" data-violent-check-search>
-        <div
-          class="offence-autocomplete offence-autocomplete--check"
-          data-offence-search-check
-        >
-          <div data-offence-search-panel>
-            <div class="govuk-form-group offence-autocomplete__combobox govuk-!-margin-bottom-0">
-              <label class="govuk-label govuk-visually-hidden" for="violent-offence-check-search-input">
-                Enter the offence name
-              </label>
-              <input
-                class="govuk-input"
-                id="violent-offence-check-search-input"
-                name="violent_offence_check_search"
-                type="text"
-                spellcheck="false"
-                autocomplete="off"
-                role="combobox"
-                aria-autocomplete="list"
-                aria-expanded="false"
-                aria-controls="violent-offence-check-search-listbox"
-                data-offence-search-input
-              >
-              <ul
-                id="violent-offence-check-search-listbox"
-                class="offence-autocomplete__menu"
-                role="listbox"
-                data-offence-search-listbox
-                hidden
-              ></ul>
-            </div>
-          </div>
-        </div>
+        {% set idPrefix = "violent-offence-check-search" %}
+        {% set inputName = "violent_offence_check_search" %}
+        {% set labelText = "Enter the offence name" %}
+        {% set checkMode = true %}
+        {% set modifierClass = "offence-autocomplete--check" %}
+        {% set showBrowseLink = false %}
+        {% set showSelectedPanel = false %}
+        {% include "includes/offence-search-field.html" %}
 
         <button
           type="button"
@@ -50,12 +30,23 @@
         </button>
       </div>
 
-      <div class="violent-offence-check__result" data-violent-check-result hidden>
-        <p class="govuk-body govuk-!-margin-bottom-2">
-          <strong data-violent-check-offence-name></strong>
-        </p>
-        <p class="violent-offence-check__classification govuk-!-margin-bottom-0">Not classified as violent</p>
+      <p class="govuk-body govuk-!-margin-top-3 govuk-!-margin-bottom-0">
+        <a class="govuk-link" href="a1o.html" data-violent-offence-browse-link>View all offences</a>
+      </p>
+
+      <div class="violent-offence-check__selected-section" data-violent-check-selected-section hidden>
+        <h3 class="govuk-heading-s govuk-!-margin-top-6 govuk-!-margin-bottom-4">Selected offences</h3>
+        <div class="violent-offence-check__selected-list" data-violent-check-selected-list></div>
       </div>
+
+      <template data-violent-check-item-template>
+        <div class="offence-autocomplete__selected-box offence-selected-card" data-violent-check-item>
+          <p class="govuk-body offence-autocomplete__selected-label offence-selected-card__label govuk-!-margin-bottom-0" data-violent-check-item-label></p>
+          <strong class="govuk-tag offence-selected-card__tag" data-offence-violent-tag></strong>
+          <p class="govuk-body offence-autocomplete__selected-code offence-selected-card__code govuk-!-margin-bottom-0" data-violent-check-item-code></p>
+          <a class="govuk-link offence-selected-card__action" href="#" data-violent-check-clear>Clear offence</a>
+        </div>
+      </template>
     </div>
   </div>
 </details>

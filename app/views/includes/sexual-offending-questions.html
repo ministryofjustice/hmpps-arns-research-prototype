@@ -1,8 +1,12 @@
 {# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
 
-<h2 id="tiering-sexual-motivation" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-6 govuk-!-margin-bottom-2">
+<div class="tiering-question-category">
+  <strong class="govuk-tag govuk-tag--purple tiering-question-category__tag">Sexual offending</strong>
+</div>
+
+<h3 id="tiering-sexual-motivation" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
   Does {{ offenderFirstName }}'s current offence have a sexual motivation?
-</h2>
+</h3>
 
 <div class="govuk-form-group govuk-!-margin-bottom-8">
   <fieldset class="govuk-fieldset">
@@ -26,9 +30,9 @@
   </fieldset>
 </div>
 
-<h2 id="tiering-stranger-contact" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+<h3 id="tiering-stranger-contact" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
   Does {{ offenderFirstName }}'s current offence involve actual or attempted direct contact against a victim who was a stranger?
-</h2>
+</h3>
 
 <div class="govuk-form-group govuk-!-margin-bottom-8">
   <fieldset class="govuk-fieldset">
@@ -52,9 +56,9 @@
   </fieldset>
 </div>
 
-<h2 id="tiering-sexual-sanction-date" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+<h3 id="tiering-sexual-sanction-date" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
   What is the date of {{ offenderFirstName }}'s most recent sanction involving a sexual or sexually motivated offence?
-</h2>
+</h3>
 
 <div class="govuk-form-group govuk-!-margin-bottom-8">
   <fieldset class="govuk-fieldset" role="group">
@@ -84,9 +88,15 @@
   </fieldset>
 </div>
 
-<h2 id="tiering-contact-adult-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+<div class="tiering-question-category">
+  <strong class="govuk-tag govuk-tag--blue tiering-question-category__tag">Direct contact</strong>
+</div>
+
+{% include "includes/direct-contact-sexual-predictor-guidance.html" %}
+
+<h3 id="tiering-contact-adult-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
   How many sanctions does {{ offenderFirstName }} have for contact adult sexual or sexually motivated offences?
-</h2>
+</h3>
 
 <p id="contact-adult-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
   Include their current offence.
@@ -107,9 +117,9 @@
   >
 </div>
 
-<h2 id="tiering-contact-child-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+<h3 id="tiering-contact-child-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
   How many sanctions does {{ offenderFirstName }} have for direct contact child sexual or sexually motivated offences?
-</h2>
+</h3>
 
 <p id="contact-child-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
   Include their current offence.
@@ -130,9 +140,15 @@
   >
 </div>
 
-<h2 id="tiering-indirect-child-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+<div class="tiering-question-category">
+  <strong class="govuk-tag govuk-tag--turquoise tiering-question-category__tag">Indirect contact</strong>
+</div>
+
+{% include "includes/indirect-contact-sexual-predictor-guidance.html" %}
+
+<h3 id="tiering-indirect-child-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
   How many sanctions does {{ offenderFirstName }} have for indecent child image or indirect contact child sexual or sexually motivated offences?
-</h2>
+</h3>
 
 <p id="indirect-child-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
   Include their current offence.
@@ -153,9 +169,9 @@
   >
 </div>
 
-<h2 id="tiering-non-contact-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+<h3 id="tiering-non-contact-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
   How many sanctions does {{ offenderFirstName }} have for other non-contact sexual or sexually motivated offences?
-</h2>
+</h3>
 
 <p id="non-contact-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
   Include their current offence.
