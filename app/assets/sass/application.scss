@@ -28,6 +28,22 @@ $desktop: 48.0625em;
     }
   }
 
+  > .govuk-back-link.assessment-layout__back-link {
+    margin-bottom: 25px;
+
+    &--hidden {
+      display: none !important;
+    }
+  }
+
+  > .govuk-back-link.assessment-layout__back-link + .assessment-offender-header {
+    margin-top: 0;
+  }
+
+  > .govuk-back-link.assessment-layout__back-link--hidden + .assessment-offender-header {
+    margin-top: 25px;
+  }
+
   .assessment-offender-header {
     margin-top: 30px;
   }
@@ -50,8 +66,48 @@ $desktop: 48.0625em;
     margin-top: 0;
   }
 
+  .assessment-service-header__title-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    min-width: 0;
+  }
+
+  .assessment-service-header__section-caption {
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .assessment-service-header__title-group .govuk-heading-l {
+    margin: 0;
+    margin-top: -16px;
+  }
+
+  .assessment-service-header .assessment-layout__row--tight {
+    align-items: flex-end;
+
+    @media (max-width: $tablet) {
+      align-items: flex-start;
+    }
+  }
+
+  .assessment-service-header .govuk-section-break--l {
+    margin-top: 0;
+    margin-bottom: 25px;
+  }
+
+  .assessment-service-header__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 15px;
+  }
+
   &__status-tag {
-    visibility: hidden;
+    // Hidden in the prototype; must not reserve flex space or page titles wrap early
+    display: none;
   }
 
   &__row {
@@ -207,6 +263,97 @@ body.assessment-page {
   }
 }
 
+// Section navigation – service header (default) and optional side nav
+.assessment-section-navigation__complete-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  line-height: 0;
+  opacity: 0;
+  visibility: hidden;
+
+  &--visible {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.assessment-section-navigation__tick {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.assessment-service-navigation {
+  @media (min-width: $tablet) {
+    .govuk-service-navigation__item {
+      padding-top: 15px;
+      padding-bottom: 15px;
+      line-height: 1.5263157895; // 29 ÷ 19 – GOV.UK service navigation bar height
+    }
+
+    .govuk-service-navigation__item--active {
+      padding-bottom: 11px; // 15px minus 4px active border
+      border-bottom-width: 4px;
+    }
+  }
+
+  @media (max-width: $tablet) {
+    .govuk-service-navigation__item {
+      padding-top: 3px;
+    }
+
+    .govuk-service-navigation__list {
+      margin-bottom: 5px;
+    }
+  }
+
+  // Tiering link (data-section, not extra class – govuk already sets class on <a>)
+  a[data-section="section-1"].govuk-service-navigation__link {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    vertical-align: bottom;
+
+    .govuk-service-navigation__active-fallback {
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      font-weight: inherit;
+    }
+
+    &:has(.assessment-section-navigation__complete-icon--visible) {
+      column-gap: 8px;
+
+      .govuk-service-navigation__active-fallback {
+        column-gap: 8px;
+      }
+    }
+  }
+
+  .assessment-section-navigation__label,
+  .assessment-section-navigation__complete-icon--visible {
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  // Hide tick from layout until section is complete (opacity alone still reserves space)
+  .assessment-section-navigation__complete-icon {
+    display: none;
+    flex-shrink: 0;
+
+    &--visible {
+      display: inline-block;
+    }
+  }
+
+  .assessment-section-navigation__complete-icon--visible,
+  .assessment-section-navigation__tick {
+    width: 16px;
+    height: 16px;
+  }
+}
+
 // Side navigation – always vertical (overrides MoJ horizontal scroll on mobile)
 .assessment-side-navigation.moj-side-navigation {
   display: block;
@@ -232,31 +379,11 @@ body.assessment-page {
       cursor: pointer;
     }
 
-    .assessment-side-navigation__link {
+    .assessment-section-navigation__link {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-    }
-
-    .assessment-side-navigation__complete-icon {
-      flex-shrink: 0;
-      width: 18px;
-      height: 18px;
-      line-height: 0;
-      opacity: 0;
-      visibility: hidden;
-
-      &--visible {
-        opacity: 1;
-        visibility: visible;
-      }
-    }
-
-    .assessment-side-navigation__tick {
-      display: block;
-      width: 18px;
-      height: 18px;
     }
 
     a:hover {
@@ -286,6 +413,58 @@ body.assessment-page {
 }
 
 // Offence autocomplete (Home Office long-list pattern)
+// Values supplied by another system (not entered on this page) – distinct from grey user selections
+.tiering-system-value {
+  padding: 10px 15px;
+  background: #e8f1fb;
+  border-left: 4px solid #1d70b8;
+
+  &__source {
+    margin: 5px 0 0;
+    font-size: 1rem; // 16px – smaller than 19px date above
+    line-height: 1.25;
+    color: #505a5f;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+  }
+
+  &__text {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    font-size: 1.1875rem;
+    line-height: 1.3157894737;
+  }
+
+  &__change {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 1.1875rem;
+    line-height: 1.3157894737;
+  }
+}
+
+// Pre-pop date edit panels – hidden by default (do not rely on [hidden] on .govuk-form-group)
+[data-conviction-date-edit],
+[data-first-sanction-date-edit] {
+  display: none;
+}
+
+[data-conviction-date-edit].tiering-system-value__edit--open,
+[data-first-sanction-date-edit].tiering-system-value__edit--open {
+  display: block;
+}
+
+[data-conviction-date-selected].tiering-system-value--summary-hidden,
+[data-first-sanction-date-selected].tiering-system-value--summary-hidden {
+  display: none;
+}
+
 .offence-autocomplete {
   &__combobox {
     position: relative;
@@ -406,8 +585,9 @@ body.assessment-page {
 
   &__selected-box {
     padding: 15px;
-    background: #f3f2f1;
+    background: #f7f7f7;
     border: 1px solid #b1b4b6;
+    box-shadow: 0 2px 0 #b1b4b6;
   }
 
   &__selected-name-row {
@@ -435,7 +615,7 @@ body.assessment-page {
   }
 
   &__selected-code {
-    color: #0b0c0c;
+    color: #505a5f;
     font-size: 1.1875rem;
     line-height: 1.3157894737;
   }
@@ -486,6 +666,54 @@ body.assessment-page {
     line-height: 1.3157894737;
     font-weight: 700;
     color: #00703c;
+  }
+}
+
+// a6 – static vs dynamic assessment options
+.tiering-a6-static-done {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  margin-bottom: 15px;
+  color: #00703c;
+
+  &__label {
+    color: inherit;
+  }
+
+  &__tick {
+    display: none; // temporarily hidden
+    flex-shrink: 0;
+    width: 35px;
+    height: 35px;
+  }
+}
+
+.tiering-a6-options {
+  margin-top: 10px;
+  padding-bottom: 60px;
+
+  &__block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .govuk-button {
+      margin-bottom: 0;
+    }
+  }
+
+  &__dynamic-hint {
+    align-self: stretch;
+    width: 100%;
+    margin-top: 45px;
+    margin-bottom: 20px;
+    padding-top: 25px;
+    border-top: 1px solid #b1b4b6;
+  }
+
+  &__dynamic-button {
+    margin-top: 0;
   }
 }
 
@@ -809,6 +1037,15 @@ body.assessment-page {
 }
 
 .risk-predictor-scores {
+  &__empty {
+    padding-bottom: 30px;
+  }
+
+  &__empty-label {
+    color: #0b0c0c;
+    margin-bottom: 0;
+  }
+
   &__section {
     // Padding cannot be negative; control separator spacing explicitly instead.
     // Keep this small and remove bottom margins from the section's last element.
@@ -826,6 +1063,14 @@ body.assessment-page {
     &--border {
       border-bottom: 1px solid #b1b4b6;
       margin-bottom: 20px;
+    }
+
+    &--not-applicable {
+      padding-bottom: 0;
+
+      > :last-child {
+        margin-bottom: 0;
+      }
     }
   }
 
@@ -1112,6 +1357,7 @@ body.assessment-page {
   .govuk-header,
   .govuk-back-link,
   .assessment-side-navigation,
+  .assessment-service-navigation,
   .tiering-session-results__download,
   .govuk-footer__navigation {
     display: none !important;

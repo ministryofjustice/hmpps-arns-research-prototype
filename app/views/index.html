@@ -1,15 +1,16 @@
 {% extends "layouts/assessment.html" %}
 
+{% set hideServiceNavigation = true %}
 {% set serviceHeaderTitle = "Research prototypes" %}
 {% set serviceHeaderHint = "Tiering assessment journeys for research." %}
-{% set hideSideNav = true %}
 
 {% block content %}
 
 {% include "includes/assessment-home-page-open.html" %}
 
 <ul class="govuk-list assessment-research-prototypes">
-  {% set href = "/01/agree.html" %}
+  {# When SESSION_TELEMETRY_UI_ENABLED is true in tiering-session-telemetry.js, use /01/agree.html #}
+  {% set href = "/01/a1.html" %}
   {% set title = "Tiering assessment" %}
   {% set titleTagText = "May 2026" %}
   {% set hint = "Submitting a Tiering assessment" %}
@@ -17,17 +18,11 @@
     <h3 class='govuk-heading-s govuk-!-margin-bottom-1'>Changes and explorations</h3>
     <ul class='govuk-list govuk-list--bullet govuk-!-margin-top-2 govuk-!-margin-bottom-0'>
       <li>Renamed the service from CSRP assessment to Tiering assessment.</li>
-      <li>Added an ‘Agree to anonymous recording’ step before starting a session.</li>
-      <li>Introduced session telemetry to understand clicks, time on pages and validation errors.</li>
-      <li>Added a ‘View session results’ page with an overall usability score and key insights.</li>
-      <li>Added a ‘View session results’ link in the footer on the last page only.</li>
-      <li>Added a ‘Skip to the end’ shortcut for quick testing with prefilled answers.</li>
+      <li>Introduced the concept of a pre-populated date in a special container.</li>
       <li>Updated content and hints across questions to improve clarity and reduce noise.</li>
       <li>Reworked the scores screen to show all predictor scores with expandable details.</li>
       <li>Added GOV.UK tabs on the final page to switch between Score and Answers.</li>
-      <li>Swapped page expanders to use an accordion-style ‘Show all sections’ control on a8.</li>
       <li>Rebuilt offence search and browse using MOJ offence codes and subcodes (e.g. 001/00).</li>
-      <li>Added browse-all-offences flow with accordions, sticky headers and inline save under the selected row.</li>
       <li>Paginated browse-all offences (30 groups per page) using GOV.UK pagination.</li>
       <li>Added browse-by-category variant with eight tabs and the same accordion pattern.</li>
     </ul>

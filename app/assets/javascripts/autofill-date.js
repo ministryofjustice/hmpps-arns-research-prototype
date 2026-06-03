@@ -29,21 +29,4 @@ window.GOVUKPrototypeKit.documentReady(() => {
       input.addEventListener('focus', fillDate)
     })
   })
-
-  // a1 conviction date (legacy ids without data-autofill-date wrapper on inputs)
-  const convictionDay = document.getElementById('current-conviction-date-day')
-  const convictionMonth = document.getElementById('current-conviction-date-month')
-  const convictionYear = document.getElementById('current-conviction-date-year')
-
-  if (convictionDay && convictionMonth && convictionYear) {
-    const fillConvictionDate = () => {
-      convictionDay.value = '24'
-      convictionMonth.value = '7'
-      convictionYear.value = '2026'
-    }
-
-    ;[convictionDay, convictionMonth, convictionYear].forEach((input) => {
-      input.addEventListener('focus', fillConvictionDate)
-    })
-  }
 })

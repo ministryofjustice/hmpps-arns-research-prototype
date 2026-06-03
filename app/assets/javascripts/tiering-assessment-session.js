@@ -92,3 +92,22 @@ export const formatDateFromParts = ({ day, month, year }) => {
 
   return `${day} ${monthName} ${year}`
 }
+
+/** Alex's current conviction date for a1 – two weeks before today */
+export const getDefaultConvictionDateParts = () => {
+  const date = new Date()
+  date.setDate(date.getDate() - 14)
+
+  return {
+    day: String(date.getDate()),
+    month: String(date.getMonth() + 1),
+    year: String(date.getFullYear())
+  }
+}
+
+/** Alex's first sanction date for a2 – prototype default from PNC */
+export const getDefaultFirstSanctionDateParts = () => ({
+  day: '14',
+  month: '6',
+  year: '2018'
+})

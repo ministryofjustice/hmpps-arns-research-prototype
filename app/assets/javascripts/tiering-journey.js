@@ -2,7 +2,23 @@
 // Tiering journey routing and field helpers (branching, completeness)
 //
 
-import { formatDateFromParts } from './tiering-assessment-session.js'
+import {
+  formatDateFromParts,
+  getDefaultConvictionDateParts,
+  getDefaultFirstSanctionDateParts,
+  getTieringAssessmentSession,
+  setTieringAssessmentSession
+} from './tiering-assessment-session.js'
+
+const TIERING_JOURNEY_PATH = '/01/'
+
+/** Absolute href for tiering pages (safe from index and /01/* routes) */
+export const tieringJourneyHref = (page) => {
+  if (!page) return TIERING_JOURNEY_PATH
+  if (page.startsWith('/')) return page
+
+  return `${TIERING_JOURNEY_PATH}${page}`
+}
 
 export const normaliseString = (value) => (value == null ? '' : String(value).trim())
 
@@ -34,6 +50,133 @@ export const isDateComplete = (date) => {
   return Boolean(parts.day && parts.month && parts.year)
 }
 
+const readDatePartsFromForm = (form, ids) =>
+  normaliseDateParts({
+    day: form.querySelector(ids.day)?.value,
+    month: form.querySelector(ids.month)?.value,
+    year: form.querySelector(ids.year)?.value
+  })
+
+/** Pre-populated dates shown in summary UI must still be saved to session */
+export const resolveConvictionDateForSave = (form, session = getTieringAssessmentSession()) => {
+  const fromForm = readDatePartsFromForm(form, {
+    day: '#current-conviction-date-day',
+    month: '#current-conviction-date-month',
+    year: '#current-conviction-date-year'
+  })
+
+  if (isDateComplete(fromForm)) return fromForm
+
+  const stored = normaliseDateParts(session.convictionDate || {})
+  if (isDateComplete(stored)) return stored
+
+  return getDefaultConvictionDateParts()
+}
+
+export const resolveFirstSanctionDateForSave = (form, session = getTieringAssessmentSession()) => {
+  const fromForm = readDatePartsFromForm(form, {
+    day: '#first-sanction-date-day',
+    month: '#first-sanction-date-month',
+    year: '#first-sanction-date-year'
+  })
+
+  if (isDateComplete(fromForm)) return fromForm
+
+  const stored = normaliseDateParts(session.firstSanctionDate || {})
+  if (isDateComplete(stored)) return stored
+
+  return getDefaultFirstSanctionDateParts()
+}
+
+const A3_PROTOTYPE_DEFAULTS = {
+  sexualMotivation: 'no',
+  strangerContact: 'no',
+  sexualSanctionDate: { day: '12', month: '8', year: '2021' },
+  contactAdultSanctions: '2',
+  contactChildSanctions: '1',
+  indirectChildSanctions: '1',
+  nonContactSanctions: '3'
+}
+
+/** Fill missing a3 answers when sexual history applies (matches on-focus autofill on a3) */
+export const applyA3PrototypeDefaults = (fields, session = getTieringAssessmentSession()) => {
+  if (session.sexualOffence !== 'yes') return fields
+
+  const next = { ...fields }
+
+  if (!next.sexualMotivation) next.sexualMotivation = A3_PROTOTYPE_DEFAULTS.sexualMotivation
+  if (!next.strangerContact) next.strangerContact = A3_PROTOTYPE_DEFAULTS.strangerContact
+  if (!isDateComplete(next.sexualSanctionDate)) {
+    next.sexualSanctionDate = { ...A3_PROTOTYPE_DEFAULTS.sexualSanctionDate }
+  }
+  if (!normaliseString(next.contactAdultSanctions)) {
+    next.contactAdultSanctions = A3_PROTOTYPE_DEFAULTS.contactAdultSanctions
+  }
+  if (!normaliseString(next.contactChildSanctions)) {
+    next.contactChildSanctions = A3_PROTOTYPE_DEFAULTS.contactChildSanctions
+  }
+  if (!normaliseString(next.indirectChildSanctions)) {
+    next.indirectChildSanctions = A3_PROTOTYPE_DEFAULTS.indirectChildSanctions
+  }
+  if (!normaliseString(next.nonContactSanctions)) {
+    next.nonContactSanctions = A3_PROTOTYPE_DEFAULTS.nonContactSanctions
+  }
+
+  return next
+}
+
+/** Backfill prototype defaults before check answers when the user completed the static flow */
+export const syncTieringSessionBeforeCheckAnswers = () => {
+  const session = getTieringAssessmentSession()
+  const updates = {}
+
+  if (!isDateComplete(session.convictionDate)) {
+    updates.convictionDate = getDefaultConvictionDateParts()
+  }
+
+  if (!isDateComplete(session.firstSanctionDate)) {
+    updates.firstSanctionDate = getDefaultFirstSanctionDateParts()
+  }
+
+  if (!normaliseString(session.totalSanctions)) {
+    updates.totalSanctions = '6'
+  }
+
+  if (!normaliseString(session.violentSanctions)) {
+    updates.violentSanctions = '2'
+  }
+
+  if (session.sexualOffence === 'yes' && !isA3Complete(session)) {
+    Object.assign(updates, applyA3PrototypeDefaults({}, session))
+  }
+
+  if (Object.keys(updates).length) {
+    setTieringAssessmentSession(updates)
+  }
+
+  return { ...session, ...updates }
+}
+
+export const hasSeenStaticAssessmentComplete = (session = getTieringAssessmentSession()) =>
+  session.staticAssessmentCompleteSeen === true
+
+export const markStaticAssessmentCompleteSeen = () => {
+  setTieringAssessmentSession({ staticAssessmentCompleteSeen: true })
+}
+
+/** After a5: first journey shows a6; return visits go to check answers or scores */
+export const getPostA5ContinueHref = (session = getTieringAssessmentSession()) => {
+  if (!hasSeenStaticAssessmentComplete(session)) {
+    return 'a6.html'
+  }
+
+  return session.scoreCalculated ? 'a8.html' : 'a7.html'
+}
+
+/** Where repeat visitors to a6 should land (check answers or scores) */
+export const getTieringReviewHref = (session = getTieringAssessmentSession()) =>
+  session.scoreCalculated ? 'a8.html' : 'a7.html'
+
 export const clearA3SessionFields = () => ({
   sexualMotivation: '',
   strangerContact: '',
@@ -64,7 +207,7 @@ export const isA3Complete = (session) => {
 
 export const isA2Complete = (session) =>
   Boolean(
-    normaliseString(session.firstSanctionAge) &&
+    isDateComplete(session.firstSanctionDate) &&
       normaliseString(session.totalSanctions) &&
       normaliseString(session.violentSanctions) &&
       session.sexualOffence
@@ -77,9 +220,26 @@ export const getFirstIncompleteTieringPage = (session) => {
   if (!isDateComplete(session.communityDate)) return 'a4.html'
   if (!session.offencesSinceCommunity) return 'a5.html'
   if (session.offencesSinceCommunity === 'yes' && !isDateComplete(session.recentOffenceDate)) {
-    return 'a6.html'
+    return 'a5.html'
   }
   return null
+}
+
+/** Redirect to the first incomplete page; returns true if a redirect was started */
+export const redirectIfTieringJourneyIncomplete = (session) => {
+  const currentPageId = document.querySelector('[data-tiering-telemetry-page]')?.dataset
+    .tieringTelemetryPage
+
+  // Only check answers (a7) and scores (a8) need full-journey validation – not a6
+  if (currentPageId !== 'a7' && currentPageId !== 'a8') {
+    return false
+  }
+
+  const page = getFirstIncompleteTieringPage(session)
+  if (!page) return false
+
+  window.location.href = tieringJourneyHref(page)
+  return true
 }
 
 export const applyBranchingCleanup = (currentPage, session, updates) => {
@@ -107,15 +267,6 @@ export const getContinueHrefAfterCheckAnswersEdit = (currentPage, beforeSession,
     return 'a3.html'
   }
 
-  if (
-    currentPage === 'a5' &&
-    afterSession.offencesSinceCommunity === 'yes' &&
-    beforeSession.offencesSinceCommunity !== 'yes' &&
-    !isDateComplete(afterSession.recentOffenceDate)
-  ) {
-    return 'a6.html'
-  }
-
   return null
 }
 
@@ -137,16 +288,12 @@ export const getA1FieldsFromForm = (form) => {
           }
         : null
     ),
-    convictionDate: normaliseDateParts({
-      day: form.querySelector('#current-conviction-date-day')?.value,
-      month: form.querySelector('#current-conviction-date-month')?.value,
-      year: form.querySelector('#current-conviction-date-year')?.value
-    })
+    convictionDate: resolveConvictionDateForSave(form)
   }
 }
 
-export const getA2FieldsFromForm = (form) => ({
-  firstSanctionAge: normaliseString(form.querySelector('#first-sanction-age')?.value),
+export const getA2FieldsFromForm = (form, session = getTieringAssessmentSession()) => ({
+  firstSanctionDate: resolveFirstSanctionDateForSave(form, session),
   totalSanctions: normaliseString(form.querySelector('#total-sanctions')?.value),
   violentSanctions: normaliseString(form.querySelector('#violent-sanctions-other')?.value),
   sexualOffence: form.querySelector('input[name="sexual_offence"]:checked')?.value || ''
@@ -175,7 +322,12 @@ export const getA4FieldsFromForm = (form) => ({
 })
 
 export const getA5FieldsFromForm = (form) => ({
-  offencesSinceCommunity: form.querySelector('input[name="offences_since_community"]:checked')?.value || ''
+  offencesSinceCommunity: form.querySelector('input[name="offences_since_community"]:checked')?.value || '',
+  recentOffenceDate: normaliseDateParts({
+    day: form.querySelector('#recent-offence-date-day')?.value,
+    month: form.querySelector('#recent-offence-date-month')?.value,
+    year: form.querySelector('#recent-offence-date-year')?.value
+  })
 })
 
 export const getA6FieldsFromForm = (form) => ({
@@ -202,8 +354,8 @@ export const getUnansweredTieringQuestions = (session, offenderFirstName = 'Alex
     add('a1', 'Current offence', `What is the date of ${name}'s current conviction?`)
   }
 
-  if (!normaliseString(session.firstSanctionAge)) {
-    add('a2', 'Offending history', `How old was ${name} when they received their first sanction?`)
+  if (!isDateComplete(session.firstSanctionDate)) {
+    add('a2', 'Offending history', `What is the date of ${name}'s first sanction?`)
   }
   if (!normaliseString(session.totalSanctions)) {
     add('a2', 'Offending history', `How many sanctions does ${name} have in total for all offences?`)
@@ -293,7 +445,7 @@ export const getUnansweredTieringQuestions = (session, offenderFirstName = 'Alex
   }
 
   if (session.offencesSinceCommunity === 'yes' && !isDateComplete(session.recentOffenceDate)) {
-    add('a6', 'Most recent offence date', `What is the date of ${name}'s most recent offence?`)
+    add('a5', 'Offences since community date', `What is the date of ${name}'s most recent offence?`)
   }
 
   return unanswered

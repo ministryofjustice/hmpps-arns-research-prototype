@@ -4,4 +4,18 @@
 
 {% extends "govuk-prototype-kit/layouts/govuk-branded.njk" %}
 
+{% from "govuk/components/header/macro.njk" import govukHeader %}
+
 {% block pageTitle %}Tiering assessment{% endblock %}
+
+{% block govukHeader %}
+  {{ govukHeader({
+    homepageUrl: "/"
+  }) }}
+{% endblock %}
+
+{% block govukServiceNavigation %}
+  {% if serviceName and not hideServiceNavigation %}
+    {% include "includes/assessment-service-navigation.html" %}
+  {% endif %}
+{% endblock %}

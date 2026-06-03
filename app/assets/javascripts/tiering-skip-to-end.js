@@ -27,7 +27,7 @@ window.GOVUKPrototypeKit.documentReady(async () => {
     convictionDate: { day: '27', month: '3', year: '2024' },
 
     // a2
-    firstSanctionAge: '17',
+    firstSanctionDate: { day: '14', month: '6', year: '2018' },
     totalSanctions: '5',
     violentSanctions: '1',
     sexualOffence: 'yes',
@@ -47,12 +47,13 @@ window.GOVUKPrototypeKit.documentReady(async () => {
     // a5
     offencesSinceCommunity: 'yes',
 
-    // a6 (only required if offencesSinceCommunity === 'yes')
+    // a5 follow-up (only required if offencesSinceCommunity === 'yes')
     recentOffenceDate: { day: '3', month: '2', year: '2026' },
 
     // state
     scoreCalculated: false,
-    section1Complete: false
+    section1Complete: false,
+    staticAssessmentCompleteSeen: true
   })
 
   window.location.href = 'a7.html'

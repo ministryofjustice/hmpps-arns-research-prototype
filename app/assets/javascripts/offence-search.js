@@ -3,6 +3,10 @@
 // Data: /api/offences (app/data/offences.json)
 //
 
+import {
+  isConvictionDateEditPanelOpen,
+  persistConvictionDateState
+} from './conviction-date.js'
 import { captureCheckAnswersEditSnapshot, isTieringCheckAnswersEdit } from './tiering-change-scroll.js'
 import { getA1FieldsFromForm } from './tiering-journey.js'
 import { getTieringAssessmentSession } from './tiering-assessment-session.js'
@@ -258,7 +262,13 @@ window.initOffenceSearch = async (container) => {
     renderOptions(subOptions)
   }
 
+  const persistA1ConvictionDateState = () => {
+    if (!document.getElementById('tiering-a1-form')) return
+    persistConvictionDateState({ editing: isConvictionDateEditPanelOpen() })
+  }
+
   const showSearch = () => {
+    persistA1ConvictionDateState()
     searchPanel.hidden = false
     selectedPanel.hidden = true
     input.value = ''
@@ -292,6 +302,7 @@ window.initOffenceSearch = async (container) => {
       return
     }
 
+    persistA1ConvictionDateState()
     searchPanel.hidden = true
     selectedPanel.hidden = false
     if (selectedLabel) selectedLabel.textContent = selection.label
@@ -545,16 +556,6 @@ window.initOffenceSearch = async (container) => {
 
     if (session.currentOffence) {
       showSelected(session.currentOffence)
-    }
-
-    const convictionDate = session.convictionDate
-    if (convictionDate) {
-      const dayInput = document.getElementById('current-conviction-date-day')
-      const monthInput = document.getElementById('current-conviction-date-month')
-      const yearInput = document.getElementById('current-conviction-date-year')
-      if (dayInput && convictionDate.day) dayInput.value = convictionDate.day
-      if (monthInput && convictionDate.month) monthInput.value = convictionDate.month
-      if (yearInput && convictionDate.year) yearInput.value = convictionDate.year
     }
 
     if (isTieringCheckAnswersEdit()) {

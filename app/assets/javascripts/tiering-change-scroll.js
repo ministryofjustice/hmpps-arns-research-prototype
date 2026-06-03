@@ -3,6 +3,7 @@
 // Save and continue returns to a7 or next required page when editing from check answers
 //
 
+import { clearSection1Complete, isSection1Complete } from './assessment-section-complete.js'
 import {
   applyBranchingCleanup,
   fieldsChanged,
@@ -16,7 +17,7 @@ export const TIERING_FROM_CHECK_ANSWERS = 'a7'
 export const TIERING_CHANGE_ANCHORS = {
   currentOffence: 'tiering-current-offence',
   convictionDate: 'tiering-conviction-date',
-  firstSanctionAge: 'tiering-first-sanction-age',
+  firstSanctionDate: 'tiering-first-sanction-date',
   totalSanctions: 'tiering-total-sanctions',
   violentSanctions: 'tiering-violent-sanctions',
   sexualOffence: 'tiering-sexual-offence',
@@ -54,6 +55,10 @@ export const isTieringCheckAnswersEditFromUrl = () =>
 
 export const startTieringCheckAnswersEdit = () => {
   setTieringAssessmentSession({ returnToCheckAnswers: true })
+
+  if (isSection1Complete()) {
+    clearSection1Complete()
+  }
 }
 
 export const ensureTieringCheckAnswersEditMode = () => {
@@ -108,6 +113,10 @@ export const completeTieringPageAndContinue = (currentPage, defaultHref, newFiel
     const sessionUpdates = {
       ...merged,
       checkAnswersEditSnapshot: undefined
+    }
+
+    if (changed && isSection1Complete()) {
+      clearSection1Complete()
     }
 
     // No change on this page – return to summary (do not continue forward in the journey)
@@ -172,6 +181,14 @@ export const scrollToTieringChangeTarget = (anchorId = window.location.hash.slic
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
+  document.addEventListener('click', (event) => {
+    const changeLink = event.target.closest('.govuk-summary-list__actions a.govuk-link')
+    const href = changeLink?.getAttribute('href') || ''
+    if (!href.includes(`from=${TIERING_FROM_CHECK_ANSWERS}`)) return
+
+    startTieringCheckAnswersEdit()
+  })
+
   if (isTieringCheckAnswersEdit()) {
     document.querySelectorAll('.govuk-back-link').forEach((link) => {
       if (link.id === 'tiering-a7-back') return

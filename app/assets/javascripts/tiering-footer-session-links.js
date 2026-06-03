@@ -3,8 +3,10 @@
 //
 
 import { getTieringAssessmentSession } from './tiering-assessment-session.js'
+import { isSessionTelemetryUiEnabled } from './tiering-session-telemetry.js'
 
 export const insertTieringSessionFooterLinks = () => {
+  if (!isSessionTelemetryUiEnabled()) return
   if (document.querySelector('[data-tiering-session-links]')) return
 
   // Only show after user has calculated the score (a7 submit).
