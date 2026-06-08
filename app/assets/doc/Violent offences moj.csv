@@ -1,0 +1,723 @@
+Category,Code,Offence description,Statute
+Violence Against the Person ABH +,00100,Murder    [Use this code only if you are unable to determine which subcoded Offence applies],
+Violence Against the Person ABH +,00101,Murder of persons aged 1 year or over. Murder abroad by UK citizen. Genocide or crime against humanity,"Common Law; Offences against the Person Act 1861 SS.1, 9 and 10. International Criminal Court Act 2001"
+Violence Against the Person ABH +,00102,Murder: Of infants under 1 year of age. Murder abroad by UK citizen.,"Common Law; Offences against the Person Act 1861 SS.1, 9 and 10."
+Violence Against the Person ABH +,00200,Attempted murder. Attempted murder abroad by UK citizen. Attempted genocide or crime against humanity,"Common Law; Offences against the Person Act 1861 S 9; International Criminal Court Act 2001, SS.52 or 53 & 55"
+Violence Against the Person ABH +,00300,"Threats, conspiracy or incitement to murder    [Use this code only if you are unable to determine which subcoded Offence applies]",
+Violence Against the Person ABH +,00301,Making threats to kill,Offences against the Person Act1861 S.16.
+Violence Against the Person ABH +,00302,"Conspiracy or soliciting, etc., to commit murder. Conspiracy or soliciting to commit murder abroad by UK citizen. Conspiring, aiding, abetting, counselling, procuring or inciting commission of genocide or crime against humanity","Common Law; Criminal Law Act 1977 S.1;Offences against the Person Act 1861 S.4. International Criminal Court Act 2001, SS.52 or 53 & 55"
+Violence Against the Person ABH +,00303,Assisting offender by impeding his apprehension or prosecution in a case of murder. Concealing commission of genocide or crime against humanity,"Criminal Law Act 1967 S.4(1), International Criminal Court Act 2001 SS.52 or 53 & 55"
+Violence Against the Person ABH +,00304,Intentionally encouraging or assisting commission of Murder,Serious Crime Act 2007 S.44(pt)
+Violence Against the Person ABH +,00305,Encouraging or assisting in the commission of Murder believing it will be committed,Serious Crime Act 2007 S.45(pt)
+Violence Against the Person ABH +,00306,Encouraging or assisting in the commission of one or more offences of Murder believing one or more will be committed,Serious Crime Act 2007 S.46(pt)
+Violence Against the Person ABH +,00400,Manslaughter etc    [Use this code only if you are unable to determine which subcoded Offence applies],
+Violence Against the Person ABH +,00401,Manslaughter. Manslaughter abroad by UK citizen. Manslaughter by driving,Common Law. Offences against the Person Act 1861 S.9
+Violence Against the Person ABH +,00402,Infanticide,Infanticide Act 1938 S.1(1)
+Violence Against the Person ABH +,00403,Child destruction,Infant Life (Preservation) Act 1929 S.1
+Violence Against the Person ABH +,00405,Manslaughter: Diminished responsibility,Homicide Act 1957 S.2
+Violence Against the Person ABH +,00407,Causing or allowing the death of a child or vulnerable person,"Domestic Violence, Crime and Victims Act 2004. S.5"
+Violence Against the Person ABH +,00410,Applicable organisation by way of management or organisation of its activities causing death by gross breach of duty of care,Corporate Manslaughter and Corporate Homicide Act 2007 S.1(1)
+Violence Against the Person ABH +,00411,Causing or allowing child or vulnerable adult to suffer serious physical harm,"Domestic Violence, Crime and Victims Act 2004, S.5(1) & (8)"
+Violence Against the Person ABH +,00500,Wounding and other acts endangering life    [Use this code only if you are unable to determine which subcoded Offence applies],
+Violence Against the Person ABH +,00501,"Wounding, etc, with intent to do grievous bodily harm, etc., or to resist apprehension",Offences against the Person Act1861 S.18
+Violence Against the Person ABH +,00502,Shooting at naval or revenue vessels,Customs and Excise Management Act1979 S.85(2)
+Violence Against the Person ABH +,00504,"Attempting to choke, suffocate etc with intent to commit an indictable offence (garrotting)",Offences against the Person Act1961 S.21
+Violence Against the Person ABH +,00505,"Using chloroform, etc., to commit or assist in committing an indictable offence",Offences against the Person Act1861 S.22
+Violence Against the Person ABH +,00506,"Burning, maiming, etc. by explosion",Offences against the Person Act1861 S.28
+Violence Against the Person ABH +,00507,"Causing, explosions or casting corrosive fluids with intent to do grievous bodily harm",Offences against the Person Act1861 S.29
+Violence Against the Person ABH +,00508,Impeding the saving of life from shipwreck,Offences against the Person Act1861 S.17
+Violence Against the Person ABH +,00509,"Placing, etc. explosives in or near ships or buildings with intent to do bodily harm, etc.",Offences against the Person Act1861 S.30
+Violence Against the Person ABH +,00510,Endangering life or causing harm by administering poison,Offences against the Person Act1861 S.23
+Violence Against the Person ABH +,00511,"Causing danger by causing anything to be on a road, interfering with a vehicle or traffic equipment",Road Traffic Act 1988 S.22A as added by the Road Traffic Act 1991 S.6
+Violence Against the Person ABH +,00513,Possession etc. of explosives with intent to endanger life,Explosives Substances Act 1883 S.3 (in part)
+Violence Against the Person ABH +,00520,Use etc. of chemical weapons,Chemical Weapons Act 1996 S.2
+Violence Against the Person ABH +,00521,Use of premises or equipment for producing chemical weapons,Chemical Weapons Act 1996 S.11
+Violence Against the Person ABH +,00522,"Use, threat of use, production or possession of a nuclear weapon","Anti-Terrorism, Crime & Security Act 2001 S.47"
+Violence Against the Person ABH +,00523,Weapons related acts overseas,"Anti-Terrorism, Crime & Security Act 2001 S.50"
+Violence Against the Person ABH +,00524,Use of noxious substances or things to cause harm or intimidate,"Anti-Terrorism, Crime & Security Act 2001 S.113"
+Violence Against the Person ABH +,00525,Performing an aviation function or ancillary function when ability to carry out function is impaired because of drink or drugs,Railways and Transport Safety Act 2003 SS.92 & 95
+Violence Against the Person ABH +,00526,Endangering safety at aerodromes,Aviation and Maritime Security Act 1990
+Violence Against the Person ABH +,00527,Torture,Criminal Justice Act 1988
+Violence Against the Person ABH +,00600,Endangering railway passengers    [Use this code only if you are unable to determine which subcoded Offence applies],
+Violence Against the Person ABH +,00601,"Endangering railway passengers: By placing, etc., anything on railway, taking up rails, changing points and signals etc.",Offences against the Person Act 1861 S.32
+Violence Against the Person ABH +,00602,"Endangering railway passengers: By throwing anything at railway carriages, etc.",Offences against the Person Act1861 S.33
+Violence Against the Person ABH +,00603,"Endangering railway passengers: By unlawful acts, or by omission or neglect",Offences against the Person Act1861 S.34
+Violence Against the Person ABH +,00604,"Endangering railway passengers: Destroying, damaging etc. a Channel Tunnel train or the Tunnel system, or committing acts of violence likely to endanger safety of operation. Similar offences under Channel Tunnel Act 1987",Channel Tunnel (Security) Order1994 Art.6. Channel Tunnel Act 1987 S.1(7)
+Violence Against the Person ABH +,00700,Endangering life at sea    [Use this code only if you are unable to determine which subcoded Offence applies],
+Violence Against the Person ABH +,00701,Sending unseaworthy ship to sea,Merchant Shipping Act 1995 S.98
+Violence Against the Person ABH +,00702,Master of ship not waiting to save lives in collision,Merchant Shipping Act 1995 S.92(1)&(3)
+Violence Against the Person ABH +,00703,"Endangering ship, life or limb on ship-board by breach of duty",Pilotage Act 1987 S.21
+Violence Against the Person ABH +,00704,Master of ship failing to render assistance to ships in distress or persons in danger at sea,"Merchant Shipping Act 1995 S.93(1), (2), (4) - (7)"
+Violence Against the Person ABH +,00705,Taking or sending a ship to sea with load line submerged,Merchant Shipping Act 1995 Sch.3 Paras.4 and 14
+Violence Against the Person ABH +,00706,Owner or master of ship contravening cargo ship construction and survey rules,Merchant Shipping Act 1964 S.7; Distress Signals and Prevention of Collisions SI.1983/708 made under Merchant Shipping Act 1979
+Violence Against the Person ABH +,00707,"Misconduct of Master or crew likely to endanger ships, structures or individuals",Merchant Shipping Act 1995 S.58
+Violence Against the Person ABH +,00708,Drunkenness etc. on duty - Endangering life at sea,Merchant Shipping Act 1995 S.117
+Violence Against the Person ABH +,00709,Contravention of deck cargo regulations (load lines etc.),Merchant Shipping Act 1995 Sch.3 para.24
+Violence Against the Person ABH +,00710,"Intentionally makes or assists in making or procures to be made, a false or fraudulent certificate (load lines etc.)",Merchant Shipping Act 1995 Sch.3 para.27
+Violence Against the Person ABH +,00711,"Using etc. in navigation any unsafe lighter, barge or like vessel, likely to endanger human life",Merchant Shipping Act 1995 S.99
+Violence Against the Person ABH +,00712,"Concerted disobedience, persistent and wilful neglect of duty or impedes progress of voyager navigation of ship",Merchant Shipping Act 1995 S.59
+Violence Against the Person ABH +,00713,"Master, Pilot or Seaman ability to carry out duties is impaired because of drink or drugs","Railways and Transport Safety Act 2003 SS.78, 80 & 82"
+Violence Against the Person ABH +,00714,Destroying ships or fixed platforms endangering their safety,Aviation and Maritime Security Act 1990 S.11
+Violence Against the Person ABH +,00715,Other acts endangering or likely to endanger safe navigation,Aviation and Maritime Security Act 1990 S.12
+Violence Against the Person ABH +,00716,"Inducing commission of offence relating to safety of ship, cargo or sea platform outside UK",Aviation and Maritime Security Act 1990 S.14(4)
+Violence Against the Person ABH +,00717,"Assisting commission of offence relating to safety of ship, cargo or sea platform outside UK",Aviation and Maritime Security Act 1990 S.14(4)
+Violence Against the Person ABH +,00800,Malicious wounding and other like offences    [Use this code only if you are unable to determine which subcoded Offence applies],
+Violence Against the Person ABH +,00801,Wound or inflict grievous bodily harm without intent,Offences against the Person Act 1861 S.20
+Violence Against the Person ABH +,00802,Administering poison with intent to injure or annoy,Offences against the Person Act 1861 S.24
+Violence Against the Person ABH +,00803,"Setting spring guns, etc., to injure trespassers",Offences against the Person Act 1861 S.31
+Violence Against the Person ABH +,00805,Assaults on person preserving wreck,Offences against the Person Act 1861 S.37
+Violence Against the Person ABH +,00806,Assaults occasioning actual bodily harm,Common Law and Offences against the Person Act 1861 S.47
+Violence Against the Person ABH +,00807,Assault police officer (triable either way offence),
+Violence Against the Person ABH +,00808,Assault police officer,
+Violence Against the Person ABH +,00809,"Obstructing, assaulting or arresting upon civil process clergymen performing service",Offences against the Person Act 1861 S.36
+Violence Against the Person ABH +,00819,Assault with intent to resist apprehension or assault a person assisting a constable,
+Violence Against the Person ABH +,00820,Assault with intent to resist apprehension or assault a person assisting a constable,Offences against the Person Act 1861 S.38
+Violence Against the Person ABH +,00830,Putting people in fear of violence,Protection from Harassment Act 1997 S.4
+Violence Against the Person ABH +,00833,Racially aggravated wounding or inflicting grievous bodily harm (inflicting bodily injury with or without weapon),Offences against the Person Act1861 S.20 as amended by the Crime & Disorder Act 1998 S.29(1)(a)(2)
+Violence Against the Person ABH +,00834,Racially aggravated actual bodily harm (assaults occasioning ABH),Offences against the Person Act1861 S.47 as amended by the Crime & Disorder Act 1998 S.29(1)(b) and (2)
+Violence Against the Person ABH +,00835,Racially aggravated common assault,Crime & Disorder Act 1998 S.29(1)(c) and (3)
+Violence Against the Person ABH +,00838,Racially aggravated putting people in fear of violence,Protection from Harassment Act 1997 S.4 as amended by Crime & Disorder Act 1998 S.32(1)(b) & (4)
+Violence Against the Person ABH +,00840,Religiously aggravated malicious wounding or GBH,Offences Against the Person Act 1861 S.20 as amended by Crime and Disorder Act 1998 S.29(1)(a) & (2)
+Violence Against the Person ABH +,00841,Religiously aggravated ABH,Offences Against the Person Act 1861 S.47 as amended by Crime and Disorder Act 1998 S.29(1)(b) & (2)
+Violence Against the Person ABH +,00842,Religiously aggravated common assault,Common law and Crime and Disorder Act 1998 S.29(1)(c) &(3)
+Violence Against the Person ABH +,00846,Racially or religiously aggravated malicious wounding or GBH,Offences Against the Person Act 1861 S.20 as amended by the Crime and Disorder Act 1998 S.29(1)(a) & (2)
+Violence Against the Person ABH +,00847,Racially or religiously aggravated ABH,Offences Against the Person Act 1861 S.47 as amended by the Crime and Disorder Act 1998 S.29(1)(b) & (2)
+Violence Against the Person ABH +,00848,Racially or religiously aggravated common assault.,Common Assault and Crime and Disorder Act 1998 S.29(1)(c) & (3)
+Violence Against the Person ABH +,00852,"Excise, infibulate or otherwise mutilate the whole or any part of a girl's labia majora, labia minora or clitoris; Aid, abet, counsel or procure a girl to excise, infibulate or otherwise mutilate the whole or any part of her own labia majora, labia minora or clitoris; Aid, abet, counsel or procure a non-UK national or person who is not a permanent UK resident to do a relevant act of female genital mutilation outside the UK",Female Genital Mutilation Act 2003 SS.1(1) and 5; SS.2 & 5; SS.3 & 5
+Violence Against the Person ABH +,00857,Racially or religiously aggravated common assault or beating,Crime and Disorder Act 1998_S.29(1)(c) & (3)_
+Violence Against the Person ABH +,00859,Racially or religiously aggravated wounding or grievous bodily harm,Crime and Disorder Act 1998_S.29(1)(a) & (2)_
+Violence Against the Person ABH +,00860,Racially or religiously aggravated assault occasioning actual bodily harm,Crime and Disorder Act 1998_S.29(1)(b) & (2)_
+Violence Against the Person ABH +,00868,Fail to protect girl from risk of genital mutilation,Serious Crime Act 2015 s. 3A(1) & 5(2)
+Violence Against the Person ABH +,00869,Care worker ill-treat / wilfully neglect an individual,Criminal Justice and Courts Act 2015 s. 20(1) & (2)
+Violence Against the Person ABH +,00870,Care provider breach duty of care resulting in ill-treatment / neglect of individual,Criminal Justice and Courts Act 2015 s. 21(1) & 23(1)
+Violence Against the Person ABH +,00873,Assault of an emergency worker,Criminal Justice Act 1988 & Assaults on Emergency Workers (Offences) Act 2018 s.1 & s.39
+Violence Against the Person ABH +,01100,Cruelty to or neglect of children    [Use this code only if you are unable to determine which subcoded Offence applies],
+Violence Against the Person ABH +,01102,Neglecting to provide for apprentice or servant,Offences against the Person Act 1861 S.26
+Violence Against the Person ABH +,01103,Cruelty to or neglect of children,Children and Young Persons Act 1933 S.1
+Violence Against the Person ABH +,01200,Abandoning children under two years,Offences against the Person Act 1861 S.27
+Violence Against the Person ABH +,01300,Abduction of children    [Use this code only if you are unable to determine which subcoded Offence applies],
+Violence Against the Person ABH +,01301,Abduction of a child by parent,Child Abduction Act 1984 S.1 as amended by the Children Act 1989
+Violence Against the Person ABH +,01302,Abduction of a child by other persons,Child Abduction Act 1984 S.2 as amended by the Children Act 1989
+Violence Against the Person ABH +,01400,Procuring illegal abortion    [Use this code only if you are unable to determine which subcoded Offence applies],
+Violence Against the Person ABH +,01401,Administering or using drugs or using instruments to procure abortion,Offences against the Person Act 1861 S.58 as amended by the Abortion Act 1967
+Violence Against the Person ABH +,01402,Procuring drugs etc. to cause abortion,Offences against the Person Act 1861 S.59 as amended by the Abortion Act 1967
+Violence Against the Person ABH +,01500,Concealment of birth,Offences against the Person Act 1861 S.60
+Violence Against the Person ABH +,03500,Blackmail,Theft Act 1968 S.21
+Violence Against the Person ABH +,03600,Kidnapping    [Use this code only if you are unable to determine which subcoded Offence applies],
+Violence Against the Person ABH +,03601,Kidnapping,Common Law
+Violence Against the Person ABH +,03602,Hijacking,"Aviation Security Act 1982 SS.1-6(2); Channel Tunnel (Security) Order 1994 Articles 4, 5, 7 and 8 [S.1(7)Channel Tunnel Act 1987]"
+Violence Against the Person ABH +,03603,False imprisonment,Common Law
+Violence Against the Person ABH +,03604,Detaining and threatening to kill or injure a hostage,Taking of Hostages Act 1982
+Violence Against the Person ABH +,03605,Forced marriage,"Anti-social Behaviour, Crime and Policing Act 2014 S.121(1)"
+Violence Against the Person ABH +,03606,Hold person in slavery or servitude,Modern Slavery Act 2015 S. 1(1)(a) & 5(1)
+Violence Against the Person ABH +,03607,Require person to perform forced or compulsory labour,Modern Slavery Act 2015 S. 1(1)(b) & 5(1)
+Violence Against the Person ABH +,03608,UK national arrange or facilitate travel of another person with a view to exploitation,Modern Slavery Act 2015 S. 2(1) & 5(1)
+Violence Against the Person ABH +,03610,Commit offence other than kidnapping or false imprisonment with intention of arranging travel with view to exploitation,Modern Slavery Act 2015 S. 4 & 5(2)
+Violence Against the Person ABH +,03611,Commit offence of kidnapping or false imprisonment with intention of arranging travel with view to exploitation,Modern Slavery Act 2015 S. 4 & 5(3)
+Violence Against the Person ABH +,03612,Do act prohibited by slavery and trafficking risk or prevention order,Modern Slavery Act 2015 S. 30(1) & 30(3)
+Violence Against the Person ABH +,03613,Fail to comply with requirement to surrender passport under Modern Slavery Act 2015,Modern Slavery Act 2015 S. 30(2)(a) & 30(3)
+Violence Against the Person ABH +,03614,Fail to comply with requirement to provide name and address under Modern Slavery Act 2015,Modern Slavery Act 2015 S. 30(2)(b) & 30(3)
+Violence Against the Person ABH +,03701,"Aggravated Taking of a Vehicle: Where, owing to the driving of the vehicle, an accident occurs causing the death of any person",Theft Act 1968 S.12A as added by the Aggravated Vehicle Taking Act 1992 S.1
+Violence Against the Person ABH +,05915,"Possessing or making an explosive substance, a noxious or dangerous thing, a machine, engine or instrument with intent to commit an offence under Offences against the Person Act 1861",Offences against the Person Act 1861
+Violence Against the Person ABH +,06697,Breach Forced Marriage Protection Order,"Anti-social Behaviour, Crime and Policing Act 2014 S63"
+Violence Against the Person ABH +,06804,Breach a Female Genital Mutilation protection order,Serious Crime Act 2015 S.para 4(1) & 4(5) Sch 1
+Violence Against the Person ABH +,07902,Intimidating a juror or witness or person assisting in investigation of offence,Criminal Justice & Public Order Act 1994 S.51(1)
+Violence Against the Person ABH +,07903,"Harming or threatening to harm a witness, juror or person assisting in investigation",Criminal Justice & Public Order Act 1994 S.51(2)
+Violence Against the Person ABH +,07904,Intimidating or intending to intimidate a witness,Criminal Justice & Police Act 2001 S.39
+Violence Against the Person ABH +,07905,Harming or intending to harm a witness,Criminal Justice & Police Act 2001 S.40
+Violence Against the Person ABH +,09413,Act as crew of aircraft when under influence of drink / drug impairing capacity,Air Navigation Order 2016 S.Articles 242(2) and 265(7)
+Violence Against the Person ABH +,09414,Intentionally interfere with performance of aircraft crew member's duty,Air Navigation Order 2016 S.Articles 245(c) and 265(7)
+Violence Against the Person ABH +,09415,Recklessly / negligently act in manner likely to endanger aircraft / person in an aircraft,Air Navigation Order 2016 S.Articles 240 and 265(8)
+Violence Against the Person ABH +,09416,Shine / direct laser beam towards a vehicle,Laser Misuse (Vehicles) Act 2018 S.s.1(1)
+Violence Against the Person ABH +,09417,Shine / direct laser beam towards an air traffic facility/a person providing air traffic services,"Laser Misuse (Vehicles) Act 2018 S.s.2(1)(a)(i, ii)"
+Violence Against the Person ABH +,09925,Knowingly holding another person in slavery or servitude,"Coroners and Justice Act 2009, S.71(1)(a) & (3)"
+Violence Against the Person ABH +,09926,Knowingly requiring another person to perform forced or compulsory labour,"Coroners and Justice Act 2009, S.71(1)(b) & (3)"
+Violence Against the Person ABH +,09979,Recklessly or negligently acting in a manner likely to endanger an aircraft or any person therein,Air Navigation Order 2000 Articles 63 & 122(6) & SCH.12C
+Violence Against the Person ABH +,09980,Recklessly or negligently causing or permitting an aircraft to endanger any person or property,Air Navigation Order 2000 Articles 64 & 122(6) & SCH.12C
+Violence Against the Person ABH +,10900,Cruelty to or neglect of children    [Use this code only if you are unable to determine which subcoded Offence applies],
+Violence Against the Person ABH +,10901,"Causing or allowing a person under 16 to take part in dangerous performance; causing or allowing the training of a person under 12, or without a licence a person under 16 to take part in a dangerous performance",Children and Young Persons Act 1933 SS.23 and 24
+Violence Against the Person ABH +,10902,Offences in relation to taking children to nurse for reward,Children Act 1989 SS.70 and 78
+Violence Against the Person ABH +,10903,"Ill-treatment, neglect, exposure, etc of child or young person by person having custody of same",
+Violence Against the Person ABH +,10905,Exposing child to risk of burning,Children and Young Persons Act 1933 S.11
+Violence Against the Person ABH +,10906,Allowing child or young person to be in brothel,Children and Young Persons Act 1933 S.3
+Violence Against the Person ABH +,10907,Neglecting to provide for safety of children at children's entertainment,Children and Young Persons Act 1933 S.12
+Violence Against the Person ABH +,10908,Permitting child to be in verminous condition,Education Act 1996 S.525 (consolidating Acts 1944 - 1996)
+Violence Against the Person ABH +,10909,"Ill-treatment, etc of illegitimate child",
+Violence Against the Person ABH +,00877,Nonfatal strangulation or suffocation,Serious Crime Act 2015 S.75A & S.75B as amended by the Domestic Abuse Act 2021 S.70
+Violence Against the Person ABH +,06821,"Offences relating to carrying out, aiding or abetting the carrying out of a virginity test",
+Violence Against the Person ABH +,06822,"Offences relating to carryin out of a hymenoplasty, aiding and abbeting the carrying out of a hymenoplasty",
+Violence Against the Person ABH +,09418,Shine / direct laser beam towards an air traffic facility /a person providing air traffic services,
+Violence Against the Person ABH +,19702,Smoking in a vehicle in which a child was present,
+Violence Against the Person ABH +,19703,Driver fail to prevent smoking in a vehicle in which child was present - England & Wales,
+Violence Against the Person Sub ABH,Home Office Code,Offence description,Statute
+Violence Against the Person Sub ABH,00821,Owner or person in charge allowing dog to be dangerously out of control in a public place injuring any person,Dangerous Dogs Act 1991 S.3(1) [Aggravated Offences]
+Violence Against the Person Sub ABH,00822,Owner or person in charge allowing dog to enter a non-public place and injuring any person,Dangerous Dogs Act 1991 S.3(3) [Aggravated Offences]
+Violence Against the Person Sub ABH,10300,Aggravated assaults,
+Violence Against the Person Sub ABH,10400,Assault    [Use this code only if you are unable to determine which subcoded Offence applies],
+Violence Against the Person Sub ABH,10401,"Assault on constable - Vagrancy Act 1824 s. 4, 5 and 11 (1963)",
+Violence Against the Person Sub ABH,10402,Assault on constable - Special Constables Act 1831 s. 11 (1963),
+Violence Against the Person Sub ABH,10404,Assault on constable - Canals (Offences) Act 1840 s. 6 (1963),
+Violence Against the Person Sub ABH,10405,Assault on constable - Town Police Clauses Act 1847 s. 20 (1963),
+Violence Against the Person Sub ABH,10406,Assault on constable - Metropolitan Police Act 1861 s. 3 (1963),
+Violence Against the Person Sub ABH,10407,"Assault on constable - Prevention of Crimes Act 1871, s. 12 (1963)",
+Violence Against the Person Sub ABH,10408,Assault on constable - Municipal Corporations Act 1882 s. 195 (1963),
+Violence Against the Person Sub ABH,10409,Assault on constable - Prevention of Crimes Amendment Act 1885 s. 2 (1963),
+Violence Against the Person Sub ABH,10420,Assault on constable - Offences against similar provisions in Local Acts (1963),
+Violence Against the Person Sub ABH,10422,Assault on constable - Special Constables Act 1831 (1964),
+Violence Against the Person Sub ABH,10423,Assault on a constable,Police Act 1996 S.89(1)
+Violence Against the Person Sub ABH,10424,Assault on constable - Canals (Offences Act) 1840 (1964),
+Violence Against the Person Sub ABH,10425,Assaulting a designated person or his assistant in the exercise of a relevant power,Serious Organised Crime and Police Act 2005 S.51 (1)&(4)
+Violence Against the Person Sub ABH,10426,Assault on constable - Metropolitan Police Act 1861 s. 3 (1964-),
+Violence Against the Person Sub ABH,10427,Assault on constable - Prevention of Crimes Act 1871 s. 12 (1964),
+Violence Against the Person Sub ABH,10428,Assault on constable - Municipal Corporations Act 1882 s. 195 (1964),
+Violence Against the Person Sub ABH,10430,Assault on constable: Offences against similar provisions in Local Acts,
+Violence Against the Person Sub ABH,10431,Offences under Vagrancy Act 1824 SS.4 and 5,Vagrancy Act 1824 SS.4 and 5
+Violence Against the Person Sub ABH,10433,Resisting or obstructing a constable in execution of duty - offences under the Police Act 1996,Police Act 1996 S.89(2)
+Violence Against the Person Sub ABH,10435,Resisting or wilfully obstructing a designated person or his assistant in exercise of such power,Serious Organised Crime and Police Act 2005 S.51 (2)&(5)
+Violence Against the Person Sub ABH,10436,Assaulting a member of a joint investigation team carrying out his functions as a member of that team,Serious Organised Crime and Police Act 2005 S.57 (2)&(4)
+Violence Against the Person Sub ABH,10437,Obstructing a person in the exercise of any rights conferred by a warrant under S.66 - power to enter and seize documents,Serious Organised Crime and Police Act 2005 S.67 (3)&(4)
+Violence Against the Person Sub ABH,10438,Resisting or wilfully obstructing a member of a joint investigation team carrying out his functions as a member of that team,Serious Organised Crime and Police Act 2005 S.57 (3)&(5)
+Violence Against the Person Sub ABH,10439,Assaulting or obstructing a Customs or Revenue officer,Commissioners for Revenue and Customs Act 2005 SS.31 & 32
+Violence Against the Person Sub ABH,10440,Assault: Offences against similar provisions in Local Acts,
+Violence Against the Person Sub ABH,10500,Common assaults etc    [Use this code only if you are unable to determine which subcoded Offence applies],
+Violence Against the Person Sub ABH,10501,Common assault and battery,Criminal Justice Act 1988 S.39
+Violence Against the Person Sub ABH,10502,"Assaults to prevent sale of corn, Assaults to hinder seamen from working, Assaults upon County Court Officers, Assaults punishable under special enactments and not falling under other headings","Offences against the Person Act 1861 S.39, Offences against the Person Act 1861 S.40, County Courts Act 1984 S.14"
+Violence Against the Person Sub ABH,10503,"Assaulting, resisting or obstructing a person assisting a constable",Police Act 1996 SS.89(1) and 89(2)
+Violence Against the Person Sub ABH,10504,Assaulting a prisoner custody officer or custody officer (STC). Assaulting a custody officer,Criminal Justice Act 1991 S.90(1); Criminal Justice & Public Order Act 1994 S.13(1)
+Violence Against the Person Sub ABH,10505,Resisting or wilfully obstructing a prisoner custody officer or custody officer (STC). Resisting or wilfully obstructing custody officer,Criminal Justice Act 1991 S.90(3); Criminal Justice & Public Order Act 1994 S.13(2)
+Violence Against the Person Sub ABH,10506,Assaulting a court security officer,Criminal Justice Act 1991 S.78(1)
+Violence Against the Person Sub ABH,10507,Resisting or wilfully obstructing a court security officer,Criminal Justice Act 1991 S.78(2)
+Violence Against the Person Sub ABH,10508,"Assaulting a designated or accredited person, or person assisting him or her, in the execution of his or her duty",Police Reform Act 2002 S.41(1)
+Violence Against the Person Sub ABH,10509,"Resisting or wilfully obstructing a designated or accredited person, or person assisting, in the execution of his or her duty",Police Reform Act 2002 S.41(2)
+Violence Against the Person Sub ABH,10510,Assaulting a traffic officer,Traffic Management Act 2004 S.10(1)
+Violence Against the Person Sub ABH,10511,Resisting or wilfully obstructing a traffic officer in the execution of his duty,Traffic Management Act 2004 S.10(2)
+Violence Against the Person Sub ABH,10512,Assault a designated immigration officer exercising section 2 detention powers,UK Borders Act 2007 S.3(1)(b) & (2)
+Violence Against the Person Sub ABH,10513,Assault an immigration officer,UK Borders Act 2007 S.22
+Violence Against the Person Sub ABH,10514.0,Assault an NCA officer or a member of an NCA-led team acting or assisting in the exercise of an operational power,"Crime and Courts Act 2013 Sch 4 P.3(1)&(2), Sch 5 P.22(1)&(2)"
+Violence Against the Person Sub ABH,10515.0,Resist or wilfully obstruct an NCA officer or a member of an NCA-lead team acting or assisting in the exercise of an operational power,"Crime and Courts Act 2013 Sch 4 P.3(3)&(4), Sch 5 P.21(1)&(2)"
+Violence Against the Person Sub ABH,10516.0,Assault a supreme court security officer,Constitutional Reform Act 2005 51E(1)&(2)
+Violence Against the Person Sub ABH,10517.0,Resist or wilfully obstruct a supreme court security officer,Constitutional Reform Act 2005 51E(4)&(5)
+Violence Against the Person Sub ABH,10521,Assault a custody officer performing custodial duties at a contracted-out secure college,Criminal Justice and Courts Act 2015 S.Sch 10 para 14(1) & (2)
+Violence Against the Person Sub ABH,10522,Resist / wilfully obstruct custody officer performing contracted-out functions at directly managed secure college,Criminal Justice and Courts Act 2015 S.Sch 10 para 23(1) & (2)
+Violence Against the Person Sub ABH,10523,Assault custody officer performing contracted-out functions at directly managed secure college,Criminal Justice and Courts Act 2015 S.Sch 10 para 24(1) & (2)
+Violence Against the Person Sub ABH,10524,Obstruct police / customs officer executing a drug-cutting agent search and seizure warrant,Serious Crime Act 2015 s.54(4)&(5)
+Violence Against the Person Sub ABH,10525,Assault/resist or wilfully obstruct appropriate person acting in exercise of relevant power,"Crminal Finances Act 2017 S. 22(356A(1&2)), S. 23(453B(1&2)),  S. 25(453C(1))"
+Violence Against the Person Sub ABH,11102,Failure to comply with control order made under Dogs Act 1871 S.2. Failure to comply with destruction order made under Dogs Act 1871 S.1(1)(a). Having custody of dog in breach of disqualification order,Dangerous Dogs Act 1989 S.1(3). S.1(3). S.1(6)
+Violence Against the Person Sub ABH,11112,Offences in relation to dogs under Dangerous Dogs Act 1991 S.1(2)(a) & (7),Dangerous Dogs Act 1991 S.1(2)(a)
+Violence Against the Person Sub ABH,11113,Offences in relation to dogs under Dangerous Dogs Act 1991 S.1(2)(b) & (7),Dangerous Dogs Act 1991 S.1(2)(b)
+Violence Against the Person Sub ABH,11114,Offences in relation to dogs under Dangerous Dogs Act 1991 S.1(2)(c) & (7),Dangerous Dogs Act 1991 S.1(2)(c)
+Violence Against the Person Sub ABH,11115,Offences in relation to dogs under Dangerous Dogs Act 1991 S.1(2)(d) & (7),Dangerous Dogs Act 1991 S.1(2)(d)
+Violence Against the Person Sub ABH,11116,Offences in relation to dogs under Dangerous Dogs Act 1991 S.1(2)(e) & (7),Dangerous Dogs Act 1991 S.1(2)(e)
+Violence Against the Person Sub ABH,11117,Offences in relation to dogs under Dangerous Dogs Act 1991 S.1(3) & (7),Dangerous Dogs Act 1991 S.1(3)
+Violence Against the Person Sub ABH,11118,Offences in relation to dogs under Dangerous Dogs Act 1991 S.3(1),Dangerous Dogs Act 1991 S.3(1) [Not Aggravated Offences]
+Violence Against the Person Sub ABH,11119,Offences in relation to dogs under Dangerous Dogs Act 1991 S.3(3),Dangerous Dogs Act 1991 S.3(3) [Not Aggravated Offences]
+Violence Against the Person Sub ABH,11120,Offences in relation to dogs under Dangerous Dogs Act 1991 S.4(8) and Protection of Badgers Act 1992 S.13,Dangerous Dogs Act 1991 S.4(8) and Protection of Badgers Act 1992 S.13
+Violence Against the Person Sub ABH,15516,Acting in a disruptive manner - Air Navigation Order 2009 AA.142 & 241(6) & Sch.13 Pt.B. Air Navigation Order 2005 AA.78(a)& 148(5) & Sch.14(A),Air Navigation Order 2005 AA.78(a)& 148(5) & Sch.14(A). Air Navigation Order 2009 AA.142 & 241(6) & Sch.13 Pt.B
+Violence Against the Person Sub ABH,15518.0,"Exhibiting,directing or shining a light which by its glare or liability to be mistaken for an aeronautical ground light would endanger aircraft","Air Navigation Order 2009, SS.221(a) & (b), 222 & 241(5) & Sch 13 Part B"
+Violence Against the Person Sub ABH,19427,Without reasonable excuse obstructing an immigration officer or other person lawfully acting in the execution of the Immigration Act 1971,Immigration Act 1971 S.26(1)(g)
+Violence Against the Person Sub ABH,19442,Assaulting a detainee custody officer,Immigration and Asylum Act 1999 Sch.10 Para.4
+Violence Against the Person Sub ABH,19443,Wilfully obstructing a detainee custody officer,Immigration and Asylum Act 1999 Sch.10 Para.5
+Violence Against the Person Sub ABH,19450,Obstruction of Immigration Service commissioner in the exercise of a power by virtue of S.38 - Asylum & Immigration (Treatment of Claimants) Act 2004,Asylum & Immigration (Treatment of Claimants) Act 2004 S.92A
+Violence Against the Person Sub ABH,19461,Obstruct a designated immigration officer exercising section 2 detention powers - UK Borders Act 2007,UK Borders Act 2007 S.3(1)(c) & (2)
+Violence Against the Person Sub ABH,19673,Obstructing or hindering another while he/she is responding or assisting a third person responding in S.1(2) capacity to emergency circumstances - Emergency Workers (Obstruction) Act 2006,"Emergency Workers (Obstruction) Act 2006 SS.1, 2 & 4"
+Violence Against the Person Sub ABH,10441,Obstruct a person serving / enforcing a closure notice / order,
+Violence Against the Person Sub ABH,10443,"Owner / manager / operator of hotel fail to comply with requirement to provide guest information imposed under s116(4) (Anti-social Behaviour, Crime and Policing Act 2014)",
+Violence Against the Person Sub ABH,10446,Offences in relation to enforcement officer functions Part 1 Schedule 2 Modern Slavery Act Modern Slavery Act 2015,
+Violence Against the Person Sub ABH,10447,Intentionally obstruct or fail to comply with requirement imposed by law enforcement officer; provide false or fail to disclose information requested by law enforcement officer,
+Violence Against the Person Sub ABH,10448,Fail to consent to being searched for alcohol/container for alcohol/tobacco/cigarette papers by CSO/CSV,
+Violence Against the Person Sub ABH,10518,Fail to hand over travel documents when required by examining officer / constable,
+Violence Against the Person Sub ABH,10519,Make off when required to wait with a secure college custody officer,
+Violence Against the Person Sub ABH,10520,Resist / wilfully obstruct a custody officer performing custodial duties at a contracted-out secure college,
+Violence Against the Person Sub ABH,12591,Offences relating to obstruction or non-compliance with searches or duties carried out under Counter-Terrorism and Border Security Act 2019,
+Violence Against the Person Sub ABH,18403,Obstruct local authority in exercise of s47(3)(a) power to enter premises - Care Act 2014,
+Violence Against the Person Sub ABH,19358,Obstruct enforcement officer in performance of functions under Psychoactive Substances Act 2016,
+Violence Against the Person Sub ABH,19359,Fail to comply / prevent compliance with requirement / direction under Psychoactive Substances Act 2016,
+Violence Against the Person Sub ABH,19655,Obstruction of regulator in exercise of his power,
+Violence Against the Person Sub ABH,19716,Intentionally obstruct or fail to give assistance or information to any person acting in the execution of the Common Agricultural Policy Regulations 2014,
+Acquisitive Violence,Home Office Code,Offence description,Statute
+Acquisitive Violence,02804,Burglary (with intent to inflict GBH - in dwelling) - Reclassified,Theft Act 1968 S.9.
+Acquisitive Violence,02900,Aggravated burglary in a dwelling,Theft Act 1968 S.10
+Acquisitive Violence,03100,Aggravated burglary in a building other than a dwelling,Theft Act 1968 S.10
+Acquisitive Violence,03200,"Entering with intent to commit felony (entering by night or breaking into houses, shops, etc, with intent to commit felony).",
+Acquisitive Violence,03400,Robbery and assaults with intent to rob    [Use this code only if you are unable to determine which subcoded Offence applies],
+Acquisitive Violence,03401,Robbery,Theft Act 1968 S.8
+Acquisitive Violence,03402,Assault with intent to rob,Theft Act 1968 S.8
+Acquisitive Violence,03403,Theft of mail accompanied by robbery/Attempt robbery (Reclassified),Theft Act 1968 S.S.8(1)
+Firearms (most Serious),Home Office Code,Offence description,Statute
+Firearms (most Serious),00514,"Possession of firearms etc., with intent to endanger life (Group I)",Firearms Act 1968 S.16 as amended by the Criminal Justice Act1972 S.28(2)
+Firearms (most Serious),00515,Possession of firearms etc. with intent to endanger life (Group II),Firearms Act 1968 S. 16 as amended by the Criminal Justice Act 1972 S.28(2)
+Firearms (most Serious),00516,Possession of firearms etc. with intent to endanger life(Group III),Firearms Act 1968 S.16 as amended by the Criminal Justice Act1972 S.28(2)
+Firearms (most Serious),00517,Using etc. firearms or imitation firearms with intent to resist arrest etc. (Group I),Firearms Act 1968 S.17 (1) as amended by the Criminal Justice Act1972 S.28(2)
+Firearms (most Serious),00518,Using etc. firearms or imitation firearms with intent to resist arrest etc. (Group II),Firearms Act 1968 S.17(1) as amended by the Criminal Justice Act1972 S.28(2)
+Firearms (most Serious),00519,Using etc. firearms or imitation firearms with intent to resist arrest etc. (Group III),Firearms Act 1968 S.17(1) as amended by the Criminal Justice Act1972 S.28(2)
+Firearms (most Serious),00813,Possessing firearm or imitation firearm at time of committing or being arrested for an offence specified in Schedule 1 of the Act (Group I),Firearms Act 1968 S.17(2) as amended by the Criminal Justice Act 1972 S.28(3)
+Firearms (most Serious),00814,Possessing firearm or imitation firearm at time of committing or being arrested for an offence specified in Schedule 1 of the Act (Group II),Firearms Act 1968 S.17(2) as amended by the Criminal Justice Act 1972 S.28(3)
+Firearms (most Serious),00815,Possessing firearm or imitation firearm at time of committing or being arrested for an offence specified in Schedule 1 of the Act (Group III),Firearms Act 1968 S.17(2) as amended by the Criminal Justice Act 1972 S.28(3)
+Firearms (most Serious),00816,Possessing firearms or imitation firearm with intent to commit an indictable offence or resist arrest etc. (Group I),Firearms Act 1968 S.18(1) as amended by the Criminal Justice Act 1972 S.28(3)
+Firearms (most Serious),00817,"Possessing firearm or imitation firearm with intent to commit an indictable offence, or resist arrest etc. (Group II)",Firearms Act 1968 S.18(1) as amended by the Criminal Justice Act 1972 S.28(3)
+Firearms (most Serious),00818,"Possessing firearms or imitation firearm with intent to commit an indictable offence, or resist arrest etc. (Group III)",Firearms Act 1968 S.18(1) as amended by the Criminal Justice Act 1972 S.28(3)
+Firearms (most Serious),00823,"Possession of a firearm or imitation firearm, with intent to cause fear of violence (Group I)",Firearms Act 1968 S.16A(as amended by Firearms(Amendment) Act 1994)
+Firearms (most Serious),00824,Possession of a firearm or imitation firearm with intent to cause fear of violence (Group II),Firearms Act 1968 S.16A(as amended by Firearms(Amendment) Act 1994)
+Firearms (most Serious),00825,Possession of a firearm or imitation firearm with intent to cause fear of violence (Group III),Firearms Act 1968 S.16A(as amended by Firearms (Amendment) Act 1994)
+Firearms (most Serious),00854,"Use another to look after, hide or transport a dangerous weapon - firearm",Violent Crime Reduction Act 2006 SS.28(1) & 29(3b)
+Firearms (Other),Home Office Code,Offence description,Statute
+Firearms (Other),08100,Firearms Act 1968 and other Firearms Acts    [Use this code only if you are unable to determine which subcoded Offence applies],
+Firearms (Other),08103,Possessing etc. firearms or ammunition without firearm certificate (Group I),Firearms Act 1968 S.1(1) (Group I) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08104,Possessing etc. shotgun without certificate (Group II),Firearms Act 1968 S.2(1) (Group II) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08107,Trading in firearms without being registered as a firearms dealer (Group I),Firearms Act 1968 S.3(1) (Group II) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08108,Trading in firearms without being registered as a firearms dealer(Group II),Firearms Act 1968 S.3(1) (Group II) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08109,Selling firearm to person without a certificate (Group I),Firearms Act 1968 S.3(2) (Group I) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08110,Selling firearm to person without a certificate (Group II),Firearms Act 1968 S.3(2) (Group II) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08111,"Repairing, testing etc. firearm for person without a certificate (Group I)",Firearms Act 1968 S.3(3) (Group I) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08112,"Repairing, testing etc. firearm for person without a certificate (Group II)",Firearms Act 1968 S.3(3) (Group II) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08113,Falsifying certificate etc. with view to acquisition of firearm (Group I),Firearms Act 1968 S.3(5) (Group I) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08114,Falsifying certificate etc. with view to acquisition of firearm (Group II),Firearms Act 1968 S.3(5) (Group II) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08115,Shortening a shotgun or other smooth bore gun (Group I),Firearms Act 1968 S.4(1) (Group I) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08116,Conversion of firearms (Group I),Firearms Act 1968 S.4(3) (Group I) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08117,Possessing or distributing prohibited weapons or ammunition (Group I),Firearms Act 1968 S.19 (Group I) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08126,Carrying firearm in public place etc. (Group I),Firearms Act 1968 S.19 (Group I) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08127,Carrying loaded firearm in public place etc. (Group II),Firearms Act 1968 S.19 (Group II) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08129,Trespassing with firearm or imitation firearm in a building (Group I),Firearms Act 1968 S.20(1) (Group I) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08130,Trespassing with firearm or imitation firearm in a building (Group II),Firearms Act 1968 S.20(1) (Group II) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08135,Possession of firearms by persons previously convicted of crime (Group I),Firearms Act 1968 S.21(4) (Group I) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08136,Possession of firearms by persons previously convicted of crime (Group II),Firearms Act 1968 S.21(4) (Group II) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08137,Possession of firearms by persons previously convicted of crime (Group III),Firearms Act 1968 S.21(4) (Group III) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08138,Supplying firearms to person denied them under Section 21 (Group I).,Firearms Act 1968 S.21(5) (Group I) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08139,Supplying firearms to person denied them under Section 21 (Group II).,Firearms Act 1968 S.21(5) (Group II) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08140,Supplying firearms to person denied them under Section 21 (Group III),Firearms Act 1968 S.21(5) (Group III) as amended by Criminal Justice & Public Order Act 1994 S.157 Sch.8 part III
+Firearms (Other),08142,Failure to transfer firearms or ammunition in person (Group I),Firearms (Amendment) Act 1997 SS.32 & 36(a)(i) and (ii)
+Firearms (Other),08143,Failure to give notice in writing to the Chief Officer of Police of transfers involving firearms (Group I),Firearms (Amendment) Act 1997 SS.33 & 36(a)(i) and (ii)
+Firearms (Other),08144,"Failure by certificate holder to notify in writing Chief Officer of Police of deactivation, destruction or loss of firearms or ammunition (Group I)",Firearms (Amendment) Act 1997 SS.34 & 36(a)(i) and (ii)
+Firearms (Other),08145,"Failure by certificate holder to notify in writing Chief Officer of Police of events taking place outside Great Britain involving firearms and ammunition (sold or otherwise disposed of, lost etc) (Group I)",Firearms (Amendment) Act 1997 SS.35 & 36(a)(i) and (ii)
+Firearms (Other),08169,Failure to comply with instructions in firearm certificate when transferring firearm to person other than registered dealer; failure to report transaction to police (Group I),Firearms Act 1968 S.42 as amended by the Criminal Justice & Public Order Act 1994 S 157 Sch.8 Pt.III
+Firearms (Other),08170,Possessing or distributing prohibited weapons designed for discharge of noxious liquid etc. (Group I),Firearms Act 1968 S.5(1)(b) (Group 1) as amended by Criminal Justice Act 2003 S.288
+Firearms (Other),08171,Possessing or distributing firearm disguised as other object. (Group I),Firearms Act 1968 S.5(1A)(a) (Group 1) as amended by Criminal Justice Act 2003 S.288
+Firearms (Other),08172,Possessing or distributing other prohibited weapons,Firearms Act 1968 S.5(1A)(b)(c)(d)(e)(f)or (g) as amended by Criminal Justice Act 2003 S.288
+Firearms (Other),08173,Offence in relation to the unlawful IMPORTATION of any weapon or ammunition of a kind mentioned in S.5(1)(a)(ab)(aba)(ac)(ad)(ae)(af) or (c) of the Firearms Act 1968,Customs and Excise Management Act 1979 S.50 (1)(2)(3)(4)(5A)
+Firearms (Other),08174,Offence in relation to the unlawful EXPORTATION of any weapon or ammunition of a kind mentioned in S.5(1)(a)(ab)(aba)(ac)(ad)(ae)(af) or (c) of the Firearms Act 1968,Customs and Excise Management Act 1979 S.68 (2)(3)(4A)
+Firearms (Other),08176,Selling or transferring an air weapon unlawfully,Firearms Act 1968 S.3(2) as amended by Violent Crime Reduction Act 2006
+Firearms (Other),08177,Carrying a loaded or unloaded or imitation firearm or air weapon in public place,Firearms Act 1968 S.19 as amended by Violent Crime Reduction Act 2006
+Firearms (Other),08178,"Knowingly being concerned in activity prohibited by Parts 2, 3 or 4 of the Order with intent to evade the relevant prohibition","Export Control Order 2008, A.34(5)"
+Firearms (Other),08181,Import prohibited weapon / ammo,"Anti-social Behaviour, Crime and Policing Act 2014 S.50(3), (4) and (5A)(a)"
+Firearms (Other),08182,Export prohibited weapon / ammunition with intent to evade prohibition / restriction,"Anti-social Behaviour, Crime and Policing Act 2014 S.68(2), (3) and (4A)"
+Firearms (Other),08183,Carry / remove / deposit etc. prohibited weapons / ammunition with intent to evade a prohibition / restriction,"Anti-social Behaviour, Crime and Policing Act 2014 S.170(1)(b) and (3)"
+Firearms (Other),08184,Knowingly concerned in fraudulent evasion of prohibition / restriction on prohibited weapon / ammunition,"Anti-social Behaviour, Crime and Policing Act 2014 S.170(2), (3) and (4A)(a)"
+Firearms (Other),08185,Manufacture weapon / ammunition specified in section 5(1) of the Firearms Act 1968,"Anti-social Behaviour, Crime and Policing Act 2014 S.5(2A)(a)"
+Firearms (Other),08186,Sell / transfer prohibited weapon / ammunition,"Anti-social Behaviour, Crime and Policing Act 2014 S.5(2A)(b)"
+Firearms (Other),08187,Possess prohibited weapon / ammunition for sale / transfer,"Anti-social Behaviour, Crime and Policing Act 2014 S.5(2A)(c)"
+Firearms (Other),08188,Purchase / acquire prohibited weapon / ammunition for sale / transfer,"Anti-social Behaviour, Crime and Policing Act 2014 S.5(2A)(d)"
+Firearms (Other),11500,Offences against the Firearms Act 1968 and other Firearms Acts    [Use this code only if you are unable to determine which subcoded Offence applies],
+Firearms (Other),11504,Non-compliance with condition of Firearm Certificate,Firearms Act 1968 S.1(2)
+Firearms (Other),11506,Non-compliance with condition of shotgun certificate - (Group II),Firearms Act 1968 S.2(2)
+Firearms (Other),11518,Non-compliance with condition of Secretary of State authority - (Group I),Firearms Act 1968 S.5(5)
+Firearms (Other),11519,Non-compliance with requirement to surrender authority to possess etc prohibited weapon or ammunition - (Group I),Firearms Act 1968 S.5(6)
+Firearms (Other),11520,Contravention of order under Section 6 etc restricting removal of arms - (Group I),Firearms Act 1968 S.6(3)
+Firearms (Other),11521,Making false statement in order to obtain police permit - (Group I),Firearms Act 1968 S.7(2)
+Firearms (Other),11522,Making false statement in order to obtain police permit - (Group II),Firearms Act 1968 S.7(2).
+Firearms (Other),11525,Making false statement in order to obtain permit for removal of signalling apparatus - (Group I),Firearms Act 1968 S.13(2)
+Firearms (Other),11528,Carrying loaded or unloaded imitation firearm or air weapon in public place etc - (Group III).,Firearms Act 1968 S.19 as amended by Anti-Social Behaviour Act 2003 S.37(1)(b)&(d) & 2
+Firearms (Other),11531,Trespassing with firearm in a building - (Group III).,Firearms Act 1968 S.20(1)
+Firearms (Other),11532,Trespassing with firearm on land - (Group I).,Firearms Act 1968 S.20(2).
+Firearms (Other),11533,Trespassing with firearm on land - (Group II).,Firearms Act 1968 S.20(2)
+Firearms (Other),11534,Trespassing with firearm on land - (Group III).,Firearms Act 1968 S.20(2)
+Firearms (Other),11540,Unknown offence presumed to be firearms,
+Firearms (Other),11541,Person under 17 acquiring firearm - (Group I).,Firearms Act 1968 S.22(1)
+Firearms (Other),11542,Person under 17 acquiring firearm - (Group II),Firearms Act 1968 S.22(1)
+Firearms (Other),11543,Person under 18 acquiring firearm - (Group III),Firearms Act 1968 S.22(1) as amended by Violent Crime Reduction Act 2006 S.33(2)
+Firearms (Other),11544,"Person under 14 having firearm in his possession, without lawful authority - (Group I)",Firearms Act 1968 S.22(2)
+Firearms (Other),11545,Person under 15 having with him a shotgun without adult supervision - (Group II),Firearms Act 1968 S.22(3)
+Firearms (Other),11546,Person under 18 having with him an air weapon or ammunition therefor - (Group III),Firearms Act 1968 S.22(4) as amended by Violent Crime Reduction Act 2006 S.33(3)
+Firearms (Other),11547,Person under 17 having with him an air weapon in a public place - (Group III).,Firearms Act 1968 S.22(5)
+Firearms (Other),11548,Person under 17 making improper use of air weapon when under supervision - (Group III),Firearms Act 1968 S.23(1)
+Firearms (Other),11549,"Person supervising person under 17, permitting improper use of air weapon - (Group III)",Firearms Act 1968 S.23(1)
+Firearms (Other),11550,Selling or letting on hire a firearm to person under 17 - (Group I),Firearms Act 1968 S.24(1)
+Firearms (Other),11551,Selling or letting on hire a firearm to person under 17 - (Group II),Firearms Act 1968 S.24(1)
+Firearms (Other),11552,Selling or letting on hire a firearm to person under 18 - (Group III),Firearms Act 1968 S.24(1) as amended by Violent Crime Reduction Act 2006 S.33(4)
+Firearms (Other),11553,Supplying firearm or ammunition (being of a kind to which Section 1 of the Act applies) to person under 14 - (Group I),Firearms Act 1968 S.24(2)
+Firearms (Other),11554,Making gift of shotgun to person under 15 - (Group II),Firearms Act 1968 S.24(3)
+Firearms (Other),11555,Supplying air weapon to person under 18 - (Group III),Firearms Act 1968 S.24(4) as amended by Violent Crime Reduction Act 2006 S.33(5)
+Firearms (Other),11556,Supplying firearm to person drunk or insane - (Group I),Firearms Act 1968 S.25
+Firearms (Other),11557,Supplying firearm to person drunk or insane- (Group II),Firearms Act 1968 S.25
+Firearms (Other),11558,Supplying firearm to person drunk or insane - (Group III),Firearms Act 1968 S.25
+Firearms (Other),11559,Making false statement in order to procure grant or renewal of a firearm certificate - (Group I),Firearms Act 1968 S.28A(7)
+Firearms (Other),11560,Making false statement in order to procure grant or renewal of shot gun certificate - (Group II),Firearms Act 1968 S.28A(7)
+Firearms (Other),11561,Making false statement in order to procure variation of a firearms certificate - (Group I),Firearms Act 1968 S.29(3)
+Firearms (Other),11562,"Failing to surrender firearm certificate, firearm or ammunition on revocation of certificate - (Group I)",Firearms Act 1968 S.30D(3) as amended by the Firearms (Amendment) Act 1988 S.12
+Firearms (Other),11563,"Failing to surrender shotgun certificate, shotgun or ammunition on revocation of certificate - (Group II)",Firearms Act 1968 S.30D(3) as amended by the Firearms (Amendment) Act 1988 S.12
+Firearms (Other),11564,Failure to surrender certificate of registration on removal of firearm dealer's name from register,Firearms Act 1968 S.38(8)
+Firearms (Other),11565,Making false statement in order to secure registration or entry in register of a place of business,Firearms Act 1968 S.39(1)
+Firearms (Other),11566,Registered firearms dealer having place of business not entered in the register,Firearms Act 1968 S.39(2)
+Firearms (Other),11567,Non-compliance with condition of registration - Firearms Act 1968,Firearms Act 1968 S.39(3)
+Firearms (Other),11568,Non-compliance by firearms dealer with provisions as to register of transactions; making false entry in register,Firearms Act 1968 S.40(5)
+Firearms (Other),11569,Obstructing constable or civilian officer in exercise of search powers,Firearms Act 1968 S.46 as added by Firearms (Amendment) Act 1997 S.43(3)
+Firearms (Other),11570,Failure to hand over firearm or ammunition on demand by constable - (Group I),Firearms Act 1968 S.47(2)
+Firearms (Other),11571,Failure to hand over firearm or ammunition on demand by constable - (Group II),Firearms Act 1968 S.47(2)
+Firearms (Other),11572,Failure to hand over firearm or ammunition on demand by constable - (Group III),Firearms Act 1968 S.47(2)
+Firearms (Other),11573,Failure to comply with requirement of a constable that a person shall declare his name and address (Group I),Firearms Act 1968 S.48(3)
+Firearms (Other),11574,Failure to comply with requirement of a constable that a person shall declare his name and address - (Group II),Firearms Act 1968 S.48(3)
+Firearms (Other),11575,"Failure to give constable facilities for examination of firearms in transit, or to produce papers - (Group I)",Firearms Act 1968 S.49(3)
+Firearms (Other),11576,Failure to surrender firearm certificate cancelled by court on conviction - (Group I),Firearms Act 1968 S.52(2)(c)
+Firearms (Other),11577,Failure to surrender shot gun certificate cancelled by court on conviction - (Group II),Firearms Act 1968 S.52(2)(c)
+Firearms (Other),11578,"Selling, letting on hire, giving or lending a shotgun. Failing to comply with the terms of the section - (Group II)",Section 4 of the Firearms (Amendment) Act 1988
+Firearms (Other),11579,Selling shotgun ammunition to unauthorised person - (Group II),Firearms Act 1968 S.5
+Firearms (Other),11580,"Auctioneer, carrier or warehouseman failing to keep firearms and ammunition safe. Failing to report loss or theft",Firearms Act 1968 S.14
+Firearms (Other),11581,"Auctioneer, carrier or warehouseman failing to keep firearms and ammunition safe. Failing to report loss or theft - (Group II)",Firearms Act 1968 S.14
+Firearms (Other),11582,Making false statement to obtain a visitor's permit - (Group I),Firearms Act 1968 S.17
+Firearms (Other),11583,Failing to comply with conditions on a visitor's permit - (Group I),Firearms Act 1968 S.17
+Firearms (Other),11584,Making false statement to obtain a visitor's permit - (Group II),Firearms Act 1968 S.17
+Firearms (Other),11585,Failing to comply with conditions on a visitor's permit - (Group II),Firearms Act 1968 S.17
+Firearms (Other),11586,Firearms dealer failing to inform police of sale of firearm for export - (Group I),Firearms Act 1968 S.18
+Firearms (Other),11587,Firearms dealer failing to inform police of sale of firearm for export - (Group II),Firearms Act 1968 S.18
+Firearms (Other),11588,Failing to report a transaction authorised by a visitor's shotgun permit - (Group II),Firearms Act 1968 S.42A
+Firearms (Other),11590,Obstructing a constable entering or inspecting an approved rifle/pistol club - (Group I),Firearms Act 1968 S.15
+Firearms (Other),11591,Making a false statement to obtain or not complying with museum licence; Failing to surrender a revoked museum licence,Firearms Act 1968 S.19 Schedule para.4(1) ;4(3)
+Firearms (Other),11592,Making a false statement to obtain a permit to auction firearms etc - (Group I),Firearms Act 1968 S.9(3) as amended by the Firearms (Amendment) Act 1988 S.23
+Firearms (Other),11593,Making a false statement to obtain a permit to auction firearms etc - (Group II),Firearms Act 1968 S.9(3) as amended by the Firearms (Amendment) Act 1988 S.23
+Firearms (Other),11594,Failure to transfer shotgun in person - (Group II),Firearms (Amendment) Act 1997 SS.32 and 36(b)
+Firearms (Other),11595,Failure to give notice in writing to the Chief Officer of Police of transfers involving shotguns - (Group II),Firearms (Amendment) Act 1997 SS.33 and 36(b)
+Firearms (Other),11596,"Failure by certificate holder to notify in writing Chief Officer of Police of deactivation, destruction or loss of shotgun - (Group II)",Firearms (Amendment) Act 1997 SS.34 and 36(b)
+Firearms (Other),11597,"Failure by certificate holder to notify Chief Officer of Police in writing of events taking place outside Great Britain involving shotguns (sold or otherwise disposed of, lost, etc) (Group II)",Firearms (Amendment) Act 1997 SS.35 and 36(b)
+Firearms (Other),11598,Failure to comply with instructions on shotgun certificate,Firearms (Amendment) Act 1997 SS.32(2) and 36(b)
+Firearms (Other),15706,Taking firearms or ammunition in pawn (Group 1),Firearms Act 1968 S.3(6)
+Firearms (Other),15707,Taking shotgun in pawn (Group II),Firearms Act 1968 S.3(6)
+Firearms (Other),19669,Firing an air weapon beyond premises,Firearms Act 1968 S.21A as amended by Violent Crime Reduction Act 2006
+Firearms (Other),19670,"Selling, buying or attempting to buy a primer or empty cartridge case incorporating a primer",Violent Crime Reduction Act 2006 S.34(2) & (7)
+Firearms (Other),19671,Manufacturing or selling a realistic imitation firearm; modifying an imitation firearm so it becomes a realistic imitation firearm; or bringing or causing to be brought a realistic imitation firearm into GB,Violent Crime Reduction Act 2006 S.36(1) & (9)(a)
+Firearms (Other),19672,Person under 18 purchasing an imitation firearm; selling an imitation firearm to person under 18,Firearms Act 1968 S.24A as amended by Violent Crime Reduction Act 2006
+Firearms (Other),19684,Specification for imitation firearms,Violent Crime Reduction Act 2006 S.39(2)
+Firearms (Other),08128,Having Small - caliber pistol outside premises of licensed pistol club,
+Firearms (Other),08141,Firearms (Amendment) Act 1988 Sec.17 (10)(b) as amended by Firearms (Amendment) Act 1997 S.12 (1) (3) (5),
+Firearms (Other),08179,Unship / unload prohibited weapon / ammunition with intent to evade prohibition / restriction,
+Firearms (Other),08180,Remove prohibited weapons / ammunition from their place of importation with intent to evade prohibition / restriction,
+Firearms (Other),09006,Offences under S.28 Violent Crime Reduction Act 2006 (using someone to mind a weapon - could be firearm or bladed),
+Firearms (Other),11507,Non-compliance with condition of permit to have small-caliber pistols outside licensed clubs.  Firearms (Amendment) Act 1997 Sec. 13(5)(a),
+Firearms (Other),11508,Making false statement etc. for purposes of procuring (whether for himself or another) the grant of a permit to have small-caliber pistol outside licensed club.  Firearms ( Amendment ) Act 1997 S.13 (5)(b),
+Firearms (Other),11509,No pistol club to operate without a license - if small-caliber pistol is stored or used in contravention of Sec. 20(1)(2) Club management held responsible. Firearms (Amendment) Act 1997 Sec. 20(4),
+Firearms (Other),11510,Failure to comply with conditions of licence. Firearms (Amendment) Act 1997 S.23,
+Firearms (Other),11511,Non-compliance with notice of revocation of club licence. Firearms (Amendment) Act 1997 Sec. 26(2)(3)(9),
+Firearms (Other),11512,Failure to comply with requirements to keep registers at licensed pistol clubs. Firearms (Amendment) Act 1997 S.28(4)(a),
+Firearms (Other),11513,Knowingly or recklessly to make any entry in the pistol register which is false in any material particular. Firearms (Amendment) Act 1997 S.28 (4)(b),
+Firearms (Other),11514,Breach of Regulations made under Section 29(1)(a)(b)(c). Firearms (Amendment) Act 1997 Sec.29(2) (historic),
+Firearms (Other),11515,Obstruction of constable or civilian officer entering or inspecting licensed premises.  Firearms (Amendment) Act 1997 S.30,
+Firearms (Other),11516,"Making false statement for purpose of procuring grant, renewal or variation of a licence or release of small-caliber pistol from police custody. Firearms (Amendment) Act 1997 S.31",
+Firearms (Other),11517,Making false statement for purpose of procuring the release of small-caliber pistol from police custody (other than under S.26 ) Firearms (Amendment) Act 1997 Sch.1 para.7,
+Firearms (Other),11599,Fail to notify Secretary of State of transfer or possession of deactivated firearm,
+Weapons (not firearms),Home Office Code,Offence description,Statute
+Weapons (not firearms),00811,Possession of offensive weapons without lawful authority or reasonable excuse,Prevention of Crime Act 1953 S.1
+Weapons (not firearms),00826,Having an article with a blade or point in a public place,Criminal Justice Act 1988 S.139
+Weapons (not firearms),00827,Having an article with a blade or point on school premises,Criminal Justice Act 1988 S.139A(1) as added by Offensive Weapons Act 1996 S.4(1)
+Weapons (not firearms),00828,Possession of offensive weapons without lawful authority or reasonable excuse on school premises,Criminal Justice Act 1988 S.139(2) as added by Offensive Weapons Act 1996 S.4(1)
+Weapons (not firearms),00853,"Using another to look after, hide or transport a dangerous weapon - offensive weapon, knife or bladed weapon",Violent Crime Reduction Act 2006 SS.28(1) & 29(2)
+Weapons (not firearms),00861,Threaten with an offensive weapon in a public place,Prevention of Crime Act 1953
+Weapons (not firearms),00862,Threaten with a blade or sharply pointed article on school premises,"Criminal Justice Act 1988, S.139AA"
+Weapons (not firearms),00863,Threaten with an offensive weapon on school premises,"Criminal Justice Act 1988, S.139AA"
+Weapons (not firearms),00864,Threaten with blade/sharply pointed article in a public place,"Criminal Justice Act 1988, S.139AA"
+Weapons (not firearms),06906,Possess weapon in prison,
+Weapons (not firearms),08189,Import / acquire / possess / use a regulated explosives precursor without a licence,"Explosives Precursors Regulations 2014 S.4(1), (2) and 12(1)"
+Weapons (not firearms),08190,Manufacture an offensive weapon (Reclassified). Possess article for use in connection with conversion of deactivated firearm.,Criminal Justice Act 1988 S.141(1). Police & Crime Act 2017 s.127 (4A)
+Weapons (not firearms),08191,Controls on defectively deactivated weapons; Make defectively deactivated weapon available for sale / gift ; Sell / give as gift defectively deactivated weapon,Police and Crime Act 2017 s.128 (8A)(1 and 11)
+Weapons (not firearms),09000,Knives Act 1997 and other related Offensive Weapons Acts and Regulations not dealt with elsewhere    [Use this code only if you are unable to determine which subcoded Offence applies],
+Weapons (not firearms),09001,Unlawful marketing of knives (selling or hiring),"Knives Act 1997 S.1(1), (2), (3), (4a) and (5)"
+Weapons (not firearms),09002,Unlawful marketing of knives (offering or exposing to sell or hire),"Knives Act 1997 S.1(1), (2), (3), (4b) and (5)"
+Weapons (not firearms),09003,Unlawful marketing of knives - having in possession for the purpose of sale or hire,"Knives Act 1997 S.1(1), (2), (3), (4c) and (5)"
+Weapons (not firearms),09004,"Publication of any written, pictorial or other material in connection with the marketing of any knife - the material suggesting/indicating knife suitable for combat",Knives Act 1997 S.2(1)(a)
+Weapons (not firearms),09005,"Publication of any written, pictorial or other material in connection with the marketing of any knife - the material is otherwise likely to stimulate or encourage violent behaviour involving use of the knife as a weapon",Knives Act 1997 S.2(1)(b)
+Weapons (not firearms),11300,Offences against Explosives Acts 1875 and 1923 (except S.80 of the Explosives Act 1875) and Orders in Council and Rules thereunder. Offences against restrictions relating to the manufacture of fireworks. Offences against Orders made under the Emergency Laws (Miscellaneous Provisions) Act 1953,"Explosives Acts 1875 and 1923 (except S.80 of the Explosives Act 1875) and Orders in Council and Rules thereunder, Fireworks Act 1951, Orders made under the Emergency Laws (Miscellaneous Provisions) Act 1953 S.3"
+Weapons (not firearms),19519,Having folding pocket knife with blade the cutting edge of which exceeds 3 inches in public place,CRIMINAL JUSTICE ACT (1988); s.139(1)
+Weapons (not firearms),19520,Offences under Restriction of Offensive Weapons Act 1959 and Criminal Justice Act 1988 S.141,Restriction of Offensive Weapons Act 1959 and Criminal Justice Act 1988 S.141
+Weapons (not firearms),19522,"Selling to a person under age of 18 years a knife, knife blade, razor blade, axe or any other article which has a blade, that is sharply pointed and which is made or adapted for use for causing injury to the person",Criminal Justice Act 1988 S.141A(1) as added by Offensive Weapons Act 1996 S.6(1) as amended by Violent Crime Reduction Act 2006
+Weapons (not firearms),19580.0,Selling or hiring a crossbow or part of a crossbow to person under the age of 18,Crossbow Act 1987 S.1 as amended by Violent Crime Reduction Act 2006
+Weapons (not firearms),19581,Person under the age of 18 buying or hiring a crossbow or part of crossbow,Crossbow Act 1987 S.2 as amended by Violent Crime Reduction Act 2006
+Weapons (not firearms),19582,Person under the age 18 having a crossbow or component parts of a crossbow,Crossbow Act 1987 S.3 as amended by Violent Crime Reduction Act 2006
+Weapons (not firearms),19668,Selling a weapon by way of trade or business when transaction not face to face,Violent Crime Reduction Act 2006 S.32
+Weapons (not firearms),00875,Have a corrosive substance in a public place,Offensive Weapons Act 2019 S.6
+Weapons (not firearms),00876,Threaten a person with an offensive weapon / article / substance in a private place,Offensive Weapons Act 2019 S.52
+Weapons (not firearms),06817,Breach Knife Crime Prevention Order (KCPO) or Interim KCPO,
+Weapons (not firearms),06818,"Fail to notify police with name or address, or give false information (Knife Crime Prevention Order)",
+Weapons (not firearms),11301,Supplier of regulated / reportable explosives precursor fail to report suspicious transaction / proposed transaction; Fail to report significant disappearance / theft of regulated / reportable explosives precursors,
+Weapons (not firearms),11302,Supply a regulated explosives precursor without entering details of the transaction in the licence or ensuring warning label is affixed to the packaging when supplying to member of public,
+Weapons (not firearms),19721,Possess an offensive weapon in private place,
+Weapons (not firearms),19722,Summary offence under the Offensive Weapons Act 2019,
+Weapons (not firearms),00879,Offences relating to a breach or obstructing enforcement of serious violence reduction orders,
+Public Order and Harassment,Home Office Code,Offence description,Statute
+Public Order and Harassment,00829,Breach of the conditions of an injunction against harassment (was breach of molestation order),Protection from Harassment Act 1997 S.3 (was Stalking Bill 1996 - not passed)
+Public Order and Harassment,00831,Breach of Restraining Order,Sentencing Act 2020 S. 363(1)&(2); Protection from Harassment Act 1997 see 8/39 for Sex Offenders Act 1997 S.5A - BREACH OF RESTRAINING ORDER
+Public Order and Harassment,00836,"Racially aggravated intentional harassment, alarm or distress",Public Order Act 1986 S.4A as amended by the Crime & Disorder Act 1998 S.31(1)(b) and (4)
+Public Order and Harassment,00837,Racially aggravated offence of harassment,Protection from Harassment Act 1997 S.2 as amended by Crime & Disorder Act 1998 S.32(1)(a) and (3)
+Public Order and Harassment,00839,Breach of Restraining Order - for use with restraining orders made before Section 104 & 113 of the Sexual Offences Act 2003,Sex Offenders Act 1997 S.5A as added by Criminal Justice & Court Services Act 2000 Sch.5 Para.6
+Public Order and Harassment,00843,"Religiously aggravated intentional harassment, alarm or distress",Public Order Act 1986 S.4A as amended by the Crime and Disorder Act 1998 S.31(1)(b) & (4)
+Public Order and Harassment,00844,Religiously aggravated offence of harassment,Protection from Harassment Act S.2 as amended by Crime and Disorder Act 1998 S.32(1)(a) & (3)
+Public Order and Harassment,00845,Religiously aggravated putting people in fear of violence,Protection from Harassment Act S.4 as amended by Crime and Disorder Act 1998 S.32(1)(b) & (3)
+Public Order and Harassment,00849,"Racially or religiously aggravated intentional harassment, alarm or distress",Public Order Act 1986 S.4A as amended by the Crime and Disorder Act 1998 S.31(1)(b) & (4)
+Public Order and Harassment,00850,Racially or religiously aggravated offence of harassment,Protection from Harassment Act 1997 S.2 as amended by Crime and Disorder Act 1998 S.32(1)(a) & (3)
+Public Order and Harassment,00851,Racially or religiously aggravated putting people in fear of violence,Protection from Harassment Act 1997 S.4 as amended by Crime and Disorder Act 1998 S.32(1)(b) & (3)
+Public Order and Harassment,00855,Racially or religiously aggravated intentional harassment or alarm or distress - words or writing,Crime and Disorder Act 1998_S.31(1)(b) & (4)_
+Public Order and Harassment,00856,Racially or religiously aggravated stalking without violence,Crime and Disorder Act 1998_S.32(1)(a) & (4)_
+Public Order and Harassment,00858,Racially or religiously aggravated stalking with fear of violence,Crime and Disorder Act 1998_S.32(1)(b) & (4)_
+Public Order and Harassment,00865,Stalking involving fear of violence,"Protection from Harassment Act 1997, S.4A(1)(a)(b)(i)"
+Public Order and Harassment,00866,Stalking involving serious alarm/distress,
+Public Order and Harassment,00867,Engage in controlling / coercive behaviour in an intimate / family relationship,Serious Crime Act 2015 s. 73(1) & (11)
+Public Order and Harassment,00871,Disclose private sexual photographs and films with intent to cause distress,Criminal Justice and Courts Act 2015 s. 33(1) & (9)
+Public Order and Harassment,00872,Sending letters etc. with intent to cause distress or anxiety,Criminal Justice and Courts Act 2015 s. 32
+Public Order and Harassment,00874,Breach of stalking order / interim stalking order,Stalking Protection Act 2019
+Public Order and Harassment,06400,Riot    [Use this code only if you are unable to determine which subcoded Offence applies],
+Public Order and Harassment,06401,Riot,Public Order Act 1986 S.1
+Public Order and Harassment,06402,Preventing reading of proclamation and rioting after proclamation,
+Public Order and Harassment,06500,Violent Disorder,Public Order Act 1986 S.2
+Public Order and Harassment,06600,Other offences against the State and Public Order    [Use this code only if you are unable to determine which subcoded Offence applies],
+Public Order and Harassment,06601,Affray,Public Order Act 1986. S.3
+Public Order and Harassment,06603,Placing or despatching articles to cause bomb hoax,Criminal Law Act 1977 S.51(1)
+Public Order and Harassment,06604,Communicating false information alleging the presence of bombs,Criminal Law Act 1977 S.51(2)
+Public Order and Harassment,06605,"Admitting spectators to, or allowing spectators to remain on unlicensed premises",Football Spectators Act 1989 S.9(1)
+Public Order and Harassment,06606,Threats of attack on United Nations workers,United Nations Personnel Act 1997 SS.2 and 3
+Public Order and Harassment,06607,Providing funding or financial assistance for designated person or avoiding prohibition thereof,Terrorist Asset-Freezing etc. Act 2010
+Public Order and Harassment,06609,Racially aggravated fear or provocation of violence,Public Order Act 1986 S.4 as amended by Crime and Disorder Act 1998 S.31(1)(a) and (4)
+Public Order and Harassment,06610,Religiously aggravated fear or provocation of violence.,Public Order Act 1986 S.4 as amended by Crime and Disorder Act 1998 S.31(1)(a) and (4)
+Public Order and Harassment,06611,Prohibition of disclosures relating to nuclear security,Anti-Terrorism Crime and Security Act 2001 S.79(3)
+Public Order and Harassment,06612,Prohibition of disclosures of uranium enrichment technology,Anti-Terrorism Crime and Security Act 2001 S.80(3)
+Public Order and Harassment,06613,Failure to disclose knowledge gained in the course of business in a regulated sector,Terrorism Act 2000 S.21A as added by Anti-Terrorism Crime and Security Act 2001 Sch 2 Para.3
+Public Order and Harassment,06614,Failure to disclose information about acts of terrorism,Terrorism Act 2000 S.38B as added by Anti-Terrorism Crime and Security Act 2001 S.117
+Public Order and Harassment,06615,Hoaxes involving noxious substances or things,Anti-Terrorism Crime and Security Act 2001 S.114
+Public Order and Harassment,06616,Racially or religiously aggravated fear or provocation of violence,Public Order Act 1986 S.4 as amended by Crime and Disorder Act 1998 S.31(1)(a) and (4)
+Public Order and Harassment,06621,Committing an act outraging public decency,Common Law
+Public Order and Harassment,06622,Public Nuisance,Common Law
+Public Order and Harassment,06623,Use of words or behaviour or display of written material intended or likely to stir up racial hatred,Public Order Act 1986 S.18
+Public Order and Harassment,06624,Publishing or distributing written material intended or likely to stir up racial hatred,Public Order Act 1986 S.19
+Public Order and Harassment,06625,Public performance of play intended or likely to stir up racial hatred,Public Order Act 1986 S.20
+Public Order and Harassment,06626,"Distribution, showing or playing a recording intended or likely to stir up racial hatred",Public Order Act 1986 S.21
+Public Order and Harassment,06627,Broadcasting or including a programme service likely to stir up racial hatred,Public Order Act 1986 S.22
+Public Order and Harassment,06628,Possession of a racially inflammatory piece of material,Public Order Act 1986 S.23
+Public Order and Harassment,06629,"Unauthorised use of uniforms; falsification of reports, forgery, personation, and false documents. Interfering with officers of the police or members of His Majesty’s forces. Duty of giving information as to commission of offences.","Official Secrets Act 1920, SS.1, 3 & 6"
+Public Order and Harassment,06630,Committing an act prejudicial to the safety or the interest of the State,"Official Secrets Act 1911, S.1"
+Public Order and Harassment,06631,Knowingly harbouring spy,"Official Secrets Act 1911, S.7"
+Public Order and Harassment,06632,Serving or former member of Security or inteligence Services disclosing information relating to security or intelligence. Person notified as subject to security or intelligence provisions unlawfully disclosing secret,"Official Secrets Act 1989, S.1(1)(a) & (b)"
+Public Order and Harassment,06633,Former or current Crown Servant or Government Contractor making damaging disclosure relating to security or intelligence,"Official Secrets Act 1989, S.1(3)"
+Public Order and Harassment,06634,Former or current Crown Servant or Government Contractor making damaging disclosure relating to defence matter,"Official Secrets Act 1989, S.2(1)"
+Public Order and Harassment,06635,Former or current Crown Servant or Government Contractor making damaging disclosure of confidential matter from Foreign State or relating to international relations,"Official Secrets Act 1989, S.3(1)(a) & (b)"
+Public Order and Harassment,06636,"Former or current Crown Servant or Government Contractor disclosing information resulting in commission of offence, facilitating escape from custody, facilitating act predudicial to safekeeping of person in custody, impeding prevention or detection of offence or apprehension or prosecution of suspected offender etc.","Official Secrets Act 1989, S.4(1)"
+Public Order and Harassment,06637,"Making damaging disclosure of protected information, Disclosing information gained in contravention of S.1 of Official Secrets Act 1911","Official Secrets Act 1989, S.5(2), S.5(6)"
+Public Order and Harassment,06638,"Breach of a Restraining Order issued on acquittal (Protection from Harassment Act 1997/Domestic Violence, Crime and Victims Act 2004",
+Public Order and Harassment,06639,Breach of a Non-Molestation Order,"Family Law Act 1996, Domestic Violence, Crime and Victims Act 2004"
+Public Order and Harassment,06640,Breach of an obligation imposed by a control order,Prevention of Terrorism Act 2005
+Public Order and Harassment,06641,"Failure to report to a specified person when first returning to the UK as required by the terms of a control order, when the order has ceased to have effect",Prevention of Terrorism Act 2005
+Public Order and Harassment,06642,Interference with contractual relationships so as to harm animal research organisations,Serious Organised Crime and Police Act 2005
+Public Order and Harassment,06643,Intimidation of persons connected with animal research organisations,Serious Organised Crime and Police Act 2005
+Public Order and Harassment,06644,Compelling by threatening to destroy or damage ship or sea platform or property used in navigation,Aviation and Maritime Security Act 1990
+Public Order and Harassment,06645,Using words or behaviour or display of written material (acts intended to stir up religious hatred),Public Order Act 1986 S.29B as added by Racial and Religious Hatred Act 2006
+Public Order and Harassment,06646,Publishing or distributing written material (acts intended to stir up religious hatred),Public Order Act 1986 S.29C as added by Racial and Religious Hatred Act 2006
+Public Order and Harassment,06647,Public performance of a play (acts intended to stir up religious hatred),Public Order Act 1986 S.29D as added by Racial and Religious Hatred Act 2006
+Public Order and Harassment,06648,"Distributing, showing or playing a recording (acts intended to stir up religious hatred)",Public Order Act 1986 S.29E as added by Racial and Religious Hatred Act 2006
+Public Order and Harassment,06649,Provider of programme broadcasting or including programme in programme service (acts intended to stir up religious hatred),Public Order Act 1986 S.29F(1) & (2)(a) as added by Racial and Religious Hatred Act 2006
+Public Order and Harassment,06650,Producer or Directorate of programme broadcasting or including programme in programme service (acts intended to stir up religious hatred),Public Order Act 1986 S.29F(1) & (2)(a) as added by Racial and Religious Hatred Act 2006
+Public Order and Harassment,06651,Person using offending words or behaviour - broadcasting or including programme in programme service (Acts intended to stir up religious hatred),Public Order Act 1986 S.29F(1) & (2)(a) as added by Racial and Religious Hatred Act 2006
+Public Order and Harassment,06652,Possessing inflammatory material (acts intended to stir up religious hatred),Public Order Act 1986 S.29G as added by Racial and Religious Hatred Act 2006
+Public Order and Harassment,06653,Publishing or causing another to publish a statement intending or recklessly encouraging terrorism,Terrorism Act 2006 S.1
+Public Order and Harassment,06654,Distributing or circulating a terrorist publication,Terrorism Act 2006 SS.2(2) (a) & 11
+Public Order and Harassment,06655,"Giving, selling, lending or offering for sale or for loan a terrorist publication",Terrorism Act 2006 SS.2(2) (b) (c) & 11
+Public Order and Harassment,06656,Providing service about reading or listening to a terrorist publication,Terrorism Act 2006 SS.2(2) (d) & 11
+Public Order and Harassment,06657,Transmitting contents of a terrorist publication,Terrorism Act 2006 SS.2(2) (e) & 11
+Public Order and Harassment,06658,"Possessing terrorist publication with view to distribution, sale, loan, reading, listening to, being seen etc",Terrorism Act 2006 SS.2(2) (f) & 11
+Public Order and Harassment,06659,With intent engaging in preparation to commit act of terrorism or to assist another,Terrorism Act 2006 S.5
+Public Order and Harassment,06660,Providing instruction or training for terrorism,Terrorism Act 2006 S.6(1) & (5)
+Public Order and Harassment,06661,Receiving instruction or training for terrorism,Terrorism Act 2006 S.6(2) & (5)
+Public Order and Harassment,06662,Attending any place in UK or elsewhere for instruction or training in terrorism,Terrorism Act 2006 S.8
+Public Order and Harassment,06664,Possessing radioactive material with intent using it in commission or preparation for terrorism,Terrorism Act 2006 S.9(1) (b) & (3)
+Public Order and Harassment,06665,Using radioactive device or material in the course of or in connection with commission of or for the purposes of terrorism,Terrorism Act 2006 S.10(1) (a)&(b) & (3)
+Public Order and Harassment,06666,In course of or in connection with commission of or for the purposes of terrorism using or damaging nuclear facility to cause release or risk of release of radioactive material,Terrorism Act 2006 S.10(2) (a)&(b) & (3)
+Public Order and Harassment,06667,Terrorist making demand relating to devices or materials or facilities,Terrorism Act 2006 S.11(1)
+Public Order and Harassment,06668,Terrorist making threat to use radioactive device or material,Terrorism Act 2006 S.11(2)
+Public Order and Harassment,06669,Making or possessing radioactive device with intent use it in commission of or preparation for terrorism,Terrorism Act 2006 S.9(1)(a) & (3)
+Public Order and Harassment,06670,Contravening prohibition on disclosure of information,Al-Qaida and Taliban (UN Measures) Order 2006 A.6
+Public Order and Harassment,06671,Contravening prohibition on dealing with funds or economic resources,Al-Qaida and Taliban (UN Measures) Order 2006 A.7
+Public Order and Harassment,06672,Contravening prohibition on making available funds or economic resources,Al-Qaida and Taliban (UN Measures) Order 2006 A.8
+Public Order and Harassment,06673,Knowingly and intentionally participating in activities to circumvent an Article 7 or 8 prohibition,Al-Qaida and Taliban (UN Measures) Order 2006 A.10
+Public Order and Harassment,06674,Failing to comply with a condition attached to an Article 7 or 9 exemption licence,Al-Qaida and Taliban (UN Measures) Order 2006
+Public Order and Harassment,06675,Knowingly or recklessly giving any information or producing any document which is false in a material particular to Treasury,Al-Qaida and Taliban (UN Measures) Order 2006 Sch.1 P.4(b)
+Public Order and Harassment,06676,"With intent to evade provisions of Schedule 1, destroying, mutilating, defacing, concealing or removing any document",Al-Qaida and Taliban (UN Measures) Order 2006 Sch.1 P.4(d)
+Public Order and Harassment,06677,Disclosing without lawful authority confidential information provided by the Treasury,Terrorism (UN Measures) Order 2006 SS.6(5) & 13(2)
+Public Order and Harassment,06678,Not under authority of a licence dealing with funds or economic resources belonging to or owned or held by an A.7(2) person,Terrorism (UN Measures) Order 2006 SS.7(3) & 13(1)
+Public Order and Harassment,06679,"Making funds, economic resources or financial services available directly to or indirectly to or for the benefit of A.7(2) person",Terrorism (UN Measures) Order 2006 SS.8(3) & 13(1)
+Public Order and Harassment,06680,Participating in activity with object or effect to circumvent A.7(1) or 8(1) prohibition; enabling or facilitating A.7 or 8 offence,Terrorism (UN Measures) Order 2006 SS.10 & 13(1)
+Public Order and Harassment,06681,Making a statement or furnishing a document or information which is false in a material particular to obtain a Treasury licence,Terrorism (UN Measures) Order 2006 SS.11(5) & 13(2)
+Public Order and Harassment,06682,"Giving false information or documents or destroying, mutilating etc documents",Terrorism (UN Measures) Order 2006 SS.13(2); Sch.1 P.4(b)(d)
+Public Order and Harassment,06689,Making damaging disclosure of information entrusted to other State or organisation.,"Official Secrets Act 1989, S.6(2)"
+Public Order and Harassment,06691,Racially or religiously aggravated fear or provocation of violence - words or writing,Crime and Disorder Act 1998 S.31(1)(a) & (4)
+Public Order and Harassment,06692,Offences in relation to notification requirements - Counter-Terrorism Act 2008,Counter-Terrorism Act 2008 S.54
+Public Order and Harassment,06693,Breach of foreign travel restriction order - Counter-Terrorism Act 2008,Counter-Terrorism Act 2008 Sch.5 Para.15
+Public Order and Harassment,06694,Failure to comply with a Serious Crime Prevention Order,Serious Crime Act 2007 S.25
+Public Order and Harassment,06695,Disclosing information which can be used to gain access to protected information,"Official Secrets Act 1989, S.8(6)"
+Public Order and Harassment,06696,Contravening a measure specified in a Terrorism Prevention and Investigation Measures Order,Terrorism Prevention and Investigation Measures Act 2011 S.23
+Public Order and Harassment,06699,"Other offences (specify Offence, Act and Section [or Common Law] under which proceedings were taken). Eliciting publishing or communicating information about members of armed forces etc","Police Act 1996 S.91; Police Act 1997 SS.43 and 87; Public Order Act 1936 S.2; Public Order Act 1986 SS.18-23; Terrorism Act 2000 SS.8, 11, 15-19, 22, 39, 54, 56, 57 and 58, Sch.10 Para.10); Channel Tunnel (Security) Order 1994 Art.11, 13(8), 14(9), 15(9) 16(8), 23(1)&(3), 28 & 32(1a); The Al Qa'ida and Taliban (United Nations Measures) (Overseas Territories) Orders 2002 (SI 111/2002 and SI 112/2002), The Terrorism (United Nations Measures) Order 2006 [SI 2006/2657]. Terrorism Act 2000 S.58A(1)(a) & (b)"
+Public Order and Harassment,06801,Participate in the criminal activities of an organised crime group,Serious Crime Act 2015 S.45(1) & (9)
+Public Order and Harassment,06802,Unauthorised act in relation to a computer causing / creating risk of serious damage,Serious Crime Act 2015 S.3ZA(1) & (6)
+Public Order and Harassment,06803,Unauthorised act in relation to a computer causing / creating risk of serious damage to human welfare/national security,Serious Crime Act 2015 S.3ZA(1) & (7)
+Public Order and Harassment,06809,Returns to UK in contravention of temporary exclusion order,Counter Terrorism and Security Act 2015 S.10(1)
+Public Order and Harassment,06810,Fail to comply with obligation after return to the UK imposed under section 9,Counter Terrorism and Security Act 2015 S.10(3)
+Public Order and Harassment,06813,Obstruct/ disrupt person engaged in lawful activity / seek to intimidate someone in order to disrupt lawful activity (Reclassified),Criminal Justice and Public Order Act 1994 S.68(1)  &  (3)
+Public Order and Harassment,06816,Fail to notify police of notification requirements within 3 days of service of stalking order / interim stalking order,Stalking Protection Act 2019
+Public Order and Harassment,09501,Disclosing any information in contravention of direction made under S.18 - Anti-Terrorism Crime and Security Act 2001 S.18(6),Anti-Terrorism Crime and Security Act 2001 S.18(6)
+Public Order and Harassment,09502,Obstruction of an officer in the exercise of a power conferred by a warrant etc.,Anti-Terrorism Crime and Security Act 2001 S.52
+Public Order and Harassment,09503,Knowingly making false or misleading statements for purpose of obtaining or opposing the variation or withdrawal of authorisation for the purposes of SS.47 & 50 - Anti-Terrorism Crime and Security Act 2001,Anti-Terrorism Crime and Security Act 2001 S.54
+Public Order and Harassment,09504,Occupier fails to comply with any duty or direction imposed on him by or under this Part(7); knowingly or recklessly making a statement which is false or misleading - Anti-Terrorism Crime and Security Act 2001,Anti-Terrorism Crime and Security Act 2001 S.67
+Public Order and Harassment,09505,Failure to comply with prohibition imposed by order; engaging in an activity knowing or intending that it will enable or facilitate the commission by another person of an offence under Sch.3 Para.2. - Anti-Terrorism Crime and Security Act 2001,"Anti-Terrorism Crime and Security Act 2001 Sch.3 Paras.2, 3 and 7."
+Public Order and Harassment,09523,"Making false or misleading statement in purported compliance with any requirement imposed under Sections 62 or 63, Serious Organised Crime and Police Act 2005",Serious Organised Crime and Police Act 2005
+Public Order and Harassment,09524,Disclosing information about protection arrangements,Serious Organised Crime and Police Act 2005
+Public Order and Harassment,09525,Disclosing information relating to persons assuming new identity,Serious Organised Crime and Police Act 2005
+Public Order and Harassment,09552,Failure to comply with a requirement imposed by direction under Sch.7 - Counter-Terrorism Act 2008. Knowingly or recklessly providing false information or a document to obtain grant of an exemption licence,Counter-Terrorism Act 2008 Sch.7 Para.30 & Sch.7 Para.30
+Public Order and Harassment,09972,TEW regulations made under Part 8 - Anti-Terrorism Crime and Security Act 2001,Anti-Terrorism Crime and Security Act 2001 S.77(2)(d)(3)(a)
+Public Order and Harassment,10442,Body fail to comply with a community protection notice [sic],
+Public Order and Harassment,12500,Offences against public order    [Use this code only if you are unable to determine which subcoded Offence applies],
+Public Order and Harassment,12501,Wearing political uniform,Public Order Act 1936 S.1
+Public Order and Harassment,12502,Wilfully obstructing a constable in the exercise of a power conferred by S.1 - Counter-Terrorism Act 2008,Counter-Terrorism Act 2008 S.2
+Public Order and Harassment,12505.0,Offences under the Public Meeting Act 1908,Public Meeting Act 1908
+Public Order and Harassment,12509,"Causing intentional harassment, alarm or distress",Public Order Act 1986 S.4A as added by Criminal Justice & Public Order Act 1994 Part 1 S.154
+Public Order and Harassment,12511,Fear or provocation of violence,Public Order Act 1986 S.4
+Public Order and Harassment,12512,"Harassment, alarm or distress. Use or display threatening behaviour, words (written or spoken) or visual representation likely to cause harassment / alarm / distress",Public Order Act 1986 S.5. Public Order Act 1986 5(1)(b) & (6)
+Public Order and Harassment,12513,Advance notice of public processions,Public Order Act 1986 S.11(7)
+Public Order and Harassment,12514,Failing to comply with conditions on public processions,"Public Order Act 1986 S.12(4), (5) and (6)"
+Public Order and Harassment,12515,Failing to comply with conditions imposed on public assemblies,"Public Order Act 1986 S.14(4), (5) and (6)"
+Public Order and Harassment,12516,"Possessing fireworks etc in, or when entering, a designated sports ground",Sporting Events (Control of Alcohol etc) Act 1985 S.2A(1)
+Public Order and Harassment,12517,Fail to comply with prohibition on public procession,Public Order Act 1986 S.13(7-9)
+Public Order and Harassment,12518,Offences under Public Order Act 1986 Part II SS.14A & 14B(1) as added by Criminal Justice & Public Order Act 1994 S.70,Public Order Act 1986 Part II SS.14A & 14B(1) as added by Criminal Justice & Public Order Act 1994 S.70
+Public Order and Harassment,12519,Take part in prohibited assembly,Public Order Act 1986 Part II S.14B(2) as added by Criminal Justice & Public Order Act 1994 S.70
+Public Order and Harassment,12520,Inciting another to take part in a prohibited trespassory assembly,Public Order Act 1986 Part II S.14B(3) as added by Criminal Justice & Public Order Act 1994 S.70
+Public Order and Harassment,12521,Ignoring a directive not to proceed in the direction of a trespassory assembly,Public Order Act 1986 Part II S.14C as added by Criminal Justice & Public Order Act 1994 S.71
+Public Order and Harassment,12522,Failing to leave land when directed or to return as a trespasser within three months,Criminal Justice & Public Order Act 1994 S.6
+Public Order and Harassment,12523,Contravening a licence Football Spectators Act 1989 S.10(13),Football Spectators Act 1989 S.10(13)
+Public Order and Harassment,12524,Failing to comply with the duty to report imposed by an International Football Banning Order,Football Spectators Act 1989 S.16(4)
+Public Order and Harassment,12525,Failing to comply with requirements necessary to give effect to International Football Banning Orders,Football Spectators Act 1989 S.19(6)
+Public Order and Harassment,12526,Making a false statement or making use of a false document in connection with an application for exemption from the duty to report,Football Spectators Act 1989 S.20(10)
+Public Order and Harassment,12527,Throwing a missile,Football Offences Act 1991 S.2
+Public Order and Harassment,12528,Racist or indecent chanting,Football Offences Act 1991 S.3
+Public Order and Harassment,12529,Going on to the playing or adjacent area,Football Offences Act 1991 S.4
+Public Order and Harassment,12530,Breach of a Domestic Football Banning Order,Public Order Act 1986 S.32(3)
+Public Order and Harassment,12531,Failing to leave land when directed or returning within 7 days of the direction (raves).,Criminal Justice & Public Order Act 1994 S.63
+Public Order and Harassment,12532,Ignoring a directive not to proceed in the direction of the gathering (rave).,Criminal Justice & Public Order Act 1994 S.65
+Public Order and Harassment,12533,Disrupting or obstructing a lawful activity or seeking to intimidate someone so to do,Criminal Justice & Public Order Act 1994 S.68
+Public Order and Harassment,12534,Failure to leave land when directed or returning within 3 months of direction (aggravated trespass).,Criminal Justice & Public Order Act 1994 S.69
+Public Order and Harassment,12535,Failure to leave residential premises when required to do so,Criminal Law Act 1977 S.7 as amended by Criminal Justice & Public Order Act 1994 S.73
+Public Order and Harassment,12536,"Failure to leave within 24 hours of interim possession order, or returning as a trespasser or attempting to do so after the expiry of the order but within 1 year from the day it was served",Criminal Justice & Public Order Act 1994 S.76
+Public Order and Harassment,12537,"Failure to leave land, or to remove vehicle, or returning within 3 months from the day direction was given by the Local Authority",Criminal Justice & Public Order Act 1994 S.77
+Public Order and Harassment,12538,Wilful obstruction of any person carrying out 'order for removal',Criminal Justice & Public Order Act 1994 S.78
+Public Order and Harassment,12539,Without reasonable excuse causing a nuisance or disturbance on NHS premises,
+Public Order and Harassment,12540,Wearing any item of dress in support of a proscribed organisation,Terrorism Act 2000 S.13a
+Public Order and Harassment,12541,"Wearing, carrying or displaying any article in support of a proscribed organisation",Terrorism Act 2000 S.13b
+Public Order and Harassment,12542,Failure to stop (power to stop & search vehicles and pedestrians),"Terrorism Act 2000 SS.43, 44 and 47(1)(a)(b)(2)"
+Public Order and Harassment,12543,Wilful obstruction (power to stop and search vehicles and pedestrians),"Terrorism Act 2000 SS.43, 44 and 47(1)(c)(2)"
+Public Order and Harassment,12544,Failing to furnish information when required by examining officer,Terrorism Act 2000 Sch.7(5)(a) and (18)
+Public Order and Harassment,12545,Failing to produce either a valid passport or identifying document when required by examining officer,Terrorism Act 2000 Sch.7(5)(b) and (18)
+Public Order and Harassment,12546,Failing to declare or produce any relevant documents when required by examining officer,Terrorism Act 2000 Sch.7(5)(c)(d) and (18)
+Public Order and Harassment,12547,Failing to submit to search by examining officer or person acting on his/her behalf,Terrorism Act 2000 Sch.7(7)(8) and (18)
+Public Order and Harassment,12548,Failing to complete and produce an embarkation card when required to by examining officer,Terrorism Act 2000 Sch.7(16) and (18)
+Public Order and Harassment,12549,Failure to leave cordoned area immediately when ordered to do so by a constable in uniform,Terrorism Act 2000 S.36(1)(a)
+Public Order and Harassment,12550,"Failure to leave premises, which abut or are wholly or partially within a cordoned area, immediately if ordered to do so by a constable in uniform",Terrorism Act 2000 S.36(1)(b)
+Public Order and Harassment,12551,Failure of driver or person in charge of a vehicle which is in a cordoned area to immediately move the vehicle if ordered to do so by a constable in uniform,Terrorism Act 2000 S.36(c)(d)(e)
+Public Order and Harassment,12552,Contravention of a prohibition or restriction order made by a constable in uniform to a cordoned area,Terrorism Act 2000 S.36(f)
+Public Order and Harassment,12553,Wilfully obstructing a constable in the execution of his duty in a cordoned area,Terrorism Act 2000 Sch 5 S.36(1)(2)
+Public Order and Harassment,12554,Failure to move vehicle when ordered to do so by a constable in uniform (vehicle has been permitted to remain at rest in contravention of any prohibition or restriction),"Terrorism Act 2000 Sec.48,51(2)"
+Public Order and Harassment,12555,Leaving a vehicle or permitting a vehicle to remain at rest on a road in contravention of a prohibition or restriction,Terrorism Act 2000 SS.48 and 51(1)
+Public Order and Harassment,12556,Wilfully obstructing or seeking to frustrate the object of a search in a cordoned area,Terrorism Act 2000 Sch.5(1-3)
+Public Order and Harassment,12557,Breach of a Parenting Order; Failure to comply with any requirement of Parenting Order,Sentencing Act 2020 S.375(1) & (2); Crime & Disorder Act 1998 S.9(7)
+Public Order and Harassment,12558,"Racially aggravated harassment, alarm or distress - Public Order Act 1986",Public Order Act 1986 S.5
+Public Order and Harassment,12559,Failure to comply with requirements of Football Banning Order,Football Spectators Act 1989 S.14J
+Public Order and Harassment,12560,Failure to comply with Notice under S.21B Football Spectators Act 1989,Football Spectators Act 1989 S.21C
+Public Order and Harassment,12561,"Religiously aggravated harassment, alarm or distress - Public Order Act 1986 & Crime and Disorder Act 1998",Public Order Act 1986 S.4A as added by Crime and Disorder Act 1998 S.31(1)(c) and (5)
+Public Order and Harassment,12562,"Offences under Summary Regulations made under Part 8 of Anti-Terrorism, Crime and Security Act 2001","Anti-Terrorism, Crime and Security Act 2001 S.77(2)(d) and (3)(b)"
+Public Order and Harassment,12563,"Racially or religiously aggravated harassment, alarm or distress - Public Order Act 1986 & Crime and Disorder Act 1998",Public Order Act 1986 S.4A as added by Crime and Disorder Act 1998 S.31(1)(c) and (5)
+Public Order and Harassment,12564,Committing an offence knowing that a direction under S.63(2) applies to him and making preparations for or attending a gathering (rave) within 24 hours starting when the direction was given,Criminal Justice & Public Order Act 1986 S.63 (7A) and (7B) as added by Anti-Social Behaviour Act 2003 S.58
+Public Order and Harassment,12565,Failure to leave relevant land as soon as reasonably practicable or entering any land in area of relevant local authority as a trespasser before end of relevant period with the intention of residing there,Criminal Justice & Public Order Act 1986 S.62B as added by Anti-Social Behaviour Act 2003 S.61
+Public Order and Harassment,12566,Intentionally obstructing a person delivering a notice setting out the terms of the control order in accordance with S.7(9),Prevention of Terrorism Act 2005
+Public Order and Harassment,12567,Failing to obey a police direction to leave an exclusion area,Serious Organised Crime and Police Act 2005
+Public Order and Harassment,12568,Harassment etc. of a person in his home,Criminal Justice and Police Act 2001 as added by Serious Organised Crime and Police Act 2005
+Public Order and Harassment,12569,Trespassing on sites designated by order of Secretary of State,Serious Organised Crime and Police Act 2005 S.128
+Public Order and Harassment,12570,Organising a demonstration in a public place in a designated area,Serious Organised Crime and Police Act 2005 SS.132 (1)(a) & 136(1)
+Public Order and Harassment,12571,"Taking part in a demonstration or carrying out a demonstration alone, without authorisation, in a designated area",Serious Organised Crime and Police Act 2005 SS.132(1)(b) & (c) & 136(2)
+Public Order and Harassment,12572,Failure to comply with a condition or diverging from the particulars specified in the authorisation in capacity as an organiser or otherwise,Serious Organised Crime and Police Act 2005 SS.134(7)135(3) & 136(3) (a)&(b)
+Public Order and Harassment,12573,"Inciting another to do anything which would constitute an offence mentioned in ss.(1), (2) or (3) or fail to do anything where the failure would cause such an offence - Serious Organised Crime and Police Act 2005 SS.132(1)(a)(b)(c)134(7), 135(3) & 136(4)","Serious Organised Crime and Police Act 2005 SS.132(1)(a)(b)(c)134(7), 135(3) & 136(4)"
+Public Order and Harassment,12574,Operating or permitting the operation of a loudspeaker in contravention of ss.(1) [ss.(1) - loudspeaker shall not be operated in designated area] - Serious Organised Crime and Police Act 2005 S.137 (1)&(4),Serious Organised Crime and Police Act 2005 S.137 (1)&(4)
+Public Order and Harassment,12575,"Failure to provide information, produce document etc. - Anti-Terrorism, Crime and Security Act 2001","Anti-Terrorism, Crime and Security Act 2001 Sch.3 para. 7(4)&(7)"
+Public Order and Harassment,12576,Relevant institution failing to comply with requirement to provide information to the Treasury,Al-Qaida and Taliban (UN Measures) Order 2006 Sch.1 P.2(3)
+Public Order and Harassment,12577,Refusing or failing to comply with any request to provide information to or produce document for Treasury,Al-Qaida and Taliban (UN Measures) Order 2006 Sch.1 P.4(a)
+Public Order and Harassment,12578,Wilfully obstructing the Treasury in the exercise of their powers under Sch.1 - Al-Qaida and Taliban (UN Measures) Order 2006,Al-Qaida and Taliban (UN Measures) Order 2006 Sch.1 P.4(c)
+Public Order and Harassment,12579,Failure to comply with request or obstructing the Treasury in exercise of their powers - Terrorism (UN Measures) Order 2006,Terrorism (UN Measures) Order 2006 AA.2(3) & 13(3); Sch.1 P.4(a) & (c)
+Public Order and Harassment,12580,Fail to comply with football banning order requirement under s.51/52 Police Public Order & CJ (Scotland) Act 2006,
+Public Order and Harassment,12581,Intentionally obstructing the exercise by a constable of power conferred by SS.7A or 7B or by warrant under S.7C - Prevention of Terrorism Act 2005,Prevention of Terrorism Act 2005 S.9(3A)
+Public Order and Harassment,12582,Racially or religiously aggravated harassment or alarm or distress - words or writing,Crime and Disorder Act 1998 S.31(1)(c) & (4)
+Public Order and Harassment,12583,Failure of relevant institution to inform Treasury,Terrorist Asset-Freezing etc. Act 2010 - SS.19(5) & 32(4)
+Public Order and Harassment,12584,Failure to comply with request for information - Terrorist Asset-Freezing etc. Act 2010,"SS.22(1)(a),(b), (c) or (d) & 32(4)"
+Public Order and Harassment,12585,Failure without reasonable excuse to comply with S.143(1) direction - Police Reform and Social Responsibility Act 2011 or Obstruction of Officers etc.,"Police Reform and Social Responsibility Act 2011-S.143(8),"
+Public Order and Harassment,12586,Trespassing on sites- Knowingly as a trespasser live/intend to live in residential building,"Legal Aid, Sentencing and Punishment of Offenders Act 2012, S.144"
+Public Order and Harassment,12599,Other offences against public order not listed above,
+Public Order and Harassment,14500,Intimidation    [Use this code only if you are unable to determine which subcoded Offence applies],
+Public Order and Harassment,14501,"Intimidating, annoying, hindering, etc., by violence or otherwise, any person, or wife, or children, with intent to compel him/her to abstain from following a certain course of action",Trade Union and Labour Relations (Consolidations) Act 1992 S.241
+Public Order and Harassment,16200,"Disorderly behaviour (including the use of violent, obscene or abusive language)    [Use this code only if you are unable to determine which subcoded Offence applies]",
+Public Order and Harassment,16202,Offences which relate to disorderly behaviour in places where the Act has been incorporated with a Local Act,Town Improvement Clauses Act 1847 S.136
+Public Order and Harassment,16203,Offences which relate to disorderly behaviour (except offences included under specific heads such as Drunkenness).,Town Police Clauses Act 1847 SS.28 and 29
+Public Order and Harassment,16210,Offences against byelaws made under Local Government Act 1972 S.235 and - offences against byelaws made under Municipal Corporation Act 1882 S.23 which relate to disorderly behaviour. Offences against similar provisions in Local Acts and against byelaws made under Local Acts,"Local Government Act 1972 S.235, Municipal Corporation Act 1882 S.23"
+Public Order and Harassment,16211,"Offences under Metropolitan Police Acts, and Metropolitan Street Acts - which relate to disorderly behaviour","Metropolitan Police Acts, Metropolitan Street Acts"
+Public Order and Harassment,18200,Wandering abroad or being in any street etc to beg or gather alms or causing or procuring any child so to do - Vagrancy Act 1824,Vagrancy Act 1824 S.3 and S.4 so far as it relates to this offence when committed by a person who has been convicted as an idle and disorderly person
+Public Order and Harassment,18300,"Sleeping out: Wandering abroad and lodging in any barn, outhouse, deserted or unoccupied building etc or in the open air etc",Vagrancy Act 1824 S.4 as amended by the Vagrancy Act 1935
+Public Order and Harassment,19512,Pursue course of conduct in breach of S.1(1) which amounts to stalking - Protection from Harassment Act 1997,Protection from Harassment Act 1997 S.2A(1).
+Public Order and Harassment,19541,Offences under Malicious Communications Act 1988 S.1,Malicious Communications Act 1988 S.1
+Public Order and Harassment,19590,Unauthorised person selling or otherwise disposing of tickets for a designated football match,Criminal Justice and Public Order Act 1994 S.166 as amended by Violent Crime Reduction Act 2006
+Public Order and Harassment,19594,Offence of harassment,Protection from Harassment Act 1997 S.2
+Public Order and Harassment,19607,Improper use of public electronic communications network,Communications Act 2003 S.127
+Public Order and Harassment,50200,Banning orders made on complaint (SS.14B and 21(B)) and banning orders arising out of offences outside England and Wales (S.22),Football Spectators Act 1989
+Public Order and Harassment,06819,Breach of domestic abuse protection order,
+Public Order and Harassment,06820,Offences relating to notification requirements of Domesic Abuse Protection Order,
+Public Order and Harassment,06823,Intentionally / recklessly cause a public nuisance,
+Public Order and Harassment,12587,Fail to stop a vehicle when required to do so by virtue of section 116(3) of Terrorism Act 2000,
+Public Order and Harassment,12588,Possess pyrotechnic article at a musical event (Policing and Crime Act 2017),
+Public Order and Harassment,12589,Fail to comply with requirement imposed under disclosure order (Criminal Finance Act 2017),
+Public Order and Harassment,12590,Publish an image of an item of clothing or other article - terrorism,
+Public Order and Harassment,12592,Offences relating one person protests failing to comply with condition,
+Public Order and Harassment,12593,Offences relating to the failure to leave land / remove vehicle and returning without permission,
+Criminal Damage,Home Office Code,Offence description,Statute
+Criminal Damage,05600,Arson    [Use this code only if you are unable to determine which subcoded Offence applies],
+Criminal Damage,05601,Arson endangering life,Criminal Damage Act 1971 S.1(2)
+Criminal Damage,05602,Arson not endangering life,Criminal Damage Act 1971 S.1(1) [named 'arson' by virtue of Section 1(3)]
+Criminal Damage,05700,Unlawfully and maliciously causing explosion likely to endanger life or property. Conspiring to cause explosion likely to endanger life or property,"Explosive Substances Act 1883 S.2 & S.3(1)(a). Malicious Damage Act 1861 SS.35,36, 47 & 48. Criminal Damage Act 1971 S.1(2)"
+Criminal Damage,05702,Racially-aggravated criminal damage,
+Criminal Damage,05711,Criminal damage endangering life (excluding arson) - ship,
+Criminal Damage,05712,Criminal damage endangering life (excluding arson) - railway,
+Criminal Damage,05713,Criminal damage endangering life (excluding arson) - aircraft,
+Criminal Damage,05714,Criminal damage endangering life (excluding arson) - motor vehicle,
+Criminal Damage,05715,Criminal damage endangering life (excluding arson) - dwelling,
+Criminal Damage,05716,Criminal damage endangering life (excluding arson) - other building,
+Criminal Damage,05717,Criminal damage endangering life (excluding arson) - other,
+Criminal Damage,05722,Criminal damage endangering life (excluding arson) - railway,
+Criminal Damage,05728,Criminal damage endangering life (excluding arson) - telegraph,
+Criminal Damage,05800,Other criminal damage,"Malicious Damage Act 1861 SS.35,36, 47 & 48. Ancient Monuments and Archaeological Area Act 1979 S.28(1). Criminal Damage Act 1971 S.1(1)"
+Criminal Damage,05801,Other criminal damage - may be racially aggravated in recent years,Criminal Damage Act 1971 S.1(1) as amended by the Crime and Disorder Act 1998 S.30 (1) & (2).
+Criminal Damage,05802,Religiously aggravated other criminal damage,Criminal Damage Act 1971 S.1(1) as amended by the Crime and Disorder Act 1998 S.30(1) & (2).
+Criminal Damage,05803,Racially or religiously aggravated other criminal damage,Criminal Damage Act 1971 S.1(1) as amended by the Crime and Disorder Act 1998 S.30 (1) & (2).
+Criminal Damage,05804,Racially or religiously aggravated criminal damage,Crime and Disorder Act 1998 S.30 (1) & (2).
+Criminal Damage,05805,Destroy property (value of damage £5000 or less - offence against Criminal Damage Act 1971 only) Reclassified,Criminal Damage Act 1971 S.1(1)
+Criminal Damage,05900,Threat and possession with intent to commit criminal damage    [Use this code only if you are unable to determine which subcoded Offence applies],
+Criminal Damage,05911,Threat,Criminal Damage Act 1971 S.2
+Criminal Damage,05912,Possession with intent; Offences against the Person Act 1861 S.64. Possessing or making explosive substance with intent to endanger property,Offences against the Person Act 1861 S.64. Explosive Substances Act 1883 S.3(1)(b)
+Criminal Damage,05913,Possessing anything with intent to destroy or damage property,Criminal Damage Act 1971 S.3
+Criminal Damage,05914,Manufacture or possession of explosives under suspicious circumstances,Explosive Substances Act 1883 S.4(1)
+Criminal Damage,14900,"Criminal Damage, £5,000 or less, and Malicious Damage: Causing damage to an allotment through negligence or any unlawful act; Criminal Damage, £5,000 or less, and Malicious Damage",Allotments Act 1922 S.19; Criminal Damage Act 1971 Sec 1(1); Magistrates' Courts Act 1980 S.22 as amended by Criminal Justice & Public Order Act 1994 S.46
+Criminal Damage,05603,Racially aggravated arson (Criminal Damage Act 1971),
+Criminal Damage,14901,"Racially aggravated criminal damage to property value under £5,000",
+Drunkenness,Home Office Code,Offence description,Statute
+Drunkenness,09412,Enter aircraft when drunk / be drunk in aircraft,Air Navigation Order 2016 S.Articles 242(1) and 265(7)
+Drunkenness,09943,Drunkenness in aircraft (including drugs),"Air Navigation Order 2000 Articles 65, 122(6) & Sch.12B; Air Navigation (Overseas Territories) Order 2001 A.65122(6) Sch.12 Pt B (SI 2128/2001)"
+Drunkenness,14000,"Drunkenness, simple    [Use this code only if you are unable to determine which subcoded Offence applies]",
+Drunkenness,14001,"Being found drunk in a highway or other public place, whether a building or not, or on licensed premises",Licensing Act 1872 S.12
+Drunkenness,14006,"Drunk in, or when entering, a designated sports event",Sporting Events (Control of Alcohol etc) Act 1985 S.2(2)
+Drunkenness,14010,"Drunkenness, simple - offences against similar provisions in Local Acts",
+Drunkenness,14011,Alcohol consumption in designated public places,Criminal Justice & Police Act 2001 S.12
+Drunkenness,14100,"Drunkenness, with aggravations    [Use this code only if you are unable to determine which subcoded Offence applies]",
+Drunkenness,14101,Being guilty while drunk of disorderly behaviour,Criminal Justice Act 1967 S.91
+Drunkenness,14102,"Being drunk while in charge on any highway or other public place of any carriage, horse, cattle or steam engine",Licensing Act 1872 S.12
+Drunkenness,14103,Being drunk when in possession of any loaded firearms,Licensing Act 1872 S.12
+Drunkenness,14104,Refusing or failing when drunk to quit licensed premises when requested,Licensing Act 1964 S.174
+Drunkenness,14105,Refusing or failing when drunk to quit any premises or place licensed under the Late Night Refreshment Houses Act 1969,Late Night Refreshment Houses Act 1969 S.9(4)
+Drunkenness,14108,Being intoxicated while driving a hackney carriage,Town Police Clauses Act 1847 S.61
+Drunkenness,14109,Being drunk during employment as a driver of a hackney carriage or as a driver or conductor of a stage carriage in the Metropolitan Police District,London Hackney Carriage Act 1843 S.28
+Drunkenness,14110,"Being drunk etc. and persisting, after being refused admission on that account, in attempting to enter ship","Merchant Shipping Act 1995 SS.101(1)(a), (4) and (5)"
+Drunkenness,14111,Being drunk on board a passenger ship and refusing to leave such a ship,"Merchant Shipping Act 1995 S.101(1)(b), (4) and (5)"
+Drunkenness,14112,Being drunk in any highway or other public place or on licensed premises while having charge of a child under 7 years,Licensing Act 1902 S.2
+Drunkenness,14120,"Drunkenness, with aggravations - All similar offences in Local Acts",

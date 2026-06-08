@@ -1,12 +1,13 @@
 {% extends "layouts/assessment.html" %}
 
 {% set offenderFirstName = "Alex" %}
-{% set pageName = "Static assessment complete" %}
-{% set pageHeading = "Static assessment complete" %}
+{% set pageName = "Section 1 complete" %}
+{% set pageHeading = "Section 1 is complete" %}
+{% set compactPageHeader = true %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Complete" %}
 {% set tieringTelemetryPage = "a6" %}
-{% set tieringTelemetryPageLabel = "Static assessment complete" %}
+{% set tieringTelemetryPageLabel = "Section 1 complete" %}
 {% set backLinkHref = "a5.html" %}
 {% set backLinkId = "tiering-a6-back" %}
 
@@ -18,20 +19,18 @@
 
 <div class="tiering-a6-options">
   <section class="tiering-a6-options__block" aria-labelledby="tiering-a6-static-heading">
-    <h2 class="govuk-heading-m tiering-a6-static-done" id="tiering-a6-static-heading">
-      <span class="tiering-a6-static-done__label">Static assessment is ready to review</span>
-      <svg class="tiering-a6-static-done__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path fill="none" stroke="currentColor" stroke-width="4.125" stroke-linecap="butt" stroke-linejoin="miter" d="M3.5 12.5 8.5 17.5 20.5 5.5"/>
-      </svg>
-    </h2>
+    <p class="govuk-body govuk-!-margin-bottom-4 tiering-a6-static-available" id="tiering-a6-static-heading">
+      <strong>Static scores are available</strong>
+    </p>
     <button type="button" class="govuk-button" data-tiering-a6-action="done" data-module="govuk-button">
       Save and continue
     </button>
-    <div class="tiering-a6-options__dynamic-hint">
-      <p class="govuk-body govuk-!-margin-bottom-0">You can also continue with the dynamic assessment.</p>
+    <div class="tiering-a6-options__section-two">
+      <p class="govuk-body govuk-!-margin-bottom-2">You can continue with Section 2.</p>
+      <p class="govuk-body govuk-!-margin-bottom-0">Completing section two will generate dynamic scores</p>
     </div>
-    <button type="button" class="govuk-button govuk-button--secondary tiering-a6-options__dynamic-button" data-tiering-a6-action="continue" data-module="govuk-button">
-      Start dynamic assessment
+    <button type="button" class="govuk-button govuk-button--secondary tiering-a6-options__section-two-button" data-tiering-inactive-link data-module="govuk-button">
+      Start section 2
     </button>
   </section>
 </div>

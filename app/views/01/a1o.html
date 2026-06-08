@@ -1,7 +1,7 @@
 {% extends "layouts/assessment.html" %}
 
 {% set offenderFirstName = "Alex" %}
-{% set pageName = "Select an offence" %}
+{% set pageName = "Find an offence" %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
 {% set hideServiceNavigation = true %}
@@ -9,9 +9,10 @@
 {% set hideOffenderViewAnswers = true %}
 {% set compactPageHeader = true %}
 {% set backLinkHref = 'a1.html' %}
-{% set offenceBrowseToggleHref = 'a1o2.html' %}
+{% set offenceBrowseToggleHref = 'a1o3.html' %}
 {% set tieringTelemetryPage = "a1o" %}
 {% set tieringTelemetryPageLabel = "Browse all offences" %}
+{% set offenceBrowseSortFilter = true %}
 
 {% block content %}
 
@@ -19,7 +20,16 @@
 
 {% include "includes/offence-browse-heading.html" %}
 
+<div class="offence-browse-category-filter govuk-!-margin-bottom-6" data-offence-category-filter hidden>
+  <div class="offence-browse-category-filter__row">
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-0" data-offence-category-title></h2>
+    <a class="govuk-link offence-browse-category-filter__view-all" href="#" data-offence-view-all>View all offences</a>
+  </div>
+</div>
+
 <form id="tiering-a1o-form" class="govuk-!-margin-top-3" novalidate>
+
+  {% include "includes/offence-browse-form-open.html" %}
 
   <div class="offence-browse-accordions govuk-!-margin-bottom-6" data-offence-accordions>
     <p class="govuk-body">Loading offences…</p>

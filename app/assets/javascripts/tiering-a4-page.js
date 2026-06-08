@@ -8,8 +8,13 @@ import {
   getTieringBackLinkHref,
   isTieringCheckAnswersEdit
 } from './tiering-change-scroll.js'
-import { getA4FieldsFromForm } from './tiering-journey.js'
+import { getA4FieldsFromForm, getFirstIncompleteA3Page } from './tiering-journey.js'
 import { getTieringAssessmentSession } from './tiering-assessment-session.js'
+
+const getA4BackHref = (session) => {
+  if (session.sexualOffence !== 'yes') return 'a2.html'
+  return getFirstIncompleteA3Page(session) || 'a3ic.html'
+}
 
 window.GOVUKPrototypeKit.documentReady(() => {
   const form = document.getElementById('tiering-a4-form')
@@ -19,9 +24,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
   const backLink = document.getElementById('tiering-a4-back')
 
   if (backLink) {
-    backLink.href = getTieringBackLinkHref(
-      session.sexualOffence === 'yes' ? 'a3.html' : 'a2.html'
-    )
+    backLink.href = getTieringBackLinkHref(getA4BackHref(session))
   }
 
   const dayInput = form.querySelector('#community-date-day')

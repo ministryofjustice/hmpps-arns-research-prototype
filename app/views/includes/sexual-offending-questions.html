@@ -1,8 +1,8 @@
 {# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
 
-<h2 id="tiering-sexual-motivation" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-6 govuk-!-margin-bottom-2">
+<h3 id="tiering-sexual-motivation" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
   Does {{ offenderFirstName }}'s current offence have a sexual motivation?
-</h2>
+</h3>
 
 <div class="govuk-form-group govuk-!-margin-bottom-8">
   <fieldset class="govuk-fieldset">
@@ -26,9 +26,9 @@
   </fieldset>
 </div>
 
-<h2 id="tiering-stranger-contact" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+<h3 id="tiering-stranger-contact" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
   Does {{ offenderFirstName }}'s current offence involve actual or attempted direct contact against a victim who was a stranger?
-</h2>
+</h3>
 
 <div class="govuk-form-group govuk-!-margin-bottom-8">
   <fieldset class="govuk-fieldset">
@@ -52,16 +52,16 @@
   </fieldset>
 </div>
 
-<h2 id="tiering-sexual-sanction-date" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+<h3 id="tiering-sexual-sanction-date" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
   What is the date of {{ offenderFirstName }}'s most recent sanction involving a sexual or sexually motivated offence?
-</h2>
+</h3>
 
-<div class="govuk-form-group govuk-!-margin-bottom-8">
+<div class="govuk-form-group govuk-!-margin-bottom-0">
   <fieldset class="govuk-fieldset" role="group">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
       What is the date of {{ offenderFirstName }}'s most recent sanction involving a sexual or sexually motivated offence?
     </legend>
-    <div class="govuk-date-input" id="sexual-sanction-date" data-autofill-date>
+    <div class="govuk-date-input" id="sexual-sanction-date">
       <div class="govuk-date-input__item">
         <div class="govuk-form-group">
           <label class="govuk-label govuk-date-input__label" for="sexual-sanction-date-day">Day</label>
@@ -82,96 +82,4 @@
       </div>
     </div>
   </fieldset>
-</div>
-
-<h2 id="tiering-contact-adult-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
-  How many sanctions does {{ offenderFirstName }} have for contact adult sexual or sexually motivated offences?
-</h2>
-
-<p id="contact-adult-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
-  Include their current offence.
-</p>
-
-<div class="govuk-form-group govuk-!-margin-bottom-8">
-  <label class="govuk-label govuk-visually-hidden" for="contact-adult-sanctions">
-    How many sanctions does {{ offenderFirstName }} have for contact adult sexual or sexually motivated offences?
-  </label>
-  <input
-    class="govuk-input govuk-input--width-4"
-    id="contact-adult-sanctions"
-    name="contact_adult_sanctions"
-    type="text"
-    inputmode="numeric"
-    autocomplete="off"
-    aria-describedby="contact-adult-sanctions-hint"
-  >
-</div>
-
-<h2 id="tiering-contact-child-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
-  How many sanctions does {{ offenderFirstName }} have for direct contact child sexual or sexually motivated offences?
-</h2>
-
-<p id="contact-child-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
-  Include their current offence.
-</p>
-
-<div class="govuk-form-group govuk-!-margin-bottom-8">
-  <label class="govuk-label govuk-visually-hidden" for="contact-child-sanctions">
-    How many sanctions does {{ offenderFirstName }} have for direct contact child sexual or sexually motivated offences?
-  </label>
-  <input
-    class="govuk-input govuk-input--width-4"
-    id="contact-child-sanctions"
-    name="contact_child_sanctions"
-    type="text"
-    inputmode="numeric"
-    autocomplete="off"
-    aria-describedby="contact-child-sanctions-hint"
-  >
-</div>
-
-<h2 id="tiering-indirect-child-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
-  How many sanctions does {{ offenderFirstName }} have for indecent child image or indirect contact child sexual or sexually motivated offences?
-</h2>
-
-<p id="indirect-child-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
-  Include their current offence.
-</p>
-
-<div class="govuk-form-group govuk-!-margin-bottom-8">
-  <label class="govuk-label govuk-visually-hidden" for="indirect-child-sanctions">
-    How many sanctions does {{ offenderFirstName }} have for indecent child image or indirect contact child sexual or sexually motivated offences?
-  </label>
-  <input
-    class="govuk-input govuk-input--width-4"
-    id="indirect-child-sanctions"
-    name="indirect_child_sanctions"
-    type="text"
-    inputmode="numeric"
-    autocomplete="off"
-    aria-describedby="indirect-child-sanctions-hint"
-  >
-</div>
-
-<h2 id="tiering-non-contact-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
-  How many sanctions does {{ offenderFirstName }} have for other non-contact sexual or sexually motivated offences?
-</h2>
-
-<p id="non-contact-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
-  Include their current offence.
-</p>
-
-<div class="govuk-form-group">
-  <label class="govuk-label govuk-visually-hidden" for="non-contact-sanctions">
-    How many sanctions does {{ offenderFirstName }} have for other non-contact sexual or sexually motivated offences?
-  </label>
-  <input
-    class="govuk-input govuk-input--width-4"
-    id="non-contact-sanctions"
-    name="non_contact_sanctions"
-    type="text"
-    inputmode="numeric"
-    autocomplete="off"
-    aria-describedby="non-contact-sanctions-hint"
-  >
 </div>

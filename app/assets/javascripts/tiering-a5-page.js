@@ -22,9 +22,7 @@ import {
   setTieringAssessmentSession
 } from './tiering-assessment-session.js'
 
-const showRecentOffenceDatePanel = (panel, show) => {
-  if (panel) panel.hidden = !show
-}
+const RECENT_OFFENCE_CONDITIONAL_ID = 'conditional-offences-since-community-yes'
 
 const restoreRecentOffenceDate = (form, date = {}) => {
   const dayInput = form.querySelector('#recent-offence-date-day')
@@ -36,12 +34,18 @@ const restoreRecentOffenceDate = (form, date = {}) => {
   if (yearInput) yearInput.value = date.year || ''
 }
 
+const setRecentOffenceConditionalVisible = (show) => {
+  const conditional = document.getElementById(RECENT_OFFENCE_CONDITIONAL_ID)
+  if (!conditional) return
+
+  conditional.classList.toggle('govuk-radios__conditional--hidden', !show)
+}
+
 window.GOVUKPrototypeKit.documentReady(() => {
   const form = document.getElementById('tiering-a5-form')
   if (!form) return
 
   const session = getTieringAssessmentSession()
-  const datePanel = document.getElementById('tiering-recent-offence-date-panel')
   const formattedDate = formatDateFromParts(session.communityDate || {})
 
   if (!formattedDate) {
@@ -49,8 +53,9 @@ window.GOVUKPrototypeKit.documentReady(() => {
     return
   }
 
-  const dateDisplay = document.querySelector('[data-community-date-display]')
-  if (dateDisplay) dateDisplay.textContent = formattedDate
+  document.querySelectorAll('[data-community-date-display]').forEach((element) => {
+    element.textContent = formattedDate
+  })
 
   if (session.offencesSinceCommunity) {
     const input = form.querySelector(
@@ -60,19 +65,18 @@ window.GOVUKPrototypeKit.documentReady(() => {
   }
 
   const hashTarget = window.location.hash.slice(1)
-  const showDatePanel =
+  const showRecentOffenceDate =
     session.offencesSinceCommunity === 'yes' ||
     hashTarget === TIERING_CHANGE_ANCHORS.recentOffenceDate
 
-  if (showDatePanel) {
-    showRecentOffenceDatePanel(datePanel, true)
+  if (showRecentOffenceDate) {
+    setRecentOffenceConditionalVisible(true)
     restoreRecentOffenceDate(form, session.recentOffenceDate)
   }
 
   form.querySelectorAll('input[name="offences_since_community"]').forEach((radio) => {
     radio.addEventListener('change', () => {
       const isYes = form.querySelector('input[name="offences_since_community"]:checked')?.value === 'yes'
-      showRecentOffenceDatePanel(datePanel, isYes)
       if (!isYes) restoreRecentOffenceDate(form)
     })
   })
@@ -97,7 +101,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
     if (newFields.offencesSinceCommunity === 'yes' && !isDateComplete(newFields.recentOffenceDate)) {
       setTieringAssessmentSession(applyBranchingCleanup('a5', getTieringAssessmentSession(), newFields))
-      showRecentOffenceDatePanel(datePanel, true)
+      setRecentOffenceConditionalVisible(true)
       form.querySelector('#recent-offence-date-day')?.focus()
       return
     }

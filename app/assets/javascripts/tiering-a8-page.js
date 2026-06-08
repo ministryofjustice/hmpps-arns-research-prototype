@@ -3,16 +3,23 @@
 //
 
 import { markSection1Complete } from './assessment-section-complete.js'
-import { getTieringAssessmentSession } from './tiering-assessment-session.js'
-import { redirectIfTieringJourneyIncomplete } from './tiering-journey.js'
+import { getTieringBackLinkHref, isTieringCheckAnswersEdit } from './tiering-change-scroll.js'
+import { redirectIfTieringJourneyIncomplete, syncTieringSessionBeforeCheckAnswers } from './tiering-journey.js'
 import { insertTieringSessionFooterLinks } from './tiering-footer-session-links.js'
 import {
   trackTelemetryRiskPredictorDetailsOpen,
   trackTelemetryRiskPredictorTabSwitch
 } from './tiering-session-telemetry.js'
+import { initTieringInactiveLinks } from './tiering-inactive-links.js'
 import { renderTieringSummaryList } from './tiering-summary.js'
 
 const easeOutCubic = (progress) => 1 - (1 - progress) ** 3
+
+const scrollA8ToTop = () => {
+  window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  document.documentElement.scrollTop = 0
+  document.body.scrollTop = 0
+}
 
 const clearFocusAfterScroll = () => {
   if (document.activeElement instanceof HTMLElement) {
@@ -49,14 +56,6 @@ const scrollToTopWithEaseOut = (targetEl) => {
   requestAnimationFrame(tick)
 }
 
-const initInactiveEquipLinks = () => {
-  document.querySelectorAll('[data-tiering-inactive-link]').forEach((link) => {
-    link.addEventListener('click', (event) => {
-      event.preventDefault()
-    })
-  })
-}
-
 const initRiskPredictorBackToTop = () => {
   const link = document.querySelector('[data-risk-predictor-back-to-top]')
   if (!link) return
@@ -84,7 +83,7 @@ const applySexualPredictorEmptyStates = (session) => {
   })
 }
 
-const initRiskPredictorTelemetry = () => {
+const initRiskPredictorTelemetry = (initialTab = 'scores') => {
   document.querySelectorAll('.risk-predictor-scores__section[data-risk-predictor-id]').forEach((section) => {
     const details = section.querySelector('details.risk-predictor-scores__details')
     if (!details) return
@@ -100,9 +99,15 @@ const initRiskPredictorTelemetry = () => {
   })
 
   const tabsRoot = document.querySelector('.govuk-tabs')
-  if (!tabsRoot) return
+  if (!tabsRoot) return () => {}
 
-  let activeTab = 'scores'
+  let activeTab = initialTab === 'answers' ? 'answers' : 'scores'
+
+  const trackTabSwitch = (fromTab, toTab) => {
+    if (fromTab === toTab) return
+    trackTelemetryRiskPredictorTabSwitch(fromTab, toTab)
+    activeTab = toTab
+  }
 
   tabsRoot.querySelectorAll('.govuk-tabs__tab').forEach((tab) => {
     tab.addEventListener('click', () => {
@@ -110,24 +115,79 @@ const initRiskPredictorTelemetry = () => {
       const nextTab = href === '#answers' ? 'answers' : href === '#score' ? 'scores' : null
       if (!nextTab || nextTab === activeTab) return
 
-      trackTelemetryRiskPredictorTabSwitch(activeTab, nextTab)
-      activeTab = nextTab
+      trackTabSwitch(activeTab, nextTab)
     })
+  })
+
+  return trackTabSwitch
+}
+
+const getInitialA8Tab = () => (window.location.hash === '#answers' ? 'answers' : 'score')
+
+const activateA8Tab = (tabId) => {
+  const tabsRoot = document.querySelector('.govuk-tabs')
+  if (!tabsRoot) return
+
+  const targetHref = tabId === 'answers' ? '#answers' : '#score'
+  const tabLink = tabsRoot.querySelector(`.govuk-tabs__tab[href="${targetHref}"]`)
+  if (!tabLink) return
+
+  tabsRoot.querySelectorAll('.govuk-tabs__list-item').forEach((item) => {
+    item.classList.toggle('govuk-tabs__list-item--selected', item.contains(tabLink))
+  })
+
+  tabsRoot.querySelectorAll('.govuk-tabs__panel').forEach((panel) => {
+    panel.classList.toggle('govuk-tabs__panel--hidden', panel.id !== tabId)
+  })
+
+  tabsRoot.querySelectorAll('.govuk-tabs__tab').forEach((tab) => {
+    tab.setAttribute('aria-selected', tab === tabLink ? 'true' : 'false')
+  })
+
+  const hash = tabId === 'answers' ? '#answers' : '#score'
+  if (window.location.hash !== hash) {
+    history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`)
+  }
+}
+
+const initA8ViewScoresButton = (onTabSwitch) => {
+  const button = document.getElementById('tiering-a8-view-scores')
+  if (!button) return
+
+  button.addEventListener('click', () => {
+    onTabSwitch?.('answers', 'scores')
+    activateA8Tab('score')
+    scrollA8ToTop()
   })
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  if (!document.querySelector('.risk-predictor-scores')) return
+  if (!document.querySelector('.govuk-tabs')) return
 
-  const session = getTieringAssessmentSession()
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual'
+  }
 
-  if (redirectIfTieringJourneyIncomplete(session)) return
+  scrollA8ToTop()
+
+  const initialTab = getInitialA8Tab()
+  activateA8Tab(initialTab)
+
+  const session = syncTieringSessionBeforeCheckAnswers()
+
+  if (redirectIfTieringJourneyIncomplete()) return
+
+  const backLink = document.getElementById('tiering-a8-back')
+  if (backLink) {
+    backLink.href = getTieringBackLinkHref('a6.html')
+  }
 
   insertTieringSessionFooterLinks()
   applySexualPredictorEmptyStates(session)
-  initInactiveEquipLinks()
+  initTieringInactiveLinks()
   initRiskPredictorBackToTop()
-  initRiskPredictorTelemetry()
+  const trackTabSwitch = initRiskPredictorTelemetry(initialTab === 'answers' ? 'answers' : 'scores')
+  initA8ViewScoresButton(trackTabSwitch)
 
   const summaryList = document.getElementById('tiering-summary-list')
   const offenderFirstName = summaryList?.dataset.offenderFirstName || 'Alex'
@@ -139,4 +199,12 @@ window.GOVUKPrototypeKit.documentReady(() => {
       markSection1Complete()
     })
   }
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(scrollA8ToTop)
+  })
+
+  window.addEventListener('pageshow', () => {
+    scrollA8ToTop()
+  })
 })

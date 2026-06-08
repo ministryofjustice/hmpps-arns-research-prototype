@@ -8,7 +8,7 @@
 {% set statusTag = "Complete" %}
 {% set tieringTelemetryPage = "a8" %}
 {% set tieringTelemetryPageLabel = "Risk predictor score" %}
-{% set backLinkHref = "a7.html" %}
+{% set backLinkHref = "a6.html" %}
 {% set backLinkId = "tiering-a8-back" %}
 
 {% block content %}
@@ -22,20 +22,21 @@
 <div class="govuk-tabs" data-module="govuk-tabs">
   <h2 class="govuk-tabs__title">Contents</h2>
   <ul class="govuk-tabs__list">
-    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-      <a class="govuk-tabs__tab" href="#score">Scores</a>
-    </li>
     <li class="govuk-tabs__list-item">
       <a class="govuk-tabs__tab" href="#answers">Answers</a>
     </li>
+    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+      <a class="govuk-tabs__tab" href="#score">Scores</a>
+    </li>
   </ul>
-
-  <div class="govuk-tabs__panel" id="score">
-    {% include "includes/risk-predictor-scores.html" %}
-  </div>
 
   <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="answers">
     <div id="tiering-summary-list" class="tiering-summary-list govuk-!-margin-top-6" data-offender-first-name="{{ offenderFirstName }}"></div>
+    <button type="button" class="govuk-button govuk-button--secondary govuk-!-margin-top-6" id="tiering-a8-view-scores" data-module="govuk-button">View risk predictor scores</button>
+  </div>
+
+  <div class="govuk-tabs__panel" id="score">
+    {% include "includes/risk-predictor-scores.html" %}
   </div>
 </div>
 

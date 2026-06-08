@@ -105,9 +105,5 @@ export const getDefaultConvictionDateParts = () => {
   }
 }
 
-/** Alex's first sanction date for a2 – prototype default from PNC */
-export const getDefaultFirstSanctionDateParts = () => ({
-  day: '14',
-  month: '6',
-  year: '2018'
-})
+/** Alex's age at first sanction for a2 – prototype default */
+export const getDefaultFirstSanctionAge = () => '16'

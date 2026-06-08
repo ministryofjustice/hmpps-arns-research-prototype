@@ -1,18 +1,24 @@
 {# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
 
-<h2 id="tiering-offences-since-community" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-4 govuk-!-margin-bottom-2">
-  Since <span data-community-date-display>that date</span>, has {{ offenderFirstName }} committed any offences?
-</h2>
-
-<div class="govuk-form-group">
+<div class="govuk-form-group govuk-!-margin-top-0">
   <fieldset class="govuk-fieldset">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
-      Since that date, has {{ offenderFirstName }} committed any offences?
+      Since <span data-community-date-display>that date</span>, has {{ offenderFirstName }} committed any offences?
     </legend>
-    <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+    <div class="govuk-radios" data-module="govuk-radios">
       <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="offences-since-community-yes" name="offences_since_community" type="radio" value="yes">
+        <input
+          class="govuk-radios__input"
+          id="offences-since-community-yes"
+          name="offences_since_community"
+          type="radio"
+          value="yes"
+          data-aria-controls="conditional-offences-since-community-yes"
+        >
         <label class="govuk-label govuk-radios__label" for="offences-since-community-yes">Yes</label>
+      </div>
+      <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-offences-since-community-yes">
+        {% include "includes/recent-offence-date-question.html" %}
       </div>
       <div class="govuk-radios__item">
         <input class="govuk-radios__input" id="offences-since-community-no" name="offences_since_community" type="radio" value="no">

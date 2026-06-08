@@ -7,34 +7,26 @@ import {
   isConvictionDateEditPanelOpen,
   persistConvictionDateState
 } from './conviction-date.js'
-import { captureCheckAnswersEditSnapshot, isTieringCheckAnswersEdit } from './tiering-change-scroll.js'
+import { captureCheckAnswersEditSnapshot, isTieringCheckAnswersEdit, withFromCheckAnswers } from './tiering-change-scroll.js'
 import { getA1FieldsFromForm } from './tiering-journey.js'
 import { getTieringAssessmentSession } from './tiering-assessment-session.js'
-import { formatOffenceCodeLabel } from './tiering-offence-browse.js'
+import {
+  applyOffenceViolentTag,
+  clearOffenceViolentTag,
+  formatOffenceCodeLabel,
+  lookupOffenceIsViolent
+} from './tiering-offence-browse.js'
+import {
+  buildOffenceSearchIndex,
+  filterOffenceBrowseGroupsByCategory,
+  getOffenceSearchMatches,
+  OFFENCE_BROWSE_SORT_CATEGORIES,
+  offenceMatchesSearchQuery
+} from './offences-data.js'
 import { trackTelemetryOffenceSearch } from './tiering-session-telemetry.js'
 
-const offenceSearchMatches = (item, query) => {
-  const q = query.trim().toLowerCase()
-  if (!q) return false
-
-  const haystack = [
-    item.label,
-    item.code,
-    item.subcode,
-    item.fullCode,
-    item.category,
-    item.code && item.subcode ? `${item.code} ${item.subcode}` : '',
-    item.code && item.subcode ? `${item.code}${item.subcode}` : '',
-    ...(item.searchTerms || [])
-  ]
-    .filter(Boolean)
-    .join(' ')
-    .toLowerCase()
-
-  return haystack.includes(q)
-}
-
 const offenceSearchFormatMeta = (item) => {
+  if (item.type === 'category') return ''
   if (item.type === 'parent' && item.subOffenceCount > 1) {
     return `(${item.subOffenceCount} offences)`
   }
@@ -50,62 +42,31 @@ const offenceSearchFormatMeta = (item) => {
   return ''
 }
 
-const offenceSearchFormatStatus = (count, browseParent) => {
+const OFFENCE_SEARCH_RESULTS_LIMIT = 30
+const OFFENCE_SEARCH_SECTION_RESULTS_LIMIT = 30
+
+const offenceSearchFormatStatus = (displayedCount, browseParent, totalCount = displayedCount) => {
   if (browseParent) {
     const total = browseParent.subOffences.length
     const offenceWord = total === 1 ? 'offence' : 'offences'
 
-    if (count === 0) {
+    if (displayedCount === 0) {
       return `${browseParent.label} (no matching ${offenceWord})`
     }
 
-    return `${browseParent.label} (${total} ${offenceWord})`
+    if (totalCount > displayedCount) {
+      return `${browseParent.label} (showing ${displayedCount} of ${totalCount} matching ${offenceWord})`
+    }
+
+    return `${browseParent.label} (${totalCount} matching ${offenceWord})`
   }
 
-  if (count === 0) return 'No results found'
-  if (count === 1) return '1 result found'
-  return `${count} results found`
-}
-
-const offenceSearchBuildIndex = (offences) => {
-  const parents = offences.map((offence) => ({
-    type: 'parent',
-    id: offence.id,
-    label: offence.label,
-    code: offence.code,
-    subcode: '00',
-    fullCode: `${offence.code}00`,
-    category: offence.category,
-    subOffenceCount: offence.subOffenceCount || 0,
-    subOffences: offence.subOffences || [],
-    searchTerms: offence.searchTerms || []
-  }))
-
-  const subs = offences.flatMap((offence) =>
-    (offence.subOffences || []).map((sub) => ({
-      type: 'sub',
-      id: sub.id,
-      label: sub.label,
-      code: sub.code,
-      subcode: sub.subcode,
-      fullCode: sub.fullCode,
-      category: offence.category,
-      parentId: offence.id,
-      parentLabel: offence.label,
-      searchTerms: [
-        sub.label,
-        sub.code,
-        sub.subcode,
-        sub.fullCode,
-        offence.label,
-        offence.code,
-        ...(sub.searchTerms || []),
-        ...(offence.searchTerms || [])
-      ]
-    }))
-  )
-
-  return { parents, subs, all: [...parents, ...subs] }
+  if (displayedCount === 0) return 'No results found'
+  if (totalCount === 1) return '1 result found'
+  if (totalCount > displayedCount) {
+    return `Showing ${displayedCount} of ${totalCount} results found`
+  }
+  return `${totalCount} results found`
 }
 
 const offenceSearchMapSubOptions = (parent, subOffences) =>
@@ -119,75 +80,205 @@ const offenceSearchMapSubOptions = (parent, subOffences) =>
     category: parent.category,
     parentId: parent.id,
     parentLabel: parent.label,
+    isViolentOffence: Boolean(sub.isViolentOffence),
     searchTerms: [sub.label, sub.code, sub.subcode, sub.fullCode]
   }))
 
-window.initOffenceSearch = async (container) => {
-  if (!container || container.dataset.offenceSearchReady === 'true') return
+const buildOffenceCategorySearchIndex = () => ({
+  parents: OFFENCE_BROWSE_SORT_CATEGORIES.map((category) => ({
+    type: 'category',
+    id: category,
+    label: category,
+    searchTerms: [category]
+  })),
+  subs: [],
+  all: []
+})
 
-  const isCheckMode = Boolean(container.dataset.offenceSearchCheck)
+window.initOffenceSearch = async (container, options = {}) => {
+  if (!container) return
+
+  const scope = options.scope || container.dataset.offenceSearchScope || 'default'
+  const isCategoryScope = scope === 'category'
+  const isCategoryOffencesScope = scope === 'category-offences'
+  const getCategoryFilter = () =>
+    options.categoryFilter || container.dataset.offenceSearchCategory || ''
+  const getSearchResultsUrlOverride = options.getSearchResultsUrl
+
+  if (container.dataset.offenceSearchReady === 'true') {
+    return {
+      getPendingSelection: () => container._pendingCheckSelection ?? null,
+      setCategoryFilter: options.setCategoryFilter
+    }
+  }
+
+  if (container.dataset.offenceSearchInitializing === 'true') {
+    await new Promise((resolve) => {
+      const observer = new MutationObserver(() => {
+        if (container.dataset.offenceSearchReady === 'true') {
+          observer.disconnect()
+          resolve()
+        }
+      })
+      observer.observe(container, {
+        attributes: true,
+        attributeFilter: ['data-offence-search-ready']
+      })
+    })
+    return {
+      getPendingSelection: () => container._pendingCheckSelection ?? null,
+      setCategoryFilter: options.setCategoryFilter
+    }
+  }
+
+  container.dataset.offenceSearchInitializing = 'true'
+
+  // Empty data-offence-search-check="" is falsy via dataset; use hasAttribute instead
+  const isCheckMode = container.hasAttribute('data-offence-search-check')
+  const isNoSuggest = container.hasAttribute('data-offence-search-no-suggest')
+  const requiresSelectedPanel = !isCheckMode && !isCategoryScope
   const input = container.querySelector('[data-offence-search-input]')
   const listbox = container.querySelector('[data-offence-search-listbox]')
+  const searchSubmitButton = container.querySelector('[data-offence-search-submit]')
   const searchPanel = container.querySelector('[data-offence-search-panel]')
   const selectedPanel = container.querySelector('[data-offence-search-selected]')
   const selectedLabel = container.querySelector('[data-offence-selected-label]')
   const selectedMeta = container.querySelector('[data-offence-selected-meta]')
+  const violentTag = container.querySelector('[data-offence-violent-tag]')
   const hiddenInput = container.querySelector('[data-offence-selected-id]')
   const hiddenCodeInput = container.querySelector('[data-offence-selected-code]')
   const hiddenSubcodeInput = container.querySelector('[data-offence-selected-subcode]')
   const changeLink = container.querySelector('[data-offence-change]')
 
-  if (!input || !listbox || !searchPanel) return
-  if (!isCheckMode && !selectedPanel) return
+  if (!input || !searchPanel || (!isNoSuggest && !listbox)) {
+    delete container.dataset.offenceSearchInitializing
+    return
+  }
+
+  if (requiresSelectedPanel && !selectedPanel) {
+    delete container.dataset.offenceSearchInitializing
+    return
+  }
 
   let pendingCheckSelection = null
 
   let index = { parents: [], subs: [], all: [] }
+  let offencesGroups = []
   let activeIndex = -1
   let browseParent = null
   let dataReady = false
 
   try {
-    const response = await fetch('/api/offences')
-    if (!response.ok) throw new Error('Failed to load offences')
-    const offences = await response.json()
-    index = offenceSearchBuildIndex(offences)
-    window.OFFENCE_SEARCH_DATA = offences
-    dataReady = true
-    container.dataset.offenceSearchReady = 'true'
+    if (isCategoryScope) {
+      index = buildOffenceCategorySearchIndex()
+      dataReady = true
+      container.dataset.offenceSearchReady = 'true'
+    } else {
+      const response = await fetch('/api/offences')
+      if (!response.ok) throw new Error('Failed to load offences')
+      let offences = await response.json()
+      const categoryFilter = getCategoryFilter()
+
+      if (isCategoryOffencesScope && categoryFilter) {
+        offences = filterOffenceBrowseGroupsByCategory(offences, categoryFilter)
+      }
+
+      index = buildOffenceSearchIndex(offences)
+      offencesGroups = offences
+      if (!isCategoryOffencesScope) {
+        window.OFFENCE_SEARCH_DATA = offences
+      }
+      dataReady = true
+      container.dataset.offenceSearchReady = 'true'
+    }
   } catch (error) {
-    listbox.innerHTML =
-      '<li class="offence-autocomplete__results-status" role="presentation">Offence list could not be loaded</li>'
-    listbox.hidden = false
-    input.setAttribute('aria-expanded', 'true')
+    if (listbox) {
+      listbox.innerHTML =
+        '<li class="offence-autocomplete__results-status" role="presentation">Offence list could not be loaded</li>'
+      listbox.hidden = false
+      input.setAttribute('aria-expanded', 'true')
+    }
+    container.dataset.offenceSearchReady = 'true'
+    delete container.dataset.offenceSearchInitializing
     return
   }
 
   const setExpanded = (expanded) => {
+    if (isNoSuggest || !listbox) return
     input.setAttribute('aria-expanded', expanded ? 'true' : 'false')
     listbox.hidden = !expanded
   }
 
+  const resizeSearchInput = () => {
+    if (isNoSuggest) {
+      input.style.height = '40px'
+      return
+    }
+
+    input.style.height = 'auto'
+    input.style.height = `${Math.max(40, input.scrollHeight)}px`
+  }
+
   const clearListbox = () => {
+    if (!listbox) return
     listbox.innerHTML = ''
     activeIndex = -1
     input.removeAttribute('aria-activedescendant')
   }
 
-  const renderStatus = (count) => {
+  const searchHintId = () =>
+    (input.getAttribute('aria-describedby') || 'current-offence-search-hint')
+      .split(/\s+/)[0]
+      .trim() || 'current-offence-search-hint'
+
+  const renderStatus = (displayedCount, totalCount = displayedCount) => {
     const status = document.createElement('li')
     status.id = `${listbox.id}-results-status`
     status.className = 'offence-autocomplete__results-status'
     status.setAttribute('role', 'presentation')
-    status.textContent = offenceSearchFormatStatus(count, browseParent)
+    let statusText = offenceSearchFormatStatus(displayedCount, browseParent, totalCount)
+
+    if (isCategoryScope && !input.value.trim() && totalCount > 0) {
+      statusText = totalCount === 1 ? '1 category' : `${totalCount} categories`
+    }
+
+    status.textContent = statusText
     listbox.appendChild(status)
-    input.setAttribute('aria-describedby', 'current-offence-search-hint current-offence-search-listbox-results-status')
+    input.setAttribute(
+      'aria-describedby',
+      `${searchHintId()} ${listbox.id}-results-status`
+    )
     return status
   }
 
-  const renderOptions = (options) => {
+  const getSearchResultsUrl = (query) => {
+    const trimmed = query.trim()
+    if (!trimmed) return null
+
+    if (getSearchResultsUrlOverride) {
+      return getSearchResultsUrlOverride(trimmed)
+    }
+
+    if (isCategoryOffencesScope) {
+      const category = getCategoryFilter()
+      if (!category) return null
+
+      const params = new URLSearchParams({
+        q: trimmed,
+        category
+      })
+      return withFromCheckAnswers(`a1o3?${params.toString()}`)
+    }
+
+    const params = new URLSearchParams({ q: trimmed })
+    if (isCheckMode) params.set('context', 'violent-offence-check')
+    // Use clean URL (a1os not a1os.html) – Prototype Kit strips query params on .html redirects
+    return withFromCheckAnswers(`a1os?${params.toString()}`)
+  }
+
+  const renderOptions = (options, totalCount = options.length) => {
     clearListbox()
-    renderStatus(options.length)
+    renderStatus(options.length, totalCount)
 
     if (browseParent) {
       const back = document.createElement('li')
@@ -232,8 +323,37 @@ window.initOffenceSearch = async (container) => {
       listbox.appendChild(li)
     })
 
-    const showMenu = Boolean(input.value.trim()) || browseParent
+    const query = input.value.trim()
+    const hasMoreResults = !isCategoryScope && totalCount > options.length && query
+
+    if (hasMoreResults) {
+      const viewAll = document.createElement('li')
+      viewAll.setAttribute('role', 'option')
+      viewAll.id = `${listbox.id}-option-view-all`
+      viewAll.className = 'offence-autocomplete__option offence-autocomplete__option--view-all'
+      viewAll.dataset.optionType = 'view-all'
+      viewAll.innerHTML = `
+        <span class="offence-autocomplete__option-label offence-autocomplete__view-all-label">View all results (${totalCount})</span>
+      `
+      listbox.appendChild(viewAll)
+    }
+
+    const showMenu = browseParent || options.length > 0
     setExpanded(showMenu)
+
+    if (browseParent) {
+      listbox.scrollTop = 0
+      syncStickyHeaderOffsets()
+    }
+  }
+
+  const syncStickyHeaderOffsets = () => {
+    const statusEl = listbox.querySelector('.offence-autocomplete__results-status')
+    const backEl = listbox.querySelector('.offence-autocomplete__option--back')
+
+    if (backEl && statusEl) {
+      backEl.style.top = `${statusEl.offsetHeight}px`
+    }
   }
 
   const getSubOffenceOptions = (parent, filterQuery = null) => {
@@ -243,23 +363,55 @@ window.initOffenceSearch = async (container) => {
       return subOptions
     }
 
-    return subOptions.filter((item) => offenceSearchMatches(item, filterQuery))
+    return subOptions.filter((item) => offenceMatchesSearchQuery(item, filterQuery))
   }
 
-  const getMatches = (query) => {
+  const getCategoryMatchResults = (query) => {
     const q = query.trim()
-    if (!q) return []
+    const allCategories = index.parents
 
-    const parentMatches = index.parents.filter((item) => offenceSearchMatches(item, q))
-    const subMatches = index.subs.filter((item) => offenceSearchMatches(item, q))
+    if (!q) {
+      return {
+        items: allCategories.slice(0, OFFENCE_SEARCH_RESULTS_LIMIT),
+        totalCount: allCategories.length
+      }
+    }
 
-    return [...parentMatches, ...subMatches].slice(0, 15)
+    const categoryMatches = allCategories.filter((item) => offenceMatchesSearchQuery(item, q))
+    return {
+      items: categoryMatches.slice(0, OFFENCE_SEARCH_RESULTS_LIMIT),
+      totalCount: categoryMatches.length
+    }
+  }
+
+  const getMatchResults = (query) => {
+    const q = query.trim()
+    if (!q && !isCategoryScope) return { items: [], totalCount: 0 }
+
+    if (isCategoryScope) {
+      return getCategoryMatchResults(query)
+    }
+
+    const { items, totalCount } = getOffenceSearchMatches(offencesGroups, query)
+
+    return {
+      items: items.slice(0, OFFENCE_SEARCH_RESULTS_LIMIT),
+      totalCount
+    }
+  }
+
+  const renderQueryMatches = (query) => {
+    const { items, totalCount } = getMatchResults(query)
+    renderOptions(items, totalCount)
   }
 
   const showSubOffenceList = (parent, filterQuery = null) => {
     browseParent = parent
     const subOptions = getSubOffenceOptions(parent, filterQuery)
-    renderOptions(subOptions)
+    renderOptions(
+      subOptions.slice(0, OFFENCE_SEARCH_SECTION_RESULTS_LIMIT),
+      subOptions.length
+    )
   }
 
   const persistA1ConvictionDateState = () => {
@@ -267,24 +419,53 @@ window.initOffenceSearch = async (container) => {
     persistConvictionDateState({ editing: isConvictionDateEditPanelOpen() })
   }
 
-  const showSearch = () => {
+  const showSearch = ({ focusInput = true } = {}) => {
+    const hadCategorySelection = isCategoryScope && selectedPanel && !selectedPanel.hidden
+    const hadOffenceSelection =
+      isCategoryOffencesScope && selectedPanel && !selectedPanel.hidden
+
     persistA1ConvictionDateState()
     searchPanel.hidden = false
-    selectedPanel.hidden = true
+    if (selectedPanel) selectedPanel.hidden = true
     input.value = ''
     browseParent = null
     clearListbox()
     setExpanded(false)
+
+    if (hadCategorySelection) {
+      options.onCategoryCleared?.()
+    }
+
+    if (hadOffenceSelection) {
+      options.onOffenceCleared?.()
+    }
     if (hiddenInput) hiddenInput.value = ''
     if (hiddenCodeInput) hiddenCodeInput.value = ''
     if (hiddenSubcodeInput) hiddenSubcodeInput.value = ''
-    input.setAttribute('aria-describedby', 'current-offence-search-hint')
-    input.focus()
+    clearOffenceViolentTag(violentTag)
+    input.setAttribute('aria-describedby', searchHintId())
+    resizeSearchInput()
+    if (focusInput) {
+      input.focus()
+    } else if (document.activeElement === input) {
+      input.blur()
+    }
   }
+
+  const offenceSelectionFromOption = (option) => ({
+    id: option.id,
+    label: option.label,
+    code: option.code || '',
+    subcode: option.subcode || '',
+    fullCode: option.fullCode || '',
+    isViolentOffence: Boolean(option.isViolentOffence)
+  })
 
   const storeCheckSelection = (selection) => {
     pendingCheckSelection = selection
+    container._pendingCheckSelection = selection
     input.value = selection.label
+    resizeSearchInput()
     browseParent = null
     clearListbox()
     setExpanded(false)
@@ -297,6 +478,28 @@ window.initOffenceSearch = async (container) => {
   }
 
   const showSelected = (selection) => {
+    if (isCategoryScope) {
+      if (selectedPanel) {
+        searchPanel.hidden = true
+        selectedPanel.hidden = false
+        if (selectedLabel) selectedLabel.textContent = selection.label
+        if (selectedMeta) selectedMeta.hidden = true
+      }
+      input.value = selection.label
+      resizeSearchInput()
+      browseParent = null
+      clearListbox()
+      setExpanded(false)
+      options.onCategorySelected?.(selection.label)
+      container.dispatchEvent(
+        new CustomEvent('offence-search:category-selected', {
+          bubbles: true,
+          detail: { category: selection.label }
+        })
+      )
+      return
+    }
+
     if (isCheckMode || !selectedPanel) {
       storeCheckSelection(selection)
       return
@@ -314,26 +517,48 @@ window.initOffenceSearch = async (container) => {
     if (hiddenInput) hiddenInput.value = selection.id
     if (hiddenCodeInput) hiddenCodeInput.value = selection.code || ''
     if (hiddenSubcodeInput) hiddenSubcodeInput.value = selection.subcode || ''
+    const isViolent =
+      selection.isViolentOffence === true ||
+      lookupOffenceIsViolent(selection.id)
+    applyOffenceViolentTag(violentTag, isViolent)
     browseParent = null
     clearListbox()
     setExpanded(false)
-    input.setAttribute('aria-describedby', 'current-offence-search-hint')
+    input.setAttribute('aria-describedby', searchHintId())
 
-    trackTelemetryOffenceSearch({
-      action: 'select',
-      query: {
-        id: selection.id,
-        label: selection.label,
-        code: selection.code || '',
-        source: 'search'
-      }
-    })
+    if (!isCategoryOffencesScope) {
+      trackTelemetryOffenceSearch({
+        action: 'select',
+        query: {
+          id: selection.id,
+          label: selection.label,
+          code: selection.code || '',
+          source: 'search'
+        }
+      })
+    }
+
+    if (isCategoryOffencesScope) {
+      options.onOffenceSelected?.(selection)
+    }
+
+    container.dispatchEvent(
+      new CustomEvent('offence-search:selected', {
+        bubbles: true,
+        detail: selection
+      })
+    )
   }
 
   const selectOption = (option) => {
+    if (option?.type === 'category') {
+      showSelected({ id: option.id, label: option.label })
+      return
+    }
+
     if (!option || option.type === 'back') {
       browseParent = null
-      renderOptions(getMatches(input.value))
+      renderQueryMatches(input.value)
       return
     }
 
@@ -345,28 +570,50 @@ window.initOffenceSearch = async (container) => {
       return
     }
 
-    showSelected({
-      id: option.id,
-      label: option.label,
-      code: option.code || '',
-      subcode: option.subcode || '',
-      fullCode: option.fullCode || ''
-    })
+    showSelected(offenceSelectionFromOption(option))
   }
 
   const getSelectableOptions = () => listbox.querySelectorAll('[role="option"]')
 
-  const highlightOption = (newIndex) => {
+  const highlightOption = (direction) => {
     const items = getSelectableOptions()
     if (!items.length) return
 
-    activeIndex = (newIndex + items.length) % items.length
+    let newIndex = activeIndex
+
+    if (activeIndex < 0 && direction > 0) {
+      newIndex = 0
+    } else if (activeIndex >= 0) {
+      newIndex = activeIndex + direction
+      if (newIndex < 0) newIndex = 0
+      if (newIndex >= items.length) newIndex = items.length - 1
+    }
+
+    if (newIndex === activeIndex) return
+
+    activeIndex = newIndex
     const activeItem = items[activeIndex]
     items.forEach((item, i) => {
       item.classList.toggle('offence-autocomplete__option--focused', i === activeIndex)
     })
     input.setAttribute('aria-activedescendant', activeItem.id)
     activeItem.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+  }
+
+  const navigateToSearchResults = () => {
+    persistA1ConvictionDateState()
+    const url = getSearchResultsUrl(input.value)
+    if (!url) return
+
+    const query = input.value.trim()
+    if (query && isNoSuggest) {
+      trackTelemetryOffenceSearch({
+        query,
+        action: 'search'
+      })
+    }
+
+    window.location.assign(url)
   }
 
   const activateHighlighted = () => {
@@ -379,19 +626,23 @@ window.initOffenceSearch = async (container) => {
       return
     }
 
+    if (optionEl.dataset.optionType === 'view-all') {
+      navigateToSearchResults()
+      return
+    }
+
     const optionId = optionEl.dataset.optionId
 
     if (browseParent) {
       const sub = browseParent.subOffences.find((item) => item.id === optionId)
       if (sub) {
-        selectOption({
-          type: 'sub',
-          id: sub.id,
-          label: sub.label,
-          code: sub.code,
-          subcode: sub.subcode,
-          fullCode: sub.fullCode
-        })
+        selectOption(
+          offenceSelectionFromOption({
+            type: 'sub',
+            ...sub,
+            isViolentOffence: sub.isViolentOffence
+          })
+        )
       }
       return
     }
@@ -410,7 +661,9 @@ window.initOffenceSearch = async (container) => {
   let lastLoggedSearchQuery = ''
 
   input.addEventListener('input', () => {
-    if (!dataReady) return
+    resizeSearchInput()
+
+    if (isNoSuggest || !dataReady) return
 
     const query = input.value.trim()
 
@@ -425,7 +678,7 @@ window.initOffenceSearch = async (container) => {
         lastLoggedSearchQuery = currentQuery
         const resultCount = browseParent
           ? getSubOffenceOptions(browseParent, currentQuery).length
-          : getMatches(currentQuery).length
+          : getMatchResults(currentQuery).totalCount
 
         trackTelemetryOffenceSearch({
           query: currentQuery,
@@ -440,122 +693,180 @@ window.initOffenceSearch = async (container) => {
       return
     }
 
-    renderOptions(getMatches(input.value))
+    renderQueryMatches(input.value)
   })
 
-  input.addEventListener('keydown', (event) => {
-    const items = getSelectableOptions()
+  if (isNoSuggest) {
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault()
+        navigateToSearchResults()
+      }
+    })
 
-    if (event.key === 'ArrowDown') {
+    searchSubmitButton?.addEventListener('click', (event) => {
       event.preventDefault()
-      if (listbox.hidden && input.value.trim()) {
-        if (browseParent) {
-          showSubOffenceList(browseParent, input.value)
-        } else {
-          renderOptions(getMatches(input.value))
+      navigateToSearchResults()
+    })
+  } else {
+    input.addEventListener('keydown', (event) => {
+      const items = getSelectableOptions()
+
+      if (event.key === 'ArrowDown') {
+        event.preventDefault()
+        if (listbox.hidden && (input.value.trim() || isCategoryScope)) {
+          if (browseParent) {
+            showSubOffenceList(browseParent, input.value)
+          } else {
+            renderQueryMatches(input.value)
+          }
+        }
+        if (!listbox.hidden && items.length) highlightOption(1)
+      }
+
+      if (event.key === 'ArrowUp') {
+        event.preventDefault()
+        if (!listbox.hidden && items.length) highlightOption(-1)
+      }
+
+      if (event.key === 'Enter' && !event.shiftKey) {
+        if (!listbox.hidden && activeIndex >= 0) {
+          event.preventDefault()
+          event.stopPropagation()
+          activateHighlighted()
+        } else if (!listbox.hidden) {
+          event.preventDefault()
         }
       }
-      if (!listbox.hidden && items.length) highlightOption(activeIndex + 1)
-    }
 
-    if (event.key === 'ArrowUp') {
-      event.preventDefault()
-      if (!listbox.hidden && items.length) highlightOption(activeIndex - 1)
-    }
-
-    if (event.key === 'Enter') {
-      if (!listbox.hidden && activeIndex >= 0) {
-        event.preventDefault()
-        activateHighlighted()
+      if (event.key === 'Escape') {
+        if (browseParent) {
+          browseParent = null
+          renderQueryMatches(input.value)
+          return
+        }
+        clearListbox()
+        setExpanded(false)
+        input.setAttribute('aria-describedby', searchHintId())
       }
-    }
+    })
 
-    if (event.key === 'Escape') {
+    input.addEventListener('focus', () => {
+      if (!dataReady) return
+      if (!input.value.trim() && !isCategoryScope) return
+
       if (browseParent) {
-        browseParent = null
-        renderOptions(getMatches(input.value))
+        showSubOffenceList(browseParent, input.value)
         return
       }
-      clearListbox()
-      setExpanded(false)
-      input.setAttribute('aria-describedby', 'current-offence-search-hint')
-    }
-  })
 
-  input.addEventListener('focus', () => {
-    if (!dataReady || !input.value.trim()) return
+      renderQueryMatches(input.value)
+    })
 
-    if (browseParent) {
-      showSubOffenceList(browseParent, input.value)
-      return
-    }
-
-    renderOptions(getMatches(input.value))
-  })
-
-  document.addEventListener('click', (event) => {
-    const clickedInside = event.composedPath().includes(container)
-    if (!clickedInside) {
-      setExpanded(false)
-    }
-  })
-
-  // Keep focus on the input and stop the outside-click handler closing the menu
-  // before the option click is handled (the option node is removed during render).
-  listbox.addEventListener('mousedown', (event) => {
-    event.preventDefault()
-  })
-
-  listbox.addEventListener('click', (event) => {
-    event.stopPropagation()
-
-    const optionEl = event.target.closest('[role="option"]')
-    if (!optionEl) return
-
-    if (optionEl.dataset.optionType === 'back') {
-      selectOption({ type: 'back' })
-      return
-    }
-
-    const optionId = optionEl.dataset.optionId
-
-    if (browseParent) {
-      const sub = browseParent.subOffences.find((item) => item.id === optionId)
-      if (sub) {
-        selectOption({
-          type: 'sub',
-          id: sub.id,
-          label: sub.label,
-          code: sub.code,
-          subcode: sub.subcode,
-          fullCode: sub.fullCode
-        })
+    document.addEventListener('click', (event) => {
+      const clickedInside = event.composedPath().includes(container)
+      if (!clickedInside) {
+        setExpanded(false)
       }
-      return
-    }
+    })
 
-    const parent = index.parents.find((item) => item.id === optionId)
-    if (parent) {
-      selectOption(parent)
-      return
-    }
+    // Keep focus on the input and stop the outside-click handler closing the menu
+    // before the option click is handled (the option node is removed during render).
+    listbox.addEventListener('mousedown', (event) => {
+      const optionEl = event.target.closest('[role="option"]')
+      if (optionEl?.dataset.optionType === 'view-all') {
+        event.preventDefault()
+        navigateToSearchResults()
+        return
+      }
+      event.preventDefault()
+    })
 
-    const sub = index.subs.find((item) => item.id === optionId)
-    if (sub) selectOption(sub)
-  })
+    listbox.addEventListener('click', (event) => {
+      event.stopPropagation()
+
+      const optionEl = event.target.closest('[role="option"]')
+      if (!optionEl) return
+
+      if (optionEl.dataset.optionType === 'back') {
+        selectOption({ type: 'back' })
+        return
+      }
+
+      if (optionEl.dataset.optionType === 'view-all') {
+        navigateToSearchResults()
+        return
+      }
+
+      const optionId = optionEl.dataset.optionId
+
+      if (browseParent) {
+        const sub = browseParent.subOffences.find((item) => item.id === optionId)
+        if (sub) {
+          selectOption(
+            offenceSelectionFromOption({
+              type: 'sub',
+              ...sub,
+              isViolentOffence: sub.isViolentOffence
+            })
+          )
+        }
+        return
+      }
+
+      const parent = index.parents.find((item) => item.id === optionId)
+      if (parent) {
+        selectOption(parent)
+        return
+      }
+
+      const sub = index.subs.find((item) => item.id === optionId)
+      if (sub) selectOption(sub)
+    })
+  }
 
   if (changeLink) {
     changeLink.addEventListener('click', (event) => {
       event.preventDefault()
+      if (isCategoryScope) {
+        options.onCategoryCleared?.()
+      }
       showSearch()
     })
   }
 
-  if (dataReady && !isCheckMode) {
-    const session = getTieringAssessmentSession()
+  const setCategoryFilter = async (category) => {
+    if (!isCategoryOffencesScope) return
 
-    if (session.currentOffence) {
-      showSelected(session.currentOffence)
+    container.dataset.offenceSearchCategory = category || ''
+
+    if (!category) return
+
+    try {
+      const response = await fetch('/api/offences')
+      if (!response.ok) throw new Error('Failed to load offences')
+      const offences = await response.json()
+      const filtered = filterOffenceBrowseGroupsByCategory(offences, category)
+      index = buildOffenceSearchIndex(filtered)
+    } catch (error) {
+      console.error('Failed to load category offences:', error)
+    }
+  }
+
+  if (dataReady && !isCheckMode && !isCategoryScope && !isCategoryOffencesScope) {
+    const focusSearchRequested =
+      new URLSearchParams(window.location.search).get('focus') === 'offence-search'
+
+    if (focusSearchRequested) {
+      showSearch()
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+      requestAnimationFrame(() => input.focus())
+    } else {
+      const session = getTieringAssessmentSession()
+
+      if (session.currentOffence) {
+        showSelected(session.currentOffence)
+      }
     }
 
     if (isTieringCheckAnswersEdit()) {
@@ -564,11 +875,25 @@ window.initOffenceSearch = async (container) => {
     }
   }
 
-  return { getPendingSelection: () => pendingCheckSelection }
+  delete container.dataset.offenceSearchInitializing
+
+  resizeSearchInput()
+
+  return {
+    getPendingSelection: () => pendingCheckSelection,
+    resizeSearchInput,
+    setCategoryFilter,
+    showSearch,
+    showSelected
+  }
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  document.querySelectorAll('[data-module="offence-search"]').forEach((container) => {
-    window.initOffenceSearch(container)
-  })
+  document
+    .querySelectorAll(
+      '[data-module="offence-search"]:not([data-offence-search-check]):not([data-offence-search-manual])'
+    )
+    .forEach((container) => {
+      window.initOffenceSearch(container)
+    })
 })

@@ -1,25 +1,31 @@
 //
-// a6 – static assessment complete (static continue or start dynamic)
+// a6 – section 1 complete (static scores available)
 //
 
 import { getTieringBackLinkHref, isTieringCheckAnswersEdit } from './tiering-change-scroll.js'
 import {
-  getTieringReviewHref,
+  getTieringResultsAnswersHref,
   hasSeenStaticAssessmentComplete,
   markStaticAssessmentCompleteSeen,
   syncTieringSessionBeforeCheckAnswers,
   tieringJourneyHref
 } from './tiering-journey.js'
-import { getTieringAssessmentSession } from './tiering-assessment-session.js'
+import { setTieringAssessmentSession } from './tiering-assessment-session.js'
+import { trackTelemetryMilestone } from './tiering-session-telemetry.js'
+import { initTieringInactiveLinks } from './tiering-inactive-links.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
   if (!document.querySelector('.tiering-a6-options')) return
 
-  const session = getTieringAssessmentSession()
+  const session = syncTieringSessionBeforeCheckAnswers()
+
+  if (!session.offencesSinceCommunity) {
+    window.location.href = tieringJourneyHref('a5.html')
+    return
+  }
 
   if (hasSeenStaticAssessmentComplete(session) && !isTieringCheckAnswersEdit()) {
-    syncTieringSessionBeforeCheckAnswers()
-    window.location.href = tieringJourneyHref(getTieringReviewHref(session))
+    window.location.href = tieringJourneyHref(getTieringResultsAnswersHref())
     return
   }
 
@@ -28,12 +34,13 @@ window.GOVUKPrototypeKit.documentReady(() => {
     backLink.href = getTieringBackLinkHref('a5.html')
   }
 
-  const doneButton = document.querySelector('[data-tiering-a6-action="done"]')
-  if (doneButton) {
-    doneButton.addEventListener('click', () => {
-      markStaticAssessmentCompleteSeen()
-      syncTieringSessionBeforeCheckAnswers()
-      window.location.href = tieringJourneyHref('a7.html')
-    })
-  }
+  initTieringInactiveLinks(document.querySelector('.tiering-a6-options'))
+
+  document.querySelector('[data-tiering-a6-action="done"]')?.addEventListener('click', () => {
+    markStaticAssessmentCompleteSeen()
+    syncTieringSessionBeforeCheckAnswers()
+    trackTelemetryMilestone('calculatedScore')
+    setTieringAssessmentSession({ scoreCalculated: true })
+    window.location.href = tieringJourneyHref(getTieringResultsAnswersHref())
+  })
 })

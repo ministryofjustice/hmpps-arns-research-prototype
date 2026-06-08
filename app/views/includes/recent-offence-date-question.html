@@ -1,15 +1,16 @@
 {# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
+{# Nested under the Yes option on a5 #}
 
-<h2 id="tiering-recent-offence-date" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-6 govuk-!-margin-bottom-2">
+<h3 id="tiering-recent-offence-date" class="govuk-heading-s tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
   What is the date of {{ offenderFirstName }}'s most recent offence?
-</h2>
+</h3>
 
-<div class="govuk-form-group">
+<div class="govuk-form-group govuk-!-margin-bottom-0">
   <fieldset class="govuk-fieldset" role="group">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-visually-hidden">
       What is the date of {{ offenderFirstName }}'s most recent offence?
     </legend>
-    <div class="govuk-date-input" id="recent-offence-date" data-autofill-date="yesterday">
+    <div class="govuk-date-input" id="recent-offence-date">
       <div class="govuk-date-input__item">
         <div class="govuk-form-group">
           <label class="govuk-label govuk-date-input__label" for="recent-offence-date-day">Day</label>
