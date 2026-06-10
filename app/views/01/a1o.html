@@ -12,7 +12,7 @@
 {% set offenceBrowseToggleHref = 'a1o3.html' %}
 {% set tieringTelemetryPage = "a1o" %}
 {% set tieringTelemetryPageLabel = "Browse all offences" %}
-{% set offenceBrowseSortFilter = true %}
+{% set offenceBrowseSortFilter = false %}
 
 {% block content %}
 
@@ -20,10 +20,14 @@
 
 {% include "includes/offence-browse-heading.html" %}
 
-<div class="offence-browse-category-filter govuk-!-margin-bottom-6" data-offence-category-filter hidden>
+<p class="govuk-!-margin-bottom-1">Offence category</p>
+<select class="govuk-select override-width" id="offence-sort-by" name="offence-sort-by" data-offence-sort-by>
+  <option value="">Select a category</option>
+</select>
+
+<div class="offence-browse-category-filter govuk-!-margin-bottom-6 govuk-!-margin-top-6" data-offence-category-filter hidden>
   <div class="offence-browse-category-filter__row">
     <h2 class="govuk-heading-m govuk-!-margin-bottom-0" data-offence-category-title></h2>
-    <a class="govuk-link offence-browse-category-filter__view-all" href="#" data-offence-view-all>View all offences</a>
   </div>
 </div>
 
@@ -31,8 +35,20 @@
 
   {% include "includes/offence-browse-form-open.html" %}
 
-  <div class="offence-browse-accordions govuk-!-margin-bottom-6" data-offence-accordions>
-    <p class="govuk-body">Loading offences…</p>
+  <div class="offence-browse-category-table-container" data-offence-list-container hidden>
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header"></th>
+      </tr>
+      </thead>
+      <tbody class="govuk-table__body" data-offence-category-list>
+      </tbody>
+    </table>
+  </div>
+
+  <div data-offence-loading-status>
+    <p class="govuk-body">Loading offence categories…</p>
   </div>
 
   <div data-offence-pagination hidden></div>

@@ -1790,3 +1790,12 @@ body.assessment-page {
     break-inside: avoid;
   }
 }
+
+.override-width {
+  width: 100% !important;
+}
+
+.border-box {
+  border: 5px solid var(--govuk-brand-colour, #1d70b8) !important;
+  padding: 10px
+}

@@ -10,11 +10,9 @@ import {
 import { getTieringAssessmentSession } from './tiering-assessment-session.js'
 import { withFromCheckAnswers } from './tiering-change-scroll.js'
 import {
-  initOffenceBrowseAccordion,
   initOffenceBrowseForm,
   initOffenceBrowsePagination,
   paginateOffenceBrowseGroups,
-  renderOffenceAccordion,
   renderOffenceBrowsePagination,
   VIOLENT_OFFENCE_CHECK_BROWSE_CONTEXT
 } from './tiering-offence-browse.js'
@@ -26,7 +24,9 @@ import {
 
 window.GOVUKPrototypeKit.documentReady(() => {
   const form = document.getElementById('tiering-a1o-form')
-  const accordionsRoot = document.querySelector('[data-offence-accordions]')
+  const listContainer = document.querySelector('[data-offence-list-container]')
+  const listRoot = document.querySelector('[data-offence-category-list]')
+  const loadingStatus = document.querySelector('[data-offence-loading-status]')
   const paginationRoot = document.querySelector('[data-offence-pagination]')
   const sortSelect = document.querySelector('[data-offence-sort-by]')
   const categoryFilter = document.querySelector('[data-offence-category-filter]')
@@ -35,8 +35,8 @@ window.GOVUKPrototypeKit.documentReady(() => {
   const session = getTieringAssessmentSession()
   const violentOffenceCheckBrowse = session.violentOffenceCheckBrowse === true
   const browseContext = violentOffenceCheckBrowse
-    ? VIOLENT_OFFENCE_CHECK_BROWSE_CONTEXT
-    : 'current-offence'
+      ? VIOLENT_OFFENCE_CHECK_BROWSE_CONTEXT
+      : 'current-offence'
   const returnUrl = violentOffenceCheckBrowse ? 'a2.html#violent-offence-check' : 'a1.html'
 
   if (violentOffenceCheckBrowse) {
@@ -56,7 +56,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
     }
   })
 
-  if (!browse || !accordionsRoot || !paginationRoot) return
+  if (!browse || !listRoot || !listContainer || !paginationRoot) return
 
   populateOffenceSortOptions(sortSelect)
   initOffenceSortSelectResize(sortSelect)
@@ -71,7 +71,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
     if (activeCategory) {
       categoryFilter.hidden = false
-      categoryTitle.textContent = activeCategory
+      categoryTitle.textContent = "Offences in " + "'" + activeCategory + "'"
       if (sortSelect) sortSelect.value = activeCategory
     } else {
       categoryFilter.hidden = true
@@ -97,26 +97,49 @@ window.GOVUKPrototypeKit.documentReady(() => {
     renderPage(1, { scrollToTop: true })
   }
 
+// Updated rendering logic inside your existing renderPage function
   const renderPage = (page, { scrollToTop = false } = {}) => {
     const displayGroups = getDisplayGroups()
-    const { items, currentPage, totalPages } = paginateOffenceBrowseGroups(displayGroups, page)
 
-    accordionsRoot.innerHTML = renderOffenceAccordion(items, 'offence-browse-a1o', {
-      rememberExpanded: false,
-      selectedId: browse.getSelectedId()
-    })
-    initOffenceBrowseAccordion(accordionsRoot.querySelector('.offence-browse-accordion'), {
-      rememberExpanded: false
-    })
-    browse.bindOffenceRadios(accordionsRoot)
+    if (loadingStatus) loadingStatus.hidden = true
 
-    if (totalPages > 1) {
-      paginationRoot.hidden = false
-      paginationRoot.innerHTML = renderOffenceBrowsePagination({ currentPage, totalPages })
-      initOffenceBrowsePagination(paginationRoot, (nextPage) => renderPage(nextPage))
+    if (activeCategory && displayGroups.length > 0) {
+      listContainer.hidden = false
+
+      const { items, currentPage, totalPages } = paginateOffenceBrowseGroups(displayGroups, page)
+
+      // Builds semantic, headerless single-column table row items
+      listRoot.innerHTML = items.map((group) => {
+        const count = group.subOffences ? group.subOffences.length : 0
+        const offenceWord = count === 1 ? 'offence' : 'offences'
+        const targetUrl = `a1o3?category=${encodeURIComponent(group.label)}`
+
+        return `
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-padding-top-3 govuk-!-padding-bottom-3">
+              <h3 class="govuk-heading-m govuk-!-margin-bottom-1">
+                <a class="govuk-link" href="${targetUrl}">${group.label} (${group.code})</a>
+              </h3>
+              <p class="govuk-body-s govuk-hint govuk-!-margin-bottom-0">
+                (${count} ${offenceWord})
+              </p>
+            </td>
+          </tr>
+        `
+      }).join('')
+
+      if (totalPages > 1) {
+        paginationRoot.hidden = false
+        paginationRoot.innerHTML = renderOffenceBrowsePagination({ currentPage, totalPages })
+        initOffenceBrowsePagination(paginationRoot, (nextPage) => renderPage(nextPage))
+      } else {
+        paginationRoot.hidden = true
+        paginationRoot.innerHTML = ''
+      }
     } else {
+      listContainer.hidden = true
+      listRoot.innerHTML = ''
       paginationRoot.hidden = true
-      paginationRoot.innerHTML = ''
     }
 
     if (scrollToTop) {
@@ -134,15 +157,16 @@ window.GOVUKPrototypeKit.documentReady(() => {
   })
 
   fetchOffenceBrowseGroups()
-    .then((groups) => {
-      allGroups = groups
-      browse.registerOffences(flattenOffenceSubOffences(groups))
-      browse.restoreSelection()
-      renderPage(1)
-    })
-    .catch((error) => {
-      console.error('Failed to load offence browse list:', error)
-      paginationRoot.hidden = true
-      browse.showLoadError(accordionsRoot)
-    })
+      .then((groups) => {
+        allGroups = groups
+        browse.registerOffences(flattenOffenceSubOffences(groups))
+        browse.restoreSelection()
+        renderPage(1)
+      })
+      .catch((error) => {
+        console.error('Failed to load offence browse list:', error)
+        paginationRoot.hidden = true
+        if (loadingStatus) loadingStatus.hidden = true
+        browse.showLoadError(listRoot)
+      })
 })
