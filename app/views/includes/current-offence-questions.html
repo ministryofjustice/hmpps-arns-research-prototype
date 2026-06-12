@@ -4,19 +4,57 @@
   What is {{ offenderFirstName }}'s current offence?
 </h2>
 
-{% set idPrefix = "current-offence-search" %}
-{% set inputName = "current_offence_search" %}
-{% set labelText = "What is " ~ offenderFirstName ~ "'s current offence?" %}
-{% set checkMode = false %}
-{% set modifierClass = "govuk-!-margin-bottom-6" %}
-{% set showBrowseLink = true %}
-{% set browseLinkText = "Find an offence" %}
-{% set showSelectedPanel = true %}
-{% set showViolentTag = false %}
-{% set searchManual = true %}
-{% set searchNoSuggest = true %}
-{% set showSearchButton = true %}
-{% include "includes/offence-search-field.html" %}
+<div
+        class="offence-autocomplete govuk-!-margin-bottom-6"
+        data-module="offence-search"
+        id="current-offence-search"
+>
+  <div data-offence-search-panel>
+    <p id="current-offence-search-hint" class="govuk-hint govuk-!-margin-bottom-4">
+      Search for the name of an offence, an offence code or subcode.
+    </p>
+    <div class="govuk-form-group offence-autocomplete__combobox">
+      <label class="govuk-label govuk-visually-hidden" for="current-offence-search-input">
+        What is {{ offenderFirstName }}'s current offence?
+      </label>
+      <input
+              class="govuk-input"
+              id="current-offence-search-input"
+              name="current_offence_search"
+              type="text"
+              spellcheck="false"
+              autocomplete="off"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded="false"
+              aria-controls="current-offence-search-listbox"
+              aria-describedby="current-offence-search-hint"
+              data-offence-search-input
+      >
+      <ul
+              id="current-offence-search-listbox"
+              class="offence-autocomplete__menu"
+              role="listbox"
+              data-offence-search-listbox
+              hidden
+      ></ul>
+    </div>
+    <p class="govuk-body govuk-!-margin-top-3 govuk-!-margin-bottom-0">
+      <a class="govuk-link" href="a1o.html" data-tiering-offence-browse-link>Find an offence</a>
+    </p>
+  </div>
+
+  <div class="offence-autocomplete__selected-box" data-offence-search-selected hidden>
+    <div class="offence-autocomplete__selected-name-row">
+      <p class="govuk-body offence-autocomplete__selected-label govuk-!-margin-bottom-0" data-offence-selected-label></p>
+      <a class="govuk-link offence-autocomplete__change-link" href="#" data-offence-change>Change offence</a>
+    </div>
+    <p class="govuk-body offence-autocomplete__selected-code govuk-!-margin-bottom-0" data-offence-selected-meta hidden></p>
+    <input type="hidden" name="current_offence_id" value="" data-offence-selected-id>
+    <input type="hidden" name="current_offence_code" value="" data-offence-selected-code>
+    <input type="hidden" name="current_offence_subcode" value="" data-offence-selected-subcode>
+  </div>
+</div>
 
 <h2 id="tiering-conviction-date" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-8 govuk-!-margin-bottom-4">
   What is the date of {{ offenderFirstName }}'s current conviction?

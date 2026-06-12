@@ -13,39 +13,75 @@
 {% set offenceBrowseRestartSearch = true %}
 {% set tieringTelemetryPage = "a1o3" %}
 {% set tieringTelemetryPageLabel = "Browse offences by category" %}
+{% extends "layouts/assessment.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Select specific offence" %}
+{% set activeSection = "section-1" %}
+{% set statusTag = "Incomplete" %}
+{% set hideServiceNavigation = true %}
+{% set hideJourneyServiceHeader = true %}
+{% set hideOffenderViewAnswers = true %}
+{% set compactPageHeader = true %}
+{% set backLinkHref = 'a1o.html' %}
 
 {% block content %}
 
 {% include "includes/assessment-journey-page-open.html" %}
 
-{% include "includes/offence-browse-heading.html" %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
 
-<div class="offence-a1o3-category-select govuk-!-margin-bottom-6" data-offence-category-step>
-  <div class="govuk-form-group govuk-!-margin-bottom-0">
-    <label class="govuk-label" for="offence-category-select">Offence category</label>
-    <select class="govuk-select" id="offence-category-select" name="offence_category" data-offence-category-select>
-      <option value="">Select a category</option>
-    </select>
+    <span class="govuk-caption-l">Offence category</span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-7" data-active-category-heading>Loading category…</h1>
+
+    <form id="tiering-a1o3-form" novalidate>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+            Select the matching specific offence from the list below
+          </legend>
+
+          <table class="govuk-table" data-sub-offences-table>
+            <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header"></th>
+            </tr>
+            </thead>
+            <tbody class="govuk-table__body" data-sub-offences-root>
+            </tbody>
+          </table>
+
+          <div data-table-status-message>
+            <p class="govuk-body">Loading available offences…</p>
+          </div>
+
+        </fieldset>
+      </div>
+
+      <div class="border-box govuk-!-margin-top-6 govuk-!-margin-bottom-6"
+           data-offence-preview-container hidden>
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-1">Selected offence:</h2>
+        <p class="govuk-body govuk-!-margin-bottom-0">
+          <span data-offence-preview-label></span>
+          <span data-offence-preview-code class="govuk-hint"></span>
+        </p>
+        <p class="govuk-body govuk-!-margin-top-4 govuk-!-margin-bottom-2">
+          <a class="govuk-link" href="a1">Start a new search</a>
+        </p>
+      </div>
+
+      <div class="govuk-button-group govuk-!-margin-top-8">
+        <button type="submit" class="govuk-button" data-module="govuk-button">
+          Save and select offence
+        </button>
+      </div>
+
+    </form>
+
   </div>
 </div>
-
-<div class="offence-a1o3-category-content" data-offence-category-content hidden>
-  <h2 class="govuk-heading-m govuk-!-margin-bottom-4">
-    Offences in ‘<span data-offence-active-category-label></span>’
-  </h2>
-</div>
-
-<form id="tiering-a1o3-form" class="govuk-!-margin-top-3" novalidate>
-
-  {% include "includes/offence-browse-form-open.html" %}
-
-  <div class="offence-browse-accordions govuk-!-margin-bottom-6" data-offence-accordions></div>
-
-  <div data-offence-pagination hidden></div>
-
-  {% include "includes/offence-browse-form-footer.html" %}
-
-</form>
 
 {% include "includes/assessment-page-close.html" %}
 

@@ -11,16 +11,11 @@ import { completeTieringPageAndContinue } from './tiering-change-scroll.js'
 import { getA1FieldsFromForm } from './tiering-journey.js'
 import { trackTelemetryOffenceSearch } from './tiering-session-telemetry.js'
 
-window.GOVUKPrototypeKit.documentReady(async () => {
+window.GOVUKPrototypeKit.documentReady(() => {
   const form = document.getElementById('tiering-a1-form')
   if (!form) return
 
   initConvictionDate()
-
-  const searchContainer = document.getElementById('current-offence-search')
-  if (searchContainer) {
-    await window.initOffenceSearch(searchContainer)
-  }
 
   document.querySelector('[data-tiering-offence-browse-link]')?.addEventListener('click', () => {
     persistConvictionDateState({ editing: isConvictionDateEditPanelOpen() })

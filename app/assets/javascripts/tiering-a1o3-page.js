@@ -1,180 +1,167 @@
 //
-// a1o3 – category dropdown, then paginated offence code accordions
+// a1o3 – Sub-offence listing grid loader
 //
 
-import {
-  fetchOffenceBrowseGroups,
-  filterOffenceBrowseGroupsByCategory,
-  flattenOffenceSubOffences,
-  getOffenceSearchMatches,
-  OFFENCE_BROWSE_SORT_CATEGORIES
-} from './offences-data.js'
-import { withFromCheckAnswers } from './tiering-change-scroll.js'
-import {
-  initOffenceBrowseAccordion,
-  initOffenceBrowseForm,
-  initOffenceBrowsePagination,
-  paginateOffenceBrowseGroups,
-  renderOffenceAccordion,
-  renderOffenceBrowsePagination
-} from './tiering-offence-browse.js'
-import { populateOffenceSortOptions } from './tiering-offence-sort-select.js'
+import { fetchOffenceBrowseGroups } from './offences-data.js'
+import { getTieringAssessmentSession } from './tiering-assessment-session.js'
 
-const isValidCategory = (category) => OFFENCE_BROWSE_SORT_CATEGORIES.includes(category)
-
-window.GOVUKPrototypeKit.documentReady(async () => {
+window.GOVUKPrototypeKit.documentReady(() => {
   const form = document.getElementById('tiering-a1o3-form')
-  if (!form) return
+  const heading = document.querySelector('[data-active-category-heading]')
+  const tableRoot = document.querySelector('[data-sub-offences-root]')
+  const statusMessage = document.querySelector('[data-table-status-message]')
 
-  const categoryStep = document.querySelector('[data-offence-category-step]')
-  const categorySelect = document.querySelector('[data-offence-category-select]')
-  const categoryContent = document.querySelector('[data-offence-category-content]')
-  const activeCategoryLabel = document.querySelector('[data-offence-active-category-label]')
-  const accordionsRoot = document.querySelector('[data-offence-accordions]')
-  const paginationRoot = document.querySelector('[data-offence-pagination]')
+  // NEW DOM References for the Selected Summary Display Box
+  const previewContainer = document.querySelector('[data-offence-preview-container]')
+  const previewLabel = document.querySelector('[data-offence-preview-label]')
+  const previewCode = document.querySelector('[data-offence-preview-code]')
 
-  const params = new URLSearchParams(window.location.search)
-  const resultsQuery = params.get('q')?.trim() || ''
-  const categoryFromUrl = params.get('category')?.trim() || ''
+  // Extract targeted string straight out of the window URL parameters
+  const urlParams = new URLSearchParams(window.location.search)
+  const categoryName = urlParams.get('category')
 
-  const returnUrl = 'a1.html'
+  if (!form || !tableRoot) return
 
-  document.querySelectorAll('.assessment-layout .govuk-back-link').forEach((link) => {
-    link.href = withFromCheckAnswers(returnUrl)
-  })
-
-  const restartSearchLink = document.querySelector('[data-offence-restart-search]')
-  if (restartSearchLink) {
-    restartSearchLink.href = withFromCheckAnswers('a1o3.html')
-  }
-
-  const browse = initOffenceBrowseForm({
-    form,
-    getTableBodies: () => document.querySelectorAll('[data-offences-table-body]'),
-    telemetrySource: 'browse-c',
-    browseContext: 'current-offence',
-    returnUrl,
-    onStartNewSearch: () => {
-      window.history.replaceState(null, '', window.location.pathname)
-      setActiveCategory('', { scrollToTop: true })
-      categorySelect?.focus()
-    }
-  })
-
-  if (!browse || !accordionsRoot || !paginationRoot) return
-
-  let allGroups = []
-  let activeCategory = ''
-
-  const scrollToPageTop = () => {
-    requestAnimationFrame(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
-      document.documentElement.scrollTop = 0
-      document.body.scrollTop = 0
-    })
-  }
-
-  const getDisplayGroups = () => {
-    const categoryGroups = filterOffenceBrowseGroupsByCategory(allGroups, activeCategory)
-    if (!resultsQuery) return categoryGroups
-    return getOffenceSearchMatches(categoryGroups, resultsQuery).groups
-  }
-
-  const renderPage = (page, { scrollToTop = false } = {}) => {
-    const displayGroups = getDisplayGroups()
-    const { items, currentPage, totalPages } = paginateOffenceBrowseGroups(displayGroups, page)
-
-    if (!displayGroups.length) {
-      accordionsRoot.innerHTML = resultsQuery
-        ? '<p class="govuk-body">No offences found.</p>'
-        : '<p class="govuk-body">No offences in this category.</p>'
-      paginationRoot.hidden = true
-      paginationRoot.innerHTML = ''
-      browse.clearSelection()
-      browse.registerOffences([])
-      return
-    }
-
-    accordionsRoot.innerHTML = renderOffenceAccordion(items, 'offence-browse-a1o3', {
-      rememberExpanded: false,
-      selectedId: browse.getSelectedId()
-    })
-    initOffenceBrowseAccordion(accordionsRoot.querySelector('.offence-browse-accordion'), {
-      rememberExpanded: false
-    })
-    browse.bindOffenceRadios(accordionsRoot)
-
-    if (totalPages > 1) {
-      paginationRoot.hidden = false
-      paginationRoot.innerHTML = renderOffenceBrowsePagination({ currentPage, totalPages })
-      initOffenceBrowsePagination(paginationRoot, (nextPage) =>
-        renderPage(nextPage, { scrollToTop: true })
-      )
-    } else {
-      paginationRoot.hidden = true
-      paginationRoot.innerHTML = ''
-    }
-
-    if (scrollToTop) {
-      scrollToPageTop()
-    }
-  }
-
-  const setActiveCategory = (category, { scrollToTop = false } = {}) => {
-    activeCategory = category || ''
-    browse.clearSelection()
-
-    if (categorySelect) {
-      categorySelect.value = activeCategory
-    }
-
-    if (categoryContent) {
-      categoryContent.hidden = !activeCategory
-    }
-
-    if (activeCategoryLabel) {
-      activeCategoryLabel.textContent = activeCategory
-    }
-
-    if (!activeCategory) {
-      accordionsRoot.innerHTML = ''
-      paginationRoot.hidden = true
-      paginationRoot.innerHTML = ''
-      browse.registerOffences([])
-      return
-    }
-
-    const groups = getDisplayGroups()
-    browse.registerOffences(flattenOffenceSubOffences(groups))
-    renderPage(1, { scrollToTop })
-  }
-
-  try {
-    allGroups = await fetchOffenceBrowseGroups()
-  } catch (error) {
-    console.error('Failed to load offences for a1o3:', error)
-    if (categoryStep) {
-      categoryStep.innerHTML =
-        '<p class="govuk-body">Offence list could not be loaded. Try refreshing the page.</p>'
-    }
-    browse.showLoadError(accordionsRoot)
+  if (!categoryName) {
+    if (heading) heading.textContent = 'No Category Selected'
+    if (statusMessage) statusMessage.innerHTML = '<p class="govuk-body">Error: Missing category query parameter.</p>'
     return
   }
 
-  populateOffenceSortOptions(categorySelect)
+  // Display clean target description text
+  if (heading) heading.textContent = categoryName
 
-  categorySelect?.addEventListener('change', () => {
-    const category = categorySelect.value.trim()
-    if (category && isValidCategory(category)) {
-      setActiveCategory(category, { scrollToTop: true })
+  let selectedOffenceObj = null
+
+  const renderSubOffencesTable = (categoryGroup) => {
+    const subOffences = categoryGroup.subOffences || []
+
+    if (subOffences.length === 0) {
+      if (statusMessage) {
+        statusMessage.hidden = false
+        statusMessage.innerHTML = '<p class="govuk-body">No granular sub-offences found inside this category block.</p>'
+      }
       return
     }
-    setActiveCategory('')
+
+    if (statusMessage) statusMessage.hidden = true
+
+    // Inject matching semantic single rows with custom micro-wrapped radio tokens
+    tableRoot.innerHTML = subOffences.map((sub, index) => {
+      const displayCode = (sub.code && sub.subcode) ? `${sub.code}${sub.subcode}` : (sub.fullCode || sub.code || '')
+      const radioId = `offence-choice-${index}`
+      const display = heading.textContent === sub.label ? sub.description : sub.label;
+
+      return `
+        <tr class="govuk-table__row" data-clickable-table-row>
+          <td class="govuk-table__cell">
+            <div class="govuk-radios govuk-radios--small">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" 
+                       id="${radioId}" 
+                       name="selected_sub_offence" 
+                       type="radio" 
+                       value="${sub.id}"
+                       data-offence-raw-string="${encodeURIComponent(JSON.stringify(sub))}">
+                
+                <label class="govuk-label govuk-radios__label" for="${radioId}">
+                  <b>${display}</b> ${displayCode}
+                </label>
+              </div>
+            </div>
+          </td>
+        </tr>
+      `
+    }).join('')
+
+    // Accessibility feature: Make the entire physical table row clickable to pick the radio target
+    tableRoot.querySelectorAll('[data-clickable-table-row]').forEach((row) => {
+      row.addEventListener('click', (e) => {
+        const targetRadio = row.querySelector('input[type="radio"]')
+        if (targetRadio && e.target !== targetRadio && !e.target.closest('label')) {
+          targetRadio.checked = true
+          extractSelectedPayload(targetRadio)
+        }
+      })
+
+      row.querySelector('input[type="radio"]')?.addEventListener('change', (e) => {
+        extractSelectedPayload(e.target)
+      })
+    })
+  }
+
+  // Parses payload data and mirrors selection configuration to visual preview block
+  const extractSelectedPayload = (radioInputElement) => {
+    try {
+      selectedOffenceObj = JSON.parse(decodeURIComponent(radioInputElement.dataset.offenceRawString))
+
+      // Update our explicit preview targets immediately
+      if (previewContainer && previewLabel && previewCode) {
+        const codeDisplay = (selectedOffenceObj.code && selectedOffenceObj.subcode)
+            ? `${selectedOffenceObj.code}${selectedOffenceObj.subcode}`
+            : (selectedOffenceObj.fullCode || selectedOffenceObj.code || '')
+
+        previewLabel.textContent = selectedOffenceObj.label
+        previewCode.textContent = `(${codeDisplay})`
+
+        // Remove 'hidden' attribute to slide summary block into layout visibility
+        previewContainer.hidden = false
+      }
+    } catch (err) {
+      console.error('Failed to parse active option state token string', err)
+    }
+  }
+
+  // Handle final choice submission inside your sub-offence script
+  form.addEventListener('submit', (event) => {
+    event.preventDefault()
+
+    if (!selectedOffenceObj) {
+      alert('Please select an offence from the list to continue.')
+      return
+    }
+
+    // 1. Save to your local assessment session cache object
+    const session = getTieringAssessmentSession()
+    const offencePayload = {
+      id: selectedOffenceObj.id,
+      label: selectedOffenceObj.label,
+      code: selectedOffenceObj.code || '',
+      subcode: selectedOffenceObj.subcode || '',
+      fullCode: selectedOffenceObj.fullCode || '',
+      isViolentOffence: Boolean(selectedOffenceObj.isViolentOffence)
+    }
+    session.currentOffence = offencePayload
+
+    // 2. Build explicit URL parameters to pass the choice back
+    const urlParams = new URLSearchParams()
+    urlParams.set('returned_offence_id', offencePayload.id)
+    urlParams.set('returned_offence_label', offencePayload.label)
+    urlParams.set('returned_offence_code', offencePayload.code)
+    urlParams.set('returned_offence_subcode', offencePayload.subcode)
+
+    // Redirect with data cleanly appended to the path string
+    window.location.href = `a1?${urlParams.toString()}`
   })
 
-  if (categoryFromUrl && isValidCategory(categoryFromUrl)) {
-    setActiveCategory(categoryFromUrl)
-    browse.restoreSelection()
-    renderPage(1)
-  }
+  // Bootstrapping
+  fetchOffenceBrowseGroups()
+      .then((groups) => {
+        const matchedGroup = groups.find(g => g.label === categoryName)
+        if (matchedGroup) {
+          renderSubOffencesTable(matchedGroup)
+        } else {
+          if (statusMessage) {
+            statusMessage.hidden = false
+            statusMessage.innerHTML = '<p class="govuk-body">Specified offence category context details not found.</p>'
+          }
+        }
+      })
+      .catch((error) => {
+        console.error('Failed processing category layout sequence data view:', error)
+        if (statusMessage) {
+          statusMessage.hidden = false
+          statusMessage.innerHTML = '<p class="govuk-body">Error loading records database payload.</p>'
+        }
+      })
 })
