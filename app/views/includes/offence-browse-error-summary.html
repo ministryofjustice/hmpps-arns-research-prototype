@@ -1,0 +1,14 @@
+<div
+  class="govuk-error-summary"
+  data-offence-browse-error-summary
+  data-module="govuk-error-summary"
+  tabindex="-1"
+  hidden
+>
+  <h2 class="govuk-error-summary__title">There is a problem</h2>
+  <div class="govuk-error-summary__body">
+    <ul class="govuk-list govuk-error-summary__list">
+      <li><a href="{{ offenceBrowseErrorLinkHref | default('#offence-browse-fieldset') }}">{{ offenceBrowseErrorLinkText | default('Select an offence') }}</a></li>
+    </ul>
+  </div>
+</div>

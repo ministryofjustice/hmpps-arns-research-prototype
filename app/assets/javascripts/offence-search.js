@@ -9,8 +9,8 @@ import {
 } from './conviction-date.js'
 import { captureCheckAnswersEditSnapshot, isTieringCheckAnswersEdit } from './tiering-change-scroll.js'
 import { getA1FieldsFromForm } from './tiering-journey.js'
-import { getTieringAssessmentSession } from './tiering-assessment-session.js'
-import { formatOffenceCodeLabel } from './tiering-offence-browse.js'
+import { getTieringAssessmentSession, setTieringAssessmentSession } from './tiering-assessment-session.js'
+import { formatOffenceCodeLabel, formatOffenceLabelWithCodes } from './tiering-offence-browse.js'
 import { trackTelemetryOffenceSearch } from './tiering-session-telemetry.js'
 
 const offenceSearchMatches = (item, query) => {
@@ -94,6 +94,7 @@ const offenceSearchBuildIndex = (offences) => {
         category: offence.category,
         parentId: offence.id,
         parentLabel: offence.label,
+        isViolentOffence: Boolean(sub.isViolentOffence),
         searchTerms: [
           sub.label,
           sub.code,
@@ -121,11 +122,13 @@ const offenceSearchMapSubOptions = (parent, subOffences) =>
       category: parent.category,
       parentId: parent.id,
       parentLabel: parent.label,
+      isViolentOffence: Boolean(sub.isViolentOffence),
       searchTerms: [sub.label, sub.code, sub.subcode, sub.fullCode]
     }))
 
 window.initOffenceSearchV2 = async (container) => {
-  if (!container || container.dataset.offenceSearchReady === 'true') return
+  if (!container) return null
+  if (container._offenceSearchHandle) return container._offenceSearchHandle
 
   const isCheckMode = Boolean(container.dataset.offenceSearchCheck)
   const input = container.querySelector('[data-offence-search-input]')
@@ -139,8 +142,13 @@ window.initOffenceSearchV2 = async (container) => {
   const hiddenSubcodeInput = container.querySelector('[data-offence-selected-subcode]')
   const changeLink = container.querySelector('[data-offence-change]')
 
-  if (!input || !listbox || !searchPanel) return
-  if (!isCheckMode && !selectedPanel) return
+  if (!input || !listbox || !searchPanel) return null
+  if (!isCheckMode && !selectedPanel) return null
+
+  const resizeSearchInput = () => {
+    input.style.height = 'auto'
+    input.style.height = `${Math.max(40, input.scrollHeight)}px`
+  }
 
   let pendingCheckSelection = null
 
@@ -278,19 +286,24 @@ window.initOffenceSearchV2 = async (container) => {
     browseParent = null
     clearListbox()
     setExpanded(false)
+    resizeSearchInput()
     if (hiddenInput) hiddenInput.value = ''
     if (hiddenCodeInput) hiddenCodeInput.value = ''
     if (hiddenSubcodeInput) hiddenSubcodeInput.value = ''
     input.setAttribute('aria-describedby', 'current-offence-search-hint')
+    if (!isCheckMode && document.getElementById('tiering-a1-form')) {
+      setTieringAssessmentSession({ currentOffence: null })
+    }
     input.focus()
   }
 
   const storeCheckSelection = (selection) => {
     pendingCheckSelection = selection
-    input.value = selection.label
+    input.value = formatOffenceLabelWithCodes(selection)
     browseParent = null
     clearListbox()
     setExpanded(false)
+    resizeSearchInput()
     container.dispatchEvent(
         new CustomEvent('offence-search:selected', {
           bubbles: true,
@@ -333,6 +346,15 @@ window.initOffenceSearchV2 = async (container) => {
     })
   }
 
+  const offenceSelectionFromOption = (option) => ({
+    id: option.id,
+    label: option.label,
+    code: option.code || '',
+    subcode: option.subcode || '',
+    fullCode: option.fullCode || '',
+    isViolentOffence: Boolean(option.isViolentOffence)
+  })
+
   const selectOption = (option) => {
     if (!option || option.type === 'back') {
       browseParent = null
@@ -348,13 +370,7 @@ window.initOffenceSearchV2 = async (container) => {
       return
     }
 
-    showSelected({
-      id: option.id,
-      label: option.label,
-      code: option.code || '',
-      subcode: option.subcode || '',
-      fullCode: option.fullCode || ''
-    })
+    showSelected(offenceSelectionFromOption(option))
   }
 
   const getSelectableOptions = () => listbox.querySelectorAll('[role="option"]')
@@ -415,6 +431,8 @@ window.initOffenceSearchV2 = async (container) => {
   input.addEventListener('input', () => {
     if (!dataReady) return
 
+    resizeSearchInput()
+
     const query = input.value.trim()
 
     if (!query) {
@@ -467,8 +485,8 @@ window.initOffenceSearchV2 = async (container) => {
     }
 
     if (event.key === 'Enter') {
+      event.preventDefault()
       if (!listbox.hidden && activeIndex >= 0) {
-        event.preventDefault()
         activateHighlighted()
       }
     }
@@ -603,12 +621,22 @@ window.initOffenceSearchV2 = async (container) => {
 
   delete container.dataset.offenceSearchInitializing
 
-  return { getPendingSelection: () => pendingCheckSelection }
+  resizeSearchInput()
+
+  const handle = {
+    getPendingSelection: () => pendingCheckSelection,
+    resizeSearchInput
+  }
+  container._offenceSearchHandle = handle
+  return handle
 }
 
+window.initOffenceSearch = window.initOffenceSearchV2
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  document.querySelectorAll('[data-module="offence-search"]').forEach((container) => {
-    window.initOffenceSearchV2(container)
-  })
+  document
+    .querySelectorAll('[data-module="offence-search"]:not([data-offence-search-check])')
+    .forEach((container) => {
+      window.initOffenceSearchV2(container)
+    })
 })

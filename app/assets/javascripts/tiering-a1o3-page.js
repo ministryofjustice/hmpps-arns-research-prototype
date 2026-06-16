@@ -4,11 +4,13 @@
 
 import { fetchOffenceBrowseGroups } from './offences-data.js'
 import { getTieringAssessmentSession } from './tiering-assessment-session.js'
+import { withFromCheckAnswers } from './tiering-change-scroll.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
   const form = document.getElementById('tiering-a1o3-form')
   const heading = document.querySelector('[data-active-category-heading]')
   const tableRoot = document.querySelector('[data-sub-offences-root]')
+  const offencesTable = document.querySelector('[data-sub-offences-table]')
   const statusMessage = document.querySelector('[data-table-status-message]')
 
   // NEW DOM References for the Selected Summary Display Box
@@ -19,8 +21,27 @@ window.GOVUKPrototypeKit.documentReady(() => {
   // Extract targeted string straight out of the window URL parameters
   const urlParams = new URLSearchParams(window.location.search)
   const categoryName = urlParams.get('category')
+  const browseCategory = urlParams.get('browseCategory')
 
   if (!form || !tableRoot) return
+
+  const saveButton = form.querySelector('[data-offence-save-continue]')
+
+  const updateBackLinks = (parentCategory) => {
+    const backUrl = parentCategory
+      ? `a1o?category=${encodeURIComponent(parentCategory)}`
+      : 'a1o'
+
+    document
+      .querySelectorAll('.assessment-layout .govuk-back-link, .offence-browse-variant-toggle')
+      .forEach((link) => {
+        link.href = withFromCheckAnswers(backUrl)
+      })
+  }
+
+  if (browseCategory) {
+    updateBackLinks(browseCategory)
+  }
 
   if (!categoryName) {
     if (heading) heading.textContent = 'No Category Selected'
@@ -33,18 +54,40 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   let selectedOffenceObj = null
 
+  const updateSaveButtonVisibility = () => {
+    if (!saveButton) return
+
+    const showSave = Boolean(selectedOffenceObj)
+    saveButton.classList.toggle('offence-browse-save--hidden', !showSave)
+    saveButton.toggleAttribute('hidden', !showSave)
+    saveButton.disabled = !showSave
+  }
+
+  const showNoResults = () => {
+    selectedOffenceObj = null
+    if (previewContainer) previewContainer.hidden = true
+    if (tableRoot) tableRoot.innerHTML = ''
+    if (offencesTable) offencesTable.hidden = true
+    if (statusMessage) {
+      statusMessage.hidden = false
+      statusMessage.innerHTML = '<p class="govuk-body">No results found</p>'
+    }
+    updateSaveButtonVisibility()
+  }
+
   const renderSubOffencesTable = (categoryGroup) => {
     const subOffences = categoryGroup.subOffences || []
 
     if (subOffences.length === 0) {
-      if (statusMessage) {
-        statusMessage.hidden = false
-        statusMessage.innerHTML = '<p class="govuk-body">No granular sub-offences found inside this category block.</p>'
-      }
+      showNoResults()
       return
     }
 
+    selectedOffenceObj = null
+    if (previewContainer) previewContainer.hidden = true
+    if (offencesTable) offencesTable.hidden = false
     if (statusMessage) statusMessage.hidden = true
+    updateSaveButtonVisibility()
 
     // Inject matching semantic single rows with custom micro-wrapped radio tokens
     tableRoot.innerHTML = subOffences.map((sub, index) => {
@@ -65,7 +108,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
                        data-offence-raw-string="${encodeURIComponent(JSON.stringify(sub))}">
                 
                 <label class="govuk-label govuk-radios__label" for="${radioId}">
-                  <b>${display}</b> ${displayCode}
+                  <b>${display}</b> <span class="govuk-hint govuk-!-display-inline govuk-!-margin-bottom-0">${displayCode}</span>
                 </label>
               </div>
             </div>
@@ -107,6 +150,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
         // Remove 'hidden' attribute to slide summary block into layout visibility
         previewContainer.hidden = false
       }
+      updateSaveButtonVisibility()
     } catch (err) {
       console.error('Failed to parse active option state token string', err)
     }
@@ -149,12 +193,11 @@ window.GOVUKPrototypeKit.documentReady(() => {
       .then((groups) => {
         const matchedGroup = groups.find(g => g.label === categoryName)
         if (matchedGroup) {
+          updateBackLinks(browseCategory || matchedGroup.category)
           renderSubOffencesTable(matchedGroup)
         } else {
-          if (statusMessage) {
-            statusMessage.hidden = false
-            statusMessage.innerHTML = '<p class="govuk-body">Specified offence category context details not found.</p>'
-          }
+          updateBackLinks(browseCategory || '')
+          showNoResults()
         }
       })
       .catch((error) => {

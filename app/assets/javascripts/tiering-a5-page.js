@@ -13,6 +13,7 @@ import {
   applyBranchingCleanup,
   getA5FieldsFromForm,
   getPostA5ContinueHref,
+  isA5Required,
   isDateComplete,
   tieringJourneyHref
 } from './tiering-journey.js'
@@ -47,6 +48,11 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   const session = getTieringAssessmentSession()
   const formattedDate = formatDateFromParts(session.communityDate || {})
+
+  if (!isA5Required(session)) {
+    window.location.href = tieringJourneyHref('a6.html')
+    return
+  }
 
   if (!formattedDate) {
     window.location.href = tieringJourneyHref('a4.html')

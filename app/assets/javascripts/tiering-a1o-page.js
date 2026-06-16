@@ -27,8 +27,10 @@ window.GOVUKPrototypeKit.documentReady(() => {
   const listContainer = document.querySelector('[data-offence-list-container]')
   const listRoot = document.querySelector('[data-offence-category-list]')
   const loadingStatus = document.querySelector('[data-offence-loading-status]')
+  const emptyStatus = document.querySelector('[data-offence-category-empty]')
   const paginationRoot = document.querySelector('[data-offence-pagination]')
   const sortSelect = document.querySelector('[data-offence-sort-by]')
+  const saveButton = form?.querySelector('[data-offence-save-continue]')
   const categoryFilter = document.querySelector('[data-offence-category-filter]')
   const categoryTitle = document.querySelector('[data-offence-category-title]')
   const viewAllLink = document.querySelector('[data-offence-view-all]')
@@ -51,6 +53,8 @@ window.GOVUKPrototypeKit.documentReady(() => {
     telemetrySource: 'browse-a',
     browseContext,
     returnUrl,
+    selectionErrorFocusSelector: '#offence-sort-by',
+    categoryRequiredSelector: '#offence-sort-by',
     onStartNewSearch: () => {
       setActiveCategory('')
     }
@@ -62,23 +66,48 @@ window.GOVUKPrototypeKit.documentReady(() => {
   initOffenceSortSelectResize(sortSelect)
 
   let allGroups = []
-  let activeCategory = ''
+  const initialCategory = new URLSearchParams(window.location.search).get('category') || ''
+  let activeCategory = initialCategory
+
+  const syncCategoryToUrl = (category) => {
+    const params = new URLSearchParams(window.location.search)
+
+    if (category) {
+      params.set('category', category)
+    } else {
+      params.delete('category')
+    }
+
+    const query = params.toString()
+    const newUrl = query ? `${window.location.pathname}?${query}` : window.location.pathname
+    window.history.replaceState(null, '', newUrl)
+  }
 
   const getDisplayGroups = () => filterOffenceBrowseGroupsByCategory(allGroups, activeCategory)
 
-  const updateCategoryFilterBar = () => {
-    if (!categoryFilter || !categoryTitle) return
+  const updateSaveButtonVisibility = () => {
+    if (!saveButton) return
 
-    if (activeCategory) {
-      categoryFilter.hidden = false
-      categoryTitle.textContent = "Offences in " + "'" + activeCategory + "'"
-      if (sortSelect) sortSelect.value = activeCategory
-    } else {
-      categoryFilter.hidden = true
-      categoryTitle.textContent = ''
-      if (sortSelect) sortSelect.value = ''
+    const hideSave = Boolean(activeCategory)
+    saveButton.classList.toggle('offence-browse-save--hidden', hideSave)
+    saveButton.toggleAttribute('hidden', hideSave)
+    saveButton.disabled = hideSave
+  }
+
+  const updateCategoryFilterBar = () => {
+    if (categoryFilter && categoryTitle) {
+      if (activeCategory) {
+        categoryFilter.hidden = false
+        categoryTitle.textContent = "Offences in " + "'" + activeCategory + "'"
+        if (sortSelect) sortSelect.value = activeCategory
+      } else {
+        categoryFilter.hidden = true
+        categoryTitle.textContent = ''
+        if (sortSelect) sortSelect.value = ''
+      }
     }
 
+    updateSaveButtonVisibility()
     resizeOffenceSortSelect(sortSelect)
   }
 
@@ -92,6 +121,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   const setActiveCategory = (category) => {
     activeCategory = category || ''
+    syncCategoryToUrl(activeCategory)
     browse.clearSelection()
     updateCategoryFilterBar()
     renderPage(1, { scrollToTop: true })
@@ -105,6 +135,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
     if (activeCategory && displayGroups.length > 0) {
       listContainer.hidden = false
+      if (emptyStatus) emptyStatus.hidden = true
 
       const { items, currentPage, totalPages } = paginateOffenceBrowseGroups(displayGroups, page)
 
@@ -112,7 +143,9 @@ window.GOVUKPrototypeKit.documentReady(() => {
       listRoot.innerHTML = items.map((group) => {
         const count = group.subOffences ? group.subOffences.length : 0
         const offenceWord = count === 1 ? 'offence' : 'offences'
-        const targetUrl = `a1o3?category=${encodeURIComponent(group.label)}`
+        const targetUrl = withFromCheckAnswers(
+          `a1o3?category=${encodeURIComponent(group.label)}&browseCategory=${encodeURIComponent(activeCategory)}`
+        )
 
         return `
           <tr class="govuk-table__row">
@@ -136,10 +169,18 @@ window.GOVUKPrototypeKit.documentReady(() => {
         paginationRoot.hidden = true
         paginationRoot.innerHTML = ''
       }
+    } else if (activeCategory) {
+      listContainer.hidden = true
+      listRoot.innerHTML = ''
+      paginationRoot.hidden = true
+      paginationRoot.innerHTML = ''
+      if (emptyStatus) emptyStatus.hidden = false
     } else {
       listContainer.hidden = true
       listRoot.innerHTML = ''
       paginationRoot.hidden = true
+      paginationRoot.innerHTML = ''
+      if (emptyStatus) emptyStatus.hidden = true
     }
 
     if (scrollToTop) {
@@ -161,6 +202,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
         allGroups = groups
         browse.registerOffences(flattenOffenceSubOffences(groups))
         browse.restoreSelection()
+        updateCategoryFilterBar()
         renderPage(1)
       })
       .catch((error) => {
@@ -169,4 +211,18 @@ window.GOVUKPrototypeKit.documentReady(() => {
         if (loadingStatus) loadingStatus.hidden = true
         browse.showLoadError(listRoot)
       })
+
+  const restoreCategoryFromUrl = () => {
+    const categoryFromUrl = new URLSearchParams(window.location.search).get('category') || ''
+    if (!categoryFromUrl || categoryFromUrl === activeCategory) return
+
+    activeCategory = categoryFromUrl
+    updateCategoryFilterBar()
+    if (allGroups.length) renderPage(1)
+  }
+
+  window.addEventListener('pageshow', (event) => {
+    if (!event.persisted) return
+    restoreCategoryFromUrl()
+  })
 })

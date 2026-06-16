@@ -3,23 +3,96 @@
 //
 
 import {
+  getOffenderDateOfBirthParts,
+  getTieringAssessmentSession
+} from './tiering-assessment-session.js'
+import {
   captureCheckAnswersEditSnapshot,
   completeTieringPageAndContinue,
   isTieringCheckAnswersEdit
 } from './tiering-change-scroll.js'
-import { getA2FieldsFromForm } from './tiering-journey.js'
-import { getTieringAssessmentSession } from './tiering-assessment-session.js'
+import {
+  calculateAgeOnDate,
+  getA2FieldsFromForm,
+  isValidDateParts,
+  normaliseDateParts
+} from './tiering-journey.js'
+
+const FIRST_SANCTION_DATE_INPUT_IDS = [
+  'first-sanction-date-day',
+  'first-sanction-date-month',
+  'first-sanction-date-year'
+]
+
+const setFirstSanctionDateValues = (parts) => {
+  const dayInput = document.getElementById('first-sanction-date-day')
+  const monthInput = document.getElementById('first-sanction-date-month')
+  const yearInput = document.getElementById('first-sanction-date-year')
+
+  if (dayInput) dayInput.value = parts.day || ''
+  if (monthInput) monthInput.value = parts.month || ''
+  if (yearInput) yearInput.value = parts.year || ''
+}
+
+const getFirstSanctionDatePartsFromDom = () =>
+  normaliseDateParts({
+    day: document.getElementById('first-sanction-date-day')?.value,
+    month: document.getElementById('first-sanction-date-month')?.value,
+    year: document.getElementById('first-sanction-date-year')?.value
+  })
 
 window.GOVUKPrototypeKit.documentReady(() => {
   const form = document.getElementById('tiering-a2-form')
   if (!form) return
 
   const session = getTieringAssessmentSession()
-  const firstSanctionAge = form.querySelector('#first-sanction-age')
+  const offenderFirstName = form.dataset.offenderFirstName || 'Alex'
+  const ageResult = document.getElementById('first-sanction-age-result')
 
-  if (session.firstSanctionAge && firstSanctionAge) {
-    firstSanctionAge.value = session.firstSanctionAge
+  if (session.firstSanctionDate) {
+    setFirstSanctionDateValues(session.firstSanctionDate)
   }
+
+  const hideAgeResult = () => {
+    if (!ageResult) return
+    ageResult.textContent = ''
+    ageResult.classList.add('first-sanction-age-result--hidden')
+  }
+
+  const showAgeResult = (age) => {
+    if (!ageResult) return
+    ageResult.innerHTML = `<strong>Age:</strong> ${offenderFirstName} was aged ${age} on this date`
+    ageResult.classList.remove('first-sanction-age-result--hidden')
+  }
+
+  const updateFirstSanctionAgeResult = () => {
+    const dateParts = getFirstSanctionDatePartsFromDom()
+
+    if (!isValidDateParts(dateParts)) {
+      hideAgeResult()
+      return
+    }
+
+    const age = calculateAgeOnDate(getOffenderDateOfBirthParts(), dateParts)
+    if (age == null) {
+      hideAgeResult()
+      return
+    }
+
+    showAgeResult(age)
+  }
+
+  FIRST_SANCTION_DATE_INPUT_IDS.forEach((id) => {
+    document.getElementById(id)?.addEventListener('blur', updateFirstSanctionAgeResult)
+  })
+
+  form.querySelector('[data-first-sanction-date-field]')?.addEventListener('focusout', (event) => {
+    const dateField = event.currentTarget
+    if (dateField.contains(event.relatedTarget)) return
+    updateFirstSanctionAgeResult()
+  })
+
+  updateFirstSanctionAgeResult()
 
   if (session.totalSanctions) {
     const totalSanctions = form.querySelector('#total-sanctions')

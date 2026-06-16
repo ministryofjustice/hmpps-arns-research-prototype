@@ -3,15 +3,15 @@
 //
 
 import { markSection1Complete } from './assessment-section-complete.js'
-import { getTieringBackLinkHref, isTieringCheckAnswersEdit } from './tiering-change-scroll.js'
-import { redirectIfTieringJourneyIncomplete, syncTieringSessionBeforeCheckAnswers } from './tiering-journey.js'
-import { insertTieringSessionFooterLinks } from './tiering-footer-session-links.js'
+import { getTieringBackLinkHref } from './tiering-change-scroll.js'
 import {
-  trackTelemetryRiskPredictorDetailsOpen,
-  trackTelemetryRiskPredictorTabSwitch
-} from './tiering-session-telemetry.js'
+  redirectIfTieringJourneyIncomplete,
+  syncTieringSessionBeforeCheckAnswers,
+  tieringJourneyHref
+} from './tiering-journey.js'
+import { insertTieringSessionFooterLinks } from './tiering-footer-session-links.js'
+import { trackTelemetryRiskPredictorDetailsOpen } from './tiering-session-telemetry.js'
 import { initTieringInactiveLinks } from './tiering-inactive-links.js'
-import { renderTieringSummaryList } from './tiering-summary.js'
 
 const easeOutCubic = (progress) => 1 - (1 - progress) ** 3
 
@@ -83,7 +83,7 @@ const applySexualPredictorEmptyStates = (session) => {
   })
 }
 
-const initRiskPredictorTelemetry = (initialTab = 'scores') => {
+const initRiskPredictorTelemetry = () => {
   document.querySelectorAll('.risk-predictor-scores__section[data-risk-predictor-id]').forEach((section) => {
     const details = section.querySelector('details.risk-predictor-scores__details')
     if (!details) return
@@ -97,72 +97,19 @@ const initRiskPredictorTelemetry = (initialTab = 'scores') => {
       trackTelemetryRiskPredictorDetailsOpen(predictorId, predictorLabel)
     })
   })
-
-  const tabsRoot = document.querySelector('.govuk-tabs')
-  if (!tabsRoot) return () => {}
-
-  let activeTab = initialTab === 'answers' ? 'answers' : 'scores'
-
-  const trackTabSwitch = (fromTab, toTab) => {
-    if (fromTab === toTab) return
-    trackTelemetryRiskPredictorTabSwitch(fromTab, toTab)
-    activeTab = toTab
-  }
-
-  tabsRoot.querySelectorAll('.govuk-tabs__tab').forEach((tab) => {
-    tab.addEventListener('click', () => {
-      const href = tab.getAttribute('href') || ''
-      const nextTab = href === '#answers' ? 'answers' : href === '#score' ? 'scores' : null
-      if (!nextTab || nextTab === activeTab) return
-
-      trackTabSwitch(activeTab, nextTab)
-    })
-  })
-
-  return trackTabSwitch
-}
-
-const getInitialA8Tab = () => (window.location.hash === '#answers' ? 'answers' : 'score')
-
-const activateA8Tab = (tabId) => {
-  const tabsRoot = document.querySelector('.govuk-tabs')
-  if (!tabsRoot) return
-
-  const targetHref = tabId === 'answers' ? '#answers' : '#score'
-  const tabLink = tabsRoot.querySelector(`.govuk-tabs__tab[href="${targetHref}"]`)
-  if (!tabLink) return
-
-  tabsRoot.querySelectorAll('.govuk-tabs__list-item').forEach((item) => {
-    item.classList.toggle('govuk-tabs__list-item--selected', item.contains(tabLink))
-  })
-
-  tabsRoot.querySelectorAll('.govuk-tabs__panel').forEach((panel) => {
-    panel.classList.toggle('govuk-tabs__panel--hidden', panel.id !== tabId)
-  })
-
-  tabsRoot.querySelectorAll('.govuk-tabs__tab').forEach((tab) => {
-    tab.setAttribute('aria-selected', tab === tabLink ? 'true' : 'false')
-  })
-
-  const hash = tabId === 'answers' ? '#answers' : '#score'
-  if (window.location.hash !== hash) {
-    history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`)
-  }
-}
-
-const initA8ViewScoresButton = (onTabSwitch) => {
-  const button = document.getElementById('tiering-a8-view-scores')
-  if (!button) return
-
-  button.addEventListener('click', () => {
-    onTabSwitch?.('answers', 'scores')
-    activateA8Tab('score')
-    scrollA8ToTop()
-  })
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  if (!document.querySelector('.govuk-tabs')) return
+  if (!document.getElementById('tiering-a8-back')) return
+
+  if (window.location.hash === '#answers') {
+    window.location.replace(tieringJourneyHref('a7.html'))
+    return
+  }
+
+  if (window.location.hash === '#score') {
+    history.replaceState(null, '', `${window.location.pathname}${window.location.search}`)
+  }
 
   if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual'
@@ -170,28 +117,20 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   scrollA8ToTop()
 
-  const initialTab = getInitialA8Tab()
-  activateA8Tab(initialTab)
-
   const session = syncTieringSessionBeforeCheckAnswers()
 
   if (redirectIfTieringJourneyIncomplete()) return
 
   const backLink = document.getElementById('tiering-a8-back')
   if (backLink) {
-    backLink.href = getTieringBackLinkHref('a6.html')
+    backLink.href = getTieringBackLinkHref('a7.html')
   }
 
   insertTieringSessionFooterLinks()
   applySexualPredictorEmptyStates(session)
   initTieringInactiveLinks()
   initRiskPredictorBackToTop()
-  const trackTabSwitch = initRiskPredictorTelemetry(initialTab === 'answers' ? 'answers' : 'scores')
-  initA8ViewScoresButton(trackTabSwitch)
-
-  const summaryList = document.getElementById('tiering-summary-list')
-  const offenderFirstName = summaryList?.dataset.offenderFirstName || 'Alex'
-  if (summaryList) renderTieringSummaryList(summaryList, session, offenderFirstName)
+  initRiskPredictorTelemetry()
 
   const markCompleteButton = document.getElementById('tiering-mark-section-complete')
   if (markCompleteButton) {

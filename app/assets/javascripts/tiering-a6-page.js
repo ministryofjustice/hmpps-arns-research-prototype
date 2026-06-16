@@ -1,46 +1,89 @@
 //
-// a6 – section 1 complete (static scores available)
+// a6 – interview done (continue assessment or view static scores)
 //
 
-import { getTieringBackLinkHref, isTieringCheckAnswersEdit } from './tiering-change-scroll.js'
 import {
+  captureCheckAnswersEditSnapshot,
+  completeTieringPageAndContinue,
+  getTieringBackLinkHref,
+  isTieringBackNavigation,
+  isTieringCheckAnswersEdit
+} from './tiering-change-scroll.js'
+import {
+  getA6BackHref,
+  getA6FieldsFromForm,
   getTieringResultsAnswersHref,
+  getTieringResultsScoresHref,
   hasSeenStaticAssessmentComplete,
-  markStaticAssessmentCompleteSeen,
+  isA4Complete,
+  isA5Required,
   syncTieringSessionBeforeCheckAnswers,
   tieringJourneyHref
 } from './tiering-journey.js'
-import { setTieringAssessmentSession } from './tiering-assessment-session.js'
-import { trackTelemetryMilestone } from './tiering-session-telemetry.js'
-import { initTieringInactiveLinks } from './tiering-inactive-links.js'
+import { getTieringAssessmentSession, setTieringAssessmentSession } from './tiering-assessment-session.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  if (!document.querySelector('.tiering-a6-options')) return
+  const form = document.getElementById('tiering-a6-form')
+  if (!form) return
 
   const session = syncTieringSessionBeforeCheckAnswers()
 
-  if (!session.offencesSinceCommunity) {
+  if (!isA4Complete(session)) {
+    window.location.href = tieringJourneyHref('a4.html')
+    return
+  }
+
+  if (isA5Required(session) && !session.offencesSinceCommunity) {
     window.location.href = tieringJourneyHref('a5.html')
     return
   }
 
-  if (hasSeenStaticAssessmentComplete(session) && !isTieringCheckAnswersEdit()) {
-    window.location.href = tieringJourneyHref(getTieringResultsAnswersHref())
+  if (hasSeenStaticAssessmentComplete(session) && !isTieringCheckAnswersEdit() && !isTieringBackNavigation()) {
+    window.location.href = tieringJourneyHref(
+      session.scoreCalculated ? getTieringResultsScoresHref() : getTieringResultsAnswersHref()
+    )
     return
   }
 
   const backLink = document.getElementById('tiering-a6-back')
   if (backLink) {
-    backLink.href = getTieringBackLinkHref('a5.html')
+    backLink.href = getTieringBackLinkHref(getA6BackHref(session))
   }
 
-  initTieringInactiveLinks(document.querySelector('.tiering-a6-options'))
+  if (session.interviewDone) {
+    const input = form.querySelector(`input[name="interview_done"][value="${session.interviewDone}"]`)
+    if (input) input.checked = true
+  }
 
-  document.querySelector('[data-tiering-a6-action="done"]')?.addEventListener('click', () => {
-    markStaticAssessmentCompleteSeen()
-    syncTieringSessionBeforeCheckAnswers()
-    trackTelemetryMilestone('calculatedScore')
-    setTieringAssessmentSession({ scoreCalculated: true })
-    window.location.href = tieringJourneyHref(getTieringResultsAnswersHref())
+  if (isTieringCheckAnswersEdit()) {
+    captureCheckAnswersEditSnapshot(getA6FieldsFromForm(form))
+  }
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault()
+
+    const newFields = getA6FieldsFromForm(form)
+
+    if (!newFields.interviewDone) {
+      form.querySelector('input[name="interview_done"]')?.focus()
+      return
+    }
+
+    if (newFields.interviewDone === 'yes') {
+      setTieringAssessmentSession({
+        ...getTieringAssessmentSession(),
+        ...newFields,
+        staticAssessmentCompleteSeen: false,
+        scoreCalculated: false
+      })
+      return
+    }
+
+    window.location.href = tieringJourneyHref(
+      completeTieringPageAndContinue('a6', 'a7.html', {
+        ...newFields,
+        staticAssessmentCompleteSeen: true
+      })
+    )
   })
 })

@@ -23,6 +23,17 @@ export const formatOffenceCodeLabel = (offence) => {
   return offence.code ? `Offence code: ${offence.code}` : ''
 }
 
+export const getOffenceCodeBracket = (offence) => {
+  const codePart =
+    offence.code && offence.subcode ? `${offence.code}${offence.subcode}` : offence.fullCode || offence.code || ''
+  return codePart ? codePart : ''
+}
+
+export const formatOffenceLabelWithCodes = (offence) => {
+  const codeBracket = getOffenceCodeBracket(offence)
+  return codeBracket ? `${offence.label}  ${codeBracket}` : offence.label
+}
+
 export const lookupOffenceIsViolent = (offenceId) => {
   const offences = window.OFFENCE_SEARCH_DATA
   if (!offences?.length || !offenceId) return false
@@ -39,8 +50,17 @@ export const applyOffenceViolentTag = (tagEl, isViolentOffence) => {
   if (!tagEl) return
 
   const isViolent = Boolean(isViolentOffence)
-  tagEl.textContent = isViolent ? 'Violent offence' : 'Not violent'
-  tagEl.className = `govuk-tag offence-selected-card__tag ${isViolent ? 'govuk-tag--red' : 'govuk-tag--green'}`
+  const preservedClasses = [...tagEl.classList].filter(
+    (className) => !className.startsWith('govuk-tag') && className !== 'offence-selected-card__tag'
+  )
+
+  tagEl.textContent = isViolent ? 'Violent' : 'Not violent'
+  tagEl.className = [
+    ...preservedClasses,
+    'govuk-tag',
+    'offence-selected-card__tag',
+    isViolent ? 'govuk-tag--red' : 'govuk-tag--grey'
+  ].join(' ')
   tagEl.hidden = false
 }
 
@@ -398,14 +418,43 @@ export const initOffenceBrowseForm = ({
   telemetrySource = 'browse',
   browseContext = 'current-offence',
   returnUrl = 'a1.html',
-  onStartNewSearch = null
+  onStartNewSearch = null,
+  selectionErrorFocusSelector = null,
+  categoryRequiredSelector = null,
+  validateOffenceSelection = true
 }) => {
   if (!form) return null
 
-  const errorSummary = form.querySelector('[data-offence-browse-error-summary]')
+  const errorSummary = document.querySelector('[data-offence-browse-error-summary]')
   const fieldset = form.querySelector('#offence-browse-fieldset')
   const selectionSummary = form.querySelector('[data-offence-selection-summary]')
   const selectionSummaryValue = form.querySelector('[data-offence-selection-summary-value]')
+  const selectionErrorFocusTarget = selectionErrorFocusSelector
+    ? document.querySelector(selectionErrorFocusSelector)
+    : null
+  const selectionErrorFieldGroup =
+    selectionErrorFocusTarget?.closest('[data-offence-category-field]') ||
+    selectionErrorFocusTarget?.closest('.govuk-form-group') ||
+    null
+
+  const getSelectionErrorMessage = () =>
+    selectionErrorFieldGroup?.querySelector('.govuk-error-message') || null
+
+  const createSelectionErrorMessage = () => {
+    if (!selectionErrorFieldGroup || !selectionErrorFocusTarget) return null
+
+    const existing = getSelectionErrorMessage()
+    if (existing) return existing
+
+    const messageText =
+      selectionErrorFieldGroup.dataset.offenceErrorMessage || 'Select an offence'
+    const message = document.createElement('p')
+    message.className = 'govuk-error-message'
+    message.id = `${selectionErrorFocusTarget.id}-error`
+    message.innerHTML = `<span class="govuk-visually-hidden">Error:</span> ${messageText}`
+    selectionErrorFocusTarget.before(message)
+    return message
+  }
 
   if (browseContext !== OFFENCE_SEARCH_RESULTS_BROWSE_CONTEXT) {
     trackTelemetryOffenceSearch({ action: 'browse-open' })
@@ -435,11 +484,7 @@ export const initOffenceBrowseForm = ({
 
   const getSelectedId = () => selectedOffence?.id || ''
 
-  const formatSelectionOffenceLine = (offence) => {
-    const codePart =
-      offence.code && offence.subcode ? `${offence.code}/${offence.subcode}` : offence.fullCode || ''
-    return codePart ? `${offence.label} (${codePart})` : offence.label
-  }
+  const formatSelectionOffenceLine = (offence) => formatOffenceLabelWithCodes(offence)
 
   const updateSelectionSummary = () => {
     if (!selectionSummary || !selectionSummaryValue) return
@@ -457,6 +502,10 @@ export const initOffenceBrowseForm = ({
   const clearSelectionError = () => {
     if (errorSummary) errorSummary.hidden = true
     fieldset?.classList.remove('govuk-fieldset--error')
+    selectionErrorFocusTarget?.classList.remove('govuk-select--error')
+    selectionErrorFieldGroup?.classList.remove('govuk-form-group--error')
+    getSelectionErrorMessage()?.remove()
+    selectionErrorFocusTarget?.removeAttribute('aria-describedby')
   }
 
   const showSelectionError = () => {
@@ -465,7 +514,26 @@ export const initOffenceBrowseForm = ({
       errorSummary.focus()
     }
 
+    if (selectionErrorFocusTarget) {
+      selectionErrorFocusTarget.classList.add('govuk-select--error')
+      selectionErrorFieldGroup?.classList.add('govuk-form-group--error')
+      const selectionErrorMessage = createSelectionErrorMessage()
+      if (selectionErrorMessage?.id) {
+        selectionErrorFocusTarget.setAttribute('aria-describedby', selectionErrorMessage.id)
+      }
+      return
+    }
+
     fieldset?.classList.add('govuk-fieldset--error')
+  }
+
+  const errorSummaryLink = errorSummary?.querySelector('a[href]')
+  if (errorSummaryLink && selectionErrorFocusTarget) {
+    errorSummaryLink.addEventListener('click', (event) => {
+      event.preventDefault()
+      selectionErrorFocusTarget.focus({ preventScroll: false })
+      selectionErrorFocusTarget.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    })
   }
 
   const clearSelection = () => {
@@ -474,6 +542,10 @@ export const initOffenceBrowseForm = ({
     form.querySelectorAll('[data-select-offence]').forEach((radio) => {
       radio.checked = false
     })
+
+    if (browseContext === 'current-offence') {
+      setTieringAssessmentSession({ currentOffence: null })
+    }
 
     updateSelectionSummary()
     clearSelectionError()
@@ -571,6 +643,17 @@ export const initOffenceBrowseForm = ({
 
   form.addEventListener('submit', (event) => {
     event.preventDefault()
+
+    if (categoryRequiredSelector) {
+      const categoryField = document.querySelector(categoryRequiredSelector)
+      if (!categoryField?.value) {
+        showSelectionError()
+        return
+      }
+      return
+    }
+
+    if (!validateOffenceSelection) return
 
     const checkedRadio = form.querySelector('[data-select-offence]:checked')
     const offence =
