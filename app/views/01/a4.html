@@ -1,8 +1,10 @@
 {% extends "layouts/assessment.html" %}
 
 {% set offenderFirstName = "Alex" %}
-{% set pageName = "Community date" %}
-{% set pageHeading = "Community date" %}
+{% set pageName = "Community supervision" %}
+{% set pageHeadingHtml = 'Is ' ~ offenderFirstName ~ ' currently being supervised in the community?' %}
+{% set pageHeadingId = "tiering-supervised-in-community" %}
+{% set pageHeadingClass = "tiering-question-anchor" %}
 {% set compactPageHeader = true %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}

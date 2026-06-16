@@ -1,6 +1,10 @@
 <div class="assessment-layout"{% if tieringTelemetryPage %} data-tiering-telemetry-page="{{ tieringTelemetryPage }}" data-tiering-telemetry-page-label="{{ tieringTelemetryPageLabel | default(tieringTelemetryPage) }}"{% endif %}>
+  {% include "includes/assessment-phase-banner.html" %}
   {% if backLinkHref %}
   <a href="{{ backLinkHref }}" class="govuk-back-link assessment-layout__back-link"{% if backLinkId %} id="{{ backLinkId }}"{% endif %}>{{ backLinkText | default('Back') }}</a>
+  {% endif %}
+  {% if offenceBrowseErrorSummary %}
+  {% include "includes/offence-browse-error-summary.html" %}
   {% endif %}
   {% if not hideOffenderHeader %}
   {% include "includes/assessment-offender-header.html" %}

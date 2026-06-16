@@ -1,6 +1,6 @@
 //
-// Scroll to a question when arriving from a8 "Change" link (URL hash)
-// Save and continue returns to a8 or next required page when editing from check answers
+// Scroll to a question when arriving from a7 "Change" link (URL hash)
+// Save and continue returns to a7 or next required page when editing from check answers
 //
 
 import { clearSection1Complete, isSection1Complete } from './assessment-section-complete.js'
@@ -13,8 +13,9 @@ import {
 } from './tiering-journey.js'
 import { getTieringAssessmentSession, setTieringAssessmentSession } from './tiering-assessment-session.js'
 
-export const TIERING_FROM_CHECK_ANSWERS = 'a8'
-const TIERING_FROM_CHECK_ANSWERS_LEGACY = 'a7'
+export const TIERING_FROM_CHECK_ANSWERS = 'a7'
+const TIERING_FROM_CHECK_ANSWERS_LEGACY = 'a8'
+export const TIERING_BACK_FROM_CHECK_ANSWERS = 'a7-back'
 
 const isFromCheckAnswersParam = (from) =>
   from === TIERING_FROM_CHECK_ANSWERS || from === TIERING_FROM_CHECK_ANSWERS_LEGACY
@@ -24,7 +25,7 @@ export const getTieringCheckAnswersReturnHref = () => getTieringResultsAnswersHr
 export const TIERING_CHANGE_ANCHORS = {
   currentOffence: 'tiering-current-offence',
   convictionDate: 'tiering-conviction-date',
-  firstSanctionAge: 'tiering-first-sanction-age',
+  firstSanctionAge: 'tiering-first-sanction-date',
   totalSanctions: 'tiering-total-sanctions',
   violentSanctions: 'tiering-violent-sanctions',
   sexualOffence: 'tiering-sexual-offence',
@@ -36,8 +37,11 @@ export const TIERING_CHANGE_ANCHORS = {
   indirectChildSanctions: 'tiering-indirect-child-sanctions',
   nonContactSanctions: 'tiering-non-contact-sanctions',
   communityDate: 'tiering-community-date',
+  supervisedInCommunity: 'tiering-supervised-in-community',
+  supervisedCommunityDate: 'tiering-supervised-community-date',
   offencesSinceCommunity: 'tiering-offences-since-community',
-  recentOffenceDate: 'tiering-recent-offence-date'
+  recentOffenceDate: 'tiering-recent-offence-date',
+  interviewDone: 'tiering-interview-done'
 }
 
 export const tieringChangeHref = (page, anchorId) => {
@@ -45,7 +49,7 @@ export const tieringChangeHref = (page, anchorId) => {
   return `${page}?from=${TIERING_FROM_CHECK_ANSWERS}${hash}`
 }
 
-/** Keep ?from=a8 on internal links while editing from check answers */
+/** Keep ?from=a7 on internal links while editing from check answers */
 export const withFromCheckAnswers = (page) => {
   if (!isTieringCheckAnswersEdit()) return page
   if (page.includes(`from=${TIERING_FROM_CHECK_ANSWERS}`)) return page
@@ -59,6 +63,14 @@ export const withFromCheckAnswers = (page) => {
 
 export const isTieringCheckAnswersEditFromUrl = () =>
   isFromCheckAnswersParam(new URLSearchParams(window.location.search).get('from'))
+
+export const isTieringBackNavigation = () => {
+  const from = new URLSearchParams(window.location.search).get('from')
+  if (from === TIERING_BACK_FROM_CHECK_ANSWERS) return true
+
+  const nav = performance.getEntriesByType('navigation')[0]
+  return nav?.type === 'back_forward'
+}
 
 export const startTieringCheckAnswersEdit = () => {
   setTieringAssessmentSession({ returnToCheckAnswers: true })
@@ -166,7 +178,7 @@ export const getTieringBackLinkHref = (defaultHref) =>
 const scrollDelayMs = (anchorId) =>
   anchorId === TIERING_CHANGE_ANCHORS.currentOffence ? 150 : 0
 
-const isA8TabNavigationHash = (anchorId = window.location.hash.slice(1)) => {
+const isA8LegacyTabHash = (anchorId = window.location.hash.slice(1)) => {
   if (anchorId !== 'answers' && anchorId !== 'score') return false
   return Boolean(document.getElementById('tiering-a8-back'))
 }
@@ -239,7 +251,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   if (!window.location.hash) return
 
-  if (isA8TabNavigationHash()) return
+  if (isA8LegacyTabHash()) return
 
   scrollToTieringChangeTarget()
 })

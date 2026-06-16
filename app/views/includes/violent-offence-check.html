@@ -1,5 +1,72 @@
-<details class="govuk-details govuk-!-margin-top-6 govuk-!-margin-bottom-0 violent-offence-check-details violent-offence-check-details--static" id="violent-offence-check">
+<details class="govuk-details govuk-!-margin-top-6 govuk-!-margin-bottom-0 violent-offence-check-details" id="violent-offence-check">
   <summary class="govuk-details__summary">
     <span class="govuk-details__summary-text">Check if an offence is classed as violent</span>
   </summary>
+  <div class="govuk-details__text">
+    <div class="violent-offence-check" data-module="violent-offence-check">
+      <p class="govuk-body govuk-!-margin-top-0 govuk-!-margin-bottom-4">Search for an offence to check if you should count it as a violent offence.</p>
+
+      <div class="violent-offence-check__search-row" data-violent-check-search>
+        <div class="violent-offence-check__input-row">
+          <div
+            class="offence-autocomplete offence-autocomplete--check"
+            data-module="offence-search"
+            data-offence-search-check="true"
+            id="violent-offence-check-search"
+          >
+            <div data-offence-search-panel>
+              <div class="govuk-form-group offence-autocomplete__combobox govuk-!-margin-bottom-0">
+                <label class="govuk-label govuk-visually-hidden" for="violent-offence-check-search-input">
+                  Search for an offence to check if you should count it as a violent offence.
+                </label>
+                <textarea
+                  class="govuk-input offence-autocomplete__input"
+                  id="violent-offence-check-search-input"
+                  name="violent_offence_check_search"
+                  rows="1"
+                  spellcheck="false"
+                  autocomplete="off"
+                  role="combobox"
+                  aria-autocomplete="list"
+                  aria-expanded="false"
+                  aria-controls="violent-offence-check-search-listbox"
+                  data-offence-search-input
+                ></textarea>
+                <ul
+                  id="violent-offence-check-search-listbox"
+                  class="offence-autocomplete__menu"
+                  role="listbox"
+                  data-offence-search-listbox
+                  hidden
+                ></ul>
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="govuk-button violent-offence-check__check-button"
+            data-violent-check-submit
+            data-module="govuk-button"
+          >
+            Check offence
+          </button>
+        </div>
+      </div>
+
+      <div class="violent-offence-check__selected-section govuk-!-margin-top-4" data-violent-check-selected-section hidden>
+        <div class="violent-offence-check__selected-list" data-violent-check-selected-list></div>
+      </div>
+
+      <template data-violent-check-item-template>
+        <div class="offence-selected-card violent-offence-check__selected-item" data-violent-check-item>
+          <p class="govuk-body violent-offence-check__selected-line govuk-!-margin-bottom-0" data-violent-check-item-label>
+            <span class="violent-offence-check__selected-text">
+              <span class="violent-offence-check__selected-name" data-violent-check-item-name></span><span class="govuk-hint violent-offence-check__selected-code" data-violent-check-item-code></span>
+            </span><strong class="govuk-tag violent-offence-check__selected-tag" data-offence-violent-tag hidden></strong>
+          </p>
+        </div>
+      </template>
+    </div>
+  </div>
 </details>

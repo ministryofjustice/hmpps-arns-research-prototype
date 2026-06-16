@@ -3,7 +3,8 @@
 //
 
 import { TIERING_CHANGE_ANCHORS, tieringChangeHref } from './tiering-change-scroll.js'
-import { formatDateFromParts } from './tiering-assessment-session.js'
+import { formatDateFromParts, getOffenderDateOfBirthParts } from './tiering-assessment-session.js'
+import { calculateAgeOnDate, isA5Required, isValidDateParts } from './tiering-journey.js'
 import { formatOffenceCodeLabel } from './tiering-offence-browse.js'
 
 const NOT_PROVIDED_HTML =
@@ -19,6 +20,16 @@ export const formatChoice = (value) => {
   }
 
   return labels[value] || value
+}
+
+const formatFirstSanctionAnswer = (session) => {
+  if (isValidDateParts(session.firstSanctionDate)) {
+    const formatted = formatDateFromParts(session.firstSanctionDate)
+    const age = calculateAgeOnDate(getOffenderDateOfBirthParts(), session.firstSanctionDate)
+    return age != null ? `${formatted} (age ${age})` : formatted
+  }
+
+  return session.firstSanctionAge
 }
 
 const escapeHtml = (text) =>
@@ -108,10 +119,10 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
     title: 'Offending history',
     rows: [
       createRow(
-        `What was ${name}'s age at first sanction?`,
-        session.firstSanctionAge,
+        `What was ${name}'s date of first sanction?`,
+        formatFirstSanctionAnswer(session),
         'a2.html',
-        `What was ${name}'s age at first sanction?`,
+        `What was the date of ${name}'s first sanction?`,
         false,
         TIERING_CHANGE_ANCHORS.firstSanctionAge
       ),
@@ -144,7 +155,7 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
 
   if (session.sexualOffence === 'yes') {
     sections.push({
-      title: 'Sexual offending',
+      title: 'Sexual or sexually motivated offending',
       rows: [
         createRow(
           `Does ${name}'s current offence have a sexual motivation?`,
@@ -174,7 +185,7 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
     })
 
     sections.push({
-      title: 'Direct contact',
+      title: 'Direct contact sexual or sexually motivated offending',
       rows: [
         createRow(
           `How many sanctions does ${name} have for contact adult sexual or sexually motivated offences?`,
@@ -196,7 +207,7 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
     })
 
     sections.push({
-      title: 'Indirect contact',
+      title: 'Indirect contact sexual or sexually motivated offending',
       rows: [
         createRow(
           `How many sanctions does ${name} have for indecent child image or indirect contact child sexual or sexually motivated offences?`,
@@ -218,48 +229,86 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
     })
   }
 
-  sections.push({
-    title: 'Community date',
-    rows: [
-      createRow(
-        `What is the earliest date ${name} could next be in the community once they've received their sentence?`,
-        formatDateFromParts(session.communityDate || {}),
-        'a4.html',
-        `What is the earliest date ${name} could next be in the community once they've received their sentence?`,
-        false,
-        TIERING_CHANGE_ANCHORS.communityDate
-      )
-    ]
-  })
-
-  const communityDateLabel = formatDateFromParts(session.communityDate || {}) || 'that date'
-  const offencesSinceCommunityRows = [
+  const communitySupervisionRows = [
     createRow(
-      `Since ${communityDateLabel}, has ${name} committed any offences?`,
-      formatChoice(session.offencesSinceCommunity),
-      'a5.html',
-      `Since ${communityDateLabel}, has ${name} committed any offences?`,
+      `Is ${name} currently being supervised in the community?`,
+      formatChoice(session.supervisedInCommunity),
+      'a4.html',
+      `Is ${name} currently being supervised in the community?`,
       false,
-      TIERING_CHANGE_ANCHORS.offencesSinceCommunity
+      TIERING_CHANGE_ANCHORS.supervisedInCommunity
     )
   ]
 
-  if (session.offencesSinceCommunity === 'yes') {
-    offencesSinceCommunityRows.push(
+  if (session.supervisedInCommunity === 'yes' || session.supervisedInCommunity === 'no') {
+    communitySupervisionRows.push(
       createRow(
-        `What is the date of ${name}'s most recent offence?`,
-        formatDateFromParts(session.recentOffenceDate || {}),
-        'a5.html',
-        `What is the date of ${name}'s most recent offence?`,
+        session.supervisedInCommunity === 'yes'
+          ? `What date did ${name}'s supervision begin?`
+          : `What is the earliest date ${name} could be in the community once they've received their sentence?`,
+        formatDateFromParts(session.communityDate || {}),
+        'a4.html',
+        session.supervisedInCommunity === 'yes'
+          ? `What date did ${name}'s supervision begin?`
+          : `What is the earliest date ${name} could be in the community once they've received their sentence?`,
         false,
-        TIERING_CHANGE_ANCHORS.recentOffenceDate
+        session.supervisedInCommunity === 'yes'
+          ? TIERING_CHANGE_ANCHORS.supervisedCommunityDate
+          : TIERING_CHANGE_ANCHORS.communityDate
       )
     )
   }
 
   sections.push({
-    title: 'Offences since community date',
-    rows: offencesSinceCommunityRows
+    title: 'Community supervision',
+    rows: communitySupervisionRows
+  })
+
+  const communityDateLabel = formatDateFromParts(session.communityDate || {}) || 'that date'
+
+  if (isA5Required(session)) {
+    const offencesSinceCommunityRows = [
+      createRow(
+        `Has ${name} committed any offences since ${communityDateLabel}?`,
+        formatChoice(session.offencesSinceCommunity),
+        'a5.html',
+        `Has ${name} committed any offences since ${communityDateLabel}?`,
+        false,
+        TIERING_CHANGE_ANCHORS.offencesSinceCommunity
+      )
+    ]
+
+    if (session.offencesSinceCommunity === 'yes') {
+      offencesSinceCommunityRows.push(
+        createRow(
+          `What is the date of ${name}'s most recent offence?`,
+          formatDateFromParts(session.recentOffenceDate || {}),
+          'a5.html',
+          `What is the date of ${name}'s most recent offence?`,
+          false,
+          TIERING_CHANGE_ANCHORS.recentOffenceDate
+        )
+      )
+    }
+
+    sections.push({
+      title: 'Offences since community date',
+      rows: offencesSinceCommunityRows
+    })
+  }
+
+  sections.push({
+    title: 'Interview',
+    rows: [
+      createRow(
+        `Have you done an interview with ${name}?`,
+        formatChoice(session.interviewDone),
+        'a6.html',
+        `Have you done an interview with ${name}?`,
+        false,
+        TIERING_CHANGE_ANCHORS.interviewDone
+      )
+    ]
   })
 
   return sections

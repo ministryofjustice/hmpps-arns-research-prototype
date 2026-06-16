@@ -1,5 +1,8 @@
 {% extends "layouts/assessment.html" %}
 
+{% set offenceBrowseErrorLinkText = "Select an offence category" %}
+{% set offenceBrowseErrorSummary = true %}
+{% set offenceBrowseErrorLinkHref = '#offence-sort-by' %}
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Find an offence" %}
 {% set activeSection = "section-1" %}
@@ -20,10 +23,12 @@
 
 {% include "includes/offence-browse-heading.html" %}
 
-<p class="govuk-!-margin-bottom-1">Offence category</p>
-<select class="govuk-select override-width" id="offence-sort-by" name="offence-sort-by" data-offence-sort-by>
-  <option value="">Select a category</option>
-</select>
+<div class="govuk-form-group govuk-!-margin-bottom-0" data-offence-category-field data-offence-error-message="Select an offence category">
+  <label class="govuk-label" for="offence-sort-by">Offence category</label>
+  <select class="govuk-select override-width" id="offence-sort-by" name="offence-sort-by" data-offence-sort-by>
+    <option value="">Select a category</option>
+  </select>
+</div>
 
 <div class="offence-browse-category-filter govuk-!-margin-bottom-6 govuk-!-margin-top-6" data-offence-category-filter hidden>
   <div class="offence-browse-category-filter__row">
@@ -46,6 +51,8 @@
       </tbody>
     </table>
   </div>
+
+  <p class="govuk-body" data-offence-category-empty hidden>No results found</p>
 
   <div data-offence-loading-status>
     <p class="govuk-body">Loading offence categories…</p>

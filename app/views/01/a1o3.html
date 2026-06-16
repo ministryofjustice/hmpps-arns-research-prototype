@@ -8,8 +8,8 @@
 {% set hideJourneyServiceHeader = true %}
 {% set hideOffenderViewAnswers = true %}
 {% set compactPageHeader = true %}
-{% set backLinkHref = 'a1o.html' %}
-{% set offenceBrowseToggleHref = 'a1o.html' %}
+{% set backLinkHref = 'a1o' %}
+{% set offenceBrowseToggleHref = 'a1o' %}
 {% set offenceBrowseRestartSearch = true %}
 {% set tieringTelemetryPage = "a1o3" %}
 {% set tieringTelemetryPageLabel = "Browse offences by category" %}
@@ -62,8 +62,8 @@
       </div>
 
       <div class="govuk-button-group govuk-!-margin-top-8">
-        <button type="submit" class="govuk-button" data-module="govuk-button">
-          Save and select offence
+        <button type="submit" class="govuk-button offence-browse-save offence-browse-save--hidden" data-module="govuk-button" data-offence-save-continue hidden>
+          Save and continue
         </button>
       </div>
 

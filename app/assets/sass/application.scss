@@ -794,22 +794,20 @@ body.assessment-page {
   .govuk-details__text {
     overflow: visible;
   }
-
-  &--static {
-    summary {
-      cursor: default;
-    }
-  }
 }
 
 .violent-offence-check {
   overflow: visible;
 
   &__search-row {
+    margin-bottom: 0;
+    overflow: visible;
+  }
+
+  &__input-row {
     display: flex;
     align-items: flex-start;
     gap: 15px;
-    margin-bottom: 0;
     overflow: visible;
 
     .offence-autocomplete--check {
@@ -834,12 +832,6 @@ body.assessment-page {
     flex-shrink: 0;
     margin-top: 0;
     margin-bottom: 0;
-    background-color: #f3f2f1;
-    box-shadow: 0 2px 0 #929191;
-
-    &:hover {
-      background-color: #e8e8e8;
-    }
   }
 
   &__selected-section {
@@ -850,6 +842,38 @@ body.assessment-page {
     display: flex;
     flex-direction: column;
     gap: 15px;
+  }
+
+  &__selected-item {
+    display: block;
+  }
+
+  &__selected-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 5px 10px;
+    font-size: 1.1875rem;
+    line-height: 1.3157894737;
+  }
+
+  &__selected-text {
+    min-width: 0;
+  }
+
+  &__selected-name {
+    font-weight: 700;
+  }
+
+  &__selected-code {
+    font-weight: 400;
+    margin-left: 5px;
+  }
+
+  &__selected-tag {
+    display: inline-block;
+    flex: 0 0 auto;
+    white-space: nowrap;
   }
 
 }
@@ -1199,6 +1223,20 @@ body.assessment-page {
 .offence-browse-save {
   margin-top: 45px;
   margin-bottom: 0;
+
+  &--hidden {
+    display: none !important;
+  }
+}
+
+[data-first-sanction-date-field]:has(+ .first-sanction-age-result--hidden) {
+  margin-bottom: 30px;
+}
+
+.first-sanction-age-result {
+  &--hidden {
+    display: none !important;
+  }
 }
 
 .offences-all-table {
@@ -1481,6 +1519,15 @@ body.assessment-page {
 
     > .risk-predictor-scores__details {
       margin-bottom: 0;
+    }
+
+    > [data-risk-predictor-score-content] > .risk-predictor-scores__details {
+      margin-bottom: 0;
+    }
+
+    > [data-risk-predictor-empty][hidden] {
+      margin: 0;
+      padding: 0;
     }
 
     &--border {

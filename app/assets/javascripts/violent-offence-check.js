@@ -2,7 +2,7 @@
 // Violent offence checker (details panel on a2)
 //
 
-import { applyOffenceViolentTag, formatOffenceCodeLabel } from './tiering-offence-browse.js'
+import { applyOffenceViolentTag, getOffenceCodeBracket, lookupOffenceIsViolent } from './tiering-offence-browse.js'
 import {
   getTieringAssessmentSession,
   setTieringAssessmentSession
@@ -11,17 +11,17 @@ import {
 const buildSelectedItem = (template, selection) => {
   const fragment = template.content.cloneNode(true)
   const item = fragment.querySelector('[data-violent-check-item]')
-  const labelEl = fragment.querySelector('[data-violent-check-item-label]')
+  const nameEl = fragment.querySelector('[data-violent-check-item-name]')
   const codeEl = fragment.querySelector('[data-violent-check-item-code]')
   const violentTagEl = fragment.querySelector('[data-offence-violent-tag]')
-  const codeLabel = formatOffenceCodeLabel(selection)
+  const codeBracket = getOffenceCodeBracket(selection)
 
-  if (labelEl) labelEl.textContent = selection.label
-  if (codeEl) {
-    codeEl.textContent = codeLabel
-    codeEl.hidden = !codeLabel
-  }
-  applyOffenceViolentTag(violentTagEl, selection.isViolentOffence)
+  if (nameEl) nameEl.textContent = selection.label
+  if (codeEl) codeEl.textContent = codeBracket || ''
+  applyOffenceViolentTag(
+    violentTagEl,
+    selection.isViolentOffence === true || lookupOffenceIsViolent(selection.id)
+  )
   if (item) item.dataset.violentCheckOffenceId = selection.id || ''
 
   return item
@@ -32,14 +32,6 @@ const persistViolentOffenceChecks = (selections) => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  document.querySelectorAll('.violent-offence-check-details--static').forEach((details) => {
-    details.open = false
-
-    details.querySelector('summary')?.addEventListener('click', (event) => {
-      event.preventDefault()
-    })
-  })
-
   document.querySelectorAll('[data-module="violent-offence-check"]').forEach(async (container) => {
     const searchRoot = container.querySelector('[data-module="offence-search"][data-offence-search-check]')
     const checkButton = container.querySelector('[data-violent-check-submit]')
@@ -61,42 +53,39 @@ window.GOVUKPrototypeKit.documentReady(() => {
           code: item.code,
           subcode: item.subcode,
           fullCode: item.fullCode,
-          isViolentOffence: Boolean(item.isViolentOffence)
+          isViolentOffence:
+            item.isViolentOffence === true || lookupOffenceIsViolent(item.id)
         }))
       )
     }
 
     const updateSelectedSectionVisibility = () => {
-      const hasItems = selectedList.children.length > 0
-      selectedSection.hidden = !hasItems
+      selectedSection.hidden = checkedOffences.length === 0
     }
 
-    const addSelectedOffence = (selection, { insertAtTop = true } = {}) => {
-      const offenceId = selection.id || `${selection.code}-${selection.subcode}`
-      if (offenceId && checkedOffences.some((item) => item.id === offenceId)) return
+    const setSelectedOffence = (selection) => {
+      if (!selection?.label) return
+
+      checkedOffences.length = 0
+      selectedList.innerHTML = ''
 
       const item = buildSelectedItem(itemTemplate, selection)
       if (!item) return
 
-      if (insertAtTop) {
-        checkedOffences.unshift(selection)
-        selectedList.prepend(item)
-      } else {
-        checkedOffences.push(selection)
-        selectedList.appendChild(item)
-      }
-
+      checkedOffences.push(selection)
+      selectedList.appendChild(item)
       updateSelectedSectionVisibility()
       syncSession()
     }
 
-    searchRoot.addEventListener('offence-search:selected', (event) => {
-      pendingSelection = event.detail
-    })
-
-    const searchHandle = await window.initOffenceSearch(searchRoot)
+    const searchHandle = await window.initOffenceSearchV2(searchRoot)
     const input = searchRoot.querySelector('[data-offence-search-input]')
     const listbox = searchRoot.querySelector('[data-offence-search-listbox]')
+
+    searchRoot.addEventListener('offence-search:selected', (event) => {
+      pendingSelection = event.detail
+      searchHandle?.resizeSearchInput?.()
+    })
 
     const resetSearchInput = () => {
       pendingSelection = null
@@ -112,22 +101,6 @@ window.GOVUKPrototypeKit.documentReady(() => {
       }
     }
 
-    selectedList.addEventListener('click', (event) => {
-      const clearLink = event.target.closest('[data-violent-check-clear]')
-      if (!clearLink) return
-
-      event.preventDefault()
-      const item = clearLink.closest('[data-violent-check-item]')
-      const offenceId = item?.dataset.violentCheckOffenceId
-      if (offenceId) {
-        const index = checkedOffences.findIndex((entry) => entry.id === offenceId)
-        if (index >= 0) checkedOffences.splice(index, 1)
-      }
-      item?.remove()
-      updateSelectedSectionVisibility()
-      syncSession()
-    })
-
     const runCheck = () => {
       const selection = pendingSelection || searchHandle?.getPendingSelection?.()
 
@@ -136,7 +109,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
         return
       }
 
-      addSelectedOffence(selection)
+      setSelectedOffence(selection)
       resetSearchInput()
       input?.focus()
     }
@@ -160,12 +133,14 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
     const session = getTieringAssessmentSession()
 
-    ;(session.violentOffenceChecks || []).forEach((offence) => {
-      addSelectedOffence(offence, { insertAtTop: false })
-    })
+    const storedChecks = session.violentOffenceChecks || []
+    const latestCheck = storedChecks[storedChecks.length - 1]
+    if (latestCheck) {
+      setSelectedOffence(latestCheck)
+    }
 
     if (session.violentOffenceCheckPending) {
-      addSelectedOffence(session.violentOffenceCheckPending)
+      setSelectedOffence(session.violentOffenceCheckPending)
       setTieringAssessmentSession({ violentOffenceCheckPending: null })
       if (detailsPanel) detailsPanel.open = true
     }

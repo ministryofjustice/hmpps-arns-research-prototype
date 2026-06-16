@@ -105,5 +105,28 @@ export const getDefaultConvictionDateParts = () => {
   }
 }
 
+/** Alex's date of birth from the offender header */
+export const OFFENDER_DATE_OF_BIRTH_PARTS = { day: '2', month: '10', year: '1969' }
+
 /** Alex's age at first sanction for a2 – prototype default */
 export const getDefaultFirstSanctionAge = () => '16'
+
+/** Date of first sanction that yields the default age (16) for Alex */
+export const getDefaultFirstSanctionDateParts = () => ({
+  day: '15',
+  month: '6',
+  year: '1986'
+})
+
+export const getOffenderDateOfBirthParts = () => {
+  const identifiers = document.querySelector('.assessment-offender-header__identifiers')
+  if (identifiers?.dataset.offenderDobYear) {
+    return {
+      day: identifiers.dataset.offenderDobDay || OFFENDER_DATE_OF_BIRTH_PARTS.day,
+      month: identifiers.dataset.offenderDobMonth || OFFENDER_DATE_OF_BIRTH_PARTS.month,
+      year: identifiers.dataset.offenderDobYear || OFFENDER_DATE_OF_BIRTH_PARTS.year
+    }
+  }
+
+  return { ...OFFENDER_DATE_OF_BIRTH_PARTS }
+}

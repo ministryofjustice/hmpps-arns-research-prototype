@@ -1,5 +1,5 @@
 //
-// Seed a complete Tiering session and jump to a8 Answers tab
+// Seed a complete Tiering session and jump to a7 check your answers
 //
 
 import { getTieringResultsAnswersHref } from './tiering-journey.js'
@@ -28,6 +28,7 @@ window.GOVUKPrototypeKit.documentReady(async () => {
     convictionDate: { day: '27', month: '3', year: '2024' },
 
     // a2
+    firstSanctionDate: { day: '15', month: '6', year: '1986' },
     firstSanctionAge: '16',
     totalSanctions: '5',
     violentSanctions: '1',
@@ -42,14 +43,9 @@ window.GOVUKPrototypeKit.documentReady(async () => {
     indirectChildSanctions: '1',
     nonContactSanctions: '1',
 
-    // a4
+    // a4 (no path skips a5)
+    supervisedInCommunity: 'no',
     communityDate: { day: '5', month: '6', year: '2027' },
-
-    // a5
-    offencesSinceCommunity: 'yes',
-
-    // a5 follow-up (only required if offencesSinceCommunity === 'yes')
-    recentOffenceDate: { day: '3', month: '2', year: '2026' },
 
     // state
     scoreCalculated: true,
