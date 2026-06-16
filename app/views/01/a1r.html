@@ -1,18 +1,16 @@
 {% extends "layouts/assessment.html" %}
 
 {% set offenderFirstName = "Alex" %}
-{% set pageName = "Select specific offence" %}
+{% set pageName = "Search results" %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
 {% set hideServiceNavigation = true %}
 {% set hideJourneyServiceHeader = true %}
 {% set hideOffenderViewAnswers = true %}
 {% set compactPageHeader = true %}
-{% set backLinkHref = 'a1o' %}
-{% set offenceBrowseToggleHref = 'a1o' %}
-{% set offenceBrowseRestartSearch = true %}
-{% set tieringTelemetryPage = "a1o3" %}
-{% set tieringTelemetryPageLabel = "Browse offences by category" %}
+{% set backLinkHref = 'a1.html' %}
+{% set tieringTelemetryPage = "a1r" %}
+{% set tieringTelemetryPageLabel = "Offence search results" %}
 
 {% block content %}
 
@@ -21,46 +19,47 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
 
-    <span class="govuk-caption-l">Offence category</span>
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-7" data-active-category-heading>Loading category…</h1>
+    <span class="govuk-caption-l" data-results-caption>Current offence</span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-2" data-results-heading>Search results</h1>
+    <p class="govuk-body govuk-!-margin-bottom-6" data-results-count role="status" aria-live="polite" aria-atomic="true"></p>
 
-    <form id="tiering-a1o3-form" novalidate>
+    <form id="tiering-a1r-form" novalidate>
 
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
-            Select the matching specific offence from the list below
+            Select the matching offence from the search results below
           </legend>
 
-          <table class="govuk-table offence-result-table" data-sub-offences-table>
-            <caption class="govuk-table__caption govuk-visually-hidden">Offences in this category</caption>
+          <table class="govuk-table offence-result-table" data-results-table hidden>
+            <caption class="govuk-table__caption govuk-visually-hidden">Offence search results</caption>
             <thead class="govuk-table__head">
             <tr class="govuk-table__row">
               <th scope="col" class="govuk-table__header offence-result-table__header--name">Offence</th>
               <th scope="col" class="govuk-table__header offence-result-table__header--code">Code</th>
             </tr>
             </thead>
-            <tbody class="govuk-table__body" data-sub-offences-root>
+            <tbody class="govuk-table__body" data-results-root>
             </tbody>
           </table>
 
-          <div data-table-status-message role="status" aria-live="polite" aria-atomic="true">
-            <p class="govuk-body">Loading available offences…</p>
+          <div data-results-status role="status" aria-live="polite" aria-atomic="true">
+            <p class="govuk-body">Loading results…</p>
           </div>
-
-          <div data-sub-offences-pagination hidden></div>
 
         </fieldset>
       </div>
 
-      <div class="offence-autocomplete__selected-box govuk-!-margin-top-6"
+      <div data-results-pagination hidden></div>
+
+      <div class="offence-autocomplete__selected-box govuk-!-margin-top-8"
            data-offence-preview-container hidden>
         <p class="govuk-body offence-autocomplete__selected-label govuk-!-margin-bottom-0" data-offence-preview-label></p>
         <p class="govuk-body offence-autocomplete__selected-code govuk-!-margin-bottom-0" data-offence-preview-code></p>
       </div>
 
       <p class="govuk-body govuk-!-margin-top-3 govuk-!-margin-bottom-6" data-offence-preview-restart hidden>
-        <a class="govuk-link" href="a1?restart_search=1">Start a new search</a>
+        <a class="govuk-link" href="a1" data-results-restart-link>Start a new search</a>
       </p>
 
       <div class="govuk-button-group govuk-!-margin-top-8">

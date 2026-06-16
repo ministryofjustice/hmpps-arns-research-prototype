@@ -3,6 +3,7 @@
 //
 
 import {
+  getDefaultFirstSanctionDateParts,
   getOffenderDateOfBirthParts,
   getTieringAssessmentSession
 } from './tiering-assessment-session.js'
@@ -51,6 +52,8 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   if (session.firstSanctionDate) {
     setFirstSanctionDateValues(session.firstSanctionDate)
+  } else {
+    setFirstSanctionDateValues(getDefaultFirstSanctionDateParts())
   }
 
   const hideAgeResult = () => {
@@ -61,7 +64,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   const showAgeResult = (age) => {
     if (!ageResult) return
-    ageResult.innerHTML = `<strong>Age:</strong> ${offenderFirstName} was aged ${age} on this date`
+    ageResult.innerHTML = `<strong>Age:</strong> ${offenderFirstName} was ${age} on this date`
     ageResult.classList.remove('first-sanction-age-result--hidden')
   }
 
@@ -117,7 +120,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
     const newFields = getA2FieldsFromForm(form)
 
     if (!isTieringCheckAnswersEdit()) {
-      if (!newFields.firstSanctionAge) newFields.firstSanctionAge = '16'
+      if (!newFields.firstSanctionAge) newFields.firstSanctionAge = '33'
       if (!newFields.totalSanctions) newFields.totalSanctions = '6'
       if (!newFields.violentSanctions) newFields.violentSanctions = '2'
     }

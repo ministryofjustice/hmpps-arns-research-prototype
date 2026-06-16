@@ -77,7 +77,7 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
   if (session.currentOffence?.label) {
     const codeLabel = formatOffenceCodeLabel(session.currentOffence)
     const offenceValue = codeLabel
-      ? `${escapeHtml(session.currentOffence.label)}<br>${escapeHtml(codeLabel)}`
+      ? `${escapeHtml(session.currentOffence.label)}<br><span class="tiering-offence-code">${escapeHtml(codeLabel)}</span>`
       : escapeHtml(session.currentOffence.label)
     a1Rows.push(
       createRow(

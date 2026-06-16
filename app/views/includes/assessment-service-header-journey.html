@@ -5,7 +5,7 @@
       <div class="assessment-service-header__title-group">
         <p class="govuk-caption-l assessment-service-header__section-caption">{{ tieringSectionCaption | default("Tiering") }}</p>
         <h1 class="govuk-heading-l govuk-!-margin-bottom-0{% if pageHeadingClass %} {{ pageHeadingClass }}{% endif %}"{% if pageHeadingId %} id="{{ pageHeadingId }}"{% endif %}>
-          {% if pageHeadingHtml %}{{ pageHeadingHtml | safe }}{% else %}{{ pageHeading | default("Tiering assessment") }}{% endif %}
+          {% if pageHeadingHtml %}{{ pageHeadingHtml | safe }}{% else %}{{ pageHeading | default("Tiering assessment") }}{% endif %}{% if statusTag %}<span class="govuk-visually-hidden">, {{ statusTag }}</span>{% endif %}
         </h1>
       </div>
       {% if statusTag %}
@@ -14,6 +14,8 @@
       </div>
       {% endif %}
     </div>
+    {% if not hidePageHeaderSeparator %}
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+    {% endif %}
   </div>
 </div>

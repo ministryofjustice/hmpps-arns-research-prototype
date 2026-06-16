@@ -10,6 +10,7 @@
 {% set tieringTelemetryPageLabel = "Risk predictor score" %}
 {% set backLinkHref = "a7.html" %}
 {% set backLinkId = "tiering-a8-back" %}
+{% set hidePageHeaderSeparator = true %}
 
 {% block content %}
 
@@ -18,6 +19,22 @@
 <span id="top" class="govuk-visually-hidden" aria-hidden="true"></span>
 
 {% include "includes/assessment-question-header.html" %}
+
+<p class="govuk-body govuk-!-margin-top-3">
+  We have developed and validated these risk predictors using real historical data about how often people who have been on probation get further sanctions.
+</p>
+
+<p class="govuk-body govuk-!-margin-bottom-2">Someone gets a sanction if they:</p>
+<ul class="govuk-list govuk-list--bullet assessment-bullet-list govuk-!-margin-bottom-4">
+  <li>are convicted by a court and given a sentence (such as a fine, community order, discharge or prison)</li>
+  <li>accept a formal caution from the police</li>
+</ul>
+
+<div class="govuk-inset-text govuk-!-margin-bottom-6">
+  Source: layer 3 assessment, completed 25 November 2025
+</div>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible govuk-!-margin-bottom-6">
 
 {% include "includes/risk-predictor-scores.html" %}
 

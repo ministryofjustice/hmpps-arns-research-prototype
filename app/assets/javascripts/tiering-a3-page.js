@@ -30,7 +30,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
     return
   }
 
-  restoreRadio(form, 'sexual_motivation', session.sexualMotivation)
+  restoreRadio(form, 'sexual_motivation', session.sexualMotivation || 'yes')
   restoreRadio(form, 'stranger_contact', session.strangerContact)
 
   const dayInput = form.querySelector('#sexual-sanction-date-day')

@@ -21,11 +21,7 @@ const setA8BackLinkVisible = (visible) => {
   if (!backLink) return
 
   backLink.classList.toggle('assessment-layout__back-link--hidden', !visible)
-  if (visible) {
-    backLink.removeAttribute('aria-hidden')
-  } else {
-    backLink.setAttribute('aria-hidden', 'true')
-  }
+  backLink.hidden = !visible
 }
 
 const hideMarkSectionCompleteButton = () => {
@@ -33,7 +29,7 @@ const hideMarkSectionCompleteButton = () => {
   if (!markBtn) return
 
   markBtn.hidden = true
-  markBtn.setAttribute('aria-hidden', 'true')
+  markBtn.disabled = true
   markBtn.classList.add('tiering-mark-section-complete--hidden')
 
   const actions = markBtn.closest('.risk-predictor-scores__actions')
@@ -50,12 +46,13 @@ export const resetSection1CompleteUi = () => {
     const item =
       link.closest('.moj-side-navigation__item') || link.closest('.govuk-service-navigation__item')
     if (item) item.classList.remove('assessment-section-navigation__item--complete')
+    link.querySelector('[data-section-complete-hint]')?.remove()
   })
 
   const markBtn = document.getElementById('tiering-mark-section-complete')
   if (markBtn) {
     markBtn.hidden = false
-    markBtn.removeAttribute('aria-hidden')
+    markBtn.disabled = false
     markBtn.classList.remove('tiering-mark-section-complete--hidden')
   }
 
@@ -74,13 +71,22 @@ export const applySection1CompleteUi = () => {
 
   document.querySelectorAll('[data-section-complete="section-1"]').forEach((icon) => {
     icon.classList.add('assessment-section-navigation__complete-icon--visible')
-    icon.setAttribute('aria-hidden', 'false')
+    icon.setAttribute('aria-hidden', 'true')
   })
 
   document.querySelectorAll('[data-section="section-1"]').forEach((link) => {
     const item =
       link.closest('.moj-side-navigation__item') || link.closest('.govuk-service-navigation__item')
     if (item) item.classList.add('assessment-section-navigation__item--complete')
+
+    let completeHint = link.querySelector('[data-section-complete-hint]')
+    if (!completeHint) {
+      completeHint = document.createElement('span')
+      completeHint.className = 'govuk-visually-hidden'
+      completeHint.dataset.sectionCompleteHint = 'true'
+      completeHint.textContent = ', complete'
+      link.appendChild(completeHint)
+    }
   })
 
   hideMarkSectionCompleteButton()

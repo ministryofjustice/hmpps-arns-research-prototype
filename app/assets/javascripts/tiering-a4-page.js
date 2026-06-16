@@ -10,6 +10,7 @@ import {
   scrollToTieringChangeTarget,
   TIERING_CHANGE_ANCHORS
 } from './tiering-change-scroll.js'
+import { restoreDateInputs, setConditionalVisible } from './tiering-conditional-fields.js'
 import { getA4FieldsFromForm, getFirstIncompleteA3Page, getPostA4ContinueHref, isDateComplete } from './tiering-journey.js'
 import { getTieringAssessmentSession, setTieringAssessmentSession } from './tiering-assessment-session.js'
 
@@ -19,23 +20,6 @@ const COMMUNITY_DATE_CONDITIONAL_ID = 'conditional-supervised-in-community-no'
 const getA4BackHref = (session) => {
   if (session.sexualOffence !== 'yes') return 'a2.html'
   return getFirstIncompleteA3Page(session) || 'a3ic.html'
-}
-
-const restoreDateInputs = (form, prefix, date = {}) => {
-  const dayInput = form.querySelector(`#${prefix}-day`)
-  const monthInput = form.querySelector(`#${prefix}-month`)
-  const yearInput = form.querySelector(`#${prefix}-year`)
-
-  if (dayInput) dayInput.value = date.day || ''
-  if (monthInput) monthInput.value = date.month || ''
-  if (yearInput) yearInput.value = date.year || ''
-}
-
-const setConditionalVisible = (id, show) => {
-  const conditional = document.getElementById(id)
-  if (!conditional) return
-
-  conditional.classList.toggle('govuk-radios__conditional--hidden', !show)
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
@@ -72,14 +56,6 @@ window.GOVUKPrototypeKit.documentReady(() => {
     setConditionalVisible(COMMUNITY_DATE_CONDITIONAL_ID, true)
     restoreDateInputs(form, 'community-date', session.communityDate)
   }
-
-  form.querySelectorAll('input[name="supervised_in_community"]').forEach((radio) => {
-    radio.addEventListener('change', () => {
-      const selected = form.querySelector('input[name="supervised_in_community"]:checked')?.value
-      if (selected !== 'yes') restoreDateInputs(form, 'supervised-community-date')
-      if (selected !== 'no') restoreDateInputs(form, 'community-date')
-    })
-  })
 
   if (isTieringCheckAnswersEdit()) {
     captureCheckAnswersEditSnapshot(getA4FieldsFromForm(form))
