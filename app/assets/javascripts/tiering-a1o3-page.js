@@ -4,6 +4,12 @@
 
 import { fetchOffenceBrowseGroups } from './offences-data.js'
 import { getTieringAssessmentSession } from './tiering-assessment-session.js'
+import {
+  formatOffenceCode,
+  initOffenceBrowsePagination,
+  OFFENCE_BROWSE_PAGE_SIZE,
+  renderOffenceBrowsePagination
+} from './tiering-offence-browse.js'
 import { withFromCheckAnswers } from './tiering-change-scroll.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
@@ -12,15 +18,18 @@ window.GOVUKPrototypeKit.documentReady(() => {
   const tableRoot = document.querySelector('[data-sub-offences-root]')
   const offencesTable = document.querySelector('[data-sub-offences-table]')
   const statusMessage = document.querySelector('[data-table-status-message]')
+  const paginationRoot = document.querySelector('[data-sub-offences-pagination]')
 
   // NEW DOM References for the Selected Summary Display Box
   const previewContainer = document.querySelector('[data-offence-preview-container]')
   const previewLabel = document.querySelector('[data-offence-preview-label]')
   const previewCode = document.querySelector('[data-offence-preview-code]')
+  const previewRestart = document.querySelector('[data-offence-preview-restart]')
 
   // Extract targeted string straight out of the window URL parameters
   const urlParams = new URLSearchParams(window.location.search)
   const categoryName = urlParams.get('category')
+  const categoryId = urlParams.get('categoryId')
   const browseCategory = urlParams.get('browseCategory')
 
   if (!form || !tableRoot) return
@@ -53,6 +62,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
   if (heading) heading.textContent = categoryName
 
   let selectedOffenceObj = null
+  let allSubOffences = []
 
   const updateSaveButtonVisibility = () => {
     if (!saveButton) return
@@ -65,9 +75,15 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   const showNoResults = () => {
     selectedOffenceObj = null
+    allSubOffences = []
     if (previewContainer) previewContainer.hidden = true
+    if (previewRestart) previewRestart.hidden = true
     if (tableRoot) tableRoot.innerHTML = ''
     if (offencesTable) offencesTable.hidden = true
+    if (paginationRoot) {
+      paginationRoot.hidden = true
+      paginationRoot.innerHTML = ''
+    }
     if (statusMessage) {
       statusMessage.hidden = false
       statusMessage.innerHTML = '<p class="govuk-body">No results found</p>'
@@ -75,29 +91,32 @@ window.GOVUKPrototypeKit.documentReady(() => {
     updateSaveButtonVisibility()
   }
 
-  const renderSubOffencesTable = (categoryGroup) => {
-    const subOffences = categoryGroup.subOffences || []
+  const scrollToListTop = () => {
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+      document.documentElement.scrollTop = 0
+      document.body.scrollTop = 0
+    })
+  }
 
-    if (subOffences.length === 0) {
-      showNoResults()
-      return
-    }
-
-    selectedOffenceObj = null
-    if (previewContainer) previewContainer.hidden = true
-    if (offencesTable) offencesTable.hidden = false
-    if (statusMessage) statusMessage.hidden = true
-    updateSaveButtonVisibility()
+  const renderSubOffencesPage = (page, { scrollToTop = false } = {}) => {
+    const totalPages = Math.max(1, Math.ceil(allSubOffences.length / OFFENCE_BROWSE_PAGE_SIZE))
+    const currentPage = Math.min(Math.max(page, 1), totalPages)
+    const start = (currentPage - 1) * OFFENCE_BROWSE_PAGE_SIZE
+    const pageItems = allSubOffences.slice(start, start + OFFENCE_BROWSE_PAGE_SIZE)
 
     // Inject matching semantic single rows with custom micro-wrapped radio tokens
-    tableRoot.innerHTML = subOffences.map((sub, index) => {
-      const displayCode = (sub.code && sub.subcode) ? `${sub.code}${sub.subcode}` : (sub.fullCode || sub.code || '')
+    tableRoot.innerHTML = pageItems.map((sub, i) => {
+      const index = start + i
+      const displayCode = formatOffenceCode(sub)
       const radioId = `offence-choice-${index}`
-      const display = heading.textContent === sub.label ? sub.description : sub.label;
+      // Show the exact offence name. `label` is a shortened version (truncated
+      // at the first "." or "["), so prefer the full `description`.
+      const display = sub.description || sub.label;
 
       return `
         <tr class="govuk-table__row" data-clickable-table-row>
-          <td class="govuk-table__cell">
+          <td class="govuk-table__cell offence-result-table__name-cell">
             <div class="govuk-radios govuk-radios--small">
               <div class="govuk-radios__item">
                 <input class="govuk-radios__input" 
@@ -108,10 +127,15 @@ window.GOVUKPrototypeKit.documentReady(() => {
                        data-offence-raw-string="${encodeURIComponent(JSON.stringify(sub))}">
                 
                 <label class="govuk-label govuk-radios__label" for="${radioId}">
-                  <b>${display}</b> <span class="govuk-hint govuk-!-display-inline govuk-!-margin-bottom-0">${displayCode}</span>
+                  ${display}<span class="govuk-visually-hidden">, code ${displayCode}</span>
                 </label>
               </div>
             </div>
+          </td>
+          <td class="govuk-table__cell offence-result-table__code-cell">
+            <label class="offence-result-table__code-label" for="${radioId}">
+              <span class="tiering-offence-code" aria-hidden="true">${displayCode}</span>
+            </label>
           </td>
         </tr>
       `
@@ -131,6 +155,47 @@ window.GOVUKPrototypeKit.documentReady(() => {
         extractSelectedPayload(e.target)
       })
     })
+
+    // Keep the previously chosen offence checked when returning to its page
+    if (selectedOffenceObj) {
+      const selectedRadio = tableRoot.querySelector(
+        `input[type="radio"][value="${CSS.escape(selectedOffenceObj.id)}"]`
+      )
+      if (selectedRadio) selectedRadio.checked = true
+    }
+
+    if (paginationRoot) {
+      if (totalPages > 1) {
+        paginationRoot.hidden = false
+        paginationRoot.innerHTML = renderOffenceBrowsePagination({ currentPage, totalPages })
+        initOffenceBrowsePagination(paginationRoot, (nextPage) =>
+          renderSubOffencesPage(nextPage, { scrollToTop: true })
+        )
+      } else {
+        paginationRoot.hidden = true
+        paginationRoot.innerHTML = ''
+      }
+    }
+
+    if (scrollToTop) scrollToListTop()
+  }
+
+  const renderSubOffencesTable = (categoryGroup) => {
+    allSubOffences = categoryGroup.subOffences || []
+
+    if (allSubOffences.length === 0) {
+      showNoResults()
+      return
+    }
+
+    selectedOffenceObj = null
+    if (previewContainer) previewContainer.hidden = true
+    if (previewRestart) previewRestart.hidden = true
+    if (offencesTable) offencesTable.hidden = false
+    if (statusMessage) statusMessage.hidden = true
+    updateSaveButtonVisibility()
+
+    renderSubOffencesPage(1)
   }
 
   // Parses payload data and mirrors selection configuration to visual preview block
@@ -140,15 +205,15 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
       // Update our explicit preview targets immediately
       if (previewContainer && previewLabel && previewCode) {
-        const codeDisplay = (selectedOffenceObj.code && selectedOffenceObj.subcode)
-            ? `${selectedOffenceObj.code}${selectedOffenceObj.subcode}`
-            : (selectedOffenceObj.fullCode || selectedOffenceObj.code || '')
+        const codeDisplay = formatOffenceCode(selectedOffenceObj)
 
-        previewLabel.textContent = selectedOffenceObj.label
-        previewCode.textContent = `(${codeDisplay})`
+        previewLabel.textContent = selectedOffenceObj.description || selectedOffenceObj.label
+        previewCode.textContent = codeDisplay
+        previewCode.hidden = !codeDisplay
 
         // Remove 'hidden' attribute to slide summary block into layout visibility
         previewContainer.hidden = false
+        if (previewRestart) previewRestart.hidden = false
       }
       updateSaveButtonVisibility()
     } catch (err) {
@@ -191,7 +256,9 @@ window.GOVUKPrototypeKit.documentReady(() => {
   // Bootstrapping
   fetchOffenceBrowseGroups()
       .then((groups) => {
-        const matchedGroup = groups.find(g => g.label === categoryName)
+        const matchedGroup =
+          (categoryId && groups.find(g => g.id === categoryId)) ||
+          groups.find(g => g.label === categoryName)
         if (matchedGroup) {
           updateBackLinks(browseCategory || matchedGroup.category)
           renderSubOffencesTable(matchedGroup)

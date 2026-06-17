@@ -13,20 +13,44 @@ export const escapeOffenceHtml = (text) =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
 
+const padDigits = (value, width) => {
+  const s = String(value ?? '').trim()
+  if (!s) return ''
+  if (!/^\d+$/.test(s)) return s
+  return s.padStart(width, '0')
+}
+
+export const formatOffenceCode = (offence) => {
+  if (!offence) return ''
+
+  const code = String(offence.code ?? '').trim()
+  const subcode = String(offence.subcode ?? '').trim()
+  const fullCode = String(offence.fullCode ?? '').trim()
+
+  if (code && subcode) return `${padDigits(code, 3)} ${padDigits(subcode, 2)}`
+
+  // Prefer splitting a 5+ digit fullCode (e.g. 00301 → 003 01)
+  if (fullCode && /^\d{5,}$/.test(fullCode)) {
+    const c = fullCode.slice(0, -2)
+    const s = fullCode.slice(-2)
+    return `${padDigits(c, 3)} ${padDigits(s, 2)}`
+  }
+
+  // Fallback: code-only still renders with a subcode part for consistent display
+  if (code) return `${padDigits(code, 3)} 00`
+
+  // Unknown shape (non-numeric codes)
+  if (fullCode) return fullCode
+
+  return ''
+}
+
 export const formatOffenceCodeLabel = (offence) => {
-  if (offence.code && offence.subcode) {
-    return `Offence code: ${offence.code}, subcode: ${offence.subcode}`
-  }
-  if (offence.fullCode) {
-    return `Offence code: ${offence.fullCode}`
-  }
-  return offence.code ? `Offence code: ${offence.code}` : ''
+  return formatOffenceCode(offence)
 }
 
 export const getOffenceCodeBracket = (offence) => {
-  const codePart =
-    offence.code && offence.subcode ? `${offence.code}${offence.subcode}` : offence.fullCode || offence.code || ''
-  return codePart ? codePart : ''
+  return formatOffenceCode(offence)
 }
 
 export const formatOffenceLabelWithCodes = (offence) => {
@@ -484,18 +508,19 @@ export const initOffenceBrowseForm = ({
 
   const getSelectedId = () => selectedOffence?.id || ''
 
-  const formatSelectionOffenceLine = (offence) => formatOffenceLabelWithCodes(offence)
-
   const updateSelectionSummary = () => {
     if (!selectionSummary || !selectionSummaryValue) return
 
     if (selectedOffence) {
-      selectionSummaryValue.textContent = formatSelectionOffenceLine(selectedOffence)
+      const code = formatOffenceCode(selectedOffence)
+      selectionSummaryValue.innerHTML = `
+        <span class="offence-browse-selection-summary__name">${escapeOffenceHtml(selectedOffence.label)}</span>
+        <span class="offence-browse-selection-summary__code">${escapeOffenceHtml(code)}</span>`
       selectionSummary.hidden = false
       return
     }
 
-    selectionSummaryValue.textContent = ''
+    selectionSummaryValue.innerHTML = ''
     selectionSummary.hidden = true
   }
 

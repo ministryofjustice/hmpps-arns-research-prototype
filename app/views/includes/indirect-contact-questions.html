@@ -1,6 +1,8 @@
 {# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
 
+{# Temporarily hidden
 {% include "includes/indirect-contact-sexual-predictor-guidance.html" %}
+#}
 
 <h3 id="tiering-indirect-child-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
   How many sanctions does {{ offenderFirstName }} have for indecent child image or indirect contact child sexual or sexually motivated offences?
@@ -10,7 +12,7 @@
   Include their current offence.
 </p>
 
-<div class="govuk-form-group govuk-!-margin-bottom-8">
+<div class="govuk-form-group govuk-!-margin-bottom-0">
   <label class="govuk-label govuk-visually-hidden" for="indirect-child-sanctions">
     How many sanctions does {{ offenderFirstName }} have for indecent child image or indirect contact child sexual or sexually motivated offences?
   </label>
@@ -24,6 +26,15 @@
     aria-describedby="indirect-child-sanctions-hint"
   >
 </div>
+
+<details class="govuk-details govuk-!-margin-top-3 govuk-!-margin-bottom-8">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">Offences that should be counted as indecent child image or indirect contact child sexual or sexually motivated</span>
+  </summary>
+  <div class="govuk-details__text">
+    {% include "includes/indirect-contact-child-offences-counted.html" %}
+  </div>
+</details>
 
 <h3 id="tiering-non-contact-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
   How many sanctions does {{ offenderFirstName }} have for other non-contact sexual or sexually motivated offences?
@@ -47,3 +58,12 @@
     aria-describedby="non-contact-sanctions-hint"
   >
 </div>
+
+<details class="govuk-details govuk-!-margin-top-3 govuk-!-margin-bottom-0">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">Offences that should be counted as other non-contact sexual or sexually motivated</span>
+  </summary>
+  <div class="govuk-details__text">
+    {% include "includes/indirect-contact-non-contact-offences-counted.html" %}
+  </div>
+</details>

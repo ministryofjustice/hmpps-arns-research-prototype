@@ -220,6 +220,7 @@ export const buildOffenceSearchIndex = (offences) => {
       type: 'sub',
       id: sub.id,
       label: sub.label,
+      description: sub.description,
       code: sub.code,
       subcode: sub.subcode,
       fullCode: sub.fullCode,

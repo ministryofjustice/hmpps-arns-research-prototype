@@ -144,17 +144,21 @@ window.GOVUKPrototypeKit.documentReady(() => {
         const count = group.subOffences ? group.subOffences.length : 0
         const offenceWord = count === 1 ? 'offence' : 'offences'
         const targetUrl = withFromCheckAnswers(
-          `a1o3?category=${encodeURIComponent(group.label)}&browseCategory=${encodeURIComponent(activeCategory)}`
+          `a1o3?category=${encodeURIComponent(group.label)}&categoryId=${encodeURIComponent(group.id)}&browseCategory=${encodeURIComponent(activeCategory)}`
         )
+
+        // Spell out the link for screen readers: include the count and drop the
+        // bracket symbols so they are not read out.
+        const ariaLabel = `${group.label}, ${group.code}, ${count} ${offenceWord}`
 
         return `
           <tr class="govuk-table__row">
             <td class="govuk-table__cell govuk-!-padding-top-3 govuk-!-padding-bottom-3">
-              <h3 class="govuk-heading-m govuk-!-margin-bottom-1">
-                <a class="govuk-link" href="${targetUrl}">${group.label} (${group.code})</a>
-              </h3>
-              <p class="govuk-body-s govuk-hint govuk-!-margin-bottom-0">
-                (${count} ${offenceWord})
+              <p class="govuk-heading-m govuk-!-margin-bottom-1">
+                <a class="govuk-link" href="${targetUrl}" aria-label="${ariaLabel}">${group.label} <span aria-hidden="true">(${group.code})</span></a>
+              </p>
+              <p class="govuk-body-s govuk-hint govuk-!-margin-bottom-0" aria-hidden="true">
+                ${count} ${offenceWord}
               </p>
             </td>
           </tr>

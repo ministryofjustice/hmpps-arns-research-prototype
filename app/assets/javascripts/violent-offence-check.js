@@ -104,14 +104,26 @@ window.GOVUKPrototypeKit.documentReady(() => {
     const runCheck = () => {
       const selection = pendingSelection || searchHandle?.getPendingSelection?.()
 
-      if (!selection?.label) {
-        if (input) input.focus()
+      if (selection?.label) {
+        setSelectedOffence(selection)
+        resetSearchInput()
+        input?.focus()
         return
       }
 
-      setSelectedOffence(selection)
-      resetSearchInput()
-      input?.focus()
+      // No suggestion picked – run a free-text search to the results page.
+      const query = input?.value.trim()
+      const resultsUrl = searchRoot.dataset.offenceSearchResultsUrl
+      if (query && resultsUrl) {
+        const params = new URLSearchParams()
+        params.set('q', query)
+        const context = searchRoot.dataset.offenceSearchResultsContext
+        if (context) params.set('context', context)
+        window.location.href = `${resultsUrl}?${params.toString()}`
+        return
+      }
+
+      if (input) input.focus()
     }
 
     checkButton.addEventListener('click', runCheck)

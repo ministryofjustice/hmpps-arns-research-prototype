@@ -22,24 +22,12 @@ import {
   getTieringAssessmentSession,
   setTieringAssessmentSession
 } from './tiering-assessment-session.js'
+import { restoreDateInputs, setConditionalVisible } from './tiering-conditional-fields.js'
 
 const RECENT_OFFENCE_CONDITIONAL_ID = 'conditional-offences-since-community-yes'
 
-const restoreRecentOffenceDate = (form, date = {}) => {
-  const dayInput = form.querySelector('#recent-offence-date-day')
-  const monthInput = form.querySelector('#recent-offence-date-month')
-  const yearInput = form.querySelector('#recent-offence-date-year')
-
-  if (dayInput) dayInput.value = date.day || ''
-  if (monthInput) monthInput.value = date.month || ''
-  if (yearInput) yearInput.value = date.year || ''
-}
-
 const setRecentOffenceConditionalVisible = (show) => {
-  const conditional = document.getElementById(RECENT_OFFENCE_CONDITIONAL_ID)
-  if (!conditional) return
-
-  conditional.classList.toggle('govuk-radios__conditional--hidden', !show)
+  setConditionalVisible(RECENT_OFFENCE_CONDITIONAL_ID, show)
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
@@ -77,15 +65,8 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   if (showRecentOffenceDate) {
     setRecentOffenceConditionalVisible(true)
-    restoreRecentOffenceDate(form, session.recentOffenceDate)
+    restoreDateInputs(form, 'recent-offence-date', session.recentOffenceDate)
   }
-
-  form.querySelectorAll('input[name="offences_since_community"]').forEach((radio) => {
-    radio.addEventListener('change', () => {
-      const isYes = form.querySelector('input[name="offences_since_community"]:checked')?.value === 'yes'
-      if (!isYes) restoreRecentOffenceDate(form)
-    })
-  })
 
   if (isTieringCheckAnswersEdit()) {
     captureCheckAnswersEditSnapshot(getA5FieldsFromForm(form))

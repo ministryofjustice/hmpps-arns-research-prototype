@@ -8,9 +8,9 @@ import {
   persistConvictionDateState
 } from './conviction-date.js'
 import { captureCheckAnswersEditSnapshot, isTieringCheckAnswersEdit } from './tiering-change-scroll.js'
-import { getA1FieldsFromForm } from './tiering-journey.js'
+import { getA1FieldsFromForm, PROTOTYPE_DEFAULT_CURRENT_OFFENCE } from './tiering-journey.js'
 import { getTieringAssessmentSession, setTieringAssessmentSession } from './tiering-assessment-session.js'
-import { formatOffenceCodeLabel, formatOffenceLabelWithCodes } from './tiering-offence-browse.js'
+import { formatOffenceCode, formatOffenceCodeLabel, formatOffenceLabelWithCodes } from './tiering-offence-browse.js'
 import { trackTelemetryOffenceSearch } from './tiering-session-telemetry.js'
 
 const offenceSearchMatches = (item, query) => {
@@ -39,13 +39,13 @@ const offenceSearchFormatMeta = (item) => {
     return `(${item.subOffenceCount} offences)`
   }
   if (item.code && item.subcode) {
-    return `${item.code} / ${item.subcode}`
+    return formatOffenceCode(item)
   }
   if (item.fullCode) {
-    return item.fullCode
+    return formatOffenceCode(item)
   }
   if (item.code) {
-    return item.code
+    return formatOffenceCode(item)
   }
   return ''
 }
@@ -131,6 +131,8 @@ window.initOffenceSearchV2 = async (container) => {
   if (container._offenceSearchHandle) return container._offenceSearchHandle
 
   const isCheckMode = Boolean(container.dataset.offenceSearchCheck)
+  const resultsUrl = container.dataset.offenceSearchResultsUrl || ''
+  const resultsContext = container.dataset.offenceSearchResultsContext || ''
   const input = container.querySelector('[data-offence-search-input]')
   const listbox = container.querySelector('[data-offence-search-listbox]')
   const searchPanel = container.querySelector('[data-offence-search-panel]')
@@ -188,10 +190,12 @@ window.initOffenceSearchV2 = async (container) => {
     const status = document.createElement('li')
     status.id = `${listbox.id}-results-status`
     status.className = 'offence-autocomplete__results-status'
-    status.setAttribute('role', 'presentation')
+    status.setAttribute('role', 'status')
+    status.setAttribute('aria-live', 'polite')
+    status.setAttribute('aria-atomic', 'true')
     status.textContent = offenceSearchFormatStatus(count, browseParent)
     listbox.appendChild(status)
-    input.setAttribute('aria-describedby', 'current-offence-search-hint current-offence-search-listbox-results-status')
+    input.setAttribute('aria-describedby', status.id)
     return status
   }
 
@@ -226,17 +230,10 @@ window.initOffenceSearchV2 = async (container) => {
       li.dataset.optionId = option.id
 
       const meta = offenceSearchFormatMeta(option)
-      const categoryHint =
-          option.type === 'sub' && option.parentLabel && !browseParent
-              ? `<span class="offence-autocomplete__option-category">${option.parentLabel}</span>`
-              : option.category && !browseParent
-                  ? `<span class="offence-autocomplete__option-category">${option.category}</span>`
-                  : ''
 
       li.innerHTML = `
         <span class="offence-autocomplete__option-label">${option.label}</span>
         ${meta ? `<span class="offence-autocomplete__option-meta">${meta}</span>` : ''}
-        ${categoryHint}
       `
 
       listbox.appendChild(li)
@@ -290,7 +287,7 @@ window.initOffenceSearchV2 = async (container) => {
     if (hiddenInput) hiddenInput.value = ''
     if (hiddenCodeInput) hiddenCodeInput.value = ''
     if (hiddenSubcodeInput) hiddenSubcodeInput.value = ''
-    input.setAttribute('aria-describedby', 'current-offence-search-hint')
+    input.removeAttribute('aria-describedby')
     if (!isCheckMode && document.getElementById('tiering-a1-form')) {
       setTieringAssessmentSession({ currentOffence: null })
     }
@@ -333,7 +330,7 @@ window.initOffenceSearchV2 = async (container) => {
     browseParent = null
     clearListbox()
     setExpanded(false)
-    input.setAttribute('aria-describedby', 'current-offence-search-hint')
+    input.removeAttribute('aria-describedby')
 
     trackTelemetryOffenceSearch({
       action: 'select',
@@ -425,6 +422,30 @@ window.initOffenceSearchV2 = async (container) => {
     }
   }
 
+  // Free-text search: navigate to a results page when the user submits a typed
+  // query without picking an option from the auto-suggest list.
+  const submitFreeTextSearch = () => {
+    if (!resultsUrl) return false
+
+    // If the user has highlighted an auto-suggest option, treat as a selection.
+    if (!listbox.hidden && activeIndex >= 0) {
+      activateHighlighted()
+      return true
+    }
+
+    const query = input.value.trim()
+    if (!query) {
+      input.focus()
+      return true
+    }
+
+    const params = new URLSearchParams()
+    params.set('q', query)
+    if (resultsContext) params.set('context', resultsContext)
+    window.location.href = `${resultsUrl}?${params.toString()}`
+    return true
+  }
+
   let searchTrackTimeout
   let lastLoggedSearchQuery = ''
 
@@ -488,6 +509,10 @@ window.initOffenceSearchV2 = async (container) => {
       event.preventDefault()
       if (!listbox.hidden && activeIndex >= 0) {
         activateHighlighted()
+      } else if (submitFreeTextSearch()) {
+        // Free-text search navigated away – prevent other Enter handlers
+        // (e.g. the violent offence check inline handler) from also firing.
+        event.stopImmediatePropagation()
       }
     }
 
@@ -499,7 +524,7 @@ window.initOffenceSearchV2 = async (container) => {
       }
       clearListbox()
       setExpanded(false)
-      input.setAttribute('aria-describedby', 'current-offence-search-hint')
+      input.removeAttribute('aria-describedby')
     }
   })
 
@@ -572,6 +597,24 @@ window.initOffenceSearchV2 = async (container) => {
     })
   }
 
+  const searchSubmit = container.querySelector('[data-offence-search-submit]')
+  if (searchSubmit) {
+    searchSubmit.addEventListener('click', () => {
+      if (!dataReady) return
+
+      if (submitFreeTextSearch()) return
+
+      // No results page configured: fall back to opening the dropdown.
+      input.focus()
+      if (!input.value.trim()) return
+      if (browseParent) {
+        showSubOffenceList(browseParent, input.value)
+      } else {
+        renderOptions(getMatches(input.value))
+      }
+    })
+  }
+
   const returnedParams = new URLSearchParams(window.location.search)
   if (returnedParams.get('returned_offence_id')) {
     const session = getTieringAssessmentSession()
@@ -589,7 +632,11 @@ window.initOffenceSearchV2 = async (container) => {
     // 1. Intercept returned URL variables from the advanced list first
     const returnedParams = new URLSearchParams(window.location.search)
 
-    if (returnedParams.get('returned_offence_id')) {
+    if (returnedParams.get('restart_search') && document.getElementById('tiering-a1-form')) {
+      // Arriving from "Start a new search": clear any selection and focus an
+      // empty search box.
+      showSearch()
+    } else if (returnedParams.get('returned_offence_id')) {
       const urlOffencePayload = {
         id: returnedParams.get('returned_offence_id'),
         label: returnedParams.get('returned_offence_label'),
@@ -610,6 +657,10 @@ window.initOffenceSearchV2 = async (container) => {
       const session = getTieringAssessmentSession()
       if (session.currentOffence) {
         showSelected(session.currentOffence)
+      } else if (document.getElementById('tiering-a1-form')) {
+        // Prototype starting point: a1 with a default offence already selected.
+        setTieringAssessmentSession({ currentOffence: { ...PROTOTYPE_DEFAULT_CURRENT_OFFENCE } })
+        showSelected({ ...PROTOTYPE_DEFAULT_CURRENT_OFFENCE })
       }
     }
 

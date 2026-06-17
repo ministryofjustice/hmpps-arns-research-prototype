@@ -86,7 +86,7 @@ const getConvictionDatePartsForDisplay = (
 
   if (inputOnly) {
     if (stored.day || stored.month || stored.year) return stored
-    return { day: '', month: '', year: '' }
+    return getDefaultConvictionDateParts()
   }
 
   return isDateComplete(stored) ? stored : getDefaultConvictionDateParts()

@@ -163,12 +163,13 @@ const A3_PROTOTYPE_DEFAULTS = {
   nonContactSanctions: '3'
 }
 
-const PROTOTYPE_DEFAULT_CURRENT_OFFENCE = {
-  id: '04600',
-  label: 'Stealing from shops and stalls (shoplifting)',
-  code: '046',
-  subcode: '00',
-  fullCode: '04600'
+export const PROTOTYPE_DEFAULT_CURRENT_OFFENCE = {
+  id: '00306',
+  label: 'Encouraging or assisting in the commission of one or more offences of Murder believing one or more will be committed',
+  code: '003',
+  subcode: '06',
+  fullCode: '00306',
+  isViolentOffence: true
 }
 
 const PROTOTYPE_DEFAULT_COMMUNITY_DATE = { day: '24', month: '7', year: '2026' }

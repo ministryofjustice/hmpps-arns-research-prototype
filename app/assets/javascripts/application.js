@@ -12,9 +12,11 @@ import './offence-search.js'
 import './assessment-side-navigation.js'
 import './assessment-section-complete.js'
 import './tiering-a1-form.js'
+import './pnc-record-viewer.js'
 import './tiering-a1o-page.js'
 import './tiering-a1os-page.js'
 import './tiering-a1o3-page.js'
+import './tiering-a1r-page.js'
 import './tiering-a2-page.js'
 import './tiering-a3-page.js'
 import './tiering-a3dc-page.js'
@@ -26,3 +28,10 @@ import './tiering-a7-page.js'
 import './tiering-a8-page.js'
 import './violent-offence-check.js'
 import './tiering-change-scroll.js'
+import { initPreserveConditionalFieldValues } from './tiering-conditional-fields.js'
+import { initTieringInactiveLinks } from './tiering-inactive-links.js'
+
+window.GOVUKPrototypeKit.documentReady(() => {
+  initPreserveConditionalFieldValues()
+  initTieringInactiveLinks()
+})

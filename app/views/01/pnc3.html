@@ -1,0 +1,30 @@
+{% extends "layouts/assessment.html" %}
+
+{% set hideSideNav = true %}
+{% set hideServiceNavigation = true %}
+
+{% block content %}
+
+<div class="pnc-record-viewer" data-pnc-record-viewer>
+  <h1 class="govuk-heading-l govuk-!-margin-top-6">PNC record</h1>
+
+  <p class="govuk-body govuk-!-margin-bottom-6">Prototype PNC extract for Alex Smith.</p>
+
+  <div class="pnc-record-viewer__pages">
+    {% for page in ["01", "02", "03", "04"] %}
+    <figure class="pnc-record-viewer__page">
+      <img
+        class="pnc-record-viewer__image"
+        src="/public/images/pnc3/page-{{ page }}.png"
+        alt="PNC record page {{ loop.index }} of 4"
+        width="1191"
+        height="1684"
+        draggable="false"
+        loading="{% if loop.index == 1 %}eager{% else %}lazy{% endif %}"
+      >
+    </figure>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

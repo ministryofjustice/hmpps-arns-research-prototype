@@ -4,7 +4,7 @@
 <div class="assessment-layout__section{% if compactPageHeader %} assessment-layout__section--compact{% endif %}">
   <div class="assessment-layout__row assessment-layout__row--tight">
     {% if pageHeading and hideJourneyServiceHeader %}
-      <h1 class="govuk-heading-l govuk-!-margin-bottom-0">{{ pageHeading }}</h1>
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-0">{{ pageHeading }}{% if statusTag %}<span class="govuk-visually-hidden">, {{ statusTag }}</span>{% endif %}</h1>
     {% elif sectionTitle and not pageHeading %}
       <p class="govuk-caption-l govuk-!-margin-bottom-0">{{ sectionTitle }}</p>
     {% endif %}
@@ -13,7 +13,7 @@
     {% endif %}
   </div>
   {% if questionTitle and not pageHeading %}
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-0">{{ questionTitle }}</h1>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-0">{{ questionTitle }}{% if statusTag %}<span class="govuk-visually-hidden">, {{ statusTag }}</span>{% endif %}</h1>
   {% endif %}
 </div>
 {% endif %}

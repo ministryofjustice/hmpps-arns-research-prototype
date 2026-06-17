@@ -196,6 +196,22 @@ $desktop: 48.0625em;
     margin-top: 40px;
     margin-bottom: 40px;
   }
+
+  // GOV.UK bullet lists: indent list items to the right of body text.
+  .govuk-list--bullet {
+    margin-left: 20px;
+    padding-left: 20px;
+    list-style-position: outside;
+    list-style-type: disc;
+  }
+}
+
+// Lead-in line + bullet list pattern (GOV.UK content style).
+.assessment-bullet-list.govuk-list--bullet {
+  margin-left: 20px;
+  padding-left: 20px;
+  list-style-position: outside;
+  list-style-type: disc;
 }
 
 .assessment-research-prototypes {
@@ -544,8 +560,7 @@ body.assessment-page {
       background: #1d70b8;
       color: #fff;
 
-      .offence-autocomplete__option-meta,
-      .offence-autocomplete__option-category {
+      .offence-autocomplete__option-meta {
         color: #fff;
       }
     }
@@ -611,16 +626,10 @@ body.assessment-page {
   &__option-meta {
     grid-column: 2;
     grid-row: 1;
-    align-self: center;
+    align-self: start;
     color: #505a5f;
     font-size: 1.1875rem;
     white-space: nowrap;
-  }
-
-  &__option-category {
-    grid-column: 1 / -1;
-    color: #505a5f;
-    font-size: 1.1875rem;
   }
 
   &__selected-panel-wrap {
@@ -631,9 +640,30 @@ body.assessment-page {
 
   &__selected-box {
     padding: 15px;
-    background: #f7f7f7;
-    border: 1px solid #b1b4b6;
-    box-shadow: 0 2px 0 #b1b4b6;
+    background: #ffffff;
+    border: 5px solid var(--govuk-brand-colour, #1d70b8);
+
+    &[hidden] {
+      display: none !important;
+    }
+  }
+
+  &__selected-box:not(.offence-selected-card) {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+
+    .offence-autocomplete__selected-label {
+      flex: 1;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .offence-autocomplete__selected-code {
+      flex: 0 0 auto;
+      text-align: right;
+    }
   }
 
   &__selected-name-row {
@@ -664,6 +694,7 @@ body.assessment-page {
     color: #505a5f;
     font-size: 1.1875rem;
     line-height: 1.3157894737;
+    white-space: nowrap;
   }
 
   &--check {
@@ -682,6 +713,10 @@ body.assessment-page {
       flex: 1;
       min-width: 0;
       display: flex;
+    }
+
+    .offence-autocomplete__menu {
+      top: 100%;
     }
 
     .offence-autocomplete__input {
@@ -741,20 +776,22 @@ body.assessment-page {
     font-weight: 700;
   }
 
-  &__tag {
+  &__code {
     grid-column: 2;
     grid-row: 1;
     justify-self: end;
     margin: 0;
-  }
-
-  &__code {
-    grid-column: 1;
-    grid-row: 2;
-    margin: 0;
     color: #505a5f;
     font-size: 1.1875rem;
     line-height: 1.3157894737;
+    white-space: nowrap;
+  }
+
+  &__tag {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+    margin: 0;
   }
 
   &__action {
@@ -772,12 +809,13 @@ body.assessment-page {
     grid-template-rows: auto auto;
 
     .offence-selected-card__label {
-      grid-column: 1 / -1;
+      grid-column: 1;
+      grid-row: 1;
     }
 
     .offence-selected-card__code {
-      grid-column: 1;
-      grid-row: 2;
+      grid-column: 2;
+      grid-row: 1;
     }
 
     .offence-selected-card__action {
@@ -876,6 +914,70 @@ body.assessment-page {
     white-space: nowrap;
   }
 
+}
+
+.tiering-offence-code {
+  color: #505a5f;
+  white-space: nowrap;
+}
+
+// a1o3 / a1r offence result tables: name and code columns.
+.offence-result-table {
+  table-layout: fixed;
+  width: 100%;
+
+  tbody .govuk-table__cell {
+    vertical-align: top;
+  }
+
+  &__header--code,
+  &__code-cell {
+    width: 5rem;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  &__name-cell {
+    overflow-wrap: anywhere;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 20px;
+  }
+
+  &__code-cell {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 0;
+    padding-right: 20px;
+  }
+
+  &__name-cell .govuk-radios {
+    margin-bottom: 0;
+  }
+
+  &__code-label {
+    display: block;
+    margin: 0;
+    cursor: pointer;
+    font-weight: 400;
+    color: inherit;
+    // Align with first line of govuk-radios--small label text
+    padding-top: 10px;
+  }
+}
+
+// Legacy single-cell label layout (kept for any remaining uses).
+.offence-result-label {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0 15px;
+  align-items: baseline;
+  width: 100%;
+}
+
+.offence-result-label__code {
+  text-align: right;
+  margin-bottom: 0;
 }
 
 // a8 – content page pagination (prev/next on one row)
@@ -1218,6 +1320,23 @@ body.assessment-page {
   &__label {
     font-weight: 700;
   }
+
+  &__value {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  &__name {
+    overflow-wrap: anywhere;
+  }
+
+  &__code {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    text-align: right;
+  }
 }
 
 .offence-browse-save {
@@ -1316,6 +1435,21 @@ body.assessment-page {
 
   &__row--selectable {
     cursor: pointer;
+  }
+
+  // Bold only the offence that is currently selected.
+  &__row--selectable:has([data-select-offence]:checked) &__name-label {
+    font-weight: 700;
+  }
+}
+
+// a1o3 / a1r "find an offence" radio result rows: default text is not bold;
+// only the selected (checked) offence is bold.
+[data-clickable-table-row]:has(input[type="radio"]:checked) .govuk-radios__label {
+  font-weight: 700;
+
+  .tiering-offence-code {
+    font-weight: 400;
   }
 }
 
@@ -1821,6 +1955,49 @@ body.assessment-page {
 
 .tiering-footer-session-links__icon svg {
   display: block;
+}
+
+.govuk-footer__crown-link {
+  display: inline-block;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+
+  &:focus {
+    outline: 3px solid transparent;
+    box-shadow: 0 0 0 3px #fd0;
+  }
+}
+
+.pnc-record-viewer {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.pnc-record-viewer__pages {
+  display: flex;
+  flex-direction: column;
+  gap: govuk-spacing(4);
+}
+
+.pnc-record-viewer__page {
+  margin: 0;
+}
+
+.pnc-record-viewer__image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid govuk-colour("mid-grey");
+  background: govuk-colour("white");
+  pointer-events: none;
 }
 
 @media print {
