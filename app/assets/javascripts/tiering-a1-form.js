@@ -11,7 +11,7 @@ import { completeTieringPageAndContinue } from './tiering-change-scroll.js'
 import { getA1FieldsFromForm } from './tiering-journey.js'
 import { trackTelemetryOffenceSearch } from './tiering-session-telemetry.js'
 
-const A1_PNC_VIEWER_URL = '/01/pnc3'
+const A1_PNC_VIEWER_URL = '/01/pnc'
 
 const initA1FooterCrownLink = () => {
   const crown = document.querySelector('.govuk-footer__crown')
