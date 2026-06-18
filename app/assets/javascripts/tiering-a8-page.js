@@ -13,47 +13,10 @@ import { insertTieringSessionFooterLinks } from './tiering-footer-session-links.
 import { trackTelemetryRiskPredictorDetailsOpen } from './tiering-session-telemetry.js'
 import { initTieringInactiveLinks } from './tiering-inactive-links.js'
 
-const easeOutCubic = (progress) => 1 - (1 - progress) ** 3
-
 const scrollA8ToTop = () => {
   window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
   document.documentElement.scrollTop = 0
   document.body.scrollTop = 0
-}
-
-const clearFocusAfterScroll = () => {
-  if (document.activeElement instanceof HTMLElement) {
-    document.activeElement.blur()
-  }
-}
-
-const scrollToTopWithEaseOut = (targetEl) => {
-  const targetTop = targetEl ? targetEl.getBoundingClientRect().top + window.scrollY : 0
-  const start = window.scrollY
-  const distance = start - targetTop
-
-  if (distance <= 0) {
-    clearFocusAfterScroll()
-    return
-  }
-
-  const duration = Math.min(800, Math.max(400, distance * 0.45))
-  const startTime = performance.now()
-
-  const tick = (now) => {
-    const elapsed = now - startTime
-    const progress = Math.min(elapsed / duration, 1)
-    window.scrollTo(0, start - distance * easeOutCubic(progress))
-
-    if (progress < 1) {
-      requestAnimationFrame(tick)
-      return
-    }
-
-    clearFocusAfterScroll()
-  }
-
-  requestAnimationFrame(tick)
 }
 
 const initRiskPredictorBackToTop = () => {
@@ -62,7 +25,7 @@ const initRiskPredictorBackToTop = () => {
 
   link.addEventListener('click', (event) => {
     event.preventDefault()
-    scrollToTopWithEaseOut()
+    scrollA8ToTop()
   })
 }
 

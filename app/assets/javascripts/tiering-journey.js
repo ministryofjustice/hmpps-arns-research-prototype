@@ -164,11 +164,11 @@ const A3_PROTOTYPE_DEFAULTS = {
 }
 
 export const PROTOTYPE_DEFAULT_CURRENT_OFFENCE = {
-  id: '00306',
-  label: 'Encouraging or assisting in the commission of one or more offences of Murder believing one or more will be committed',
-  code: '003',
-  subcode: '06',
-  fullCode: '00306',
+  id: '00842',
+  label: 'Religiously aggravated common assault',
+  code: '008',
+  subcode: '42',
+  fullCode: '00842',
   isViolentOffence: true
 }
 
@@ -666,7 +666,7 @@ export const getUnansweredTieringQuestions = (session, offenderFirstName = 'Alex
       add(
         'a3ic',
         'Indirect contact',
-        `How many sanctions does ${name} have for indecent child image or indirect contact child sexual or sexually motivated offences?`
+        `How many sanctions does ${name} have for indecent child image, or indirect contact child, sexual or sexually motivated offences?`
       )
     }
     if (normaliseString(session.nonContactSanctions) === '') {

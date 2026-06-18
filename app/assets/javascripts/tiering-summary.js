@@ -207,13 +207,13 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
     })
 
     sections.push({
-      title: 'Indirect contact sexual or sexually motivated offending',
+      title: 'Images and indirect contact sexual or sexually motivated offending',
       rows: [
         createRow(
-          `How many sanctions does ${name} have for indecent child image or indirect contact child sexual or sexually motivated offences?`,
+          `How many sanctions does ${name} have for indecent child image, or indirect contact child, sexual or sexually motivated offences?`,
           session.indirectChildSanctions,
           'a3ic.html',
-          `How many sanctions does ${name} have for indecent child image or indirect contact child sexual or sexually motivated offences?`,
+          `How many sanctions does ${name} have for indecent child image, or indirect contact child, sexual or sexually motivated offences?`,
           false,
           TIERING_CHANGE_ANCHORS.indirectChildSanctions
         ),
