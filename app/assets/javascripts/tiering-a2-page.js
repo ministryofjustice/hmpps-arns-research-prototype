@@ -3,6 +3,7 @@
 //
 
 import {
+  getDefaultFirstSanctionAge,
   getDefaultFirstSanctionDateParts,
   getOffenderDateOfBirthParts,
   getTieringAssessmentSession
@@ -120,7 +121,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
     const newFields = getA2FieldsFromForm(form)
 
     if (!isTieringCheckAnswersEdit()) {
-      if (!newFields.firstSanctionAge) newFields.firstSanctionAge = '33'
+      if (!newFields.firstSanctionAge) newFields.firstSanctionAge = getDefaultFirstSanctionAge()
       if (!newFields.totalSanctions) newFields.totalSanctions = '6'
       if (!newFields.violentSanctions) newFields.violentSanctions = '2'
     }
