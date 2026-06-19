@@ -103,14 +103,14 @@ export const getDefaultConvictionDateParts = () => ({
 /** Alex's date of birth from the offender header */
 export const OFFENDER_DATE_OF_BIRTH_PARTS = { day: '2', month: '10', year: '1969' }
 
-/** Alex's age at first sanction for a2 – prototype default (age on 5/9/2003) */
-export const getDefaultFirstSanctionAge = () => '33'
+/** Alex's age at first sanction for a2 – prototype default (age on 15/5/2012) */
+export const getDefaultFirstSanctionAge = () => '42'
 
 /** Date of first sanction for Alex – prototype default */
 export const getDefaultFirstSanctionDateParts = () => ({
-  day: '5',
-  month: '9',
-  year: '2003'
+  day: '15',
+  month: '5',
+  year: '2012'
 })
 
 export const getOffenderDateOfBirthParts = () => {
