@@ -3,6 +3,12 @@
 //
 
 import { clearPrototypeDataForTiering } from './tiering-assessment-session.js'
+import { resetTieringSessionForFreshStart } from './02/tiering-assessment-session.js'
+
+const clearSessionForPrototypeVersion = (version) => {
+  if (version === '02') return resetTieringSessionForFreshStart()
+  return clearPrototypeDataForTiering()
+}
 
 window.GOVUKPrototypeKit.documentReady(() => {
   document.querySelectorAll('[data-clear-session-on-start]').forEach((link) => {
@@ -11,7 +17,8 @@ window.GOVUKPrototypeKit.documentReady(() => {
       const href = link.getAttribute('href')
       if (!href) return
 
-      await clearPrototypeDataForTiering()
+      const version = link.getAttribute('data-prototype-version') || '01'
+      await clearSessionForPrototypeVersion(version)
       window.location.href = href
     })
   })

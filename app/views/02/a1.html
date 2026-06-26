@@ -1,0 +1,34 @@
+{% extends "layouts/assessment.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Current offence" %}
+{% set activeSection = "section-1" %}
+{% set pageHeading = "Current offence details" %}
+{% set statusTag = "Incomplete" %}
+{% set tieringTelemetryPage = "a1" %}
+{% set tieringTelemetryPageLabel = "Current offence" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div id="tiering-a1-error-summary" class="govuk-error-summary" data-module="govuk-error-summary" tabindex="-1" hidden>
+  <div role="alert">
+    <h2 class="govuk-error-summary__title">There is a problem</h2>
+    <div class="govuk-error-summary__body"></div>
+  </div>
+</div>
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="tiering-a1-form" novalidate>
+
+  {% include "includes/02/current-offence-questions.html" %}
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-8" data-module="govuk-button">Save and continue</button>
+
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

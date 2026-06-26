@@ -1,0 +1,46 @@
+{% extends "layouts/assessment.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Interview" %}
+{% set pageHeadingHtml = 'Have you done an interview with ' ~ offenderFirstName ~ '?' %}
+{% set pageHeadingId = "tiering-interview-done" %}
+{% set pageHeadingClass = "tiering-question-anchor" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "section-1" %}
+{% set statusTag = "Incomplete" %}
+{% set tieringTelemetryPage = "a6" %}
+{% set tieringTelemetryPageLabel = "Interview" %}
+{% set backLinkHref = "a5.html" %}
+{% set backLinkId = "tiering-a6-back" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="tiering-a6-form" novalidate>
+  <div class="govuk-form-group govuk-!-margin-top-0">
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+        Have you done an interview with {{ offenderFirstName }}?
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="interview-done-yes" name="interview_done" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="interview-done-yes">Yes, continue assessment</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="interview-done-no" name="interview_done" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="interview-done-no">No, check answers and view static reoffending predictor scores</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

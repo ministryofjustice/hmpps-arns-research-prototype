@@ -23,6 +23,8 @@ const getA4BackHref = (session) => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
+  if (window.location.pathname.includes('/02/')) return
+
   const form = document.getElementById('tiering-a4-form')
   if (!form) return
 

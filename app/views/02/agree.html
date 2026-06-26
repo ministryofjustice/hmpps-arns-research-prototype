@@ -1,0 +1,46 @@
+{% extends "layouts/assessment.html" %}
+
+{% set serviceHeaderTitle = "Tiering assessment" %}
+{% set hideJourneyServiceHeader = true %}
+{% set hideOffenderViewAnswers = true %}
+{% set hideOffenderHeader = true %}
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<h1 class="govuk-heading-l govuk-!-margin-top-6">Help us improve this prototype</h1>
+
+<p class="govuk-body">
+  We would like to collect anonymous research information while you use this prototype.
+</p>
+
+<p class="govuk-body">This helps us understand:</p>
+
+<ul class="govuk-list govuk-list--bullet">
+  <li>which parts are easy or difficult to use</li>
+  <li>where people get stuck or change answers</li>
+  <li>how we can improve the experience</li>
+</ul>
+
+<p class="govuk-body">
+  We do not record personal information and data is only used for research and design improvements.
+</p>
+
+<p class="govuk-body">
+  Taking part is optional and will not affect your session.
+</p>
+
+<h2 class="govuk-heading-m govuk-!-margin-top-6">Do you agree to anonymous recording for this session?</h2>
+
+<div class="govuk-button-group govuk-!-margin-top-6">
+  <button type="button" class="govuk-button govuk-button--secondary" data-telemetry-consent="decline" data-module="govuk-button">
+    No thanks, don’t record this session
+  </button>
+  <button type="button" class="govuk-button" data-telemetry-consent="agree" data-module="govuk-button">
+    I agree
+  </button>
+</div>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "layouts/assessment.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Search results" %}
+{% set activeSection = "section-1" %}
+{% set statusTag = "Incomplete" %}
+{% set hideServiceNavigation = true %}
+{% set hideJourneyServiceHeader = true %}
+{% set hideOffenderViewAnswers = true %}
+{% set compactPageHeader = true %}
+{% set backLinkHref = 'a1.html' %}
+{% set tieringTelemetryPage = "a1r" %}
+{% set tieringTelemetryPageLabel = "Offence search results" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <span class="govuk-caption-l" data-results-caption>Current offence</span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-2" data-results-heading>Search results</h1>
+    <p class="govuk-body govuk-!-margin-bottom-6" data-results-count role="status" aria-live="polite" aria-atomic="true"></p>
+
+    <form id="tiering-a1r-form" novalidate>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+            Select the matching offence from the search results below
+          </legend>
+
+          <table class="govuk-table offence-result-table" data-results-table hidden>
+            <caption class="govuk-table__caption govuk-visually-hidden">Offence search results</caption>
+            <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header offence-result-table__header--name">Offence</th>
+              <th scope="col" class="govuk-table__header offence-result-table__header--code">Code</th>
+            </tr>
+            </thead>
+            <tbody class="govuk-table__body" data-results-root>
+            </tbody>
+          </table>
+
+          <div data-results-status role="status" aria-live="polite" aria-atomic="true">
+            <p class="govuk-body">Loading results…</p>
+          </div>
+
+        </fieldset>
+      </div>
+
+      <div data-results-pagination hidden></div>
+
+      <div class="offence-autocomplete__selected-box govuk-!-margin-top-8"
+           data-offence-preview-container hidden>
+        <p class="govuk-body offence-autocomplete__selected-label govuk-!-margin-bottom-0" data-offence-preview-label></p>
+        <p class="govuk-body offence-autocomplete__selected-code govuk-!-margin-bottom-0" data-offence-preview-code></p>
+      </div>
+
+      <p class="govuk-body govuk-!-margin-top-3 govuk-!-margin-bottom-6" data-offence-preview-restart hidden>
+        <a class="govuk-link" href="a1" data-results-restart-link>Start a new search</a>
+      </p>
+
+      <div class="govuk-button-group govuk-!-margin-top-8">
+        <button type="submit" class="govuk-button offence-browse-save offence-browse-save--hidden" data-module="govuk-button" data-offence-save-continue hidden>
+          Save and continue
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

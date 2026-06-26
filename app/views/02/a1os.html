@@ -1,0 +1,50 @@
+{% extends "layouts/assessment.html" %}
+
+{% set offenceBrowseErrorSummary = true %}
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Search results" %}
+{% set activeSection = "section-1" %}
+{% set statusTag = "Incomplete" %}
+{% set hideServiceNavigation = true %}
+{% set hideJourneyServiceHeader = true %}
+{% set hideOffenderViewAnswers = true %}
+{% set compactPageHeader = true %}
+{% set backLinkHref = 'a1.html' %}
+{% set tieringTelemetryPage = "a1os" %}
+{% set tieringTelemetryPageLabel = "Search results" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div class="offence-search-results-heading assessment-layout__section assessment-layout__section--compact govuk-!-margin-bottom-6">
+  <div class="offence-search-results-heading__row assessment-layout__row assessment-layout__row--tight">
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-0 offence-search-results-heading__title">
+      Search results for ‘<span data-offence-search-query></span>’
+    </h1>
+    <a
+      href="a1.html"
+      class="govuk-button govuk-button--secondary offence-search-results-heading__restart"
+      data-offence-restart-search
+    >Restart search</a>
+  </div>
+  <p class="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-0" data-offence-search-count></p>
+</div>
+
+<form id="tiering-a1os-form" class="govuk-!-margin-top-3" novalidate>
+
+  {% include "includes/offence-browse-form-open.html" %}
+
+  <div class="offence-browse-accordions govuk-!-margin-bottom-6" data-offence-accordions>
+    <p class="govuk-body">Loading offences…</p>
+  </div>
+
+  <div data-offence-pagination hidden></div>
+
+  {% include "includes/offence-browse-form-footer.html" %}
+
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}
