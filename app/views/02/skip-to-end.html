@@ -1,0 +1,17 @@
+{% extends "layouts/assessment.html" %}
+
+{% set hideJourneyServiceHeader = true %}
+{% set hideOffenderViewAnswers = true %}
+{% set hideOffenderHeader = true %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<h1 class="govuk-heading-l">Skipping to the end…</h1>
+<p class="govuk-body">Setting up a completed example session and taking you to the summary page.</p>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}
+

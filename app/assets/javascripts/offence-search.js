@@ -7,11 +7,16 @@ import {
   isConvictionDateEditPanelOpen,
   persistConvictionDateState
 } from './conviction-date.js'
-import { captureCheckAnswersEditSnapshot, isTieringCheckAnswersEdit } from './tiering-change-scroll.js'
-import { getA1FieldsFromForm, PROTOTYPE_DEFAULT_CURRENT_OFFENCE } from './tiering-journey.js'
-import { getTieringAssessmentSession, setTieringAssessmentSession } from './tiering-assessment-session.js'
-import { formatOffenceCode, formatOffenceCodeLabel, formatOffenceLabelWithCodes } from './tiering-offence-browse.js'
-import { trackTelemetryOffenceSearch } from './tiering-session-telemetry.js'
+import {
+  captureCheckAnswersEditSnapshot,
+  getA1FieldsFromForm,
+  getPrototypeDefaultCurrentOffence,
+  getTieringAssessmentSession,
+  isTieringCheckAnswersEdit,
+  setTieringAssessmentSession,
+  trackTelemetryOffenceSearch
+} from './tiering-page-apis.js'
+import { formatOffenceCode, formatOffenceCodeLabel, formatOffenceLabelWithCodes, lookupOffenceIsViolent } from './tiering-offence-browse.js'
 
 const offenceSearchMatches = (item, query) => {
   const q = query.trim().toLowerCase()
@@ -32,6 +37,33 @@ const offenceSearchMatches = (item, query) => {
       .toLowerCase()
 
   return haystack.includes(q)
+}
+
+const offenceSearchFormatViolentTag = (option) => {
+  if (option.type !== 'sub') return ''
+
+  const isViolent =
+    option.isViolentOffence === true || lookupOffenceIsViolent(option.id)
+  const tagClass = isViolent ? 'govuk-tag--red' : 'govuk-tag--grey'
+  const label = isViolent ? 'Violent' : 'Not violent'
+
+  return `<strong class="govuk-tag offence-autocomplete__option-tag ${tagClass}">${label}</strong>`
+}
+
+const offenceSearchFormatOptionMeta = (option, showViolentTags) => {
+  const meta = offenceSearchFormatMeta(option)
+  if (!meta) return ''
+
+  if (!showViolentTags) {
+    return `<span class="offence-autocomplete__option-meta">${meta}</span>`
+  }
+
+  return `
+    <span class="offence-autocomplete__option-aside">
+      <span class="offence-autocomplete__option-code">${meta}</span>
+      ${offenceSearchFormatViolentTag(option)}
+    </span>
+  `
 }
 
 const offenceSearchFormatMeta = (item) => {
@@ -131,6 +163,7 @@ window.initOffenceSearchV2 = async (container) => {
   if (container._offenceSearchHandle) return container._offenceSearchHandle
 
   const isCheckMode = Boolean(container.dataset.offenceSearchCheck)
+  const showViolentTags = Boolean(container.dataset.offenceSearchSuggestViolentTags)
   const resultsUrl = container.dataset.offenceSearchResultsUrl || ''
   const resultsContext = container.dataset.offenceSearchResultsContext || ''
   const input = container.querySelector('[data-offence-search-input]')
@@ -146,6 +179,10 @@ window.initOffenceSearchV2 = async (container) => {
 
   if (!input || !listbox || !searchPanel) return null
   if (!isCheckMode && !selectedPanel) return null
+
+  if (showViolentTags) {
+    listbox.classList.add('offence-autocomplete__menu--with-violent-tags')
+  }
 
   const resizeSearchInput = () => {
     input.style.height = 'auto'
@@ -231,9 +268,13 @@ window.initOffenceSearchV2 = async (container) => {
 
       const meta = offenceSearchFormatMeta(option)
 
+      if (showViolentTags && meta) {
+        li.classList.add('offence-autocomplete__option--with-violent-tag')
+      }
+
       li.innerHTML = `
         <span class="offence-autocomplete__option-label">${option.label}</span>
-        ${meta ? `<span class="offence-autocomplete__option-meta">${meta}</span>` : ''}
+        ${meta ? offenceSearchFormatOptionMeta(option, showViolentTags) : ''}
       `
 
       listbox.appendChild(li)
@@ -658,9 +699,9 @@ window.initOffenceSearchV2 = async (container) => {
       if (session.currentOffence) {
         showSelected(session.currentOffence)
       } else if (document.getElementById('tiering-a1-form')) {
-        // Prototype starting point: a1 with a default offence already selected.
-        setTieringAssessmentSession({ currentOffence: { ...PROTOTYPE_DEFAULT_CURRENT_OFFENCE } })
-        showSelected({ ...PROTOTYPE_DEFAULT_CURRENT_OFFENCE })
+        const defaultOffence = { ...getPrototypeDefaultCurrentOffence() }
+        setTieringAssessmentSession({ currentOffence: defaultOffence })
+        showSelected(defaultOffence)
       }
     }
 

@@ -429,6 +429,8 @@ export const getFirstIncompleteTieringPage = (session) => {
 
 /** Redirect to the first incomplete page; returns true if a redirect was started */
 export const redirectIfTieringJourneyIncomplete = () => {
+  if (!window.location.pathname.includes('/01/')) return false
+
   const currentPageId = document.querySelector('[data-tiering-telemetry-page]')?.dataset
     .tieringTelemetryPage
 

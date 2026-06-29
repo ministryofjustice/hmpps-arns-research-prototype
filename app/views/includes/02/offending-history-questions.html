@@ -1,0 +1,107 @@
+{# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
+
+<h2 id="tiering-first-sanction-date" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  What was the date of {{ offenderFirstName }}'s first sanction?
+</h2>
+
+<div class="govuk-form-group" data-first-sanction-date-field>
+  <fieldset class="govuk-fieldset" role="group" aria-describedby="first-sanction-age-result">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      What was the date of {{ offenderFirstName }}'s first sanction?
+    </legend>
+    <div class="govuk-date-input" id="first-sanction-date">
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="first-sanction-date-day">Day</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="first-sanction-date-day" name="first_sanction_date_day" type="text" inputmode="numeric" autocomplete="off">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="first-sanction-date-month">Month</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="first-sanction-date-month" name="first_sanction_date_month" type="text" inputmode="numeric" autocomplete="off">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="first-sanction-date-year">Year</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="first-sanction-date-year" name="first_sanction_date_year" type="text" inputmode="numeric" autocomplete="off">
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>
+
+<p id="first-sanction-age-result" class="govuk-body govuk-!-margin-top-4 govuk-!-margin-bottom-8 first-sanction-age-result first-sanction-age-result--hidden" data-first-sanction-age-result aria-live="polite"></p>
+
+<h2 id="tiering-total-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  How many sanctions does {{ offenderFirstName }} have in total for all offences?
+</h2>
+
+<p id="total-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
+  A sanction is a court conviction with a sentence (for example, a fine, community order or prison).
+</p>
+
+<div class="govuk-form-group govuk-!-margin-bottom-8">
+  <label class="govuk-label govuk-visually-hidden" for="total-sanctions">
+    How many sanctions does {{ offenderFirstName }} have in total for all offences?
+  </label>
+  <input
+    class="govuk-input govuk-input--width-4"
+    id="total-sanctions"
+    name="total_sanctions"
+    type="text"
+    inputmode="numeric"
+    autocomplete="off"
+    aria-describedby="total-sanctions-hint"
+  >
+</div>
+
+<h2 id="tiering-violent-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  How many of {{ offenderFirstName }}'s total sanctions involved violent offences?
+</h2>
+
+<div class="govuk-form-group govuk-!-margin-bottom-0">
+  <label class="govuk-label govuk-visually-hidden" for="violent-sanctions-other">
+    How many of {{ offenderFirstName }}'s total sanctions involved violent offences?
+  </label>
+  <input
+    class="govuk-input govuk-input--width-4"
+    id="violent-sanctions-other"
+    name="violent_sanctions_other"
+    type="text"
+    inputmode="numeric"
+    autocomplete="off"
+  >
+</div>
+
+{% include "includes/02/violent-offence-check.html" %}
+
+<h2 id="tiering-sexual-offence" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-8 govuk-!-margin-bottom-2">
+  Has {{ offenderFirstName }} ever committed a sexual or sexually motivated offence?
+</h2>
+
+<div class="govuk-form-group">
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      Has {{ offenderFirstName }} ever committed a sexual or sexually motivated offence?
+    </legend>
+    <div id="sexual-offence-hint" class="govuk-hint">
+      This includes their current offence.
+    </div>
+    <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="sexual-offence-yes" name="sexual_offence" type="radio" value="yes" aria-describedby="sexual-offence-hint">
+        <label class="govuk-label govuk-radios__label" for="sexual-offence-yes">Yes</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="sexual-offence-no" name="sexual_offence" type="radio" value="no">
+        <label class="govuk-label govuk-radios__label" for="sexual-offence-no">No</label>
+      </div>
+      <div class="govuk-radios__item" hidden aria-hidden="true" style="display: none;">
+        <input class="govuk-radios__input" id="sexual-offence-unknown" name="sexual_offence" type="radio" value="unknown" disabled>
+        <label class="govuk-label govuk-radios__label" for="sexual-offence-unknown">Unknown</label>
+      </div>
+    </div>
+  </fieldset>
+</div>

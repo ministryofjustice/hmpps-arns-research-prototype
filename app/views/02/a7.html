@@ -1,0 +1,29 @@
+{% extends "layouts/assessment.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Check your answers" %}
+{% set activeSection = "section-1" %}
+{% set pageHeading = "Check your answers" %}
+{% set statusTag = "Incomplete" %}
+{% set tieringTelemetryPage = "a7" %}
+{% set tieringTelemetryPageLabel = "Check your answers" %}
+{% set backLinkHref = "a6?from=a7-back" %}
+{% set backLinkId = "tiering-a7-back" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="tiering-a7-form" novalidate>
+
+  <div id="tiering-summary-list" class="tiering-summary-list govuk-!-margin-top-6" data-offender-first-name="{{ offenderFirstName }}"></div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">View reoffending predictors scores</button>
+
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

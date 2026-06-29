@@ -1,0 +1,31 @@
+{% extends "layouts/assessment.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Offences since community date" %}
+{% set pageHeadingHtml = 'Has ' ~ offenderFirstName ~ ' committed any offences since <span data-community-date-display>that date</span>?' %}
+{% set pageHeadingId = "tiering-offences-since-community" %}
+{% set pageHeadingClass = "tiering-question-anchor" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "section-1" %}
+{% set statusTag = "Incomplete" %}
+{% set tieringTelemetryPage = "a5" %}
+{% set tieringTelemetryPageLabel = "Offences since community" %}
+{% set backLinkHref = "a4.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="tiering-a5-form" novalidate>
+
+  {% include "includes/offences-since-community-question.html" %}
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

@@ -35,12 +35,14 @@ window.GOVUKPrototypeKit.documentReady(() => {
   document.querySelectorAll('[data-module="violent-offence-check"]').forEach(async (container) => {
     const searchRoot = container.querySelector('[data-module="offence-search"][data-offence-search-check]')
     const checkButton = container.querySelector('[data-violent-check-submit]')
+    const noCheckButton = container.dataset.violentOffenceCheckNoButton === 'true'
     const selectedSection = container.querySelector('[data-violent-check-selected-section]')
     const selectedList = container.querySelector('[data-violent-check-selected-list]')
     const itemTemplate = container.querySelector('[data-violent-check-item-template]')
     const detailsPanel = container.closest('.violent-offence-check-details')
 
-    if (!searchRoot || !checkButton || !selectedSection || !selectedList || !itemTemplate) return
+    if (!searchRoot || !selectedSection || !selectedList || !itemTemplate) return
+    if (!noCheckButton && !checkButton) return
 
     const checkedOffences = []
     let pendingSelection = null
@@ -83,6 +85,12 @@ window.GOVUKPrototypeKit.documentReady(() => {
     const listbox = searchRoot.querySelector('[data-offence-search-listbox]')
 
     searchRoot.addEventListener('offence-search:selected', (event) => {
+      if (noCheckButton) {
+        setSelectedOffence(event.detail)
+        resetSearchInput()
+        return
+      }
+
       pendingSelection = event.detail
       searchHandle?.resizeSearchInput?.()
     })
@@ -126,15 +134,17 @@ window.GOVUKPrototypeKit.documentReady(() => {
       if (input) input.focus()
     }
 
-    checkButton.addEventListener('click', runCheck)
+    if (!noCheckButton) {
+      checkButton.addEventListener('click', runCheck)
 
-    if (input) {
-      input.addEventListener('keydown', (event) => {
-        if (event.key !== 'Enter') return
-        if (listbox && !listbox.hidden) return
-        event.preventDefault()
-        runCheck()
-      })
+      if (input) {
+        input.addEventListener('keydown', (event) => {
+          if (event.key !== 'Enter') return
+          if (listbox && !listbox.hidden) return
+          event.preventDefault()
+          runCheck()
+        })
+      }
     }
 
     container.querySelectorAll('[data-violent-offence-browse-link]').forEach((link) => {

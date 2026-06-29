@@ -44,6 +44,8 @@ const getFirstSanctionDatePartsFromDom = () =>
   })
 
 window.GOVUKPrototypeKit.documentReady(() => {
+  if (window.location.pathname.includes('/02/')) return
+
   const form = document.getElementById('tiering-a2-form')
   if (!form) return
 

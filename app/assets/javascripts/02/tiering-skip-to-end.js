@@ -1,0 +1,58 @@
+//
+// Seed a complete Tiering session and jump to a7 check your answers
+//
+
+import { getTieringResultsAnswersHref } from './tiering-journey.js'
+import { clearPrototypeDataForTiering, setTieringAssessmentSession } from './tiering-assessment-session.js'
+import { setTelemetryConsent } from './tiering-session-telemetry.js'
+
+const isOnSkipPage = () => window.location.pathname.endsWith('/02/skip-to-end') || window.location.pathname.endsWith('/02/skip-to-end.html')
+
+window.GOVUKPrototypeKit.documentReady(async () => {
+  if (!isOnSkipPage()) return
+
+  await clearPrototypeDataForTiering()
+
+  // Keep consent declined by default so we don’t record unexpectedly.
+  setTelemetryConsent(false)
+
+  setTieringAssessmentSession({
+    // a1
+    currentOffence: {
+      id: '04600',
+      label: 'Stealing from shops and stalls (shoplifting)',
+      code: '046',
+      subcode: '00',
+      fullCode: '04600'
+    },
+    convictionDate: { day: '27', month: '3', year: '2024' },
+
+    // a2
+    firstSanctionDate: { day: '15', month: '6', year: '1986' },
+    firstSanctionAge: '16',
+    totalSanctions: '5',
+    violentSanctions: '1',
+    sexualOffence: 'yes',
+
+    // a3 (only required if sexualOffence === 'yes')
+    sexualMotivation: 'no',
+    strangerContact: 'no',
+    sexualSanctionDate: { day: '12', month: '8', year: '2021' },
+    contactAdultSanctions: '1',
+    contactChildSanctions: '1',
+    indirectChildSanctions: '1',
+    nonContactSanctions: '1',
+
+    // a4 (no path skips a5)
+    supervisedInCommunity: 'no',
+    communityDate: { day: '5', month: '6', year: '2027' },
+
+    // state
+    scoreCalculated: true,
+    section1Complete: false,
+    staticAssessmentCompleteSeen: true
+  })
+
+  window.location.href = getTieringResultsAnswersHref()
+})
+

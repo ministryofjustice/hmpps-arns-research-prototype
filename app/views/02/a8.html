@@ -1,0 +1,41 @@
+{% extends "layouts/assessment.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set offenderFullName = "Alex Smith" %}
+{% set pageName = "Reoffending predictor scores" %}
+{% set activeSection = "section-1" %}
+{% set pageHeading = "Reoffending predictor scores" %}
+{% set statusTag = "Complete" %}
+{% set tieringTelemetryPage = "a8" %}
+{% set tieringTelemetryPageLabel = "Reoffending predictor score" %}
+{% set backLinkHref = "a7.html" %}
+{% set backLinkId = "tiering-a8-back" %}
+{% set hidePageHeaderSeparator = true %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<span id="top" class="govuk-visually-hidden" aria-hidden="true"></span>
+
+{% include "includes/assessment-question-header.html" %}
+
+<div class="govuk-inset-text govuk-!-margin-bottom-6">
+  Tiering assessment, completed <span data-tiering-completion-date></span>
+</div>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible govuk-!-margin-bottom-6">
+
+{% include "includes/02/risk-predictor-scores.html" %}
+
+<p class="govuk-body govuk-!-margin-top-3 govuk-!-margin-bottom-0">
+  <a class="govuk-button govuk-button--secondary" href="a7.html" data-module="govuk-button">Check answers</a>
+</p>
+
+<div class="risk-predictor-scores__actions govuk-!-margin-top-9">
+  <button type="button" class="govuk-button" id="tiering-mark-section-complete" data-module="govuk-button">Mark this section complete</button>
+</div>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

@@ -2,14 +2,15 @@
 // a1 – conviction date inputs (optional OASys summary on other pages)
 //
 
-import { TIERING_CHANGE_ANCHORS } from './tiering-change-scroll.js'
 import {
   formatDateFromParts,
   getDefaultConvictionDateParts,
   getTieringAssessmentSession,
-  setTieringAssessmentSession
-} from './tiering-assessment-session.js'
-import { isDateComplete, normaliseDateParts } from './tiering-journey.js'
+  setTieringAssessmentSession,
+  TIERING_CHANGE_ANCHORS,
+  isDateComplete,
+  normaliseDateParts
+} from './tiering-page-apis.js'
 
 const SUMMARY_HIDDEN_CLASS = 'tiering-system-value--summary-hidden'
 const EDIT_OPEN_CLASS = 'tiering-system-value__edit--open'

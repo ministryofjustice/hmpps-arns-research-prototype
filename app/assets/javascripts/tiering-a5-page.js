@@ -31,6 +31,8 @@ const setRecentOffenceConditionalVisible = (show) => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
+  if (window.location.pathname.includes('/02/')) return
+
   const form = document.getElementById('tiering-a5-form')
   if (!form) return
 
