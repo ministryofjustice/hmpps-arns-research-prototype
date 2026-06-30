@@ -31,14 +31,24 @@ const SEXUAL_PREDICTOR_IDS = ['direct-contact-sexual', 'indirect-contact-sexual'
 const hasSexualOffenceHistory = (session) => session.sexualOffence === 'yes'
 
 const applySexualPredictorEmptyStates = (session) => {
-  if (hasSexualOffenceHistory(session)) return
+  const showScores = hasSexualOffenceHistory(session)
 
   SEXUAL_PREDICTOR_IDS.forEach((predictorId) => {
     const section = document.querySelector(`[data-risk-predictor-id="${predictorId}"]`)
     if (!section) return
 
-    section.querySelector('[data-risk-predictor-score-content]')?.setAttribute('hidden', '')
-    section.querySelector('[data-risk-predictor-empty]')?.removeAttribute('hidden')
+    const scoreContent = section.querySelector('[data-risk-predictor-score-content]')
+    const emptyState = section.querySelector('[data-risk-predictor-empty]')
+
+    if (showScores) {
+      scoreContent?.removeAttribute('hidden')
+      emptyState?.setAttribute('hidden', '')
+      section.classList.remove('risk-predictor-scores__section--not-applicable')
+      return
+    }
+
+    scoreContent?.setAttribute('hidden', '')
+    emptyState?.removeAttribute('hidden')
     section.classList.add('risk-predictor-scores__section--not-applicable')
   })
 }

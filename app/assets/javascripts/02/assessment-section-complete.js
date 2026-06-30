@@ -24,6 +24,17 @@ const setA8BackLinkVisible = (visible) => {
   backLink.hidden = !visible
 }
 
+const setTieringCompletionInsetVisible = (visible) => {
+  const inset = document.querySelector('[data-tiering-completion-inset]')
+  if (!inset) return
+
+  if (visible) {
+    inset.removeAttribute('hidden')
+  } else {
+    inset.setAttribute('hidden', '')
+  }
+}
+
 const hideMarkSectionCompleteButton = () => {
   const markBtn = document.getElementById('tiering-mark-section-complete')
   if (!markBtn) return
@@ -61,6 +72,7 @@ export const resetSection1CompleteUi = () => {
   })
 
   setA8BackLinkVisible(true)
+  setTieringCompletionInsetVisible(false)
 }
 
 export const applySection1CompleteUi = () => {
@@ -91,6 +103,7 @@ export const applySection1CompleteUi = () => {
 
   hideMarkSectionCompleteButton()
   setA8BackLinkVisible(false)
+  setTieringCompletionInsetVisible(true)
 }
 
 export const clearSection1CompleteSession = () => {

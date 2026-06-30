@@ -1,10 +1,10 @@
-<details class="govuk-details govuk-!-margin-top-6 govuk-!-margin-bottom-0 violent-offence-check-details" id="violent-offence-check">
+<details class="govuk-details govuk-!-margin-top-0 govuk-!-margin-bottom-4 violent-offence-check-details" id="violent-offence-check">
   <summary class="govuk-details__summary">
     <span class="govuk-details__summary-text">Check if an offence is classed as violent</span>
   </summary>
   <div class="govuk-details__text">
     <div class="violent-offence-check" data-module="violent-offence-check">
-      <p class="govuk-body govuk-!-margin-top-0 govuk-!-margin-bottom-4">Search for an offence to check if you should count it as a violent offence.</p>
+      <p class="govuk-body govuk-!-margin-top-0 govuk-!-margin-bottom-4" id="violent-offence-check-hint">Search for an offence to check if you should count it as a violent offence.</p>
 
       <div class="violent-offence-check__search-row" data-violent-check-search>
         <div class="violent-offence-check__input-row">
@@ -12,6 +12,7 @@
             class="offence-autocomplete offence-autocomplete--check"
             data-module="offence-search"
             data-offence-search-check="true"
+            data-offence-search-describedby="violent-offence-check-hint"
             data-offence-search-results-url="a1r"
             data-offence-search-results-context="violent-offence-check"
             id="violent-offence-check-search"
@@ -30,8 +31,10 @@
                   autocomplete="off"
                   role="combobox"
                   aria-autocomplete="list"
+                  aria-haspopup="listbox"
                   aria-expanded="false"
                   aria-controls="violent-offence-check-search-listbox"
+                  aria-describedby="violent-offence-check-hint"
                   data-offence-search-input
                 ></textarea>
                 <ul
@@ -56,17 +59,21 @@
         </div>
       </div>
 
-      <div class="violent-offence-check__selected-section govuk-!-margin-top-4" data-violent-check-selected-section hidden>
+      <div class="violent-offence-check__selected-section govuk-!-margin-top-4" data-violent-check-selected-section hidden role="region" aria-label="Offence check result">
+        <div class="govuk-visually-hidden" data-violent-check-live-region role="status" aria-live="polite" aria-atomic="true"></div>
         <div class="violent-offence-check__selected-list" data-violent-check-selected-list></div>
       </div>
 
       <template data-violent-check-item-template>
-        <div class="offence-selected-card violent-offence-check__selected-item" data-violent-check-item>
-          <p class="govuk-body violent-offence-check__selected-line govuk-!-margin-bottom-0" data-violent-check-item-label>
-            <span class="violent-offence-check__selected-text">
-              <span class="violent-offence-check__selected-name" data-violent-check-item-name></span><span class="govuk-hint violent-offence-check__selected-code" data-violent-check-item-code></span>
-            </span><strong class="govuk-tag violent-offence-check__selected-tag" data-offence-violent-tag hidden></strong>
-          </p>
+        <div class="violent-offence-check__selected-item" data-violent-check-item>
+          <p class="govuk-visually-hidden" data-violent-check-sr-summary></p>
+          <div class="violent-offence-check__selected-row" aria-hidden="true" data-violent-check-item-label>
+            <span class="violent-offence-check__selected-name" data-violent-check-item-name></span>
+            <span class="violent-offence-check__selected-code tiering-offence-code" data-violent-check-item-code></span>
+            <span class="violent-offence-check__selected-type">
+              <strong class="govuk-tag violent-offence-check__selected-tag" data-offence-violent-tag hidden></strong>
+            </span>
+          </div>
         </div>
       </template>
     </div>

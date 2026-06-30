@@ -6,25 +6,56 @@ import { applyOffenceViolentTag, getOffenceCodeBracket, lookupOffenceIsViolent }
 import {
   getTieringAssessmentSession,
   setTieringAssessmentSession
-} from './tiering-assessment-session.js'
+} from './tiering-page-apis.js'
+
+const getViolentTypeLabel = (isViolentOffence) => (isViolentOffence ? 'Violent' : 'Not violent')
+
+const getSelectionIsViolent = (selection) =>
+  selection.isViolentOffence === true || lookupOffenceIsViolent(selection.id)
+
+const formatSelectedOffenceSummary = (selection) => {
+  const offenceName = selection.label || selection.description || ''
+  const code = getOffenceCodeBracket(selection)
+  const type = getViolentTypeLabel(getSelectionIsViolent(selection))
+  const parts = [`Offence: ${offenceName}`]
+
+  if (code) parts.push(`code: ${code}`)
+  parts.push(`type: ${type}`)
+
+  return parts.join(', ')
+}
 
 const buildSelectedItem = (template, selection) => {
   const fragment = template.content.cloneNode(true)
   const item = fragment.querySelector('[data-violent-check-item]')
+  const summaryEl = fragment.querySelector('[data-violent-check-sr-summary]')
   const nameEl = fragment.querySelector('[data-violent-check-item-name]')
   const codeEl = fragment.querySelector('[data-violent-check-item-code]')
   const violentTagEl = fragment.querySelector('[data-offence-violent-tag]')
   const codeBracket = getOffenceCodeBracket(selection)
+  const offenceName = selection.label || selection.description || ''
 
-  if (nameEl) nameEl.textContent = selection.label
-  if (codeEl) codeEl.textContent = codeBracket || ''
-  applyOffenceViolentTag(
-    violentTagEl,
-    selection.isViolentOffence === true || lookupOffenceIsViolent(selection.id)
-  )
+  if (summaryEl) summaryEl.textContent = formatSelectedOffenceSummary(selection)
+  if (nameEl) nameEl.textContent = offenceName
+  if (codeEl) {
+    codeEl.textContent = codeBracket || ''
+    codeEl.hidden = !codeBracket
+  }
+  applyOffenceViolentTag(violentTagEl, getSelectionIsViolent(selection))
   if (item) item.dataset.violentCheckOffenceId = selection.id || ''
 
   return item
+}
+
+const syncSelectedRowLayout = (item) => {
+  const row = item?.querySelector('.violent-offence-check__selected-row')
+  const nameEl = item?.querySelector('[data-violent-check-item-name]')
+  if (!row || !nameEl) return
+
+  const lineHeight = parseFloat(getComputedStyle(nameEl).lineHeight) || 0
+  const isSingleLine = !lineHeight || nameEl.scrollHeight <= lineHeight + 2
+
+  row.classList.toggle('violent-offence-check__selected-row--single-line', isSingleLine)
 }
 
 const persistViolentOffenceChecks = (selections) => {
@@ -46,6 +77,17 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
     const checkedOffences = []
     let pendingSelection = null
+    const liveRegion = container.querySelector('[data-violent-check-live-region]')
+
+    const announceSelection = (selection) => {
+      if (!liveRegion) return
+
+      const summary = formatSelectedOffenceSummary(selection)
+      liveRegion.textContent = ''
+      requestAnimationFrame(() => {
+        liveRegion.textContent = summary
+      })
+    }
 
     const syncSession = () => {
       persistViolentOffenceChecks(
@@ -65,8 +107,8 @@ window.GOVUKPrototypeKit.documentReady(() => {
       selectedSection.hidden = checkedOffences.length === 0
     }
 
-    const setSelectedOffence = (selection) => {
-      if (!selection?.label) return
+    const setSelectedOffence = (selection, { announce = false } = {}) => {
+      if (!selection?.label && !selection?.description) return
 
       checkedOffences.length = 0
       selectedList.innerHTML = ''
@@ -78,7 +120,19 @@ window.GOVUKPrototypeKit.documentReady(() => {
       selectedList.appendChild(item)
       updateSelectedSectionVisibility()
       syncSession()
+
+      requestAnimationFrame(() => syncSelectedRowLayout(item))
+
+      if (announce) announceSelection(selection)
     }
+
+    const refreshSelectedRowLayout = () => {
+      const item = selectedList.querySelector('[data-violent-check-item]')
+      if (item) syncSelectedRowLayout(item)
+    }
+
+    window.addEventListener('resize', refreshSelectedRowLayout)
+    detailsPanel?.addEventListener('toggle', refreshSelectedRowLayout)
 
     const searchHandle = await window.initOffenceSearchV2(searchRoot)
     const input = searchRoot.querySelector('[data-offence-search-input]')
@@ -86,7 +140,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
     searchRoot.addEventListener('offence-search:selected', (event) => {
       if (noCheckButton) {
-        setSelectedOffence(event.detail)
+        setSelectedOffence(event.detail, { announce: true })
         resetSearchInput()
         return
       }
@@ -99,7 +153,9 @@ window.GOVUKPrototypeKit.documentReady(() => {
       pendingSelection = null
       if (input) {
         input.value = ''
-        input.removeAttribute('aria-describedby')
+        const hintId = searchRoot.dataset.offenceSearchDescribedby
+        if (hintId) input.setAttribute('aria-describedby', hintId)
+        else input.removeAttribute('aria-describedby')
         searchHandle?.resizeSearchInput?.()
       }
       if (listbox) {
@@ -112,8 +168,8 @@ window.GOVUKPrototypeKit.documentReady(() => {
     const runCheck = () => {
       const selection = pendingSelection || searchHandle?.getPendingSelection?.()
 
-      if (selection?.label) {
-        setSelectedOffence(selection)
+      if (selection?.label || selection?.description) {
+        setSelectedOffence(selection, { announce: true })
         resetSearchInput()
         input?.focus()
         return
@@ -162,8 +218,9 @@ window.GOVUKPrototypeKit.documentReady(() => {
     }
 
     if (session.violentOffenceCheckPending) {
-      setSelectedOffence(session.violentOffenceCheckPending)
+      setSelectedOffence(session.violentOffenceCheckPending, { announce: true })
       setTieringAssessmentSession({ violentOffenceCheckPending: null })
+      resetSearchInput()
       if (detailsPanel) detailsPanel.open = true
     }
 

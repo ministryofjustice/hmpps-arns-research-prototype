@@ -42,13 +42,17 @@ const escapeHtml = (text) =>
 const renderSummaryRows = (rows) =>
   rows
     .map(
-      ({ key, value, changeHref, changeHidden }) => `
+      ({ key, value, changeHref, changeHidden, hideChange }) => `
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">${escapeHtml(key)}</dt>
-    <dd class="govuk-summary-list__value">${value}</dd>
+    <dd class="govuk-summary-list__value">${value}</dd>${
+      hideChange
+        ? ''
+        : `
     <dd class="govuk-summary-list__actions">
       <a class="govuk-link" href="${changeHref}">Change<span class="govuk-visually-hidden"> ${escapeHtml(changeHidden)}</span></a>
-    </dd>
+    </dd>`
+    }
   </div>`
     )
     .join('')
@@ -57,7 +61,7 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
   const name = offenderFirstName
   const sections = []
 
-  const createRow = (key, value, changeHref, changeHidden, allowHtml = false, changeAnchor) => {
+  const createRow = (key, value, changeHref, changeHidden, allowHtml = false, changeAnchor, hideChange = false) => {
     let display = NOT_PROVIDED_HTML
 
     if (value) {
@@ -68,7 +72,8 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
       key,
       value: display,
       changeHref: tieringChangeHref(changeHref, changeAnchor),
-      changeHidden: changeHidden || key
+      changeHidden: changeHidden || key,
+      hideChange
     }
   }
 
@@ -86,7 +91,8 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
         'a1.html',
         `What is ${name}'s current offence?`,
         true,
-        TIERING_CHANGE_ANCHORS.currentOffence
+        TIERING_CHANGE_ANCHORS.currentOffence,
+        true
       )
     )
   } else {
@@ -97,7 +103,8 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
         'a1.html',
         `What is ${name}'s current offence?`,
         false,
-        TIERING_CHANGE_ANCHORS.currentOffence
+        TIERING_CHANGE_ANCHORS.currentOffence,
+        true
       )
     )
   }

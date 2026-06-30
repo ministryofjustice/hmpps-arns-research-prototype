@@ -52,10 +52,18 @@
 
       <div data-results-pagination hidden></div>
 
-      <div class="offence-autocomplete__selected-box govuk-!-margin-top-8"
-           data-offence-preview-container hidden>
-        <p class="govuk-body offence-autocomplete__selected-label govuk-!-margin-bottom-0" data-offence-preview-label></p>
-        <p class="govuk-body offence-autocomplete__selected-code govuk-!-margin-bottom-0" data-offence-preview-code></p>
+      <div class="offence-autocomplete__selected-box offence-autocomplete__selected-box--preview-row govuk-!-margin-top-8"
+           data-offence-preview-container
+           hidden
+           role="region"
+           aria-label="Selected offence">
+        <div class="govuk-visually-hidden" data-offence-preview-live-region role="status" aria-live="polite" aria-atomic="true"></div>
+        <p class="govuk-visually-hidden" data-offence-preview-sr-summary></p>
+        <div class="offence-autocomplete__selected-preview-row" aria-hidden="true">
+          <span class="offence-autocomplete__selected-preview-name" data-offence-preview-label></span>
+          <span class="offence-autocomplete__selected-preview-code tiering-offence-code" data-offence-preview-code></span>
+          <span class="offence-autocomplete__selected-preview-type" data-offence-preview-type hidden></span>
+        </div>
       </div>
 
       <p class="govuk-body govuk-!-margin-top-3 govuk-!-margin-bottom-6" data-offence-preview-restart hidden>

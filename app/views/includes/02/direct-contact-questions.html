@@ -1,0 +1,69 @@
+{# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
+
+{# Temporarily hidden
+{% include "includes/direct-contact-sexual-predictor-guidance.html" %}
+#}
+
+<h3 id="tiering-contact-adult-sanctions" class="govuk-heading-s tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  How many sanctions does {{ offenderFirstName }} have for contact adult sexual or sexually motivated offences?
+</h3>
+
+<p id="contact-adult-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
+  Include their current offence.
+</p>
+
+<details class="govuk-details govuk-!-margin-bottom-4">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">Offences that should be counted as contact adult sexual or sexually motivated</span>
+  </summary>
+  <div class="govuk-details__text">
+    {% include "includes/direct-contact-adult-offences-counted.html" %}
+  </div>
+</details>
+
+<div class="govuk-form-group govuk-!-margin-bottom-8">
+  <label class="govuk-label govuk-visually-hidden" for="contact-adult-sanctions">
+    How many sanctions does {{ offenderFirstName }} have for contact adult sexual or sexually motivated offences?
+  </label>
+  <input
+    class="govuk-input govuk-input--width-4"
+    id="contact-adult-sanctions"
+    name="contact_adult_sanctions"
+    type="text"
+    inputmode="numeric"
+    autocomplete="off"
+    aria-describedby="contact-adult-sanctions-hint"
+  >
+</div>
+
+<h3 id="tiering-contact-child-sanctions" class="govuk-heading-s tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  How many sanctions does {{ offenderFirstName }} have for direct contact child sexual or sexually motivated offences?
+</h3>
+
+<p id="contact-child-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
+  Include their current offence.
+</p>
+
+<details class="govuk-details govuk-!-margin-bottom-4">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">Offences that should be counted as direct contact child sexual or sexually motivated</span>
+  </summary>
+  <div class="govuk-details__text">
+    {% include "includes/direct-contact-child-offences-counted.html" %}
+  </div>
+</details>
+
+<div class="govuk-form-group govuk-!-margin-bottom-0">
+  <label class="govuk-label govuk-visually-hidden" for="contact-child-sanctions">
+    How many sanctions does {{ offenderFirstName }} have for direct contact child sexual or sexually motivated offences?
+  </label>
+  <input
+    class="govuk-input govuk-input--width-4"
+    id="contact-child-sanctions"
+    name="contact_child_sanctions"
+    type="text"
+    inputmode="numeric"
+    autocomplete="off"
+    aria-describedby="contact-child-sanctions-hint"
+  >
+</div>
