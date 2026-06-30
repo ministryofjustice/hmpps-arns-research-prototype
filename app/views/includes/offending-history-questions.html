@@ -56,6 +56,8 @@
   How many of {{ offenderFirstName }}'s total sanctions involved violent offences?
 </h2>
 
+{% include "includes/violent-offence-check.html" %}
+
 <div class="govuk-form-group govuk-!-margin-bottom-0">
   <label class="govuk-label govuk-visually-hidden" for="violent-sanctions-other">
     How many of {{ offenderFirstName }}'s total sanctions involved violent offences?
@@ -69,8 +71,6 @@
     autocomplete="off"
   >
 </div>
-
-{% include "includes/violent-offence-check.html" %}
 
 <h2 id="tiering-sexual-offence" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-8 govuk-!-margin-bottom-2">
   Has {{ offenderFirstName }} ever committed a sexual or sexually motivated offence?

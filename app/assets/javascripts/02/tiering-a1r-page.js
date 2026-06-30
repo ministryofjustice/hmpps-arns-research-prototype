@@ -9,6 +9,7 @@ import { getTieringAssessmentSession, setTieringAssessmentSession } from './tier
 import {
   formatOffenceCode,
   initOffenceBrowsePagination,
+  lookupOffenceIsViolent,
   paginateOffenceBrowseGroups,
   renderOffenceBrowsePagination
 } from './tiering-offence-browse.js'
@@ -16,7 +17,69 @@ import {
 const VIOLENT_CONTEXT = 'violent-offence-check'
 const VIOLENT_RETURN_URL = 'a2.html#violent-offence-check'
 
+const getViolentTypeLabel = (isViolentOffence) => (isViolentOffence ? 'Violent' : 'Not violent')
+
+const getOffenceIsViolent = (offence) =>
+  offence.isViolentOffence === true || lookupOffenceIsViolent(offence.id)
+
+const formatOffenceSummary = (offence, { includeType = false } = {}) => {
+  const offenceName = offence.description || offence.label || ''
+  const code = formatOffenceCode(offence)
+  const parts = [`Offence: ${offenceName}`]
+
+  if (code) parts.push(`code: ${code}`)
+  if (includeType) parts.push(`type: ${getViolentTypeLabel(getOffenceIsViolent(offence))}`)
+
+  return parts.join(', ')
+}
+
+const formatViolentTagHtml = (offence) => {
+  const isViolent = getOffenceIsViolent(offence)
+  const tagClass = isViolent ? 'govuk-tag--red' : 'govuk-tag--grey'
+  const label = getViolentTypeLabel(isViolent)
+
+  return `<strong class="govuk-tag offence-result-table__violent-tag ${tagClass}">${label}</strong>`
+}
+
+const renderCodeCell = (sub) => {
+  const displayCode = formatOffenceCode(sub)
+
+  return `
+    <td class="govuk-table__cell offence-result-table__code-cell" aria-hidden="true">
+      <span class="offence-result-table__code-label">
+        <span class="tiering-offence-code">${displayCode}</span>
+      </span>
+    </td>
+  `
+}
+
+const renderTypeCell = (sub) => `
+  <td class="govuk-table__cell offence-result-table__type-cell" aria-hidden="true">
+    <span class="offence-result-table__type-label">
+      ${formatViolentTagHtml(sub)}
+    </span>
+  </td>
+`
+
+const renderOffenceLabel = (sub, showViolentTags) => {
+  const offenceName = sub.description || sub.label || ''
+  const displayCode = formatOffenceCode(sub)
+
+  if (showViolentTags) {
+    return `
+      <span aria-hidden="true">${offenceName}</span>
+      <span class="govuk-visually-hidden">${formatOffenceSummary(sub, { includeType: true })}</span>
+    `
+  }
+
+  return `
+    ${offenceName}<span class="govuk-visually-hidden">, code ${displayCode}</span>
+  `
+}
+
 window.GOVUKPrototypeKit.documentReady(() => {
+  if (!window.location.pathname.includes('/02/')) return
+
   const form = document.getElementById('tiering-a1r-form')
   const heading = document.querySelector('[data-results-heading]')
   const countEl = document.querySelector('[data-results-count]')
@@ -28,6 +91,9 @@ window.GOVUKPrototypeKit.documentReady(() => {
   const previewContainer = document.querySelector('[data-offence-preview-container]')
   const previewLabel = document.querySelector('[data-offence-preview-label]')
   const previewCode = document.querySelector('[data-offence-preview-code]')
+  const previewType = document.querySelector('[data-offence-preview-type]')
+  const previewSummary = document.querySelector('[data-offence-preview-sr-summary]')
+  const previewLiveRegion = document.querySelector('[data-offence-preview-live-region]')
   const previewRestart = document.querySelector('[data-offence-preview-restart]')
 
   if (!form || !root) return
@@ -51,6 +117,24 @@ window.GOVUKPrototypeKit.documentReady(() => {
     document
       .querySelectorAll('.assessment-layout .govuk-back-link')
       .forEach((link) => link.setAttribute('href', VIOLENT_RETURN_URL))
+
+    if (tableEl) tableEl.classList.add('offence-result-table--with-violent-tags')
+    if (previewContainer) {
+      previewContainer.classList.add('offence-autocomplete__selected-box--with-type')
+    }
+
+    const codeHeader = document.querySelector('.offence-result-table__header--code')
+    if (codeHeader) {
+      codeHeader.textContent = 'Code'
+
+      if (!document.querySelector('.offence-result-table__header--type')) {
+        const typeHeader = document.createElement('th')
+        typeHeader.scope = 'col'
+        typeHeader.className = 'govuk-table__header offence-result-table__header--type'
+        typeHeader.textContent = 'Type'
+        codeHeader.insertAdjacentElement('afterend', typeHeader)
+      }
+    }
   }
 
   let selectedOffenceObj = null
@@ -70,15 +154,41 @@ window.GOVUKPrototypeKit.documentReady(() => {
     if (!selectedOffenceObj) {
       previewContainer.hidden = true
       if (previewRestart) previewRestart.hidden = true
+      if (previewSummary) previewSummary.textContent = ''
       return
     }
 
     const codeDisplay = formatOffenceCode(selectedOffenceObj)
-    previewLabel.textContent = selectedOffenceObj.description || selectedOffenceObj.label
+    const offenceName = selectedOffenceObj.description || selectedOffenceObj.label || ''
+    const summary = formatOffenceSummary(selectedOffenceObj, { includeType: isViolentContext })
+
+    previewLabel.textContent = offenceName
     previewCode.textContent = codeDisplay
     previewCode.hidden = !codeDisplay
+
+    if (previewType) {
+      if (isViolentContext) {
+        previewType.innerHTML = formatViolentTagHtml(selectedOffenceObj)
+        previewType.hidden = false
+      } else {
+        previewType.innerHTML = ''
+        previewType.hidden = true
+      }
+    }
+
+    if (previewSummary) previewSummary.textContent = summary
     previewContainer.hidden = false
     if (previewRestart) previewRestart.hidden = false
+  }
+
+  const announceSelection = (offence) => {
+    if (!previewLiveRegion) return
+
+    const summary = formatOffenceSummary(offence, { includeType: isViolentContext })
+    previewLiveRegion.textContent = ''
+    requestAnimationFrame(() => {
+      previewLiveRegion.textContent = summary
+    })
   }
 
   const extractSelectedPayload = (radioInputElement) => {
@@ -86,6 +196,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
       selectedOffenceObj = JSON.parse(decodeURIComponent(radioInputElement.dataset.offenceRawString))
       updatePreview()
       updateSaveButtonVisibility()
+      announceSelection(selectedOffenceObj)
     } catch (err) {
       console.error('Failed to parse selected offence payload', err)
     }
@@ -96,7 +207,6 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
     root.innerHTML = items
       .map((sub, index) => {
-        const displayCode = formatOffenceCode(sub)
         const radioId = `offence-choice-${index}`
         const isChecked = selectedOffenceObj && String(selectedOffenceObj.id) === String(sub.id)
 
@@ -113,16 +223,12 @@ window.GOVUKPrototypeKit.documentReady(() => {
                          ${isChecked ? 'checked' : ''}
                          data-offence-raw-string="${encodeURIComponent(JSON.stringify(sub))}">
                   <label class="govuk-label govuk-radios__label" for="${radioId}">
-                    ${sub.description || sub.label}<span class="govuk-visually-hidden">, code ${displayCode}</span>
+                    ${renderOffenceLabel(sub, isViolentContext)}
                   </label>
                 </div>
               </div>
             </td>
-            <td class="govuk-table__cell offence-result-table__code-cell">
-              <label class="offence-result-table__code-label" for="${radioId}">
-                <span class="tiering-offence-code" aria-hidden="true">${displayCode}</span>
-              </label>
-            </td>
+            ${renderCodeCell(sub)}${isViolentContext ? renderTypeCell(sub) : ''}
           </tr>
         `
       })
@@ -163,7 +269,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
     const offencePayload = {
       id: selectedOffenceObj.id,
-      label: selectedOffenceObj.label,
+      label: selectedOffenceObj.label || selectedOffenceObj.description || '',
       code: selectedOffenceObj.code || '',
       subcode: selectedOffenceObj.subcode || '',
       fullCode: selectedOffenceObj.fullCode || '',

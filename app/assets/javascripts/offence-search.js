@@ -166,6 +166,7 @@ window.initOffenceSearchV2 = async (container) => {
   const showViolentTags = Boolean(container.dataset.offenceSearchSuggestViolentTags)
   const resultsUrl = container.dataset.offenceSearchResultsUrl || ''
   const resultsContext = container.dataset.offenceSearchResultsContext || ''
+  const staticDescribedBy = container.dataset.offenceSearchDescribedby || ''
   const input = container.querySelector('[data-offence-search-input]')
   const listbox = container.querySelector('[data-offence-search-listbox]')
   const searchPanel = container.querySelector('[data-offence-search-panel]')
@@ -217,6 +218,16 @@ window.initOffenceSearchV2 = async (container) => {
     listbox.hidden = !expanded
   }
 
+  const setInputDescribedBy = (...dynamicIds) => {
+    const ids = [staticDescribedBy, ...dynamicIds].filter(Boolean).join(' ').trim()
+    if (ids) {
+      input.setAttribute('aria-describedby', ids)
+      return
+    }
+
+    input.removeAttribute('aria-describedby')
+  }
+
   const clearListbox = () => {
     listbox.innerHTML = ''
     activeIndex = -1
@@ -232,7 +243,7 @@ window.initOffenceSearchV2 = async (container) => {
     status.setAttribute('aria-atomic', 'true')
     status.textContent = offenceSearchFormatStatus(count, browseParent)
     listbox.appendChild(status)
-    input.setAttribute('aria-describedby', status.id)
+    setInputDescribedBy(status.id)
     return status
   }
 
@@ -276,6 +287,16 @@ window.initOffenceSearchV2 = async (container) => {
         <span class="offence-autocomplete__option-label">${option.label}</span>
         ${meta ? offenceSearchFormatOptionMeta(option, showViolentTags) : ''}
       `
+
+      if (showViolentTags && option.type === 'sub' && meta) {
+        const isViolent =
+          option.isViolentOffence === true || lookupOffenceIsViolent(option.id)
+        const typeLabel = isViolent ? 'Violent' : 'Not violent'
+        li.setAttribute(
+          'aria-label',
+          `Offence: ${option.label}, code: ${meta}, type: ${typeLabel}`
+        )
+      }
 
       listbox.appendChild(li)
     })
@@ -328,7 +349,7 @@ window.initOffenceSearchV2 = async (container) => {
     if (hiddenInput) hiddenInput.value = ''
     if (hiddenCodeInput) hiddenCodeInput.value = ''
     if (hiddenSubcodeInput) hiddenSubcodeInput.value = ''
-    input.removeAttribute('aria-describedby')
+    setInputDescribedBy()
     if (!isCheckMode && document.getElementById('tiering-a1-form')) {
       setTieringAssessmentSession({ currentOffence: null })
     }
@@ -371,7 +392,7 @@ window.initOffenceSearchV2 = async (container) => {
     browseParent = null
     clearListbox()
     setExpanded(false)
-    input.removeAttribute('aria-describedby')
+    setInputDescribedBy()
 
     trackTelemetryOffenceSearch({
       action: 'select',
@@ -565,7 +586,7 @@ window.initOffenceSearchV2 = async (container) => {
       }
       clearListbox()
       setExpanded(false)
-      input.removeAttribute('aria-describedby')
+      setInputDescribedBy()
     }
   })
 

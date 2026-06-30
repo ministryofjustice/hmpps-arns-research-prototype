@@ -19,6 +19,8 @@ router.use((req, res, next) => {
   res.locals.offenceBrowseCategories = offenceBrowseCategories
   if (req.path.startsWith('/02')) {
     res.locals.tieringSectionCaption = 'Reoffending predictors'
+    res.locals.useReoffendingServiceNavigation = true
+    res.locals.hideOffenderViewAnswers = true
   }
   next()
 })
