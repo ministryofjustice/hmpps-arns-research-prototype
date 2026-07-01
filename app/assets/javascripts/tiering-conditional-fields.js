@@ -26,7 +26,14 @@ const snapshotConditionalFields = (conditional, cache) => {
     const key = field.name || field.id
     if (!key) return
 
-    if (field.type === 'checkbox' || field.type === 'radio') {
+    if (field.type === 'radio') {
+      if (field.checked) {
+        data[key] = field.value
+      }
+      return
+    }
+
+    if (field.type === 'checkbox') {
       data[key] = field.checked
     } else {
       data[key] = field.value
@@ -42,9 +49,16 @@ const restoreConditionalFields = (conditional, cache) => {
 
   conditional.querySelectorAll('input, select, textarea').forEach((field) => {
     const key = field.name || field.id
+    if (!key) return
+
+    if (field.type === 'radio') {
+      field.checked = data[key] === field.value
+      return
+    }
+
     if (!(key in data)) return
 
-    if (field.type === 'checkbox' || field.type === 'radio') {
+    if (field.type === 'checkbox') {
       field.checked = data[key]
     } else {
       field.value = data[key]
@@ -58,9 +72,14 @@ const initPreserveConditionalFieldsInGroup = (radiosRoot) => {
 
   const cache = new Map()
 
-  const syncConditionals = () => {
+  const syncConditionals = (changeTarget) => {
     conditionals.forEach((conditional) => {
       if (conditional.classList.contains('govuk-radios__conditional--hidden')) {
+        snapshotConditionalFields(conditional, cache)
+        return
+      }
+
+      if (changeTarget && conditional.contains(changeTarget)) {
         snapshotConditionalFields(conditional, cache)
         return
       }
@@ -77,8 +96,8 @@ const initPreserveConditionalFieldsInGroup = (radiosRoot) => {
     })
   })
 
-  radiosRoot.addEventListener('change', () => {
-    requestAnimationFrame(syncConditionals)
+  radiosRoot.addEventListener('change', (event) => {
+    requestAnimationFrame(() => syncConditionals(event.target))
   })
 
   syncConditionals()

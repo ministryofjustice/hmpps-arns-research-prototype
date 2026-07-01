@@ -1,4 +1,4 @@
-{% extends "layouts/assessment.html" %}
+{% extends "layouts/assessment-proto2.html" %}
 
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Offending history" %}
@@ -13,9 +13,15 @@
 
 {% include "includes/assessment-journey-page-open.html" %}
 
+<div data-sanction-inset-slot="header" hidden></div>
+
 {% include "includes/assessment-question-header.html" %}
 
 <form id="tiering-a2-form" novalidate data-offender-first-name="{{ offenderFirstName }}">
+
+  <div data-sanction-inset-slot="form">
+    {% include "includes/02/sanction-definition-inset.html" %}
+  </div>
 
   {% include "includes/02/offending-history-questions.html" %}
 

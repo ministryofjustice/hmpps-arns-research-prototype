@@ -10,7 +10,6 @@ import {
 import {
   captureCheckAnswersEditSnapshot,
   completeTieringPageAndContinue,
-  isTieringBackNavigation,
   isTieringCheckAnswersEdit
 } from './tiering-change-scroll.js'
 import {
@@ -25,6 +24,45 @@ const FIRST_SANCTION_DATE_INPUT_IDS = [
   'first-sanction-date-month',
   'first-sanction-date-year'
 ]
+
+const initSanctionDefinitionToggle = () => {
+  const toggle = document.querySelector('[data-sanction-definition-toggle]')
+  const headerSlot = document.querySelector('[data-sanction-inset-slot="header"]')
+  const formSlot = document.querySelector('[data-sanction-inset-slot="form"]')
+  const insetPanel = toggle?.querySelector('.sanction-definition-toggle__inset')
+  const headingPanel = toggle?.querySelector('.sanction-definition-toggle__heading')
+
+  if (!toggle || !headerSlot || !formSlot || !insetPanel || !headingPanel) return
+
+  const applyMode = (mode) => {
+    const isInset = mode === 'inset'
+    const targetSlot = isInset ? headerSlot : formSlot
+
+    targetSlot.appendChild(toggle)
+    headerSlot.hidden = !isInset
+    formSlot.hidden = isInset
+
+    insetPanel.hidden = !isInset
+    headingPanel.hidden = isInset
+
+    toggle.dataset.sanctionDefinitionMode = mode
+    toggle.setAttribute('aria-pressed', String(!isInset))
+  }
+
+  const toggleMode = () => {
+    const nextMode = toggle.dataset.sanctionDefinitionMode === 'inset' ? 'heading' : 'inset'
+    applyMode(nextMode)
+  }
+
+  toggle.addEventListener('click', toggleMode)
+  toggle.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return
+    event.preventDefault()
+    toggleMode()
+  })
+
+  applyMode('heading')
+}
 
 const setFirstSanctionDateValues = (parts) => {
   const dayInput = document.getElementById('first-sanction-date-day')
@@ -49,13 +87,13 @@ window.GOVUKPrototypeKit.documentReady(() => {
   const form = document.getElementById('tiering-a2-form')
   if (!form) return
 
+  initSanctionDefinitionToggle()
+
   const session = getTieringAssessmentSession()
   const offenderFirstName = form.dataset.offenderFirstName || 'Alex'
   const ageResult = document.getElementById('first-sanction-age-result')
-  const shouldRestoreSavedAnswers =
-    isTieringCheckAnswersEdit() || isTieringBackNavigation()
 
-  if (shouldRestoreSavedAnswers && session.firstSanctionDate) {
+  if (session.firstSanctionDate) {
     setFirstSanctionDateValues(session.firstSanctionDate)
   } else {
     setFirstSanctionDateValues(getDefaultFirstSanctionDateParts())
@@ -102,29 +140,19 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   updateFirstSanctionAgeResult()
 
-  if (shouldRestoreSavedAnswers) {
-    if (session.totalSanctions) {
-      const totalSanctions = form.querySelector('#total-sanctions')
-      if (totalSanctions) totalSanctions.value = session.totalSanctions
-    }
-    if (session.violentSanctions) {
-      const violentSanctions = form.querySelector('#violent-sanctions-other')
-      if (violentSanctions) violentSanctions.value = session.violentSanctions
-    }
-    if (session.sexualOffence) {
-      const sexualOffenceInput = form.querySelector(
-        `input[name="sexual_offence"][value="${session.sexualOffence}"]`
-      )
-      if (sexualOffenceInput) sexualOffenceInput.checked = true
-    }
-  } else {
+  if (session.totalSanctions) {
     const totalSanctions = form.querySelector('#total-sanctions')
+    if (totalSanctions) totalSanctions.value = session.totalSanctions
+  }
+  if (session.violentSanctions) {
     const violentSanctions = form.querySelector('#violent-sanctions-other')
-    if (totalSanctions) totalSanctions.value = ''
-    if (violentSanctions) violentSanctions.value = ''
-    form.querySelectorAll('input[name="sexual_offence"]').forEach((input) => {
-      input.checked = false
-    })
+    if (violentSanctions) violentSanctions.value = session.violentSanctions
+  }
+  if (session.sexualOffence) {
+    const sexualOffenceInput = form.querySelector(
+      `input[name="sexual_offence"][value="${session.sexualOffence}"]`
+    )
+    if (sexualOffenceInput) sexualOffenceInput.checked = true
   }
 
   if (isTieringCheckAnswersEdit()) {

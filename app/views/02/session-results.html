@@ -1,4 +1,4 @@
-{% extends "layouts/assessment.html" %}
+{% extends "layouts/assessment-proto2.html" %}
 
 {% set serviceHeaderTitle = "Tiering assessment" %}
 {% set hideJourneyServiceHeader = true %}
@@ -14,7 +14,8 @@
 <div class="tiering-session-results__header govuk-!-margin-bottom-6">
   <div class="tiering-session-results__header-row">
     <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Session results</h1>
-    <div class="tiering-session-results__header-links">
+    <div class="tiering-session-results__header-links assessment-service-header__actions">
+      {% include "includes/02/return-to-oasys-button.html" %}
       <button type="button" class="govuk-button tiering-session-results__download" id="tiering-session-results-download" data-module="govuk-button" hidden>
         Download as PDF
       </button>

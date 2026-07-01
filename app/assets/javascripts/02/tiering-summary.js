@@ -2,10 +2,17 @@
 // Build GOV.UK summary list rows from Tiering session data (grouped by page)
 //
 
-import { TIERING_CHANGE_ANCHORS, tieringChangeHref } from './tiering-change-scroll.js'
+import {
+  TIERING_CHANGE_ANCHORS,
+  TIERING_FROM_B11_DYNAMIC,
+  TIERING_FROM_B11_STATIC,
+  TIERING_FROM_CHECK_ANSWERS,
+  tieringChangeHref
+} from './tiering-change-scroll.js'
 import { formatDateFromParts, getOffenderDateOfBirthParts } from './tiering-assessment-session.js'
-import { calculateAgeOnDate, isA5Required, isValidDateParts } from './tiering-journey.js'
+import { calculateAgeOnDate, enrichOffenceFromLookup, isA5Required, isValidDateParts } from './tiering-journey.js'
 import { formatOffenceCodeLabel } from './tiering-offence-browse.js'
+import { buildDynamicTieringSummarySections } from './tiering-dynamic-summary.js'
 
 const NOT_PROVIDED_HTML =
   '<span class="tiering-summary-list__not-provided">Not provided</span>'
@@ -39,6 +46,33 @@ const escapeHtml = (text) =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
 
+const renderSummarySection = ({ title, rows }) => `
+  <section class="tiering-summary-section govuk-!-margin-bottom-6">
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-3">${escapeHtml(title)}</h2>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-0">${renderSummaryRows(rows)}</dl>
+  </section>`
+
+const renderSummarySections = (sections) => sections.map(renderSummarySection).join('')
+
+const renderSummaryGroup = (heading, sections, extraClass = '') => `
+  <div class="tiering-summary-group ${extraClass}">
+    <h2 class="govuk-heading-l govuk-!-margin-bottom-6">${escapeHtml(heading)}</h2>
+    ${renderSummarySections(sections)}
+  </div>`
+
+const splitStaticAndDynamicSections = (sections) => {
+  const interviewIndex = sections.findIndex(({ title }) => title === 'Interview')
+
+  if (interviewIndex === -1) {
+    return { staticSections: sections, dynamicSections: [] }
+  }
+
+  return {
+    staticSections: sections.slice(0, interviewIndex + 1),
+    dynamicSections: sections.slice(interviewIndex + 1)
+  }
+}
+
 const renderSummaryRows = (rows) =>
   rows
     .map(
@@ -57,11 +91,28 @@ const renderSummaryRows = (rows) =>
     )
     .join('')
 
-export const buildTieringSummarySections = (session, offenderFirstName = 'Alex') => {
+export const buildTieringSummarySections = (session, offenderFirstName = 'Alex', options = {}) => {
   const name = offenderFirstName
   const sections = []
+  const staticCheckAnswersFrom =
+    options.staticCheckAnswersFrom ||
+    options.checkAnswersFrom ||
+    TIERING_FROM_CHECK_ANSWERS
+  const dynamicCheckAnswersFrom =
+    options.dynamicCheckAnswersFrom ||
+    options.checkAnswersFrom ||
+    TIERING_FROM_CHECK_ANSWERS
 
-  const createRow = (key, value, changeHref, changeHidden, allowHtml = false, changeAnchor, hideChange = false) => {
+  const createRow = (
+    key,
+    value,
+    changeHref,
+    changeHidden,
+    allowHtml = false,
+    changeAnchor,
+    hideChange = false,
+    from = staticCheckAnswersFrom
+  ) => {
     let display = NOT_PROVIDED_HTML
 
     if (value) {
@@ -71,19 +122,40 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
     return {
       key,
       value: display,
-      changeHref: tieringChangeHref(changeHref, changeAnchor),
+      changeHref: tieringChangeHref(changeHref, changeAnchor, from),
       changeHidden: changeHidden || key,
       hideChange
     }
   }
 
-  const a1Rows = []
+  const createDynamicRow = (
+    key,
+    value,
+    changeHref,
+    changeHidden,
+    allowHtml = false,
+    changeAnchor,
+    hideChange = false
+  ) =>
+    createRow(
+      key,
+      value,
+      changeHref,
+      changeHidden,
+      allowHtml,
+      changeAnchor,
+      hideChange,
+      dynamicCheckAnswersFrom
+    )
 
-  if (session.currentOffence?.label) {
-    const codeLabel = formatOffenceCodeLabel(session.currentOffence)
+  const a1Rows = []
+  const currentOffence = enrichOffenceFromLookup(session.currentOffence)
+
+  if (currentOffence?.label) {
+    const codeLabel = formatOffenceCodeLabel(currentOffence)
     const offenceValue = codeLabel
-      ? `${escapeHtml(session.currentOffence.label)}<br><span class="tiering-offence-code">${escapeHtml(codeLabel)}</span>`
-      : escapeHtml(session.currentOffence.label)
+      ? `${escapeHtml(currentOffence.label)}<br><span class="tiering-offence-code">${escapeHtml(codeLabel)}</span>`
+      : escapeHtml(currentOffence.label)
     a1Rows.push(
       createRow(
         `What is ${name}'s current offence?`,
@@ -318,20 +390,27 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex')
     ]
   })
 
+  if (options.includeDynamic) {
+    sections.push(...buildDynamicTieringSummarySections(session, offenderFirstName, createDynamicRow))
+  }
+
   return sections
 }
 
-export const renderTieringSummaryList = (container, session, offenderFirstName = 'Alex') => {
+export const renderTieringSummaryList = (container, session, offenderFirstName = 'Alex', options = {}) => {
   if (!container) return
 
-  const sections = buildTieringSummarySections(session, offenderFirstName)
-  container.innerHTML = sections
-    .map(
-      ({ title, rows }) => `
-  <section class="tiering-summary-section govuk-!-margin-bottom-6">
-    <h2 class="govuk-heading-m govuk-!-margin-bottom-3">${escapeHtml(title)}</h2>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-0">${renderSummaryRows(rows)}</dl>
-  </section>`
-    )
-    .join('')
+  const sections = buildTieringSummarySections(session, offenderFirstName, options)
+
+  if (options.includeDynamic) {
+    const { staticSections, dynamicSections } = splitStaticAndDynamicSections(sections)
+
+    container.innerHTML =
+      renderSummaryGroup('Static factors', staticSections) +
+      renderSummaryGroup('Dynamic factors', dynamicSections, 'tiering-summary-group--separated')
+
+    return
+  }
+
+  container.innerHTML = renderSummarySections(sections)
 }

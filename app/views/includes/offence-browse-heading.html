@@ -4,7 +4,9 @@
     <h1 class="govuk-heading-l govuk-!-margin-bottom-0">
       {{ offenceBrowseTitle | default('Find an offence') }}{% if statusTag %}<span class="govuk-visually-hidden">, {{ statusTag }}</span>{% endif %}
     </h1>
-    {% if offenceBrowseSortFilter %}
+    {% if offenceBrowseSortFilter or offenceBrowseRestartSearch or showReturnToOasysButton or statusTag %}
+    <div class="offence-browse-heading__actions assessment-service-header__actions">
+      {% if offenceBrowseSortFilter %}
       <div class="offence-browse-heading__sort">
         <div class="govuk-form-group offence-browse-heading__sort-field govuk-!-margin-bottom-0">
           <label class="govuk-label offence-browse-heading__sort-label" for="offence-sort-by">Filter by</label>
@@ -13,14 +15,20 @@
           </select>
         </div>
       </div>
-    {% elif offenceBrowseRestartSearch %}
+      {% endif %}
+      {% if offenceBrowseRestartSearch %}
       <a
         href="{{ offenceBrowseRestartHref or 'a1o3.html' }}"
         class="govuk-button govuk-button--secondary offence-browse-heading__restart"
         data-offence-restart-search
       >Restart search</a>
-    {% elif statusTag %}
+      {% endif %}
+      {% if showReturnToOasysButton %}
+      {% include returnToOasysButtonInclude | default("includes/02/return-to-oasys-button.html") %}
+      {% elif statusTag %}
       <strong class="govuk-tag govuk-tag--grey assessment-layout__status-tag" aria-hidden="true">{{ statusTag }}</strong>
+      {% endif %}
+    </div>
     {% endif %}
   </div>
 </div>

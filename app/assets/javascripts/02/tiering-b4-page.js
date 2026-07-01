@@ -1,0 +1,104 @@
+//
+// b4 – which drugs misused (yes branch)
+//
+
+import {
+  captureCheckAnswersEditSnapshot,
+  completeTieringPageAndContinue,
+  getTieringBackLinkHref,
+  isTieringCheckAnswersEdit,
+  redirectUnlessCheckAnswersEdit
+} from './tiering-change-scroll.js'
+import { getMisusedDrugConditionalId } from './tiering-b4-drugs.js'
+import {
+  getB4FieldsFromForm,
+  getB4ValidationError,
+  tieringJourneyHref
+} from './tiering-journey.js'
+import { getTieringAssessmentSession } from './tiering-assessment-session.js'
+
+const hasRequiredDynamicAnswers = (session) =>
+  session.interviewDone === 'yes' &&
+  session.accommodationSuitable &&
+  session.employmentHistory &&
+  session.drugsMisused
+
+const setCheckboxConditionalVisible = (id, show) => {
+  const conditional = document.getElementById(id)
+  if (!conditional) return
+
+  conditional.classList.toggle('govuk-checkboxes__conditional--hidden', !show)
+}
+
+const getMisusedDrugsFromSession = (session) => {
+  const misusedDrugs = { ...(session.misusedDrugs || {}) }
+
+  if (session.amphetaminesMisused && !misusedDrugs.amphetamines) {
+    misusedDrugs.amphetamines = { period: session.amphetaminesPeriod || '' }
+  }
+
+  return misusedDrugs
+}
+
+const restoreMisusedDrugsToForm = (form, misusedDrugs) => {
+  Object.entries(misusedDrugs).forEach(([id, data]) => {
+    const checkbox = form.querySelector(`#drugs-${id}`)
+    if (checkbox) {
+      checkbox.checked = true
+      setCheckboxConditionalVisible(getMisusedDrugConditionalId(id), true)
+    }
+
+    if (data.period) {
+      const periodInput = form.querySelector(`input[name="${id}_period"][value="${data.period}"]`)
+      if (periodInput) periodInput.checked = true
+    }
+
+    if (id === 'other' && data.name) {
+      const nameInput = form.querySelector('#other-drug-name')
+      if (nameInput) nameInput.value = data.name
+    }
+  })
+}
+
+window.GOVUKPrototypeKit.documentReady(() => {
+  if (!window.location.pathname.includes('/02/')) return
+
+  const form = document.getElementById('tiering-b4-form')
+  if (!form) return
+
+  const session = getTieringAssessmentSession()
+
+  if (!hasRequiredDynamicAnswers(session) && redirectUnlessCheckAnswersEdit('b3.html')) return
+  if (session.drugsMisused !== 'yes' && redirectUnlessCheckAnswersEdit('b5.html')) return
+
+  const backLink = document.getElementById('tiering-b4-back')
+  if (backLink) {
+    backLink.href = getTieringBackLinkHref('b3.html')
+  }
+
+  restoreMisusedDrugsToForm(form, getMisusedDrugsFromSession(session))
+
+  if (isTieringCheckAnswersEdit()) {
+    captureCheckAnswersEditSnapshot(getB4FieldsFromForm(form))
+  }
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault()
+
+    const validationError = getB4ValidationError(form)
+    if (validationError) {
+      if (validationError.conditionalId) {
+        setCheckboxConditionalVisible(validationError.conditionalId, true)
+      }
+
+      form.querySelector(validationError.focusSelector)?.focus()
+      return
+    }
+
+    const newFields = getB4FieldsFromForm(form)
+
+    window.location.href = tieringJourneyHref(
+      completeTieringPageAndContinue('b4', 'b5.html', newFields)
+    )
+  })
+})

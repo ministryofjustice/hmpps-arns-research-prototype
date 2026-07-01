@@ -1,4 +1,4 @@
-{% extends "layouts/assessment.html" %}
+{% extends "layouts/assessment-proto2.html" %}
 
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Check your answers" %}
@@ -20,7 +20,10 @@
 
   <div id="tiering-summary-list" class="tiering-summary-list govuk-!-margin-top-6" data-offender-first-name="{{ offenderFirstName }}"></div>
 
-  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">View reoffending predictors scores</button>
+  <div class="tiering-check-answers-actions govuk-!-margin-top-6">
+    <button type="button" class="govuk-button govuk-button--secondary" id="tiering-a7-continue-assessment" data-module="govuk-button">Continue assessment</button>
+    <button type="submit" class="govuk-button" data-module="govuk-button">View reoffending predictors scores</button>
+  </div>
 
 </form>
 

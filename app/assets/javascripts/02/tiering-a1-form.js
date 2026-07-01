@@ -7,7 +7,11 @@ import {
   isConvictionDateEditPanelOpen,
   persistConvictionDateState
 } from '../conviction-date.js'
-import { completeTieringPageAndContinue } from './tiering-change-scroll.js'
+import {
+  captureCheckAnswersEditSnapshot,
+  completeTieringPageAndContinue,
+  isTieringCheckAnswersEdit
+} from './tiering-change-scroll.js'
 import { getA1FieldsFromForm } from './tiering-journey.js'
 import { trackTelemetryOffenceSearch } from './tiering-session-telemetry.js'
 
@@ -43,6 +47,10 @@ window.GOVUKPrototypeKit.documentReady(() => {
     persistConvictionDateState({ editing: isConvictionDateEditPanelOpen() })
     trackTelemetryOffenceSearch({ action: 'browse-open' })
   })
+
+  if (isTieringCheckAnswersEdit()) {
+    captureCheckAnswersEditSnapshot(getA1FieldsFromForm(form))
+  }
 
   form.addEventListener('submit', (event) => {
     event.preventDefault()

@@ -1,0 +1,27 @@
+{% extends "layouts/assessment-proto-dev.html" %}
+
+{% set hideSideNav = true %}
+{% set hideServiceNavigation = true %}
+
+{% block pageTitle %}Supporting document - Tiering{% endblock %}
+
+{% block content %}
+
+<div class="pnc-record-viewer" data-pnc-record-viewer>
+
+  <div class="pnc-record-viewer__pages">
+    <figure class="pnc-record-viewer__page">
+      <img
+        class="pnc-record-viewer__image"
+        src="/public/images/PNC.jpg"
+        alt="PNC record for Alex Smith"
+        width="3363"
+        height="4756"
+        draggable="false"
+        loading="eager"
+      >
+    </figure>
+  </div>
+</div>
+
+{% endblock %}

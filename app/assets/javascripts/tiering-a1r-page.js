@@ -17,7 +17,7 @@ const VIOLENT_CONTEXT = 'violent-offence-check'
 const VIOLENT_RETURN_URL = 'a2.html#violent-offence-check'
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  if (window.location.pathname.includes('/02/')) return
+  if (window.location.pathname.includes('/02/') || window.location.pathname.includes('/dev/')) return
 
   const form = document.getElementById('tiering-a1r-form')
   const heading = document.querySelector('[data-results-heading]')

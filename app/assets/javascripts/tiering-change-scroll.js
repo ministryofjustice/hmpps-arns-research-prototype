@@ -17,6 +17,9 @@ export const TIERING_FROM_CHECK_ANSWERS = 'a7'
 const TIERING_FROM_CHECK_ANSWERS_LEGACY = 'a8'
 export const TIERING_BACK_FROM_CHECK_ANSWERS = 'a7-back'
 
+const isProto1TieringPage = () =>
+  !window.location.pathname.includes('/02/') && !window.location.pathname.includes('/dev/')
+
 const isFromCheckAnswersParam = (from) =>
   from === TIERING_FROM_CHECK_ANSWERS || from === TIERING_FROM_CHECK_ANSWERS_LEGACY
 
@@ -96,6 +99,8 @@ export const clearTieringCheckAnswersEdit = () => {
 }
 
 export const initTieringCheckAnswersEditFromUrl = () => {
+  if (!isProto1TieringPage()) return
+
   const from = new URLSearchParams(window.location.search).get('from')
   if (isFromCheckAnswersParam(from)) {
     startTieringCheckAnswersEdit()
@@ -205,6 +210,8 @@ export const scrollToTieringChangeTarget = (anchorId = window.location.hash.slic
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
+  if (!isProto1TieringPage()) return
+
   document.addEventListener('click', (event) => {
     const changeLink = event.target.closest('.govuk-summary-list__actions a.govuk-link')
     const href = changeLink?.getAttribute('href') || ''

@@ -9,7 +9,7 @@ import {
   isTieringCheckAnswersEdit,
   scrollToTieringChangeTarget
 } from './tiering-change-scroll.js'
-import { getA3FieldsFromForm } from './tiering-journey.js'
+import { getA3FieldsFromForm, isA3Complete } from './tiering-journey.js'
 import { getTieringAssessmentSession } from './tiering-assessment-session.js'
 import { initTieringInactiveLinks } from '../tiering-inactive-links.js'
 
@@ -91,7 +91,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
   initTieringInactiveLinks(form)
 
   const shouldRestoreSavedAnswers =
-    isTieringCheckAnswersEdit() || isTieringBackNavigation()
+    isTieringCheckAnswersEdit() || isTieringBackNavigation() || isA3Complete(session)
 
   if (shouldRestoreSavedAnswers) {
     restoreA3Fields(form, session)

@@ -1,0 +1,28 @@
+{% extends "layouts/assessment-proto2.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Offence analysis" %}
+{% set tieringSectionCaption = "Reoffending predictors" %}
+{% set pageHeading = "Offence analysis" %}
+{% set activeSection = "section-1" %}
+{% set statusTag = "Incomplete" %}
+{% set tieringTelemetryPage = "b9" %}
+{% set tieringTelemetryPageLabel = "Offence analysis" %}
+{% set backLinkHref = "b8.html" %}
+{% set backLinkId = "tiering-b9-back" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="tiering-b9-form" novalidate>
+  {% include "includes/02/offence-analysis-questions.html" %}
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

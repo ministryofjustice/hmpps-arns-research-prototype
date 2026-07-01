@@ -1,0 +1,463 @@
+{# Placeholder detailed reoffending predictor scores (multiple predictors) #}
+{% set offenderFirstName = offenderFirstName or "Alex" %}
+
+<div class="risk-predictor-scores govuk-body" data-module="risk-predictor-scores" data-offender-first-name="{{ offenderFirstName }}">
+
+  <div
+    class="govuk-notification-banner risk-predictor-scores__summary"
+    role="region"
+    aria-labelledby="risk-predictor-summary-title"
+    hidden
+  >
+    <div class="govuk-notification-banner__header">
+      <h2 class="govuk-notification-banner__title" id="risk-predictor-summary-title">Summary</h2>
+    </div>
+    <div class="govuk-notification-banner__content">
+      <ul class="risk-predictor-scores__summary-points govuk-!-margin-bottom-0">
+        <li class="risk-predictor-scores__summary-point">{{ offenderFirstName }}’s static scores suggest their general risk level is <strong class="govuk-tag govuk-tag--green risk-predictor-scores__summary-tag">low</strong></li>
+        <li class="risk-predictor-scores__summary-point">This assessment puts {{ offenderFirstName }} in <strong class="govuk-tag govuk-tag--purple risk-predictor-scores__summary-tag">Tier 3</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <section class="risk-predictor-scores__section risk-predictor-scores__section--border" role="region" aria-labelledby="arp-heading" data-risk-predictor-id="arp" data-risk-predictor-label="All reoffending predictor" data-risk-band="low" data-risk-score-type="static">
+    <div class="risk-predictor-scores__header">
+      <h2 class="govuk-heading-m govuk-!-margin-bottom-0" id="arp-heading">All reoffending predictor</h2>
+      <strong class="govuk-tag govuk-tag--grey">Static</strong>
+    </div>
+    <p class="govuk-!-margin-top-3 govuk-!-margin-bottom-4">
+      About 1 in 8 people (12.34%) with a similar profile to {{ offenderFirstName }} will get a sanction for an offence
+      they commit within two years. This puts {{ offenderFirstName }} in the low risk band.
+    </p>
+    <div class="risk-predictor-scores__scale">
+      <img class="risk-predictor-scores__scale-image" src="/public/images/scale.png" alt="Placeholder scale for the All reoffending predictor." width="1648" height="552" decoding="async">
+    </div>
+    <details class="govuk-details risk-predictor-scores__details">
+      <summary class="govuk-details__summary risk-predictor-scores__details-summary">
+        <span class="risk-predictor-scores__details-toggle">
+          <span class="risk-predictor-scores__details-toggle-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="25" height="25" focusable="false" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"></circle>
+              <path class="risk-predictor-scores__details-toggle-chevron" d="M8 10l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+          <span class="risk-predictor-scores__details-toggle-text">
+            <span class="risk-predictor-scores__details-show">Show details</span>
+            <span class="risk-predictor-scores__details-hide">Hide details</span>
+          </span>
+        </span>
+      </summary>
+      <div class="govuk-details__text">
+        <h4 class="govuk-heading-m risk-predictor-scores__details-heading">What this score predicts</h4>
+        <p class="govuk-body">
+          The All reoffending predictor predicts the likelihood of someone getting a sanction for any recordable offence.
+        </p>
+        <p class="govuk-body">
+          It includes all sexual and all violent offences, but there are other reoffending predictors that are specifically designed
+          to predict serious, violent and sexual offences.
+        </p>
+        <h4 class="govuk-heading-m risk-predictor-scores__details-heading">How we calculate the score</h4>
+        <p class="govuk-body">We calculate the score using:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>static factors only, when we have limited information (a static score)</li>
+          <li>dynamic and static factors, when we have more detailed information (a dynamic score)</li>
+        </ul>
+        <p class="govuk-body">This score has been calculated using static factors only.</p>
+
+        <p class="govuk-body">Static factors are things which cannot be deliberately changed, and include the person's:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>age when they enter the community caseload</li>
+          <li>current offence</li>
+          <li>total number of sanctions</li>
+          <li>length of offending history</li>
+        </ul>
+        <p class="govuk-body">The person’s current legal gender also counts towards the static score.</p>
+
+        <p class="govuk-body">Dynamic factors are things that can change, and include their:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>accommodation status</li>
+          <li>employment status</li>
+          <li>relationship status</li>
+          <li>history of domestic abuse</li>
+          <li>regular activities that encourage offending</li>
+          <li>drug use and motivation to tackle drug use</li>
+          <li>alcohol use</li>
+          <li>impulsivity</li>
+          <li>attitudes that support or excuse criminal behaviour</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <section class="risk-predictor-scores__section risk-predictor-scores__section--border" role="region" aria-labelledby="vrp-heading" data-risk-predictor-id="vrp" data-risk-predictor-label="Violent reoffending predictor" data-risk-band="medium" data-risk-score-type="static">
+    <div class="risk-predictor-scores__header">
+      <h2 class="govuk-heading-m govuk-!-margin-bottom-0" id="vrp-heading">Violent reoffending predictor</h2>
+      <strong class="govuk-tag govuk-tag--grey">Static</strong>
+    </div>
+    <p class="govuk-!-margin-top-3 govuk-!-margin-bottom-4">
+      About 1 in 3 people (34.56%) with a similar profile to {{ offenderFirstName }} will get a sanction for a violent
+      offence they commit within two years. This puts {{ offenderFirstName }} in the medium risk band.
+    </p>
+    <div class="risk-predictor-scores__scale">
+      <img class="risk-predictor-scores__scale-image" src="/public/images/scale.png" alt="Placeholder scale for the Violent reoffending predictor." width="1648" height="552" decoding="async">
+    </div>
+    <details class="govuk-details risk-predictor-scores__details">
+      <summary class="govuk-details__summary risk-predictor-scores__details-summary">
+        <span class="risk-predictor-scores__details-toggle">
+          <span class="risk-predictor-scores__details-toggle-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="25" height="25" focusable="false" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"></circle>
+              <path class="risk-predictor-scores__details-toggle-chevron" d="M8 10l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+          <span class="risk-predictor-scores__details-toggle-text">
+            <span class="risk-predictor-scores__details-show">Show details</span>
+            <span class="risk-predictor-scores__details-hide">Hide details</span>
+          </span>
+        </span>
+      </summary>
+      <div class="govuk-details__text">
+        <h4 class="govuk-heading-m risk-predictor-scores__details-heading">What this score predicts</h4>
+        <p class="govuk-body">
+          The Violent reoffending predictor predicts the risk of reoffending for all offences that are classed as violent.
+        </p>
+        <p class="govuk-body">
+          However, the Serious violent reoffending predictor is specifically designed to predict the most serious violent offences.
+          Because of this, the Violent reoffending predictor should be used to identify whether someone is likely to commit
+          offences not covered by the Serious violent reoffending predictor, such as:
+        </p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>actual bodily harm, common assault and aggravated assault</li>
+          <li>robbery and assault with intent to rob</li>
+          <li>arson not endangering life</li>
+          <li>criminal damage not endangering life</li>
+          <li>abduction of children</li>
+          <li>intimidation</li>
+          <li>breach of restraining order</li>
+          <li>possessing or use of knives or offensive weapons offences</li>
+          <li>public order and harassment</li>
+          <li>resisting arrest</li>
+          <li>disorderly behaviour</li>
+          <li>drunkenness offences (not including those related to driving)</li>
+        </ul>
+        <p class="govuk-body">
+          To check if a specific offence is classed as violent, go to the
+          <a class="govuk-link" href="https://equip-portal.equip.service.justice.gov.uk/CtrlWebIsapi.dll/app/documents/C025AF635DB44965AC7B629E5538CB5B/master" data-tiering-inactive-link>full list of violent offences (EQUip)</a>.
+        </p>
+
+        <h4 class="govuk-heading-m risk-predictor-scores__details-heading">How we calculate the score</h4>
+        <p class="govuk-body">We calculate the score using:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>static factors only, when we have limited information (a static score)</li>
+          <li>dynamic and static factors, when we have more detailed information (a dynamic score)</li>
+        </ul>
+        <p class="govuk-body">This score has been calculated using both dynamic and static factors.</p>
+
+        <p class="govuk-body">Static factors are things which cannot be deliberately changed, and include the person's:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>age when they enter the community caseload</li>
+          <li>current offence</li>
+          <li>total number of sanctions</li>
+          <li>number of violent sanctions</li>
+          <li>length of offending history</li>
+        </ul>
+        <p class="govuk-body">The person’s current legal gender also counts towards the static score.</p>
+
+        <p class="govuk-body">Dynamic factors are things that can change, and include their:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>accommodation status</li>
+          <li>employment status</li>
+          <li>relationship status</li>
+          <li>history of domestic abuse</li>
+          <li>regular activities that encourage offending</li>
+          <li>drug use and motivation to tackle drug use</li>
+          <li>alcohol use</li>
+          <li>impulsivity</li>
+          <li>temper control</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <section class="risk-predictor-scores__section risk-predictor-scores__section--border" role="region" aria-labelledby="tiering-heading" data-risk-predictor-id="combined-serious" data-risk-predictor-label="Combined serious reoffending predictor" data-risk-band="low" data-risk-score-type="static">
+    <div class="risk-predictor-scores__header">
+      <h2 class="govuk-heading-m govuk-!-margin-bottom-0" id="tiering-heading">Combined serious reoffending predictor</h2>
+      <strong class="govuk-tag govuk-tag--grey">Static</strong>
+    </div>
+    <p class="govuk-!-margin-top-3 govuk-!-margin-bottom-4">
+      Fewer than 1 in 100 people (0.89%) with a similar profile to {{ offenderFirstName }} will get a sanction for a
+      seriously harmful offence they commit within two years. This puts {{ offenderFirstName }} in the low risk band.
+    </p>
+    <div class="risk-predictor-scores__scale">
+      <img class="risk-predictor-scores__scale-image" src="/public/images/scale.png" alt="Placeholder scale for the Combined serious reoffending predictor." width="1648" height="552" decoding="async">
+    </div>
+    <details class="govuk-details risk-predictor-scores__details">
+      <summary class="govuk-details__summary risk-predictor-scores__details-summary">
+        <span class="risk-predictor-scores__details-toggle">
+          <span class="risk-predictor-scores__details-toggle-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="25" height="25" focusable="false" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"></circle>
+              <path class="risk-predictor-scores__details-toggle-chevron" d="M8 10l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+          <span class="risk-predictor-scores__details-toggle-text">
+            <span class="risk-predictor-scores__details-show">Show details</span>
+            <span class="risk-predictor-scores__details-hide">Hide details</span>
+          </span>
+        </span>
+      </summary>
+      <div class="govuk-details__text">
+        <h4 class="govuk-heading-m risk-predictor-scores__details-heading">What this score predicts</h4>
+        <p class="govuk-body">
+          The Combined serious reoffending predictor predicts seriously harmful offences by combining the scores from other predictors.
+        </p>
+        <p class="govuk-body">
+          A seriously harmful offence involves an event that is life-threatening or traumatic. The victim will find it difficult or
+          impossible to recover physically or psychologically.
+        </p>
+        <h4 class="govuk-heading-m risk-predictor-scores__details-heading">Risks combined in this score</h4>
+        <p class="govuk-body">The Combined serious reoffending predictor combines 3 different scores:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>Serious violent reoffending predictor</li>
+          <li>Direct contact – sexual reoffending predictor</li>
+          <li>Images and indirect contact – sexual reoffending predictor</li>
+        </ul>
+        <p class="govuk-body">
+          If a person has no history of sexual or sexually motivated offending, we base their score only on their Serious violent
+          reoffending predictor score.
+        </p>
+        <p class="govuk-body">
+          Everyone gets a Serious violent reoffending predictor score, even if they have no history of violent offending.
+        </p>
+        <p class="govuk-body">
+          Go to the details for the Serious violent reoffending predictor and the two sexual reoffending predictors to find out:
+        </p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>the offences they predict</li>
+          <li>how we calculate the scores</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <section class="risk-predictor-scores__section risk-predictor-scores__section--border" role="region" aria-labelledby="svrp-heading" data-risk-predictor-id="svrp" data-risk-predictor-label="Serious violent reoffending predictor" data-risk-band="high" data-risk-score-type="static">
+    <div class="risk-predictor-scores__header">
+      <h2 class="govuk-heading-m govuk-!-margin-bottom-0" id="svrp-heading">Serious violent reoffending predictor</h2>
+      <strong class="govuk-tag govuk-tag--grey">Static</strong>
+    </div>
+    <p class="govuk-!-margin-top-3 govuk-!-margin-bottom-4">
+      About 1 in 20 people (4.56%) with a similar profile to {{ offenderFirstName }} will get a sanction for a serious
+      violent offence they commit within two years. This puts {{ offenderFirstName }} in the high risk band.
+    </p>
+    <div class="risk-predictor-scores__scale">
+      <img class="risk-predictor-scores__scale-image" src="/public/images/scale.png" alt="Placeholder scale for the Serious violent reoffending predictor." width="1648" height="552" decoding="async">
+    </div>
+    <details class="govuk-details risk-predictor-scores__details">
+      <summary class="govuk-details__summary risk-predictor-scores__details-summary">
+        <span class="risk-predictor-scores__details-toggle">
+          <span class="risk-predictor-scores__details-toggle-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="25" height="25" focusable="false" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"></circle>
+              <path class="risk-predictor-scores__details-toggle-chevron" d="M8 10l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+          <span class="risk-predictor-scores__details-toggle-text">
+            <span class="risk-predictor-scores__details-show">Show details</span>
+            <span class="risk-predictor-scores__details-hide">Hide details</span>
+          </span>
+        </span>
+      </summary>
+      <div class="govuk-details__text">
+        <h4 class="govuk-heading-m risk-predictor-scores__details-heading">What this score predicts</h4>
+        <p class="govuk-body">The Serious violent reoffending predictor predicts the risk of reoffending for:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>murder or attempted murder</li>
+          <li>conspiracy to, soliciting, assisting or encouraging murder</li>
+          <li>manslaughter</li>
+          <li>wounding or inflicting grievous bodily harm (GBH)</li>
+          <li>nonfatal strangulation or suffocation</li>
+          <li>offences related to possessing or use of a firearm or imitation firearm</li>
+          <li>aggravated burglary in a dwelling</li>
+          <li>kidnap or false imprisonment</li>
+          <li>arson endangering life</li>
+          <li>criminal damage endangering life</li>
+          <li>aggravated vehicle taking causing death</li>
+          <li>blackmail</li>
+          <li>other non-motoring offences endangering life</li>
+        </ul>
+        <p class="govuk-body">It does not predict the following serious offences:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>cruelty to or neglect of children</li>
+          <li>abandoning children under two years</li>
+          <li>abduction of children</li>
+          <li>terrorism offences</li>
+        </ul>
+        <h4 class="govuk-heading-m risk-predictor-scores__details-heading">How we calculate the score</h4>
+        <p class="govuk-body">We calculate the score using:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>static factors only, when we have limited information (a static score)</li>
+          <li>dynamic and static factors, when we have more detailed information (a dynamic score)</li>
+        </ul>
+        <p class="govuk-body">This score has been calculated using static factors only.</p>
+
+        <p class="govuk-body">Static factors are things which cannot be deliberately changed, and include the person's:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>age when they enter the community caseload</li>
+          <li>current offence</li>
+          <li>total number of sanctions</li>
+          <li>number of violent sanctions</li>
+          <li>length of offending history</li>
+        </ul>
+        <p class="govuk-body">The person’s current legal gender also counts towards the static score.</p>
+
+        <p class="govuk-body">Dynamic factors are things that can change, and include their:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>previous and current weapons offences</li>
+          <li>accommodation status</li>
+          <li>employment status</li>
+          <li>alcohol use</li>
+          <li>temper control</li>
+          <li>attitudes that support or excuse criminal behaviour</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <section class="risk-predictor-scores__section risk-predictor-scores__section--border" role="region" aria-labelledby="dtiering-heading" data-risk-predictor-id="direct-contact-sexual" data-risk-predictor-label="Direct contact – sexual reoffending predictor" data-risk-band="very-high">
+    <div class="risk-predictor-scores__header">
+      <h2 class="govuk-heading-m govuk-!-margin-bottom-0" id="dtiering-heading">Direct contact – sexual reoffending predictor</h2>
+    </div>
+    <div data-risk-predictor-score-content>
+    <p class="govuk-!-margin-top-3 govuk-!-margin-bottom-4">
+      About 83 in 100 people (83.1%) with a similar profile to {{ offenderFirstName }} will get a sanction for a direct
+      contact sexual offence they commit within two years. This puts {{ offenderFirstName }} in the very high risk band.
+    </p>
+    <div class="risk-predictor-scores__scale">
+      <img class="risk-predictor-scores__scale-image" src="/public/images/scale.png" alt="Placeholder scale for the Direct contact sexual reoffending predictor." width="1648" height="552" decoding="async">
+    </div>
+    <details class="govuk-details risk-predictor-scores__details">
+      <summary class="govuk-details__summary risk-predictor-scores__details-summary">
+        <span class="risk-predictor-scores__details-toggle">
+          <span class="risk-predictor-scores__details-toggle-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="25" height="25" focusable="false" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"></circle>
+              <path class="risk-predictor-scores__details-toggle-chevron" d="M8 10l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+          <span class="risk-predictor-scores__details-toggle-text">
+            <span class="risk-predictor-scores__details-show">Show details</span>
+            <span class="risk-predictor-scores__details-hide">Hide details</span>
+          </span>
+        </span>
+      </summary>
+      <div class="govuk-details__text">
+        {% include "includes/dev/direct-contact-sexual-what-score-predicts.html" %}
+        <h4 class="govuk-heading-m risk-predictor-scores__details-heading">How we calculate the score</h4>
+        <p class="govuk-body">
+          We only calculate a Direct contact – sexual reoffending predictor score for men with a known history of sexual or sexually motivated offending.
+        </p>
+        <p class="govuk-body">We calculate the score using the number of current and previous sanctions a person has for:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>sexual or sexually motivated offences involving contact with an adult</li>
+          <li>sexual or sexually motivated offences involving direct contact with a child</li>
+          <li>non-contact sexual offences</li>
+        </ul>
+        <p class="govuk-body">It does not count indecent images of children offences.</p>
+        <p class="govuk-body">We also look at static factors, which are things which cannot be deliberately changed. These include:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>age when they enter the community caseload</li>
+          <li>total number of sanctions</li>
+          <li>if their current offence was a direct contact offence committed against a stranger victim</li>
+        </ul>
+      </div>
+    </details>
+    </div>
+    {% include "includes/risk-predictor-empty-state.html" %}
+  </section>
+
+  <section class="risk-predictor-scores__section risk-predictor-scores__section--border" role="region" aria-labelledby="iitiering-heading" data-risk-predictor-id="indirect-contact-sexual" data-risk-predictor-label="Images and indirect contact – sexual reoffending predictor" data-risk-band="low">
+    <div class="risk-predictor-scores__header">
+      <h2 class="govuk-heading-m govuk-!-margin-bottom-0" id="iitiering-heading">Images and indirect contact – sexual reoffending predictor</h2>
+    </div>
+    <div data-risk-predictor-score-content>
+    <p class="govuk-!-margin-top-3 govuk-!-margin-bottom-4">
+      {{ offenderFirstName }} is in the low risk category for getting a sanction for an indirect sexual contact offence
+      they commit within two years (placeholder content).
+    </p>
+    <div class="risk-predictor-scores__scale">
+      <img class="risk-predictor-scores__scale-image" src="/public/images/scale.png" alt="Placeholder scale for the Images and indirect contact sexual reoffending predictor." width="1648" height="552" decoding="async">
+    </div>
+    <details class="govuk-details risk-predictor-scores__details">
+      <summary class="govuk-details__summary risk-predictor-scores__details-summary">
+        <span class="risk-predictor-scores__details-toggle">
+          <span class="risk-predictor-scores__details-toggle-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="25" height="25" focusable="false" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"></circle>
+              <path class="risk-predictor-scores__details-toggle-chevron" d="M8 10l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+          <span class="risk-predictor-scores__details-toggle-text">
+            <span class="risk-predictor-scores__details-show">Show details</span>
+            <span class="risk-predictor-scores__details-hide">Hide details</span>
+          </span>
+        </span>
+      </summary>
+      <div class="govuk-details__text">
+        {% include "includes/dev/indirect-contact-sexual-what-score-predicts.html" %}
+        <h4 class="govuk-heading-m risk-predictor-scores__details-heading">How we calculate the score</h4>
+        <p class="govuk-body">
+          We only calculate an Images and indirect contact – sexual reoffending predictor score for men with a known history of sexual or sexually motivated offending.
+        </p>
+        <p class="govuk-body">We calculate the score using the number of current and previous sanctions a person has for:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>indirect child contact offences</li>
+          <li>indecent images of children offences</li>
+        </ul>
+        <p class="govuk-body">Indirect contact offences are:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>causing a child to watch a sexual act</li>
+          <li>causing or inciting a child to engage in sexual activity</li>
+          <li>arranging child prostitution or pornography</li>
+          <li>arranging or facilitating child sexual offences</li>
+          <li>sexual communication with a child</li>
+          <li>grooming</li>
+        </ul>
+        <p class="govuk-body">The score puts the person into a risk band:</p>
+        <table class="govuk-table govuk-!-margin-top-2">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">Risk band</th>
+              <th scope="col" class="govuk-table__header">Number of sanctions</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+              <th scope="row" class="govuk-table__header">Low</th>
+              <td class="govuk-table__cell">0</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th scope="row" class="govuk-table__header">Medium</th>
+              <td class="govuk-table__cell">1</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th scope="row" class="govuk-table__header">High</th>
+              <td class="govuk-table__cell">2 or more</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+    </div>
+    {% include "includes/risk-predictor-empty-state.html" %}
+  </section>
+
+  <div class="govuk-back-to-top govuk-!-margin-top-6">
+    <a class="govuk-link govuk-link--no-visited-state" href="#top" data-risk-predictor-back-to-top>
+      <svg class="govuk-back-to-top__icon" xmlns="http://www.w3.org/2000/svg" width="13" height="17" viewBox="0 0 13 17" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M6.5 0L0 6.5 1.4 8l4.1-4.1V17h2V3.9l4.1 4.1 1.4-1.4z"></path>
+      </svg>
+      Back to top
+    </a>
+  </div>
+
+</div>

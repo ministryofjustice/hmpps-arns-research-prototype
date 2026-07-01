@@ -5,7 +5,7 @@
 import { markSection1Complete } from './assessment-section-complete.js'
 import { formatToday } from './tiering-assessment-session.js'
 import { getTieringBackLinkHref } from './tiering-change-scroll.js'
-import { syncTieringSessionBeforeCheckAnswers, tieringJourneyHref } from './tiering-journey.js'
+import { getDynamicTieringCheckAnswersHref, hasDynamicScoresOrigin, syncTieringSessionBeforeCheckAnswers, tieringJourneyHref } from './tiering-journey.js'
 import { insertTieringSessionFooterLinks } from './tiering-footer-session-links.js'
 import { trackTelemetryRiskPredictorDetailsOpen } from './tiering-session-telemetry.js'
 import { initTieringInactiveLinks } from '../tiering-inactive-links.js'
@@ -53,6 +53,19 @@ const applySexualPredictorEmptyStates = (session) => {
   })
 }
 
+const applyRiskPredictorScoreTypeTags = (session) => {
+  const isDynamic = hasDynamicScoresOrigin(session)
+  const scoreType = isDynamic ? 'dynamic' : 'static'
+  const label = isDynamic ? 'Dynamic' : 'Static'
+
+  document.querySelectorAll('[data-risk-score-type]').forEach((section) => {
+    section.dataset.riskScoreType = scoreType
+
+    const tag = section.querySelector('.risk-predictor-scores__header .govuk-tag')
+    if (tag) tag.textContent = label
+  })
+}
+
 const initCompletionDate = () => {
   const element = document.querySelector('[data-tiering-completion-date]')
   if (!element) return
@@ -81,7 +94,11 @@ window.GOVUKPrototypeKit.documentReady(() => {
   if (!document.getElementById('tiering-a8-back')) return
 
   if (window.location.hash === '#answers') {
-    window.location.replace(tieringJourneyHref('a7.html'))
+    const session = syncTieringSessionBeforeCheckAnswers()
+    const checkAnswersHref = hasDynamicScoresOrigin(session)
+      ? getDynamicTieringCheckAnswersHref()
+      : 'a7.html'
+    window.location.replace(tieringJourneyHref(checkAnswersHref))
     return
   }
 
@@ -96,14 +113,22 @@ window.GOVUKPrototypeKit.documentReady(() => {
   scrollA8ToTop()
 
   const session = syncTieringSessionBeforeCheckAnswers()
+  const checkAnswersHref = hasDynamicScoresOrigin(session)
+    ? getDynamicTieringCheckAnswersHref()
+    : 'a7.html'
 
   const backLink = document.getElementById('tiering-a8-back')
   if (backLink) {
-    backLink.href = getTieringBackLinkHref('a7.html')
+    backLink.href = getTieringBackLinkHref(checkAnswersHref)
   }
+
+  document.querySelectorAll('a[href="a7.html"]').forEach((link) => {
+    link.href = tieringJourneyHref(checkAnswersHref)
+  })
 
   insertTieringSessionFooterLinks()
   initCompletionDate()
+  applyRiskPredictorScoreTypeTags(session)
   applySexualPredictorEmptyStates(session)
   initTieringInactiveLinks()
   initRiskPredictorBackToTop()

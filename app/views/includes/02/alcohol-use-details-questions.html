@@ -1,0 +1,70 @@
+{# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
+
+<h2 id="tiering-alcohol-frequency" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  How often has {{ offenderFirstName }} drunk alcohol in the last 3 months?
+</h2>
+
+<div class="govuk-form-group govuk-!-margin-bottom-8">
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      How often has {{ offenderFirstName }} drunk alcohol in the last 3 months?
+    </legend>
+    <div class="govuk-radios" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="alcohol-frequency-once-month-or-less" name="alcohol_frequency_last_3_months" type="radio" value="once-month-or-less">
+        <label class="govuk-label govuk-radios__label" for="alcohol-frequency-once-month-or-less">Once a month or less</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="alcohol-frequency-2-4-times-month" name="alcohol_frequency_last_3_months" type="radio" value="2-4-times-month">
+        <label class="govuk-label govuk-radios__label" for="alcohol-frequency-2-4-times-month">2 to 4 times a month</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="alcohol-frequency-2-3-times-week" name="alcohol_frequency_last_3_months" type="radio" value="2-3-times-week">
+        <label class="govuk-label govuk-radios__label" for="alcohol-frequency-2-3-times-week">2 to 3 times a week</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="alcohol-frequency-more-than-4-times-week" name="alcohol_frequency_last_3_months" type="radio" value="more-than-4-times-week">
+        <label class="govuk-label govuk-radios__label" for="alcohol-frequency-more-than-4-times-week">More than 4 times a week</label>
+      </div>
+    </div>
+  </fieldset>
+</div>
+
+<h2 id="tiering-alcohol-units" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  How many units of alcohol does {{ offenderFirstName }} have on a typical day of drinking?
+</h2>
+
+{% include "includes/02/alcohol-units-help.html" %}
+
+<div class="govuk-form-group govuk-!-margin-bottom-8">
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      How many units of alcohol does {{ offenderFirstName }} have on a typical day of drinking?
+    </legend>
+    <div class="govuk-radios" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="alcohol-units-1-2" name="alcohol_units_typical_day" type="radio" value="1-2">
+        <label class="govuk-label govuk-radios__label" for="alcohol-units-1-2">1 to 2 units</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="alcohol-units-3-4" name="alcohol_units_typical_day" type="radio" value="3-4">
+        <label class="govuk-label govuk-radios__label" for="alcohol-units-3-4">3 to 4 units</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="alcohol-units-5-6" name="alcohol_units_typical_day" type="radio" value="5-6">
+        <label class="govuk-label govuk-radios__label" for="alcohol-units-5-6">5 to 6 units</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="alcohol-units-7-9" name="alcohol_units_typical_day" type="radio" value="7-9">
+        <label class="govuk-label govuk-radios__label" for="alcohol-units-7-9">7 to 9 units</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="alcohol-units-10-or-more" name="alcohol_units_typical_day" type="radio" value="10-or-more">
+        <label class="govuk-label govuk-radios__label" for="alcohol-units-10-or-more">10 or more units</label>
+      </div>
+    </div>
+  </fieldset>
+</div>
+
+{% set alcoholBingeShowHeading = true %}
+{% include "includes/02/alcohol-binge-evidence-question.html" %}

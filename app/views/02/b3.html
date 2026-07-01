@@ -1,0 +1,49 @@
+{% extends "layouts/assessment-proto2.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Drug use" %}
+{% set tieringSectionCaption = "Drug use" %}
+{% set pageHeadingHtml = "Has " ~ offenderFirstName ~ " ever misused drugs?" %}
+{% set pageHeadingId = "tiering-drugs-misused" %}
+{% set pageHeadingClass = "tiering-question-anchor" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "section-1" %}
+{% set statusTag = "Incomplete" %}
+{% set tieringTelemetryPage = "b3" %}
+{% set tieringTelemetryPageLabel = "Drug use" %}
+{% set pageHeadingHint = "This includes illegal and prescription drugs." %}
+{% set pageHeadingHintId = "drugs-misused-hint" %}
+{% set backLinkHref = "b2.html" %}
+{% set backLinkId = "tiering-b3-back" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="tiering-b3-form" novalidate>
+  <div class="govuk-form-group govuk-!-margin-top-0">
+    <fieldset class="govuk-fieldset" aria-describedby="drugs-misused-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+        Has {{ offenderFirstName }} ever misused drugs?
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="drugs-misused-yes" name="drugs_misused" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="drugs-misused-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="drugs-misused-no" name="drugs_misused" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="drugs-misused-no">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

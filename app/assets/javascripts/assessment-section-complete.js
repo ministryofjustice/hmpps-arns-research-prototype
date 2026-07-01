@@ -103,5 +103,8 @@ export const clearSection1Complete = () => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
+  const path = window.location.pathname
+  if (path.includes('/02/') || path.includes('/dev/')) return
+
   applySection1CompleteUi()
 })

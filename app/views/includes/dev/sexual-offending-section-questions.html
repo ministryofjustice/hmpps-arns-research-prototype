@@ -1,0 +1,94 @@
+{# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
+
+<h3 id="tiering-sexual-motivation" class="govuk-heading-s tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  Does {{ offenderFirstName }}'s current offence have a sexual motivation?
+</h3>
+
+<div class="govuk-form-group govuk-!-margin-bottom-8">
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      Does {{ offenderFirstName }}'s current offence have a sexual motivation?
+    </legend>
+    <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="sexual-motivation-yes" name="sexual_motivation" type="radio" value="yes">
+        <label class="govuk-label govuk-radios__label" for="sexual-motivation-yes">Yes</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="sexual-motivation-no" name="sexual_motivation" type="radio" value="no">
+        <label class="govuk-label govuk-radios__label" for="sexual-motivation-no">No</label>
+      </div>
+      <div class="govuk-radios__item" hidden aria-hidden="true" style="display: none;">
+        <input class="govuk-radios__input" id="sexual-motivation-unknown" name="sexual_motivation" type="radio" value="unknown" disabled>
+        <label class="govuk-label govuk-radios__label" for="sexual-motivation-unknown">Unknown</label>
+      </div>
+    </div>
+  </fieldset>
+</div>
+
+<h3 id="tiering-stranger-contact" class="govuk-heading-s tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  Does {{ offenderFirstName }}'s current offence involve actual or attempted direct contact against a victim who was a stranger?
+</h3>
+
+<details class="govuk-details govuk-!-margin-bottom-4">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">When to answer yes to this question</span>
+  </summary>
+  <div class="govuk-details__text">
+    {% include "includes/dev/stranger-contact-yes-guidance.html" %}
+  </div>
+</details>
+
+<div class="govuk-form-group govuk-!-margin-bottom-8">
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      Does {{ offenderFirstName }}'s current offence involve actual or attempted direct contact against a victim who was a stranger?
+    </legend>
+    <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="stranger-contact-yes" name="stranger_contact" type="radio" value="yes">
+        <label class="govuk-label govuk-radios__label" for="stranger-contact-yes">Yes</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="stranger-contact-no" name="stranger_contact" type="radio" value="no">
+        <label class="govuk-label govuk-radios__label" for="stranger-contact-no">No</label>
+      </div>
+      <div class="govuk-radios__item" hidden aria-hidden="true" style="display: none;">
+        <input class="govuk-radios__input" id="stranger-contact-unknown" name="stranger_contact" type="radio" value="unknown" disabled>
+        <label class="govuk-label govuk-radios__label" for="stranger-contact-unknown">Unknown</label>
+      </div>
+    </div>
+  </fieldset>
+</div>
+
+<h3 id="tiering-sexual-sanction-date" class="govuk-heading-s tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  What is the date of {{ offenderFirstName }}'s most recent sanction involving a sexual or sexually motivated offence?
+</h3>
+
+<div class="govuk-form-group govuk-!-margin-bottom-0">
+  <fieldset class="govuk-fieldset" role="group">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      What is the date of {{ offenderFirstName }}'s most recent sanction involving a sexual or sexually motivated offence?
+    </legend>
+    <div class="govuk-date-input" id="sexual-sanction-date">
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="sexual-sanction-date-day">Day</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="sexual-sanction-date-day" name="sexual_sanction_date_day" type="text" inputmode="numeric" autocomplete="off" data-date-part="day">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="sexual-sanction-date-month">Month</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="sexual-sanction-date-month" name="sexual_sanction_date_month" type="text" inputmode="numeric" autocomplete="off" data-date-part="month">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="sexual-sanction-date-year">Year</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="sexual-sanction-date-year" name="sexual_sanction_date_year" type="text" inputmode="numeric" autocomplete="off" data-date-part="year">
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>

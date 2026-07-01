@@ -16,7 +16,14 @@ import {
   setTieringAssessmentSession,
   trackTelemetryOffenceSearch
 } from './tiering-page-apis.js'
-import { formatOffenceCode, formatOffenceCodeLabel, formatOffenceLabelWithCodes, lookupOffenceIsViolent } from './tiering-offence-browse.js'
+import {
+  formatOffenceCode,
+  formatOffenceCodeLabel,
+  formatOffenceLabelWithCodes,
+  lookupOffenceDetails,
+  lookupOffenceIsViolent,
+  populateOffenceSummaryCard
+} from './tiering-offence-browse.js'
 
 const offenceSearchMatches = (item, query) => {
   const q = query.trim().toLowerCase()
@@ -163,6 +170,7 @@ window.initOffenceSearchV2 = async (container) => {
   if (container._offenceSearchHandle) return container._offenceSearchHandle
 
   const isCheckMode = Boolean(container.dataset.offenceSearchCheck)
+  const useSummaryCard = container.dataset.offenceSearchSummaryCard === 'true'
   const showViolentTags = Boolean(container.dataset.offenceSearchSuggestViolentTags)
   const resultsUrl = container.dataset.offenceSearchResultsUrl || ''
   const resultsContext = container.dataset.offenceSearchResultsContext || ''
@@ -380,11 +388,15 @@ window.initOffenceSearchV2 = async (container) => {
     persistA1ConvictionDateState()
     searchPanel.hidden = true
     selectedPanel.hidden = false
-    if (selectedLabel) selectedLabel.textContent = selection.label
-    if (selectedMeta) {
-      const codeLabel = formatOffenceCodeLabel(selection)
-      selectedMeta.textContent = codeLabel
-      selectedMeta.hidden = !codeLabel
+    if (useSummaryCard) {
+      populateOffenceSummaryCard(container, selection)
+    } else {
+      if (selectedLabel) selectedLabel.textContent = selection.label
+      if (selectedMeta) {
+        const codeLabel = formatOffenceCodeLabel(selection)
+        selectedMeta.textContent = codeLabel
+        selectedMeta.hidden = !codeLabel
+      }
     }
     if (hiddenInput) hiddenInput.value = selection.id
     if (hiddenCodeInput) hiddenCodeInput.value = selection.code || ''
@@ -393,6 +405,20 @@ window.initOffenceSearchV2 = async (container) => {
     clearListbox()
     setExpanded(false)
     setInputDescribedBy()
+
+    if (document.getElementById('tiering-a1-form')) {
+      const details = lookupOffenceDetails(selection.id)
+      setTieringAssessmentSession({
+        currentOffence: {
+          id: selection.id,
+          label: details?.label || selection.label || '',
+          code: selection.code || details?.code || '',
+          subcode: selection.subcode || details?.subcode || '',
+          fullCode: selection.fullCode || details?.fullCode || '',
+          isViolentOffence: Boolean(selection.isViolentOffence ?? details?.isViolentOffence)
+        }
+      })
+    }
 
     trackTelemetryOffenceSearch({
       action: 'select',

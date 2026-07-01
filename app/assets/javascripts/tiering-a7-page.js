@@ -15,7 +15,7 @@ import { trackTelemetryMilestone } from './tiering-session-telemetry.js'
 import { renderTieringSummaryList } from './tiering-summary.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  if (window.location.pathname.includes('/02/')) return
+  if (window.location.pathname.includes('/02/') || window.location.pathname.includes('/dev/')) return
 
   const form = document.getElementById('tiering-a7-form')
   if (!form) return

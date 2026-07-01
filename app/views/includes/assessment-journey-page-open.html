@@ -3,6 +3,9 @@
   {% if backLinkHref %}
   <a href="{{ backLinkHref }}" class="govuk-back-link assessment-layout__back-link"{% if backLinkId %} id="{{ backLinkId }}"{% endif %}>{{ backLinkText | default('Back') }}</a>
   {% endif %}
+  {% if sectionCompleteSuccessBannerInclude %}
+  {% include sectionCompleteSuccessBannerInclude %}
+  {% endif %}
   {% if offenceBrowseErrorSummary %}
   {% include "includes/offence-browse-error-summary.html" %}
   {% endif %}
@@ -10,7 +13,11 @@
   {% include "includes/assessment-offender-header.html" %}
   {% endif %}
   {% if not hideJourneyServiceHeader %}
-  {% include "includes/assessment-service-header-journey.html" %}
+  {% include journeyServiceHeaderInclude | default("includes/assessment-service-header-journey.html") %}
+  {% endif %}
+
+  {% if afterJourneyHeaderInclude %}
+  {% include afterJourneyHeaderInclude %}
   {% endif %}
 
   <div class="govuk-grid-row assessment-layout__content-row{% if hideSideNav %} assessment-layout__content-row--no-nav{% endif %}">
