@@ -63,7 +63,7 @@ const initRiskPredictorTelemetry = () => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  if (window.location.pathname.includes('/02/')) return
+  if (window.location.pathname.includes('/02/') || window.location.pathname.includes('/dev/')) return
   if (!document.getElementById('tiering-a8-back')) return
 
   if (window.location.hash === '#answers') {

@@ -1,4 +1,4 @@
-{% extends "layouts/assessment.html" %}
+{% extends "layouts/assessment-proto2.html" %}
 
 {% set offenceBrowseErrorSummary = true %}
 {% set offenderFirstName = "Alex" %}
@@ -22,11 +22,14 @@
     <h1 class="govuk-heading-l govuk-!-margin-bottom-0 offence-search-results-heading__title">
       Search results for ‘<span data-offence-search-query></span>’
     </h1>
-    <a
-      href="a1.html"
-      class="govuk-button govuk-button--secondary offence-search-results-heading__restart"
-      data-offence-restart-search
-    >Restart search</a>
+    <div class="offence-search-results-heading__actions assessment-service-header__actions">
+      <a
+        href="a1.html"
+        class="govuk-button govuk-button--secondary offence-search-results-heading__restart"
+        data-offence-restart-search
+      >Restart search</a>
+      {% include "includes/02/return-to-oasys-button.html" %}
+    </div>
   </div>
   <p class="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-0" data-offence-search-count></p>
 </div>

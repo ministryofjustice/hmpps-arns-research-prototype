@@ -11,6 +11,11 @@ import {
   getTieringAssessmentSession,
   setTieringAssessmentSession
 } from './tiering-assessment-session.js'
+import { lookupOffenceDetails } from '../tiering-offence-browse.js'
+import {
+  getMisusedDrugConditionalId,
+  MISUSED_DRUG_TYPES
+} from './tiering-b4-drugs.js'
 
 const TIERING_JOURNEY_PATH = '/02/'
 
@@ -41,6 +46,23 @@ export const normaliseOffence = (offence) => {
     fullCode: normaliseString(offence.fullCode),
     isViolentOffence: offence.isViolentOffence === true
   }
+}
+
+export const enrichOffenceFromLookup = (offence) => {
+  const normalised = normaliseOffence(offence)
+  if (!normalised?.id || normalised.label) return normalised
+
+  const details = lookupOffenceDetails(normalised.id)
+  if (!details) return normalised
+
+  return normaliseOffence({
+    ...normalised,
+    label: details.label,
+    code: normalised.code || details.code,
+    subcode: normalised.subcode || details.subcode,
+    fullCode: normalised.fullCode || details.fullCode,
+    isViolentOffence: normalised.isViolentOffence || details.isViolentOffence
+  })
 }
 
 export const normaliseFields = (fields) => JSON.parse(JSON.stringify(fields))
@@ -246,6 +268,11 @@ export const syncTieringSessionBeforeCheckAnswers = () => {
 
   if (!session.currentOffence?.id) {
     updates.currentOffence = { ...PROTOTYPE_DEFAULT_CURRENT_OFFENCE }
+  } else {
+    const enrichedOffence = enrichOffenceFromLookup(session.currentOffence)
+    if (enrichedOffence?.label && enrichedOffence.label !== session.currentOffence.label) {
+      updates.currentOffence = enrichedOffence
+    }
   }
 
   if (!isDateComplete(session.convictionDate)) {
@@ -308,9 +335,9 @@ export const syncTieringSessionBeforeCheckAnswers = () => {
 export const hasSeenStaticAssessmentComplete = (session = getTieringAssessmentSession()) =>
   session.staticAssessmentCompleteSeen === true
 
-/** User chose "No – view static scores" on a6 and may proceed to check answers / scores */
+/** a6 answered: static path (no) or dynamic path (yes) */
 export const hasCompletedA6Gate = (session = getTieringAssessmentSession()) =>
-  session.staticAssessmentCompleteSeen === true
+  session.staticAssessmentCompleteSeen === true || Boolean(session.interviewDone)
 
 export const markStaticAssessmentCompleteSeen = () => {
   setTieringAssessmentSession({ staticAssessmentCompleteSeen: true })
@@ -318,7 +345,19 @@ export const markStaticAssessmentCompleteSeen = () => {
 
 export const getTieringResultsAnswersHref = () => 'a7.html'
 
+export const getDynamicTieringCheckAnswersHref = () => 'b11.html'
+
 export const getTieringResultsScoresHref = () => 'a8.html'
+
+export const SCORES_CHECK_ANSWERS_ORIGIN_A7 = 'a7'
+export const SCORES_CHECK_ANSWERS_ORIGIN_B11 = 'b11'
+
+export const hasDynamicScoresOrigin = (session = getTieringAssessmentSession()) => {
+  if (session.scoresCheckAnswersOrigin === SCORES_CHECK_ANSWERS_ORIGIN_B11) return true
+  if (session.scoresCheckAnswersOrigin === SCORES_CHECK_ANSWERS_ORIGIN_A7) return false
+
+  return Boolean(session.b10Complete || session.seriousHarmConvictions?.length)
+}
 
 export const getPostA5ContinueHref = (session = getTieringAssessmentSession()) => {
   if (!hasSeenStaticAssessmentComplete(session)) {
@@ -460,11 +499,78 @@ export const applyBranchingCleanup = (currentPage, session, updates) => {
     return { ...merged, ...clearA6SessionFields() }
   }
 
+  if (currentPage === 'a6' && merged.interviewDone === 'no') {
+    return {
+      ...merged,
+      ...pauseDynamicSectionSessionFields(merged),
+      staticAssessmentCompleteSeen: true,
+      scoreCalculated: false
+    }
+  }
+
+  if (currentPage === 'a6' && merged.interviewDone === 'yes') {
+    return {
+      ...merged,
+      ...restoreDynamicSectionSessionFields(merged),
+      staticAssessmentCompleteSeen: false,
+      scoreCalculated: false
+    }
+  }
+
+  if (currentPage === 'b3' && merged.drugsMisused !== 'yes') {
+    return { ...merged, ...clearB4SessionFields() }
+  }
+
+  if (currentPage === 'b5' && merged.alcoholUse === 'no') {
+    return { ...merged, ...clearB6SessionFields() }
+  }
+
+  if (currentPage === 'b5' && merged.alcoholUse === 'yes-not-in-last-3-months') {
+    return {
+      ...merged,
+      alcoholFrequencyLast3Months: '',
+      alcoholUnitsTypicalDay: ''
+    }
+  }
+
+  if (currentPage === 'b9') {
+    const cleaned = { ...merged }
+
+    if (cleaned.domesticAbusePerpetrator !== 'yes') {
+      cleaned.domesticAbusePerpetratorAgainst = ''
+    }
+
+    if (cleaned.domesticAbuseVictim !== 'yes') {
+      cleaned.domesticAbuseVictimBy = ''
+    }
+
+    return cleaned
+  }
+
   return merged
 }
 
 export const getPostCheckAnswersEditHref = (session) =>
   getFirstIncompleteTieringPage(session) || getTieringResultsAnswersHref()
+
+/** When an a6 interview edit excludes or opens the dynamic section, return the right summary page */
+export const getCheckAnswersReturnHrefAfterEdit = (
+  currentPage,
+  beforeSession,
+  afterSession,
+  defaultHref
+) => {
+  if (
+    currentPage === 'a6' &&
+    beforeSession.interviewDone === 'yes' &&
+    afterSession.interviewDone === 'no' &&
+    beforeSession.checkAnswersReturnTarget === 'b11'
+  ) {
+    return getTieringResultsAnswersHref()
+  }
+
+  return defaultHref
+}
 
 /**
  * When editing from check answers (a8), only continue the journey for branching
@@ -492,16 +598,40 @@ export const getContinueHrefAfterCheckAnswersEdit = (currentPage, beforeSession,
     return getFirstIncompleteTieringPage(afterSession)
   }
 
+  if (
+    currentPage === 'a6' &&
+    beforeSession.interviewDone !== 'yes' &&
+    afterSession.interviewDone === 'yes'
+  ) {
+    return getPostInterviewYesContinueHref(afterSession)
+  }
+
+  if (currentPage === 'b3') {
+    const beforeYes = beforeSession.drugsMisused === 'yes'
+    const afterYes = afterSession.drugsMisused === 'yes'
+
+    if (beforeYes !== afterYes) {
+      return getPostB3ContinueHref(afterSession)
+    }
+  }
+
+  if (currentPage === 'b5' && beforeSession.alcoholUse !== afterSession.alcoholUse) {
+    return getPostB5ContinueHref(afterSession)
+  }
+
   return null
 }
 
 export const getA1FieldsFromForm = (form, session = getTieringAssessmentSession()) => {
   const offenceId = form.querySelector('[data-offence-selected-id]')?.value
-  const offenceLabel = form.querySelector('[data-offence-selected-label]')?.textContent?.trim()
+  const offenceLabel =
+    form.querySelector('[data-offence-selected-label]')?.textContent?.trim() ||
+    form.querySelector('[data-offence-summary-card-title]')?.textContent?.trim() ||
+    ''
   const offenceCode = form.querySelector('[data-offence-selected-code]')?.value?.trim() || ''
   const offenceSubcode = form.querySelector('[data-offence-selected-subcode]')?.value?.trim() || ''
 
-  const fromForm = normaliseOffence(
+  const fromForm = enrichOffenceFromLookup(
     offenceId
       ? {
           id: offenceId,
@@ -514,7 +644,7 @@ export const getA1FieldsFromForm = (form, session = getTieringAssessmentSession(
   )
 
   return {
-    currentOffence: fromForm?.id ? fromForm : normaliseOffence(session.currentOffence),
+    currentOffence: fromForm?.id ? fromForm : enrichOffenceFromLookup(session.currentOffence),
     convictionDate: resolveConvictionDateForSave(form, session)
   }
 }
@@ -585,6 +715,436 @@ export const getA5FieldsFromForm = (form) => ({
 export const getA6FieldsFromForm = (form) => ({
   interviewDone: form.querySelector('input[name="interview_done"]:checked')?.value || ''
 })
+
+export const getB1FieldsFromForm = (form) => ({
+  accommodationSuitable: form.querySelector('input[name="accommodation_suitable"]:checked')?.value || ''
+})
+
+export const getB2FieldsFromForm = (form) => ({
+  employmentHistory: form.querySelector('input[name="employment_history"]:checked')?.value || ''
+})
+
+export const getB3FieldsFromForm = (form) => ({
+  drugsMisused: form.querySelector('input[name="drugs_misused"]:checked')?.value || ''
+})
+
+export const getPostB3ContinueHref = (session = getTieringAssessmentSession()) =>
+  session.drugsMisused === 'yes' ? 'b4.html' : 'b5.html'
+
+export const getB4FieldsFromForm = (form) => {
+  const misusedDrugs = {}
+
+  MISUSED_DRUG_TYPES.forEach((drug) => {
+    const checkbox = form.querySelector(`#drugs-${drug.id}`)
+    if (!checkbox?.checked) return
+
+    const entry = {
+      period: form.querySelector(`input[name="${drug.id}_period"]:checked`)?.value || ''
+    }
+
+    if (drug.hasNameField) {
+      entry.name = form.querySelector('#other-drug-name')?.value?.trim() || ''
+    }
+
+    misusedDrugs[drug.id] = entry
+  })
+
+  return { misusedDrugs }
+}
+
+export const getB4ValidationError = (form) => {
+  const { misusedDrugs } = getB4FieldsFromForm(form)
+  const selectedIds = Object.keys(misusedDrugs)
+
+  if (!selectedIds.length) {
+    return { focusSelector: `#drugs-${MISUSED_DRUG_TYPES[0].id}` }
+  }
+
+  for (const drug of MISUSED_DRUG_TYPES) {
+    const entry = misusedDrugs[drug.id]
+    if (!entry) continue
+
+    if (drug.hasNameField && !entry.name) {
+      return {
+        conditionalId: getMisusedDrugConditionalId(drug.id),
+        focusSelector: '#other-drug-name'
+      }
+    }
+
+    if (!entry.period) {
+      return {
+        conditionalId: getMisusedDrugConditionalId(drug.id),
+        focusSelector: `input[name="${drug.id}_period"]`
+      }
+    }
+  }
+
+  return null
+}
+
+export const clearB4SessionFields = () => ({
+  misusedDrugs: {}
+})
+
+export const isB4Complete = (session = getTieringAssessmentSession()) => {
+  if (session.drugsMisused !== 'yes') return true
+
+  const misusedDrugs = session.misusedDrugs || {}
+  const selectedIds = Object.keys(misusedDrugs)
+  if (!selectedIds.length) return false
+
+  return selectedIds.every((id) => {
+    const entry = misusedDrugs[id]
+    if (id === 'other' && !entry.name) return false
+    return Boolean(entry.period)
+  })
+}
+
+export const getFirstIncompleteDynamicPage = (session = getTieringAssessmentSession()) => {
+  if (session.interviewDone !== 'yes') return null
+
+  if (!session.accommodationSuitable) return 'b1.html'
+  if (!session.employmentHistory) return 'b2.html'
+  if (!session.drugsMisused) return 'b3.html'
+  if (session.drugsMisused === 'yes' && !isB4Complete(session)) return 'b4.html'
+  if (!session.alcoholUse) return 'b5.html'
+
+  const alcoholPage = getFirstIncompleteAlcoholPage(session)
+  if (alcoholPage) return alcoholPage
+
+  if (!session.relationshipStatus) return 'b7.html'
+  if (!isB8Complete(session)) return 'b8.html'
+  if (!isDynamicSectionReadyForB10(session)) return 'b9.html'
+  if (!isB10Complete(session)) return 'b10.html'
+
+  return null
+}
+
+export const getB5FieldsFromForm = (form) => ({
+  alcoholUse: form.querySelector('input[name="alcohol_use"]:checked')?.value || ''
+})
+
+export const hasAlcoholUseYesAnswer = (session = getTieringAssessmentSession()) =>
+  session.alcoholUse === 'yes-in-last-3-months' || session.alcoholUse === 'yes-not-in-last-3-months'
+
+export const hasAlcoholUseInLast3Months = (session = getTieringAssessmentSession()) =>
+  session.alcoholUse === 'yes-in-last-3-months'
+
+export const getPostB5ContinueHref = (session = getTieringAssessmentSession()) => {
+  if (session.alcoholUse === 'yes-in-last-3-months') return 'b6.html'
+  if (session.alcoholUse === 'yes-not-in-last-3-months') return 'b6b.html'
+  return 'b7.html'
+}
+
+export const getFirstIncompleteAlcoholPage = (session = getTieringAssessmentSession()) => {
+  if (!session.alcoholUse) return 'b5.html'
+  if (session.alcoholUse === 'no') return null
+
+  if (session.alcoholUse === 'yes-in-last-3-months') {
+    if (!session.alcoholFrequencyLast3Months || !session.alcoholUnitsTypicalDay || !session.alcoholBingeEvidence) {
+      return 'b6.html'
+    }
+    return null
+  }
+
+  if (session.alcoholUse === 'yes-not-in-last-3-months') {
+    if (!session.alcoholBingeEvidence) return 'b6b.html'
+    return null
+  }
+
+  return null
+}
+
+export const getPostB6bContinueHref = () => 'b7.html'
+
+export const getPostB7ContinueHref = () => 'b8.html'
+
+export const getPostB8ContinueHref = () => 'b9.html'
+
+export const getPostB9ContinueHref = () => 'b10.html'
+
+export const getPostB10ContinueHref = () => 'b11.html'
+
+export const isAlcoholSectionComplete = (session = getTieringAssessmentSession()) => {
+  if (session.alcoholUse === 'no') return true
+
+  if (session.alcoholUse === 'yes-not-in-last-3-months') {
+    return Boolean(session.alcoholBingeEvidence)
+  }
+
+  if (session.alcoholUse === 'yes-in-last-3-months') {
+    return Boolean(
+      session.alcoholFrequencyLast3Months &&
+        session.alcoholUnitsTypicalDay &&
+        session.alcoholBingeEvidence
+    )
+  }
+
+  return false
+}
+
+export const isDynamicSectionReadyForB7 = (session = getTieringAssessmentSession()) =>
+  Boolean(
+    session.interviewDone === 'yes' &&
+      session.accommodationSuitable &&
+      session.employmentHistory &&
+      session.drugsMisused &&
+      session.alcoholUse
+  )
+
+export const getB7BackHref = (session = getTieringAssessmentSession()) => {
+  if (!hasAlcoholUseYesAnswer(session)) return 'b5.html'
+  if (session.alcoholUse === 'yes-not-in-last-3-months') return 'b6b.html'
+  return 'b6.html'
+}
+
+export const getB6BackHref = () => 'b5.html'
+
+export const getB6bBackHref = (session = getTieringAssessmentSession()) =>
+  session.alcoholUse === 'yes-in-last-3-months' ? 'b6.html' : 'b5.html'
+
+export const getB6FieldsFromForm = (form) => ({
+  alcoholFrequencyLast3Months:
+    form.querySelector('input[name="alcohol_frequency_last_3_months"]:checked')?.value || '',
+  alcoholUnitsTypicalDay:
+    form.querySelector('input[name="alcohol_units_typical_day"]:checked')?.value || '',
+  alcoholBingeEvidence:
+    form.querySelector('input[name="alcohol_binge_evidence"]:checked')?.value || ''
+})
+
+export const getB6bFieldsFromForm = (form) => ({
+  alcoholBingeEvidence:
+    form.querySelector('input[name="alcohol_binge_evidence"]:checked')?.value || ''
+})
+
+export const isB6Complete = (session = getTieringAssessmentSession()) =>
+  Boolean(
+    session.alcoholFrequencyLast3Months &&
+      session.alcoholUnitsTypicalDay &&
+      session.alcoholBingeEvidence
+  )
+
+export const clearB6SessionFields = () => ({
+  alcoholFrequencyLast3Months: '',
+  alcoholUnitsTypicalDay: '',
+  alcoholBingeEvidence: ''
+})
+
+export const clearDynamicSectionSessionFields = () => ({
+  accommodationSuitable: '',
+  employmentHistory: '',
+  drugsMisused: '',
+  ...clearB4SessionFields(),
+  alcoholUse: '',
+  ...clearB6SessionFields(),
+  relationshipStatus: '',
+  activitiesLinkedToOffending: '',
+  manageTemper: '',
+  actOnImpulse: '',
+  supportCriminalBehaviour: '',
+  offenceElements: [],
+  domesticAbusePerpetrator: '',
+  domesticAbusePerpetratorAgainst: '',
+  domesticAbuseVictim: '',
+  domesticAbuseVictimBy: '',
+  b9Complete: false,
+  seriousHarmConvictions: [],
+  b10Complete: false
+})
+
+const dynamicSectionFieldHasValue = (value) => {
+  if (Array.isArray(value)) return value.length > 0
+
+  if (value && typeof value === 'object') {
+    return Object.values(value).some((entry) => {
+      if (entry && typeof entry === 'object') {
+        return Object.values(entry).some(Boolean)
+      }
+
+      return Boolean(entry)
+    })
+  }
+
+  return Boolean(value)
+}
+
+export const extractDynamicSectionSessionFields = (session) => {
+  const fields = {}
+
+  Object.keys(clearDynamicSectionSessionFields()).forEach((key) => {
+    if (key in session) fields[key] = session[key]
+  })
+
+  return fields
+}
+
+export const hasDynamicSectionSessionData = (fields) =>
+  Object.values(fields).some(dynamicSectionFieldHasValue)
+
+/** Hide dynamic answers while static-only, but keep them to restore if interview resumes */
+export const pauseDynamicSectionSessionFields = (session) => {
+  const current = extractDynamicSectionSessionFields(session)
+  const updates = clearDynamicSectionSessionFields()
+
+  if (hasDynamicSectionSessionData(current)) {
+    updates.pausedDynamicSection = current
+  } else if (session.pausedDynamicSection) {
+    updates.pausedDynamicSection = session.pausedDynamicSection
+  }
+
+  return updates
+}
+
+export const restoreDynamicSectionSessionFields = (session) => {
+  if (!session.pausedDynamicSection) return {}
+
+  return {
+    ...session.pausedDynamicSection,
+    pausedDynamicSection: undefined
+  }
+}
+
+export const getPostInterviewYesContinueHref = (session = getTieringAssessmentSession()) =>
+  getFirstIncompleteDynamicPage(session) || getDynamicTieringCheckAnswersHref()
+
+export const getB7FieldsFromForm = (form) => ({
+  relationshipStatus: form.querySelector('input[name="relationship_status"]:checked')?.value || ''
+})
+
+export const getB8BackHref = () => 'b7.html'
+
+export const getB8FieldsFromForm = (form) => ({
+  activitiesLinkedToOffending:
+    form.querySelector('input[name="activities_linked_to_offending"]:checked')?.value || '',
+  manageTemper: form.querySelector('input[name="manage_temper"]:checked')?.value || '',
+  actOnImpulse: form.querySelector('input[name="act_on_impulse"]:checked')?.value || '',
+  supportCriminalBehaviour:
+    form.querySelector('input[name="support_criminal_behaviour"]:checked')?.value || ''
+})
+
+export const isB8Complete = (session = getTieringAssessmentSession()) =>
+  Boolean(
+    session.activitiesLinkedToOffending &&
+      session.manageTemper &&
+      session.actOnImpulse &&
+      session.supportCriminalBehaviour
+  )
+
+export const getB9BackHref = () => 'b8.html'
+
+export const getB9FieldsFromForm = (form) => ({
+  offenceElements: [...form.querySelectorAll('input[name="offence_elements"]:checked')].map(
+    (input) => input.value
+  ),
+  domesticAbusePerpetrator:
+    form.querySelector('input[name="domestic_abuse_perpetrator"]:checked')?.value || '',
+  domesticAbusePerpetratorAgainst:
+    form.querySelector('input[name="domestic_abuse_perpetrator_against"]:checked')?.value || '',
+  domesticAbuseVictim:
+    form.querySelector('input[name="domestic_abuse_victim"]:checked')?.value || '',
+  domesticAbuseVictimBy:
+    form.querySelector('input[name="domestic_abuse_victim_by"]:checked')?.value || ''
+})
+
+export const getB9ValidationError = (form) => {
+  const fields = getB9FieldsFromForm(form)
+
+  if (!fields.offenceElements.length) {
+    return {
+      anchor: '#tiering-offence-elements',
+      focusSelector: 'input[name="offence_elements"]'
+    }
+  }
+
+  if (!fields.domesticAbusePerpetrator) {
+    return {
+      anchor: '#tiering-domestic-abuse-perpetrator',
+      focusSelector: 'input[name="domestic_abuse_perpetrator"]'
+    }
+  }
+
+  if (fields.domesticAbusePerpetrator === 'yes' && !fields.domesticAbusePerpetratorAgainst) {
+    return {
+      anchor: '#tiering-domestic-abuse-perpetrator',
+      conditionalId: 'conditional-domestic-abuse-perpetrator-yes',
+      focusSelector: 'input[name="domestic_abuse_perpetrator_against"]'
+    }
+  }
+
+  if (!fields.domesticAbuseVictim) {
+    return {
+      anchor: '#tiering-domestic-abuse-victim',
+      focusSelector: 'input[name="domestic_abuse_victim"]'
+    }
+  }
+
+  if (fields.domesticAbuseVictim === 'yes' && !fields.domesticAbuseVictimBy) {
+    return {
+      anchor: '#tiering-domestic-abuse-victim',
+      conditionalId: 'conditional-domestic-abuse-victim-yes',
+      focusSelector: 'input[name="domestic_abuse_victim_by"]'
+    }
+  }
+
+  return null
+}
+
+export const isB9Complete = (session = getTieringAssessmentSession()) => {
+  if (!Array.isArray(session.offenceElements) || !session.offenceElements.length) return false
+  if (!session.domesticAbusePerpetrator) return false
+  if (session.domesticAbusePerpetrator === 'yes' && !session.domesticAbusePerpetratorAgainst) {
+    return false
+  }
+  if (!session.domesticAbuseVictim) return false
+  if (session.domesticAbuseVictim === 'yes' && !session.domesticAbuseVictimBy) return false
+
+  return true
+}
+
+export const isDynamicSectionReadyForB10 = (session = getTieringAssessmentSession()) =>
+  session.b9Complete === true || isB9Complete(session)
+
+export const getB10BackHref = () => 'b9.html'
+
+export const getB10FieldsFromForm = (form) => ({
+  seriousHarmConvictions: [...form.querySelectorAll('input[name="serious_harm_convictions"]:checked')].map(
+    (input) => input.value
+  )
+})
+
+export const isB10Complete = (session = getTieringAssessmentSession()) =>
+  Boolean(session.seriousHarmConvictions?.length)
+
+export const isDynamicSectionReadyForB11 = (session = getTieringAssessmentSession()) =>
+  session.b10Complete === true || isB10Complete(session)
+
+export const getB11BackHref = () => 'b10.html'
+
+export const redirectIfDynamicCheckAnswersIncomplete = () => {
+  if (!window.location.pathname.includes('/02/')) return false
+
+  const currentPageId = document.querySelector('[data-tiering-telemetry-page]')?.dataset
+    .tieringTelemetryPage
+
+  if (currentPageId !== 'b11') return false
+
+  const session = syncTieringSessionBeforeCheckAnswers()
+  const staticPage = getFirstIncompleteTieringPage(session)
+
+  if (staticPage) {
+    window.location.href = tieringJourneyHref(staticPage)
+    return true
+  }
+
+  const dynamicPage = getFirstIncompleteDynamicPage(session)
+
+  if (dynamicPage) {
+    window.location.href = tieringJourneyHref(dynamicPage)
+    return true
+  }
+
+  return false
+}
 
 /** Questions required for the journey that are missing from session storage */
 export const getUnansweredTieringQuestions = (session, offenderFirstName = 'Alex') => {

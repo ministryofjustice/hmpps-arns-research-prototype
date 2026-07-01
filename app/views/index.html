@@ -1,11 +1,29 @@
 {% extends "layouts/assessment.html" %}
 
 {% set hideServiceNavigation = true %}
-{% set serviceHeaderTitle = "Research prototypes" %}
+{% set hideServiceHeader = true %}
 
 {% block content %}
 
 {% include "includes/assessment-home-page-open.html" %}
+
+<div class="assessment-home-header">
+  <h1 class="govuk-heading-xl assessment-home-title">Prototypes</h1>
+  <p class="govuk-hint assessment-home-hint">These prototypes have been built by the ARNS Actuarials team (squad 3). It shows reference designs and experiments for research.</p>
+</div>
+
+<div class="govuk-tabs assessment-home-tabs" data-module="govuk-tabs">
+  <h2 class="govuk-tabs__title">Contents</h2>
+  <ul class="govuk-tabs__list">
+    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+      <a class="govuk-tabs__tab" href="#research-prototypes">Research</a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="#dev-prototypes">Dev</a>
+    </li>
+  </ul>
+
+  <div class="govuk-tabs__panel" id="research-prototypes">
 
 <ul class="govuk-list assessment-research-prototypes">
   {% set href = "/02/a1.html" %}
@@ -17,6 +35,8 @@
   {% set secondaryClearSessionOnStart = true %}
   {% set secondaryPrototypeVersion = "02" %}
   {% set titleTagText = "June-July 2026" %}
+  {% set secondaryTitleTagText = "To be tested in R3" %}
+  {% set secondaryTitleTagColour = "yellow" %}
   {% set hint = "Submitting reoffending assessments (static & dynamic)" %}
   {% set hintDetailsHtml = "
     <h3 class='govuk-heading-s govuk-!-margin-bottom-1'>Key changes</h3>
@@ -39,8 +59,9 @@
   {% set itemHeading = "Prototype 1" %}
   {% set title = "Static assessment" %}
   {% set titleTagText = "May-June 2026" %}
-  {% set titleTagColour = "green" %}
+  {% set titleTagColour = "blue" %}
   {% set secondaryTitleTagText = "Tested in R2" %}
+  {% set secondaryTitleTagColour = "green" %}
   {% set hint = "Submitting a Tiering assessment (static)" %}
   {% set hintDetailsHtml = "
     <h3 class='govuk-heading-s govuk-!-margin-bottom-1'>Key changes</h3>
@@ -63,6 +84,29 @@
   {% set prototypeVersion = "01" %}
   {% include "includes/research-prototype-entry.html" %}
 </ul>
+  </div>
+
+  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="dev-prototypes">
+
+<ul class="govuk-list assessment-research-prototypes">
+  {% set href = "/dev/a1.html" %}
+  {% set itemHeading = "CSRP prototype" %}
+  {% set title = "Static assessment" %}
+  {% set prototypeVersion = "dev" %}
+  {% set secondaryTitle = "Dynamic assessment" %}
+  {% set secondaryInactive = true %}
+  {% set titleTagText = "September 2026" %}
+  {% set titleTagColour = "blue" %}
+  {% set secondaryTitleTagText = null %}
+  {% set secondaryTitleTagColour = null %}
+  {% set hint = "This is a reference prototype for development" %}
+  {% set hintDetailsHtml = null %}
+  {% set skipToEndHref = null %}
+  {% set clearSessionOnStart = true %}
+  {% include "includes/research-prototype-entry.html" %}
+</ul>
+  </div>
+</div>
 
 {% include "includes/assessment-page-close.html" %}
 

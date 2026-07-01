@@ -12,6 +12,7 @@ export const markSection1Complete = () => {
   setTieringAssessmentSession({ section1Complete: true })
   trackTelemetryMilestone('markSectionComplete')
   applySection1CompleteUi()
+  setSectionCompleteSuccessBannerVisible(true)
 
   window.scrollTo(0, 0)
 }
@@ -33,6 +34,21 @@ const setTieringCompletionInsetVisible = (visible) => {
   } else {
     inset.setAttribute('hidden', '')
   }
+}
+
+const setSectionCompleteSuccessBannerVisible = (visible) => {
+  const banner = document.getElementById('tiering-section-complete-success-banner')
+  if (!banner) return
+
+  if (visible) {
+    banner.removeAttribute('hidden')
+    banner.setAttribute('tabindex', '-1')
+    banner.focus({ preventScroll: true })
+    return
+  }
+
+  banner.setAttribute('hidden', '')
+  banner.removeAttribute('tabindex')
 }
 
 const hideMarkSectionCompleteButton = () => {
@@ -73,6 +89,7 @@ export const resetSection1CompleteUi = () => {
 
   setA8BackLinkVisible(true)
   setTieringCompletionInsetVisible(false)
+  setSectionCompleteSuccessBannerVisible(false)
 }
 
 export const applySection1CompleteUi = () => {

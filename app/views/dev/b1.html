@@ -1,0 +1,25 @@
+{% extends "layouts/assessment-proto-dev.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Dynamic assessment" %}
+{% set activeSection = "section-1" %}
+{% set pageHeading = "Dynamic assessment" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "a6.html" %}
+{% set backLinkId = "tiering-b1-back" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="tiering-b1-form" novalidate>
+  <p class="govuk-body govuk-!-margin-top-0">Dynamic assessment questions will go here.</p>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

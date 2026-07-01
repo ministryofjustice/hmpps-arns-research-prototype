@@ -1,0 +1,35 @@
+{# Requires offenderFirstName. Optional: alcoholBingeShowHeading (boolean) #}
+
+{% if alcoholBingeShowHeading %}
+<h2 id="tiering-alcohol-binge-evidence" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  Has {{ offenderFirstName }} shown evidence of binge drinking or excessive alcohol use in the last 6 months?
+</h2>
+{% endif %}
+
+<div class="govuk-form-group govuk-!-margin-top-0 govuk-!-margin-bottom-8">
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      Has {{ offenderFirstName }} shown evidence of binge drinking or excessive alcohol use in the last 6 months?
+    </legend>
+    <div class="govuk-radios" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="alcohol-binge-evidence-none" name="alcohol_binge_evidence" type="radio" value="none">
+        <label class="govuk-label govuk-radios__label" for="alcohol-binge-evidence-none">No evidence of binge drinking or excessive alcohol use</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="alcohol-binge-evidence-some" name="alcohol_binge_evidence" type="radio" value="some" aria-describedby="alcohol-binge-evidence-some-hint">
+        <label class="govuk-label govuk-radios__label" for="alcohol-binge-evidence-some">Some evidence of binge drinking or excessive alcohol use</label>
+        <div id="alcohol-binge-evidence-some-hint" class="govuk-hint govuk-radios__hint">
+          There is a pattern of alcohol use but has not caused any serious problems.
+        </div>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="alcohol-binge-evidence-evidence" name="alcohol_binge_evidence" type="radio" value="evidence" aria-describedby="alcohol-binge-evidence-evidence-hint">
+        <label class="govuk-label govuk-radios__label" for="alcohol-binge-evidence-evidence">Evidence of binge drinking or excessive alcohol use</label>
+        <div id="alcohol-binge-evidence-evidence-hint" class="govuk-hint govuk-radios__hint">
+          There is a detrimental effect on other areas of their life and is often directly related to offending.
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>

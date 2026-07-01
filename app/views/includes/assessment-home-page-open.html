@@ -1,5 +1,7 @@
 <div class="assessment-layout assessment-home-page-open">
+  {% if not hideServiceHeader %}
   {% include "includes/assessment-service-header.html" %}
+  {% endif %}
 
   <div class="govuk-grid-row assessment-layout__content-row{% if hideSideNav %} assessment-layout__content-row--no-nav{% endif %}">
     {% if not hideSideNav %}

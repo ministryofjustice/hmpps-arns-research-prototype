@@ -11,7 +11,7 @@
       {% if titleTagText or secondaryTitleTagText %}
         <div class="assessment-research-prototypes__title-tags">
           {% if secondaryTitleTagText %}
-            <strong class="govuk-tag govuk-tag--yellow assessment-research-prototypes__title-tag-secondary">{{ secondaryTitleTagText }}</strong>
+            <strong class="govuk-tag govuk-tag--{{ secondaryTitleTagColour | default('yellow') }} assessment-research-prototypes__title-tag-secondary">{{ secondaryTitleTagText }}</strong>
           {% endif %}
           {% if titleTagText %}
             <strong class="govuk-tag{% if titleTagColour %} govuk-tag--{{ titleTagColour }}{% else %} assessment-research-prototypes__title-tag{% endif %}">{{ titleTagText }}</strong>
@@ -33,15 +33,23 @@
           </h2>
         {% endif %}
       </li>
-      {% if secondaryHref and secondaryTitle %}
+      {% if secondaryTitle and (secondaryHref or secondaryInactive) %}
         <li class="assessment-research-prototypes__title-link-item">
           {% if itemHeading %}
-            <h3 class="govuk-heading-m govuk-!-margin-bottom-2">
-              <a href="{{ secondaryHref }}" class="govuk-link"{% if secondaryClearSessionOnStart %} data-clear-session-on-start{% if secondaryPrototypeVersion %} data-prototype-version="{{ secondaryPrototypeVersion }}"{% endif %}{% endif %}>{{ secondaryTitle }}</a>
+            <h3 class="govuk-heading-m govuk-!-margin-bottom-2{% if secondaryInactive %} assessment-research-prototypes__title-text--inactive{% endif %}">
+              {% if secondaryInactive %}
+                {{ secondaryTitle }}
+              {% else %}
+                <a href="{{ secondaryHref }}" class="govuk-link"{% if secondaryClearSessionOnStart %} data-clear-session-on-start{% if secondaryPrototypeVersion %} data-prototype-version="{{ secondaryPrototypeVersion }}"{% endif %}{% endif %}>{{ secondaryTitle }}</a>
+              {% endif %}
             </h3>
           {% else %}
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
-              <a href="{{ secondaryHref }}" class="govuk-link"{% if secondaryClearSessionOnStart %} data-clear-session-on-start{% if secondaryPrototypeVersion %} data-prototype-version="{{ secondaryPrototypeVersion }}"{% endif %}{% endif %}>{{ secondaryTitle }}</a>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-2{% if secondaryInactive %} assessment-research-prototypes__title-text--inactive{% endif %}">
+              {% if secondaryInactive %}
+                {{ secondaryTitle }}
+              {% else %}
+                <a href="{{ secondaryHref }}" class="govuk-link"{% if secondaryClearSessionOnStart %} data-clear-session-on-start{% if secondaryPrototypeVersion %} data-prototype-version="{{ secondaryPrototypeVersion }}"{% endif %}{% endif %}>{{ secondaryTitle }}</a>
+              {% endif %}
             </h2>
           {% endif %}
         </li>
@@ -50,7 +58,7 @@
     {% if not itemHeading and (titleTagText or secondaryTitleTagText) %}
       <div class="assessment-research-prototypes__title-tags">
         {% if secondaryTitleTagText %}
-          <strong class="govuk-tag govuk-tag--yellow assessment-research-prototypes__title-tag-secondary">{{ secondaryTitleTagText }}</strong>
+          <strong class="govuk-tag govuk-tag--{{ secondaryTitleTagColour | default('yellow') }} assessment-research-prototypes__title-tag-secondary">{{ secondaryTitleTagText }}</strong>
         {% endif %}
         {% if titleTagText %}
           <strong class="govuk-tag{% if titleTagColour %} govuk-tag--{{ titleTagColour }}{% else %} assessment-research-prototypes__title-tag{% endif %}">{{ titleTagText }}</strong>

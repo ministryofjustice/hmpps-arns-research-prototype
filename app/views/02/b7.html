@@ -1,0 +1,51 @@
+{% extends "layouts/assessment-proto2.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Personal relationships and community" %}
+{% set tieringSectionCaption = "Personal relationships and community" %}
+{% set pageHeadingHtml = "Is " ~ offenderFirstName ~ " happy with their current relationship status?" %}
+{% set pageHeadingId = "tiering-relationship-status" %}
+{% set pageHeadingClass = "tiering-question-anchor" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "section-1" %}
+{% set statusTag = "Incomplete" %}
+{% set tieringTelemetryPage = "b7" %}
+{% set tieringTelemetryPageLabel = "Personal relationships and community" %}
+{% set backLinkHref = "b6b.html" %}
+{% set backLinkId = "tiering-b7-back" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="tiering-b7-form" novalidate>
+  <div class="govuk-form-group govuk-!-margin-top-0">
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+        Is {{ offenderFirstName }} happy with their current relationship status?
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="relationship-status-happy-protective" name="relationship_status" type="radio" value="happy-protective">
+          <label class="govuk-label govuk-radios__label" for="relationship-status-happy-protective">Happy and positive about their relationship status, or their relationship is likely to act as a protective factor</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="relationship-status-some-concerns" name="relationship_status" type="radio" value="some-concerns">
+          <label class="govuk-label govuk-radios__label" for="relationship-status-some-concerns">Has some concerns about their relationship status but is overall happy</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="relationship-status-unhappy-unhealthy" name="relationship_status" type="radio" value="unhappy-unhealthy">
+          <label class="govuk-label govuk-radios__label" for="relationship-status-unhappy-unhealthy">Unhappy about their relationship status, or their relationship is unhealthy and directly linked to offending</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

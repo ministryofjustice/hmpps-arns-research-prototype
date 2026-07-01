@@ -12,6 +12,7 @@ import {
 import {
   getA6BackHref,
   getA6FieldsFromForm,
+  getPostInterviewYesContinueHref,
   getTieringResultsAnswersHref,
   getTieringResultsScoresHref,
   hasSeenStaticAssessmentComplete,
@@ -72,7 +73,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
     if (newFields.interviewDone === 'yes') {
       window.location.href = tieringJourneyHref(
-        completeTieringPageAndContinue('a6', 'b1.html', {
+        completeTieringPageAndContinue('a6', getPostInterviewYesContinueHref, {
           ...newFields,
           staticAssessmentCompleteSeen: false,
           scoreCalculated: false

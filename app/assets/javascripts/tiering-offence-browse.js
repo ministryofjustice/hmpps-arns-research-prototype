@@ -58,16 +58,99 @@ export const formatOffenceLabelWithCodes = (offence) => {
   return codeBracket ? `${offence.label}  ${codeBracket}` : offence.label
 }
 
+const normaliseOffenceId = (offenceId) => String(offenceId ?? '').trim().toLowerCase()
+
+export const ensureOffenceSearchData = async () => {
+  if (window.OFFENCE_SEARCH_DATA?.length) return window.OFFENCE_SEARCH_DATA
+
+  try {
+    const response = await fetch('/api/offences')
+    if (!response.ok) return []
+    window.OFFENCE_SEARCH_DATA = await response.json()
+    return window.OFFENCE_SEARCH_DATA
+  } catch {
+    return []
+  }
+}
+
 export const lookupOffenceIsViolent = (offenceId) => {
   const offences = window.OFFENCE_SEARCH_DATA
   if (!offences?.length || !offenceId) return false
 
+  const targetId = normaliseOffenceId(offenceId)
+
   for (const group of offences) {
-    const match = (group.subOffences || []).find((sub) => sub.id === offenceId)
+    const match = (group.subOffences || []).find((sub) => normaliseOffenceId(sub.id) === targetId)
     if (match) return Boolean(match.isViolentOffence)
   }
 
   return false
+}
+
+export const lookupOffenceDetails = (offenceId) => {
+  const offences = window.OFFENCE_SEARCH_DATA
+  if (!offences?.length || !offenceId) return null
+
+  const targetId = normaliseOffenceId(offenceId)
+
+  for (const group of offences) {
+    const match = (group.subOffences || []).find((sub) => normaliseOffenceId(sub.id) === targetId)
+    if (match) {
+      return {
+        id: match.id,
+        label: match.label || '',
+        code: match.code || '',
+        subcode: match.subcode || '',
+        fullCode: match.fullCode || '',
+        parentGroupDescription: group.category || '',
+        categoryDescription: group.label || '',
+        subCategoryDescription: match.description || match.label || '',
+        isViolentOffence: Boolean(match.isViolentOffence)
+      }
+    }
+  }
+
+  return null
+}
+
+export const populateOffenceSummaryCard = (container, selection) => {
+  if (!container || !selection) return
+
+  const details =
+    lookupOffenceDetails(selection.id) || {
+      label: selection.label || '',
+      code: selection.code || '',
+      subcode: selection.subcode || '',
+      fullCode: selection.fullCode || '',
+      parentGroupDescription: selection.category || '',
+      categoryDescription: selection.parentLabel || selection.label || '',
+      subCategoryDescription: selection.description || selection.label || ''
+    }
+
+  const titleEl = container.querySelector('[data-offence-summary-card-title]')
+  const listEl = container.querySelector('[data-offence-summary-list]')
+
+  if (titleEl) titleEl.textContent = details.label || selection.label || ''
+
+  if (!listEl) return
+
+  const rows = [
+    ['Offence category', details.parentGroupDescription],
+    ['Category', details.categoryDescription],
+    ['Subcategory', details.subCategoryDescription],
+    ['Offence code', formatOffenceCodeLabel(selection)]
+  ].filter(([, value]) => Boolean(String(value || '').trim()))
+
+  listEl.innerHTML = rows
+    .map(
+      ([key, value]) => `
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">${escapeOffenceHtml(key)}</dt>
+          <dd class="govuk-summary-list__value">${escapeOffenceHtml(value)}</dd>
+        </div>
+      `
+    )
+    .join('')
 }
 
 export const applyOffenceViolentTag = (tagEl, isViolentOffence) => {

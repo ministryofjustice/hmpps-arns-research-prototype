@@ -1,13 +1,11 @@
 {# Set pageHeading per page; optional tieringSectionCaption (default Tiering) and statusTag #}
-<div class="govuk-grid-row assessment-service-header">
+<div class="govuk-grid-row assessment-service-header{% if hidePageHeaderSeparator %} assessment-service-header--no-separator{% endif %}">
   <div class="govuk-grid-column-full">
-    <div class="assessment-layout__row assessment-layout__row--tight">
-      <div class="assessment-service-header__title-group">
-        <p class="govuk-caption-l assessment-service-header__section-caption">{{ tieringSectionCaption | default("Tiering") }}</p>
-        <h1 class="govuk-heading-l govuk-!-margin-bottom-0{% if pageHeadingClass %} {{ pageHeadingClass }}{% endif %}"{% if pageHeadingId %} id="{{ pageHeadingId }}"{% endif %}>
-          {% if pageHeadingHtml %}{{ pageHeadingHtml | safe }}{% else %}{{ pageHeading | default("Tiering assessment") }}{% endif %}{% if statusTag %}<span class="govuk-visually-hidden">, {{ statusTag }}</span>{% endif %}
-        </h1>
-      </div>
+    <p class="govuk-caption-l assessment-service-header__section-caption">{{ tieringSectionCaption | default("Tiering") }}</p>
+    <div class="assessment-layout__row assessment-layout__row--tight assessment-service-header__question-row">
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-0{% if pageHeadingClass %} {{ pageHeadingClass }}{% endif %}"{% if pageHeadingId %} id="{{ pageHeadingId }}"{% endif %}>
+        {% if pageHeadingHtml %}{{ pageHeadingHtml | safe }}{% else %}{{ pageHeading | default("Tiering assessment") }}{% endif %}{% if statusTag %}<span class="govuk-visually-hidden">, {{ statusTag }}</span>{% endif %}
+      </h1>
       {% if statusTag %}
       <div class="assessment-service-header__actions">
         <strong class="govuk-tag govuk-tag--grey assessment-layout__status-tag" aria-hidden="true">{{ statusTag }}</strong>
