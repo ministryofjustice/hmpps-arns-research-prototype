@@ -7,10 +7,7 @@
 {% set backLinkHref = "a8.html" %}
 {% set backLinkText = "Back to reoffending predictor score" %}
 
-{% block content %}
-
-{% include "includes/assessment-journey-page-open.html" %}
-
+{% set afterJourneyHeaderHtml %}
 <div class="tiering-session-results__header govuk-!-margin-bottom-6">
   <div class="tiering-session-results__header-row">
     <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Session results</h1>
@@ -25,6 +22,11 @@
     Anonymous research summary for this prototype session.
   </p>
 </div>
+{% endset %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
 
 <div id="tiering-session-results-summary" class="tiering-session-results__summary" data-session-results>
   <p class="govuk-body">Loading session results…</p>

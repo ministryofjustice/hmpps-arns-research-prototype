@@ -9,10 +9,14 @@ import {
 } from './conviction-date.js'
 import {
   captureCheckAnswersEditSnapshot,
+  formatDateFromParts,
   getA1FieldsFromForm,
+  getDefaultConvictionDateParts,
   getPrototypeDefaultCurrentOffence,
   getTieringAssessmentSession,
+  isDateComplete,
   isTieringCheckAnswersEdit,
+  normaliseDateParts,
   setTieringAssessmentSession,
   trackTelemetryOffenceSearch
 } from './tiering-page-apis.js'
@@ -22,8 +26,10 @@ import {
   formatOffenceLabelWithCodes,
   lookupOffenceDetails,
   lookupOffenceIsViolent,
-  populateOffenceSummaryCard
+  populateOffenceSummaryCard,
+  populateOffenceSummaryList
 } from './tiering-offence-browse.js'
+import { initA1OffenceDisplayToggle, refreshA1OffenceDisplay } from './tiering-a1-display-toggle.js'
 
 const offenceSearchMatches = (item, query) => {
   const q = query.trim().toLowerCase()
@@ -166,6 +172,13 @@ const offenceSearchMapSubOptions = (parent, subOffences) =>
     }))
 
 window.initOffenceSearchV2 = async (container) => {
+  if (
+    container.id === 'current-offence-search' &&
+    document.getElementById('tiering-a1-form') &&
+    document.querySelector('[data-offence-display-toggle]')
+  ) {
+    initA1OffenceDisplayToggle()
+  }
   if (!container) return null
   if (container._offenceSearchHandle) return container._offenceSearchHandle
 
@@ -389,7 +402,16 @@ window.initOffenceSearchV2 = async (container) => {
     searchPanel.hidden = true
     selectedPanel.hidden = false
     if (useSummaryCard) {
-      populateOffenceSummaryCard(container, selection)
+      if (document.querySelector('[data-offence-display-toggle]')) {
+        refreshA1OffenceDisplay(container, selection)
+      } else if (container.dataset.offenceSearchSummaryListOnly === 'true') {
+        const session = getTieringAssessmentSession()
+        const stored = normaliseDateParts(session.convictionDate || {})
+        const parts = isDateComplete(stored) ? stored : getDefaultConvictionDateParts()
+        populateOffenceSummaryList(container, selection, formatDateFromParts(parts))
+      } else {
+        populateOffenceSummaryCard(container, selection)
+      }
     } else {
       if (selectedLabel) selectedLabel.textContent = selection.label
       if (selectedMeta) {

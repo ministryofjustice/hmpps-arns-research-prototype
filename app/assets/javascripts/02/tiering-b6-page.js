@@ -43,7 +43,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   if (!hasAlcoholUseInLast3Months(session)) {
     window.location.href = tieringJourneyHref(
-      session.alcoholUse === 'yes-not-in-last-3-months' ? 'b6b.html' : 'b7.html'
+      session.alcoholUse === 'yes-not-in-last-3-months' ? 'b6c.html' : 'b7.html'
     )
     return
   }

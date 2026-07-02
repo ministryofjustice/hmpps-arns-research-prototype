@@ -259,7 +259,7 @@ export const buildDynamicTieringSummarySections = (session, offenderFirstName = 
       createRow(
         `Has ${name} shown evidence of binge drinking or excessive alcohol use in the last 6 months?`,
         formatLabelledChoice(session.alcoholBingeEvidence, ALCOHOL_BINGE_LABELS),
-        hasAlcoholUseInLast3Months(session) ? 'b6.html' : 'b6b.html',
+        hasAlcoholUseInLast3Months(session) ? 'b6.html' : 'b6c.html',
         `Has ${name} shown evidence of binge drinking or excessive alcohol use in the last 6 months?`,
         false,
         'tiering-alcohol-binge-evidence'

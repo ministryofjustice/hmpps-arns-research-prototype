@@ -12,6 +12,7 @@ import {
   completeTieringPageAndContinue,
   isTieringCheckAnswersEdit
 } from './tiering-change-scroll.js'
+import { initA1OffenceDisplayToggle } from '../tiering-a1-display-toggle.js'
 import { getA1FieldsFromForm } from './tiering-journey.js'
 import { trackTelemetryOffenceSearch } from './tiering-session-telemetry.js'
 
@@ -41,6 +42,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
   if (!form) return
 
   initConvictionDate()
+  initA1OffenceDisplayToggle()
   initA1FooterCrownLink()
 
   document.querySelector('[data-tiering-offence-browse-link]')?.addEventListener('click', () => {

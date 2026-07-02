@@ -2,18 +2,17 @@
 
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Alcohol use" %}
-{% set tieringSectionCaption = "Alcohol" %}
-{% set pageHeadingHtml = "How often has " ~ offenderFirstName ~ " drunk alcohol in the last 3 months?" %}
-{% set pageHeadingId = "tiering-alcohol-frequency" %}
+{% set tieringSectionCaption = "Alcohol use" %}
+{% set pageHeadingHtml = "Has " ~ offenderFirstName ~ " shown evidence of binge drinking or excessive alcohol use in the last 6 months?" %}
+{% set pageHeadingId = "tiering-alcohol-binge-evidence" %}
 {% set pageHeadingClass = "tiering-question-anchor" %}
 {% set compactPageHeader = true %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
-{% set tieringTelemetryPage = "b6b" %}
+{% set tieringTelemetryPage = "b6c" %}
 {% set tieringTelemetryPageLabel = "Alcohol use (continued)" %}
-{% set returnToOasysButtonInclude = "includes/02/b6-layout-toggle-to-b6.html" %}
 {% set backLinkHref = "b5.html" %}
-{% set backLinkId = "tiering-b6b-back" %}
+{% set backLinkId = "tiering-b6c-back" %}
 
 {% block content %}
 
@@ -21,9 +20,8 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-b6b-form" novalidate>
-  {% set alcoholHideFirstQuestionHeading = true %}
-  {% include "includes/02/alcohol-use-details-questions.html" %}
+<form id="tiering-b6c-form" novalidate>
+  {% include "includes/02/alcohol-binge-evidence-question.html" %}
 
   <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
 </form>

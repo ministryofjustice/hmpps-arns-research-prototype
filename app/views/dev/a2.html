@@ -11,15 +11,13 @@
 
 {% include "includes/assessment-journey-page-open.html" %}
 
-<div data-sanction-inset-slot="header" hidden></div>
+<div data-sanction-inset-slot="header">
+  {% include "includes/dev/sanction-definition-inset.html" %}
+</div>
 
 {% include "includes/assessment-question-header.html" %}
 
 <form id="tiering-a2-form" novalidate data-offender-first-name="{{ offenderFirstName }}">
-
-  <div data-sanction-inset-slot="form">
-    {% include "includes/dev/sanction-definition-inset.html" %}
-  </div>
 
   {% include "includes/dev/offending-history-questions.html" %}
 

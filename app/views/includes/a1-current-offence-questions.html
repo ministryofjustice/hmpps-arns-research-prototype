@@ -1,0 +1,133 @@
+{# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
+{# Shared a1 questions – click selected offence to toggle list / card / inline layouts #}
+
+<h2 id="tiering-current-offence" class="govuk-heading-m tiering-question-anchor govuk-visually-hidden" hidden>
+  What is {{ offenderFirstName }}'s current offence?
+</h2>
+
+<div
+        class="offence-autocomplete offence-autocomplete--with-search-button govuk-!-margin-bottom-6"
+        data-module="offence-search"
+        data-offence-search-summary-card="true"
+        data-offence-search-results-url="a1r"
+        id="current-offence-search"
+>
+  <div data-offence-search-panel>
+    <div class="offence-autocomplete__search-row">
+      <div class="govuk-form-group offence-autocomplete__combobox govuk-!-margin-bottom-0">
+        <label class="govuk-label govuk-visually-hidden" for="current-offence-search-input">
+          What is {{ offenderFirstName }}'s current offence?
+        </label>
+        <input
+                class="govuk-input offence-autocomplete__input"
+                id="current-offence-search-input"
+                name="current_offence_search"
+                type="text"
+                spellcheck="false"
+                autocomplete="off"
+                role="combobox"
+                aria-autocomplete="list"
+                aria-expanded="false"
+                aria-controls="current-offence-search-listbox"
+                data-offence-search-input
+        >
+        <ul
+                id="current-offence-search-listbox"
+                class="offence-autocomplete__menu"
+                role="listbox"
+                data-offence-search-listbox
+                hidden
+        ></ul>
+      </div>
+      <button
+              type="button"
+              class="govuk-button offence-autocomplete__search-button"
+              data-offence-search-submit
+              data-module="govuk-button"
+      >Search</button>
+    </div>
+    <p class="govuk-body govuk-!-margin-top-3 govuk-!-margin-bottom-0">
+      <a class="govuk-link" href="a1o.html" data-tiering-offence-browse-link>Find an offence</a>
+    </p>
+  </div>
+
+  <div data-offence-search-selected hidden>
+    <div
+            class="offence-display-toggle"
+            data-offence-display-toggle
+            data-offence-display-mode="list"
+            tabindex="0"
+            role="button"
+            aria-pressed="false"
+            title="Click to toggle offence display layout"
+    >
+      <div data-offence-display-variant="list">
+        <dl class="govuk-summary-list govuk-!-margin-bottom-0" data-offence-summary-list-list></dl>
+        <details class="govuk-details govuk-!-margin-top-4">
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">If this information is incorrect</span>
+          </summary>
+          <div class="govuk-details__text">
+            <p class="govuk-body">If any of the details shown are wrong, update them in NDelius. Once the record has been corrected there, the updated information should appear here automatically.</p>
+          </div>
+        </details>
+      </div>
+
+      <div data-offence-display-variant="card" hidden>
+        <div class="govuk-summary-card offence-autocomplete__summary-card">
+          <div class="govuk-summary-card__title-wrapper">
+            <h2 class="govuk-summary-card__title" data-offence-summary-card-title></h2>
+          </div>
+          <div class="govuk-summary-card__content">
+            <dl class="govuk-summary-list govuk-!-margin-bottom-0" data-offence-summary-list-card></dl>
+          </div>
+        </div>
+      </div>
+
+      <div data-offence-display-variant="inline" hidden>
+        <div class="offence-display-toggle__inline-row" aria-hidden="true">
+          <span class="offence-display-toggle__inline-name" data-offence-inline-name></span>
+          <span class="offence-display-toggle__inline-code tiering-offence-code" data-offence-inline-code></span>
+          <span class="offence-display-toggle__inline-type" data-offence-inline-type></span>
+        </div>
+        <p class="govuk-visually-hidden" data-offence-inline-sr-summary></p>
+      </div>
+    </div>
+
+    <input type="hidden" name="current_offence_id" value="" data-offence-selected-id>
+    <input type="hidden" name="current_offence_code" value="" data-offence-selected-code>
+    <input type="hidden" name="current_offence_subcode" value="" data-offence-selected-subcode>
+  </div>
+</div>
+
+<h2 id="tiering-conviction-date" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-8 govuk-!-margin-bottom-2 govuk-visually-hidden">
+  What is the date of {{ offenderFirstName }}'s current conviction?
+</h2>
+
+<div class="govuk-form-group" data-conviction-date-edit data-conviction-date-input-only data-a1-conviction-fields>
+  <fieldset class="govuk-fieldset" role="group">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      What is the date of {{ offenderFirstName }}'s current conviction?
+    </legend>
+    <div class="govuk-date-input" id="current-conviction-date" data-a1-conviction-date-inputs>
+      <div class="govuk-date-input__item" data-a1-conviction-date-part>
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="current-conviction-date-day">Day</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="current-conviction-date-day" name="current_conviction_date_day" type="hidden" inputmode="numeric" autocomplete="bday-day" value="18">
+        </div>
+      </div>
+      <div class="govuk-date-input__item" data-a1-conviction-date-part>
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="current-conviction-date-month">Month</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="current-conviction-date-month" name="current_conviction_date_month" type="hidden" inputmode="numeric" autocomplete="bday-month" value="3">
+        </div>
+      </div>
+      <div class="govuk-date-input__item" data-a1-conviction-date-part>
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="current-conviction-date-year">Year</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="current-conviction-date-year" name="current_conviction_date_year" type="hidden" inputmode="numeric" autocomplete="bday-year" value="2026">
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>

@@ -8,6 +8,7 @@ import {
   persistConvictionDateState
 } from '../conviction-date.js'
 import { completeTieringPageAndContinue } from './tiering-change-scroll.js'
+import { initA1OffenceDisplayToggle } from '../tiering-a1-display-toggle.js'
 import { getA1FieldsFromForm } from './tiering-journey.js'
 
 const A1_PNC_VIEWER_URL = '/dev/pnc'
@@ -36,6 +37,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
   if (!form) return
 
   initConvictionDate()
+  initA1OffenceDisplayToggle()
   initA1FooterCrownLink()
 
   document.querySelector('[data-tiering-offence-browse-link]')?.addEventListener('click', () => {

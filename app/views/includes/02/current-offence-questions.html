@@ -1,6 +1,6 @@
 {# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
 
-<h2 id="tiering-current-offence" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-4 govuk-!-margin-bottom-2">
+<h2 id="tiering-current-offence" class="govuk-heading-m tiering-question-anchor govuk-visually-hidden">
   What is {{ offenderFirstName }}'s current offence?
 </h2>
 
@@ -8,6 +8,7 @@
         class="offence-autocomplete offence-autocomplete--with-search-button govuk-!-margin-bottom-6"
         data-module="offence-search"
         data-offence-search-summary-card="true"
+        data-offence-search-summary-list-only="true"
         data-offence-search-results-url="a1r"
         id="current-offence-search"
 >
@@ -51,50 +52,25 @@
   </div>
 
   <div data-offence-search-selected hidden>
-    <div class="govuk-summary-card offence-autocomplete__summary-card">
-      <div class="govuk-summary-card__title-wrapper">
-        <h2 class="govuk-summary-card__title" data-offence-summary-card-title></h2>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-0" data-offence-summary-list></dl>
+    <details class="govuk-details govuk-!-margin-top-4">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">If this information is incorrect</span>
+      </summary>
+      <div class="govuk-details__text">
+        <p class="govuk-body">If any of the details shown are wrong, update them in NDelius. Once the record has been corrected there, the updated information should appear here automatically.</p>
       </div>
-      <div class="govuk-summary-card__content">
-        <dl class="govuk-summary-list govuk-!-margin-bottom-0" data-offence-summary-list></dl>
-      </div>
-    </div>
+    </details>
     <input type="hidden" name="current_offence_id" value="" data-offence-selected-id>
     <input type="hidden" name="current_offence_code" value="" data-offence-selected-code>
     <input type="hidden" name="current_offence_subcode" value="" data-offence-selected-subcode>
   </div>
 </div>
 
-<h2 id="tiering-conviction-date" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-8 govuk-!-margin-bottom-2">
+<h2 id="tiering-conviction-date" class="govuk-heading-m tiering-question-anchor govuk-visually-hidden">
   What is the date of {{ offenderFirstName }}'s current conviction?
 </h2>
 
-<p class="govuk-hint govuk-!-margin-bottom-4">This information is sourced from NDelius.</p>
-
-<div class="govuk-form-group" data-conviction-date-edit data-conviction-date-input-only>
-  <fieldset class="govuk-fieldset" role="group">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
-      What is the date of {{ offenderFirstName }}'s current conviction?
-    </legend>
-    <div class="govuk-date-input" id="current-conviction-date">
-      <div class="govuk-date-input__item">
-        <div class="govuk-form-group">
-          <label class="govuk-label govuk-date-input__label" for="current-conviction-date-day">Day</label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="current-conviction-date-day" name="current_conviction_date_day" type="text" inputmode="numeric" autocomplete="bday-day">
-        </div>
-      </div>
-      <div class="govuk-date-input__item">
-        <div class="govuk-form-group">
-          <label class="govuk-label govuk-date-input__label" for="current-conviction-date-month">Month</label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="current-conviction-date-month" name="current_conviction_date_month" type="text" inputmode="numeric" autocomplete="bday-month">
-        </div>
-      </div>
-      <div class="govuk-date-input__item">
-        <div class="govuk-form-group">
-          <label class="govuk-label govuk-date-input__label" for="current-conviction-date-year">Year</label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="current-conviction-date-year" name="current_conviction_date_year" type="text" inputmode="numeric" autocomplete="bday-year">
-        </div>
-      </div>
-    </div>
-  </fieldset>
-</div>
+<input type="hidden" id="current-conviction-date-day" name="current_conviction_date_day" value="18">
+<input type="hidden" id="current-conviction-date-month" name="current_conviction_date_month" value="3">
+<input type="hidden" id="current-conviction-date-year" name="current_conviction_date_year" value="2026">

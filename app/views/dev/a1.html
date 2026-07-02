@@ -4,6 +4,7 @@
 {% set pageName = "Current offence" %}
 {% set activeSection = "section-1" %}
 {% set pageHeading = "Current offence details" %}
+{% set pageHeadingHint = "This information is sourced from NDelius." %}
 {% set statusTag = "Incomplete" %}
 
 {% block content %}
@@ -19,9 +20,9 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-a1-form" novalidate>
+<form id="tiering-a1-form" novalidate data-a1-offence-display-default="card">
 
-  {% include "includes/dev/current-offence-questions.html" %}
+  {% include "includes/a1-current-offence-questions.html" %}
 
   <button type="submit" class="govuk-button govuk-!-margin-top-8" data-module="govuk-button">Save and continue</button>
 
