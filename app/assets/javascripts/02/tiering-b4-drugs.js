@@ -3,20 +3,20 @@
 //
 
 export const MISUSED_DRUG_TYPES = [
-  { id: 'amphetamines', label: 'Amphetamines (including speed, methamphetamine)' },
-  { id: 'benzodiazepines', label: 'Benzodiazepines (including diazepam, temazepam)' },
+  { id: 'amphetamines', label: 'Amphetamines' },
+  { id: 'benzodiazepines', label: 'Benzodiazepines' },
   { id: 'cannabis', label: 'Cannabis' },
-  { id: 'cocaine', label: 'Cocaine' },
-  { id: 'crack-cocaine', label: 'Crack cocaine' },
-  { id: 'ecstasy', label: 'Ecstasy (MDMA)' },
+  { id: 'cocaine', label: 'Cocaine hydrochloride' },
+  { id: 'crack-cocaine', label: 'Crack or cocaine' },
+  { id: 'ecstasy', label: 'Ecstasy (also known as MDMA)' },
   { id: 'hallucinogens', label: 'Hallucinogens' },
   { id: 'heroin', label: 'Heroin' },
   { id: 'methadone', label: 'Methadone (not prescribed)' },
-  { id: 'prescribed-drugs', label: 'Prescribed drugs' },
+  { id: 'prescribed-drugs', label: 'Misused prescribed drugs' },
   { id: 'other-opiates', label: 'Other opiates' },
   { id: 'solvents', label: 'Solvents (including gases and glues)' },
+  { id: 'spice', label: 'Spice' },
   { id: 'steroids', label: 'Steroids' },
-  { id: 'synthetic-cannabinoids', label: 'Synthetic cannabinoids (spice)' },
   { id: 'other', label: 'Other', hasNameField: true }
 ]
 

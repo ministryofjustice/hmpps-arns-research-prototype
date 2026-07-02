@@ -110,12 +110,12 @@ $desktop: 48.0625em;
     margin-bottom: 15px;
   }
 
-  .assessment-service-header + [data-sanction-inset-slot="header"] .sanction-definition-toggle__inset,
+  .assessment-service-header + [data-sanction-inset-slot="header"] .govuk-inset-text,
   .assessment-service-header + .govuk-inset-text {
     margin-top: 0;
   }
 
-  .sanction-definition-toggle {
+  .offence-display-toggle {
     cursor: pointer;
 
     &:focus {
@@ -130,6 +130,46 @@ $desktop: 48.0625em;
     &:focus-visible {
       outline: 3px solid transparent;
       box-shadow: 0 0 0 3px #fd0;
+    }
+
+    &__inline-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 5.5rem 7.5rem;
+      column-gap: 15px;
+      align-items: start;
+      padding: 15px;
+      border: 1px solid #b1b4b6;
+      font-family: "GDS Transport", arial, sans-serif;
+      font-size: 1.1875rem;
+      line-height: 1.3157894737;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+
+      * {
+        font-family: inherit;
+        -webkit-font-smoothing: inherit;
+        -moz-osx-font-smoothing: inherit;
+      }
+    }
+
+    &__inline-name {
+      font-weight: 700;
+      overflow-wrap: anywhere;
+      padding-right: 10px;
+    }
+
+    &__inline-code {
+      font-weight: 400;
+      color: #505a5f;
+      white-space: nowrap;
+    }
+
+    &__inline-type {
+      white-space: nowrap;
+
+      .govuk-tag {
+        margin: 0;
+      }
     }
   }
 
@@ -217,7 +257,6 @@ $desktop: 48.0625em;
       }
     }
 
-    > .govuk-grid-column-two-thirds-from-desktop,
     > .govuk-grid-column-full {
       .govuk-radios:not(.govuk-radios--small),
       .alcohol-units-help-details,

@@ -47,6 +47,7 @@ import './02/tiering-b4-page.js'
 import './02/tiering-b5-page.js'
 import './02/tiering-b6-page.js'
 import './02/tiering-b6b-page.js'
+import './02/tiering-b6c-page.js'
 import './02/tiering-b7-page.js'
 import './02/tiering-b8-page.js'
 import './02/tiering-b9-page.js'
@@ -72,8 +73,10 @@ import './violent-offence-check.js'
 import './tiering-change-scroll.js'
 import { initPreserveConditionalFieldValues } from './tiering-conditional-fields.js'
 import { initTieringInactiveLinks } from './tiering-inactive-links.js'
+import { initB6LayoutToggleButtons } from './02/tiering-b6-layout-toggle.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
   initPreserveConditionalFieldValues()
   initTieringInactiveLinks()
+  initB6LayoutToggleButtons()
 })

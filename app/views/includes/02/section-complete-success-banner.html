@@ -12,8 +12,13 @@
     </h2>
   </div>
   <div class="govuk-notification-banner__content">
-    <p class="govuk-notification-banner__heading govuk-!-margin-bottom-0">
+    <p class="govuk-notification-banner__heading {% if sectionCompleteSuccessBannerSecondaryLinkHref %}govuk-!-margin-bottom-2{% else %}govuk-!-margin-bottom-0{% endif %}">
       You have marked this section as complete
     </p>
+    {% if sectionCompleteSuccessBannerSecondaryLinkHref and sectionCompleteSuccessBannerSecondaryLinkText %}
+    <p class="govuk-body govuk-!-margin-bottom-0">
+      You can still make changes from the <a class="govuk-link" href="{{ sectionCompleteSuccessBannerSecondaryLinkHref }}">{{ sectionCompleteSuccessBannerSecondaryLinkText }}</a>.
+    </p>
+    {% endif %}
   </div>
 </div>

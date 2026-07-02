@@ -832,7 +832,7 @@ export const hasAlcoholUseInLast3Months = (session = getTieringAssessmentSession
 
 export const getPostB5ContinueHref = (session = getTieringAssessmentSession()) => {
   if (session.alcoholUse === 'yes-in-last-3-months') return 'b6.html'
-  if (session.alcoholUse === 'yes-not-in-last-3-months') return 'b6b.html'
+  if (session.alcoholUse === 'yes-not-in-last-3-months') return 'b6c.html'
   return 'b7.html'
 }
 
@@ -848,7 +848,7 @@ export const getFirstIncompleteAlcoholPage = (session = getTieringAssessmentSess
   }
 
   if (session.alcoholUse === 'yes-not-in-last-3-months') {
-    if (!session.alcoholBingeEvidence) return 'b6b.html'
+    if (!session.alcoholBingeEvidence) return 'b6c.html'
     return null
   }
 
@@ -856,6 +856,8 @@ export const getFirstIncompleteAlcoholPage = (session = getTieringAssessmentSess
 }
 
 export const getPostB6bContinueHref = () => 'b7.html'
+
+export const getPostB6cContinueHref = () => 'b7.html'
 
 export const getPostB7ContinueHref = () => 'b8.html'
 
@@ -894,13 +896,13 @@ export const isDynamicSectionReadyForB7 = (session = getTieringAssessmentSession
 
 export const getB7BackHref = (session = getTieringAssessmentSession()) => {
   if (!hasAlcoholUseYesAnswer(session)) return 'b5.html'
-  if (session.alcoholUse === 'yes-not-in-last-3-months') return 'b6b.html'
+  if (session.alcoholUse === 'yes-not-in-last-3-months') return 'b6c.html'
   return 'b6.html'
 }
 
 export const getB6BackHref = () => 'b5.html'
 
-export const getB6bBackHref = (session = getTieringAssessmentSession()) =>
+export const getB6cBackHref = (session = getTieringAssessmentSession()) =>
   session.alcoholUse === 'yes-in-last-3-months' ? 'b6.html' : 'b5.html'
 
 export const getB6FieldsFromForm = (form) => ({
@@ -912,7 +914,7 @@ export const getB6FieldsFromForm = (form) => ({
     form.querySelector('input[name="alcohol_binge_evidence"]:checked')?.value || ''
 })
 
-export const getB6bFieldsFromForm = (form) => ({
+export const getB6cFieldsFromForm = (form) => ({
   alcoholBingeEvidence:
     form.querySelector('input[name="alcohol_binge_evidence"]:checked')?.value || ''
 })

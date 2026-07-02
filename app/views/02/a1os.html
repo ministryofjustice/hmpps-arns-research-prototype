@@ -13,10 +13,7 @@
 {% set tieringTelemetryPage = "a1os" %}
 {% set tieringTelemetryPageLabel = "Search results" %}
 
-{% block content %}
-
-{% include "includes/assessment-journey-page-open.html" %}
-
+{% set afterJourneyHeaderHtml %}
 <div class="offence-search-results-heading assessment-layout__section assessment-layout__section--compact govuk-!-margin-bottom-6">
   <div class="offence-search-results-heading__row assessment-layout__row assessment-layout__row--tight">
     <h1 class="govuk-heading-l govuk-!-margin-bottom-0 offence-search-results-heading__title">
@@ -33,6 +30,11 @@
   </div>
   <p class="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-0" data-offence-search-count></p>
 </div>
+{% endset %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
 
 <form id="tiering-a1os-form" class="govuk-!-margin-top-3" novalidate>
 

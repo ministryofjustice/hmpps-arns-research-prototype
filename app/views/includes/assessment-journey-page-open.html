@@ -19,6 +19,9 @@
   {% if afterJourneyHeaderInclude %}
   {% include afterJourneyHeaderInclude %}
   {% endif %}
+  {% if afterJourneyHeaderHtml %}
+  {{ afterJourneyHeaderHtml | safe }}
+  {% endif %}
 
   <div class="govuk-grid-row assessment-layout__content-row{% if hideSideNav %} assessment-layout__content-row--no-nav{% endif %}">
     {% if not hideSideNav %}
@@ -28,4 +31,4 @@
       </div>
     </div>
     {% endif %}
-    <div class="{% if hideSideNav %}govuk-grid-column-full{% else %}govuk-grid-column-two-thirds-from-desktop{% endif %}">
+    <div class="{% if contentColumnClass %}{{ contentColumnClass }}{% elif hideSideNav %}govuk-grid-column-full{% else %}govuk-grid-column-two-thirds-from-desktop{% endif %}">

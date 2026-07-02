@@ -113,7 +113,131 @@ export const lookupOffenceDetails = (offenceId) => {
   return null
 }
 
-export const populateOffenceSummaryCard = (container, selection) => {
+const getOffenceTypeLabel = (selection, details) => {
+  const isViolent =
+    selection.isViolentOffence === true ||
+    details?.isViolentOffence === true ||
+    lookupOffenceIsViolent(selection.id)
+
+  return isViolent ? 'Violent' : 'Not violent'
+}
+
+export const formatOffenceViolentTagHtml = (selection, details) => {
+  const isViolent =
+    selection.isViolentOffence === true ||
+    details?.isViolentOffence === true ||
+    lookupOffenceIsViolent(selection.id)
+  const tagClass = isViolent ? 'govuk-tag--red' : 'govuk-tag--grey'
+
+  return `<strong class="govuk-tag ${tagClass}">${getOffenceTypeLabel(selection, details)}</strong>`
+}
+
+export const populateOffenceSummaryList = (container, selection, convictionDateLabel, options = {}) => {
+  if (!container || !selection) return
+
+  const details =
+    lookupOffenceDetails(selection.id) || {
+      label: selection.label || '',
+      code: selection.code || '',
+      subcode: selection.subcode || '',
+      fullCode: selection.fullCode || ''
+    }
+
+  const listEl =
+    options.listEl ||
+    container.querySelector('[data-offence-summary-list-list]') ||
+    container.querySelector('[data-offence-summary-list]')
+  if (!listEl) return
+
+  const rows = [
+    ['Offence name', details.label || selection.label || ''],
+    ['Offence type', getOffenceTypeLabel(selection, details)],
+    ['Offence code', formatOffenceCodeLabel(selection)],
+    ['Date of current conviction', convictionDateLabel || '']
+  ].filter(([, value]) => Boolean(String(value || '').trim()))
+
+  listEl.innerHTML = rows
+    .map(
+      ([key, value]) => `
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">${escapeOffenceHtml(key)}</dt>
+          <dd class="govuk-summary-list__value">${escapeOffenceHtml(value)}</dd>
+        </div>
+      `
+    )
+    .join('')
+}
+
+export const populateOffenceInlineRow = (container, selection) => {
+  if (!container || !selection) return
+
+  const inlineVariant = container.querySelector('[data-offence-display-variant="inline"]')
+  if (!inlineVariant) return
+
+  const details =
+    lookupOffenceDetails(selection.id) || {
+      label: selection.label || '',
+      code: selection.code || '',
+      subcode: selection.subcode || '',
+      fullCode: selection.fullCode || ''
+    }
+
+  const name = details.label || selection.label || ''
+  const code = formatOffenceCodeLabel(selection)
+  const typeLabel = getOffenceTypeLabel(selection, details)
+
+  const nameEl = inlineVariant.querySelector('[data-offence-inline-name]')
+  const codeEl = inlineVariant.querySelector('[data-offence-inline-code]')
+  const typeEl = inlineVariant.querySelector('[data-offence-inline-type]')
+  const srEl = inlineVariant.querySelector('[data-offence-inline-sr-summary]')
+
+  if (nameEl) nameEl.textContent = name
+  if (codeEl) {
+    codeEl.textContent = code
+    codeEl.hidden = !code
+  }
+  if (typeEl) typeEl.innerHTML = formatOffenceViolentTagHtml(selection, details)
+  if (srEl) srEl.textContent = `Offence: ${name}, code: ${code}, type: ${typeLabel}`
+}
+
+export const populateOffenceNamedSummaryCard = (container, selection, options = {}) => {
+  if (!container || !selection) return
+
+  const details =
+    lookupOffenceDetails(selection.id) || {
+      label: selection.label || '',
+      code: selection.code || '',
+      subcode: selection.subcode || '',
+      fullCode: selection.fullCode || ''
+    }
+
+  const titleEl = options.titleEl || container.querySelector('[data-offence-summary-card-title]')
+  const listEl =
+    options.listEl ||
+    container.querySelector('[data-offence-summary-list-card]') ||
+    container.querySelector('[data-offence-summary-list]')
+
+  if (titleEl) titleEl.textContent = details.label || selection.label || ''
+  if (!listEl) return
+
+  const rows = [
+    ['Offence type', getOffenceTypeLabel(selection, details)],
+    ['Offence code', formatOffenceCodeLabel(selection)]
+  ].filter(([, value]) => Boolean(String(value || '').trim()))
+
+  listEl.innerHTML = rows
+    .map(
+      ([key, value]) => `
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">${escapeOffenceHtml(key)}</dt>
+          <dd class="govuk-summary-list__value">${escapeOffenceHtml(value)}</dd>
+        </div>
+      `
+    )
+    .join('')
+}
+
+export const populateOffenceSummaryCard = (container, selection, options = {}) => {
   if (!container || !selection) return
 
   const details =
@@ -127,8 +251,11 @@ export const populateOffenceSummaryCard = (container, selection) => {
       subCategoryDescription: selection.description || selection.label || ''
     }
 
-  const titleEl = container.querySelector('[data-offence-summary-card-title]')
-  const listEl = container.querySelector('[data-offence-summary-list]')
+  const titleEl = options.titleEl || container.querySelector('[data-offence-summary-card-title]')
+  const listEl =
+    options.listEl ||
+    container.querySelector('[data-offence-summary-list-card]') ||
+    container.querySelector('[data-offence-summary-list]')
 
   if (titleEl) titleEl.textContent = details.label || selection.label || ''
 

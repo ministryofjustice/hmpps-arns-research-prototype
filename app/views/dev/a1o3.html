@@ -12,20 +12,19 @@
 {% set offenceBrowseToggleHref = 'a1o' %}
 {% set offenceBrowseRestartSearch = true %}
 
+{% set afterJourneyHeaderHtml %}
+<div class="assessment-layout__row assessment-layout__row--tight govuk-!-margin-bottom-7">
+  <div>
+    <span class="govuk-caption-l">Offence category</span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-0" data-active-category-heading>Loading category…</h1>
+  </div>
+  {% include "includes/dev/return-to-oasys-button.html" %}
+</div>
+{% endset %}
+
 {% block content %}
 
 {% include "includes/assessment-journey-page-open.html" %}
-
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-
-    <div class="assessment-layout__row assessment-layout__row--tight govuk-!-margin-bottom-7">
-      <div>
-        <span class="govuk-caption-l">Offence category</span>
-        <h1 class="govuk-heading-l govuk-!-margin-bottom-0" data-active-category-heading>Loading category…</h1>
-      </div>
-      {% include "includes/dev/return-to-oasys-button.html" %}
-    </div>
 
     <form id="tiering-a1o3-form" novalidate>
 
@@ -73,9 +72,6 @@
       </div>
 
     </form>
-
-  </div>
-</div>
 
 {% include "includes/assessment-page-close.html" %}
 
