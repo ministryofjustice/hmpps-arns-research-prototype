@@ -1231,6 +1231,101 @@ body.assessment-page {
 
 }
 
+.alcohol-units-help-details {
+  overflow: visible;
+
+  .govuk-details__text {
+    overflow: visible;
+  }
+}
+
+.alcohol-units-help {
+  &__calculator-table {
+    table-layout: fixed;
+    width: 100%;
+
+    .govuk-table__cell {
+      vertical-align: middle;
+    }
+
+    tbody th[scope="row"],
+    tbody td:nth-child(2) {
+      padding-left: 8px;
+      font-weight: 400;
+    }
+  }
+
+  &__drinks-header,
+  &__drinks-cell {
+    width: 4.5rem;
+  }
+
+  &__drinks-cell {
+    padding-right: 5px;
+  }
+
+  &__units-header {
+    width: 6.5rem;
+  }
+
+  &__drink-type-header,
+  &__calculator-table tbody th[scope="row"] {
+    width: auto;
+  }
+
+  &__drinks-input {
+    margin-bottom: 0;
+  }
+
+  &__actions {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr 6.5rem;
+    row-gap: 10px;
+  }
+
+  &__actions-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    grid-column: 1 / -1;
+    grid-row: 1;
+    min-height: 2.75rem;
+  }
+
+  &__calculate-button {
+    flex-shrink: 0;
+    margin-bottom: 0;
+  }
+
+  &__result {
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 0;
+    font-weight: 700;
+
+    &--empty {
+      text-align: left;
+      white-space: normal;
+    }
+
+    &--total {
+      text-align: right;
+      white-space: nowrap;
+    }
+  }
+
+  &__clear-all {
+    grid-column: 1;
+    grid-row: 2;
+    margin-bottom: 0;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+}
+
 .tiering-offence-code {
   color: #505a5f;
   white-space: nowrap;
