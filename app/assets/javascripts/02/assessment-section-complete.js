@@ -1,5 +1,5 @@
 //
-// Tiering section 1 complete state (side nav tick + hide mark-complete button)
+// Tiering section 1 complete state (hide mark-complete button + success banner)
 //
 
 import { getTieringAssessmentSession, setTieringAssessmentSession } from './tiering-assessment-session.js'
@@ -64,18 +64,6 @@ const hideMarkSectionCompleteButton = () => {
 }
 
 export const resetSection1CompleteUi = () => {
-  document.querySelectorAll('[data-section-complete="section-1"]').forEach((icon) => {
-    icon.classList.remove('assessment-section-navigation__complete-icon--visible')
-    icon.setAttribute('aria-hidden', 'true')
-  })
-
-  document.querySelectorAll('[data-section="section-1"]').forEach((link) => {
-    const item =
-      link.closest('.moj-side-navigation__item') || link.closest('.govuk-service-navigation__item')
-    if (item) item.classList.remove('assessment-section-navigation__item--complete')
-    link.querySelector('[data-section-complete-hint]')?.remove()
-  })
-
   const markBtn = document.getElementById('tiering-mark-section-complete')
   if (markBtn) {
     markBtn.hidden = false
@@ -98,26 +86,6 @@ export const applySection1CompleteUi = () => {
     return
   }
 
-  document.querySelectorAll('[data-section-complete="section-1"]').forEach((icon) => {
-    icon.classList.add('assessment-section-navigation__complete-icon--visible')
-    icon.setAttribute('aria-hidden', 'true')
-  })
-
-  document.querySelectorAll('[data-section="section-1"]').forEach((link) => {
-    const item =
-      link.closest('.moj-side-navigation__item') || link.closest('.govuk-service-navigation__item')
-    if (item) item.classList.add('assessment-section-navigation__item--complete')
-
-    let completeHint = link.querySelector('[data-section-complete-hint]')
-    if (!completeHint) {
-      completeHint = document.createElement('span')
-      completeHint.className = 'govuk-visually-hidden'
-      completeHint.dataset.sectionCompleteHint = 'true'
-      completeHint.textContent = ', complete'
-      link.appendChild(completeHint)
-    }
-  })
-
   hideMarkSectionCompleteButton()
   setA8BackLinkVisible(false)
   setTieringCompletionInsetVisible(true)
@@ -133,5 +101,7 @@ export const clearSection1Complete = () => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
+  if (!window.location.pathname.includes('/02/')) return
+
   applySection1CompleteUi()
 })

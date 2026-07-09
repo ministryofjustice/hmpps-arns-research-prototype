@@ -47,7 +47,8 @@ window.GOVUKPrototypeKit.documentReady(async () => {
     setTieringAssessmentSession({
       scoreCalculated: true,
       staticAssessmentCompleteSeen: true,
-      scoresCheckAnswersOrigin: SCORES_CHECK_ANSWERS_ORIGIN_B11
+      scoresCheckAnswersOrigin: SCORES_CHECK_ANSWERS_ORIGIN_B11,
+      section1Complete: false
     })
     window.location.href = tieringJourneyHref(getTieringResultsScoresHref())
   })

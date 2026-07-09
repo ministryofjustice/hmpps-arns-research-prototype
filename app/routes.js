@@ -18,7 +18,7 @@ const offenceBrowseCategories = JSON.parse(
 router.use((req, res, next) => {
   res.locals.offenceBrowseCategories = offenceBrowseCategories
   if (req.path.startsWith('/02') || req.path.startsWith('/dev')) {
-    res.locals.tieringSectionCaption = 'Reoffending predictors'
+    res.locals.tieringSectionCaption = 'Predictors'
     res.locals.useReoffendingServiceNavigation = true
     res.locals.hideOffenderViewAnswers = true
   }

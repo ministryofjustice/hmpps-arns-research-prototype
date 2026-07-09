@@ -49,7 +49,8 @@ window.GOVUKPrototypeKit.documentReady(async () => {
         ...restored,
         interviewDone: 'yes',
         staticAssessmentCompleteSeen: false,
-        scoreCalculated: false
+        scoreCalculated: false,
+        section1Complete: false
       })
 
       window.location.href = tieringJourneyHref(
@@ -63,7 +64,8 @@ window.GOVUKPrototypeKit.documentReady(async () => {
     trackTelemetryMilestone('calculatedScore')
     setTieringAssessmentSession({
       scoreCalculated: true,
-      scoresCheckAnswersOrigin: SCORES_CHECK_ANSWERS_ORIGIN_A7
+      scoresCheckAnswersOrigin: SCORES_CHECK_ANSWERS_ORIGIN_A7,
+      section1Complete: false
     })
     window.location.href = tieringJourneyHref(getTieringResultsScoresHref())
   })

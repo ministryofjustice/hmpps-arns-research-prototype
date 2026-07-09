@@ -305,7 +305,8 @@ export const syncTieringSessionBeforeCheckAnswers = () => {
     updates.supervisedInCommunity = 'no'
   }
 
-  if (!isDateComplete(session.communityDate)) {
+  const supervisedInCommunity = updates.supervisedInCommunity || session.supervisedInCommunity
+  if (supervisedInCommunity === 'yes' && !isDateComplete(session.communityDate)) {
     updates.communityDate = { ...PROTOTYPE_DEFAULT_COMMUNITY_DATE }
   }
 
@@ -447,7 +448,10 @@ export const isA2Complete = (session) =>
   )
 
 export const isA4Complete = (session) =>
-  Boolean(session.supervisedInCommunity && isDateComplete(session.communityDate))
+  Boolean(
+    session.supervisedInCommunity &&
+      (session.supervisedInCommunity !== 'yes' || isDateComplete(session.communityDate))
+  )
 
 export const getFirstIncompleteTieringPage = (session) => {
   if (!session.currentOffence?.id) return 'a1.html'
@@ -492,7 +496,11 @@ export const applyBranchingCleanup = (currentPage, session, updates) => {
   }
 
   if (currentPage === 'a4' && merged.supervisedInCommunity !== 'yes') {
-    return { ...merged, ...clearA5SessionFields() }
+    return {
+      ...merged,
+      communityDate: { day: '', month: '', year: '' },
+      ...clearA5SessionFields()
+    }
   }
 
   if (currentPage === 'a5' && merged.offencesSinceCommunity !== 'yes') {
@@ -690,15 +698,20 @@ export const getA3FieldsFromForm = (form) => ({
 export const getA4FieldsFromForm = (form) => {
   const supervisedInCommunity =
     form.querySelector('input[name="supervised_in_community"]:checked')?.value || ''
-  const datePrefix =
-    supervisedInCommunity === 'yes' ? 'supervised-community-date' : 'community-date'
+
+  if (supervisedInCommunity === 'no') {
+    return {
+      supervisedInCommunity,
+      communityDate: { day: '', month: '', year: '' }
+    }
+  }
 
   return {
     supervisedInCommunity,
     communityDate: normaliseDateParts({
-      day: form.querySelector(`#${datePrefix}-day`)?.value,
-      month: form.querySelector(`#${datePrefix}-month`)?.value,
-      year: form.querySelector(`#${datePrefix}-year`)?.value
+      day: form.querySelector('#supervised-community-date-day')?.value,
+      month: form.querySelector('#supervised-community-date-month')?.value,
+      year: form.querySelector('#supervised-community-date-year')?.value
     })
   }
 }
@@ -1245,13 +1258,6 @@ export const getUnansweredTieringQuestions = (session, offenderFirstName = 'Alex
     )
     if (session.supervisedInCommunity === 'yes' && !isDateComplete(session.communityDate)) {
       add('a4', 'Community supervision', `What date did ${name}'s supervision begin?`)
-    }
-    if (session.supervisedInCommunity === 'no' && !isDateComplete(session.communityDate)) {
-      add(
-        'a4',
-        'Community supervision',
-        `What is the earliest date ${name} could be in the community once they've received their sentence?`
-      )
     }
   }
 

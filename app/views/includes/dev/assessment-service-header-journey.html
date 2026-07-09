@@ -13,7 +13,20 @@
         {% include returnToOasysButtonInclude | default("includes/dev/return-to-oasys-button.html") %}
       </div>
     </div>
-    {% if pageHeadingHint %}
+    {% if pageHeadingSourceToggle and pageHeadingInset and pageHeadingHint %}
+    <div class="govuk-grid-row" data-a1-source-notice>
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-inset-text assessment-service-header__heading-inset govuk-!-margin-bottom-0" data-a1-source-notice-variant="inset">{{ pageHeadingInset }}</div>
+        <p{% if pageHeadingHintId %} id="{{ pageHeadingHintId }}"{% endif %} class="govuk-hint assessment-service-header__heading-hint govuk-!-margin-bottom-0" data-a1-source-notice-variant="hint" hidden>{{ pageHeadingHint }}</p>
+      </div>
+    </div>
+    {% elif pageHeadingInset %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-inset-text assessment-service-header__heading-inset govuk-!-margin-bottom-0">{{ pageHeadingInset }}</div>
+      </div>
+    </div>
+    {% elif pageHeadingHint %}
     <p{% if pageHeadingHintId %} id="{{ pageHeadingHintId }}"{% endif %} class="govuk-hint assessment-service-header__heading-hint govuk-!-margin-bottom-0">{{ pageHeadingHint }}</p>
     {% endif %}
     {% if not hidePageHeaderSeparator %}

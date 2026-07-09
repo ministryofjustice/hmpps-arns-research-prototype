@@ -3,7 +3,9 @@
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Accommodation" %}
 {% set tieringSectionCaption = "Accommodation" %}
+{% set tieringSectionCaptionSection = "Predictors" %}
 {% set pageHeadingHtml = "Is " ~ offenderFirstName ~ "'s accommodation suitable?" %}
+{% set pageHeadingSection = "Accommodation" %}
 {% set pageHeadingId = "tiering-accommodation-suitable" %}
 {% set pageHeadingClass = "tiering-question-anchor" %}
 {% set compactPageHeader = true %}
@@ -13,6 +15,7 @@
 {% set tieringTelemetryPageLabel = "Accommodation" %}
 {% set pageHeadingHint = "This includes things like safety or having appropriate amenities." %}
 {% set pageHeadingHintId = "accommodation-suitable-hint" %}
+{% set journeyServiceHeaderInclude = "includes/02/b1-assessment-service-header-journey.html" %}
 {% set backLinkHref = "a6.html" %}
 {% set backLinkId = "tiering-b1-back" %}
 
@@ -22,10 +25,17 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-b1-form" novalidate>
+<form id="tiering-b1-form" novalidate data-b1-layout-form>
+  <div data-b1-content-question hidden>
+    <h2 class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2" id="tiering-accommodation-suitable-question">
+      Is {{ offenderFirstName }}'s accommodation suitable?
+    </h2>
+    <p id="accommodation-suitable-content-hint" class="govuk-hint">{{ pageHeadingHint }}</p>
+  </div>
+
   <div class="govuk-form-group govuk-!-margin-top-0">
-    <fieldset class="govuk-fieldset" aria-describedby="accommodation-suitable-hint">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+    <fieldset class="govuk-fieldset" aria-describedby="accommodation-suitable-hint" data-b1-fieldset>
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden" data-b1-fieldset-legend>
         Is {{ offenderFirstName }}'s accommodation suitable?
       </legend>
       <div class="govuk-radios" data-module="govuk-radios">
