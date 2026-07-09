@@ -3,7 +3,6 @@
 //
 
 import { markSection1Complete } from './assessment-section-complete.js'
-import { formatToday } from './tiering-assessment-session.js'
 import { getTieringBackLinkHref } from './tiering-change-scroll.js'
 import { syncTieringSessionBeforeCheckAnswers, tieringJourneyHref } from './tiering-journey.js'
 import { initTieringInactiveLinks } from '../tiering-inactive-links.js'
@@ -51,13 +50,6 @@ const applySexualPredictorEmptyStates = (session) => {
   })
 }
 
-const initCompletionDate = () => {
-  const element = document.querySelector('[data-tiering-completion-date]')
-  if (!element) return
-
-  element.textContent = formatToday()
-}
-
 window.GOVUKPrototypeKit.documentReady(() => {
   if (!window.location.pathname.includes('/dev/')) return
   if (!document.getElementById('tiering-a8-back')) return
@@ -84,7 +76,6 @@ window.GOVUKPrototypeKit.documentReady(() => {
     backLink.href = getTieringBackLinkHref('a7.html')
   }
 
-  initCompletionDate()
   applySexualPredictorEmptyStates(session)
   initTieringInactiveLinks()
   initRiskPredictorBackToTop()

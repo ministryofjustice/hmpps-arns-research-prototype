@@ -2,7 +2,7 @@
 // a8 – risk predictor scores
 //
 
-import { markSection1Complete } from './assessment-section-complete.js'
+import { applySection1CompleteUi, markSection1Complete } from './assessment-section-complete.js'
 import { formatToday } from './tiering-assessment-session.js'
 import { getTieringBackLinkHref } from './tiering-change-scroll.js'
 import { getDynamicTieringCheckAnswersHref, hasDynamicScoresOrigin, syncTieringSessionBeforeCheckAnswers, tieringJourneyHref } from './tiering-journey.js'
@@ -73,6 +73,13 @@ const initCompletionDate = () => {
   element.textContent = formatToday()
 }
 
+const updateSectionCompleteBannerLink = (checkAnswersHref) => {
+  const link = document.querySelector('#tiering-section-complete-success-banner a.govuk-link')
+  if (!link) return
+
+  link.href = tieringJourneyHref(checkAnswersHref)
+}
+
 const initRiskPredictorTelemetry = () => {
   document.querySelectorAll('.risk-predictor-scores__section[data-risk-predictor-id]').forEach((section) => {
     const details = section.querySelector('details.risk-predictor-scores__details')
@@ -126,6 +133,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
     link.href = tieringJourneyHref(checkAnswersHref)
   })
 
+  updateSectionCompleteBannerLink(checkAnswersHref)
   insertTieringSessionFooterLinks()
   initCompletionDate()
   applyRiskPredictorScoreTypeTags(session)
@@ -140,6 +148,8 @@ window.GOVUKPrototypeKit.documentReady(() => {
       markSection1Complete()
     })
   }
+
+  applySection1CompleteUi()
 
   requestAnimationFrame(() => {
     requestAnimationFrame(scrollA8ToTop)

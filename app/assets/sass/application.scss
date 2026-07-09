@@ -97,6 +97,10 @@ $desktop: 48.0625em;
     margin-top: 5px;
   }
 
+  .assessment-service-header__heading-inset {
+    margin-top: 15px;
+  }
+
   .assessment-service-header--no-separator:has(+ [data-sanction-inset-slot="header"]) {
     margin-bottom: 5px;
   }
@@ -218,6 +222,23 @@ $desktop: 48.0625em;
       margin: 0;
       flex: 1;
       min-width: 0;
+    }
+
+    // Dual H1 layout toggle (b1): flex would keep both visible if [hidden] is overridden
+    .govuk-heading-l[hidden] {
+      display: none !important;
+      flex: none;
+      width: 0;
+      min-width: 0;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  .assessment-service-header__section-caption {
+    [data-b1-caption-variant][hidden] {
+      display: none !important;
     }
   }
 
@@ -652,6 +673,11 @@ body.assessment-page {
 
 [data-conviction-date-selected].tiering-system-value--summary-hidden {
   display: none;
+}
+
+// GOV.UK .govuk-details sets display: block, which overrides the [hidden] attribute
+[data-a1-incorrect-info-details][hidden] {
+  display: none !important;
 }
 
 .offence-autocomplete {
@@ -1285,6 +1311,7 @@ body.assessment-page {
 
   &__actions-main {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 15px;
@@ -1312,6 +1339,18 @@ body.assessment-page {
     &--total {
       text-align: right;
       white-space: nowrap;
+    }
+
+    // At 400% zoom / narrow viewports, sit under the calculate button
+    // instead of overflowing off-screen beside it.
+    @media (max-width: $tablet) {
+      flex: 1 1 100%;
+
+      &--empty,
+      &--total {
+        text-align: left;
+        white-space: normal;
+      }
     }
   }
 

@@ -45,7 +45,6 @@ window.GOVUKPrototypeKit.documentReady(async () => {
 
     // a4 (no path skips a5)
     supervisedInCommunity: 'no',
-    communityDate: { day: '5', month: '6', year: '2027' },
 
     // state
     scoreCalculated: true,

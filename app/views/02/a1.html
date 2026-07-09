@@ -5,6 +5,8 @@
 {% set activeSection = "section-1" %}
 {% set pageHeading = "Current offence details" %}
 {% set pageHeadingHint = "This information is sourced from NDelius." %}
+{% set pageHeadingInset = "This information comes from NDelius. If any details are wrong, contact the case administrator at your probation delivery unit (PDU)." %}
+{% set pageHeadingSourceToggle = true %}
 {% set statusTag = "Incomplete" %}
 {% set tieringTelemetryPage = "a1" %}
 {% set tieringTelemetryPageLabel = "Current offence" %}
@@ -22,7 +24,7 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-a1-form" novalidate data-a1-offence-display-default="list">
+<form id="tiering-a1-form" novalidate data-a1-offence-display-default="table">
 
   {% include "includes/a1-current-offence-questions.html" %}
 

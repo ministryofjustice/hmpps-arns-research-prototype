@@ -15,7 +15,6 @@ import { getA4FieldsFromForm, getFirstIncompleteA3Page, getPostA4ContinueHref, i
 import { getTieringAssessmentSession, setTieringAssessmentSession } from './tiering-assessment-session.js'
 
 const SUPERVISED_CONDITIONAL_ID = 'conditional-supervised-in-community-yes'
-const COMMUNITY_DATE_CONDITIONAL_ID = 'conditional-supervised-in-community-no'
 
 const getA4BackHref = (session) => {
   if (session.sexualOffence !== 'yes') return 'a2.html'
@@ -46,24 +45,17 @@ window.GOVUKPrototypeKit.documentReady(() => {
   const supervisedInCommunity = session.supervisedInCommunity
   const showSupervisedDate =
     supervisedInCommunity === 'yes' || hashTarget === TIERING_CHANGE_ANCHORS.supervisedCommunityDate
-  const showCommunityDate =
-    supervisedInCommunity === 'no' || hashTarget === TIERING_CHANGE_ANCHORS.communityDate
 
   if (showSupervisedDate) {
     setConditionalVisible(SUPERVISED_CONDITIONAL_ID, true)
     restoreDateInputs(form, 'supervised-community-date', session.communityDate)
   }
 
-  if (showCommunityDate) {
-    setConditionalVisible(COMMUNITY_DATE_CONDITIONAL_ID, true)
-    restoreDateInputs(form, 'community-date', session.communityDate)
-  }
-
   if (isTieringCheckAnswersEdit()) {
     captureCheckAnswersEditSnapshot(getA4FieldsFromForm(form))
   }
 
-  if (hashTarget === TIERING_CHANGE_ANCHORS.supervisedInCommunity || hashTarget === TIERING_CHANGE_ANCHORS.communityDate || hashTarget === TIERING_CHANGE_ANCHORS.supervisedCommunityDate) {
+  if (hashTarget === TIERING_CHANGE_ANCHORS.supervisedInCommunity || hashTarget === TIERING_CHANGE_ANCHORS.supervisedCommunityDate) {
     scrollToTieringChangeTarget(hashTarget)
   }
 
@@ -77,15 +69,10 @@ window.GOVUKPrototypeKit.documentReady(() => {
       return
     }
 
-    if (!isDateComplete(newFields.communityDate)) {
+    if (newFields.supervisedInCommunity === 'yes' && !isDateComplete(newFields.communityDate)) {
       setTieringAssessmentSession({ ...getTieringAssessmentSession(), ...newFields })
-      if (newFields.supervisedInCommunity === 'yes') {
-        setConditionalVisible(SUPERVISED_CONDITIONAL_ID, true)
-        form.querySelector('#supervised-community-date-day')?.focus()
-      } else {
-        setConditionalVisible(COMMUNITY_DATE_CONDITIONAL_ID, true)
-        form.querySelector('#community-date-day')?.focus()
-      }
+      setConditionalVisible(SUPERVISED_CONDITIONAL_ID, true)
+      form.querySelector('#supervised-community-date-day')?.focus()
       return
     }
 

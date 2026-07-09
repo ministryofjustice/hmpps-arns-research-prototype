@@ -53,44 +53,25 @@
 
   <div data-offence-search-selected hidden>
     <div
-            class="offence-display-toggle"
-            data-offence-display-toggle
-            data-offence-display-mode="list"
-            tabindex="0"
-            role="button"
-            aria-pressed="false"
-            title="Click to toggle offence display layout"
+      data-offence-display-toggle
+      data-offence-display-mode="table"
+      aria-pressed="false"
     >
-      <div data-offence-display-variant="list">
-        <dl class="govuk-summary-list govuk-!-margin-bottom-0" data-offence-summary-list-list></dl>
-        <details class="govuk-details govuk-!-margin-top-4">
+      <div data-offence-display-variant="table">
+        <table class="govuk-table govuk-!-margin-bottom-0">
+          <caption class="govuk-table__caption govuk-visually-hidden">Current offence details</caption>
+          <tbody class="govuk-table__body" data-offence-summary-table-body>
+          </tbody>
+        </table>
+
+        <details class="govuk-details govuk-!-margin-top-4" data-a1-incorrect-info-details hidden>
           <summary class="govuk-details__summary">
             <span class="govuk-details__summary-text">If this information is incorrect</span>
           </summary>
           <div class="govuk-details__text">
-            <p class="govuk-body">If any of the details shown are wrong, update them in NDelius. Once the record has been corrected there, the updated information should appear here automatically.</p>
+            <p class="govuk-body">This information comes from NDelius. If any details are wrong, contact the case administrator at your probation delivery unit (PDU).</p>
           </div>
         </details>
-      </div>
-
-      <div data-offence-display-variant="card" hidden>
-        <div class="govuk-summary-card offence-autocomplete__summary-card">
-          <div class="govuk-summary-card__title-wrapper">
-            <h2 class="govuk-summary-card__title" data-offence-summary-card-title></h2>
-          </div>
-          <div class="govuk-summary-card__content">
-            <dl class="govuk-summary-list govuk-!-margin-bottom-0" data-offence-summary-list-card></dl>
-          </div>
-        </div>
-      </div>
-
-      <div data-offence-display-variant="inline" hidden>
-        <div class="offence-display-toggle__inline-row" aria-hidden="true">
-          <span class="offence-display-toggle__inline-name" data-offence-inline-name></span>
-          <span class="offence-display-toggle__inline-code tiering-offence-code" data-offence-inline-code></span>
-          <span class="offence-display-toggle__inline-type" data-offence-inline-type></span>
-        </div>
-        <p class="govuk-visually-hidden" data-offence-inline-sr-summary></p>
       </div>
     </div>
 

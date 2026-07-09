@@ -55,6 +55,7 @@ import './02/tiering-b10-page.js'
 import './02/tiering-b11-page.js'
 import './02/tiering-a7-page.js'
 import './02/tiering-a8-page.js'
+import './02/assessment-section-complete.js'
 import './dev/tiering-a1-form.js'
 import './dev/tiering-a1o-page.js'
 import './dev/tiering-a1os-page.js'
@@ -68,6 +69,7 @@ import './dev/tiering-a6-page.js'
 import './dev/tiering-b1-page.js'
 import './dev/tiering-a7-page.js'
 import './dev/tiering-a8-page.js'
+import './dev/assessment-section-complete.js'
 import './02/tiering-change-scroll.js'
 import './violent-offence-check.js'
 import './alcohol-units-help.js'
@@ -75,9 +77,13 @@ import './tiering-change-scroll.js'
 import { initPreserveConditionalFieldValues } from './tiering-conditional-fields.js'
 import { initTieringInactiveLinks } from './tiering-inactive-links.js'
 import { initB6LayoutToggleButtons } from './02/tiering-b6-layout-toggle.js'
+import { initA1SourceNoticeToggle } from './tiering-a1-source-notice-toggle.js'
+import { initB1CaptionProgressToggle } from './tiering-b1-caption-progress-toggle.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
   initPreserveConditionalFieldValues()
   initTieringInactiveLinks()
   initB6LayoutToggleButtons()
+  initA1SourceNoticeToggle()
+  initB1CaptionProgressToggle()
 })

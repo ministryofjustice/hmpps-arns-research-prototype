@@ -148,51 +148,42 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex',
       dynamicCheckAnswersFrom
     )
 
-  const a1Rows = []
   const currentOffence = enrichOffenceFromLookup(session.currentOffence)
+  const convictionDateLabel = formatDateFromParts(session.convictionDate || {})
+  const offenceCodeLabel = formatOffenceCodeLabel(currentOffence || {})
 
-  if (currentOffence?.label) {
-    const codeLabel = formatOffenceCodeLabel(currentOffence)
-    const offenceValue = codeLabel
-      ? `${escapeHtml(currentOffence.label)}<br><span class="tiering-offence-code">${escapeHtml(codeLabel)}</span>`
-      : escapeHtml(currentOffence.label)
-    a1Rows.push(
+  sections.push({
+    title: 'Current offence details',
+    rows: [
       createRow(
-        `What is ${name}'s current offence?`,
-        offenceValue,
+        'Offence name',
+        currentOffence?.label || null,
         'a1.html',
-        `What is ${name}'s current offence?`,
-        true,
-        TIERING_CHANGE_ANCHORS.currentOffence,
-        true
-      )
-    )
-  } else {
-    a1Rows.push(
-      createRow(
-        `What is ${name}'s current offence?`,
-        null,
-        'a1.html',
-        `What is ${name}'s current offence?`,
+        'Offence name',
         false,
         TIERING_CHANGE_ANCHORS.currentOffence,
         true
+      ),
+      createRow(
+        'Offence code',
+        offenceCodeLabel || null,
+        'a1.html',
+        'Offence code',
+        false,
+        TIERING_CHANGE_ANCHORS.currentOffence,
+        true
+      ),
+      createRow(
+        'Date of current conviction',
+        convictionDateLabel || null,
+        'a1.html',
+        'Date of current conviction',
+        false,
+        TIERING_CHANGE_ANCHORS.convictionDate,
+        true
       )
-    )
-  }
-
-  a1Rows.push(
-    createRow(
-      `What is the date of ${name}'s current conviction?`,
-      formatDateFromParts(session.convictionDate || {}),
-      'a1.html',
-      `What is the date of ${name}'s current conviction?`,
-      false,
-      TIERING_CHANGE_ANCHORS.convictionDate
-    )
-  )
-
-  sections.push({ title: 'Current offence', rows: a1Rows })
+    ]
+  })
 
   sections.push({
     title: 'Offending history',
@@ -319,21 +310,15 @@ export const buildTieringSummarySections = (session, offenderFirstName = 'Alex',
     )
   ]
 
-  if (session.supervisedInCommunity === 'yes' || session.supervisedInCommunity === 'no') {
+  if (session.supervisedInCommunity === 'yes') {
     communitySupervisionRows.push(
       createRow(
-        session.supervisedInCommunity === 'yes'
-          ? `What date did ${name}'s supervision begin?`
-          : `What is the earliest date ${name} could be in the community once they've received their sentence?`,
+        `What date did ${name}'s supervision begin?`,
         formatDateFromParts(session.communityDate || {}),
         'a4.html',
-        session.supervisedInCommunity === 'yes'
-          ? `What date did ${name}'s supervision begin?`
-          : `What is the earliest date ${name} could be in the community once they've received their sentence?`,
+        `What date did ${name}'s supervision begin?`,
         false,
-        session.supervisedInCommunity === 'yes'
-          ? TIERING_CHANGE_ANCHORS.supervisedCommunityDate
-          : TIERING_CHANGE_ANCHORS.communityDate
+        TIERING_CHANGE_ANCHORS.supervisedCommunityDate
       )
     )
   }
