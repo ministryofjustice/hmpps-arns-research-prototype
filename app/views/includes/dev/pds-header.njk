@@ -1,0 +1,43 @@
+{%- from "moj/components/domain-specific/probation/header/macro.njk" import pdsHeader -%}
+
+{{ pdsHeader({
+  environmentName: 'PRODUCTION',
+  name: 'Amal Jones',
+  manageDetailsLink: '#',
+  servicesLink: '#',
+  services: [
+    {
+      heading: 'Service 1',
+      href: '/dev/a1'
+    },
+    {
+      heading: 'Service 2',
+      href: '#'
+    },
+    {
+      heading: 'Service 3',
+      href: '#'
+    },
+    {
+      heading: 'Service 4',
+      href: '#'
+    },
+    {
+      heading: 'Service 5',
+      href: '#'
+    },
+    {
+      heading: 'Service 6',
+      href: '#'
+    },
+    {
+      heading: 'Service 7',
+      href: '#'
+    },
+    {
+      heading: 'Service 8',
+      href: '#'
+    }
+  ],
+  titleLink: '/'
+}) }}

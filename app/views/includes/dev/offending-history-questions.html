@@ -1,11 +1,11 @@
 {# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
 
-<h2 id="tiering-first-sanction-date" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+<h2 id="predictors-first-sanction-date" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
   What was the date of {{ offenderFirstName }}'s first sanction?
 </h2>
 
-<div class="govuk-form-group" data-first-sanction-date-field>
-  <fieldset class="govuk-fieldset" role="group" aria-describedby="first-sanction-age-result">
+<div class="govuk-form-group govuk-!-margin-bottom-8" data-first-sanction-date-field>
+  <fieldset class="govuk-fieldset" role="group">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
       What was the date of {{ offenderFirstName }}'s first sanction?
     </legend>
@@ -32,11 +32,13 @@
   </fieldset>
 </div>
 
-<p id="first-sanction-age-result" class="govuk-body govuk-!-margin-top-4 govuk-!-margin-bottom-8 first-sanction-age-result first-sanction-age-result--hidden" data-first-sanction-age-result aria-live="polite"></p>
-
-<h2 id="tiering-total-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+<h2 id="predictors-total-sanctions" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
   How many sanctions does {{ offenderFirstName }} have in total for all offences?
 </h2>
+
+<div id="total-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
+  Include their current offence.
+</div>
 
 <div class="govuk-form-group govuk-!-margin-bottom-8">
   <label class="govuk-label govuk-visually-hidden" for="total-sanctions">
@@ -48,13 +50,18 @@
     name="total_sanctions"
     type="text"
     inputmode="numeric"
+    aria-describedby="total-sanctions-hint"
     autocomplete="off"
   >
 </div>
 
-<h2 id="tiering-violent-sanctions" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+<h2 id="predictors-violent-sanctions" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
   How many of {{ offenderFirstName }}'s total sanctions involved violent offences?
 </h2>
+
+<div id="violent-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
+  Include their current offence.
+</div>
 
 <div class="govuk-form-group govuk-!-margin-bottom-0">
   <label class="govuk-label govuk-visually-hidden" for="violent-sanctions-other">
@@ -66,11 +73,12 @@
     name="violent_sanctions_other"
     type="text"
     inputmode="numeric"
+    aria-describedby="violent-sanctions-hint"
     autocomplete="off"
   >
 </div>
 
-<h2 id="tiering-sexual-offence" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-8 govuk-!-margin-bottom-2">
+<h2 id="predictors-sexual-offence" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-8 govuk-!-margin-bottom-2">
   Has {{ offenderFirstName }} ever committed a sexual or sexually motivated offence?
 </h2>
 

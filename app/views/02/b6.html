@@ -2,15 +2,13 @@
 
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Alcohol use" %}
-{% set tieringSectionCaption = "Reoffending predictors" %}
+{% set predictorsSectionCaption = "Reoffending predictors" %}
 {% set pageHeading = "Alcohol" %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
-{% set tieringTelemetryPage = "b6" %}
-{% set tieringTelemetryPageLabel = "Alcohol use (continued)" %}
 {% set returnToOasysButtonInclude = "includes/02/b6-layout-toggle-to-b6b.html" %}
 {% set backLinkHref = "b5.html" %}
-{% set backLinkId = "tiering-b6-back" %}
+{% set backLinkId = "predictors-b6-back" %}
 
 {% block content %}
 
@@ -18,7 +16,7 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-b6-form" novalidate>
+<form id="predictors-b6-form" novalidate>
   {% include "includes/02/alcohol-use-details-questions.html" %}
 
   <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>

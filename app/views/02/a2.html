@@ -5,8 +5,6 @@
 {% set activeSection = "section-1" %}
 {% set pageHeading = "Offending history" %}
 {% set statusTag = "Incomplete" %}
-{% set tieringTelemetryPage = "a2" %}
-{% set tieringTelemetryPageLabel = "Offending history" %}
 {% set backLinkHref = "a1.html" %}
 
 {% block content %}
@@ -19,7 +17,7 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-a2-form" novalidate data-offender-first-name="{{ offenderFirstName }}">
+<form id="predictors-a2-form" novalidate data-offender-first-name="{{ offenderFirstName }}">
 
   {% include "includes/02/offending-history-questions.html" %}
 

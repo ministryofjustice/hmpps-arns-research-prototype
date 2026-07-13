@@ -168,6 +168,39 @@ export const populateOffenceSummaryList = (container, selection, convictionDateL
     .join('')
 }
 
+export const populateOffenceSummaryTable = (container, selection, convictionDateLabel, options = {}) => {
+  if (!container || !selection) return
+
+  const details =
+    lookupOffenceDetails(selection.id) || {
+      label: selection.label || '',
+      code: selection.code || '',
+      subcode: selection.subcode || '',
+      fullCode: selection.fullCode || ''
+    }
+
+  const bodyEl =
+    options.bodyEl || container.querySelector('[data-offence-summary-table-body]')
+  if (!bodyEl) return
+
+  const rows = [
+    ['Offence name', details.label || selection.label || ''],
+    ['Offence code', formatOffenceCodeLabel(selection)],
+    ['Date of current conviction', convictionDateLabel || '']
+  ].filter(([, value]) => Boolean(String(value || '').trim()))
+
+  bodyEl.innerHTML = rows
+    .map(
+      ([key, value]) => `
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">${escapeOffenceHtml(key)}</th>
+          <td class="govuk-table__cell">${escapeOffenceHtml(value)}</td>
+        </tr>
+      `
+    )
+    .join('')
+}
+
 export const populateOffenceInlineRow = (container, selection) => {
   if (!container || !selection) return
 

@@ -3,16 +3,15 @@
 //
 
 import * as session01 from './tiering-assessment-session.js'
-import * as session02 from './02/tiering-assessment-session.js'
-import * as sessionDev from './dev/tiering-assessment-session.js'
+import * as session02 from './02/predictors-assessment-session.js'
+import * as sessionDev from './dev/predictors-assessment-session.js'
 import * as journey01 from './tiering-journey.js'
-import * as journey02 from './02/tiering-journey.js'
-import * as journeyDev from './dev/tiering-journey.js'
+import * as journey02 from './02/predictors-journey.js'
+import * as journeyDev from './dev/predictors-journey.js'
 import * as scroll01 from './tiering-change-scroll.js'
-import * as scroll02 from './02/tiering-change-scroll.js'
-import * as scrollDev from './dev/tiering-change-scroll.js'
+import * as scroll02 from './02/predictors-change-scroll.js'
+import * as scrollDev from './dev/predictors-change-scroll.js'
 import * as telemetry01 from './tiering-session-telemetry.js'
-import * as telemetry02 from './02/tiering-session-telemetry.js'
 
 export const isProto2Page = () => window.location.pathname.includes('/02/')
 export const isProtoDevPage = () => window.location.pathname.includes('/dev/')
@@ -23,6 +22,16 @@ const pick = (proto1, proto2, protoDev) => {
   if (isProto2Page()) return proto2
   return proto1
 }
+
+export const getA1FormElement = () =>
+  document.getElementById(isVersionedTieringPage() ? 'predictors-a1-form' : 'tiering-a1-form')
+
+export const getConvictionDateHeadingElement = () =>
+  document.getElementById(
+    isVersionedTieringPage() ? 'predictors-conviction-date' : 'tiering-conviction-date'
+  )
+
+export const getTieringChangeAnchors = () => pick(scroll01, scroll02, scrollDev).TIERING_CHANGE_ANCHORS
 
 export const getTieringAssessmentSession = () =>
   pick(session01, session02, sessionDev).getTieringAssessmentSession()
@@ -54,6 +63,6 @@ export const isTieringCheckAnswersEdit = () =>
 export const TIERING_CHANGE_ANCHORS = scroll01.TIERING_CHANGE_ANCHORS
 
 export const trackTelemetryOffenceSearch = (data) => {
-  if (isProtoDevPage()) return
-  return (isProto2Page() ? telemetry02 : telemetry01).trackTelemetryOffenceSearch(data)
+  if (isProtoDevPage() || isProto2Page()) return
+  return telemetry01.trackTelemetryOffenceSearch(data)
 }

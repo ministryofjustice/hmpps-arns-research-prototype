@@ -15,12 +15,81 @@ const offenceBrowseCategories = JSON.parse(
   fs.readFileSync(offenceBrowseCategoriesPath, 'utf8')
 )
 
+/** Alex's date of birth – keep in sync with assessment offender header / JS session helpers */
+const OFFENDER_DATE_OF_BIRTH = { day: 2, month: 10, year: 1969 }
+const DEFAULT_FIRST_SANCTION_DATE = { day: '15', month: '5', year: '2012' }
+
+const normaliseDatePart = (value) => String(value == null ? '' : value).trim()
+
+const isValidDateParts = (parts) => {
+  const day = parseInt(parts.day, 10)
+  const month = parseInt(parts.month, 10)
+  const year = parseInt(parts.year, 10)
+
+  if (!Number.isInteger(day) || !Number.isInteger(month) || !Number.isInteger(year)) return false
+  if (month < 1 || month > 12 || day < 1 || year < 1000) return false
+
+  const parsed = new Date(year, month - 1, day)
+  return (
+    parsed.getFullYear() === year &&
+    parsed.getMonth() === month - 1 &&
+    parsed.getDate() === day
+  )
+}
+
+const calculateAgeOnDate = (dateOfBirth, targetDate) => {
+  if (!isValidDateParts(dateOfBirth) || !isValidDateParts(targetDate)) return null
+
+  const dob = new Date(dateOfBirth.year, dateOfBirth.month - 1, dateOfBirth.day)
+  const target = new Date(
+    parseInt(targetDate.year, 10),
+    parseInt(targetDate.month, 10) - 1,
+    parseInt(targetDate.day, 10)
+  )
+
+  let age = target.getFullYear() - dob.getFullYear()
+  const birthdayNotYetThisYear =
+    target.getMonth() < dob.getMonth() ||
+    (target.getMonth() === dob.getMonth() && target.getDate() < dob.getDate())
+
+  if (birthdayNotYetThisYear) age -= 1
+  return age >= 0 ? age : null
+}
+
+const getFirstSanctionAgeLocals = (query = {}) => {
+  const submittedDay = normaliseDatePart(query.first_sanction_date_day)
+  const submittedMonth = normaliseDatePart(query.first_sanction_date_month)
+  const submittedYear = normaliseDatePart(query.first_sanction_date_year)
+  const hasSubmittedDate = Boolean(submittedDay || submittedMonth || submittedYear || query.calculateAge)
+
+  const dateParts = {
+    day: submittedDay || (hasSubmittedDate ? '' : DEFAULT_FIRST_SANCTION_DATE.day),
+    month: submittedMonth || (hasSubmittedDate ? '' : DEFAULT_FIRST_SANCTION_DATE.month),
+    year: submittedYear || (hasSubmittedDate ? '' : DEFAULT_FIRST_SANCTION_DATE.year)
+  }
+
+  let firstSanctionCalculatedAge = null
+  if (query.calculateAge) {
+    firstSanctionCalculatedAge = calculateAgeOnDate(OFFENDER_DATE_OF_BIRTH, dateParts)
+  }
+
+  return {
+    firstSanctionDateDay: dateParts.day,
+    firstSanctionDateMonth: dateParts.month,
+    firstSanctionDateYear: dateParts.year,
+    firstSanctionCalculatedAge
+  }
+}
+
 router.use((req, res, next) => {
   res.locals.offenceBrowseCategories = offenceBrowseCategories
   if (req.path.startsWith('/02') || req.path.startsWith('/dev')) {
-    res.locals.tieringSectionCaption = 'Reoffending predictors'
+    res.locals.predictorsSectionCaption = 'Reoffending predictors'
     res.locals.useReoffendingServiceNavigation = true
     res.locals.hideOffenderViewAnswers = true
+  }
+  if (/^\/(01|02)\/a2(\.html)?$/.test(req.path)) {
+    Object.assign(res.locals, getFirstSanctionAgeLocals(req.query))
   }
   next()
 })

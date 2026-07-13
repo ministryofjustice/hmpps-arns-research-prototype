@@ -1,7 +1,8 @@
 {# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
 {# Nested under the Yes option on a5 #}
+{% set servicePrefix = 'predictors' if useReoffendingServiceNavigation else 'tiering' %}
 
-<h3 id="tiering-recent-offence-date" class="govuk-heading-s tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+<h3 id="{{ servicePrefix }}-recent-offence-date" class="govuk-heading-s {{ servicePrefix }}-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
   What is the date of {{ offenderFirstName }}'s most recent offence?
 </h3>
 

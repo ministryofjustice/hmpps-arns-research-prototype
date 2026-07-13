@@ -91,7 +91,7 @@
       <a
         class="govuk-link"
         href="{{ browseLinkHref or 'a1o.html' }}"
-        {% if violentBrowseLink %}data-violent-offence-browse-link{% else %}data-tiering-offence-browse-link{% endif %}
+        {% if violentBrowseLink %}data-violent-offence-browse-link{% elif useReoffendingServiceNavigation %}data-predictors-offence-browse-link{% else %}data-tiering-offence-browse-link{% endif %}
       >{{ browseLinkText | default('View all offences') }}</a>
     </p>
     {% endif %}

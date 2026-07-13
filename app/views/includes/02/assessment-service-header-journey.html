@@ -1,11 +1,13 @@
-{# Set pageHeading per page; optional tieringSectionCaption (default Tiering) and statusTag #}
-<div class="govuk-grid-row assessment-service-header{% if hidePageHeaderSeparator %} assessment-service-header--no-separator{% endif %}">
+{# Set pageHeading per page; optional predictorsSectionCaption (default Reoffending predictors) and statusTag #}
+<div class="govuk-grid-row assessment-service-header{% if hidePageHeaderSeparator %} assessment-service-header--no-separator{% endif %}{% if pageHeadingHtml and questionLegendAsHeading %} assessment-service-header--legend-heading{% endif %}">
   <div class="govuk-grid-column-full">
-    <p class="govuk-caption-l assessment-service-header__section-caption">{{ tieringSectionCaption | default("Tiering") }}</p>
-    <div class="assessment-layout__row assessment-layout__row--tight assessment-service-header__question-row">
+    <div class="assessment-layout__row assessment-layout__row--tight assessment-service-header__question-row{% if pageHeadingHtml and questionLegendAsHeading %} assessment-service-header__question-row--legend-heading{% endif %}">
+      {% if not (pageHeadingHtml and questionLegendAsHeading) %}
       <h1 class="govuk-heading-l govuk-!-margin-bottom-0{% if pageHeadingClass %} {{ pageHeadingClass }}{% endif %}"{% if pageHeadingId %} id="{{ pageHeadingId }}"{% endif %}>
-        {% if pageHeadingHtml %}{{ pageHeadingHtml | safe }}{% else %}{{ pageHeading | default("Tiering assessment") }}{% endif %}{% if statusTag %}<span class="govuk-visually-hidden">, {{ statusTag }}</span>{% endif %}
+        <span class="govuk-caption-l assessment-service-header__section-caption">{{ predictorsSectionCaption | default("Reoffending predictors") }}</span>
+        {% if pageHeadingHtml %}{{ pageHeadingHtml | safe }}{% else %}{{ pageHeading | default("Reoffending predictors assessment") }}{% endif %}{% if statusTag %}<span class="govuk-visually-hidden">, {{ statusTag }}</span>{% endif %}
       </h1>
+      {% endif %}
       <div class="assessment-service-header__actions">
         {% if statusTag %}
         <strong class="govuk-tag govuk-tag--grey assessment-layout__status-tag" aria-hidden="true">{{ statusTag }}</strong>
@@ -13,7 +15,20 @@
         {% include returnToOasysButtonInclude | default("includes/02/return-to-oasys-button.html") %}
       </div>
     </div>
-    {% if pageHeadingHint %}
+    {% if pageHeadingSourceToggle and pageHeadingInset and pageHeadingHint %}
+    <div class="govuk-grid-row" data-a1-source-notice>
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-inset-text assessment-service-header__heading-inset govuk-!-margin-bottom-0" data-a1-source-notice-variant="inset">{{ pageHeadingInset }}</div>
+        <p{% if pageHeadingHintId %} id="{{ pageHeadingHintId }}"{% endif %} class="govuk-hint assessment-service-header__heading-hint govuk-!-margin-bottom-0" data-a1-source-notice-variant="hint" hidden>{{ pageHeadingHint }}</p>
+      </div>
+    </div>
+    {% elif pageHeadingInset %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-inset-text assessment-service-header__heading-inset govuk-!-margin-bottom-0">{{ pageHeadingInset }}</div>
+      </div>
+    </div>
+    {% elif pageHeadingHint and not (pageHeadingHtml and questionLegendAsHeading) %}
     <p{% if pageHeadingHintId %} id="{{ pageHeadingHintId }}"{% endif %} class="govuk-hint assessment-service-header__heading-hint govuk-!-margin-bottom-0">{{ pageHeadingHint }}</p>
     {% endif %}
     {% if not hidePageHeaderSeparator %}

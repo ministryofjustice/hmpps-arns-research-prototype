@@ -4,7 +4,6 @@
 {% set pageName = "Select specific offence" %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
-{% set hideServiceNavigation = true %}
 {% set hideJourneyServiceHeader = true %}
 {% set hideOffenderViewAnswers = true %}
 {% set compactPageHeader = true %}
@@ -15,8 +14,10 @@
 {% set afterJourneyHeaderHtml %}
 <div class="assessment-layout__row assessment-layout__row--tight govuk-!-margin-bottom-7">
   <div>
-    <span class="govuk-caption-l">Offence category</span>
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-0" data-active-category-heading>Loading category…</h1>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-0">
+      <span class="govuk-caption-l">Offence category</span>
+      <span data-active-category-heading>Loading category…</span>
+    </h1>
   </div>
   {% include "includes/dev/return-to-oasys-button.html" %}
 </div>
@@ -26,7 +27,7 @@
 
 {% include "includes/assessment-journey-page-open.html" %}
 
-    <form id="tiering-a1o3-form" novalidate>
+    <form id="predictors-a1o3-form" novalidate>
 
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">

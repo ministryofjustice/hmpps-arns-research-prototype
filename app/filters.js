@@ -6,5 +6,7 @@
 const govukPrototypeKit = require('govuk-prototype-kit')
 const addFilter = govukPrototypeKit.views.addFilter
 
-// Add your filters here
-
+addFilter('striptags', (value) => {
+  if (!value) return ''
+  return String(value).replace(/<[^>]*>/g, '')
+})

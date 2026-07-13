@@ -5,10 +5,8 @@
 {% set activeSection = "section-1" %}
 {% set pageHeading = "Check your answers" %}
 {% set statusTag = "Incomplete" %}
-{% set tieringTelemetryPage = "b11" %}
-{% set tieringTelemetryPageLabel = "Check your answers" %}
 {% set backLinkHref = "b10?from=b11-back" %}
-{% set backLinkId = "tiering-b11-back" %}
+{% set backLinkId = "predictors-b11-back" %}
 
 {% block content %}
 
@@ -16,8 +14,8 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-b11-form" novalidate>
-  <div id="tiering-summary-list" class="tiering-summary-list govuk-!-margin-top-6" data-offender-first-name="{{ offenderFirstName }}"></div>
+<form id="predictors-b11-form" novalidate>
+  <div id="predictors-summary-list" class="predictors-summary-list govuk-!-margin-top-6" data-offender-first-name="{{ offenderFirstName }}"></div>
 
   <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">View reoffending predictors scores</button>
 </form>

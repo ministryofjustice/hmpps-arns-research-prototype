@@ -2,19 +2,16 @@
 
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Employment and education" %}
-{% set tieringSectionCaption = "Employment and education" %}
 {% set pageHeadingHtml = "What is " ~ offenderFirstName ~ "'s employment history?" %}
-{% set pageHeadingId = "tiering-employment-history" %}
-{% set pageHeadingClass = "tiering-question-anchor" %}
+{% set pageHeadingId = "predictors-employment-history" %}
+{% set pageHeadingClass = "predictors-question-anchor" %}
 {% set compactPageHeader = true %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
-{% set tieringTelemetryPage = "b2" %}
-{% set tieringTelemetryPageLabel = "Employment and education" %}
 {% set pageHeadingHint = "Include their current employment." %}
 {% set pageHeadingHintId = "employment-history-hint" %}
 {% set backLinkHref = "b1.html" %}
-{% set backLinkId = "tiering-b2-back" %}
+{% set backLinkId = "predictors-b2-back" %}
 
 {% block content %}
 
@@ -22,12 +19,16 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-b2-form" novalidate>
+<form id="predictors-b2-form" novalidate>
   <div class="govuk-form-group govuk-!-margin-top-0">
     <fieldset class="govuk-fieldset" aria-describedby="employment-history-hint">
+      {% if questionLegendAsHeading and pageHeadingHtml %}
+        {% include "includes/assessment-question-legend-heading.html" %}
+      {% else %}
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
         What is {{ offenderFirstName }}'s employment history?
       </legend>
+      {% endif %}
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="employment-history-continuous" name="employment_history" type="radio" value="continuous" aria-describedby="employment-history-continuous-hint">

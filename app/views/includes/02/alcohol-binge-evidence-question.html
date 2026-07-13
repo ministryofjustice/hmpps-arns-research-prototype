@@ -1,16 +1,20 @@
 {# Requires offenderFirstName. Optional: alcoholBingeShowHeading (boolean) #}
 
-{% if alcoholBingeShowHeading %}
-<h2 id="tiering-alcohol-binge-evidence" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2" data-b6-question-heading>
+{% if alcoholBingeShowHeading and not (questionLegendAsHeading and pageHeadingHtml) %}
+<h2 id="predictors-alcohol-binge-evidence" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2" data-b6-question-heading>
   Has {{ offenderFirstName }} shown evidence of binge drinking or excessive alcohol use in the last 6 months?
 </h2>
 {% endif %}
 
 <div class="govuk-form-group govuk-!-margin-top-0 govuk-!-margin-bottom-8">
   <fieldset class="govuk-fieldset">
+    {% if questionLegendAsHeading and pageHeadingHtml %}
+      {% include "includes/assessment-question-legend-heading.html" %}
+    {% else %}
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
       Has {{ offenderFirstName }} shown evidence of binge drinking or excessive alcohol use in the last 6 months?
     </legend>
+    {% endif %}
     <div class="govuk-radios" data-module="govuk-radios">
       <div class="govuk-radios__item">
         <input class="govuk-radios__input" id="alcohol-binge-evidence-none" name="alcohol_binge_evidence" type="radio" value="none">

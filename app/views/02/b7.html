@@ -2,17 +2,14 @@
 
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Personal relationships and community" %}
-{% set tieringSectionCaption = "Personal relationships and community" %}
 {% set pageHeadingHtml = "Is " ~ offenderFirstName ~ " happy with their current relationship status?" %}
-{% set pageHeadingId = "tiering-relationship-status" %}
-{% set pageHeadingClass = "tiering-question-anchor" %}
+{% set pageHeadingId = "predictors-relationship-status" %}
+{% set pageHeadingClass = "predictors-question-anchor" %}
 {% set compactPageHeader = true %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
-{% set tieringTelemetryPage = "b7" %}
-{% set tieringTelemetryPageLabel = "Personal relationships and community" %}
 {% set backLinkHref = "b6b.html" %}
-{% set backLinkId = "tiering-b7-back" %}
+{% set backLinkId = "predictors-b7-back" %}
 
 {% block content %}
 
@@ -20,12 +17,16 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-b7-form" novalidate>
+<form id="predictors-b7-form" novalidate>
   <div class="govuk-form-group govuk-!-margin-top-0">
     <fieldset class="govuk-fieldset">
+      {% if questionLegendAsHeading and pageHeadingHtml %}
+        {% include "includes/assessment-question-legend-heading.html" %}
+      {% else %}
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
         Is {{ offenderFirstName }} happy with their current relationship status?
       </legend>
+      {% endif %}
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="relationship-status-happy-protective" name="relationship_status" type="radio" value="happy-protective">

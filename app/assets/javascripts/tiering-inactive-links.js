@@ -14,15 +14,38 @@ export const markPrototypeOnlyLink = (link) => {
   }
 }
 
+const isDevProtoPage = () => window.location.pathname.includes('/dev/')
+
 export const initTieringInactiveLinks = (root = document) => {
-  root.querySelectorAll('[data-tiering-inactive-link]').forEach((link) => {
+  root.querySelectorAll('[data-tiering-inactive-link], [data-predictors-inactive-link]').forEach((link) => {
     markPrototypeOnlyLink(link)
     link.addEventListener('click', (event) => {
       event.preventDefault()
     })
   })
 
-  root.querySelectorAll('.assessment-section-navigation a[href="#"]').forEach((link) => {
+  root.querySelectorAll('.assessment-section-navigation a[href="#"]:not([data-primary-navigation-service-name])').forEach((link) => {
     markPrototypeOnlyLink(link)
   })
+
+  root.querySelectorAll('[data-primary-navigation-service-name]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault()
+    })
+  })
+
+  if (isDevProtoPage()) {
+    const disablePrototypeHeaderLink = (link) => {
+      markPrototypeOnlyLink(link)
+      link.addEventListener('click', (event) => {
+        event.preventDefault()
+      })
+    }
+
+    root.querySelectorAll('a.probation-common-header__submenu-link[href="/sign-out"]').forEach(disablePrototypeHeaderLink)
+
+    root
+      .querySelectorAll('.probation-common-header__services-menu a.probation-common-header__submenu-link[href="/dev/a1"]')
+      .forEach(disablePrototypeHeaderLink)
+  }
 }

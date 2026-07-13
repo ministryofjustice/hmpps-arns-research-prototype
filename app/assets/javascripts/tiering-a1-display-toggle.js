@@ -5,6 +5,8 @@
 import { applyConvictionDateUi } from './conviction-date.js'
 import {
   formatDateFromParts,
+  getA1FormElement,
+  getConvictionDateHeadingElement,
   getDefaultConvictionDateParts,
   getTieringAssessmentSession,
   isDateComplete,
@@ -13,7 +15,8 @@ import {
 import {
   populateOffenceInlineRow,
   populateOffenceNamedSummaryCard,
-  populateOffenceSummaryList
+  populateOffenceSummaryList,
+  populateOffenceSummaryTable
 } from './tiering-offence-browse.js'
 
 const CONVICTION_DATE_INPUT_IDS = [
@@ -22,7 +25,7 @@ const CONVICTION_DATE_INPUT_IDS = [
   'current-conviction-date-year'
 ]
 
-const OFFENCE_DISPLAY_MODES = ['list', 'card', 'inline']
+const OFFENCE_DISPLAY_MODES = ['table']
 
 let lastA1OffenceSelection = null
 let a1OffenceDisplayToggleReady = false
@@ -40,24 +43,30 @@ export const refreshA1OffenceDisplay = (container, selection) => {
   if (!container || !currentSelection) return
 
   const toggle = document.querySelector('[data-offence-display-toggle]')
-  const mode = toggle?.dataset.offenceDisplayMode || 'list'
+  const mode = toggle?.dataset.offenceDisplayMode || 'table'
 
-  if (mode === 'list') {
+  if (mode === 'table') {
     const session = getTieringAssessmentSession()
     const stored = normaliseDateParts(session.convictionDate || {})
     const parts = isDateComplete(stored) ? stored : getDefaultConvictionDateParts()
 
-    populateOffenceSummaryList(container, currentSelection, formatDateFromParts(parts), {
-      listEl: container.querySelector('[data-offence-summary-list-list]')
+    populateOffenceSummaryTable(container, currentSelection, formatDateFromParts(parts), {
+      bodyEl: container.querySelector('[data-offence-summary-table-body]')
     })
     return
   }
 
+  // Backwards compatibility: if older markup sets list/card/inline, still render something.
+  if (mode === 'list') {
+    const session = getTieringAssessmentSession()
+    const stored = normaliseDateParts(session.convictionDate || {})
+    const parts = isDateComplete(stored) ? stored : getDefaultConvictionDateParts()
+    populateOffenceSummaryList(container, currentSelection, formatDateFromParts(parts))
+    return
+  }
+
   if (mode === 'card') {
-    populateOffenceNamedSummaryCard(container, currentSelection, {
-      titleEl: container.querySelector('[data-offence-summary-card-title]'),
-      listEl: container.querySelector('[data-offence-summary-list-card]')
-    })
+    populateOffenceNamedSummaryCard(container, currentSelection)
     return
   }
 
@@ -65,7 +74,7 @@ export const refreshA1OffenceDisplay = (container, selection) => {
 }
 
 const setConvictionDateFieldMode = (mode) => {
-  const isList = mode === 'list'
+  const isList = mode === 'table' || mode === 'list'
   const convictionFields = document.querySelector('[data-a1-conviction-fields]')
   const dateParts = document.querySelectorAll('[data-a1-conviction-date-part]')
 
@@ -100,18 +109,21 @@ export const applyA1OffenceDisplayMode = (mode) => {
   const toggle = document.querySelector('[data-offence-display-toggle]')
   if (!toggle) return
 
-  const form = document.getElementById('tiering-a1-form')
-  const defaultMode = form?.dataset.a1OffenceDisplayDefault || 'list'
-  const isList = mode === 'list'
+  const form = getA1FormElement()
+  const defaultMode = form?.dataset.a1OffenceDisplayDefault || 'table'
+  const isList = mode === 'table' || mode === 'list'
 
   toggle.dataset.offenceDisplayMode = mode
   toggle.setAttribute('aria-pressed', String(mode !== defaultMode))
 
+  toggle
+    .querySelector('[data-offence-display-variant="table"]')
+    ?.toggleAttribute('hidden', mode !== 'table' && mode !== 'list')
   toggle.querySelector('[data-offence-display-variant="list"]')?.toggleAttribute('hidden', mode !== 'list')
   toggle.querySelector('[data-offence-display-variant="card"]')?.toggleAttribute('hidden', mode !== 'card')
   toggle.querySelector('[data-offence-display-variant="inline"]')?.toggleAttribute('hidden', mode !== 'inline')
 
-  document.getElementById('tiering-conviction-date')?.classList.toggle('govuk-visually-hidden', isList)
+  getConvictionDateHeadingElement()?.classList.toggle('govuk-visually-hidden', isList)
 
   setConvictionDateFieldMode(mode)
 
@@ -123,27 +135,13 @@ export const applyA1OffenceDisplayMode = (mode) => {
 
 export const initA1OffenceDisplayToggle = () => {
   const toggle = document.querySelector('[data-offence-display-toggle]')
-  const form = document.getElementById('tiering-a1-form')
+  const form = getA1FormElement()
   if (!toggle || !form || a1OffenceDisplayToggleReady) return
 
   a1OffenceDisplayToggleReady = true
 
-  const defaultMode = form.dataset.a1OffenceDisplayDefault || 'list'
+  const defaultMode = form.dataset.a1OffenceDisplayDefault || 'table'
   applyA1OffenceDisplayMode(defaultMode)
 
-  const switchMode = () => {
-    const nextMode = getNextOffenceDisplayMode(toggle.dataset.offenceDisplayMode || defaultMode)
-    applyA1OffenceDisplayMode(nextMode)
-  }
-
-  toggle.addEventListener('click', switchMode)
-  toggle.addEventListener('keydown', (event) => {
-    if (event.key !== 'Enter' && event.key !== ' ') return
-    event.preventDefault()
-    switchMode()
-  })
-
-  toggle.querySelector('.govuk-details__summary')?.addEventListener('click', (event) => {
-    event.stopPropagation()
-  })
+  // Mode is fixed to table for this prototype; no interactive toggle.
 }

@@ -1,0 +1,17 @@
+{%- set journeyPageTitleCaption = predictorsSectionCaption | default(tieringSectionCaption) | default("Reoffending predictors") -%}
+{%- if pageHeadingHtml -%}
+  {%- set journeyPageTitleHeading = pageHeadingHtml | striptags -%}
+{%- elif pageHeading -%}
+  {%- set journeyPageTitleHeading = pageHeading -%}
+{%- elif pageName -%}
+  {%- set journeyPageTitleHeading = pageName -%}
+{%- elif offenceBrowseTitle -%}
+  {%- set journeyPageTitleHeading = offenceBrowseTitle -%}
+{%- else -%}
+  {%- if useReoffendingServiceNavigation -%}
+  {%- set journeyPageTitleHeading = "Reoffending predictors assessment" -%}
+  {%- else -%}
+  {%- set journeyPageTitleHeading = "Tiering assessment" -%}
+  {%- endif -%}
+{%- endif -%}
+{{- journeyPageTitleCaption }} - {{ journeyPageTitleHeading -}}

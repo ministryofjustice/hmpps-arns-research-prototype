@@ -2,14 +2,12 @@
 
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Thinking, attitudes and behaviours" %}
-{% set tieringSectionCaption = "Reoffending predictors" %}
+{% set predictorsSectionCaption = "Reoffending predictors" %}
 {% set pageHeading = "Thinking, attitudes and behaviours" %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
-{% set tieringTelemetryPage = "b8" %}
-{% set tieringTelemetryPageLabel = "Thinking, attitudes and behaviours" %}
 {% set backLinkHref = "b7.html" %}
-{% set backLinkId = "tiering-b8-back" %}
+{% set backLinkId = "predictors-b8-back" %}
 
 {% block content %}
 
@@ -17,7 +15,7 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-b8-form" novalidate>
+<form id="predictors-b8-form" novalidate>
   {% include "includes/02/thinking-attitudes-behaviours-questions.html" %}
 
   <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>

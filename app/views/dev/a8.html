@@ -7,7 +7,7 @@
 {% set pageHeading = "Reoffending predictor scores" %}
 {% set statusTag = "Complete" %}
 {% set backLinkHref = "a7.html" %}
-{% set backLinkId = "tiering-a8-back" %}
+{% set backLinkId = "predictors-a8-back" %}
 {% set sectionCompleteSuccessBannerInclude = "includes/dev/section-complete-success-banner.html" %}
 
 {% block content %}
@@ -18,10 +18,6 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<div class="govuk-inset-text govuk-!-margin-bottom-6" data-tiering-completion-inset hidden>
-  Tiering assessment, completed <span data-tiering-completion-date></span>
-</div>
-
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible govuk-!-margin-bottom-6">
 
 {% include "includes/dev/risk-predictor-scores.html" %}
@@ -31,7 +27,7 @@
 </p>
 
 <div class="risk-predictor-scores__actions govuk-!-margin-top-9">
-  <button type="button" class="govuk-button" id="tiering-mark-section-complete" data-module="govuk-button">Mark this section complete</button>
+  <button type="button" class="govuk-button" id="predictors-mark-section-complete" data-module="govuk-button">Mark this section complete</button>
 </div>
 
 {% include "includes/assessment-page-close.html" %}
