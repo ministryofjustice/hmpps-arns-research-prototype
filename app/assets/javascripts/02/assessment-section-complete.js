@@ -1,16 +1,14 @@
 //
-// Tiering section 1 complete state (hide mark-complete button + success banner)
+// Predictors section 1 complete state (hide mark-complete button + success banner)
 //
 
-import { getTieringAssessmentSession, setTieringAssessmentSession } from './tiering-assessment-session.js'
-import { trackTelemetryMilestone } from './tiering-session-telemetry.js'
+import { getPredictorsAssessmentSession, setPredictorsAssessmentSession } from './predictors-assessment-session.js'
 
-export const isSection1Complete = () => getTieringAssessmentSession().section1Complete === true
+export const isSection1Complete = () => getPredictorsAssessmentSession().section1Complete === true
 
 export const markSection1Complete = () => {
   hideMarkSectionCompleteButton()
-  setTieringAssessmentSession({ section1Complete: true })
-  trackTelemetryMilestone('markSectionComplete')
+  setPredictorsAssessmentSession({ section1Complete: true })
   applySection1CompleteUi()
   setSectionCompleteSuccessBannerVisible(true)
 
@@ -18,15 +16,15 @@ export const markSection1Complete = () => {
 }
 
 const setA8BackLinkVisible = (visible) => {
-  const backLink = document.getElementById('tiering-a8-back')
+  const backLink = document.getElementById('predictors-a8-back')
   if (!backLink) return
 
   backLink.classList.toggle('assessment-layout__back-link--hidden', !visible)
   backLink.hidden = !visible
 }
 
-const setTieringCompletionInsetVisible = (visible) => {
-  const inset = document.querySelector('[data-tiering-completion-inset]')
+const setPredictorsCompletionInsetVisible = (visible) => {
+  const inset = document.querySelector('[data-predictors-completion-inset]')
   if (!inset) return
 
   if (visible) {
@@ -37,7 +35,7 @@ const setTieringCompletionInsetVisible = (visible) => {
 }
 
 const setSectionCompleteSuccessBannerVisible = (visible) => {
-  const banner = document.getElementById('tiering-section-complete-success-banner')
+  const banner = document.getElementById('predictors-section-complete-success-banner')
   if (!banner) return
 
   if (visible) {
@@ -52,23 +50,23 @@ const setSectionCompleteSuccessBannerVisible = (visible) => {
 }
 
 const hideMarkSectionCompleteButton = () => {
-  const markBtn = document.getElementById('tiering-mark-section-complete')
+  const markBtn = document.getElementById('predictors-mark-section-complete')
   if (!markBtn) return
 
   markBtn.hidden = true
   markBtn.disabled = true
-  markBtn.classList.add('tiering-mark-section-complete--hidden')
+  markBtn.classList.add('predictors-mark-section-complete--hidden')
 
   const actions = markBtn.closest('.risk-predictor-scores__actions')
   if (actions) actions.classList.add('risk-predictor-scores__actions--section-complete')
 }
 
 export const resetSection1CompleteUi = () => {
-  const markBtn = document.getElementById('tiering-mark-section-complete')
+  const markBtn = document.getElementById('predictors-mark-section-complete')
   if (markBtn) {
     markBtn.hidden = false
     markBtn.disabled = false
-    markBtn.classList.remove('tiering-mark-section-complete--hidden')
+    markBtn.classList.remove('predictors-mark-section-complete--hidden')
   }
 
   document.querySelectorAll('.risk-predictor-scores__actions').forEach((actions) => {
@@ -76,7 +74,7 @@ export const resetSection1CompleteUi = () => {
   })
 
   setA8BackLinkVisible(true)
-  setTieringCompletionInsetVisible(false)
+  setPredictorsCompletionInsetVisible(false)
   setSectionCompleteSuccessBannerVisible(false)
 }
 
@@ -88,11 +86,11 @@ export const applySection1CompleteUi = () => {
 
   hideMarkSectionCompleteButton()
   setA8BackLinkVisible(false)
-  setTieringCompletionInsetVisible(true)
+  setPredictorsCompletionInsetVisible(true)
 }
 
 export const clearSection1CompleteSession = () => {
-  setTieringAssessmentSession({ section1Complete: false })
+  setPredictorsAssessmentSession({ section1Complete: false })
 }
 
 export const clearSection1Complete = () => {

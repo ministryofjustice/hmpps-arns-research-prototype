@@ -20,7 +20,13 @@
 {% endblock %}
 
 {% block footer %}
-  {% if pluginVersionSatisfies("govuk-frontend", ">=6.0.0") %}
+  {% if usePdsHeader %}
+    {% set phaseBannerAboveFooter = true %}
+    {% include "includes/assessment-phase-banner.html" %}
+    {% include pdsFooterInclude | default("includes/02/pds-footer.njk") %}
+  {% elif usePdsFooter %}
+    {% include pdsFooterInclude | default("includes/02/pds-footer.njk") %}
+  {% elif pluginVersionSatisfies("govuk-frontend", ">=6.0.0") %}
     {{ super() }}
   {% else %}
     {{ govukFooter({

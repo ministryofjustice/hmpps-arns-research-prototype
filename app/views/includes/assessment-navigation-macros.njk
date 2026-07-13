@@ -15,7 +15,7 @@
 
 {% macro renderServiceNavigation(activeSection, useReoffendingNav) %}
   {# Single-line markup – line breaks in the HTML force the tick onto a new row #}
-  {% set sectionNavLabel = "Predictors" if useReoffendingNav else "Tiering" %}
+  {% set sectionNavLabel = "Reoffending predictors" if useReoffendingNav else "Tiering" %}
   {% set sectionNavHtml %}<span class="assessment-section-navigation__label">{{ sectionNavLabel }}</span><span class="assessment-section-navigation__complete-icon" data-section-complete="section-1" aria-hidden="true"><svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="12" fill="#1d70b8"/><path fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M7 12.5 10 15.5 17 8.5"/></svg></span>{% endset %}
 
   {% if useReoffendingNav %}
@@ -32,7 +32,7 @@
         html: sectionNavHtml | trim,
         href: "#",
         current: activeSection == "section-1",
-        attributes: { "data-section": "section-1" }
+        attributes: { "data-section": "section-1", "data-predictors-inactive-link": true }
       },
       {
         text: "Strengths and needs",
@@ -70,7 +70,7 @@
         html: sectionNavHtml | trim,
         href: "#",
         current: activeSection == "section-1",
-        attributes: { "data-section": "section-1" }
+        attributes: { "data-section": "section-1", "data-tiering-inactive-link": true }
       },
       {
         text: "Strengths and needs",
@@ -95,6 +95,62 @@
     ]
   }) }}
   {% endif %}
+{% endmacro %}
+
+{% macro renderPrimaryNavigation(activeSection, useReoffendingNav) %}
+  {# Single-line markup – line breaks in the HTML force the tick onto a new row #}
+  {% set sectionNavLabel = "Reoffending predictors" if useReoffendingNav else "Tiering" %}
+  {% set sectionNavHtml %}<span class="assessment-section-navigation__label">{{ sectionNavLabel }}</span><span class="assessment-section-navigation__complete-icon" data-section-complete="section-1" aria-hidden="true"><svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="12" fill="#1d70b8"/><path fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M7 12.5 10 15.5 17 8.5"/></svg></span>{% endset %}
+
+  <div class="moj-primary-navigation assessment-primary-navigation">
+    <div class="moj-primary-navigation__container assessment-primary-navigation__container">
+      <div class="moj-primary-navigation__nav govuk-service-navigation__wrapper">
+        <nav class="moj-primary-navigation assessment-section-navigation" aria-label="Primary navigation">
+          <ul class="moj-primary-navigation__list">
+            {% if useReoffendingNav %}
+            <li class="moj-primary-navigation__item">
+              <a class="moj-primary-navigation__link" href="#"{% if activeSection == "home" %} aria-current="page"{% endif %} data-section="home" data-predictors-inactive-link>Home</a>
+            </li>
+            <li class="moj-primary-navigation__item">
+              <a class="moj-primary-navigation__link" href="#"{% if activeSection == "section-1" %} aria-current="page"{% endif %} data-section="section-1" data-predictors-inactive-link>{{ sectionNavHtml | trim | safe }}</a>
+            </li>
+            <li class="moj-primary-navigation__item">
+              <a class="moj-primary-navigation__link" href="#" data-section="strengths-and-needs" data-predictors-inactive-link>Strengths and needs</a>
+            </li>
+            <li class="moj-primary-navigation__item">
+              <a class="moj-primary-navigation__link" href="#" data-section="rosh" data-predictors-inactive-link>Risk</a>
+            </li>
+            <li class="moj-primary-navigation__item">
+              <a class="moj-primary-navigation__link" href="#" data-section="risk-management-plan" data-predictors-inactive-link>Summary sheet</a>
+            </li>
+            <li class="moj-primary-navigation__item">
+              <a class="moj-primary-navigation__link" href="#" data-section="sentence-plan" data-predictors-inactive-link>Sentence plan</a>
+            </li>
+            {% else %}
+            <li class="moj-primary-navigation__item">
+              <a class="moj-primary-navigation__link" href="#"{% if activeSection == "home" %} aria-current="page"{% endif %} data-section="home">Home</a>
+            </li>
+            <li class="moj-primary-navigation__item">
+              <a class="moj-primary-navigation__link" href="#"{% if activeSection == "section-1" %} aria-current="page"{% endif %} data-section="section-1">{{ sectionNavHtml | trim | safe }}</a>
+            </li>
+            <li class="moj-primary-navigation__item">
+              <a class="moj-primary-navigation__link" href="#" data-section="strengths-and-needs">Strengths and needs</a>
+            </li>
+            <li class="moj-primary-navigation__item">
+              <a class="moj-primary-navigation__link" href="#" data-section="rosh">Risk of serious harm</a>
+            </li>
+            <li class="moj-primary-navigation__item">
+              <a class="moj-primary-navigation__link" href="#" data-section="risk-management-plan">Risk management plan</a>
+            </li>
+            <li class="moj-primary-navigation__item">
+              <a class="moj-primary-navigation__link" href="#" data-section="sentence-plan">Sentence plan</a>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
 {% endmacro %}
 
 {% macro renderSideNavigation(activeSection) %}

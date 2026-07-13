@@ -11,6 +11,7 @@ import {
   captureCheckAnswersEditSnapshot,
   formatDateFromParts,
   getA1FieldsFromForm,
+  getA1FormElement,
   getDefaultConvictionDateParts,
   getPrototypeDefaultCurrentOffence,
   getTieringAssessmentSession,
@@ -174,7 +175,7 @@ const offenceSearchMapSubOptions = (parent, subOffences) =>
 window.initOffenceSearchV2 = async (container) => {
   if (
     container.id === 'current-offence-search' &&
-    document.getElementById('tiering-a1-form') &&
+    getA1FormElement() &&
     document.querySelector('[data-offence-display-toggle]')
   ) {
     initA1OffenceDisplayToggle()
@@ -354,7 +355,7 @@ window.initOffenceSearchV2 = async (container) => {
   }
 
   const persistA1ConvictionDateState = () => {
-    if (!document.getElementById('tiering-a1-form')) return
+    if (!getA1FormElement()) return
     persistConvictionDateState({ editing: isConvictionDateEditPanelOpen() })
   }
 
@@ -371,7 +372,7 @@ window.initOffenceSearchV2 = async (container) => {
     if (hiddenCodeInput) hiddenCodeInput.value = ''
     if (hiddenSubcodeInput) hiddenSubcodeInput.value = ''
     setInputDescribedBy()
-    if (!isCheckMode && document.getElementById('tiering-a1-form')) {
+    if (!isCheckMode && getA1FormElement()) {
       setTieringAssessmentSession({ currentOffence: null })
     }
     input.focus()
@@ -428,7 +429,7 @@ window.initOffenceSearchV2 = async (container) => {
     setExpanded(false)
     setInputDescribedBy()
 
-    if (document.getElementById('tiering-a1-form')) {
+    if (getA1FormElement()) {
       const details = lookupOffenceDetails(selection.id)
       setTieringAssessmentSession({
         currentOffence: {
@@ -742,7 +743,7 @@ window.initOffenceSearchV2 = async (container) => {
     // 1. Intercept returned URL variables from the advanced list first
     const returnedParams = new URLSearchParams(window.location.search)
 
-    if (returnedParams.get('restart_search') && document.getElementById('tiering-a1-form')) {
+    if (returnedParams.get('restart_search') && getA1FormElement()) {
       // Arriving from "Start a new search": clear any selection and focus an
       // empty search box.
       showSearch()
@@ -767,7 +768,7 @@ window.initOffenceSearchV2 = async (container) => {
       const session = getTieringAssessmentSession()
       if (session.currentOffence) {
         showSelected(session.currentOffence)
-      } else if (document.getElementById('tiering-a1-form')) {
+      } else if (getA1FormElement()) {
         const defaultOffence = { ...getPrototypeDefaultCurrentOffence() }
         setTieringAssessmentSession({ currentOffence: defaultOffence })
         showSelected(defaultOffence)
@@ -775,7 +776,7 @@ window.initOffenceSearchV2 = async (container) => {
     }
 
     if (isTieringCheckAnswersEdit()) {
-      const a1Form = document.getElementById('tiering-a1-form')
+      const a1Form = getA1FormElement()
       if (a1Form) captureCheckAnswersEditSnapshot(getA1FieldsFromForm(a1Form))
     }
   }

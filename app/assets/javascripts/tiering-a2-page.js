@@ -52,6 +52,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
   const session = getTieringAssessmentSession()
   const offenderFirstName = form.dataset.offenderFirstName || 'Alex'
   const ageResult = document.getElementById('first-sanction-age-result')
+  let ageResultAnnounceTimeoutId = null
 
   if (session.firstSanctionDate) {
     setFirstSanctionDateValues(session.firstSanctionDate)
@@ -61,35 +62,68 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   const hideAgeResult = () => {
     if (!ageResult) return
+    if (ageResultAnnounceTimeoutId) {
+      window.clearTimeout(ageResultAnnounceTimeoutId)
+      ageResultAnnounceTimeoutId = null
+    }
     ageResult.textContent = ''
+    ageResult.removeAttribute('data-age-message')
     ageResult.classList.add('first-sanction-age-result--hidden')
   }
 
   const showAgeResult = (age) => {
     if (!ageResult) return
-    ageResult.innerHTML = `<strong>Age:</strong> ${offenderFirstName} was ${age} on this date`
+    const message = `Age: ${offenderFirstName} was ${age} on this date`
+    if (ageResult.getAttribute('data-age-message') === message) return
+
+    const previousMessage = ageResult.getAttribute('data-age-message')
+    ageResult.setAttribute('data-age-message', message)
     ageResult.classList.remove('first-sanction-age-result--hidden')
+
+    const render = () => {
+      ageResult.innerHTML = `<strong>Age:</strong> ${offenderFirstName} was ${age} on this date`
+    }
+
+    // First paint can update immediately; later changes clear first so aria-live
+    // re-announces while focus remains in the date fields.
+    if (!previousMessage) {
+      render()
+      return
+    }
+
+    if (ageResultAnnounceTimeoutId) window.clearTimeout(ageResultAnnounceTimeoutId)
+    ageResult.textContent = ''
+    ageResultAnnounceTimeoutId = window.setTimeout(() => {
+      ageResultAnnounceTimeoutId = null
+      if (ageResult.getAttribute('data-age-message') !== message) return
+      render()
+    }, 0)
   }
 
-  const updateFirstSanctionAgeResult = () => {
+  const updateFirstSanctionAgeResult = ({ hideWhenInvalid = true } = {}) => {
     const dateParts = getFirstSanctionDatePartsFromDom()
 
     if (!isValidDateParts(dateParts)) {
-      hideAgeResult()
+      if (hideWhenInvalid) hideAgeResult()
       return
     }
 
     const age = calculateAgeOnDate(getOffenderDateOfBirthParts(), dateParts)
     if (age == null) {
-      hideAgeResult()
+      if (hideWhenInvalid) hideAgeResult()
       return
     }
 
     showAgeResult(age)
   }
 
+  // Update as soon as a complete valid date is typed so aria-live announces
+  // without waiting for blur / focus leaving the year field.
   FIRST_SANCTION_DATE_INPUT_IDS.forEach((id) => {
-    document.getElementById(id)?.addEventListener('blur', updateFirstSanctionAgeResult)
+    const input = document.getElementById(id)
+    if (!input) return
+    input.addEventListener('input', () => updateFirstSanctionAgeResult({ hideWhenInvalid: false }))
+    input.addEventListener('blur', () => updateFirstSanctionAgeResult())
   })
 
   form.querySelector('[data-first-sanction-date-field]')?.addEventListener('focusout', (event) => {

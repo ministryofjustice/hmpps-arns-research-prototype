@@ -6,8 +6,8 @@ import {
   formatDateFromParts,
   getDefaultConvictionDateParts,
   getTieringAssessmentSession,
+  getTieringChangeAnchors,
   setTieringAssessmentSession,
-  TIERING_CHANGE_ANCHORS,
   isDateComplete,
   normaliseDateParts
 } from './tiering-page-apis.js'
@@ -77,7 +77,7 @@ export const persistConvictionDateState = ({ editing } = {}) => {
 
 const isConvictionDateEditMode = (session = getTieringAssessmentSession()) =>
   session.convictionDateEditMode === true ||
-  window.location.hash.slice(1) === TIERING_CHANGE_ANCHORS.convictionDate
+  window.location.hash.slice(1) === getTieringChangeAnchors().convictionDate
 
 const getConvictionDatePartsForDisplay = (
   session = getTieringAssessmentSession(),

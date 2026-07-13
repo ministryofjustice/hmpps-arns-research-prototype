@@ -1,7 +1,9 @@
-<div class="assessment-layout"{% if tieringTelemetryPage %} data-tiering-telemetry-page="{{ tieringTelemetryPage }}" data-tiering-telemetry-page-label="{{ tieringTelemetryPageLabel | default(tieringTelemetryPage) }}"{% endif %}>
+<div class="assessment-layout{% if usePdsHeader %} assessment-layout--phase-banner-above-footer{% endif %}"{% if tieringTelemetryPage %} data-tiering-telemetry-page="{{ tieringTelemetryPage }}" data-tiering-telemetry-page-label="{{ tieringTelemetryPageLabel | default(tieringTelemetryPage) }}"{% endif %}>
+  {% if not usePdsHeader %}
   {% include "includes/assessment-phase-banner.html" %}
+  {% endif %}
   {% if backLinkHref %}
-  <a href="{{ backLinkHref }}" class="govuk-back-link assessment-layout__back-link"{% if backLinkId %} id="{{ backLinkId }}"{% endif %}>{{ backLinkText | default('Back') }}</a>
+  <a href="{{ backLinkHref }}" class="govuk-back-link assessment-layout__back-link"{% if backLinkId %} id="{{ backLinkId }}"{% endif %}{% if backLinkHref == "#" %}{% if useReoffendingServiceNavigation %} data-predictors-inactive-link{% else %} data-tiering-inactive-link{% endif %}{% endif %}>{{ backLinkText | default('Back') }}</a>
   {% endif %}
   {% if sectionCompleteSuccessBannerInclude %}
   {% include sectionCompleteSuccessBannerInclude %}

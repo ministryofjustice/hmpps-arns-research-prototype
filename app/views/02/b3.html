@@ -2,19 +2,16 @@
 
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Drug use" %}
-{% set tieringSectionCaption = "Drug use" %}
 {% set pageHeadingHtml = "Has " ~ offenderFirstName ~ " ever misused drugs?" %}
-{% set pageHeadingId = "tiering-drugs-misused" %}
-{% set pageHeadingClass = "tiering-question-anchor" %}
+{% set pageHeadingId = "predictors-drugs-misused" %}
+{% set pageHeadingClass = "predictors-question-anchor" %}
 {% set compactPageHeader = true %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
-{% set tieringTelemetryPage = "b3" %}
-{% set tieringTelemetryPageLabel = "Drug use" %}
 {% set pageHeadingHint = "This includes illegal and prescription drugs." %}
 {% set pageHeadingHintId = "drugs-misused-hint" %}
 {% set backLinkHref = "b2.html" %}
-{% set backLinkId = "tiering-b3-back" %}
+{% set backLinkId = "predictors-b3-back" %}
 
 {% block content %}
 
@@ -22,12 +19,16 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-b3-form" novalidate>
+<form id="predictors-b3-form" novalidate>
   <div class="govuk-form-group govuk-!-margin-top-0">
     <fieldset class="govuk-fieldset" aria-describedby="drugs-misused-hint">
+      {% if questionLegendAsHeading and pageHeadingHtml %}
+        {% include "includes/assessment-question-legend-heading.html" %}
+      {% else %}
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
         Has {{ offenderFirstName }} ever misused drugs?
       </legend>
+      {% endif %}
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="drugs-misused-yes" name="drugs_misused" type="radio" value="yes">

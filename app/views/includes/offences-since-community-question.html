@@ -2,9 +2,13 @@
 
 <div class="govuk-form-group govuk-!-margin-top-0">
   <fieldset class="govuk-fieldset">
+    {% if questionLegendAsHeading and pageHeadingHtml %}
+      {% include "includes/assessment-question-legend-heading.html" %}
+    {% else %}
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
       Has {{ offenderFirstName }} committed any offences since <span data-community-date-display>that date</span>?
     </legend>
+    {% endif %}
     <div class="govuk-radios" data-module="govuk-radios">
       <div class="govuk-radios__item">
         <input

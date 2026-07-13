@@ -39,7 +39,8 @@ const activateToggleButton = (button) => {
   button.removeAttribute('aria-disabled')
   button.removeAttribute('tabindex')
   button.removeAttribute('data-tiering-inactive-link')
-  button.querySelector('[data-tiering-prototype-only-hint]')?.remove()
+  button.removeAttribute('data-predictors-inactive-link')
+  button.querySelector('[data-tiering-prototype-only-hint], [data-predictors-prototype-only-hint]')?.remove()
   button.setAttribute('href', '#')
   button.dataset.a1SourceNoticeToggle = 'true'
 }

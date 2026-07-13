@@ -44,7 +44,9 @@ export const resetSection1CompleteUi = () => {
 
   document.querySelectorAll('[data-section="section-1"]').forEach((link) => {
     const item =
-      link.closest('.moj-side-navigation__item') || link.closest('.govuk-service-navigation__item')
+      link.closest('.moj-side-navigation__item') ||
+      link.closest('.govuk-service-navigation__item') ||
+      link.closest('.moj-primary-navigation__item')
     if (item) item.classList.remove('assessment-section-navigation__item--complete')
     link.querySelector('[data-section-complete-hint]')?.remove()
   })
@@ -76,7 +78,9 @@ export const applySection1CompleteUi = () => {
 
   document.querySelectorAll('[data-section="section-1"]').forEach((link) => {
     const item =
-      link.closest('.moj-side-navigation__item') || link.closest('.govuk-service-navigation__item')
+      link.closest('.moj-side-navigation__item') ||
+      link.closest('.govuk-service-navigation__item') ||
+      link.closest('.moj-primary-navigation__item')
     if (item) item.classList.add('assessment-section-navigation__item--complete')
 
     let completeHint = link.querySelector('[data-section-complete-hint]')
