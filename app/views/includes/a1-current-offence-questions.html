@@ -1,7 +1,8 @@
 {# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
 {# Shared a1 questions – click selected offence to toggle list / card / inline layouts #}
+{% set servicePrefix = 'predictors' if useReoffendingServiceNavigation else 'tiering' %}
 
-<h2 id="tiering-current-offence" class="govuk-heading-m tiering-question-anchor govuk-visually-hidden" hidden>
+<h2 id="{{ servicePrefix }}-current-offence" class="govuk-heading-m {{ servicePrefix }}-question-anchor govuk-visually-hidden" hidden>
   What is {{ offenderFirstName }}'s current offence?
 </h2>
 
@@ -47,7 +48,7 @@
       >Search</button>
     </div>
     <p class="govuk-body govuk-!-margin-top-3 govuk-!-margin-bottom-0">
-      <a class="govuk-link" href="a1o.html" data-tiering-offence-browse-link>Find an offence</a>
+      <a class="govuk-link" href="a1o.html" data-{{ servicePrefix }}-offence-browse-link>Find an offence</a>
     </p>
   </div>
 
@@ -81,7 +82,7 @@
   </div>
 </div>
 
-<h2 id="tiering-conviction-date" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-8 govuk-!-margin-bottom-2 govuk-visually-hidden">
+<h2 id="{{ servicePrefix }}-conviction-date" class="govuk-heading-m {{ servicePrefix }}-question-anchor govuk-!-margin-top-8 govuk-!-margin-bottom-2 govuk-visually-hidden">
   What is the date of {{ offenderFirstName }}'s current conviction?
 </h2>
 

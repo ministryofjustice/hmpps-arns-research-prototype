@@ -3,15 +3,13 @@
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Interview" %}
 {% set pageHeadingHtml = 'Have you done an interview with ' ~ offenderFirstName ~ '?' %}
-{% set pageHeadingId = "tiering-interview-done" %}
-{% set pageHeadingClass = "tiering-question-anchor" %}
+{% set pageHeadingId = "predictors-interview-done" %}
+{% set pageHeadingClass = "predictors-question-anchor" %}
 {% set compactPageHeader = true %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
-{% set tieringTelemetryPage = "a6" %}
-{% set tieringTelemetryPageLabel = "Interview" %}
 {% set backLinkHref = "a5.html" %}
-{% set backLinkId = "tiering-a6-back" %}
+{% set backLinkId = "predictors-a6-back" %}
 
 {% block content %}
 
@@ -19,12 +17,16 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-a6-form" novalidate>
+<form id="predictors-a6-form" novalidate>
   <div class="govuk-form-group govuk-!-margin-top-0">
     <fieldset class="govuk-fieldset">
+      {% if questionLegendAsHeading and pageHeadingHtml %}
+        {% include "includes/assessment-question-legend-heading.html" %}
+      {% else %}
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
         Have you done an interview with {{ offenderFirstName }}?
       </legend>
+      {% endif %}
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="interview-done-yes" name="interview_done" type="radio" value="yes">

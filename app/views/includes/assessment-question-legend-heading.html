@@ -1,0 +1,8 @@
+{# Visible page heading as fieldset legend – set pageHeadingHtml on the page, or questionLegendText in the include #}
+<legend class="govuk-fieldset__legend govuk-fieldset__legend--l{% if pageHeadingHint %} govuk-!-margin-bottom-2{% else %} govuk-!-margin-bottom-4{% endif %}{% if pageHeadingClass %} {{ pageHeadingClass }}{% endif %}"{% if pageHeadingId %} id="{{ pageHeadingId }}"{% endif %}{% if questionLegendAttributes %} {{ questionLegendAttributes | safe }}{% endif %}>
+  <span class="govuk-caption-l assessment-service-header__section-caption">{{ predictorsSectionCaption | default(tieringSectionCaption) | default("Reoffending predictors") }}</span>
+  {% if pageHeadingHtml %}{{ pageHeadingHtml | safe }}{% else %}{{ questionLegendText }}{% endif %}{% if statusTag %}<span class="govuk-visually-hidden">, {{ statusTag }}</span>{% endif %}
+</legend>
+{% if pageHeadingHint %}
+<p{% if pageHeadingHintId %} id="{{ pageHeadingHintId }}"{% endif %} class="govuk-hint assessment-question-legend-hint govuk-!-margin-bottom-4{% if questionLegendHintClass %} {{ questionLegendHintClass }}{% endif %}"{% if questionLegendHintAttributes %} {{ questionLegendHintAttributes | safe }}{% endif %}>{{ pageHeadingHint }}</p>
+{% endif %}

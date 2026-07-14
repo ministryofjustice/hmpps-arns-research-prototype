@@ -5,10 +5,8 @@
 {% set activeSection = "section-1" %}
 {% set pageHeading = "Check your answers" %}
 {% set statusTag = "Incomplete" %}
-{% set tieringTelemetryPage = "a7" %}
-{% set tieringTelemetryPageLabel = "Check your answers" %}
 {% set backLinkHref = "a6?from=a7-back" %}
-{% set backLinkId = "tiering-a7-back" %}
+{% set backLinkId = "predictors-a7-back" %}
 
 {% block content %}
 
@@ -16,12 +14,12 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-a7-form" novalidate>
+<form id="predictors-a7-form" novalidate>
 
-  <div id="tiering-summary-list" class="tiering-summary-list govuk-!-margin-top-6" data-offender-first-name="{{ offenderFirstName }}"></div>
+  <div id="predictors-summary-list" class="predictors-summary-list govuk-!-margin-top-6" data-offender-first-name="{{ offenderFirstName }}"></div>
 
-  <div class="tiering-check-answers-actions govuk-!-margin-top-6">
-    <button type="button" class="govuk-button govuk-button--secondary" id="tiering-a7-continue-assessment" data-module="govuk-button">Continue assessment</button>
+  <div class="predictors-check-answers-actions govuk-!-margin-top-6">
+    <button type="button" class="govuk-button govuk-button--secondary" id="predictors-a7-continue-assessment" data-module="govuk-button">Continue assessment</button>
     <button type="submit" class="govuk-button" data-module="govuk-button">View reoffending predictors scores</button>
   </div>
 

@@ -38,14 +38,6 @@
   {% set secondaryTitleTagText = "To be tested in R3" %}
   {% set secondaryTitleTagColour = "yellow" %}
   {% set hint = "Submitting reoffending assessments (static & dynamic)" %}
-  {% set hintDetailsHtml = "
-    <h3 class='govuk-heading-s govuk-!-margin-bottom-1'>Key changes</h3>
-    <ul class='govuk-list govuk-list--bullet govuk-!-margin-top-2 govuk-!-margin-bottom-0'>
-      <li>Reworked the offence checker to verify if an offence is classed as violent.</li>
-      <li>Moved all sexual offences questions on the same page.</li>
-      <li>Added info about the source of information (eg. NDelius).</li>
-    </ul>
-  " %}
   {% set clearSessionOnStart = true %}
   {% include "includes/research-prototype-entry.html" %}
 
@@ -63,22 +55,6 @@
   {% set secondaryTitleTagText = "Tested in R2" %}
   {% set secondaryTitleTagColour = "green" %}
   {% set hint = "Submitting a Tiering assessment (static)" %}
-  {% set hintDetailsHtml = "
-    <h3 class='govuk-heading-s govuk-!-margin-bottom-1'>Key changes</h3>
-    <ul class='govuk-list govuk-list--bullet govuk-!-margin-top-2 govuk-!-margin-bottom-0'>
-      <li>Renamed the service from CSRP assessment to Tiering assessment.</li>
-      <li>Updated content and hints across questions to improve clarity and reduce noise.</li>
-      <li>Reworked the scores screen to show all predictor scores with expandable details.</li>
-      <li>Rebuilt offence search and browse using MOJ offence codes and subcodes (e.g. 001 00).</li>
-      <li>Paginated browse-all offences (20 groups per page) using GOV.UK pagination.</li>
-      <li>Added browse-by-category variant (a1o3) to search offences within an OASys category.</li>
-      <li>Introduced an offence checker to verify if an offence is classed as violent.</li>
-      <li>Added an example PNC doc to simulate practitioner data handling during testing.</li>
-      <li>Introduced localised guidance on sexual offending pages for counting sanctions.</li>
-      <li>Introduced a branching screen to guide users to view scores or continue with dynamic assessment.</li>
-      <li>Added a new Q about supervision in the community to help users with context.</li>
-    </ul>
-  " %}
   {% set skipToEndHref = "/01/skip-to-end.html" %}
   {% set clearSessionOnStart = true %}
   {% set prototypeVersion = "01" %}
@@ -100,7 +76,6 @@
   {% set secondaryTitleTagText = null %}
   {% set secondaryTitleTagColour = null %}
   {% set hint = "This is a reference prototype for development" %}
-  {% set hintDetailsHtml = null %}
   {% set skipToEndHref = null %}
   {% set clearSessionOnStart = true %}
   {% include "includes/research-prototype-entry.html" %}

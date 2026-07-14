@@ -5,6 +5,8 @@
 import { applyConvictionDateUi } from './conviction-date.js'
 import {
   formatDateFromParts,
+  getA1FormElement,
+  getConvictionDateHeadingElement,
   getDefaultConvictionDateParts,
   getTieringAssessmentSession,
   isDateComplete,
@@ -107,7 +109,7 @@ export const applyA1OffenceDisplayMode = (mode) => {
   const toggle = document.querySelector('[data-offence-display-toggle]')
   if (!toggle) return
 
-  const form = document.getElementById('tiering-a1-form')
+  const form = getA1FormElement()
   const defaultMode = form?.dataset.a1OffenceDisplayDefault || 'table'
   const isList = mode === 'table' || mode === 'list'
 
@@ -121,7 +123,7 @@ export const applyA1OffenceDisplayMode = (mode) => {
   toggle.querySelector('[data-offence-display-variant="card"]')?.toggleAttribute('hidden', mode !== 'card')
   toggle.querySelector('[data-offence-display-variant="inline"]')?.toggleAttribute('hidden', mode !== 'inline')
 
-  document.getElementById('tiering-conviction-date')?.classList.toggle('govuk-visually-hidden', isList)
+  getConvictionDateHeadingElement()?.classList.toggle('govuk-visually-hidden', isList)
 
   setConvictionDateFieldMode(mode)
 
@@ -133,7 +135,7 @@ export const applyA1OffenceDisplayMode = (mode) => {
 
 export const initA1OffenceDisplayToggle = () => {
   const toggle = document.querySelector('[data-offence-display-toggle]')
-  const form = document.getElementById('tiering-a1-form')
+  const form = getA1FormElement()
   if (!toggle || !form || a1OffenceDisplayToggleReady) return
 
   a1OffenceDisplayToggleReady = true

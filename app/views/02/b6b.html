@@ -2,18 +2,15 @@
 
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Alcohol use" %}
-{% set tieringSectionCaption = "Alcohol" %}
 {% set pageHeadingHtml = "How often has " ~ offenderFirstName ~ " drunk alcohol in the last 3 months?" %}
-{% set pageHeadingId = "tiering-alcohol-frequency" %}
-{% set pageHeadingClass = "tiering-question-anchor" %}
+{% set pageHeadingId = "predictors-alcohol-frequency" %}
+{% set pageHeadingClass = "predictors-question-anchor" %}
 {% set compactPageHeader = true %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
-{% set tieringTelemetryPage = "b6b" %}
-{% set tieringTelemetryPageLabel = "Alcohol use (continued)" %}
 {% set returnToOasysButtonInclude = "includes/02/b6-layout-toggle-to-b6.html" %}
 {% set backLinkHref = "b5.html" %}
-{% set backLinkId = "tiering-b6b-back" %}
+{% set backLinkId = "predictors-b6b-back" %}
 
 {% block content %}
 
@@ -21,8 +18,7 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-b6b-form" novalidate>
-  {% set alcoholHideFirstQuestionHeading = true %}
+<form id="predictors-b6b-form" novalidate>
   {% include "includes/02/alcohol-use-details-questions.html" %}
 
   <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>

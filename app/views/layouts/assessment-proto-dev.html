@@ -7,5 +7,14 @@
 {% set showReturnToOasysButton = true %}
 {% set returnToOasysButtonInclude = "includes/dev/return-to-oasys-button.html" %}
 {% set journeyServiceHeaderInclude = "includes/dev/assessment-service-header-journey.html" %}
+{% set pdsHeaderInclude = "includes/dev/pds-header.njk" %}
+{% set pdsFooterInclude = "includes/dev/pds-footer.njk" %}
+{% set primaryNavigationInclude = "includes/dev/primary-navigation.njk" %}
+{% set usePdsHeader = true %}
+{% set usePrimaryNavigation = true %}
+{% set useDevBetaPhaseBanner = true %}
 {% set hidePageHeaderSeparator = true %}
+{% set questionLegendAsHeading = true %}
 {% set contentColumnClass = contentColumnClass if contentColumnClass is defined else "govuk-grid-column-two-thirds-from-desktop" %}
+
+{% block pageTitle %}{% include "includes/assessment-journey-page-title.html" %}{% endblock %}

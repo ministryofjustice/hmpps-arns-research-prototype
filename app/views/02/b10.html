@@ -2,19 +2,16 @@
 
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Risk of serious harm" %}
-{% set tieringSectionCaption = "Risk of serious harm" %}
 {% set pageHeadingHtml = "Has " ~ offenderFirstName ~ " previously been convicted of any of these offences?" %}
-{% set pageHeadingId = "tiering-serious-harm-convictions" %}
-{% set pageHeadingClass = "tiering-question-anchor" %}
+{% set pageHeadingId = "predictors-serious-harm-convictions" %}
+{% set pageHeadingClass = "predictors-question-anchor" %}
 {% set compactPageHeader = true %}
 {% set pageHeadingHint = "Select all that apply, or select ‘None of these offences’." %}
 {% set pageHeadingHintId = "serious-harm-convictions-hint" %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
-{% set tieringTelemetryPage = "b10" %}
-{% set tieringTelemetryPageLabel = "Risk of serious harm" %}
 {% set backLinkHref = "b9.html" %}
-{% set backLinkId = "tiering-b10-back" %}
+{% set backLinkId = "predictors-b10-back" %}
 
 {% block content %}
 
@@ -22,12 +19,16 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-b10-form" novalidate>
+<form id="predictors-b10-form" novalidate>
   <div class="govuk-form-group govuk-!-margin-top-0">
     <fieldset class="govuk-fieldset" aria-describedby="serious-harm-convictions-hint">
+      {% if questionLegendAsHeading and pageHeadingHtml %}
+        {% include "includes/assessment-question-legend-heading.html" %}
+      {% else %}
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
         Has {{ offenderFirstName }} previously been convicted of any of these offences?
       </legend>
+      {% endif %}
       {% include "includes/02/serious-harm-convictions-question.html" %}
     </fieldset>
   </div>

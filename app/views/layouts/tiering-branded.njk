@@ -9,13 +9,21 @@
 {% block pageTitle %}Tiering assessment{% endblock %}
 
 {% block govukHeader %}
-  {{ govukHeader({
-    homepageUrl: "/"
-  }) }}
+  {% if usePdsHeader %}
+    {% include pdsHeaderInclude | default("includes/02/pds-header.njk") %}
+  {% else %}
+    {{ govukHeader({
+      homepageUrl: "/"
+    }) }}
+  {% endif %}
 {% endblock %}
 
 {% block govukServiceNavigation %}
   {% if serviceName and not hideServiceNavigation %}
-    {% include "includes/assessment-service-navigation.html" %}
+    {% if usePrimaryNavigation %}
+      {% include primaryNavigationInclude | default("includes/02/primary-navigation.njk") %}
+    {% else %}
+      {% include "includes/assessment-service-navigation.html" %}
+    {% endif %}
   {% endif %}
 {% endblock %}

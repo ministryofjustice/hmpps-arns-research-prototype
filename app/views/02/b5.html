@@ -2,17 +2,14 @@
 
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Alcohol use" %}
-{% set tieringSectionCaption = "Alcohol use" %}
 {% set pageHeadingHtml = "Has " ~ offenderFirstName ~ " ever drunk alcohol?" %}
-{% set pageHeadingId = "tiering-alcohol-use" %}
-{% set pageHeadingClass = "tiering-question-anchor" %}
+{% set pageHeadingId = "predictors-alcohol-use" %}
+{% set pageHeadingClass = "predictors-question-anchor" %}
 {% set compactPageHeader = true %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
-{% set tieringTelemetryPage = "b5" %}
-{% set tieringTelemetryPageLabel = "Alcohol use" %}
 {% set backLinkHref = "b3.html" %}
-{% set backLinkId = "tiering-b5-back" %}
+{% set backLinkId = "predictors-b5-back" %}
 
 {% block content %}
 
@@ -20,12 +17,16 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-b5-form" novalidate>
+<form id="predictors-b5-form" novalidate>
   <div class="govuk-form-group govuk-!-margin-top-0">
     <fieldset class="govuk-fieldset">
+      {% if questionLegendAsHeading and pageHeadingHtml %}
+        {% include "includes/assessment-question-legend-heading.html" %}
+      {% else %}
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
         Has {{ offenderFirstName }} ever drunk alcohol?
       </legend>
+      {% endif %}
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="alcohol-use-yes-in-last-3-months" name="alcohol_use" type="radio" value="yes-in-last-3-months">

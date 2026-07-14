@@ -1,17 +1,22 @@
 {# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
 
 <div data-b6-question-block="1">
-  {% if not alcoholHideFirstQuestionHeading %}
-  <h2 id="tiering-alcohol-frequency" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2" data-b6-question-heading>
+  {% if not pageHeadingHtml and not alcoholHideFirstQuestionHeading %}
+  <h2 id="predictors-alcohol-frequency" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2" data-b6-question-heading>
     How often has {{ offenderFirstName }} drunk alcohol in the last 3 months?
   </h2>
   {% endif %}
 
-  <div class="govuk-form-group{% if alcoholHideFirstQuestionHeading %} govuk-!-margin-top-0{% endif %} govuk-!-margin-bottom-8">
+  <div class="govuk-form-group{% if pageHeadingHtml or alcoholHideFirstQuestionHeading %} govuk-!-margin-top-0{% endif %} govuk-!-margin-bottom-8">
     <fieldset class="govuk-fieldset">
+      {% if questionLegendAsHeading and pageHeadingHtml %}
+        {% set questionLegendAttributes = 'data-b6-question-heading' %}
+        {% include "includes/assessment-question-legend-heading.html" %}
+      {% else %}
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
         How often has {{ offenderFirstName }} drunk alcohol in the last 3 months?
       </legend>
+      {% endif %}
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="alcohol-frequency-once-month-or-less" name="alcohol_frequency_last_3_months" type="radio" value="once-month-or-less">
@@ -35,7 +40,7 @@
 </div>
 
 <div data-b6-question-block="2">
-  <h2 id="tiering-alcohol-units" class="govuk-heading-m tiering-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2" data-b6-question-heading>
+  <h2 id="predictors-alcohol-units" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2" data-b6-question-heading>
     How many units of alcohol does {{ offenderFirstName }} have on a typical day of drinking?
   </h2>
 

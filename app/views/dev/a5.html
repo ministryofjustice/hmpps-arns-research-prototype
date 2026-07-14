@@ -3,8 +3,8 @@
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Offences since community date" %}
 {% set pageHeadingHtml = 'Has ' ~ offenderFirstName ~ ' committed any offences since <span data-community-date-display>that date</span>?' %}
-{% set pageHeadingId = "tiering-offences-since-community" %}
-{% set pageHeadingClass = "tiering-question-anchor" %}
+{% set pageHeadingId = "predictors-offences-since-community" %}
+{% set pageHeadingClass = "predictors-question-anchor" %}
 {% set compactPageHeader = true %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
@@ -16,7 +16,7 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-a5-form" novalidate>
+<form id="predictors-a5-form" novalidate>
 
   {% include "includes/offences-since-community-question.html" %}
 

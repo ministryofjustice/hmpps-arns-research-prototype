@@ -2,14 +2,12 @@
 
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Offence analysis" %}
-{% set tieringSectionCaption = "Predictors" %}
+{% set predictorsSectionCaption = "Reoffending predictors" %}
 {% set pageHeading = "Offence analysis" %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
-{% set tieringTelemetryPage = "b9" %}
-{% set tieringTelemetryPageLabel = "Offence analysis" %}
 {% set backLinkHref = "b8.html" %}
-{% set backLinkId = "tiering-b9-back" %}
+{% set backLinkId = "predictors-b9-back" %}
 
 {% block content %}
 
@@ -17,7 +15,7 @@
 
 {% include "includes/assessment-question-header.html" %}
 
-<form id="tiering-b9-form" novalidate>
+<form id="predictors-b9-form" novalidate>
   {% include "includes/02/offence-analysis-questions.html" %}
 
   <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
