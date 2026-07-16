@@ -9,6 +9,7 @@ const formatYesNo = (value) => {
   if (!value) return null
   if (value === 'yes') return 'Yes'
   if (value === 'no') return 'No'
+  if (value === 'unknown') return 'Unknown'
   return value
 }
 
@@ -30,7 +31,8 @@ const formatCheckboxLabels = (values, labelMap) => {
 const ACCOMMODATION_LABELS = {
   yes: 'Yes',
   'yes-with-concerns': 'Yes, with concerns',
-  no: 'No'
+  no: 'No',
+  unknown: 'Unknown'
 }
 
 const EMPLOYMENT_LABELS = {
@@ -43,7 +45,8 @@ const EMPLOYMENT_LABELS = {
 const ALCOHOL_USE_LABELS = {
   'yes-in-last-3-months': 'Yes, including in the last 3 months',
   'yes-not-in-last-3-months': 'Yes, but not in the last 3 months',
-  no: 'No'
+  no: 'No',
+  unknown: 'Unknown'
 }
 
 const ALCOHOL_FREQUENCY_LABELS = {
@@ -72,7 +75,8 @@ const RELATIONSHIP_STATUS_LABELS = {
     'Happy and positive about their relationship status, or their relationship is likely to act as a protective factor',
   'some-concerns': 'Has some concerns about their relationship status but is overall happy',
   'unhappy-unhealthy':
-    'Unhappy about their relationship status, or their relationship is unhealthy and directly linked to offending'
+    'Unhappy about their relationship status, or their relationship is unhealthy and directly linked to offending',
+  unknown: 'Unknown'
 }
 
 const ACTIVITIES_LINKED_LABELS = {
@@ -81,27 +85,31 @@ const ACTIVITIES_LINKED_LABELS = {
   'sometimes-linked-recognises':
     'Sometimes engages in activities linked to offending but recognises the link',
   'regularly-encourages-unaware':
-    'Regularly engages in activities which encourage offending and is not aware or does not care about the link to offending'
+    'Regularly engages in activities which encourage offending and is not aware or does not care about the link to offending',
+  unknown: 'Unknown'
 }
 
 const MANAGE_TEMPER_LABELS = {
   'manages-well': 'Yes, is able to manage their temper well',
   'sometimes-uncontrolled-anger': 'Sometimes has outbreaks of uncontrolled anger',
-  'easily-loses-temper': 'No, easily loses their temper'
+  'easily-loses-temper': 'No, easily loses their temper',
+  unknown: 'Unknown'
 }
 
 const ACT_ON_IMPULSE_LABELS = {
   'considers-before-acting':
     'Considers all aspects of a situation before acting on or making a decision',
   'sometimes-causes-problems': 'Sometimes acts on impulse which causes problems',
-  'significant-problems': 'Acts on impulse which causes significant problems'
+  'significant-problems': 'Acts on impulse which causes significant problems',
+  unknown: 'Unknown'
 }
 
 const SUPPORT_CRIMINAL_BEHAVIOUR_LABELS = {
   'does-not-support': 'Does not support or excuse criminal behaviour',
   'sometimes-supports': 'Sometimes supports or excuses criminal behaviour',
   'supports-or-excuses-issue':
-    'Supports or excuses criminal behaviour or their pattern of behaviour and other evidence indicates this is an issue'
+    'Supports or excuses criminal behaviour or their pattern of behaviour and other evidence indicates this is an issue',
+  unknown: 'Unknown'
 }
 
 const DOMESTIC_ABUSE_RELATION_LABELS = {

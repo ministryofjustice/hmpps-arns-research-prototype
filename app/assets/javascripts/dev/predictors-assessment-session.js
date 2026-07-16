@@ -161,7 +161,3 @@ export const getOffenderDateOfBirthParts = () => {
 
   return { ...OFFENDER_DATE_OF_BIRTH_PARTS }
 }
-
-// Shared script compatibility (offence-search, conviction-date, etc.)
-export const getTieringAssessmentSession = getPredictorsAssessmentSession
-export const setTieringAssessmentSession = setPredictorsAssessmentSession

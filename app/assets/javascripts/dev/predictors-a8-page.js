@@ -5,7 +5,7 @@
 import { markSection1Complete } from './assessment-section-complete.js'
 import { getPredictorsBackLinkHref } from './predictors-change-scroll.js'
 import { syncPredictorsSessionBeforeCheckAnswers, predictorsJourneyHref } from './predictors-journey.js'
-import { initTieringInactiveLinks } from '../tiering-inactive-links.js'
+import { initPredictorsInactiveLinks } from './predictors-inactive-links.js'
 
 const scrollA8ToTop = () => {
   window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
@@ -77,7 +77,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
   }
 
   applySexualPredictorEmptyStates(session)
-  initTieringInactiveLinks()
+  initPredictorsInactiveLinks()
   initRiskPredictorBackToTop()
 
   const markCompleteButton = document.getElementById('predictors-mark-section-complete')

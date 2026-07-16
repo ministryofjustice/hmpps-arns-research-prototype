@@ -1,5 +1,5 @@
 //
-// Path-aware Tiering APIs for shared scripts used by /01/, /02/, and /dev/
+// Path-aware APIs for shared scripts used by /01/, /02/, and /dev/
 //
 
 import * as session01 from './tiering-assessment-session.js'
@@ -23,21 +23,35 @@ const pick = (proto1, proto2, protoDev) => {
   return proto1
 }
 
-export const getA1FormElement = () =>
-  document.getElementById(isVersionedTieringPage() ? 'predictors-a1-form' : 'tiering-a1-form')
+export const getA1FormElement = () => {
+  if (!isVersionedTieringPage()) {
+    return document.getElementById('tiering-a1-form')
+  }
+
+  return (
+    document.getElementById('predictors-a1-form') ||
+    document.getElementById('predictors-a2b-form')
+  )
+}
 
 export const getConvictionDateHeadingElement = () =>
   document.getElementById(
     isVersionedTieringPage() ? 'predictors-conviction-date' : 'tiering-conviction-date'
   )
 
-export const getTieringChangeAnchors = () => pick(scroll01, scroll02, scrollDev).TIERING_CHANGE_ANCHORS
+export const getTieringChangeAnchors = () => {
+  const api = pick(scroll01, scroll02, scrollDev)
+  return api.PREDICTORS_CHANGE_ANCHORS || api.TIERING_CHANGE_ANCHORS
+}
+export const getTieringAssessmentSession = () => {
+  const api = pick(session01, session02, sessionDev)
+  return (api.getPredictorsAssessmentSession || api.getTieringAssessmentSession)()
+}
 
-export const getTieringAssessmentSession = () =>
-  pick(session01, session02, sessionDev).getTieringAssessmentSession()
-
-export const setTieringAssessmentSession = (updates) =>
-  pick(session01, session02, sessionDev).setTieringAssessmentSession(updates)
+export const setTieringAssessmentSession = (updates) => {
+  const api = pick(session01, session02, sessionDev)
+  return (api.setPredictorsAssessmentSession || api.setTieringAssessmentSession)(updates)
+}
 
 export const getDefaultConvictionDateParts = () =>
   pick(session01, session02, sessionDev).getDefaultConvictionDateParts()
@@ -57,8 +71,10 @@ export const getPrototypeDefaultCurrentOffence = () =>
 export const captureCheckAnswersEditSnapshot = (fields) =>
   pick(scroll01, scroll02, scrollDev).captureCheckAnswersEditSnapshot(fields)
 
-export const isTieringCheckAnswersEdit = () =>
-  pick(scroll01, scroll02, scrollDev).isTieringCheckAnswersEdit()
+export const isTieringCheckAnswersEdit = () => {
+  const api = pick(scroll01, scroll02, scrollDev)
+  return (api.isPredictorsCheckAnswersEdit || api.isTieringCheckAnswersEdit)()
+}
 
 export const TIERING_CHANGE_ANCHORS = scroll01.TIERING_CHANGE_ANCHORS
 

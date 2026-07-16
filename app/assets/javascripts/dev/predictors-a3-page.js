@@ -11,7 +11,7 @@ import {
 } from './predictors-change-scroll.js'
 import { getA3FieldsFromForm, isA3Complete } from './predictors-journey.js'
 import { getPredictorsAssessmentSession } from './predictors-assessment-session.js'
-import { initTieringInactiveLinks } from '../tiering-inactive-links.js'
+import { initPredictorsInactiveLinks } from './predictors-inactive-links.js'
 
 const restoreRadio = (form, name, value) => {
   if (!value) return
@@ -88,7 +88,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
     return
   }
 
-  initTieringInactiveLinks(form)
+  initPredictorsInactiveLinks(form)
 
   const shouldRestoreSavedAnswers =
     isPredictorsCheckAnswersEdit() || isPredictorsBackNavigation() || isA3Complete(session)

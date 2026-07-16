@@ -1,5 +1,5 @@
 //
-// a4 – community supervision and date
+// a4 – community supervision start date
 //
 
 import {
@@ -10,11 +10,15 @@ import {
   scrollToPredictorsChangeTarget,
   PREDICTORS_CHANGE_ANCHORS
 } from './predictors-change-scroll.js'
-import { restoreDateInputs, setConditionalVisible } from '../tiering-conditional-fields.js'
-import { getA4FieldsFromForm, getFirstIncompleteA3Page, getPostA4ContinueHref, isDateComplete } from './predictors-journey.js'
-import { getPredictorsAssessmentSession, setPredictorsAssessmentSession } from './predictors-assessment-session.js'
-
-const SUPERVISED_CONDITIONAL_ID = 'conditional-supervised-in-community-yes'
+import { restoreDateInputs } from './predictors-conditional-fields.js'
+import {
+  getA4FieldsFromForm,
+  getDefaultCommunityDateParts,
+  getFirstIncompleteA3Page,
+  getPostA4ContinueHref,
+  isDateComplete
+} from './predictors-journey.js'
+import { getPredictorsAssessmentSession } from './predictors-assessment-session.js'
 
 const getA4BackHref = (session) => {
   if (session.sexualOffence !== 'yes') return 'a2.html'
@@ -34,29 +38,22 @@ window.GOVUKPrototypeKit.documentReady(() => {
     backLink.href = getPredictorsBackLinkHref(getA4BackHref(session))
   }
 
-  if (session.supervisedInCommunity) {
-    const input = form.querySelector(
-      `input[name="supervised_in_community"][value="${session.supervisedInCommunity}"]`
-    )
-    if (input) input.checked = true
-  }
+  const communityDate = isDateComplete(session.communityDate)
+    ? session.communityDate
+    : getDefaultCommunityDateParts()
 
-  const hashTarget = window.location.hash.slice(1)
-  const supervisedInCommunity = session.supervisedInCommunity
-  const showSupervisedDate =
-    supervisedInCommunity === 'yes' || hashTarget === PREDICTORS_CHANGE_ANCHORS.supervisedCommunityDate
-
-  if (showSupervisedDate) {
-    setConditionalVisible(SUPERVISED_CONDITIONAL_ID, true)
-    restoreDateInputs(form, 'supervised-community-date', session.communityDate)
-  }
+  restoreDateInputs(form, 'supervised-community-date', communityDate)
 
   if (isPredictorsCheckAnswersEdit()) {
     captureCheckAnswersEditSnapshot(getA4FieldsFromForm(form))
   }
 
-  if (hashTarget === PREDICTORS_CHANGE_ANCHORS.supervisedInCommunity || hashTarget === PREDICTORS_CHANGE_ANCHORS.supervisedCommunityDate) {
-    scrollToPredictorsChangeTarget(hashTarget)
+  const hashTarget = window.location.hash.slice(1)
+  if (
+    hashTarget === PREDICTORS_CHANGE_ANCHORS.supervisedCommunityDate ||
+    hashTarget === PREDICTORS_CHANGE_ANCHORS.supervisedInCommunity
+  ) {
+    scrollToPredictorsChangeTarget(PREDICTORS_CHANGE_ANCHORS.supervisedCommunityDate)
   }
 
   form.addEventListener('submit', (event) => {
@@ -64,14 +61,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
     const newFields = getA4FieldsFromForm(form)
 
-    if (!newFields.supervisedInCommunity) {
-      form.querySelector('input[name="supervised_in_community"]')?.focus()
-      return
-    }
-
-    if (newFields.supervisedInCommunity === 'yes' && !isDateComplete(newFields.communityDate)) {
-      setPredictorsAssessmentSession({ ...getPredictorsAssessmentSession(), ...newFields })
-      setConditionalVisible(SUPERVISED_CONDITIONAL_ID, true)
+    if (!isDateComplete(newFields.communityDate)) {
       form.querySelector('#supervised-community-date-day')?.focus()
       return
     }

@@ -4,7 +4,7 @@
 
 import { getPredictorsBackLinkHref } from './predictors-change-scroll.js'
 import { getPredictorsAssessmentSession, setPredictorsAssessmentSession } from './predictors-assessment-session.js'
-import { ensureOffenceSearchData } from '../tiering-offence-browse.js'
+import { ensureOffenceSearchData } from './predictors-offence-browse.js'
 import {
   getA7BackHref,
   getPostInterviewYesContinueHref,

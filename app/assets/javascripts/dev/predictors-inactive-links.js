@@ -16,7 +16,7 @@ export const markPrototypeOnlyLink = (link) => {
 
 const isDevProtoPage = () => window.location.pathname.includes('/dev/')
 
-export const initTieringInactiveLinks = (root = document) => {
+export const initPredictorsInactiveLinks = (root = document) => {
   root.querySelectorAll('[data-predictors-inactive-link]').forEach((link) => {
     markPrototypeOnlyLink(link)
     link.addEventListener('click', (event) => {

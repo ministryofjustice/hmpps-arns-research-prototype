@@ -1,7 +1,7 @@
 //
 // b1 – cycle page layouts via Return to OASys
-// default: question as fieldset legend (H1-as-legend) with caption
-// section: caption Reoffending predictors + topic H1 + question in content
+// default: caption + question as H1 in the service header (a1 layout)
+// section: caption + topic H1 in header, question as H2 in content
 //
 
 const STORAGE_KEY = 'tiering-b1-caption-progress'
@@ -28,19 +28,19 @@ const getNextVariant = (current) => {
 
 const applyVariant = (variant) => {
   const isSection = variant === 'section'
-  const showLegendHeading = !isSection
 
   document.querySelectorAll('[data-b1-heading-variant]').forEach((el) => {
     const headingVariant = el.dataset.b1HeadingVariant
     el.toggleAttribute('hidden', isSection ? headingVariant !== 'section' : headingVariant !== 'default')
   })
 
+  // Always keep a1-style header spacing (never actions-only / legend-heading row)
   document.querySelectorAll('[data-b1-layout-heading]').forEach((el) => {
-    el.classList.toggle('assessment-service-header__question-row--legend-heading', showLegendHeading)
+    el.classList.remove('assessment-service-header__question-row--legend-heading')
   })
 
   document.querySelectorAll('[data-b1-layout-header]').forEach((el) => {
-    el.classList.toggle('assessment-service-header--legend-heading', showLegendHeading)
+    el.classList.remove('assessment-service-header--legend-heading')
   })
 
   document.querySelectorAll('[data-b1-header-hint]').forEach((el) => {
@@ -48,7 +48,7 @@ const applyVariant = (variant) => {
   })
 
   document.querySelectorAll('[data-b1-legend-hint]').forEach((el) => {
-    el.toggleAttribute('hidden', isSection)
+    el.toggleAttribute('hidden', true)
   })
 
   document.querySelectorAll('[data-b1-content-question]').forEach((el) => {
@@ -57,19 +57,13 @@ const applyVariant = (variant) => {
 
   const legend = document.querySelector('[data-b1-fieldset-legend]')
   if (legend) {
-    legend.classList.toggle('govuk-visually-hidden', !showLegendHeading)
-    legend.classList.toggle('govuk-fieldset__legend--l', showLegendHeading)
-    legend.classList.toggle('govuk-fieldset__legend--m', !showLegendHeading)
-    legend.classList.toggle('govuk-!-margin-bottom-2', showLegendHeading && Boolean(document.querySelector('[data-b1-legend-hint]')))
-    legend.classList.toggle('govuk-!-margin-bottom-4', showLegendHeading && !document.querySelector('[data-b1-legend-hint]'))
-    if (showLegendHeading && !legend.id) {
-      legend.id = 'predictors-accommodation-suitable'
-    } else if (!showLegendHeading) {
-      legend.removeAttribute('id')
-    }
+    legend.classList.add('govuk-visually-hidden')
+    legend.classList.remove('govuk-fieldset__legend--l', 'govuk-!-margin-bottom-2', 'govuk-!-margin-bottom-4')
+    legend.classList.add('govuk-fieldset__legend--m')
+    legend.removeAttribute('id')
 
-    legend.querySelectorAll('.govuk-caption-l, .govuk-visually-hidden').forEach((el) => {
-      el.toggleAttribute('hidden', !showLegendHeading)
+    legend.querySelectorAll('.govuk-caption-l').forEach((el) => {
+      el.setAttribute('hidden', '')
     })
   }
 

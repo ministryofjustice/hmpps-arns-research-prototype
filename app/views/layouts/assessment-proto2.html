@@ -10,7 +10,8 @@
 {% set pdsFooterInclude = "includes/02/pds-footer.njk" %}
 {% set usePdsFooter = true %}
 {% set hidePageHeaderSeparator = true %}
-{% set questionLegendAsHeading = true %}
+{# Keep caption + page heading in the service header (a1 layout), not as a fieldset legend #}
+{% set questionLegendAsHeading = false %}
 {% set contentColumnClass = contentColumnClass if contentColumnClass is defined else "govuk-grid-column-two-thirds-from-desktop" %}
 
 {% block pageTitle %}{% include "includes/assessment-journey-page-title.html" %}{% endblock %}
