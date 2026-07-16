@@ -33,6 +33,7 @@ import './02/predictors-a1os-page.js'
 import './02/predictors-a1o3-page.js'
 import './02/predictors-a1r-page.js'
 import './02/predictors-a2-page.js'
+import './02/predictors-a2b-page.js'
 import './02/predictors-a3-page.js'
 import './02/predictors-a4-page.js'
 import './02/predictors-a5-page.js'
@@ -59,6 +60,7 @@ import './dev/predictors-a1os-page.js'
 import './dev/predictors-a1o3-page.js'
 import './dev/predictors-a1r-page.js'
 import './dev/predictors-a2-page.js'
+import './dev/predictors-a2b-page.js'
 import './dev/predictors-a3-page.js'
 import './dev/predictors-a4-page.js'
 import './dev/predictors-a5-page.js'
@@ -74,6 +76,8 @@ import './tiering-change-scroll.js'
 import { initPreserveConditionalFieldValues } from './tiering-conditional-fields.js'
 import { initTieringInactiveLinks } from './tiering-inactive-links.js'
 import { initB6LayoutToggleButtons } from './02/predictors-b6-layout-toggle.js'
+import { initA2LayoutToggleButtons } from './02/predictors-a2-layout-toggle.js'
+import { initA1LayoutToggleButtons } from './02/predictors-a1-layout-toggle.js'
 import { initA1SourceNoticeToggle } from './tiering-a1-source-notice-toggle.js'
 import { initB1CaptionProgressToggle } from './tiering-b1-caption-progress-toggle.js'
 
@@ -81,6 +85,8 @@ window.GOVUKPrototypeKit.documentReady(() => {
   initPreserveConditionalFieldValues()
   initTieringInactiveLinks()
   initB6LayoutToggleButtons()
+  initA2LayoutToggleButtons()
+  initA1LayoutToggleButtons()
   initA1SourceNoticeToggle()
   initB1CaptionProgressToggle()
 })

@@ -261,7 +261,3 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   scrollToPredictorsChangeTarget()
 })
-
-// Shared script compatibility (offence-search, conviction-date, etc.)
-export const isTieringCheckAnswersEdit = isPredictorsCheckAnswersEdit
-export const TIERING_CHANGE_ANCHORS = PREDICTORS_CHANGE_ANCHORS

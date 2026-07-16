@@ -1,4 +1,8 @@
-{%- set journeyPageTitleCaption = predictorsSectionCaption | default(tieringSectionCaption) | default("Reoffending predictors") -%}
+{%- if predictorsSectionCaption !== false -%}
+  {%- set journeyPageTitleCaption = predictorsSectionCaption | default(tieringSectionCaption) | default("Reoffending predictors") -%}
+{%- else -%}
+  {%- set journeyPageTitleCaption = "" -%}
+{%- endif -%}
 {%- if pageHeadingHtml -%}
   {%- set journeyPageTitleHeading = pageHeadingHtml | striptags -%}
 {%- elif pageHeading -%}
@@ -14,4 +18,8 @@
   {%- set journeyPageTitleHeading = "Tiering assessment" -%}
   {%- endif -%}
 {%- endif -%}
+{%- if journeyPageTitleCaption -%}
 {{- journeyPageTitleCaption }} - {{ journeyPageTitleHeading -}}
+{%- else -%}
+{{- journeyPageTitleHeading -}}
+{%- endif -%}

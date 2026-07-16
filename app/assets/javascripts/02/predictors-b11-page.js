@@ -4,7 +4,7 @@
 
 import { getPredictorsBackLinkHref, PREDICTORS_FROM_B11_DYNAMIC, PREDICTORS_FROM_B11_STATIC } from './predictors-change-scroll.js'
 import { setPredictorsAssessmentSession } from './predictors-assessment-session.js'
-import { ensureOffenceSearchData } from '../tiering-offence-browse.js'
+import { ensureOffenceSearchData } from './predictors-offence-browse.js'
 import {
   getB11BackHref,
   getPredictorsResultsScoresHref,

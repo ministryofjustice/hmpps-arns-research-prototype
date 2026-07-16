@@ -22,7 +22,7 @@ import {
   getPredictorsAssessmentSession,
   setPredictorsAssessmentSession
 } from './predictors-assessment-session.js'
-import { restoreDateInputs, setConditionalVisible } from '../tiering-conditional-fields.js'
+import { restoreDateInputs, setConditionalVisible } from './predictors-conditional-fields.js'
 
 const RECENT_OFFENCE_CONDITIONAL_ID = 'conditional-offences-since-community-yes'
 

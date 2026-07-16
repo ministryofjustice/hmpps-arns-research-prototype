@@ -54,6 +54,10 @@ export const initA1SourceNoticeToggle = () => {
   const notice = document.querySelector('[data-a1-source-notice]')
   if (!button || !notice) return
 
+  // Return to OASys navigates a1 ↔ a1b when wired as a layout toggle
+  const href = button.getAttribute('href') || ''
+  if (href.includes('a1b')) return
+
   activateToggleButton(button)
   applyVariant(getStoredVariant())
 

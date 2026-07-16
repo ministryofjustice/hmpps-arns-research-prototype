@@ -39,8 +39,10 @@ window.GOVUKPrototypeKit.documentReady(async () => {
     indirectChildSanctions: '1',
     nonContactSanctions: '1',
 
-    // a4 (no path skips a5)
-    supervisedInCommunity: 'no',
+    // a4 + a5
+    supervisedInCommunity: 'yes',
+    communityDate: { day: '2', month: '5', year: '2015' },
+    offencesSinceCommunity: 'no',
 
     // state
     scoreCalculated: true,

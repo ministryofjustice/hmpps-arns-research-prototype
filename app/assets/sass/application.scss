@@ -2811,6 +2811,35 @@ body.assessment-page {
   padding: 10px
 }
 
+// MOJ inset text (highlighted) – https://design-patterns.service.justice.gov.uk/components/inset-text-highlighted/
+.guidance-panel {
+  border-left-color: govuk-colour("blue");
+  background-color: #eaf4f9;
+}
+
+.a2b-current-offence {
+  cursor: pointer;
+
+  &:focus {
+    outline: 3px solid transparent;
+    box-shadow: 0 0 0 3px #fd0;
+  }
+
+  &:focus:not(:focus-visible) {
+    box-shadow: none;
+  }
+
+  &:focus-visible {
+    outline: 3px solid transparent;
+    box-shadow: 0 0 0 3px #fd0;
+  }
+
+  .a2b-current-offence__notice--plain {
+    margin-top: 0;
+    margin-bottom: govuk-spacing(4);
+  }
+}
+
 // Proto 2 / dev: predictors naming mirrors tiering component classes
 .predictors-question-anchor { @extend .tiering-question-anchor; }
 .predictors-offence-code { @extend .tiering-offence-code; }

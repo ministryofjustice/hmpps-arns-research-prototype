@@ -11,7 +11,7 @@ import {
   getPredictorsAssessmentSession,
   setPredictorsAssessmentSession
 } from './predictors-assessment-session.js'
-import { lookupOffenceDetails } from '../tiering-offence-browse.js'
+import { lookupOffenceDetails } from './predictors-offence-browse.js'
 
 const PREDICTORS_JOURNEY_PATH = '/dev/'
 
@@ -190,7 +190,9 @@ export const PROTOTYPE_DEFAULT_CURRENT_OFFENCE = {
   isViolentOffence: true
 }
 
-const PROTOTYPE_DEFAULT_COMMUNITY_DATE = { day: '24', month: '7', year: '2026' }
+const PROTOTYPE_DEFAULT_COMMUNITY_DATE = { day: '2', month: '5', year: '2015' }
+
+export const getDefaultCommunityDateParts = () => ({ ...PROTOTYPE_DEFAULT_COMMUNITY_DATE })
 
 const getDefaultRecentOffenceDateParts = () => {
   const date = new Date()
@@ -298,11 +300,10 @@ export const syncPredictorsSessionBeforeCheckAnswers = () => {
   }
 
   if (!session.supervisedInCommunity) {
-    updates.supervisedInCommunity = 'no'
+    updates.supervisedInCommunity = 'yes'
   }
 
-  const supervisedInCommunity = updates.supervisedInCommunity || session.supervisedInCommunity
-  if (supervisedInCommunity === 'yes' && !isDateComplete(session.communityDate)) {
+  if (!isDateComplete(session.communityDate)) {
     updates.communityDate = { ...PROTOTYPE_DEFAULT_COMMUNITY_DATE }
   }
 
@@ -374,7 +375,7 @@ export const clearA5SessionFields = () => ({
   recentOffenceDate: { day: '', month: '', year: '' }
 })
 
-export const isA5Required = (session) => session.supervisedInCommunity === 'yes'
+export const isA5Required = (session) => isDateComplete(session.communityDate)
 
 export const getPostA4ContinueHref = (session = getPredictorsAssessmentSession()) =>
   isA5Required(session) ? 'a5.html' : 'a6.html'
@@ -431,11 +432,7 @@ export const isA2Complete = (session) =>
       session.sexualOffence
   )
 
-export const isA4Complete = (session) =>
-  Boolean(
-    session.supervisedInCommunity &&
-      (session.supervisedInCommunity !== 'yes' || isDateComplete(session.communityDate))
-  )
+export const isA4Complete = (session) => isDateComplete(session.communityDate)
 
 export const getFirstIncompletePredictorsPage = (session) => {
   if (!session.currentOffence?.id) return 'a1.html'
@@ -478,14 +475,6 @@ export const applyBranchingCleanup = (currentPage, session, updates) => {
     return { ...merged, ...clearA3SessionFields() }
   }
 
-  if (currentPage === 'a4' && merged.supervisedInCommunity !== 'yes') {
-    return {
-      ...merged,
-      communityDate: { day: '', month: '', year: '' },
-      ...clearA5SessionFields()
-    }
-  }
-
   if (currentPage === 'a5' && merged.offencesSinceCommunity !== 'yes') {
     return { ...merged, ...clearA6SessionFields() }
   }
@@ -501,15 +490,6 @@ export const getPostCheckAnswersEditHref = (session) =>
  * changes that open a new required page — not for simple field updates (e.g. a4 date).
  */
 export const getContinueHrefAfterCheckAnswersEdit = (currentPage, beforeSession, afterSession) => {
-  if (currentPage === 'a4') {
-    const beforeRequiredA5 = beforeSession.supervisedInCommunity === 'yes'
-    const afterRequiredA5 = afterSession.supervisedInCommunity === 'yes'
-
-    if (beforeRequiredA5 !== afterRequiredA5) {
-      return getFirstIncompletePredictorsPage(afterSession)
-    }
-  }
-
   if (currentPage === 'a2' && afterSession.sexualOffence === 'yes' && !isA3Complete(afterSession)) {
     return getFirstIncompleteA3Page(afterSession) || 'a3.html'
   }
@@ -590,26 +570,14 @@ export const getA3FieldsFromForm = (form) => ({
   ...getA3IndirectContactFieldsFromForm(form)
 })
 
-export const getA4FieldsFromForm = (form) => {
-  const supervisedInCommunity =
-    form.querySelector('input[name="supervised_in_community"]:checked')?.value || ''
-
-  if (supervisedInCommunity === 'no') {
-    return {
-      supervisedInCommunity,
-      communityDate: { day: '', month: '', year: '' }
-    }
-  }
-
-  return {
-    supervisedInCommunity,
-    communityDate: normaliseDateParts({
-      day: form.querySelector('#supervised-community-date-day')?.value,
-      month: form.querySelector('#supervised-community-date-month')?.value,
-      year: form.querySelector('#supervised-community-date-year')?.value
-    })
-  }
-}
+export const getA4FieldsFromForm = (form) => ({
+  supervisedInCommunity: 'yes',
+  communityDate: normaliseDateParts({
+    day: form.querySelector('#supervised-community-date-day')?.value,
+    month: form.querySelector('#supervised-community-date-month')?.value,
+    year: form.querySelector('#supervised-community-date-year')?.value
+  })
+})
 
 export const getA5FieldsFromForm = (form) => ({
   offencesSinceCommunity: form.querySelector('input[name="offences_since_community"]:checked')?.value || '',
@@ -717,11 +685,8 @@ export const getUnansweredPredictorsQuestions = (session, offenderFirstName = 'A
     add(
       'a4',
       'Community supervision',
-      `Is ${name} currently being supervised in the community?`
+      `What date did ${name}'s current supervision in the community begin?`
     )
-    if (session.supervisedInCommunity === 'yes' && !isDateComplete(session.communityDate)) {
-      add('a4', 'Community supervision', `What date did ${name}'s supervision begin?`)
-    }
   }
 
   if (isA5Required(session) && !session.offencesSinceCommunity) {

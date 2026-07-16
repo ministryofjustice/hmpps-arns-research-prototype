@@ -1,0 +1,31 @@
+{# Predictors a4: community supervision start date (proto 2 / dev) #}
+{# Requires offenderFirstName; optional pageHeadingHintId for aria-describedby #}
+{# Question text is shown as the page heading #}
+
+<div class="govuk-form-group govuk-!-margin-top-0">
+  <fieldset class="govuk-fieldset" role="group"{% if pageHeadingHintId %} aria-describedby="{{ pageHeadingHintId }}"{% endif %}>
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      What date did {{ offenderFirstName }}'s current supervision in the community begin?
+    </legend>
+    <div class="govuk-date-input" id="supervised-community-date">
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="supervised-community-date-day">Day</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="supervised-community-date-day" name="supervised_community_date_day" type="text" inputmode="numeric" autocomplete="off" data-date-part="day">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="supervised-community-date-month">Month</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="supervised-community-date-month" name="supervised_community_date_month" type="text" inputmode="numeric" autocomplete="off" data-date-part="month">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="supervised-community-date-year">Year</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="supervised-community-date-year" name="supervised_community_date_year" type="text" inputmode="numeric" autocomplete="off" data-date-part="year">
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>

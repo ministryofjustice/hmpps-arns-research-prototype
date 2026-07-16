@@ -108,24 +108,6 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
         false,
         PREDICTORS_CHANGE_ANCHORS.convictionDate,
         true
-      ),
-      createRow(
-        'Offence code',
-        offenceCodeLabel || null,
-        'a1.html',
-        'Offence code',
-        false,
-        TIERING_CHANGE_ANCHORS.currentOffence,
-        true
-      ),
-      createRow(
-        'Date of current conviction',
-        convictionDateLabel || null,
-        'a1.html',
-        'Date of current conviction',
-        false,
-        TIERING_CHANGE_ANCHORS.convictionDate,
-        true
       )
     ]
   })
@@ -170,7 +152,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
 
   if (session.sexualOffence === 'yes') {
     sections.push({
-      title: 'Sexual or sexually motivated offending',
+      title: 'Current and recent sexual offending',
       rows: [
         createRow(
           `Does ${name}'s current offence have a sexual motivation?`,
@@ -244,33 +226,18 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
     })
   }
 
-  const communitySupervisionRows = [
-    createRow(
-      `Is ${name} currently being supervised in the community?`,
-      formatChoice(session.supervisedInCommunity),
-      'a4.html',
-      `Is ${name} currently being supervised in the community?`,
-      false,
-      PREDICTORS_CHANGE_ANCHORS.supervisedInCommunity
-    )
-  ]
-
-  if (session.supervisedInCommunity === 'yes') {
-    communitySupervisionRows.push(
+  sections.push({
+    title: 'Community supervision',
+    rows: [
       createRow(
-        `What date did ${name}'s supervision begin?`,
+        `What date did ${name}'s current supervision in the community begin?`,
         formatDateFromParts(session.communityDate || {}),
         'a4.html',
-        `What date did ${name}'s supervision begin?`,
+        `What date did ${name}'s current supervision in the community begin?`,
         false,
         PREDICTORS_CHANGE_ANCHORS.supervisedCommunityDate
       )
-    )
-  }
-
-  sections.push({
-    title: 'Community supervision',
-    rows: communitySupervisionRows
+    ]
   })
 
   const communityDateLabel = formatDateFromParts(session.communityDate || {}) || 'that date'

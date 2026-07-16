@@ -2,9 +2,11 @@
 
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Community supervision" %}
-{% set pageHeadingHtml = 'Is ' ~ offenderFirstName ~ ' currently being supervised in the community?' %}
-{% set pageHeadingId = "predictors-supervised-in-community" %}
+{% set pageHeadingHtml = "What date did " ~ offenderFirstName ~ "'s current supervision in the community begin?" %}
+{% set pageHeadingId = "predictors-supervised-community-date" %}
 {% set pageHeadingClass = "predictors-question-anchor" %}
+{% set pageHeadingHint = "We will fill in this date from previous assessment data if it is available. Change the date if it is wrong." %}
+{% set pageHeadingHintId = "supervised-community-date-hint" %}
 {% set compactPageHeader = true %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
@@ -19,7 +21,7 @@
 
 <form id="predictors-a4-form" novalidate>
 
-  {% include "includes/community-date-question.html" %}
+  {% include "includes/predictors-community-date-question.html" %}
 
   <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
 

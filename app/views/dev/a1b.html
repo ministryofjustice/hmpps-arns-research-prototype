@@ -1,0 +1,22 @@
+{% extends "layouts/assessment-proto-dev.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Reoffending predictor scores" %}
+{% set activeSection = "section-1" %}
+{% set pageHeading = "Reoffending predictor scores" %}
+{% set predictorsSectionCaption = false %}
+{% set returnToOasysButtonInclude = "includes/dev/a1-layout-toggle-to-a1.html" %}
+{% set backLinkHref = "#" %}
+{% set backLinkId = "predictors-a1b-back" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+{% include "includes/predictors-a1b-start-content.html" %}
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

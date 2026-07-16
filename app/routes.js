@@ -88,7 +88,7 @@ router.use((req, res, next) => {
     res.locals.useReoffendingServiceNavigation = true
     res.locals.hideOffenderViewAnswers = true
   }
-  if (/^\/(01|02)\/a2(\.html)?$/.test(req.path)) {
+  if (/^\/(01|02|dev)\/a2(b)?(\.html)?$/.test(req.path)) {
     Object.assign(res.locals, getFirstSanctionAgeLocals(req.query))
   }
   next()
