@@ -17,7 +17,6 @@ import {
   isPredictorsCheckAnswersEdit
 } from './predictors-change-scroll.js'
 import { initA1OffenceDisplayToggle } from '../tiering-a1-display-toggle.js'
-import { initA2bCurrentOffenceToggle } from '../a2b-current-offence-toggle.js'
 import { getA1FieldsFromForm, getA2FieldsFromForm } from './predictors-journey.js'
 
 const setFirstSanctionDateValues = (parts) => {
@@ -38,7 +37,6 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   initConvictionDate()
   initA1OffenceDisplayToggle()
-  initA2bCurrentOffenceToggle()
 
   document.querySelector('[data-predictors-offence-browse-link]')?.addEventListener('click', () => {
     persistConvictionDateState({ editing: isConvictionDateEditPanelOpen() })

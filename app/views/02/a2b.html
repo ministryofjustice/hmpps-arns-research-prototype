@@ -6,6 +6,7 @@
 {% set pageHeading = "Current offence and offending history" %}
 {% set statusTag = "Incomplete" %}
 {% set returnToOasysButtonInclude = "includes/02/a2-layout-toggle-to-a2.html" %}
+{% set showCurrentOffenceWarning = true %}
 {% set backLinkHref = "a1.html" %}
 
 {% block content %}
@@ -23,19 +24,19 @@
 
 <form id="predictors-a2b-form" novalidate data-offender-first-name="{{ offenderFirstName }}" data-a1-offence-display-default="table">
 
-  <div class="a2b-current-offence" data-a2b-current-offence data-a2b-current-offence-variant="default">
+  <div class="a2b-current-offence">
     <h2 class="govuk-heading-m">Current offence</h2>
 
-    <div data-a2b-current-offence-panel>
-      <div class="govuk-inset-text" data-a2b-current-offence-notice>
-        This information comes from NDelius. If any details are wrong, contact the case administrator at your probation delivery unit (PDU).
-      </div>
-
-      {% include "includes/a1-current-offence-questions.html" %}
+    <div class="govuk-inset-text">
+      This information comes from NDelius.
     </div>
+
+    {% include "includes/a1-current-offence-questions.html" %}
   </div>
 
-  <h2 class="govuk-heading-m govuk-!-margin-top-9 govuk-!-padding-top-4">Offending history</h2>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible govuk-!-margin-top-9 govuk-!-margin-bottom-6">
+
+  <h2 class="govuk-heading-m govuk-!-margin-top-0">Offending history</h2>
 
   {% include "includes/02/sanction-definition-inset.html" %}
 
