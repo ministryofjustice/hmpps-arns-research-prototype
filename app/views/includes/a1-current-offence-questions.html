@@ -65,6 +65,16 @@
           </tbody>
         </table>
 
+        {% if showCurrentOffenceWarning %}
+        <div class="govuk-warning-text govuk-!-margin-top-4 govuk-!-margin-bottom-0">
+          <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+          <strong class="govuk-warning-text__text">
+            <span class="govuk-visually-hidden">Warning</span>
+            Incorrect details will impact reoffending predictor scores. If any details are wrong, contact the case administrator at your probation delivery unit (PDU).
+          </strong>
+        </div>
+        {% endif %}
+
         <details class="govuk-details govuk-!-margin-top-4" data-a1-incorrect-info-details hidden>
           <summary class="govuk-details__summary">
             <span class="govuk-details__summary-text">If this information is incorrect</span>

@@ -18,7 +18,6 @@ import {
   isPredictorsCheckAnswersEdit
 } from './predictors-change-scroll.js'
 import { initA1OffenceDisplayToggle } from '../tiering-a1-display-toggle.js'
-import { initA2bCurrentOffenceToggle } from '../a2b-current-offence-toggle.js'
 import {
   calculateAgeOnDate,
   getA1FieldsFromForm,
@@ -77,7 +76,6 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   initConvictionDate()
   initA1OffenceDisplayToggle()
-  initA2bCurrentOffenceToggle()
   initA1FooterCrownLink()
 
   document.querySelector('[data-predictors-offence-browse-link]')?.addEventListener('click', () => {

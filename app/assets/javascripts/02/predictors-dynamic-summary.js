@@ -22,7 +22,7 @@ const formatCheckboxLabels = (values, labelMap) => {
   if (!Array.isArray(values) || !values.length) return null
 
   if (values.includes('none')) {
-    return labelMap.none || 'None'
+    return labelMap.none || 'None of these elements'
   }
 
   return values.map((value) => labelMap[value] || value).join('<br>')
@@ -53,7 +53,8 @@ const ALCOHOL_FREQUENCY_LABELS = {
   'once-month-or-less': 'Once a month or less',
   '2-4-times-month': '2 to 4 times a month',
   '2-3-times-week': '2 to 3 times a week',
-  'more-than-4-times-week': 'More than 4 times a week'
+  'more-than-4-times-week': 'More than 4 times a week',
+  unknown: 'Unknown'
 }
 
 const ALCOHOL_UNITS_LABELS = {
@@ -61,13 +62,15 @@ const ALCOHOL_UNITS_LABELS = {
   '3-4': '3 to 4 units',
   '5-6': '5 to 6 units',
   '7-9': '7 to 9 units',
-  '10-or-more': '10 or more units'
+  '10-or-more': '10 or more units',
+  unknown: 'Unknown'
 }
 
 const ALCOHOL_BINGE_LABELS = {
   none: 'No evidence of binge drinking or excessive alcohol use',
   some: 'Some evidence of binge drinking or excessive alcohol use',
-  evidence: 'Evidence of binge drinking or excessive alcohol use'
+  evidence: 'Evidence of binge drinking or excessive alcohol use',
+  unknown: 'Unknown'
 }
 
 const RELATIONSHIP_STATUS_LABELS = {
@@ -128,7 +131,7 @@ const OFFENCE_ELEMENT_LABELS = {
   'stalking-element': 'Stalking element',
   'violence-threat-weapon': 'Violence or threat of violence with a weapon',
   weapon: 'Weapon',
-  none: 'None'
+  none: 'None of these elements'
 }
 
 const SERIOUS_HARM_CONVICTION_LABELS = {
@@ -155,7 +158,8 @@ const SERIOUS_HARM_CONVICTION_LABELS = {
 
 const DRUG_PERIOD_LABELS = {
   'last-6-months': 'Used in the last 6 months',
-  'more-than-6-months': 'Used more than 6 months ago'
+  'more-than-6-months': 'Used more than 6 months ago',
+  unknown: 'Unknown'
 }
 
 const formatMisusedDrugs = (misusedDrugs = {}) => {

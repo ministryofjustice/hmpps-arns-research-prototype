@@ -53,6 +53,11 @@
           <input class="govuk-radios__input" id="{{ drug.id }}-period-more-than-6-months" name="{{ drug.id }}_period" type="radio" value="more-than-6-months">
           <label class="govuk-label govuk-radios__label" for="{{ drug.id }}-period-more-than-6-months">Used more than 6 months ago</label>
         </div>
+        <div class="govuk-radios__divider">or</div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="{{ drug.id }}-period-unknown" name="{{ drug.id }}_period" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="{{ drug.id }}-period-unknown">Unknown</label>
+        </div>
       </div>
     </fieldset>
   </div>
