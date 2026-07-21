@@ -15,7 +15,7 @@ import {
 } from './predictors-offence-browse.js'
 
 const VIOLENT_CONTEXT = 'violent-offence-check'
-const VIOLENT_RETURN_URL = 'a2.html#violent-offence-check'
+const VIOLENT_RETURN_URL = 'a2b.html#violent-offence-check'
 
 const getViolentTypeLabel = (isViolentOffence) => (isViolentOffence ? 'Violent' : 'Not violent')
 
@@ -112,7 +112,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
     if (caption) caption.textContent = 'Check if an offence is violent'
 
     const restartLink = document.querySelector('[data-results-restart-link]')
-    if (restartLink) restartLink.setAttribute('href', `a2.html?focus=offence-search#violent-offence-check`)
+    if (restartLink) restartLink.setAttribute('href', `a2b.html?focus=offence-search#violent-offence-check`)
 
     document
       .querySelectorAll('.assessment-layout .govuk-back-link')
@@ -294,7 +294,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
     urlParams.set('returned_offence_code', offencePayload.code)
     urlParams.set('returned_offence_subcode', offencePayload.subcode)
 
-    window.location.href = `a1?${urlParams.toString()}`
+    window.location.href = `a2b?${urlParams.toString()}`
   })
 
   if (!query) {

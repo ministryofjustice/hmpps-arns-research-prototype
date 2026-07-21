@@ -21,7 +21,7 @@ import {
 import { getPredictorsAssessmentSession } from './predictors-assessment-session.js'
 
 const getA4BackHref = (session) => {
-  if (session.sexualOffence !== 'yes') return 'a2.html'
+  if (session.sexualOffence !== 'yes') return 'a2b.html'
   return getFirstIncompleteA3Page(session) || 'a3.html'
 }
 

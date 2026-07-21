@@ -246,7 +246,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
     })
 
     document.querySelectorAll('[data-predictors-return-to-a1]').forEach((link) => {
-      link.href = withFromCheckAnswers(link.getAttribute('href') || 'a1.html')
+      link.href = withFromCheckAnswers(link.getAttribute('href') || 'a2b.html')
     })
   }
 
