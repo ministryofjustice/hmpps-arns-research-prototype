@@ -39,11 +39,11 @@ window.GOVUKPrototypeKit.documentReady(() => {
   const browseContext = violentOffenceCheckBrowse
       ? VIOLENT_OFFENCE_CHECK_BROWSE_CONTEXT
       : 'current-offence'
-  const returnUrl = violentOffenceCheckBrowse ? 'a2.html#violent-offence-check' : 'a1.html'
+  const returnUrl = violentOffenceCheckBrowse ? 'a2b.html#violent-offence-check' : 'a2b.html'
 
   if (violentOffenceCheckBrowse) {
     document.querySelectorAll('.assessment-layout .govuk-back-link').forEach((link) => {
-      link.href = withFromCheckAnswers('a2.html#violent-offence-check')
+      link.href = withFromCheckAnswers('a2b.html#violent-offence-check')
     })
   }
 

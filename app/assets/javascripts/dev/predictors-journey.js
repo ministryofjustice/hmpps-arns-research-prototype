@@ -435,8 +435,7 @@ export const isA2Complete = (session) =>
 export const isA4Complete = (session) => isDateComplete(session.communityDate)
 
 export const getFirstIncompletePredictorsPage = (session) => {
-  if (!session.currentOffence?.id) return 'a1.html'
-  if (!isA2Complete(session)) return 'a2.html'
+  if (!session.currentOffence?.id || !isA2Complete(session)) return 'a2b.html'
   if (!isA3Complete(session)) return getFirstIncompleteA3Page(session) || 'a3.html'
   if (!isA4Complete(session)) return 'a4.html'
   if (isA5Required(session)) {

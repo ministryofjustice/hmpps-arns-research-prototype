@@ -84,7 +84,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
   const session = getPredictorsAssessmentSession()
 
   if (session.sexualOffence !== 'yes') {
-    window.location.href = 'a2.html'
+    window.location.href = 'a2b.html'
     return
   }
 
