@@ -1,4 +1,4 @@
-<div class="assessment-layout{% if usePdsHeader %} assessment-layout--phase-banner-above-footer{% endif %}"{% if tieringTelemetryPage %} data-tiering-telemetry-page="{{ tieringTelemetryPage }}" data-tiering-telemetry-page-label="{{ tieringTelemetryPageLabel | default(tieringTelemetryPage) }}"{% endif %}>
+<div class="assessment-layout{% if usePdsHeader and not phaseBannerBelowHeader %} assessment-layout--phase-banner-above-footer{% endif %}"{% if tieringTelemetryPage %} data-tiering-telemetry-page="{{ tieringTelemetryPage }}" data-tiering-telemetry-page-label="{{ tieringTelemetryPageLabel | default(tieringTelemetryPage) }}"{% endif %}>
   {% if not usePdsHeader %}
   {% include "includes/assessment-phase-banner.html" %}
   {% endif %}
@@ -12,7 +12,7 @@
   {% include "includes/offence-browse-error-summary.html" %}
   {% endif %}
   {% if not hideOffenderHeader %}
-  {% include "includes/assessment-offender-header.html" %}
+  {% include offenderHeaderInclude | default("includes/assessment-offender-header.html") %}
   {% endif %}
   {% if not hideJourneyServiceHeader %}
   {% include journeyServiceHeaderInclude | default("includes/assessment-service-header-journey.html") %}

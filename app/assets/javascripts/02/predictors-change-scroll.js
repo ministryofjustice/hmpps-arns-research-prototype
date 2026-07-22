@@ -9,8 +9,6 @@ import {
   fieldsChanged,
   getCheckAnswersReturnHrefAfterEdit,
   getContinueHrefAfterCheckAnswersEdit,
-  getDynamicPredictorsCheckAnswersHref,
-  getPredictorsResultsAnswersHref,
   normaliseFields,
   predictorsJourneyHref
 } from './predictors-journey.js'
@@ -26,6 +24,8 @@ export const PREDICTORS_BACK_FROM_DYNAMIC_CHECK_ANSWERS = 'b11-back'
 
 const CHECK_ANSWERS_RETURN_A7 = 'a7'
 const CHECK_ANSWERS_RETURN_B11 = 'b11'
+const CHECK_ANSWERS_HREF_A7 = 'a7.html'
+const CHECK_ANSWERS_HREF_B11 = 'b11.html'
 
 const isProto2PredictorsPage = () => window.location.pathname.includes('/02/')
 
@@ -45,22 +45,25 @@ const getFromParamFromHref = (href = '') => {
   return match?.[1] || null
 }
 
+// Keep a7/b11 hrefs as literals (do not import from predictors-journey).
+// change-scroll ↔ offence-browse ↔ journey is circular; documentReady can run
+// during module init while journey exports are still in the TDZ.
 export const getPredictorsCheckAnswersReturnHref = (session = getPredictorsAssessmentSession()) => {
   if (session.checkAnswersReturnTarget === CHECK_ANSWERS_RETURN_B11) {
-    return getDynamicPredictorsCheckAnswersHref()
+    return CHECK_ANSWERS_HREF_B11
   }
 
   if (session.checkAnswersReturnTarget === CHECK_ANSWERS_RETURN_A7) {
-    return getPredictorsResultsAnswersHref()
+    return CHECK_ANSWERS_HREF_A7
   }
 
   const from = new URLSearchParams(window.location.search).get('from')
 
   if (isB11FromParam(from)) {
-    return getDynamicPredictorsCheckAnswersHref()
+    return CHECK_ANSWERS_HREF_B11
   }
 
-  return getPredictorsResultsAnswersHref()
+  return CHECK_ANSWERS_HREF_A7
 }
 
 export const getActiveCheckAnswersFromParam = () => {

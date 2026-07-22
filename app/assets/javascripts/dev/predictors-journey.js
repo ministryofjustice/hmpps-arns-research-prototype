@@ -1,6 +1,8 @@
 //
 // Predictors journey routing and field helpers (branching, completeness)
 //
+// Dev static journey: a2b → a3 (if sexual) → a4 → a5 (if needed) → a7 → a8
+//
 
 import {
   formatDateFromParts,
@@ -11,7 +13,7 @@ import {
   getPredictorsAssessmentSession,
   setPredictorsAssessmentSession
 } from './predictors-assessment-session.js'
-import { lookupOffenceDetails } from './predictors-offence-browse.js'
+import { lookupOffenceDetails } from './predictors-offence-lookup.js'
 
 const PREDICTORS_JOURNEY_PATH = '/dev/'
 
@@ -329,12 +331,8 @@ export const syncPredictorsSessionBeforeCheckAnswers = () => {
   return { ...session, ...updates }
 }
 
-/** After a5: first journey shows a6; return visits go to check answers or scores */
+/** After a5: journey continues to check answers */
 export const hasSeenStaticAssessmentComplete = (session = getPredictorsAssessmentSession()) =>
-  session.staticAssessmentCompleteSeen === true
-
-/** User chose "No – view static scores" on a6 and may proceed to check answers / scores */
-export const hasCompletedA6Gate = (session = getPredictorsAssessmentSession()) =>
   session.staticAssessmentCompleteSeen === true
 
 export const markStaticAssessmentCompleteSeen = () => {
@@ -345,16 +343,7 @@ export const getPredictorsResultsAnswersHref = () => 'a7.html'
 
 export const getPredictorsResultsScoresHref = () => 'a8.html'
 
-export const getPostA5ContinueHref = (session = getPredictorsAssessmentSession()) => {
-  if (!hasSeenStaticAssessmentComplete(session)) {
-    return 'a6.html'
-  }
-
-  return getPredictorsResultsAnswersHref()
-}
-
-/** Where repeat visitors to a6 should land */
-export const getPredictorsReviewHref = () => getPredictorsResultsAnswersHref()
+export const getPostA5ContinueHref = () => getPredictorsResultsAnswersHref()
 
 export const clearA3SessionFields = () => ({
   sexualMotivation: '',
@@ -366,24 +355,17 @@ export const clearA3SessionFields = () => ({
   nonContactSanctions: ''
 })
 
-export const clearA6SessionFields = () => ({
-  recentOffenceDate: { day: '', month: '', year: '' }
-})
-
-export const clearA5SessionFields = () => ({
-  offencesSinceCommunity: '',
+export const clearRecentOffenceDateFields = () => ({
   recentOffenceDate: { day: '', month: '', year: '' }
 })
 
 export const isA5Required = (session) => isDateComplete(session.communityDate)
 
 export const getPostA4ContinueHref = (session = getPredictorsAssessmentSession()) =>
-  isA5Required(session) ? 'a5.html' : 'a6.html'
+  isA5Required(session) ? 'a5.html' : getPredictorsResultsAnswersHref()
 
-export const getA6BackHref = (session = getPredictorsAssessmentSession()) =>
+export const getA7BackHref = (session = getPredictorsAssessmentSession()) =>
   isA5Required(session) ? 'a5.html' : 'a4.html'
-
-export const getA7BackHref = () => 'a6?from=a7-back'
 
 export const isA3SexualOffendingComplete = (session) => {
   if (session.sexualOffence !== 'yes') return true
@@ -444,7 +426,6 @@ export const getFirstIncompletePredictorsPage = (session) => {
       return 'a5.html'
     }
   }
-  if (!hasCompletedA6Gate(session)) return 'a6.html'
   return null
 }
 
@@ -475,7 +456,7 @@ export const applyBranchingCleanup = (currentPage, session, updates) => {
   }
 
   if (currentPage === 'a5' && merged.offencesSinceCommunity !== 'yes') {
-    return { ...merged, ...clearA6SessionFields() }
+    return { ...merged, ...clearRecentOffenceDateFields() }
   }
 
   return merged
@@ -586,124 +567,3 @@ export const getA5FieldsFromForm = (form) => ({
     year: form.querySelector('#recent-offence-date-year')?.value
   })
 })
-
-export const getA6FieldsFromForm = (form) => ({
-  interviewDone: form.querySelector('input[name="interview_done"]:checked')?.value || ''
-})
-
-/** Questions required for the journey that are missing from session storage */
-export const getUnansweredPredictorsQuestions = (session, offenderFirstName = 'Alex') => {
-  const name = offenderFirstName
-  const unanswered = []
-
-  const add = (pageId, pageLabel, question) => {
-    unanswered.push({ pageId, pageLabel, question })
-  }
-
-  if (!session.currentOffence?.id) {
-    add('a1', 'Current offence', `What is ${name}'s current offence?`)
-  }
-  if (!isDateComplete(session.convictionDate)) {
-    add('a1', 'Current offence', `What is the date of ${name}'s current conviction?`)
-  }
-
-  if (!isDateComplete(session.firstSanctionDate) && !normaliseString(session.firstSanctionAge)) {
-    add('a2', 'Offending history', `What was the date of ${name}'s first sanction?`)
-  }
-  if (!normaliseString(session.totalSanctions)) {
-    add('a2', 'Offending history', `How many sanctions does ${name} have in total for all offences?`)
-  }
-  if (!normaliseString(session.violentSanctions)) {
-    add(
-      'a2',
-      'Offending history',
-      `How many of ${name}'s total sanctions involved violent offences?`
-    )
-  }
-  if (!session.sexualOffence) {
-    add(
-      'a2',
-      'Offending history',
-      `Has ${name} ever committed a sexual or sexually motivated offence?`
-    )
-  }
-
-  if (session.sexualOffence === 'yes') {
-    if (!session.sexualMotivation) {
-      add(
-        'a3',
-        'Sexual offending',
-        `Does ${name}'s current offence have a sexual motivation?`
-      )
-    }
-    if (!session.strangerContact) {
-      add(
-        'a3',
-        'Sexual offending',
-        `Does ${name}'s current offence involve actual or attempted direct contact against a victim who was a stranger?`
-      )
-    }
-    if (!isDateComplete(session.sexualSanctionDate)) {
-      add(
-        'a3',
-        'Sexual offending',
-        `What is the date of ${name}'s most recent sanction involving a sexual or sexually motivated offence?`
-      )
-    }
-    if (normaliseString(session.contactAdultSanctions) === '') {
-      add(
-        'a3',
-        'Sexual offending',
-        `How many sanctions does ${name} have for contact adult sexual or sexually motivated offences?`
-      )
-    }
-    if (normaliseString(session.contactChildSanctions) === '') {
-      add(
-        'a3',
-        'Sexual offending',
-        `How many sanctions does ${name} have for direct contact child sexual or sexually motivated offences?`
-      )
-    }
-    if (normaliseString(session.indirectChildSanctions) === '') {
-      add(
-        'a3',
-        'Sexual offending',
-        `How many sanctions does ${name} have for indecent child image, or indirect contact child, sexual or sexually motivated offences?`
-      )
-    }
-    if (normaliseString(session.nonContactSanctions) === '') {
-      add(
-        'a3',
-        'Sexual offending',
-        `How many sanctions does ${name} have for other non-contact sexual or sexually motivated offences?`
-      )
-    }
-  }
-
-  if (!isA4Complete(session)) {
-    add(
-      'a4',
-      'Community supervision',
-      `What date did ${name}'s current supervision in the community begin?`
-    )
-  }
-
-  if (isA5Required(session) && !session.offencesSinceCommunity) {
-    const communityDateLabel = formatDateFromParts(session.communityDate || {}) || 'that date'
-    add(
-      'a5',
-      'Offences since community date',
-      `Has ${name} committed any offences since ${communityDateLabel}?`
-    )
-  }
-
-  if (
-    isA5Required(session) &&
-    session.offencesSinceCommunity === 'yes' &&
-    !isDateComplete(session.recentOffenceDate)
-  ) {
-    add('a5', 'Offences since community date', `What is the date of ${name}'s most recent offence?`)
-  }
-
-  return unanswered
-}

@@ -5,7 +5,7 @@
 import { PREDICTORS_CHANGE_ANCHORS, predictorsChangeHref } from './predictors-change-scroll.js'
 import { formatDateFromParts } from './predictors-assessment-session.js'
 import { enrichOffenceFromLookup, isA5Required, isValidDateParts } from './predictors-journey.js'
-import { formatOffenceCodeLabel } from './predictors-offence-browse.js'
+import { formatOffenceCodeLabel } from './predictors-offence-lookup.js'
 
 const NOT_PROVIDED_HTML =
   '<span class="predictors-summary-list__not-provided">Not provided</span>'
@@ -55,9 +55,19 @@ const renderSummaryRows = (rows) =>
     )
     .join('')
 
-export const buildPredictorsSummarySections = (session, offenderFirstName = 'Alex') => {
+export const A7_SUMMARY_LAYOUTS = {
+  default: 'default',
+  timeSinceLastOffence: 'time-since-last-offence'
+}
+
+export const buildPredictorsSummarySections = (
+  session,
+  offenderFirstName = 'Alex',
+  { layout = A7_SUMMARY_LAYOUTS.timeSinceLastOffence } = {}
+) => {
   const name = offenderFirstName
   const sections = []
+  const groupTimeSinceLastOffence = layout === A7_SUMMARY_LAYOUTS.timeSinceLastOffence
 
   const createRow = (key, value, changeHref, changeHidden, allowHtml = false, changeAnchor, hideChange = false) => {
     let display = NOT_PROVIDED_HTML
@@ -85,7 +95,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
       createRow(
         'Offence name',
         currentOffence?.label || null,
-        'a1.html',
+        'a2b.html',
         'Offence name',
         false,
         PREDICTORS_CHANGE_ANCHORS.currentOffence,
@@ -94,7 +104,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
       createRow(
         'Offence code',
         offenceCodeLabel || null,
-        'a1.html',
+        'a2b.html',
         'Offence code',
         false,
         PREDICTORS_CHANGE_ANCHORS.currentOffence,
@@ -103,7 +113,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
       createRow(
         'Date of current conviction',
         convictionDateLabel || null,
-        'a1.html',
+        'a2b.html',
         'Date of current conviction',
         false,
         PREDICTORS_CHANGE_ANCHORS.convictionDate,
@@ -118,7 +128,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
       createRow(
         `What was ${name}'s date of first sanction?`,
         formatFirstSanctionAnswer(session),
-        'a2.html',
+        'a2b.html',
         `What was the date of ${name}'s first sanction?`,
         false,
         PREDICTORS_CHANGE_ANCHORS.firstSanctionAge
@@ -126,7 +136,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
       createRow(
         `How many sanctions does ${name} have in total for all offences?`,
         session.totalSanctions,
-        'a2.html',
+        'a2b.html',
         `How many sanctions does ${name} have in total for all offences?`,
         false,
         PREDICTORS_CHANGE_ANCHORS.totalSanctions
@@ -134,7 +144,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
       createRow(
         `How many of ${name}'s total sanctions involved violent offences?`,
         session.violentSanctions,
-        'a2.html',
+        'a2b.html',
         `How many of ${name}'s total sanctions involved violent offences?`,
         false,
         PREDICTORS_CHANGE_ANCHORS.violentSanctions
@@ -142,7 +152,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
       createRow(
         `Has ${name} ever committed a sexual or sexually motivated offence?`,
         formatChoice(session.sexualOffence),
-        'a2.html',
+        'a2b.html',
         `Has ${name} ever committed a sexual or sexually motivated offence?`,
         false,
         PREDICTORS_CHANGE_ANCHORS.sexualOffence
@@ -226,24 +236,20 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
     })
   }
 
-  sections.push({
-    title: 'Community supervision',
-    rows: [
-      createRow(
-        `What date did ${name}'s current supervision in the community begin?`,
-        formatDateFromParts(session.communityDate || {}),
-        'a4.html',
-        `What date did ${name}'s current supervision in the community begin?`,
-        false,
-        PREDICTORS_CHANGE_ANCHORS.supervisedCommunityDate
-      )
-    ]
-  })
-
   const communityDateLabel = formatDateFromParts(session.communityDate || {}) || 'that date'
+  const communityDateRow = createRow(
+    `What date did ${name}'s current supervision in the community begin?`,
+    formatDateFromParts(session.communityDate || {}),
+    'a4.html',
+    `What date did ${name}'s current supervision in the community begin?`,
+    false,
+    PREDICTORS_CHANGE_ANCHORS.supervisedCommunityDate
+  )
+
+  const offencesSinceCommunityRows = []
 
   if (isA5Required(session)) {
-    const offencesSinceCommunityRows = [
+    offencesSinceCommunityRows.push(
       createRow(
         `Has ${name} committed any offences since ${communityDateLabel}?`,
         formatChoice(session.offencesSinceCommunity),
@@ -252,7 +258,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
         false,
         PREDICTORS_CHANGE_ANCHORS.offencesSinceCommunity
       )
-    ]
+    )
 
     if (session.offencesSinceCommunity === 'yes') {
       offencesSinceCommunityRows.push(
@@ -266,34 +272,39 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
         )
       )
     }
-
-    sections.push({
-      title: 'Offences since community date',
-      rows: offencesSinceCommunityRows
-    })
   }
 
-  sections.push({
-    title: 'Interview',
-    rows: [
-      createRow(
-        `Have you done an interview with ${name}?`,
-        formatChoice(session.interviewDone),
-        'a6.html',
-        `Have you done an interview with ${name}?`,
-        false,
-        PREDICTORS_CHANGE_ANCHORS.interviewDone
-      )
-    ]
-  })
+  if (groupTimeSinceLastOffence) {
+    sections.push({
+      title: 'Time since last offence',
+      rows: [communityDateRow, ...offencesSinceCommunityRows]
+    })
+  } else {
+    sections.push({
+      title: 'Community supervision',
+      rows: [communityDateRow]
+    })
+
+    if (offencesSinceCommunityRows.length) {
+      sections.push({
+        title: 'Offences since community date',
+        rows: offencesSinceCommunityRows
+      })
+    }
+  }
 
   return sections
 }
 
-export const renderPredictorsSummaryList = (container, session, offenderFirstName = 'Alex') => {
+export const renderPredictorsSummaryList = (
+  container,
+  session,
+  offenderFirstName = 'Alex',
+  { layout = A7_SUMMARY_LAYOUTS.timeSinceLastOffence } = {}
+) => {
   if (!container) return
 
-  const sections = buildPredictorsSummarySections(session, offenderFirstName)
+  const sections = buildPredictorsSummarySections(session, offenderFirstName, { layout })
   container.innerHTML = sections
     .map(
       ({ title, rows }) => `

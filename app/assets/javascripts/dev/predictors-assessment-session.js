@@ -76,7 +76,7 @@ export const clearPrototypeDataForPredictors = async () => {
   }
 }
 
-/** Reset prototype 2 session for a fresh static assessment start from the index */
+/** Reset the dev predictors session for a fresh static assessment start from the index */
 export const resetPredictorsSessionForFreshStart = async () => {
   await clearPrototypeDataForPredictors()
 
@@ -129,7 +129,7 @@ export const formatToday = () => {
   })
 }
 
-/** Alex's current conviction date for a1 */
+/** Alex's current conviction date (default for a2b) */
 export const getDefaultConvictionDateParts = () => ({
   day: '18',
   month: '3',
@@ -139,7 +139,7 @@ export const getDefaultConvictionDateParts = () => ({
 /** Alex's date of birth from the offender header */
 export const OFFENDER_DATE_OF_BIRTH_PARTS = { day: '2', month: '10', year: '1969' }
 
-/** Alex's age at first sanction for a2 – prototype default (age on 15/5/2012) */
+/** Alex's age at first sanction – prototype default (age on 15/5/2012) */
 export const getDefaultFirstSanctionAge = () => '42'
 
 /** Date of first sanction for Alex – prototype default */

@@ -1,98 +1,70 @@
 {# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
+{# Read-only current offence from NDelius (no search / browse on the dev journey) #}
 
-<h2 id="predictors-current-offence" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-4 govuk-!-margin-bottom-2">
+<h2 id="predictors-current-offence" class="govuk-heading-m predictors-question-anchor govuk-visually-hidden" hidden>
   What is {{ offenderFirstName }}'s current offence?
 </h2>
 
-<div
-        class="offence-autocomplete offence-autocomplete--with-search-button govuk-!-margin-bottom-6"
-        data-module="offence-search"
-        data-offence-search-summary-card="true"
-        data-offence-search-results-url="a1r"
-        id="current-offence-search"
->
-  <div data-offence-search-panel>
-    <div class="offence-autocomplete__search-row">
-      <div class="govuk-form-group offence-autocomplete__combobox govuk-!-margin-bottom-0">
-        <label class="govuk-label govuk-visually-hidden" for="current-offence-search-input">
-          What is {{ offenderFirstName }}'s current offence?
-        </label>
-        <input
-                class="govuk-input offence-autocomplete__input"
-                id="current-offence-search-input"
-                name="current_offence_search"
-                type="text"
-                spellcheck="false"
-                autocomplete="off"
-                role="combobox"
-                aria-autocomplete="list"
-                aria-expanded="false"
-                aria-controls="current-offence-search-listbox"
-                data-offence-search-input
-        >
-        <ul
-                id="current-offence-search-listbox"
-                class="offence-autocomplete__menu"
-                role="listbox"
-                data-offence-search-listbox
-                hidden
-        ></ul>
+{#
+  Keep id="current-offence-search" so shared tiering-a1-display-toggle.js can find this root.
+#}
+<div class="govuk-!-margin-bottom-6" id="current-offence-search">
+  <div
+    data-offence-display-toggle
+    data-offence-display-mode="table"
+    aria-pressed="false"
+  >
+    <div data-offence-display-variant="table">
+      <table class="govuk-table govuk-!-margin-bottom-0">
+        <caption class="govuk-table__caption govuk-visually-hidden">Current offence details</caption>
+        <tbody class="govuk-table__body" data-offence-summary-table-body>
+        </tbody>
+      </table>
+
+      {% if showCurrentOffenceWarning %}
+      <div class="govuk-warning-text govuk-!-margin-top-4 govuk-!-margin-bottom-0">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-visually-hidden">Warning</span>
+          Incorrect details will impact reoffending predictor scores. If any details are wrong, contact the case administrator at your probation delivery unit (PDU).
+        </strong>
       </div>
-      <button
-              type="button"
-              class="govuk-button offence-autocomplete__search-button"
-              data-offence-search-submit
-              data-module="govuk-button"
-      >Search</button>
+      {% endif %}
     </div>
-    <p class="govuk-body govuk-!-margin-top-3 govuk-!-margin-bottom-0">
-      <a class="govuk-link" href="a1o.html" data-predictors-offence-browse-link>Find an offence</a>
-    </p>
   </div>
 
-  <div data-offence-search-selected hidden>
-    <div class="govuk-summary-card offence-autocomplete__summary-card">
-      <div class="govuk-summary-card__title-wrapper">
-        <h2 class="govuk-summary-card__title" data-offence-summary-card-title></h2>
-      </div>
-      <div class="govuk-summary-card__content">
-        <dl class="govuk-summary-list govuk-!-margin-bottom-0" data-offence-summary-list></dl>
-      </div>
-    </div>
-    <input type="hidden" name="current_offence_id" value="" data-offence-selected-id>
-    <input type="hidden" name="current_offence_code" value="" data-offence-selected-code>
-    <input type="hidden" name="current_offence_subcode" value="" data-offence-selected-subcode>
-  </div>
+  <span class="govuk-visually-hidden" data-offence-selected-label></span>
+  <input type="hidden" name="current_offence_id" value="" data-offence-selected-id>
+  <input type="hidden" name="current_offence_code" value="" data-offence-selected-code>
+  <input type="hidden" name="current_offence_subcode" value="" data-offence-selected-subcode>
 </div>
 
-<h2 id="predictors-conviction-date" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-8 govuk-!-margin-bottom-2">
+<h2 id="predictors-conviction-date" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-8 govuk-!-margin-bottom-2 govuk-visually-hidden">
   What is the date of {{ offenderFirstName }}'s current conviction?
 </h2>
 
-<p class="govuk-hint govuk-!-margin-bottom-4">This information is sourced from NDelius.</p>
-
-<div class="govuk-form-group" data-conviction-date-edit data-conviction-date-input-only>
+<div class="govuk-form-group" data-conviction-date-edit data-conviction-date-input-only data-a1-conviction-fields>
   <fieldset class="govuk-fieldset" role="group">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
       What is the date of {{ offenderFirstName }}'s current conviction?
     </legend>
-    <div class="govuk-date-input" id="current-conviction-date">
-      <div class="govuk-date-input__item">
+    <div class="govuk-date-input" id="current-conviction-date" data-a1-conviction-date-inputs>
+      <div class="govuk-date-input__item" data-a1-conviction-date-part>
         <div class="govuk-form-group">
           <label class="govuk-label govuk-date-input__label" for="current-conviction-date-day">Day</label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="current-conviction-date-day" name="current_conviction_date_day" type="text" inputmode="numeric" autocomplete="bday-day">
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="current-conviction-date-day" name="current_conviction_date_day" type="hidden" inputmode="numeric" autocomplete="bday-day" value="18">
         </div>
       </div>
-      <div class="govuk-date-input__item">
+      <div class="govuk-date-input__item" data-a1-conviction-date-part>
         <div class="govuk-form-group">
           <label class="govuk-label govuk-date-input__label" for="current-conviction-date-month">Month</label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="current-conviction-date-month" name="current_conviction_date_month" type="text" inputmode="numeric" autocomplete="bday-month">
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="current-conviction-date-month" name="current_conviction_date_month" type="hidden" inputmode="numeric" autocomplete="bday-month" value="3">
         </div>
       </div>
-      <div class="govuk-date-input__item">
+      <div class="govuk-date-input__item" data-a1-conviction-date-part>
         <div class="govuk-form-group">
           <label class="govuk-label govuk-date-input__label" for="current-conviction-date-year">Year</label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="current-conviction-date-year" name="current_conviction_date_year" type="text" inputmode="numeric" autocomplete="bday-year">
+          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="current-conviction-date-year" name="current_conviction_date_year" type="hidden" inputmode="numeric" autocomplete="bday-year" value="2026">
         </div>
       </div>
     </div>

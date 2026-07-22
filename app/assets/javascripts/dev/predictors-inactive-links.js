@@ -45,7 +45,7 @@ export const initPredictorsInactiveLinks = (root = document) => {
     root.querySelectorAll('a.probation-common-header__submenu-link[href="/sign-out"]').forEach(disablePrototypeHeaderLink)
 
     root
-      .querySelectorAll('.probation-common-header__services-menu a.probation-common-header__submenu-link[href="/dev/a1"]')
+      .querySelectorAll('.probation-common-header__services-menu a.probation-common-header__submenu-link[href="/dev/a2b.html"]')
       .forEach(disablePrototypeHeaderLink)
   }
 }
