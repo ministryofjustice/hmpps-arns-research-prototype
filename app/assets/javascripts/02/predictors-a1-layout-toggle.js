@@ -16,7 +16,8 @@ const activateLayoutToggleButton = (href) => {
 export const initA1LayoutToggleButtons = () => {
   const path = window.location.pathname
 
-  if (!(path.includes('/02/') || path.includes('/dev/'))) return
+  // Layout experiments live on prototype 02 only
+  if (!path.includes('/02/')) return
 
   if (path.includes('/a1b')) {
     activateLayoutToggleButton('a1.html')

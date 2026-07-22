@@ -5,20 +5,12 @@
 {% set activeSection = "section-1" %}
 {% set pageHeading = "Current offence and offending history" %}
 {% set statusTag = "Incomplete" %}
-{% set returnToOasysButtonInclude = "includes/dev/a2-layout-toggle-to-a2.html" %}
 {% set showCurrentOffenceWarning = true %}
-{% set backLinkHref = "a1.html" %}
+{% set backLinkHref = "/" %}
 
 {% block content %}
 
 {% include "includes/assessment-journey-page-open.html" %}
-
-<div id="predictors-a1-error-summary" class="govuk-error-summary" data-module="govuk-error-summary" tabindex="-1" hidden>
-  <div role="alert">
-    <h2 class="govuk-error-summary__title">There is a problem</h2>
-    <div class="govuk-error-summary__body"></div>
-  </div>
-</div>
 
 {% include "includes/assessment-question-header.html" %}
 
@@ -31,7 +23,7 @@
       This information comes from NDelius.
     </div>
 
-    {% include "includes/a1-current-offence-questions.html" %}
+    {% include "includes/dev/current-offence-questions.html" %}
   </div>
 
   <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible govuk-!-margin-top-9 govuk-!-margin-bottom-6">

@@ -436,10 +436,10 @@ export const VIOLENT_OFFENCE_CHECK_BROWSE_CONTEXT = 'violent-offence-check'
 
 export const OFFENCE_SEARCH_RESULTS_BROWSE_CONTEXT = 'search-results'
 
-/** Save current offence to session and return to a1 (or other returnUrl). */
+/** Save current offence to session and return to a2b (or other returnUrl). */
 export const persistPredictorsCurrentOffenceAndReturn = ({
   offence,
-  returnUrl = 'a1.html',
+  returnUrl = 'a2b.html',
   preserveConvictionDateEditMode = true
 }) => {
   if (!offence?.id) return false
@@ -469,7 +469,7 @@ export const initOffenceBrowseForm = ({
   form,
   getTableBodies,
   browseContext = 'current-offence',
-  returnUrl = 'a1.html',
+  returnUrl = 'a2b.html',
   onStartNewSearch = null,
   selectionErrorFocusSelector = null,
   categoryRequiredSelector = null,
@@ -524,7 +524,7 @@ export const initOffenceBrowseForm = ({
 
   if (isPredictorsCheckAnswersEdit()) {
     const backLink = document.querySelector('.assessment-layout .govuk-back-link')
-    if (backLink) backLink.href = withFromCheckAnswers('a1.html')
+    if (backLink) backLink.href = withFromCheckAnswers('a2b.html')
   }
 
   let selectedOffence = null

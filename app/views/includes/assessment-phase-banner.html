@@ -7,7 +7,7 @@
           {% if useDevBetaPhaseBanner %}
           <strong class="govuk-tag govuk-phase-banner__content__tag">Beta</strong>
           <span class="govuk-phase-banner__text">
-            This is a new service. Give <a class="govuk-link" href="#" data-predictors-inactive-link>feedback</a> or <a class="govuk-link" href="#" data-predictors-inactive-link>report a problem</a>.
+            This is a new service. <a class="govuk-link" href="#" data-predictors-inactive-link>Give feedback</a> to help us improve it, or <a class="govuk-link" href="#" data-predictors-inactive-link>report a problem</a>.
           </span>
           {% else %}
           <strong class="govuk-tag govuk-phase-banner__content__tag">Prototype</strong>
@@ -20,6 +20,26 @@
     </div>
   </div>
 </div>
+{% elif phaseBannerBelowHeader %}
+<div class="assessment-phase-banner assessment-phase-banner--below-header">
+  <div class="govuk-width-container">
+    <div class="govuk-phase-banner">
+      <p class="govuk-phase-banner__content">
+        {% if useDevBetaPhaseBanner %}
+        <strong class="govuk-tag govuk-phase-banner__content__tag">Beta</strong>
+        <span class="govuk-phase-banner__text">
+          This is a new service. <a class="govuk-link" href="#" data-predictors-inactive-link>Give feedback</a> to help us improve it, or <a class="govuk-link" href="#" data-predictors-inactive-link>report a problem</a>.
+        </span>
+        {% else %}
+        <strong class="govuk-tag govuk-phase-banner__content__tag">Prototype</strong>
+        <span class="govuk-phase-banner__text">
+          This is a research prototype – your feedback will help us improve it.
+        </span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</div>
 {% else %}
 <div class="govuk-grid-row assessment-phase-banner">
   <div class="govuk-grid-column-full">
@@ -28,7 +48,7 @@
         {% if useDevBetaPhaseBanner %}
         <strong class="govuk-tag govuk-phase-banner__content__tag">Beta</strong>
         <span class="govuk-phase-banner__text">
-          This is a new service. Give <a class="govuk-link" href="#" data-predictors-inactive-link>feedback</a> or <a class="govuk-link" href="#" data-predictors-inactive-link>report a problem</a>.
+          This is a new service. <a class="govuk-link" href="#" data-predictors-inactive-link>Give feedback</a> to help us improve it, or <a class="govuk-link" href="#" data-predictors-inactive-link>report a problem</a>.
         </span>
         {% else %}
         <strong class="govuk-tag govuk-phase-banner__content__tag">Prototype</strong>

@@ -3,12 +3,15 @@
 {% set hideServiceNavigation = true %}
 {% set hideServiceHeader = true %}
 
+{% block pageTitle %}Reoffending predictors - Research prototypes{% endblock %}
+
 {% block content %}
 
 {% include "includes/assessment-home-page-open.html" %}
 
 <div class="assessment-home-header">
-  <h1 class="govuk-heading-xl assessment-home-title">Prototypes</h1>
+  <span class="govuk-caption-xl">Reoffending predictors</span>
+  <h1 class="govuk-heading-xl assessment-home-title">Research prototypes</h1>
   <p class="govuk-hint assessment-home-hint">These prototypes have been built by the ARNS Actuarials team (squad 3). It shows reference designs and experiments for research.</p>
 </div>
 
@@ -26,7 +29,7 @@
   <div class="govuk-tabs__panel" id="research-prototypes">
 
 <ul class="govuk-list assessment-research-prototypes">
-  {% set href = "/02/a1.html" %}
+  {% set href = "/02/a2b.html" %}
   {% set itemHeading = "Prototype 2" %}
   {% set title = "Static assessment" %}
   {% set prototypeVersion = "02" %}
@@ -65,8 +68,8 @@
   <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="dev-prototypes">
 
 <ul class="govuk-list assessment-research-prototypes">
-  {% set href = "/dev/a1.html" %}
-  {% set itemHeading = "CSRP prototype" %}
+  {% set href = "/dev/a2b.html" %}
+  {% set itemHeading = "Dev reference" %}
   {% set title = "Static assessment" %}
   {% set prototypeVersion = "dev" %}
   {% set secondaryTitle = "Dynamic assessment" %}
@@ -75,7 +78,7 @@
   {% set titleTagColour = "blue" %}
   {% set secondaryTitleTagText = null %}
   {% set secondaryTitleTagColour = null %}
-  {% set hint = "This is a reference prototype for development" %}
+  {% set hint = "Reference prototype for development" %}
   {% set skipToEndHref = null %}
   {% set clearSessionOnStart = true %}
   {% include "includes/research-prototype-entry.html" %}

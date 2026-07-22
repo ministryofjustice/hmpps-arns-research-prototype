@@ -3,9 +3,7 @@
 //
 
 import {
-  initConvictionDate,
-  isConvictionDateEditPanelOpen,
-  persistConvictionDateState
+  initConvictionDate
 } from '../conviction-date.js'
 import {
   getDefaultFirstSanctionDateParts,
@@ -16,7 +14,7 @@ import {
   completePredictorsPageAndContinue,
   isPredictorsCheckAnswersEdit
 } from './predictors-change-scroll.js'
-import { initA1OffenceDisplayToggle } from '../tiering-a1-display-toggle.js'
+import { hydrateCurrentOffenceDisplay } from './predictors-current-offence-display.js'
 import { getA1FieldsFromForm, getA2FieldsFromForm } from './predictors-journey.js'
 
 const setFirstSanctionDateValues = (parts) => {
@@ -36,11 +34,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
   if (!form) return
 
   initConvictionDate()
-  initA1OffenceDisplayToggle()
-
-  document.querySelector('[data-predictors-offence-browse-link]')?.addEventListener('click', () => {
-    persistConvictionDateState({ editing: isConvictionDateEditPanelOpen() })
-  })
+  hydrateCurrentOffenceDisplay()
 
   const session = getPredictorsAssessmentSession()
 

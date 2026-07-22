@@ -77,6 +77,22 @@ $desktop: 48.0625em;
     margin-bottom: 10px;
   }
 
+  .assessment-offender-header--identifiers-beside-name {
+    .assessment-offender-header__name-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 15px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .assessment-offender-header__identifiers {
+      margin-bottom: 0;
+      color: #484949;
+    }
+  }
+
   .assessment-offender-header__view-answers {
     font-size: 1.1875rem; // 19px
     line-height: 1.3157894737;
@@ -234,6 +250,23 @@ $desktop: 48.0625em;
     @media (max-width: $tablet) {
       width: 100%;
       text-align: center;
+    }
+  }
+
+  // Drop Return to OASys to the H1 title line (below caption)
+  // Only when actions sit beside the heading (not stacked under it on small screens).
+  // Section caption: line-height 1.1 + 10px margin. Plain caption-l: GOV.UK 24/30 (tablet).
+  @media (min-width: $tablet) {
+    .assessment-service-header__question-row:has(.assessment-service-header__section-caption) > .assessment-service-header__actions {
+      margin-top: calc(24px * 1.1 + 10px);
+    }
+
+    .assessment-layout__row:has(> :is(div, h1) .govuk-caption-l:not(.assessment-service-header__section-caption)) {
+      > .assessment-layout__return-to-oasys,
+      > .assessment-service-header__actions {
+        align-self: flex-start;
+        margin-top: 30px; // caption line-height (tablet 30px)
+      }
     }
   }
 
@@ -2703,6 +2736,22 @@ body.assessment-page {
 }
 
 // Proto 2 a1 – prototype banner flush above PDS footer
+.assessment-phase-banner--below-header {
+  margin-top: 0;
+  margin-bottom: 0;
+  border-bottom: 1px solid #b1b4b6;
+  background-color: #ffffff;
+
+  .govuk-phase-banner {
+    margin-top: 0;
+    margin-bottom: 0;
+    border-top: 0;
+    border-bottom: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+}
+
 .assessment-phase-banner--above-footer {
   margin-top: 0;
   margin-bottom: 0;
@@ -2729,6 +2778,32 @@ body.assessment-page {
 
 .policy-page__content-spacer {
   min-height: 10lh;
+}
+
+// Dev header – space between organisation and service name
+.probation-common-header__title__service-name {
+  margin-left: govuk-spacing(2);
+  font-weight: normal;
+}
+
+// Dev header – account toggle: name only, no dropdown arrow
+.probation-common-header__navigation__item
+  > button.probation-common-header__user-menu-toggle
+  > span::before {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+}
+
+// Dev header – hide Menu (kept in DOM so account dropdown JS still initialises)
+.probation-common-header__navigation__item--services,
+.probation-common-header__services-menu-toggle,
+.probation-common-header__services-menu-link,
+.probation-common-header__services-menu {
+  display: none !important;
 }
 
 // Proto 2 a1 – PDS footer crown under policy links

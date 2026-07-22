@@ -191,7 +191,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
       createRow(
         `What was ${name}'s date of first sanction?`,
         formatFirstSanctionAnswer(session),
-        'a2.html',
+        'a2b.html',
         `What was the date of ${name}'s first sanction?`,
         false,
         PREDICTORS_CHANGE_ANCHORS.firstSanctionAge
@@ -199,7 +199,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
       createRow(
         `How many sanctions does ${name} have in total for all offences?`,
         session.totalSanctions,
-        'a2.html',
+        'a2b.html',
         `How many sanctions does ${name} have in total for all offences?`,
         false,
         PREDICTORS_CHANGE_ANCHORS.totalSanctions
@@ -207,7 +207,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
       createRow(
         `How many of ${name}'s total sanctions involved violent offences?`,
         session.violentSanctions,
-        'a2.html',
+        'a2b.html',
         `How many of ${name}'s total sanctions involved violent offences?`,
         false,
         PREDICTORS_CHANGE_ANCHORS.violentSanctions
@@ -215,7 +215,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
       createRow(
         `Has ${name} ever committed a sexual or sexually motivated offence?`,
         formatChoice(session.sexualOffence),
-        'a2.html',
+        'a2b.html',
         `Has ${name} ever committed a sexual or sexually motivated offence?`,
         false,
         PREDICTORS_CHANGE_ANCHORS.sexualOffence
