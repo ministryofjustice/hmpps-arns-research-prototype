@@ -1,4 +1,5 @@
 <div class="assessment-layout{% if usePdsHeader and not phaseBannerBelowHeader %} assessment-layout--phase-banner-above-footer{% endif %}"{% if tieringTelemetryPage %} data-tiering-telemetry-page="{{ tieringTelemetryPage }}" data-tiering-telemetry-page-label="{{ tieringTelemetryPageLabel | default(tieringTelemetryPage) }}"{% endif %}>
+  <div id="top" tabindex="-1"></div>
   {% if not usePdsHeader %}
   {% include "includes/assessment-phase-banner.html" %}
   {% endif %}

@@ -1,5 +1,5 @@
 //
-// b2 – employment history
+// b2 – current employment status
 //
 
 import {

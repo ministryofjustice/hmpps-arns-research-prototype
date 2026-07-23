@@ -90,7 +90,7 @@ export const buildPredictorsSummarySections = (
   const offenceCodeLabel = formatOffenceCodeLabel(currentOffence || {})
 
   sections.push({
-    title: 'Current offence details',
+    title: 'Current offence',
     rows: [
       createRow(
         'Offence name',

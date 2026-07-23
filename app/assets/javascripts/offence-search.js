@@ -361,8 +361,8 @@ window.initOffenceSearchV2 = async (container) => {
 
   const showSearch = () => {
     persistA1ConvictionDateState()
-    searchPanel.hidden = false
-    selectedPanel.hidden = true
+    if (searchPanel) searchPanel.hidden = false
+    if (selectedPanel) selectedPanel.hidden = true
     input.value = ''
     browseParent = null
     clearListbox()
@@ -710,7 +710,9 @@ window.initOffenceSearchV2 = async (container) => {
 
   const searchSubmit = container.querySelector('[data-offence-search-submit]')
   if (searchSubmit) {
-    searchSubmit.addEventListener('click', () => {
+    searchSubmit.addEventListener('click', (event) => {
+      // Progressive enhancement: submit buttons use a GET form when JS is off.
+      event.preventDefault()
       if (!dataReady) return
 
       if (submitFreeTextSearch()) return

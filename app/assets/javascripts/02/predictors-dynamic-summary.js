@@ -36,9 +36,12 @@ const ACCOMMODATION_LABELS = {
 }
 
 const EMPLOYMENT_LABELS = {
-  continuous: 'Continuous employment history',
-  'changes-jobs-often': 'Generally in employment but changes jobs often',
-  unstable: 'Unstable employment history with regular periods of unemployment',
+  employed: 'Employed',
+  'self-employed': 'Self-employed',
+  retired: 'Retired',
+  'currently-unavailable': 'Currently unavailable for work',
+  'unemployed-looking': 'Unemployed - actively looking for work',
+  'unemployed-not-looking': 'Unemployed - not actively looking for work',
   unknown: 'Unknown'
 }
 
@@ -198,12 +201,12 @@ export const buildDynamicPredictorsSummarySections = (session, offenderFirstName
     title: 'Employment and education',
     rows: [
       createRow(
-        `What is ${name}'s employment history?`,
+        `What is ${name}'s current employment status?`,
         formatLabelledChoice(session.employmentHistory, EMPLOYMENT_LABELS),
         'b2.html',
-        `What is ${name}'s employment history?`,
+        `What is ${name}'s current employment status?`,
         false,
-        'predictors-employment-history'
+        'predictors-employment-status'
       )
     ]
   })

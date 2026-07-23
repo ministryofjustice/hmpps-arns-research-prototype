@@ -1,9 +1,9 @@
 {% extends "layouts/assessment-proto2.html" %}
 
 {% set offenderFirstName = "Alex" %}
-{% set pageName = "Current offence and offending history" %}
+{% set pageName = "Offending" %}
 {% set activeSection = "section-1" %}
-{% set pageHeading = "Current offence and offending history" %}
+{% set pageHeading = "Offending" %}
 {% set statusTag = "Incomplete" %}
 {% set returnToOasysButtonInclude = "includes/02/a2-layout-toggle-to-a2.html" %}
 {% set showCurrentOffenceWarning = true %}
@@ -21,6 +21,8 @@
 </div>
 
 {% include "includes/assessment-question-header.html" %}
+
+{% include "includes/02/violent-offence-check-search-form.html" %}
 
 <form id="predictors-a2b-form" novalidate data-offender-first-name="{{ offenderFirstName }}" data-a1-offence-display-default="table">
 

@@ -2,7 +2,7 @@
 // a7 – check your answers (summary list from session)
 //
 
-import { getPredictorsBackLinkHref } from './predictors-change-scroll.js'
+import { getPredictorsBackLinkHref, scrollToPredictorsChangeTarget } from './predictors-change-scroll.js'
 import { getPredictorsAssessmentSession, setPredictorsAssessmentSession } from './predictors-assessment-session.js'
 import { ensureOffenceSearchData } from './predictors-offence-browse.js'
 import {
@@ -37,6 +37,7 @@ window.GOVUKPrototypeKit.documentReady(async () => {
   }
 
   renderPredictorsSummaryList(summaryList, session, offenderFirstName)
+  scrollToPredictorsChangeTarget()
 
   const continueAssessmentButton = document.getElementById('predictors-a7-continue-assessment')
   if (continueAssessmentButton) {

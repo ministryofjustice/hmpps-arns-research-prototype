@@ -1282,6 +1282,12 @@ body.assessment-page {
       .offence-autocomplete__combobox {
         max-width: none;
       }
+
+      .offence-autocomplete--with-search-button {
+        .offence-autocomplete__search-row {
+          width: 100%;
+        }
+      }
     }
   }
 }
@@ -2900,3 +2906,7 @@ body.assessment-page {
 .predictors-mark-section-complete--hidden { @extend .tiering-mark-section-complete--hidden; }
 .predictors-summary-list__not-provided { @extend .tiering-summary-list__not-provided; }
 .predictors-summary-group--separated { @extend .tiering-summary-group--separated; }
+
+.predictors-summary-section {
+  scroll-margin-top: 20px;
+}

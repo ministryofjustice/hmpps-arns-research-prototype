@@ -8,7 +8,7 @@
 
       <div class="violent-offence-check__search-row" data-violent-check-search>
         <div
-          class="offence-autocomplete offence-autocomplete--check offence-autocomplete--check-full-width"
+          class="offence-autocomplete offence-autocomplete--check offence-autocomplete--check-full-width offence-autocomplete--with-search-button"
           data-module="offence-search"
           data-offence-search-check="true"
           data-offence-search-suggest-violent-tags="true"
@@ -18,32 +18,42 @@
           id="violent-offence-check-search"
         >
           <div data-offence-search-panel>
-            <div class="govuk-form-group offence-autocomplete__combobox govuk-!-margin-bottom-0">
-              <label class="govuk-label govuk-visually-hidden" for="violent-offence-check-search-input">
-                Search for an offence to check if you should count it as a violent offence.
-              </label>
-              <textarea
-                class="govuk-input offence-autocomplete__input"
-                id="violent-offence-check-search-input"
-                name="violent_offence_check_search"
-                rows="1"
-                spellcheck="false"
-                autocomplete="off"
-                role="combobox"
-                aria-autocomplete="list"
-                aria-haspopup="listbox"
-                aria-expanded="false"
-                aria-controls="violent-offence-check-search-listbox"
-                aria-describedby="violent-offence-check-hint"
-                data-offence-search-input
-              ></textarea>
-              <ul
-                id="violent-offence-check-search-listbox"
-                class="offence-autocomplete__menu"
-                role="listbox"
-                data-offence-search-listbox
-                hidden
-              ></ul>
+            <div class="offence-autocomplete__search-row">
+              <div class="govuk-form-group offence-autocomplete__combobox govuk-!-margin-bottom-0">
+                <label class="govuk-label govuk-visually-hidden" for="violent-offence-check-search-input">
+                  Search for an offence to check if you should count it as a violent offence.
+                </label>
+                <textarea
+                  class="govuk-input offence-autocomplete__input"
+                  id="violent-offence-check-search-input"
+                  name="q"
+                  form="violent-offence-check-search-form"
+                  rows="1"
+                  spellcheck="false"
+                  autocomplete="off"
+                  role="combobox"
+                  aria-autocomplete="list"
+                  aria-haspopup="listbox"
+                  aria-expanded="false"
+                  aria-controls="violent-offence-check-search-listbox"
+                  aria-describedby="violent-offence-check-hint"
+                  data-offence-search-input
+                ></textarea>
+                <ul
+                  id="violent-offence-check-search-listbox"
+                  class="offence-autocomplete__menu"
+                  role="listbox"
+                  data-offence-search-listbox
+                  hidden
+                ></ul>
+              </div>
+              <button
+                type="submit"
+                form="violent-offence-check-search-form"
+                class="govuk-button offence-autocomplete__search-button"
+                data-offence-search-submit
+                data-module="govuk-button"
+              >Search</button>
             </div>
           </div>
         </div>

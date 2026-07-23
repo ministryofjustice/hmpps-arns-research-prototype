@@ -45,25 +45,31 @@ const getFromParamFromHref = (href = '') => {
   return match?.[1] || null
 }
 
+const withCheckAnswersReturnAnchor = (href, session = getPredictorsAssessmentSession()) => {
+  const anchor = session.checkAnswersReturnAnchor
+  if (!anchor || href.includes('#')) return href
+  return `${href}#${anchor}`
+}
+
 // Keep a7/b11 hrefs as literals (do not import from predictors-journey).
 // change-scroll ↔ offence-browse ↔ journey is circular; documentReady can run
 // during module init while journey exports are still in the TDZ.
 export const getPredictorsCheckAnswersReturnHref = (session = getPredictorsAssessmentSession()) => {
+  let href = CHECK_ANSWERS_HREF_A7
+
   if (session.checkAnswersReturnTarget === CHECK_ANSWERS_RETURN_B11) {
-    return CHECK_ANSWERS_HREF_B11
+    href = CHECK_ANSWERS_HREF_B11
+  } else if (session.checkAnswersReturnTarget === CHECK_ANSWERS_RETURN_A7) {
+    href = CHECK_ANSWERS_HREF_A7
+  } else {
+    const from = new URLSearchParams(window.location.search).get('from')
+
+    if (isB11FromParam(from)) {
+      href = CHECK_ANSWERS_HREF_B11
+    }
   }
 
-  if (session.checkAnswersReturnTarget === CHECK_ANSWERS_RETURN_A7) {
-    return CHECK_ANSWERS_HREF_A7
-  }
-
-  const from = new URLSearchParams(window.location.search).get('from')
-
-  if (isB11FromParam(from)) {
-    return CHECK_ANSWERS_HREF_B11
-  }
-
-  return CHECK_ANSWERS_HREF_A7
+  return withCheckAnswersReturnAnchor(href, session)
 }
 
 export const getActiveCheckAnswersFromParam = () => {
@@ -154,7 +160,7 @@ export const isPredictorsBackNavigation = () => {
   return nav?.type === 'back_forward'
 }
 
-export const startPredictorsCheckAnswersEdit = (fromParam) => {
+export const startPredictorsCheckAnswersEdit = (fromParam, returnAnchor) => {
   const session = getPredictorsAssessmentSession()
   const from = fromParam || new URLSearchParams(window.location.search).get('from')
   const updates = { returnToCheckAnswers: true }
@@ -169,6 +175,12 @@ export const startPredictorsCheckAnswersEdit = (fromParam) => {
     updates.checkAnswersReturnTarget = session.checkAnswersReturnTarget
   } else if (window.location.pathname.includes('/02/b11')) {
     updates.checkAnswersReturnTarget = CHECK_ANSWERS_RETURN_B11
+  }
+
+  if (returnAnchor) {
+    updates.checkAnswersReturnAnchor = returnAnchor
+  } else if (session.checkAnswersReturnAnchor) {
+    updates.checkAnswersReturnAnchor = session.checkAnswersReturnAnchor
   }
 
   setPredictorsAssessmentSession(updates)
@@ -193,6 +205,7 @@ export const clearPredictorsCheckAnswersEdit = () => {
   setPredictorsAssessmentSession({
     returnToCheckAnswers: false,
     checkAnswersReturnTarget: undefined,
+    checkAnswersReturnAnchor: undefined,
     checkAnswersEditSnapshot: undefined
   })
 }
@@ -249,11 +262,14 @@ export const completePredictorsPageAndContinue = (currentPage, defaultHref, newF
     }
 
     const resolveReturnHref = () =>
-      getCheckAnswersReturnHrefAfterEdit(
-        currentPage,
-        beforeSession,
-        merged,
-        checkAnswersReturnHref
+      withCheckAnswersReturnAnchor(
+        getCheckAnswersReturnHrefAfterEdit(
+          currentPage,
+          beforeSession,
+          merged,
+          checkAnswersReturnHref
+        ),
+        beforeSession
       )
 
     if (changed && isSection1Complete()) {
@@ -264,6 +280,7 @@ export const completePredictorsPageAndContinue = (currentPage, defaultHref, newF
     if (!changed) {
       sessionUpdates.returnToCheckAnswers = false
       sessionUpdates.checkAnswersReturnTarget = undefined
+      sessionUpdates.checkAnswersReturnAnchor = undefined
       setPredictorsAssessmentSession(sessionUpdates)
 
       if (wasEdit || snapshot) {
@@ -284,10 +301,14 @@ export const completePredictorsPageAndContinue = (currentPage, defaultHref, newF
       if (isOpeningDynamicFromInterviewEdit(currentPage, beforeSession, merged)) {
         sessionUpdates.returnToCheckAnswers = false
         sessionUpdates.checkAnswersReturnTarget = undefined
+        sessionUpdates.checkAnswersReturnAnchor = undefined
       } else {
         sessionUpdates.returnToCheckAnswers = true
         if (beforeSession.checkAnswersReturnTarget) {
           sessionUpdates.checkAnswersReturnTarget = beforeSession.checkAnswersReturnTarget
+        }
+        if (beforeSession.checkAnswersReturnAnchor) {
+          sessionUpdates.checkAnswersReturnAnchor = beforeSession.checkAnswersReturnAnchor
         }
       }
       setPredictorsAssessmentSession(sessionUpdates)
@@ -296,6 +317,7 @@ export const completePredictorsPageAndContinue = (currentPage, defaultHref, newF
 
     sessionUpdates.returnToCheckAnswers = false
     sessionUpdates.checkAnswersReturnTarget = undefined
+    sessionUpdates.checkAnswersReturnAnchor = undefined
     setPredictorsAssessmentSession(sessionUpdates)
     return resolveReturnHref()
   }
@@ -304,6 +326,7 @@ export const completePredictorsPageAndContinue = (currentPage, defaultHref, newF
     ...merged,
     returnToCheckAnswers: false,
     checkAnswersReturnTarget: undefined,
+    checkAnswersReturnAnchor: undefined,
     checkAnswersEditSnapshot: undefined
   })
 
@@ -328,7 +351,13 @@ export const scrollToPredictorsChangeTarget = (anchorId = window.location.hash.s
   if (!target) return
 
   const scroll = () => {
-    target.scrollIntoView({ behavior: 'auto', block: 'start' })
+    const section = target.closest?.('.predictors-summary-section')
+    const scrollTarget = section || target
+    scrollTarget.scrollIntoView({ behavior: 'auto', block: 'start' })
+
+    if (typeof target.focus === 'function' && target.matches?.('a.govuk-link, a')) {
+      target.focus({ preventScroll: true })
+    }
   }
 
   const delay = scrollDelayMs(anchorId)
@@ -354,7 +383,9 @@ window.GOVUKPrototypeKit.documentReady(() => {
       return
     }
 
-    startPredictorsCheckAnswersEdit(from)
+    const returnAnchor =
+      changeLink.id || changeLink.closest('.predictors-summary-section')?.id || null
+    startPredictorsCheckAnswersEdit(from, returnAnchor)
   })
 
   if (isPredictorsCheckAnswersEdit()) {
