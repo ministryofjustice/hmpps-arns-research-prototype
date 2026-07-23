@@ -40,7 +40,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
   const formattedDate = formatDateFromParts(session.communityDate || {})
 
   if (!isA5Required(session)) {
-    window.location.href = predictorsJourneyHref('a6.html')
+    window.location.href = predictorsJourneyHref('a7.html')
     return
   }
 
@@ -95,10 +95,11 @@ window.GOVUKPrototypeKit.documentReady(() => {
       return
     }
 
-    const merged = applyBranchingCleanup('a5', getPredictorsAssessmentSession(), newFields)
-
     window.location.href = predictorsJourneyHref(
-      completePredictorsPageAndContinue('a5', getPostA5ContinueHref(merged), newFields)
+      completePredictorsPageAndContinue('a5', getPostA5ContinueHref(), {
+        ...newFields,
+        staticAssessmentCompleteSeen: true
+      })
     )
   })
 })

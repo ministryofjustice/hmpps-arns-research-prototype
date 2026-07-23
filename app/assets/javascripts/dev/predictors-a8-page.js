@@ -8,7 +8,7 @@ import { syncPredictorsSessionBeforeCheckAnswers, predictorsJourneyHref } from '
 import { initPredictorsInactiveLinks } from './predictors-inactive-links.js'
 
 const scrollA8ToTop = () => {
-  window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  window.scrollTo(0, 0)
   document.documentElement.scrollTop = 0
   document.body.scrollTop = 0
 }
@@ -20,6 +20,15 @@ const initRiskPredictorBackToTop = () => {
   link.addEventListener('click', (event) => {
     event.preventDefault()
     scrollA8ToTop()
+
+    const top = document.getElementById('top')
+    if (top) {
+      top.focus({ preventScroll: true })
+    }
+
+    if (window.location.hash) {
+      history.replaceState(null, '', `${window.location.pathname}${window.location.search}`)
+    }
   })
 }
 

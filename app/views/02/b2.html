@@ -2,14 +2,12 @@
 
 {% set offenderFirstName = "Alex" %}
 {% set pageName = "Employment and education" %}
-{% set pageHeadingHtml = "What is " ~ offenderFirstName ~ "'s employment history?" %}
-{% set pageHeadingId = "predictors-employment-history" %}
+{% set pageHeadingHtml = "What is " ~ offenderFirstName ~ "'s current employment status?" %}
+{% set pageHeadingId = "predictors-employment-status" %}
 {% set pageHeadingClass = "predictors-question-anchor" %}
 {% set compactPageHeader = true %}
 {% set activeSection = "section-1" %}
 {% set statusTag = "Incomplete" %}
-{% set pageHeadingHint = "Include their current employment." %}
-{% set pageHeadingHintId = "employment-history-hint" %}
 {% set backLinkHref = "b1.html" %}
 {% set backLinkId = "predictors-b2-back" %}
 
@@ -21,34 +19,43 @@
 
 <form id="predictors-b2-form" novalidate>
   <div class="govuk-form-group govuk-!-margin-top-0">
-    <fieldset class="govuk-fieldset" aria-describedby="employment-history-hint">
+    <fieldset class="govuk-fieldset">
       {% if questionLegendAsHeading and pageHeadingHtml %}
         {% include "includes/assessment-question-legend-heading.html" %}
       {% else %}
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
-        What is {{ offenderFirstName }}'s employment history?
+        What is {{ offenderFirstName }}'s current employment status?
       </legend>
       {% endif %}
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="employment-history-continuous" name="employment_history" type="radio" value="continuous" aria-describedby="employment-history-continuous-hint">
-          <label class="govuk-label govuk-radios__label" for="employment-history-continuous">Continuous employment history</label>
-          <div id="employment-history-continuous-hint" class="govuk-hint govuk-radios__hint">
-            They may have had a break in employment due to things like redundancy, illness or caring for a family member.
-          </div>
+          <input class="govuk-radios__input" id="employment-status-employed" name="employment_history" type="radio" value="employed">
+          <label class="govuk-label govuk-radios__label" for="employment-status-employed">Employed</label>
         </div>
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="employment-history-changes-jobs-often" name="employment_history" type="radio" value="changes-jobs-often">
-          <label class="govuk-label govuk-radios__label" for="employment-history-changes-jobs-often">Generally in employment but changes jobs often</label>
+          <input class="govuk-radios__input" id="employment-status-self-employed" name="employment_history" type="radio" value="self-employed">
+          <label class="govuk-label govuk-radios__label" for="employment-status-self-employed">Self-employed</label>
         </div>
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="employment-history-unstable" name="employment_history" type="radio" value="unstable">
-          <label class="govuk-label govuk-radios__label" for="employment-history-unstable">Unstable employment history with regular periods of unemployment</label>
+          <input class="govuk-radios__input" id="employment-status-retired" name="employment_history" type="radio" value="retired">
+          <label class="govuk-label govuk-radios__label" for="employment-status-retired">Retired</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="employment-status-currently-unavailable" name="employment_history" type="radio" value="currently-unavailable">
+          <label class="govuk-label govuk-radios__label" for="employment-status-currently-unavailable">Currently unavailable for work</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="employment-status-unemployed-looking" name="employment_history" type="radio" value="unemployed-looking">
+          <label class="govuk-label govuk-radios__label" for="employment-status-unemployed-looking">Unemployed - actively looking for work</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="employment-status-unemployed-not-looking" name="employment_history" type="radio" value="unemployed-not-looking">
+          <label class="govuk-label govuk-radios__label" for="employment-status-unemployed-not-looking">Unemployed - not actively looking for work</label>
         </div>
         <div class="govuk-radios__divider">or</div>
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="employment-history-unknown" name="employment_history" type="radio" value="unknown">
-          <label class="govuk-label govuk-radios__label" for="employment-history-unknown">Unknown</label>
+          <input class="govuk-radios__input" id="employment-status-unknown" name="employment_history" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="employment-status-unknown">Unknown</label>
         </div>
       </div>
     </fieldset>

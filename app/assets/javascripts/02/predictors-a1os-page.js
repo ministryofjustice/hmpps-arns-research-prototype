@@ -45,7 +45,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
   const browseContext = violentOffenceCheckBrowse
     ? VIOLENT_OFFENCE_CHECK_BROWSE_CONTEXT
     : OFFENCE_SEARCH_RESULTS_BROWSE_CONTEXT
-  const returnUrl = violentOffenceCheckBrowse ? 'a2.html#violent-offence-check' : 'a1.html'
+  const returnUrl = violentOffenceCheckBrowse ? 'a2b.html#violent-offence-check' : 'a2b.html'
 
   if (!query) {
     window.location.replace(withFromCheckAnswers(returnUrl))

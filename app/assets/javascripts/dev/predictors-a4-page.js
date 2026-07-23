@@ -16,12 +16,13 @@ import {
   getDefaultCommunityDateParts,
   getFirstIncompleteA3Page,
   getPostA4ContinueHref,
+  getPredictorsResultsAnswersHref,
   isDateComplete
 } from './predictors-journey.js'
 import { getPredictorsAssessmentSession } from './predictors-assessment-session.js'
 
 const getA4BackHref = (session) => {
-  if (session.sexualOffence !== 'yes') return 'a2.html'
+  if (session.sexualOffence !== 'yes') return 'a2b.html'
   return getFirstIncompleteA3Page(session) || 'a3.html'
 }
 
@@ -66,10 +67,12 @@ window.GOVUKPrototypeKit.documentReady(() => {
       return
     }
 
-    window.location.href = completePredictorsPageAndContinue(
-      'a4',
-      getPostA4ContinueHref({ ...getPredictorsAssessmentSession(), ...newFields }),
-      newFields
-    )
+    const continueHref = getPostA4ContinueHref({ ...getPredictorsAssessmentSession(), ...newFields })
+    const sessionUpdates =
+      continueHref === getPredictorsResultsAnswersHref()
+        ? { ...newFields, staticAssessmentCompleteSeen: true }
+        : newFields
+
+    window.location.href = completePredictorsPageAndContinue('a4', continueHref, sessionUpdates)
   })
 })

@@ -28,13 +28,19 @@
       </legend>
       {% endif %}
       <div class="govuk-radios" data-module="govuk-radios">
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="interview-done-yes" name="interview_done" type="radio" value="yes">
-          <label class="govuk-label govuk-radios__label" for="interview-done-yes">Yes, continue assessment and complete questions that contribute to dynamic scores</label>
+        <div class="govuk-radios__item govuk-!-margin-bottom-6">
+          <input class="govuk-radios__input" id="interview-done-yes" name="interview_done" type="radio" value="yes" aria-describedby="interview-done-yes-hint">
+          <label class="govuk-label govuk-radios__label" for="interview-done-yes">Yes, continue assessment</label>
+          <div id="interview-done-yes-hint" class="govuk-hint govuk-radios__hint">
+            Answer questions needed for the dynamic scores.
+          </div>
         </div>
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="interview-done-no" name="interview_done" type="radio" value="no">
-          <label class="govuk-label govuk-radios__label" for="interview-done-no">No, check answers and view static scores</label>
+          <input class="govuk-radios__input" id="interview-done-no" name="interview_done" type="radio" value="no" aria-describedby="interview-done-no-hint">
+          <label class="govuk-label govuk-radios__label" for="interview-done-no">No</label>
+          <div id="interview-done-no-hint" class="govuk-hint govuk-radios__hint">
+            Check your answers and view static scores.
+          </div>
         </div>
       </div>
     </fieldset>

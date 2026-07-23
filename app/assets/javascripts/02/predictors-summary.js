@@ -46,11 +46,27 @@ const escapeHtml = (text) =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
 
-const renderSummarySection = ({ title, rows }) => `
-  <section class="predictors-summary-section govuk-!-margin-bottom-6">
+export const predictorsSummarySectionId = (title) =>
+  `predictors-summary-${String(title)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')}`
+
+export const predictorsSummaryChangeLinkId = (label) =>
+  `predictors-cya-change-${String(label)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')}`
+
+const renderSummarySection = ({ id, title, rows }) => {
+  const sectionId = id || predictorsSummarySectionId(title)
+
+  return `
+  <section class="predictors-summary-section govuk-!-margin-bottom-6" id="${escapeHtml(sectionId)}">
     <h2 class="govuk-heading-m govuk-!-margin-bottom-3">${escapeHtml(title)}</h2>
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">${renderSummaryRows(rows)}</dl>
   </section>`
+}
 
 const renderSummarySections = (sections) => sections.map(renderSummarySection).join('')
 
@@ -76,7 +92,7 @@ const splitStaticAndDynamicSections = (sections) => {
 const renderSummaryRows = (rows) =>
   rows
     .map(
-      ({ key, value, changeHref, changeHidden, hideChange }) => `
+      ({ key, value, changeHref, changeHidden, changeLinkId, hideChange }) => `
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">${escapeHtml(key)}</dt>
     <dd class="govuk-summary-list__value">${value}</dd>${
@@ -84,16 +100,23 @@ const renderSummaryRows = (rows) =>
         ? ''
         : `
     <dd class="govuk-summary-list__actions">
-      <a class="govuk-link" href="${changeHref}">Change<span class="govuk-visually-hidden"> ${escapeHtml(changeHidden)}</span></a>
+      <a class="govuk-link" href="${changeHref}" id="${escapeHtml(changeLinkId)}">Change<span class="govuk-visually-hidden"> ${escapeHtml(changeHidden)}</span></a>
     </dd>`
     }
   </div>`
     )
     .join('')
 
+export const A7_SUMMARY_LAYOUTS = {
+  default: 'default',
+  timeSinceLastOffence: 'time-since-last-offence'
+}
+
 export const buildPredictorsSummarySections = (session, offenderFirstName = 'Alex', options = {}) => {
   const name = offenderFirstName
   const sections = []
+  const layout = options.layout || A7_SUMMARY_LAYOUTS.timeSinceLastOffence
+  const groupTimeSinceLastOffence = layout === A7_SUMMARY_LAYOUTS.timeSinceLastOffence
   const staticCheckAnswersFrom =
     options.staticCheckAnswersFrom ||
     options.checkAnswersFrom ||
@@ -114,6 +137,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
     from = staticCheckAnswersFrom
   ) => {
     let display = NOT_PROVIDED_HTML
+    const hiddenLabel = changeHidden || key
 
     if (value) {
       display = allowHtml ? value : escapeHtml(value)
@@ -123,7 +147,8 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
       key,
       value: display,
       changeHref: predictorsChangeHref(changeHref, changeAnchor, from),
-      changeHidden: changeHidden || key,
+      changeHidden: hiddenLabel,
+      changeLinkId: predictorsSummaryChangeLinkId(hiddenLabel),
       hideChange
     }
   }
@@ -153,7 +178,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
   const offenceCodeLabel = formatOffenceCodeLabel(currentOffence || {})
 
   sections.push({
-    title: 'Current offence details',
+    title: 'Current offence',
     rows: [
       createRow(
         'Offence name',
@@ -191,7 +216,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
       createRow(
         `What was ${name}'s date of first sanction?`,
         formatFirstSanctionAnswer(session),
-        'a2.html',
+        'a2b.html',
         `What was the date of ${name}'s first sanction?`,
         false,
         PREDICTORS_CHANGE_ANCHORS.firstSanctionAge
@@ -199,7 +224,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
       createRow(
         `How many sanctions does ${name} have in total for all offences?`,
         session.totalSanctions,
-        'a2.html',
+        'a2b.html',
         `How many sanctions does ${name} have in total for all offences?`,
         false,
         PREDICTORS_CHANGE_ANCHORS.totalSanctions
@@ -207,7 +232,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
       createRow(
         `How many of ${name}'s total sanctions involved violent offences?`,
         session.violentSanctions,
-        'a2.html',
+        'a2b.html',
         `How many of ${name}'s total sanctions involved violent offences?`,
         false,
         PREDICTORS_CHANGE_ANCHORS.violentSanctions
@@ -215,7 +240,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
       createRow(
         `Has ${name} ever committed a sexual or sexually motivated offence?`,
         formatChoice(session.sexualOffence),
-        'a2.html',
+        'a2b.html',
         `Has ${name} ever committed a sexual or sexually motivated offence?`,
         false,
         PREDICTORS_CHANGE_ANCHORS.sexualOffence
@@ -299,24 +324,20 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
     })
   }
 
-  sections.push({
-    title: 'Community supervision',
-    rows: [
-      createRow(
-        `What date did ${name}'s current supervision in the community begin?`,
-        formatDateFromParts(session.communityDate || {}),
-        'a4.html',
-        `What date did ${name}'s current supervision in the community begin?`,
-        false,
-        PREDICTORS_CHANGE_ANCHORS.supervisedCommunityDate
-      )
-    ]
-  })
-
   const communityDateLabel = formatDateFromParts(session.communityDate || {}) || 'that date'
+  const communityDateRow = createRow(
+    `What date did ${name}'s current supervision in the community begin?`,
+    formatDateFromParts(session.communityDate || {}),
+    'a4.html',
+    `What date did ${name}'s current supervision in the community begin?`,
+    false,
+    PREDICTORS_CHANGE_ANCHORS.supervisedCommunityDate
+  )
+
+  const offencesSinceCommunityRows = []
 
   if (isA5Required(session)) {
-    const offencesSinceCommunityRows = [
+    offencesSinceCommunityRows.push(
       createRow(
         `Has ${name} committed any offences since ${communityDateLabel}?`,
         formatChoice(session.offencesSinceCommunity),
@@ -325,7 +346,7 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
         false,
         PREDICTORS_CHANGE_ANCHORS.offencesSinceCommunity
       )
-    ]
+    )
 
     if (session.offencesSinceCommunity === 'yes') {
       offencesSinceCommunityRows.push(
@@ -339,11 +360,25 @@ export const buildPredictorsSummarySections = (session, offenderFirstName = 'Ale
         )
       )
     }
+  }
 
+  if (groupTimeSinceLastOffence) {
     sections.push({
-      title: 'Offences since community date',
-      rows: offencesSinceCommunityRows
+      title: 'Time since last offence',
+      rows: [communityDateRow, ...offencesSinceCommunityRows]
     })
+  } else {
+    sections.push({
+      title: 'Community supervision',
+      rows: [communityDateRow]
+    })
+
+    if (offencesSinceCommunityRows.length) {
+      sections.push({
+        title: 'Offences since community date',
+        rows: offencesSinceCommunityRows
+      })
+    }
   }
 
   sections.push({

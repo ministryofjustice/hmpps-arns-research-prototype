@@ -2,7 +2,12 @@
 // b11 – check your answers (static + dynamic summary)
 //
 
-import { getPredictorsBackLinkHref, PREDICTORS_FROM_B11_DYNAMIC, PREDICTORS_FROM_B11_STATIC } from './predictors-change-scroll.js'
+import {
+  getPredictorsBackLinkHref,
+  PREDICTORS_FROM_B11_DYNAMIC,
+  PREDICTORS_FROM_B11_STATIC,
+  scrollToPredictorsChangeTarget
+} from './predictors-change-scroll.js'
 import { setPredictorsAssessmentSession } from './predictors-assessment-session.js'
 import { ensureOffenceSearchData } from './predictors-offence-browse.js'
 import {
@@ -39,6 +44,7 @@ window.GOVUKPrototypeKit.documentReady(async () => {
     staticCheckAnswersFrom: PREDICTORS_FROM_B11_STATIC,
     dynamicCheckAnswersFrom: PREDICTORS_FROM_B11_DYNAMIC
   })
+  scrollToPredictorsChangeTarget()
 
   form.addEventListener('submit', (event) => {
     event.preventDefault()

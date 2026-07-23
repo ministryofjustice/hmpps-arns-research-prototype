@@ -8,7 +8,6 @@ import {
   applyBranchingCleanup,
   fieldsChanged,
   getContinueHrefAfterCheckAnswersEdit,
-  getPredictorsResultsAnswersHref,
   normaliseFields
 } from './predictors-journey.js'
 import { getPredictorsAssessmentSession, setPredictorsAssessmentSession } from './predictors-assessment-session.js'
@@ -22,7 +21,10 @@ const isProtoDevPredictorsPage = () => window.location.pathname.includes('/dev/'
 const isFromCheckAnswersParam = (from) =>
   from === PREDICTORS_FROM_CHECK_ANSWERS || from === PREDICTORS_FROM_CHECK_ANSWERS_LEGACY
 
-export const getPredictorsCheckAnswersReturnHref = () => getPredictorsResultsAnswersHref()
+// Keep this as a literal (do not import from predictors-journey).
+// Avoid a circular init dependency with journey while documentReady can run
+// during module init and journey exports are still in the TDZ.
+export const getPredictorsCheckAnswersReturnHref = () => 'a7.html'
 
 export const PREDICTORS_CHANGE_ANCHORS = {
   currentOffence: 'predictors-current-offence',
@@ -42,25 +44,12 @@ export const PREDICTORS_CHANGE_ANCHORS = {
   supervisedInCommunity: 'predictors-supervised-in-community',
   supervisedCommunityDate: 'predictors-supervised-community-date',
   offencesSinceCommunity: 'predictors-offences-since-community',
-  recentOffenceDate: 'predictors-recent-offence-date',
-  interviewDone: 'predictors-interview-done'
+  recentOffenceDate: 'predictors-recent-offence-date'
 }
 
 export const predictorsChangeHref = (page, anchorId) => {
   const hash = anchorId ? `#${anchorId}` : ''
   return `${page}?from=${PREDICTORS_FROM_CHECK_ANSWERS}${hash}`
-}
-
-/** Keep ?from=a7 on internal links while editing from check answers */
-export const withFromCheckAnswers = (page) => {
-  if (!isPredictorsCheckAnswersEdit()) return page
-  if (page.includes(`from=${PREDICTORS_FROM_CHECK_ANSWERS}`)) return page
-
-  const [path, hash = ''] = page.split('#')
-  const separator = path.includes('?') ? '&' : '?'
-  const query = `${separator}from=${PREDICTORS_FROM_CHECK_ANSWERS}`
-
-  return `${path}${query}${hash ? `#${hash}` : ''}`
 }
 
 export const isPredictorsCheckAnswersEditFromUrl = () =>
@@ -229,30 +218,6 @@ window.GOVUKPrototypeKit.documentReady(() => {
       if (link.id === 'predictors-a7-back' || link.id === 'predictors-a8-back') return
       link.href = getPredictorsCheckAnswersReturnHref()
     })
-
-    document.querySelectorAll('[data-predictors-offence-browse-link]').forEach((link) => {
-      const href = link.getAttribute('href') || 'a1o.html'
-      link.href = withFromCheckAnswers(href)
-    })
-
-    document.querySelectorAll('[data-violent-offence-browse-link]').forEach((link) => {
-      const href = link.getAttribute('href') || 'a1o.html'
-      link.href = withFromCheckAnswers(href)
-    })
-
-    document.querySelectorAll('.offence-browse-variant-toggle').forEach((link) => {
-      const href = link.getAttribute('href')
-      if (href) link.href = withFromCheckAnswers(href)
-    })
-
-    document.querySelectorAll('[data-predictors-return-to-a1]').forEach((link) => {
-      link.href = withFromCheckAnswers(link.getAttribute('href') || 'a1.html')
-    })
-  }
-
-  if (new URLSearchParams(window.location.search).get('focus') === 'offence-search') {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
-    return
   }
 
   if (!window.location.hash) return

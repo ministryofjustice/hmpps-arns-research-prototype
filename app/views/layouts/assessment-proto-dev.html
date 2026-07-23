@@ -1,5 +1,6 @@
 {#
-  Dev prototype pages – standalone copy of Proto 2
+  Dev predictors journey – static assessment reference prototype.
+  Entry: /dev/a2b.html → a3 (if sexual) → a4 → a5 (if needed) → a7 → a8
 #}
 
 {% extends "layouts/assessment.html" %}
@@ -7,15 +8,21 @@
 {% set showReturnToOasysButton = true %}
 {% set returnToOasysButtonInclude = returnToOasysButtonInclude | default("includes/dev/return-to-oasys-button.html") %}
 {% set journeyServiceHeaderInclude = journeyServiceHeaderInclude | default("includes/dev/assessment-service-header-journey.html") %}
+{% set offenderHeaderInclude = offenderHeaderInclude | default("includes/dev/assessment-offender-header.html") %}
 {% set pdsHeaderInclude = "includes/dev/pds-header.njk" %}
 {% set pdsFooterInclude = "includes/dev/pds-footer.njk" %}
-{% set primaryNavigationInclude = "includes/dev/primary-navigation.njk" %}
 {% set usePdsHeader = true %}
-{% set usePrimaryNavigation = true %}
+{% set usePdsFooter = true %}
+{% set hideServiceNavigation = true %}
 {% set useDevBetaPhaseBanner = true %}
+{% set phaseBannerBelowHeader = true %}
 {% set hidePageHeaderSeparator = true %}
-{# Keep caption + page heading in the service header (a1 layout), not as a fieldset legend #}
+{# Keep caption + page heading in the service header, not as a fieldset legend #}
 {% set questionLegendAsHeading = false %}
 {% set contentColumnClass = contentColumnClass if contentColumnClass is defined else "govuk-grid-column-two-thirds-from-desktop" %}
 
 {% block pageTitle %}{% include "includes/assessment-journey-page-title.html" %}{% endblock %}
+
+{% block headerEnd %}
+  {% include "includes/assessment-phase-banner.html" %}
+{% endblock %}

@@ -250,7 +250,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
     urlParams.set('returned_offence_subcode', offencePayload.subcode)
 
     // Redirect with data cleanly appended to the path string
-    window.location.href = `a1?${urlParams.toString()}`
+    window.location.href = `a2b?${urlParams.toString()}`
   })
 
   // Bootstrapping
