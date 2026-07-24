@@ -5,6 +5,7 @@
 
 const fs = require('fs')
 const path = require('path')
+const { execSync } = require('child_process')
 
 const govukPrototypeKit = require('govuk-prototype-kit')
 const router = govukPrototypeKit.requests.setupRouter()
@@ -14,6 +15,36 @@ const offenceBrowseCategoriesPath = path.join(__dirname, 'data', 'offence-browse
 const offenceBrowseCategories = JSON.parse(
   fs.readFileSync(offenceBrowseCategoriesPath, 'utf8')
 )
+
+const formatLongUkDate = (date) =>
+  date.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  })
+
+/** Date of the latest commit on origin/main (last merge/push to main). */
+const getUxHandoverLastUpdatedLabel = () => {
+  const repoRoot = path.join(__dirname, '..')
+  const refs = ['origin/main', 'main']
+
+  for (const ref of refs) {
+    try {
+      const gitTimestamp = execSync(`git log -1 --format=%ct ${ref}`, {
+        cwd: repoRoot,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'ignore']
+      }).trim()
+      if (gitTimestamp) {
+        return formatLongUkDate(new Date(parseInt(gitTimestamp, 10) * 1000))
+      }
+    } catch (error) {
+      // Try the next ref.
+    }
+  }
+
+  return formatLongUkDate(new Date())
+}
 
 /** Alex's date of birth – keep in sync with assessment offender header / JS session helpers */
 const OFFENDER_DATE_OF_BIRTH = { day: 2, month: 10, year: 1969 }
@@ -87,6 +118,9 @@ router.use((req, res, next) => {
     res.locals.predictorsSectionCaption = 'Reoffending predictors'
     res.locals.useReoffendingServiceNavigation = true
     res.locals.hideOffenderViewAnswers = true
+  }
+  if (/^\/dev\/ux-handover(\.html)?$/.test(req.path)) {
+    res.locals.uxHandoverLastUpdated = getUxHandoverLastUpdatedLabel()
   }
   if (/^\/(01|02|dev)\/a2(b)?(\.html)?$/.test(req.path)) {
     Object.assign(res.locals, getFirstSanctionAgeLocals(req.query))
