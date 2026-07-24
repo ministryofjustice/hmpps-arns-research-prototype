@@ -72,6 +72,7 @@ import { initA2LayoutToggleButtons } from './02/predictors-a2-layout-toggle.js'
 import { initA1LayoutToggleButtons } from './02/predictors-a1-layout-toggle.js'
 import { initA1SourceNoticeToggle } from './tiering-a1-source-notice-toggle.js'
 import { initB1CaptionProgressToggle } from './tiering-b1-caption-progress-toggle.js'
+import { initUxHandoverTopicSubnav } from './dev/ux-handover-docs.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
   initPreserveConditionalFieldValues()
@@ -81,4 +82,5 @@ window.GOVUKPrototypeKit.documentReady(() => {
   initA1LayoutToggleButtons()
   initA1SourceNoticeToggle()
   initB1CaptionProgressToggle()
+  initUxHandoverTopicSubnav()
 })
