@@ -16,6 +16,7 @@ import {
   getB9ValidationError,
   getFirstIncompleteAlcoholPage,
   getPostB9ContinueHref,
+  isB7Complete,
   isB8Complete,
   isDynamicSectionReadyForB7,
   predictorsJourneyHref
@@ -67,7 +68,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   const alcoholPage = getFirstIncompleteAlcoholPage(session)
   if (alcoholPage && redirectUnlessCheckAnswersEdit(alcoholPage)) return
-  if (!session.relationshipStatus && redirectUnlessCheckAnswersEdit('b7.html')) return
+  if (!isB7Complete(session) && redirectUnlessCheckAnswersEdit('b7.html')) return
   if (!isB8Complete(session) && redirectUnlessCheckAnswersEdit('b8.html')) return
 
   const backLink = document.getElementById('predictors-b9-back')

@@ -13,13 +13,14 @@ import {
   getB6FieldsFromForm,
   getPostB6bContinueHref,
   hasAlcoholUseInLast3Months,
+  isB1Complete,
   predictorsJourneyHref
 } from './predictors-journey.js'
 import { getPredictorsAssessmentSession } from './predictors-assessment-session.js'
 
 const hasRequiredDynamicAnswers = (session) =>
   session.interviewDone === 'yes' &&
-  session.accommodationSuitable &&
+  isB1Complete(session) &&
   session.employmentHistory &&
   session.drugsMisused &&
   session.alcoholUse

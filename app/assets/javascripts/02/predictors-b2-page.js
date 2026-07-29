@@ -11,6 +11,7 @@ import {
 } from './predictors-change-scroll.js'
 import {
   getB2FieldsFromForm,
+  isB1Complete,
   predictorsJourneyHref
 } from './predictors-journey.js'
 import { getPredictorsAssessmentSession } from './predictors-assessment-session.js'
@@ -24,7 +25,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
   const session = getPredictorsAssessmentSession()
 
   if (session.interviewDone !== 'yes' && redirectUnlessCheckAnswersEdit('a6.html')) return
-  if (!session.accommodationSuitable && redirectUnlessCheckAnswersEdit('b1.html')) return
+  if (!isB1Complete(session) && redirectUnlessCheckAnswersEdit('b1.html')) return
 
   const backLink = document.getElementById('predictors-b2-back')
   if (backLink) {

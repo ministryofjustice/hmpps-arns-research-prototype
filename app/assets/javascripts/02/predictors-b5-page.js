@@ -12,13 +12,14 @@ import {
 import {
   getB5FieldsFromForm,
   getPostB5ContinueHref,
+  isB1Complete,
   predictorsJourneyHref
 } from './predictors-journey.js'
 import { getPredictorsAssessmentSession } from './predictors-assessment-session.js'
 
 const hasRequiredDynamicAnswers = (session) =>
   session.interviewDone === 'yes' &&
-  session.accommodationSuitable &&
+  isB1Complete(session) &&
   session.employmentHistory &&
   session.drugsMisused
 

@@ -1,5 +1,5 @@
 //
-// b1 – accommodation suitability
+// b1 – accommodation (living with + suitability)
 //
 
 import {
@@ -11,9 +11,19 @@ import {
 } from './predictors-change-scroll.js'
 import {
   getB1FieldsFromForm,
+  getB1ValidationError,
   predictorsJourneyHref
 } from './predictors-journey.js'
 import { getPredictorsAssessmentSession } from './predictors-assessment-session.js'
+
+const restoreLivingWith = (form, session) => {
+  const livingWith = Array.isArray(session.livingWith) ? session.livingWith : []
+
+  livingWith.forEach((value) => {
+    const checkbox = form.querySelector(`input[name="living_with"][value="${value}"]`)
+    if (checkbox) checkbox.checked = true
+  })
+}
 
 window.GOVUKPrototypeKit.documentReady(() => {
   if (!window.location.pathname.includes('/02/')) return
@@ -30,6 +40,8 @@ window.GOVUKPrototypeKit.documentReady(() => {
     backLink.href = getPredictorsBackLinkHref('a6.html')
   }
 
+  restoreLivingWith(form, session)
+
   if (session.accommodationSuitable) {
     const input = form.querySelector(
       `input[name="accommodation_suitable"][value="${session.accommodationSuitable}"]`
@@ -44,12 +56,17 @@ window.GOVUKPrototypeKit.documentReady(() => {
   form.addEventListener('submit', (event) => {
     event.preventDefault()
 
-    const newFields = getB1FieldsFromForm(form)
+    const validationError = getB1ValidationError(form)
+    if (validationError) {
+      if (validationError.scrollId) {
+        document.getElementById(validationError.scrollId)?.scrollIntoView({ block: 'start' })
+      }
 
-    if (!newFields.accommodationSuitable) {
-      form.querySelector('input[name="accommodation_suitable"]')?.focus()
+      form.querySelector(validationError.focusSelector)?.focus()
       return
     }
+
+    const newFields = getB1FieldsFromForm(form)
 
     window.location.href = predictorsJourneyHref(
       completePredictorsPageAndContinue('b1', 'b2.html', newFields)

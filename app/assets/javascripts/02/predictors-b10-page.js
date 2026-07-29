@@ -14,6 +14,7 @@ import {
   getB10FieldsFromForm,
   getFirstIncompleteAlcoholPage,
   getPostB10ContinueHref,
+  isB7Complete,
   isB8Complete,
   isDynamicSectionReadyForB10,
   isDynamicSectionReadyForB7,
@@ -40,7 +41,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   const alcoholPage = getFirstIncompleteAlcoholPage(session)
   if (alcoholPage && redirectUnlessCheckAnswersEdit(alcoholPage)) return
-  if (!session.relationshipStatus && redirectUnlessCheckAnswersEdit('b7.html')) return
+  if (!isB7Complete(session) && redirectUnlessCheckAnswersEdit('b7.html')) return
   if (!isB8Complete(session) && redirectUnlessCheckAnswersEdit('b8.html')) return
   if (!isDynamicSectionReadyForB10(session) && redirectUnlessCheckAnswersEdit('b9.html')) return
 

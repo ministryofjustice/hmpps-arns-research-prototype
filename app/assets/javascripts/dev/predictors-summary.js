@@ -55,19 +55,9 @@ const renderSummaryRows = (rows) =>
     )
     .join('')
 
-export const A7_SUMMARY_LAYOUTS = {
-  default: 'default',
-  timeSinceLastOffence: 'time-since-last-offence'
-}
-
-export const buildPredictorsSummarySections = (
-  session,
-  offenderFirstName = 'Alex',
-  { layout = A7_SUMMARY_LAYOUTS.timeSinceLastOffence } = {}
-) => {
+export const buildPredictorsSummarySections = (session, offenderFirstName = 'Alex') => {
   const name = offenderFirstName
   const sections = []
-  const groupTimeSinceLastOffence = layout === A7_SUMMARY_LAYOUTS.timeSinceLastOffence
 
   const createRow = (key, value, changeHref, changeHidden, allowHtml = false, changeAnchor, hideChange = false) => {
     let display = NOT_PROVIDED_HTML
@@ -90,7 +80,7 @@ export const buildPredictorsSummarySections = (
   const offenceCodeLabel = formatOffenceCodeLabel(currentOffence || {})
 
   sections.push({
-    title: 'Current offence',
+    title: 'Current offence details',
     rows: [
       createRow(
         'Offence name',
@@ -274,37 +264,25 @@ export const buildPredictorsSummarySections = (
     }
   }
 
-  if (groupTimeSinceLastOffence) {
-    sections.push({
-      title: 'Time since last offence',
-      rows: [communityDateRow, ...offencesSinceCommunityRows]
-    })
-  } else {
-    sections.push({
-      title: 'Community supervision',
-      rows: [communityDateRow]
-    })
+  sections.push({
+    title: 'Community supervision',
+    rows: [communityDateRow]
+  })
 
-    if (offencesSinceCommunityRows.length) {
-      sections.push({
-        title: 'Offences since community date',
-        rows: offencesSinceCommunityRows
-      })
-    }
+  if (offencesSinceCommunityRows.length) {
+    sections.push({
+      title: 'Offences since community date',
+      rows: offencesSinceCommunityRows
+    })
   }
 
   return sections
 }
 
-export const renderPredictorsSummaryList = (
-  container,
-  session,
-  offenderFirstName = 'Alex',
-  { layout = A7_SUMMARY_LAYOUTS.timeSinceLastOffence } = {}
-) => {
+export const renderPredictorsSummaryList = (container, session, offenderFirstName = 'Alex') => {
   if (!container) return
 
-  const sections = buildPredictorsSummarySections(session, offenderFirstName, { layout })
+  const sections = buildPredictorsSummarySections(session, offenderFirstName)
   container.innerHTML = sections
     .map(
       ({ title, rows }) => `
