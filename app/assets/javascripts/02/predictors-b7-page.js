@@ -1,5 +1,5 @@
 //
-// b7 – relationship status
+// b7 – important people + relationship status
 //
 
 import {
@@ -19,6 +19,13 @@ import {
 } from './predictors-journey.js'
 import { getPredictorsAssessmentSession } from './predictors-assessment-session.js'
 
+const restoreImportantPeople = (form, importantPeople = []) => {
+  importantPeople.forEach((value) => {
+    const checkbox = form.querySelector(`input[name="important_people"][value="${value}"]`)
+    if (checkbox) checkbox.checked = true
+  })
+}
+
 window.GOVUKPrototypeKit.documentReady(() => {
   if (!window.location.pathname.includes('/02/')) return
 
@@ -37,6 +44,8 @@ window.GOVUKPrototypeKit.documentReady(() => {
     backLink.href = getPredictorsBackLinkHref(getB7BackHref(session))
   }
 
+  restoreImportantPeople(form, session.importantPeople)
+
   if (session.relationshipStatus) {
     const input = form.querySelector(
       `input[name="relationship_status"][value="${session.relationshipStatus}"]`
@@ -52,6 +61,11 @@ window.GOVUKPrototypeKit.documentReady(() => {
     event.preventDefault()
 
     const newFields = getB7FieldsFromForm(form)
+
+    if (!newFields.importantPeople.length) {
+      form.querySelector('input[name="important_people"]')?.focus()
+      return
+    }
 
     if (!newFields.relationshipStatus) {
       form.querySelector('input[name="relationship_status"]')?.focus()

@@ -693,9 +693,43 @@ export const getA6FieldsFromForm = (form) => ({
   interviewDone: form.querySelector('input[name="interview_done"]:checked')?.value || ''
 })
 
-export const getB1FieldsFromForm = (form) => ({
-  accommodationSuitable: form.querySelector('input[name="accommodation_suitable"]:checked')?.value || ''
-})
+export const getB1FieldsFromForm = (form) => {
+  const livingWith = [...form.querySelectorAll('input[name="living_with"]:checked')].map(
+    (input) => input.value
+  )
+
+  return {
+    livingWith,
+    livingWithOther: '',
+    accommodationSuitable:
+      form.querySelector('input[name="accommodation_suitable"]:checked')?.value || ''
+  }
+}
+
+export const getB1ValidationError = (form) => {
+  const fields = getB1FieldsFromForm(form)
+
+  if (!fields.livingWith.length) {
+    return {
+      scrollId: 'predictors-living-with',
+      focusSelector: 'input[name="living_with"]'
+    }
+  }
+
+  if (!fields.accommodationSuitable) {
+    return {
+      scrollId: 'predictors-accommodation-suitable',
+      focusSelector: 'input[name="accommodation_suitable"]'
+    }
+  }
+
+  return null
+}
+
+export const isB1Complete = (session = getPredictorsAssessmentSession()) => {
+  if (!Array.isArray(session.livingWith) || !session.livingWith.length) return false
+  return Boolean(session.accommodationSuitable)
+}
 
 export const getB2FieldsFromForm = (form) => ({
   employmentHistory: form.querySelector('input[name="employment_history"]:checked')?.value || ''
@@ -780,7 +814,7 @@ export const isB4Complete = (session = getPredictorsAssessmentSession()) => {
 export const getFirstIncompleteDynamicPage = (session = getPredictorsAssessmentSession()) => {
   if (session.interviewDone !== 'yes') return null
 
-  if (!session.accommodationSuitable) return 'b1.html'
+  if (!isB1Complete(session)) return 'b1.html'
   if (!session.employmentHistory) return 'b2.html'
   if (!session.drugsMisused) return 'b3.html'
   if (session.drugsMisused === 'yes' && !isB4Complete(session)) return 'b4.html'
@@ -789,7 +823,7 @@ export const getFirstIncompleteDynamicPage = (session = getPredictorsAssessmentS
   const alcoholPage = getFirstIncompleteAlcoholPage(session)
   if (alcoholPage) return alcoholPage
 
-  if (!session.relationshipStatus) return 'b7.html'
+  if (!isB7Complete(session)) return 'b7.html'
   if (!isB8Complete(session)) return 'b8.html'
   if (!isDynamicSectionReadyForB10(session)) return 'b9.html'
   if (!isB10Complete(session)) return 'b10.html'
@@ -865,7 +899,7 @@ export const isAlcoholSectionComplete = (session = getPredictorsAssessmentSessio
 export const isDynamicSectionReadyForB7 = (session = getPredictorsAssessmentSession()) =>
   Boolean(
     session.interviewDone === 'yes' &&
-      session.accommodationSuitable &&
+      isB1Complete(session) &&
       session.employmentHistory &&
       session.drugsMisused &&
       session.alcoholUse
@@ -910,12 +944,15 @@ export const clearB6SessionFields = () => ({
 })
 
 export const clearDynamicSectionSessionFields = () => ({
+  livingWith: [],
+  livingWithOther: '',
   accommodationSuitable: '',
   employmentHistory: '',
   drugsMisused: '',
   ...clearB4SessionFields(),
   alcoholUse: '',
   ...clearB6SessionFields(),
+  importantPeople: [],
   relationshipStatus: '',
   activitiesLinkedToOffending: '',
   manageTemper: '',
@@ -987,8 +1024,18 @@ export const getPostInterviewYesContinueHref = (session = getPredictorsAssessmen
   getFirstIncompleteDynamicPage(session) || getDynamicPredictorsCheckAnswersHref()
 
 export const getB7FieldsFromForm = (form) => ({
+  importantPeople: [...form.querySelectorAll('input[name="important_people"]:checked')].map(
+    (input) => input.value
+  ),
   relationshipStatus: form.querySelector('input[name="relationship_status"]:checked')?.value || ''
 })
+
+export const isB7Complete = (session = getPredictorsAssessmentSession()) =>
+  Boolean(
+    Array.isArray(session.importantPeople) &&
+      session.importantPeople.length &&
+      session.relationshipStatus
+  )
 
 export const getB8BackHref = () => 'b7.html'
 

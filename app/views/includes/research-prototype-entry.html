@@ -25,11 +25,11 @@
       <li class="assessment-research-prototypes__title-link-item{% if titleRegularWeight %} assessment-research-prototypes__title-link-item--regular{% endif %}">
         {% if itemHeading %}
           <h3 class="govuk-heading-m govuk-!-margin-bottom-2">
-            <a href="{{ href }}" class="govuk-link"{% if clearSessionOnStart %} data-clear-session-on-start{% if prototypeVersion %} data-prototype-version="{{ prototypeVersion }}"{% endif %}{% endif %}>{{ title }}</a>
+            <a href="{{ href }}" class="govuk-link"{% if clearSessionOnStart %} data-clear-session-on-start{% if prototypeVersion %} data-prototype-version="{{ prototypeVersion }}"{% endif %}{% endif %}>{{ title }}</a>{% if titleHint %} <span class="govuk-hint">{{ titleHint }}</span>{% endif %}
           </h3>
         {% else %}
           <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
-            <a href="{{ href }}" class="govuk-link"{% if clearSessionOnStart %} data-clear-session-on-start{% if prototypeVersion %} data-prototype-version="{{ prototypeVersion }}"{% endif %}{% endif %}>{{ title }}</a>
+            <a href="{{ href }}" class="govuk-link"{% if clearSessionOnStart %} data-clear-session-on-start{% if prototypeVersion %} data-prototype-version="{{ prototypeVersion }}"{% endif %}{% endif %}>{{ title }}</a>{% if titleHint %} <span class="govuk-hint">{{ titleHint }}</span>{% endif %}
           </h2>
         {% endif %}
       </li>

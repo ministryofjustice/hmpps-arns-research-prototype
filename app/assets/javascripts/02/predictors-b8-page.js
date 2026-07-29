@@ -14,6 +14,7 @@ import {
   getB8FieldsFromForm,
   getFirstIncompleteAlcoholPage,
   getPostB8ContinueHref,
+  isB7Complete,
   isDynamicSectionReadyForB7,
   predictorsJourneyHref
 } from './predictors-journey.js'
@@ -61,7 +62,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   const alcoholPage = getFirstIncompleteAlcoholPage(session)
   if (alcoholPage && redirectUnlessCheckAnswersEdit(alcoholPage)) return
-  if (!session.relationshipStatus && redirectUnlessCheckAnswersEdit('b7.html')) return
+  if (!isB7Complete(session) && redirectUnlessCheckAnswersEdit('b7.html')) return
 
   const backLink = document.getElementById('predictors-b8-back')
   if (backLink) {

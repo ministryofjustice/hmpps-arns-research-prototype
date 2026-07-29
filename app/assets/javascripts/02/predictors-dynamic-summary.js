@@ -35,6 +35,24 @@ const ACCOMMODATION_LABELS = {
   unknown: 'Unknown'
 }
 
+const LIVING_WITH_LABELS = {
+  family: 'Family',
+  friends: 'Friends',
+  partner: 'Partner',
+  'person-under-18': 'Person under 18 years old',
+  other: 'Other',
+  unknown: 'Unknown',
+  alone: 'Alone'
+}
+
+const formatLivingWith = (values = []) => {
+  if (!Array.isArray(values) || !values.length) return null
+
+  if (values.includes('alone')) return LIVING_WITH_LABELS.alone
+
+  return values.map((value) => LIVING_WITH_LABELS[value] || value).join('<br>')
+}
+
 const EMPLOYMENT_LABELS = {
   employed: 'Employed',
   'self-employed': 'Self-employed',
@@ -83,6 +101,16 @@ const RELATIONSHIP_STATUS_LABELS = {
   'unhappy-unhealthy':
     'Unhappy about their relationship status, or their relationship is unhealthy and directly linked to offending',
   unknown: 'Unknown'
+}
+
+const IMPORTANT_PEOPLE_LABELS = {
+  partner: "Partner or someone they're in an intimate relationship with",
+  'children-parenting':
+    'Their children or anyone they have parenting responsibilities for',
+  'other-children': 'Other children',
+  family: 'Family members',
+  friends: 'Friends',
+  other: 'Other'
 }
 
 const ACTIVITIES_LINKED_LABELS = {
@@ -187,6 +215,14 @@ export const buildDynamicPredictorsSummarySections = (session, offenderFirstName
     title: 'Accommodation',
     rows: [
       createRow(
+        `Who is ${name} living with?`,
+        formatLivingWith(session.livingWith),
+        'b1.html',
+        `Who is ${name} living with?`,
+        true,
+        'predictors-living-with'
+      ),
+      createRow(
         `Is ${name}'s accommodation suitable?`,
         formatLabelledChoice(session.accommodationSuitable, ACCOMMODATION_LABELS),
         'b1.html',
@@ -287,6 +323,14 @@ export const buildDynamicPredictorsSummarySections = (session, offenderFirstName
   sections.push({
     title: 'Personal relationships and community',
     rows: [
+      createRow(
+        `Who are the important people in ${name}'s life?`,
+        formatCheckboxLabels(session.importantPeople, IMPORTANT_PEOPLE_LABELS),
+        'b7.html',
+        `Who are the important people in ${name}'s life?`,
+        true,
+        'predictors-important-people'
+      ),
       createRow(
         `Is ${name} happy with their current relationship status?`,
         formatLabelledChoice(session.relationshipStatus, RELATIONSHIP_STATUS_LABELS),
