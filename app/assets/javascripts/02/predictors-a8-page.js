@@ -5,7 +5,13 @@
 import { applySection1CompleteUi, markSection1Complete } from './assessment-section-complete.js'
 import { formatToday } from './predictors-assessment-session.js'
 import { getPredictorsBackLinkHref } from './predictors-change-scroll.js'
-import { getDynamicPredictorsCheckAnswersHref, hasDynamicScoresOrigin, syncPredictorsSessionBeforeCheckAnswers, predictorsJourneyHref } from './predictors-journey.js'
+import {
+  getDynamicPredictorsCheckAnswersHref,
+  getRiskPredictorScoreType,
+  hasDynamicScoresOrigin,
+  syncPredictorsSessionBeforeCheckAnswers,
+  predictorsJourneyHref
+} from './predictors-journey.js'
 import { initPredictorsInactiveLinks } from './predictors-inactive-links.js'
 
 const scrollA8ToTop = () => {
@@ -60,16 +66,24 @@ const applySexualPredictorEmptyStates = (session) => {
   })
 }
 
-const applyRiskPredictorScoreTypeTags = (session) => {
-  const isDynamic = hasDynamicScoresOrigin(session)
-  const scoreType = isDynamic ? 'dynamic' : 'static'
-  const label = isDynamic ? 'Dynamic' : 'Static'
+const SCORE_CALCULATION_COPY = {
+  static: 'This score has been calculated using static factors only.',
+  dynamic: 'This score has been calculated using both dynamic and static factors.'
+}
 
+const applyRiskPredictorScoreTypeTags = (session) => {
   document.querySelectorAll('[data-risk-score-type]').forEach((section) => {
+    const predictorId = section.dataset.riskPredictorId || ''
+    const scoreType = getRiskPredictorScoreType(session, predictorId)
+    const label = scoreType === 'dynamic' ? 'Dynamic' : 'Static'
+
     section.dataset.riskScoreType = scoreType
 
     const tag = section.querySelector('.risk-predictor-scores__header .govuk-tag')
     if (tag) tag.textContent = label
+
+    const calculation = section.querySelector('[data-risk-score-calculation]')
+    if (calculation) calculation.textContent = SCORE_CALCULATION_COPY[scoreType]
   })
 }
 

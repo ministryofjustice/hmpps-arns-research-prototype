@@ -1,0 +1,105 @@
+{% extends "layouts/assessment-proto-dev.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Accommodation" %}
+{% set predictorsSectionCaption = "Reoffending predictors" %}
+{% set pageHeading = "Accommodation" %}
+{% set activeSection = "section-1" %}
+{% set statusTag = "Incomplete" %}
+{% set compactPageHeader = true %}
+{% set backLinkHref = "a6.html" %}
+{% set backLinkId = "predictors-b1-back" %}
+{% set pageErrorSummaryInclude = "includes/02/a3-error-summary.html" %}
+
+{% set livingWithOptions = [
+  { "id": "family", "label": "Family" },
+  { "id": "friends", "label": "Friends" },
+  { "id": "partner", "label": "Partner" },
+  { "id": "person-under-18", "label": "Person under 18 years old" },
+  { "id": "other", "label": "Other" }
+] %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="predictors-b1-form" novalidate>
+  <div
+    class="govuk-form-group govuk-!-margin-top-0 govuk-!-margin-bottom-8"
+    id="predictors-living-with"
+    tabindex="-1"
+    data-predictors-question="living-with"
+  >
+    <h2 class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+      Who is {{ offenderFirstName }} living with?
+    </h2>
+    <fieldset class="govuk-fieldset" id="living-with-fieldset" aria-describedby="living-with-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+        Who is {{ offenderFirstName }} living with?
+      </legend>
+      <div id="living-with-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        {% for option in livingWithOptions %}
+        <div class="govuk-checkboxes__item">
+          <input
+            class="govuk-checkboxes__input"
+            id="living-with-{{ option.id }}"
+            name="living_with"
+            type="checkbox"
+            value="{{ option.id }}"
+          >
+          <label class="govuk-label govuk-checkboxes__label" for="living-with-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        {% endfor %}
+        <div class="govuk-checkboxes__divider">or</div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="living-with-alone" name="living_with" type="checkbox" value="alone" data-behaviour="exclusive">
+          <label class="govuk-label govuk-checkboxes__label" for="living-with-alone">Alone</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="living-with-unknown" name="living_with" type="checkbox" value="unknown" data-behaviour="exclusive">
+          <label class="govuk-label govuk-checkboxes__label" for="living-with-unknown">Unknown</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group govuk-!-margin-bottom-0">
+    <h2 class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2" id="predictors-accommodation-suitable">
+      Is {{ offenderFirstName }}'s accommodation suitable?
+    </h2>
+    <p id="accommodation-suitable-hint" class="govuk-hint">This includes things like safety or having appropriate amenities.</p>
+    <fieldset class="govuk-fieldset" aria-describedby="accommodation-suitable-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+        Is {{ offenderFirstName }}'s accommodation suitable?
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="accommodation-suitable-yes" name="accommodation_suitable" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="accommodation-suitable-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="accommodation-suitable-yes-with-concerns" name="accommodation_suitable" type="radio" value="yes-with-concerns">
+          <label class="govuk-label govuk-radios__label" for="accommodation-suitable-yes-with-concerns">Yes, with concerns</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="accommodation-suitable-no" name="accommodation_suitable" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="accommodation-suitable-no">No</label>
+        </div>
+        <div class="govuk-radios__divider">or</div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="accommodation-suitable-unknown" name="accommodation_suitable" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="accommodation-suitable-unknown">Unknown</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

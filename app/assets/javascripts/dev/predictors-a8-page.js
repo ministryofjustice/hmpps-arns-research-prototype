@@ -2,9 +2,16 @@
 // a8 – risk predictor scores
 //
 
-import { markSection1Complete } from './assessment-section-complete.js'
+import { applySection1CompleteUi, markSection1Complete } from './assessment-section-complete.js'
+import { formatToday } from './predictors-assessment-session.js'
 import { getPredictorsBackLinkHref } from './predictors-change-scroll.js'
-import { syncPredictorsSessionBeforeCheckAnswers, predictorsJourneyHref } from './predictors-journey.js'
+import {
+  getDynamicPredictorsCheckAnswersHref,
+  getRiskPredictorScoreType,
+  hasDynamicScoresOrigin,
+  syncPredictorsSessionBeforeCheckAnswers,
+  predictorsJourneyHref
+} from './predictors-journey.js'
 import { initPredictorsInactiveLinks } from './predictors-inactive-links.js'
 
 const scrollA8ToTop = () => {
@@ -59,12 +66,51 @@ const applySexualPredictorEmptyStates = (session) => {
   })
 }
 
+const SCORE_CALCULATION_COPY = {
+  static: 'This score has been calculated using static factors only.',
+  dynamic: 'This score has been calculated using both dynamic and static factors.'
+}
+
+const applyRiskPredictorScoreTypeTags = (session) => {
+  document.querySelectorAll('[data-risk-score-type]').forEach((section) => {
+    const predictorId = section.dataset.riskPredictorId || ''
+    const scoreType = getRiskPredictorScoreType(session, predictorId)
+    const label = scoreType === 'dynamic' ? 'Dynamic' : 'Static'
+
+    section.dataset.riskScoreType = scoreType
+
+    const tag = section.querySelector('.risk-predictor-scores__header .govuk-tag')
+    if (tag) tag.textContent = label
+
+    const calculation = section.querySelector('[data-risk-score-calculation]')
+    if (calculation) calculation.textContent = SCORE_CALCULATION_COPY[scoreType]
+  })
+}
+
+const initCompletionDate = () => {
+  const element = document.querySelector('[data-predictors-completion-date]')
+  if (!element) return
+
+  element.textContent = formatToday()
+}
+
+const updateSectionCompleteBannerLink = (checkAnswersHref) => {
+  const link = document.querySelector('#predictors-section-complete-success-banner a.govuk-link')
+  if (!link) return
+
+  link.href = predictorsJourneyHref(checkAnswersHref)
+}
+
 window.GOVUKPrototypeKit.documentReady(() => {
   if (!window.location.pathname.includes('/dev/')) return
   if (!document.getElementById('predictors-a8-back')) return
 
   if (window.location.hash === '#answers') {
-    window.location.replace(predictorsJourneyHref('a7.html'))
+    const session = syncPredictorsSessionBeforeCheckAnswers()
+    const checkAnswersHref = hasDynamicScoresOrigin(session)
+      ? getDynamicPredictorsCheckAnswersHref()
+      : 'a7.html'
+    window.location.replace(predictorsJourneyHref(checkAnswersHref))
     return
   }
 
@@ -79,12 +125,22 @@ window.GOVUKPrototypeKit.documentReady(() => {
   scrollA8ToTop()
 
   const session = syncPredictorsSessionBeforeCheckAnswers()
+  const checkAnswersHref = hasDynamicScoresOrigin(session)
+    ? getDynamicPredictorsCheckAnswersHref()
+    : 'a7.html'
 
   const backLink = document.getElementById('predictors-a8-back')
   if (backLink) {
-    backLink.href = getPredictorsBackLinkHref('a7.html')
+    backLink.href = getPredictorsBackLinkHref(checkAnswersHref)
   }
 
+  document.querySelectorAll('a[href="a7.html"]').forEach((link) => {
+    link.href = predictorsJourneyHref(checkAnswersHref)
+  })
+
+  updateSectionCompleteBannerLink(checkAnswersHref)
+  initCompletionDate()
+  applyRiskPredictorScoreTypeTags(session)
   applySexualPredictorEmptyStates(session)
   initPredictorsInactiveLinks()
   initRiskPredictorBackToTop()
@@ -95,6 +151,8 @@ window.GOVUKPrototypeKit.documentReady(() => {
       markSection1Complete()
     })
   }
+
+  applySection1CompleteUi()
 
   requestAnimationFrame(() => {
     requestAnimationFrame(scrollA8ToTop)

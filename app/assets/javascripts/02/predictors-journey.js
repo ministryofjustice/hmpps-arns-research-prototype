@@ -361,6 +361,20 @@ export const hasDynamicScoresOrigin = (session = getPredictorsAssessmentSession(
   return Boolean(session.b10Complete || session.seriousHarmConvictions?.length)
 }
 
+/** Predictors that fall back to static when relationship status is Unknown */
+export const RELATIONSHIP_STATUS_STATIC_PREDICTOR_IDS = ['arp', 'vrp']
+
+export const getRiskPredictorScoreType = (session, predictorId) => {
+  if (
+    session.relationshipStatus === 'unknown' &&
+    RELATIONSHIP_STATUS_STATIC_PREDICTOR_IDS.includes(predictorId)
+  ) {
+    return 'static'
+  }
+
+  return hasDynamicScoresOrigin(session) ? 'dynamic' : 'static'
+}
+
 export const getPostA5ContinueHref = (session = getPredictorsAssessmentSession()) => {
   if (!hasSeenStaticAssessmentComplete(session)) {
     return 'a6.html'
@@ -414,9 +428,16 @@ export const isA3SexualOffendingComplete = (session) => {
 export const isA3DirectContactComplete = (session) => {
   if (session.sexualOffence !== 'yes') return true
 
+  const fields = {
+    strangerContact: session.strangerContact,
+    contactAdultSanctions: session.contactAdultSanctions,
+    contactChildSanctions: session.contactChildSanctions
+  }
+
   return (
     normaliseString(session.contactAdultSanctions) !== '' &&
-    normaliseString(session.contactChildSanctions) !== ''
+    normaliseString(session.contactChildSanctions) !== '' &&
+    isStrangerContactSanctionsValid(fields)
   )
 }
 
@@ -671,6 +692,43 @@ export const getA3FieldsFromForm = (form) => ({
   ...getA3IndirectContactFieldsFromForm(form)
 })
 
+export const getStrangerContactSanctionsError = (name = 'Alex') =>
+  `Direct contact against a victim who was a stranger can only be 'yes' if ${name} has at least 1 sanction for contact adult, or direct contact child, sexual or sexually motivated offences`
+
+export const parseSanctionCount = (value) => {
+  const normalised = normaliseString(value)
+  if (normalised === '') return 0
+
+  const count = Number(normalised)
+  if (!Number.isFinite(count) || count < 0) return 0
+
+  return count
+}
+
+export const isStrangerContactSanctionsValid = (fields) => {
+  if (fields.strangerContact !== 'yes') return true
+
+  return (
+    parseSanctionCount(fields.contactAdultSanctions) +
+      parseSanctionCount(fields.contactChildSanctions) >
+    0
+  )
+}
+
+export const getA3ValidationError = (form, offenderFirstName = 'Alex') => {
+  const fields = getA3FieldsFromForm(form)
+
+  if (!isStrangerContactSanctionsValid(fields)) {
+    return {
+      scrollId: 'predictors-stranger-contact',
+      focusSelector: '#predictors-stranger-contact',
+      message: getStrangerContactSanctionsError(offenderFirstName)
+    }
+  }
+
+  return null
+}
+
 export const getA4FieldsFromForm = (form) => ({
   supervisedInCommunity: 'yes',
   communityDate: normaliseDateParts({
@@ -706,13 +764,17 @@ export const getB1FieldsFromForm = (form) => {
   }
 }
 
-export const getB1ValidationError = (form) => {
+export const getLivingWithError = (name = 'Alex') =>
+  `Select who ${name} is living with, or select 'Alone' or 'Unknown'`
+
+export const getB1ValidationError = (form, offenderFirstName = 'Alex') => {
   const fields = getB1FieldsFromForm(form)
 
   if (!fields.livingWith.length) {
     return {
       scrollId: 'predictors-living-with',
-      focusSelector: 'input[name="living_with"]'
+      focusSelector: '#predictors-living-with',
+      message: getLivingWithError(offenderFirstName)
     }
   }
 
@@ -760,11 +822,14 @@ export const getB4FieldsFromForm = (form) => {
     misusedDrugs[drug.id] = entry
   })
 
-  return { misusedDrugs }
+  return {
+    misusedDrugs,
+    drugsMotivation: form.querySelector('input[name="drugs_motivation"]:checked')?.value || ''
+  }
 }
 
 export const getB4ValidationError = (form) => {
-  const { misusedDrugs } = getB4FieldsFromForm(form)
+  const { misusedDrugs, drugsMotivation } = getB4FieldsFromForm(form)
   const selectedIds = Object.keys(misusedDrugs)
 
   if (!selectedIds.length) {
@@ -790,11 +855,16 @@ export const getB4ValidationError = (form) => {
     }
   }
 
+  if (!drugsMotivation) {
+    return { focusSelector: 'input[name="drugs_motivation"]' }
+  }
+
   return null
 }
 
 export const clearB4SessionFields = () => ({
-  misusedDrugs: {}
+  misusedDrugs: {},
+  drugsMotivation: ''
 })
 
 export const isB4Complete = (session = getPredictorsAssessmentSession()) => {
@@ -803,6 +873,7 @@ export const isB4Complete = (session = getPredictorsAssessmentSession()) => {
   const misusedDrugs = session.misusedDrugs || {}
   const selectedIds = Object.keys(misusedDrugs)
   if (!selectedIds.length) return false
+  if (!session.drugsMotivation) return false
 
   return selectedIds.every((id) => {
     const entry = misusedDrugs[id]
@@ -1241,6 +1312,16 @@ export const getUnansweredPredictorsQuestions = (session, offenderFirstName = 'A
         'Sexual offending',
         `How many sanctions does ${name} have for direct contact child sexual or sexually motivated offences?`
       )
+    }
+    if (
+      session.strangerContact === 'yes' &&
+      !isStrangerContactSanctionsValid({
+        strangerContact: session.strangerContact,
+        contactAdultSanctions: session.contactAdultSanctions,
+        contactChildSanctions: session.contactChildSanctions
+      })
+    ) {
+      add('a3', 'Sexual offending', getStrangerContactSanctionsError(name))
     }
     if (normaliseString(session.indirectChildSanctions) === '') {
       add(

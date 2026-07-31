@@ -9,7 +9,9 @@
   {% if sectionCompleteSuccessBannerInclude %}
   {% include sectionCompleteSuccessBannerInclude %}
   {% endif %}
-  {% if offenceBrowseErrorSummary %}
+  {% if pageErrorSummaryInclude %}
+  {% include pageErrorSummaryInclude %}
+  {% elif offenceBrowseErrorSummary %}
   {% include "includes/offence-browse-error-summary.html" %}
   {% endif %}
   {% if not hideOffenderHeader %}

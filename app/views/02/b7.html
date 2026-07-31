@@ -41,6 +41,11 @@
           <label class="govuk-label govuk-checkboxes__label" for="important-people-{{ option.id }}">{{ option.label }}</label>
         </div>
         {% endfor %}
+        <div class="govuk-checkboxes__divider">or</div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="important-people-unknown" name="important_people" type="checkbox" value="unknown" data-behaviour="exclusive">
+          <label class="govuk-label govuk-checkboxes__label" for="important-people-unknown">Unknown</label>
+        </div>
       </div>
     </fieldset>
   </div>

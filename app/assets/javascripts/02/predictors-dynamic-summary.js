@@ -49,17 +49,23 @@ const formatLivingWith = (values = []) => {
   if (!Array.isArray(values) || !values.length) return null
 
   if (values.includes('alone')) return LIVING_WITH_LABELS.alone
+  if (values.includes('unknown')) return LIVING_WITH_LABELS.unknown
 
   return values.map((value) => LIVING_WITH_LABELS[value] || value).join('<br>')
 }
 
 const EMPLOYMENT_LABELS = {
-  employed: 'Employed',
-  'self-employed': 'Self-employed',
+  'employed-or-self-employed': 'Employed or self-employed',
   retired: 'Retired',
   'currently-unavailable': 'Currently unavailable for work',
-  'unemployed-looking': 'Unemployed - actively looking for work',
-  'unemployed-not-looking': 'Unemployed - not actively looking for work',
+  unemployed: 'Unemployed',
+  unknown: 'Unknown'
+}
+
+const DRUGS_MOTIVATION_LABELS = {
+  'does-not-show': 'Does not show motivation to stop or reduce',
+  some: 'Shows some motivation to stop or reduce',
+  motivated: 'Motivated to stop or reduce',
   unknown: 'Unknown'
 }
 
@@ -110,7 +116,8 @@ const IMPORTANT_PEOPLE_LABELS = {
   'other-children': 'Other children',
   family: 'Family members',
   friends: 'Friends',
-  other: 'Other'
+  other: 'Other',
+  unknown: 'Unknown'
 }
 
 const ACTIVITIES_LINKED_LABELS = {
@@ -267,6 +274,14 @@ export const buildDynamicPredictorsSummarySections = (session, offenderFirstName
         `Which drugs has ${name} misused?`,
         true,
         'predictors-drugs-misused-types'
+      ),
+      createRow(
+        `Does ${name} seem motivated to stop or reduce their drug use?`,
+        formatLabelledChoice(session.drugsMotivation, DRUGS_MOTIVATION_LABELS),
+        'b4.html',
+        `Does ${name} seem motivated to stop or reduce their drug use?`,
+        false,
+        'predictors-drugs-motivation'
       )
     )
   }

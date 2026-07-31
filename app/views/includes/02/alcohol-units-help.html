@@ -1,11 +1,12 @@
 {# Alcohol units reference table and calculator for b6 #}
 
-<details class="govuk-details govuk-!-margin-bottom-4 alcohol-units-help-details" id="alcohol-units-help">
+<details class="govuk-details{% if alcoholUnitsHelpAfterRadios %} govuk-!-margin-bottom-8{% else %} govuk-!-margin-bottom-4{% endif %} alcohol-units-help-details" id="alcohol-units-help">
   <summary class="govuk-details__summary">
     <span class="govuk-details__summary-text">Check how many units are consumed</span>
   </summary>
   <div class="govuk-details__text">
     <div class="alcohol-units-help" data-module="alcohol-units-help">
+      {% if not alcoholUnitsHelpHideCalculator %}
       <div class="govuk-form-group govuk-!-margin-top-0 govuk-!-margin-bottom-4">
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-visually-hidden">
@@ -42,6 +43,7 @@
           </div>
         </fieldset>
       </div>
+      {% endif %}
 
       <div data-alcohol-units-variant="table">
         <table class="govuk-table govuk-!-margin-bottom-0">
@@ -92,6 +94,7 @@
         </table>
       </div>
 
+      {% if not alcoholUnitsHelpHideCalculator %}
       <div data-alcohol-units-variant="calculator" hidden>
         <table class="govuk-table alcohol-units-help__calculator-table govuk-!-margin-bottom-4">
           <thead class="govuk-table__head">
@@ -187,6 +190,7 @@
           <a class="govuk-link alcohol-units-help__clear-all" href="#" data-alcohol-units-clear-all hidden>Clear all</a>
         </div>
       </div>
+      {% endif %}
     </div>
   </div>
 </details>

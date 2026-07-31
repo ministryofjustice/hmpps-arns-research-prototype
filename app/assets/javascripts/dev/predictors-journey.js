@@ -2,6 +2,7 @@
 // Predictors journey routing and field helpers (branching, completeness)
 //
 // Dev static journey: a2b → a3 (if sexual) → a4 → a5 (if needed) → a7 → a8
+// Dev dynamic journey: a6 → b1–b11 → a8 (static a2b–a5 seeded when starting from index)
 //
 
 import {
@@ -14,6 +15,11 @@ import {
   setPredictorsAssessmentSession
 } from './predictors-assessment-session.js'
 import { lookupOffenceDetails } from './predictors-offence-lookup.js'
+import {
+  drugRequiresPeriod,
+  getMisusedDrugConditionalId,
+  MISUSED_DRUG_TYPES
+} from './predictors-b4-drugs.js'
 
 const PREDICTORS_JOURNEY_PATH = '/dev/'
 
@@ -331,9 +337,13 @@ export const syncPredictorsSessionBeforeCheckAnswers = () => {
   return { ...session, ...updates }
 }
 
-/** After a5: journey continues to check answers */
+/** After a5 (static) or a6 (dynamic no): check answers / scores */
 export const hasSeenStaticAssessmentComplete = (session = getPredictorsAssessmentSession()) =>
   session.staticAssessmentCompleteSeen === true
+
+/** a6 answered, or static path marked complete without visiting a6 */
+export const hasCompletedA6Gate = (session = getPredictorsAssessmentSession()) =>
+  session.staticAssessmentCompleteSeen === true || Boolean(session.interviewDone)
 
 export const markStaticAssessmentCompleteSeen = () => {
   setPredictorsAssessmentSession({ staticAssessmentCompleteSeen: true })
@@ -341,9 +351,39 @@ export const markStaticAssessmentCompleteSeen = () => {
 
 export const getPredictorsResultsAnswersHref = () => 'a7.html'
 
+export const getDynamicPredictorsCheckAnswersHref = () => 'b11.html'
+
 export const getPredictorsResultsScoresHref = () => 'a8.html'
 
+export const SCORES_CHECK_ANSWERS_ORIGIN_A7 = 'a7'
+export const SCORES_CHECK_ANSWERS_ORIGIN_B11 = 'b11'
+
+export const hasDynamicScoresOrigin = (session = getPredictorsAssessmentSession()) => {
+  if (session.scoresCheckAnswersOrigin === SCORES_CHECK_ANSWERS_ORIGIN_B11) return true
+  if (session.scoresCheckAnswersOrigin === SCORES_CHECK_ANSWERS_ORIGIN_A7) return false
+
+  return Boolean(session.b10Complete || session.seriousHarmConvictions?.length)
+}
+
+/** Predictors that fall back to static when relationship status is Unknown */
+export const RELATIONSHIP_STATUS_STATIC_PREDICTOR_IDS = ['arp', 'vrp']
+
+export const getRiskPredictorScoreType = (session, predictorId) => {
+  if (
+    session.relationshipStatus === 'unknown' &&
+    RELATIONSHIP_STATUS_STATIC_PREDICTOR_IDS.includes(predictorId)
+  ) {
+    return 'static'
+  }
+
+  return hasDynamicScoresOrigin(session) ? 'dynamic' : 'static'
+}
+
+/** Static journey skips a6 and continues to check answers */
 export const getPostA5ContinueHref = () => getPredictorsResultsAnswersHref()
+
+/** Where repeat visitors to a6 should land */
+export const getPredictorsReviewHref = () => getPredictorsResultsAnswersHref()
 
 export const clearA3SessionFields = () => ({
   sexualMotivation: '',
@@ -355,17 +395,32 @@ export const clearA3SessionFields = () => ({
   nonContactSanctions: ''
 })
 
-export const clearRecentOffenceDateFields = () => ({
+export const clearA6SessionFields = () => ({
+  recentOffenceDate: { day: '', month: '', year: '' }
+})
+
+export const clearA5SessionFields = () => ({
+  offencesSinceCommunity: '',
   recentOffenceDate: { day: '', month: '', year: '' }
 })
 
 export const isA5Required = (session) => isDateComplete(session.communityDate)
 
+/** Static journey: a5 when needed, otherwise check answers (not a6) */
 export const getPostA4ContinueHref = (session = getPredictorsAssessmentSession()) =>
   isA5Required(session) ? 'a5.html' : getPredictorsResultsAnswersHref()
 
-export const getA7BackHref = (session = getPredictorsAssessmentSession()) =>
-  isA5Required(session) ? 'a5.html' : 'a4.html'
+/** Dynamic assessment starts at a6 from the index (static journey never visits a6) */
+export const getA6BackHref = () => '/'
+
+/** Back from a7: a6 when the interview gate was used, otherwise static a4/a5 */
+export const getA7BackHref = (session = getPredictorsAssessmentSession()) => {
+  if (session.interviewDone) {
+    return 'a6?from=a7-back'
+  }
+
+  return isA5Required(session) ? 'a5.html' : 'a4.html'
+}
 
 export const isA3SexualOffendingComplete = (session) => {
   if (session.sexualOffence !== 'yes') return true
@@ -380,9 +435,16 @@ export const isA3SexualOffendingComplete = (session) => {
 export const isA3DirectContactComplete = (session) => {
   if (session.sexualOffence !== 'yes') return true
 
+  const fields = {
+    strangerContact: session.strangerContact,
+    contactAdultSanctions: session.contactAdultSanctions,
+    contactChildSanctions: session.contactChildSanctions
+  }
+
   return (
     normaliseString(session.contactAdultSanctions) !== '' &&
-    normaliseString(session.contactChildSanctions) !== ''
+    normaliseString(session.contactChildSanctions) !== '' &&
+    isStrangerContactSanctionsValid(fields)
   )
 }
 
@@ -426,6 +488,7 @@ export const getFirstIncompletePredictorsPage = (session) => {
       return 'a5.html'
     }
   }
+  if (!hasCompletedA6Gate(session)) return 'a6.html'
   return null
 }
 
@@ -433,10 +496,8 @@ export const getFirstIncompletePredictorsPage = (session) => {
 export const redirectIfPredictorsJourneyIncomplete = () => {
   if (!window.location.pathname.includes('/dev/')) return false
 
-  const currentPageId = window.location.pathname.match(/\/([^/]+)\.html?$/)?.[1]
-
   // a7 (check your answers) validates the journey is complete first
-  if (currentPageId !== 'a7') {
+  if (!/\/a7(?:\.html)?$/.test(window.location.pathname)) {
     return false
   }
 
@@ -456,7 +517,55 @@ export const applyBranchingCleanup = (currentPage, session, updates) => {
   }
 
   if (currentPage === 'a5' && merged.offencesSinceCommunity !== 'yes') {
-    return { ...merged, ...clearRecentOffenceDateFields() }
+    return { ...merged, ...clearA6SessionFields() }
+  }
+
+  if (currentPage === 'a6' && merged.interviewDone === 'no') {
+    return {
+      ...merged,
+      ...pauseDynamicSectionSessionFields(merged),
+      staticAssessmentCompleteSeen: true,
+      scoreCalculated: false
+    }
+  }
+
+  if (currentPage === 'a6' && merged.interviewDone === 'yes') {
+    return {
+      ...merged,
+      ...restoreDynamicSectionSessionFields(merged),
+      staticAssessmentCompleteSeen: false,
+      scoreCalculated: false
+    }
+  }
+
+  if (currentPage === 'b3' && merged.drugsMisused !== 'yes') {
+    return { ...merged, ...clearB4SessionFields() }
+  }
+
+  if (currentPage === 'b5' && (merged.alcoholUse === 'no' || merged.alcoholUse === 'unknown')) {
+    return { ...merged, ...clearB6SessionFields() }
+  }
+
+  if (currentPage === 'b5' && merged.alcoholUse === 'yes-not-in-last-3-months') {
+    return {
+      ...merged,
+      alcoholFrequencyLast3Months: '',
+      alcoholUnitsTypicalDay: ''
+    }
+  }
+
+  if (currentPage === 'b9') {
+    const cleaned = { ...merged }
+
+    if (cleaned.domesticAbusePerpetrator !== 'yes') {
+      cleaned.domesticAbusePerpetratorAgainst = ''
+    }
+
+    if (cleaned.domesticAbuseVictim !== 'yes') {
+      cleaned.domesticAbuseVictimBy = ''
+    }
+
+    return cleaned
   }
 
   return merged
@@ -464,6 +573,25 @@ export const applyBranchingCleanup = (currentPage, session, updates) => {
 
 export const getPostCheckAnswersEditHref = (session) =>
   getFirstIncompletePredictorsPage(session) || getPredictorsResultsAnswersHref()
+
+/** When an a6 interview edit excludes or opens the dynamic section, return the right summary page */
+export const getCheckAnswersReturnHrefAfterEdit = (
+  currentPage,
+  beforeSession,
+  afterSession,
+  defaultHref
+) => {
+  if (
+    currentPage === 'a6' &&
+    beforeSession.interviewDone === 'yes' &&
+    afterSession.interviewDone === 'no' &&
+    beforeSession.checkAnswersReturnTarget === 'b11'
+  ) {
+    return getPredictorsResultsAnswersHref()
+  }
+
+  return defaultHref
+}
 
 /**
  * When editing from check answers (a8), only continue the journey for branching
@@ -480,6 +608,27 @@ export const getContinueHrefAfterCheckAnswersEdit = (currentPage, beforeSession,
 
   if (currentPage === 'a5') {
     return getFirstIncompletePredictorsPage(afterSession)
+  }
+
+  if (
+    currentPage === 'a6' &&
+    beforeSession.interviewDone !== 'yes' &&
+    afterSession.interviewDone === 'yes'
+  ) {
+    return getPostInterviewYesContinueHref(afterSession)
+  }
+
+  if (currentPage === 'b3') {
+    const beforeYes = beforeSession.drugsMisused === 'yes'
+    const afterYes = afterSession.drugsMisused === 'yes'
+
+    if (beforeYes !== afterYes) {
+      return getPostB3ContinueHref(afterSession)
+    }
+  }
+
+  if (currentPage === 'b5' && beforeSession.alcoholUse !== afterSession.alcoholUse) {
+    return getPostB5ContinueHref(afterSession)
   }
 
   return null
@@ -550,6 +699,43 @@ export const getA3FieldsFromForm = (form) => ({
   ...getA3IndirectContactFieldsFromForm(form)
 })
 
+export const getStrangerContactSanctionsError = (name = 'Alex') =>
+  `Direct contact against a victim who was a stranger can only be 'yes' if ${name} has at least 1 sanction for contact adult, or direct contact child, sexual or sexually motivated offences`
+
+export const parseSanctionCount = (value) => {
+  const normalised = normaliseString(value)
+  if (normalised === '') return 0
+
+  const count = Number(normalised)
+  if (!Number.isFinite(count) || count < 0) return 0
+
+  return count
+}
+
+export const isStrangerContactSanctionsValid = (fields) => {
+  if (fields.strangerContact !== 'yes') return true
+
+  return (
+    parseSanctionCount(fields.contactAdultSanctions) +
+      parseSanctionCount(fields.contactChildSanctions) >
+    0
+  )
+}
+
+export const getA3ValidationError = (form, offenderFirstName = 'Alex') => {
+  const fields = getA3FieldsFromForm(form)
+
+  if (!isStrangerContactSanctionsValid(fields)) {
+    return {
+      scrollId: 'predictors-stranger-contact',
+      focusSelector: '#predictors-stranger-contact',
+      message: getStrangerContactSanctionsError(offenderFirstName)
+    }
+  }
+
+  return null
+}
+
 export const getA4FieldsFromForm = (form) => ({
   supervisedInCommunity: 'yes',
   communityDate: normaliseDateParts({
@@ -567,3 +753,625 @@ export const getA5FieldsFromForm = (form) => ({
     year: form.querySelector('#recent-offence-date-year')?.value
   })
 })
+
+export const getA6FieldsFromForm = (form) => ({
+  interviewDone: form.querySelector('input[name="interview_done"]:checked')?.value || ''
+})
+
+export const getB1FieldsFromForm = (form) => {
+  const livingWith = [...form.querySelectorAll('input[name="living_with"]:checked')].map(
+    (input) => input.value
+  )
+
+  return {
+    livingWith,
+    livingWithOther: '',
+    accommodationSuitable:
+      form.querySelector('input[name="accommodation_suitable"]:checked')?.value || ''
+  }
+}
+
+export const getLivingWithError = (name = 'Alex') =>
+  `Select who ${name} is living with, or select 'Alone' or 'Unknown'`
+
+export const getB1ValidationError = (form, offenderFirstName = 'Alex') => {
+  const fields = getB1FieldsFromForm(form)
+
+  if (!fields.livingWith.length) {
+    return {
+      scrollId: 'predictors-living-with',
+      focusSelector: '#predictors-living-with',
+      message: getLivingWithError(offenderFirstName)
+    }
+  }
+
+  if (!fields.accommodationSuitable) {
+    return {
+      scrollId: 'predictors-accommodation-suitable',
+      focusSelector: 'input[name="accommodation_suitable"]'
+    }
+  }
+
+  return null
+}
+
+export const isB1Complete = (session = getPredictorsAssessmentSession()) => {
+  if (!Array.isArray(session.livingWith) || !session.livingWith.length) return false
+  return Boolean(session.accommodationSuitable)
+}
+
+export const getB2FieldsFromForm = (form) => ({
+  employmentHistory: form.querySelector('input[name="employment_history"]:checked')?.value || ''
+})
+
+export const getB3FieldsFromForm = (form) => ({
+  drugsMisused: form.querySelector('input[name="drugs_misused"]:checked')?.value || ''
+})
+
+export const getPostB3ContinueHref = (session = getPredictorsAssessmentSession()) =>
+  session.drugsMisused === 'yes' ? 'b4.html' : 'b5.html'
+
+export const getB4FieldsFromForm = (form) => {
+  const misusedDrugs = {}
+
+  MISUSED_DRUG_TYPES.forEach((drug) => {
+    const checkbox = form.querySelector(`#drugs-${drug.id}`)
+    if (!checkbox?.checked) return
+
+    const entry = {
+      period: form.querySelector(`input[name="${drug.id}_period"]:checked`)?.value || ''
+    }
+
+    if (drug.hasNameField) {
+      entry.name = form.querySelector('#other-drug-name')?.value?.trim() || ''
+    }
+
+    misusedDrugs[drug.id] = entry
+  })
+
+  return {
+    misusedDrugs,
+    drugsMotivation: form.querySelector('input[name="drugs_motivation"]:checked')?.value || ''
+  }
+}
+
+export const getB4ValidationError = (form) => {
+  const { misusedDrugs, drugsMotivation } = getB4FieldsFromForm(form)
+  const selectedIds = Object.keys(misusedDrugs)
+
+  if (!selectedIds.length) {
+    return { focusSelector: `#drugs-${MISUSED_DRUG_TYPES[0].id}` }
+  }
+
+  for (const drug of MISUSED_DRUG_TYPES) {
+    const entry = misusedDrugs[drug.id]
+    if (!entry) continue
+
+    if (drug.hasNameField && !entry.name) {
+      return {
+        conditionalId: getMisusedDrugConditionalId(drug.id),
+        focusSelector: '#other-drug-name'
+      }
+    }
+
+    if (drugRequiresPeriod(drug) && !entry.period) {
+      return {
+        conditionalId: getMisusedDrugConditionalId(drug.id),
+        focusSelector: `input[name="${drug.id}_period"]`
+      }
+    }
+  }
+
+  if (!drugsMotivation) {
+    return { focusSelector: 'input[name="drugs_motivation"]' }
+  }
+
+  return null
+}
+
+export const clearB4SessionFields = () => ({
+  misusedDrugs: {},
+  drugsMotivation: ''
+})
+
+export const isB4Complete = (session = getPredictorsAssessmentSession()) => {
+  if (session.drugsMisused !== 'yes') return true
+
+  const misusedDrugs = session.misusedDrugs || {}
+  const selectedIds = Object.keys(misusedDrugs)
+  if (!selectedIds.length) return false
+  if (!session.drugsMotivation) return false
+
+  return selectedIds.every((id) => {
+    const entry = misusedDrugs[id]
+    const drug = MISUSED_DRUG_TYPES.find((item) => item.id === id)
+    if (drug?.hasNameField && !entry.name) return false
+    if (drugRequiresPeriod(drug || { id }) && !entry.period) return false
+    return true
+  })
+}
+
+export const getFirstIncompleteDynamicPage = (session = getPredictorsAssessmentSession()) => {
+  if (session.interviewDone !== 'yes') return null
+
+  if (!isB1Complete(session)) return 'b1.html'
+  if (!session.employmentHistory) return 'b2.html'
+  if (!session.drugsMisused) return 'b3.html'
+  if (session.drugsMisused === 'yes' && !isB4Complete(session)) return 'b4.html'
+  if (!session.alcoholUse) return 'b5.html'
+
+  const alcoholPage = getFirstIncompleteAlcoholPage(session)
+  if (alcoholPage) return alcoholPage
+
+  if (!isB7Complete(session)) return 'b7.html'
+  if (!isB8Complete(session)) return 'b8.html'
+  if (!isDynamicSectionReadyForB10(session)) return 'b9.html'
+  if (!isB10Complete(session)) return 'b10.html'
+
+  return null
+}
+
+export const getB5FieldsFromForm = (form) => ({
+  alcoholUse: form.querySelector('input[name="alcohol_use"]:checked')?.value || ''
+})
+
+export const hasAlcoholUseYesAnswer = (session = getPredictorsAssessmentSession()) =>
+  session.alcoholUse === 'yes-in-last-3-months' || session.alcoholUse === 'yes-not-in-last-3-months'
+
+export const hasAlcoholUseInLast3Months = (session = getPredictorsAssessmentSession()) =>
+  session.alcoholUse === 'yes-in-last-3-months'
+
+export const getPostB5ContinueHref = (session = getPredictorsAssessmentSession()) => {
+  if (session.alcoholUse === 'yes-in-last-3-months') return 'b6.html'
+  if (session.alcoholUse === 'yes-not-in-last-3-months') return 'b6c.html'
+  return 'b7.html'
+}
+
+export const getFirstIncompleteAlcoholPage = (session = getPredictorsAssessmentSession()) => {
+  if (!session.alcoholUse) return 'b5.html'
+  if (session.alcoholUse === 'no' || session.alcoholUse === 'unknown') return null
+
+  if (session.alcoholUse === 'yes-in-last-3-months') {
+    if (!session.alcoholFrequencyLast3Months || !session.alcoholUnitsTypicalDay || !session.alcoholBingeEvidence) {
+      return 'b6.html'
+    }
+    return null
+  }
+
+  if (session.alcoholUse === 'yes-not-in-last-3-months') {
+    if (!session.alcoholBingeEvidence) return 'b6c.html'
+    return null
+  }
+
+  return null
+}
+
+export const getPostB6bContinueHref = () => 'b7.html'
+
+export const getPostB6cContinueHref = () => 'b7.html'
+
+export const getPostB7ContinueHref = () => 'b8.html'
+
+export const getPostB8ContinueHref = () => 'b9.html'
+
+export const getPostB9ContinueHref = () => 'b10.html'
+
+export const getPostB10ContinueHref = () => 'b11.html'
+
+export const isAlcoholSectionComplete = (session = getPredictorsAssessmentSession()) => {
+  if (session.alcoholUse === 'no' || session.alcoholUse === 'unknown') return true
+
+  if (session.alcoholUse === 'yes-not-in-last-3-months') {
+    return Boolean(session.alcoholBingeEvidence)
+  }
+
+  if (session.alcoholUse === 'yes-in-last-3-months') {
+    return Boolean(
+      session.alcoholFrequencyLast3Months &&
+        session.alcoholUnitsTypicalDay &&
+        session.alcoholBingeEvidence
+    )
+  }
+
+  return false
+}
+
+export const isDynamicSectionReadyForB7 = (session = getPredictorsAssessmentSession()) =>
+  Boolean(
+    session.interviewDone === 'yes' &&
+      isB1Complete(session) &&
+      session.employmentHistory &&
+      session.drugsMisused &&
+      session.alcoholUse
+  )
+
+export const getB7BackHref = (session = getPredictorsAssessmentSession()) => {
+  if (!hasAlcoholUseYesAnswer(session)) return 'b5.html'
+  if (session.alcoholUse === 'yes-not-in-last-3-months') return 'b6c.html'
+  return 'b6.html'
+}
+
+export const getB6BackHref = () => 'b5.html'
+
+export const getB6cBackHref = (session = getPredictorsAssessmentSession()) =>
+  session.alcoholUse === 'yes-in-last-3-months' ? 'b6.html' : 'b5.html'
+
+export const getB6FieldsFromForm = (form) => ({
+  alcoholFrequencyLast3Months:
+    form.querySelector('input[name="alcohol_frequency_last_3_months"]:checked')?.value || '',
+  alcoholUnitsTypicalDay:
+    form.querySelector('input[name="alcohol_units_typical_day"]:checked')?.value || '',
+  alcoholBingeEvidence:
+    form.querySelector('input[name="alcohol_binge_evidence"]:checked')?.value || ''
+})
+
+export const getB6cFieldsFromForm = (form) => ({
+  alcoholBingeEvidence:
+    form.querySelector('input[name="alcohol_binge_evidence"]:checked')?.value || ''
+})
+
+export const isB6Complete = (session = getPredictorsAssessmentSession()) =>
+  Boolean(
+    session.alcoholFrequencyLast3Months &&
+      session.alcoholUnitsTypicalDay &&
+      session.alcoholBingeEvidence
+  )
+
+export const clearB6SessionFields = () => ({
+  alcoholFrequencyLast3Months: '',
+  alcoholUnitsTypicalDay: '',
+  alcoholBingeEvidence: ''
+})
+
+export const clearDynamicSectionSessionFields = () => ({
+  livingWith: [],
+  livingWithOther: '',
+  accommodationSuitable: '',
+  employmentHistory: '',
+  drugsMisused: '',
+  ...clearB4SessionFields(),
+  alcoholUse: '',
+  ...clearB6SessionFields(),
+  importantPeople: [],
+  relationshipStatus: '',
+  activitiesLinkedToOffending: '',
+  manageTemper: '',
+  actOnImpulse: '',
+  supportCriminalBehaviour: '',
+  offenceElements: [],
+  domesticAbusePerpetrator: '',
+  domesticAbusePerpetratorAgainst: '',
+  domesticAbuseVictim: '',
+  domesticAbuseVictimBy: '',
+  b9Complete: false,
+  seriousHarmConvictions: [],
+  b10Complete: false
+})
+
+const dynamicSectionFieldHasValue = (value) => {
+  if (Array.isArray(value)) return value.length > 0
+
+  if (value && typeof value === 'object') {
+    return Object.values(value).some((entry) => {
+      if (entry && typeof entry === 'object') {
+        return Object.values(entry).some(Boolean)
+      }
+
+      return Boolean(entry)
+    })
+  }
+
+  return Boolean(value)
+}
+
+export const extractDynamicSectionSessionFields = (session) => {
+  const fields = {}
+
+  Object.keys(clearDynamicSectionSessionFields()).forEach((key) => {
+    if (key in session) fields[key] = session[key]
+  })
+
+  return fields
+}
+
+export const hasDynamicSectionSessionData = (fields) =>
+  Object.values(fields).some(dynamicSectionFieldHasValue)
+
+/** Hide dynamic answers while static-only, but keep them to restore if interview resumes */
+export const pauseDynamicSectionSessionFields = (session) => {
+  const current = extractDynamicSectionSessionFields(session)
+  const updates = clearDynamicSectionSessionFields()
+
+  if (hasDynamicSectionSessionData(current)) {
+    updates.pausedDynamicSection = current
+  } else if (session.pausedDynamicSection) {
+    updates.pausedDynamicSection = session.pausedDynamicSection
+  }
+
+  return updates
+}
+
+export const restoreDynamicSectionSessionFields = (session) => {
+  if (!session.pausedDynamicSection) return {}
+
+  return {
+    ...session.pausedDynamicSection,
+    pausedDynamicSection: undefined
+  }
+}
+
+export const getPostInterviewYesContinueHref = (session = getPredictorsAssessmentSession()) =>
+  getFirstIncompleteDynamicPage(session) || getDynamicPredictorsCheckAnswersHref()
+
+export const getB7FieldsFromForm = (form) => ({
+  importantPeople: [...form.querySelectorAll('input[name="important_people"]:checked')].map(
+    (input) => input.value
+  ),
+  relationshipStatus: form.querySelector('input[name="relationship_status"]:checked')?.value || ''
+})
+
+export const isB7Complete = (session = getPredictorsAssessmentSession()) =>
+  Boolean(
+    Array.isArray(session.importantPeople) &&
+      session.importantPeople.length &&
+      session.relationshipStatus
+  )
+
+export const getB8BackHref = () => 'b7.html'
+
+export const getB8FieldsFromForm = (form) => ({
+  activitiesLinkedToOffending:
+    form.querySelector('input[name="activities_linked_to_offending"]:checked')?.value || '',
+  manageTemper: form.querySelector('input[name="manage_temper"]:checked')?.value || '',
+  actOnImpulse: form.querySelector('input[name="act_on_impulse"]:checked')?.value || '',
+  supportCriminalBehaviour:
+    form.querySelector('input[name="support_criminal_behaviour"]:checked')?.value || ''
+})
+
+export const isB8Complete = (session = getPredictorsAssessmentSession()) =>
+  Boolean(
+    session.activitiesLinkedToOffending &&
+      session.manageTemper &&
+      session.actOnImpulse &&
+      session.supportCriminalBehaviour
+  )
+
+export const getB9BackHref = () => 'b8.html'
+
+export const getB9FieldsFromForm = (form) => ({
+  offenceElements: [...form.querySelectorAll('input[name="offence_elements"]:checked')].map(
+    (input) => input.value
+  ),
+  domesticAbusePerpetrator:
+    form.querySelector('input[name="domestic_abuse_perpetrator"]:checked')?.value || '',
+  domesticAbusePerpetratorAgainst:
+    form.querySelector('input[name="domestic_abuse_perpetrator_against"]:checked')?.value || '',
+  domesticAbuseVictim:
+    form.querySelector('input[name="domestic_abuse_victim"]:checked')?.value || '',
+  domesticAbuseVictimBy:
+    form.querySelector('input[name="domestic_abuse_victim_by"]:checked')?.value || ''
+})
+
+export const getB9ValidationError = (form) => {
+  const fields = getB9FieldsFromForm(form)
+
+  if (!fields.offenceElements.length) {
+    return {
+      anchor: '#predictors-offence-elements',
+      focusSelector: 'input[name="offence_elements"]'
+    }
+  }
+
+  if (!fields.domesticAbusePerpetrator) {
+    return {
+      anchor: '#predictors-domestic-abuse-perpetrator',
+      focusSelector: 'input[name="domestic_abuse_perpetrator"]'
+    }
+  }
+
+  if (fields.domesticAbusePerpetrator === 'yes' && !fields.domesticAbusePerpetratorAgainst) {
+    return {
+      anchor: '#predictors-domestic-abuse-perpetrator',
+      conditionalId: 'conditional-domestic-abuse-perpetrator-yes',
+      focusSelector: 'input[name="domestic_abuse_perpetrator_against"]'
+    }
+  }
+
+  if (!fields.domesticAbuseVictim) {
+    return {
+      anchor: '#predictors-domestic-abuse-victim',
+      focusSelector: 'input[name="domestic_abuse_victim"]'
+    }
+  }
+
+  if (fields.domesticAbuseVictim === 'yes' && !fields.domesticAbuseVictimBy) {
+    return {
+      anchor: '#predictors-domestic-abuse-victim',
+      conditionalId: 'conditional-domestic-abuse-victim-yes',
+      focusSelector: 'input[name="domestic_abuse_victim_by"]'
+    }
+  }
+
+  return null
+}
+
+export const isB9Complete = (session = getPredictorsAssessmentSession()) => {
+  if (!Array.isArray(session.offenceElements) || !session.offenceElements.length) return false
+  if (!session.domesticAbusePerpetrator) return false
+  if (session.domesticAbusePerpetrator === 'yes' && !session.domesticAbusePerpetratorAgainst) {
+    return false
+  }
+  if (!session.domesticAbuseVictim) return false
+  if (session.domesticAbuseVictim === 'yes' && !session.domesticAbuseVictimBy) return false
+
+  return true
+}
+
+export const isDynamicSectionReadyForB10 = (session = getPredictorsAssessmentSession()) =>
+  session.b9Complete === true || isB9Complete(session)
+
+export const getB10BackHref = () => 'b9.html'
+
+export const getB10FieldsFromForm = (form) => ({
+  seriousHarmConvictions: [...form.querySelectorAll('input[name="serious_harm_convictions"]:checked')].map(
+    (input) => input.value
+  )
+})
+
+export const isB10Complete = (session = getPredictorsAssessmentSession()) =>
+  Boolean(session.seriousHarmConvictions?.length)
+
+export const isDynamicSectionReadyForB11 = (session = getPredictorsAssessmentSession()) =>
+  session.b10Complete === true || isB10Complete(session)
+
+export const getB11BackHref = () => 'b10.html'
+
+export const redirectIfDynamicCheckAnswersIncomplete = () => {
+  if (!window.location.pathname.includes('/dev/')) return false
+
+  if (!/\/b11(?:\.html)?$/.test(window.location.pathname)) return false
+
+  const session = syncPredictorsSessionBeforeCheckAnswers()
+  const staticPage = getFirstIncompletePredictorsPage(session)
+
+  if (staticPage) {
+    window.location.href = predictorsJourneyHref(staticPage)
+    return true
+  }
+
+  const dynamicPage = getFirstIncompleteDynamicPage(session)
+
+  if (dynamicPage) {
+    window.location.href = predictorsJourneyHref(dynamicPage)
+    return true
+  }
+
+  return false
+}
+
+/** Questions required for the journey that are missing from session storage */
+export const getUnansweredPredictorsQuestions = (session, offenderFirstName = 'Alex') => {
+  const name = offenderFirstName
+  const unanswered = []
+
+  const add = (pageId, pageLabel, question) => {
+    unanswered.push({ pageId, pageLabel, question })
+  }
+
+  if (!session.currentOffence?.id) {
+    add('a1', 'Current offence', `What is ${name}'s current offence?`)
+  }
+  if (!isDateComplete(session.convictionDate)) {
+    add('a1', 'Current offence', `What is the date of ${name}'s current conviction?`)
+  }
+
+  if (!isDateComplete(session.firstSanctionDate) && !normaliseString(session.firstSanctionAge)) {
+    add('a2', 'Offending history', `What was the date of ${name}'s first sanction?`)
+  }
+  if (!normaliseString(session.totalSanctions)) {
+    add('a2', 'Offending history', `How many sanctions does ${name} have in total for all offences?`)
+  }
+  if (!normaliseString(session.violentSanctions)) {
+    add(
+      'a2',
+      'Offending history',
+      `How many of ${name}'s total sanctions involved violent offences?`
+    )
+  }
+  if (!session.sexualOffence) {
+    add(
+      'a2',
+      'Offending history',
+      `Has ${name} ever committed a sexual or sexually motivated offence?`
+    )
+  }
+
+  if (session.sexualOffence === 'yes') {
+    if (!session.sexualMotivation) {
+      add(
+        'a3',
+        'Sexual offending',
+        `Does ${name}'s current offence have a sexual motivation?`
+      )
+    }
+    if (!session.strangerContact) {
+      add(
+        'a3',
+        'Sexual offending',
+        `Does ${name}'s current offence involve actual or attempted direct contact against a victim who was a stranger?`
+      )
+    }
+    if (!isDateComplete(session.sexualSanctionDate)) {
+      add(
+        'a3',
+        'Sexual offending',
+        `What is the date of ${name}'s most recent sanction involving a sexual or sexually motivated offence?`
+      )
+    }
+    if (normaliseString(session.contactAdultSanctions) === '') {
+      add(
+        'a3',
+        'Sexual offending',
+        `How many sanctions does ${name} have for contact adult sexual or sexually motivated offences?`
+      )
+    }
+    if (normaliseString(session.contactChildSanctions) === '') {
+      add(
+        'a3',
+        'Sexual offending',
+        `How many sanctions does ${name} have for direct contact child sexual or sexually motivated offences?`
+      )
+    }
+    if (
+      session.strangerContact === 'yes' &&
+      !isStrangerContactSanctionsValid({
+        strangerContact: session.strangerContact,
+        contactAdultSanctions: session.contactAdultSanctions,
+        contactChildSanctions: session.contactChildSanctions
+      })
+    ) {
+      add('a3', 'Sexual offending', getStrangerContactSanctionsError(name))
+    }
+    if (normaliseString(session.indirectChildSanctions) === '') {
+      add(
+        'a3',
+        'Sexual offending',
+        `How many sanctions does ${name} have for indecent child image, or indirect contact child, sexual or sexually motivated offences?`
+      )
+    }
+    if (normaliseString(session.nonContactSanctions) === '') {
+      add(
+        'a3',
+        'Sexual offending',
+        `How many sanctions does ${name} have for other non-contact sexual or sexually motivated offences?`
+      )
+    }
+  }
+
+  if (!isA4Complete(session)) {
+    add(
+      'a4',
+      'Community supervision',
+      `What date did ${name}'s current supervision in the community begin?`
+    )
+  }
+
+  if (isA5Required(session) && !session.offencesSinceCommunity) {
+    const communityDateLabel = formatDateFromParts(session.communityDate || {}) || 'that date'
+    add(
+      'a5',
+      'Offences since community date',
+      `Has ${name} committed any offences since ${communityDateLabel}?`
+    )
+  }
+
+  if (
+    isA5Required(session) &&
+    session.offencesSinceCommunity === 'yes' &&
+    !isDateComplete(session.recentOffenceDate)
+  ) {
+    add('a5', 'Offences since community date', `What is the date of ${name}'s most recent offence?`)
+  }
+
+  return unanswered
+}

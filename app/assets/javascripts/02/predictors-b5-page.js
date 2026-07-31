@@ -13,6 +13,7 @@ import {
   getB5FieldsFromForm,
   getPostB5ContinueHref,
   isB1Complete,
+  isB4Complete,
   predictorsJourneyHref
 } from './predictors-journey.js'
 import { getPredictorsAssessmentSession } from './predictors-assessment-session.js'
@@ -22,8 +23,6 @@ const hasRequiredDynamicAnswers = (session) =>
   isB1Complete(session) &&
   session.employmentHistory &&
   session.drugsMisused
-
-const hasCompletedB4 = (session) => Object.keys(session.misusedDrugs || {}).length > 0
 
 const getB5BackHref = (session) =>
   session.drugsMisused === 'yes' ? 'b4.html' : 'b3.html'
@@ -39,7 +38,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
   if (!hasRequiredDynamicAnswers(session) && redirectUnlessCheckAnswersEdit('b3.html')) return
   if (
     session.drugsMisused === 'yes' &&
-    !hasCompletedB4(session) &&
+    !isB4Complete(session) &&
     redirectUnlessCheckAnswersEdit('b4.html')
   ) {
     return
