@@ -72,14 +72,18 @@
   {% set itemHeading = "Dev reference" %}
   {% set title = "Static assessment" %}
   {% set prototypeVersion = "dev" %}
+  {% set secondaryHref = "/dev/a6.html" %}
   {% set secondaryTitle = "Dynamic assessment" %}
-  {% set secondaryInactive = true %}
+  {% set secondaryClearSessionOnStart = true %}
+  {% set secondaryPrototypeVersion = "dev" %}
+  {% set secondaryInactive = null %}
   {% set titleTagText = "September 2026" %}
   {% set titleTagColour = "blue" %}
   {% set secondaryTitleTagText = null %}
   {% set secondaryTitleTagColour = null %}
   {% set hint = "Reference prototype for development" %}
   {% set titleHint = "(design frozen on 23 July 2026)" %}
+  {% set secondaryTitleHint = "(design to be frozen)" %}
   {% set skipToEndHref = null %}
   {% set clearSessionOnStart = true %}
   {% include "includes/research-prototype-entry.html" %}
@@ -89,7 +93,10 @@
   {% set title = "UX documentation" %}
   {% set titleRegularWeight = true %}
   {% set prototypeVersion = null %}
+  {% set secondaryHref = null %}
   {% set secondaryTitle = null %}
+  {% set secondaryClearSessionOnStart = null %}
+  {% set secondaryPrototypeVersion = null %}
   {% set secondaryInactive = null %}
   {% set titleTagText = null %}
   {% set titleTagColour = null %}
@@ -97,6 +104,7 @@
   {% set secondaryTitleTagColour = null %}
   {% set hint = null %}
   {% set titleHint = null %}
+  {% set secondaryTitleHint = null %}
   {% set skipToEndHref = null %}
   {% set clearSessionOnStart = null %}
   {% include "includes/research-prototype-entry.html" %}

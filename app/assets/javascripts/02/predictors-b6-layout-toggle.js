@@ -16,12 +16,17 @@ const activateLayoutToggleButton = (href) => {
 export const initB6LayoutToggleButtons = () => {
   const path = window.location.pathname
 
-  if (path.includes('/02/b6b')) {
+  if (path.includes('/02/b6b') || path.includes('/dev/b6b')) {
     activateLayoutToggleButton('b6.html')
     return
   }
 
-  if (path.endsWith('/02/b6') || path.includes('/02/b6.html')) {
+  if (
+    path.endsWith('/02/b6') ||
+    path.includes('/02/b6.html') ||
+    path.endsWith('/dev/b6') ||
+    path.includes('/dev/b6.html')
+  ) {
     activateLayoutToggleButton('b6b.html')
   }
 }

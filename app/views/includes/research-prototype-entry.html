@@ -38,17 +38,17 @@
           {% if itemHeading %}
             <h3 class="govuk-heading-m govuk-!-margin-bottom-2{% if secondaryInactive %} assessment-research-prototypes__title-text--inactive{% endif %}">
               {% if secondaryInactive %}
-                {{ secondaryTitle }}
+                {{ secondaryTitle }}{% if secondaryTitleHint %} <span class="govuk-hint">{{ secondaryTitleHint }}</span>{% endif %}
               {% else %}
-                <a href="{{ secondaryHref }}" class="govuk-link"{% if secondaryClearSessionOnStart %} data-clear-session-on-start{% if secondaryPrototypeVersion %} data-prototype-version="{{ secondaryPrototypeVersion }}"{% endif %}{% endif %}>{{ secondaryTitle }}</a>
+                <a href="{{ secondaryHref }}" class="govuk-link"{% if secondaryClearSessionOnStart %} data-clear-session-on-start{% if secondaryPrototypeVersion %} data-prototype-version="{{ secondaryPrototypeVersion }}"{% endif %}{% endif %}>{{ secondaryTitle }}</a>{% if secondaryTitleHint %} <span class="govuk-hint">{{ secondaryTitleHint }}</span>{% endif %}
               {% endif %}
             </h3>
           {% else %}
             <h2 class="govuk-heading-m govuk-!-margin-bottom-2{% if secondaryInactive %} assessment-research-prototypes__title-text--inactive{% endif %}">
               {% if secondaryInactive %}
-                {{ secondaryTitle }}
+                {{ secondaryTitle }}{% if secondaryTitleHint %} <span class="govuk-hint">{{ secondaryTitleHint }}</span>{% endif %}
               {% else %}
-                <a href="{{ secondaryHref }}" class="govuk-link"{% if secondaryClearSessionOnStart %} data-clear-session-on-start{% if secondaryPrototypeVersion %} data-prototype-version="{{ secondaryPrototypeVersion }}"{% endif %}{% endif %}>{{ secondaryTitle }}</a>
+                <a href="{{ secondaryHref }}" class="govuk-link"{% if secondaryClearSessionOnStart %} data-clear-session-on-start{% if secondaryPrototypeVersion %} data-prototype-version="{{ secondaryPrototypeVersion }}"{% endif %}{% endif %}>{{ secondaryTitle }}</a>{% if secondaryTitleHint %} <span class="govuk-hint">{{ secondaryTitleHint }}</span>{% endif %}
               {% endif %}
             </h2>
           {% endif %}

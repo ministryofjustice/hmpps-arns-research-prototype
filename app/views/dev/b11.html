@@ -1,0 +1,25 @@
+{% extends "layouts/assessment-proto-dev.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Check your answers" %}
+{% set activeSection = "section-1" %}
+{% set pageHeading = "Check your answers" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "b10?from=b11-back" %}
+{% set backLinkId = "predictors-b11-back" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="predictors-b11-form" novalidate>
+  <div id="predictors-summary-list" class="predictors-summary-list govuk-!-margin-top-6" data-offender-first-name="{{ offenderFirstName }}"></div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">View reoffending predictors scores</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

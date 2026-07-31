@@ -49,9 +49,11 @@
     How many units of alcohol does {{ offenderFirstName }} have on a typical day of drinking?
   </h2>
 
+  {% if not alcoholUnitsHelpAfterRadios %}
   {% include "includes/02/alcohol-units-help.html" %}
+  {% endif %}
 
-  <div class="govuk-form-group govuk-!-margin-bottom-8">
+  <div class="govuk-form-group{% if alcoholUnitsHelpAfterRadios %} govuk-!-margin-bottom-4{% else %} govuk-!-margin-bottom-8{% endif %}">
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
         How many units of alcohol does {{ offenderFirstName }} have on a typical day of drinking?
@@ -85,6 +87,10 @@
       </div>
     </fieldset>
   </div>
+
+  {% if alcoholUnitsHelpAfterRadios %}
+  {% include "includes/02/alcohol-units-help.html" %}
+  {% endif %}
 </div>
 
 <div data-b6-question-block="3">

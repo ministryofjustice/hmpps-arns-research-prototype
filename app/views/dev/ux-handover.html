@@ -25,18 +25,20 @@
 </div>
 
 <div class="govuk-inset-text guidance-panel ux-handover-reference">
-  <p class="govuk-body govuk-!-margin-bottom-0">
-    The <a class="govuk-link" href="/dev/a2b.html" data-clear-session-on-start data-prototype-version="dev">Dev prototype</a> can be used as a reference for the September 2026 release.
+  <p class="govuk-body">
+    The Dev prototypes are the reference for the September 2026 release.
   </p>
+  <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+    <li>
+      <a class="govuk-link govuk-!-font-weight-bold" href="/dev/a2b.html" data-clear-session-on-start data-prototype-version="dev" rel="noopener noreferrer" target="_blank">Static</a>
+    </li>
+    <li>
+      <a class="govuk-link govuk-!-font-weight-bold" href="/dev/a6.html" data-clear-session-on-start data-prototype-version="dev" rel="noopener noreferrer" target="_blank">Dynamic</a>
+    </li>
+  </ul>
 </div>
 
-<div class="govuk-warning-text ux-handover-warning">
-  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-  <strong class="govuk-warning-text__text">
-    <span class="govuk-visually-hidden">Warning</span>
-    This page describes the <strong>dev</strong> static journey only.
-  </strong>
-</div>
+
 
 <div class="govuk-tabs assessment-home-tabs ux-handover-tabs" data-module="govuk-tabs">
   <h2 class="govuk-tabs__title">Contents</h2>
@@ -65,8 +67,9 @@
   <div class="govuk-tabs__panel" id="overview">
     <h2 class="govuk-heading-l">Overview</h2>
     <p class="govuk-body">
-      The static assessment collects offending history and related answers so the service can calculate reoffending predictor scores.
-      Practitioners move through a short question journey, check their answers, then view scores and mark the section complete.
+      Reoffending predictors has two related journeys on the same section.
+      The <strong>static assessment</strong> collects offending history so the service can calculate static predictor scores.
+      The <strong>dynamic assessment</strong> starts from an interview gate: if the practitioner has interviewed the person, they answer further questions (accommodation through risk of serious harm) for dynamic scores; if not, they continue to static check answers and scores only.
     </p>
 
     <h3 class="govuk-heading-m">How the design evolved</h3>
@@ -81,7 +84,7 @@
       <li>Incentivise practitioners to do an interview so they can get dynamic scores that give a more accurate picture of reoffending risks</li>
     </ul>
 
-    <h3 class="govuk-heading-m">Journey at a glance</h3>
+    <h3 class="govuk-heading-m">Static journey at a glance</h3>
     <div class="ux-docs-infographic">
       <div role="img" aria-label="Infographic: six stages from offending history through sexual questions, community date, offences since, check answers, to predictor scores">
         <ol class="ux-docs-pipeline" aria-hidden="true">
@@ -111,10 +114,10 @@
           </li>
         </ol>
       </div>
-      <p class="govuk-hint">Dashed steps are conditional. In the current prototype a complete community date almost always shows a5.</p>
+
       <details class="govuk-details govuk-!-margin-bottom-0">
         <summary class="govuk-details__summary">
-          <span class="govuk-details__summary-text">Journey steps as a list</span>
+          <span class="govuk-details__summary-text">Static journey steps as a list</span>
         </summary>
         <div class="govuk-details__text">
           <ol class="govuk-list govuk-list--number govuk-!-margin-bottom-0">
@@ -129,35 +132,90 @@
       </details>
     </div>
 
+    <h3 class="govuk-heading-m">Dynamic journey at a glance</h3>
+    <div class="ux-docs-infographic">
+      <div role="img" aria-label="Infographic: interview gate, then dynamic topics with optional drugs and alcohol branches, check answers, predictor scores">
+        <ol class="ux-docs-pipeline" aria-hidden="true">
+          <li class="ux-docs-pipeline__step">
+            <span class="ux-docs-pipeline__num">1</span>
+            <span class="ux-docs-pipeline__label">Interview</span>
+          </li>
+          <li class="ux-docs-pipeline__step">
+            <span class="ux-docs-pipeline__num">2</span>
+            <span class="ux-docs-pipeline__label">Accommodation to RoSH</span>
+          </li>
+          <li class="ux-docs-pipeline__step ux-docs-pipeline__step--optional">
+            <span class="ux-docs-pipeline__num">3</span>
+            <span class="ux-docs-pipeline__label">Drugs / alcohol detail</span>
+          </li>
+          <li class="ux-docs-pipeline__step">
+            <span class="ux-docs-pipeline__num">4</span>
+            <span class="ux-docs-pipeline__label">Check answers</span>
+          </li>
+          <li class="ux-docs-pipeline__step ux-docs-pipeline__step--end">
+            <span class="ux-docs-pipeline__num">5</span>
+            <span class="ux-docs-pipeline__label">Predictor scores</span>
+          </li>
+        </ol>
+      </div>
+
+      <details class="govuk-details govuk-!-margin-bottom-0">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">Dynamic journey steps as a list</span>
+        </summary>
+        <div class="govuk-details__text">
+          <ol class="govuk-list govuk-list--number govuk-!-margin-bottom-0">
+            <li>Interview (a6) — Yes continues to dynamic questions; No goes to static check answers (a7)</li>
+            <li>Accommodation (b1) and employment (b2) — always on the Yes path</li>
+            <li>Drug use (b3); drug detail (b4) only if misused drugs is yes</li>
+            <li>Alcohol use (b5); alcohol detail (b6 or b6c) depending on timing of use</li>
+            <li>Relationships (b7), thinking (b8), offence analysis (b9), risk of serious harm (b10)</li>
+            <li>Check answers (b11) — static plus dynamic sections</li>
+            <li>Predictor scores (a8) — dynamic origin; mark the section complete</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
     <h3 class="govuk-heading-m">Quick links</h3>
     <ul class="govuk-list govuk-list--bullet assessment-bullet-list">
-      <li><a class="govuk-link" href="/dev/a2b.html" data-clear-session-on-start data-prototype-version="dev">Start the static assessment</a></li>
-      <li><a class="govuk-link" href="https://miro.com/app/board/uXjVHRJpm_4=/?moveToWidget=3458764678984633232&amp;cot=10" rel="noopener noreferrer" target="_blank">View user flow (Miro board)</a></li>
       <li><a class="govuk-link" href="https://dsdmoj.atlassian.net/wiki/spaces/AAD/pages/6167593233/UCD+Overview" rel="noopener noreferrer" target="_blank">UCD overview (Confluence)</a></li>
+      <li><a class="govuk-link" href="https://github.com/ministryofjustice/hmpps-arns-research-prototype" rel="noopener noreferrer" target="_blank">Prototype on GitHub</a></li>
     </ul>
   </div>
 
   {# ───────────────────────────────────────────── Journey ───────────────────────────────────────────── #}
   <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="journey">
     <h2 class="govuk-heading-l">User journey</h2>
-    <div class="govuk-inset-text guidance-panel ux-handover-reference">
-      <p class="govuk-body govuk-!-margin-bottom-0">
-        <a class="govuk-link" href="https://miro.com/app/board/uXjVHRJpm_4=/?moveToWidget=3458764678984633232&amp;cot=10" rel="noopener noreferrer" target="_blank">View the full user flow on Miro</a>
-      </p>
-    </div>
+    <p class="govuk-body">
+      There are two paths in the same section. The <strong>static</strong> path starts at Current offence and offending history (a2b) and never visits Interview (a6).
+      The <strong>dynamic</strong> path starts at Interview (a6), with static answers seeded, and either continues through Accommodation to Risk of serious harm (b1–b11) or drops back to static Check your answers if there was no interview.
+    </p>
 
+    {{ mojSubNavigation({
+      label: "Journey types",
+      classes: "ux-docs-topic-subnav",
+      attributes: { "data-ux-docs-topic-subnav": true },
+      items: [
+        { text: "Static assessment", href: "#journey-static", active: true, attributes: { "data-topic": "journey-static" } },
+        { text: "Dynamic assessment", href: "#journey-dynamic", attributes: { "data-topic": "journey-dynamic" } }
+      ]
+    }) }}
+
+    <div class="ux-docs-topic-block" id="journey-static" data-topic-panel="journey-static">
+    <h3 class="govuk-heading-m">Static assessment</h3>
     <figure class="ux-docs-figure">
       <div class="ux-docs-ltr" role="img" aria-labelledby="flow-title flow-desc">
         <p class="govuk-visually-hidden" id="flow-title">Static assessment journey from left to right</p>
         <p class="govuk-visually-hidden" id="flow-desc">
-          Start at a2b. If sexual offence is yes, go to a3 then a4; if no, skip to a4.
-          From a4, if the community date is complete go to a5 then a7; otherwise skip to a7. Then a8 scores.
+          Start at Current offence and offending history (a2b). If sexual offence is yes, go to Sexual offending (a3) then Community date (a4); if no, skip to Community date (a4).
+          From Community date (a4), if the community date is complete go to Offences since (a5) then Check your answers (a7); otherwise skip to Check your answers (a7). Then Predictor scores (a8).
         </p>
 
         <ol class="ux-docs-ltr__track">
           <li class="ux-docs-ltr__step">
-            <span class="ux-docs-ltr__id">a2b</span>
-            <span class="ux-docs-ltr__name">Offending history</span>
+            <span class="ux-docs-ltr__id">Offending history</span>
+            <span class="ux-docs-ltr__name">(a2b)</span>
             <span class="ux-docs-ltr__meta">Always</span>
           </li>
 
@@ -170,8 +228,8 @@
           </li>
 
           <li class="ux-docs-ltr__step ux-docs-ltr__step--optional">
-            <span class="ux-docs-ltr__id">a3</span>
-            <span class="ux-docs-ltr__name">Sexual offending</span>
+            <span class="ux-docs-ltr__id">Sexual offending</span>
+            <span class="ux-docs-ltr__name">(a3)</span>
             <span class="ux-docs-ltr__meta">If sexual = yes</span>
           </li>
 
@@ -180,8 +238,8 @@
           </li>
 
           <li class="ux-docs-ltr__step">
-            <span class="ux-docs-ltr__id">a4</span>
-            <span class="ux-docs-ltr__name">Community date</span>
+            <span class="ux-docs-ltr__id">Community date</span>
+            <span class="ux-docs-ltr__name">(a4)</span>
             <span class="ux-docs-ltr__meta">Always</span>
           </li>
 
@@ -194,8 +252,8 @@
           </li>
 
           <li class="ux-docs-ltr__step ux-docs-ltr__step--optional">
-            <span class="ux-docs-ltr__id">a5</span>
-            <span class="ux-docs-ltr__name">Offences since</span>
+            <span class="ux-docs-ltr__id">Offences since</span>
+            <span class="ux-docs-ltr__name">(a5)</span>
             <span class="ux-docs-ltr__meta">If date complete</span>
           </li>
 
@@ -204,8 +262,8 @@
           </li>
 
           <li class="ux-docs-ltr__step">
-            <span class="ux-docs-ltr__id">a7</span>
-            <span class="ux-docs-ltr__name">Check answers</span>
+            <span class="ux-docs-ltr__id">Check answers</span>
+            <span class="ux-docs-ltr__name">(a7)</span>
             <span class="ux-docs-ltr__meta">Always</span>
           </li>
 
@@ -214,74 +272,73 @@
           </li>
 
           <li class="ux-docs-ltr__step ux-docs-ltr__step--end">
-            <span class="ux-docs-ltr__id">a8</span>
-            <span class="ux-docs-ltr__name">Predictor scores</span>
+            <span class="ux-docs-ltr__id">Predictor scores</span>
+            <span class="ux-docs-ltr__name">(a8)</span>
             <span class="ux-docs-ltr__meta">Mark complete</span>
           </li>
         </ol>
       </div>
-      <figcaption class="govuk-hint govuk-!-margin-top-4">Read left to right. Solid boxes are always visited. Dashed boxes are conditional. Editing from a7 can re-enter earlier steps.</figcaption>
-      <details class="govuk-details govuk-!-margin-bottom-0">
+      <figcaption class="govuk-hint govuk-!-margin-top-4">Read left to right. Solid boxes are always visited. Dashed boxes are conditional. Editing from Check your answers (a7) can re-enter earlier steps.</figcaption>
+      <details class="govuk-details">
         <summary class="govuk-details__summary">
-          <span class="govuk-details__summary-text">Journey steps as a list</span>
+          <span class="govuk-details__summary-text">Static journey steps as a list</span>
         </summary>
         <div class="govuk-details__text">
           <ol class="govuk-list govuk-list--number assessment-bullet-list govuk-!-margin-bottom-0">
-            <li>Offending history (a2b) — always shown</li>
+            <li>Current offence and offending history (a2b) — always shown</li>
             <li>Sexual offending (a3) — shown if sexual or sexually motivated offending is yes; otherwise skipped</li>
             <li>Community date (a4) — always shown</li>
             <li>Offences since (a5) — shown if the community date is complete; otherwise skipped</li>
-            <li>Check answers (a7) — always shown; editing can re-enter earlier steps</li>
-            <li>Predictor scores (a8) — always shown; mark the section complete</li>
+            <li>Check your answers (a7) — always shown; editing can re-enter earlier steps</li>
+            <li>Reoffending predictor scores (a8) — always shown; mark the section complete</li>
           </ol>
         </div>
       </details>
+
+      <h4 class="govuk-heading-s">Static</h4>
+      <ul class="govuk-list govuk-list--bullet assessment-bullet-list govuk-!-margin-bottom-0">
+        <li><a class="govuk-link" href="/dev/a2b.html" data-clear-session-on-start data-prototype-version="dev">Start the static assessment</a></li>
+        <li><a class="govuk-link" href="https://miro.com/app/board/uXjVHRJpm_4=/?moveToWidget=3458764678984633232&amp;cot=10" rel="noopener noreferrer" target="_blank">View static user flow (Miro)</a></li>
+      </ul>
     </figure>
 
-    <h3 class="govuk-heading-m">Page table</h3>
+    <h3 class="govuk-heading-m">Static page table</h3>
     <table class="govuk-table ux-docs-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-          <th scope="col" class="govuk-table__header">Page</th>
           <th scope="col" class="govuk-table__header">Page title</th>
           <th scope="col" class="govuk-table__header">Number of Qs</th>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/a2b.html">a2b</a></th>
-          <td class="govuk-table__cell">Current offence and offending history</td>
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/a2b.html">Current offence and offending history (a2b)</a></th>
           <td class="govuk-table__cell">4</td>
         </tr>
         <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/a3.html">a3</a></th>
-          <td class="govuk-table__cell">Sexual offending</td>
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/a3.html">Sexual offending (a3)</a></th>
           <td class="govuk-table__cell">7</td>
         </tr>
         <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/a4.html">a4</a></th>
-          <td class="govuk-table__cell">What date did Alex’s current supervision in the community begin?</td>
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/a4.html">Community supervision start date (a4)</a></th>
           <td class="govuk-table__cell">1</td>
         </tr>
         <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/a5.html">a5</a></th>
-          <td class="govuk-table__cell">Has Alex committed any offences since that date?</td>
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/a5.html">Offences since community date (a5)</a></th>
           <td class="govuk-table__cell">2</td>
         </tr>
         <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/a7.html">a7</a></th>
-          <td class="govuk-table__cell">Check your answers</td>
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/a7.html">Check your answers (a7)</a></th>
           <td class="govuk-table__cell">0</td>
         </tr>
         <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/a8.html">a8</a></th>
-          <td class="govuk-table__cell">Reoffending predictor scores</td>
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/a8.html">Reoffending predictor scores (a8)</a></th>
           <td class="govuk-table__cell">0</td>
         </tr>
       </tbody>
     </table>
 
-    <h3 class="govuk-heading-m">When questions appear</h3>
+    <h3 class="govuk-heading-m">When static questions appear</h3>
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Sexual offending questions</dt>
@@ -321,11 +378,225 @@
         </dd>
       </div>
     </dl>
+    </div>
+
+    <div class="ux-docs-topic-block" id="journey-dynamic" data-topic-panel="journey-dynamic">
+    <h3 class="govuk-heading-m">Dynamic assessment</h3>
+    <figure class="ux-docs-figure">
+      <div class="ux-docs-ltr ux-docs-ltr--simplified" role="img" aria-labelledby="dynamic-flow-title dynamic-flow-desc">
+        <p class="govuk-visually-hidden" id="dynamic-flow-title">Dynamic assessment journey from left to right</p>
+        <p class="govuk-visually-hidden" id="dynamic-flow-desc">
+          Start at Interview (a6). If interview is no, go to Check your answers (a7) then Predictor scores (a8).
+          If yes, continue through dynamic questions (b1 to b10), including optional drug and alcohol detail,
+          then Check your answers (b11), then Predictor scores (a8).
+        </p>
+
+        <ol class="ux-docs-ltr__track">
+          <li class="ux-docs-ltr__step">
+            <span class="ux-docs-ltr__id">Interview</span>
+            <span class="ux-docs-ltr__name">(a6)</span>
+          </li>
+
+          <li class="ux-docs-ltr__join" aria-hidden="true">
+            <span class="ux-docs-ltr__arrow">→</span>
+          </li>
+
+          <li class="ux-docs-ltr__step">
+            <span class="ux-docs-ltr__id">Dynamic questions</span>
+            <span class="ux-docs-ltr__name">(b1–b10)</span>
+          </li>
+
+          <li class="ux-docs-ltr__join" aria-hidden="true">
+            <span class="ux-docs-ltr__arrow">→</span>
+          </li>
+
+          <li class="ux-docs-ltr__step">
+            <span class="ux-docs-ltr__id">Check answers</span>
+            <span class="ux-docs-ltr__name">(b11)</span>
+          </li>
+
+          <li class="ux-docs-ltr__join" aria-hidden="true">
+            <span class="ux-docs-ltr__arrow">→</span>
+          </li>
+
+          <li class="ux-docs-ltr__step ux-docs-ltr__step--end">
+            <span class="ux-docs-ltr__id">Predictor scores</span>
+            <span class="ux-docs-ltr__name">(a8)</span>
+          </li>
+        </ol>
+      </div>
+
+      <ul class="govuk-list govuk-list--bullet assessment-bullet-list ux-docs-ltr-notes govuk-!-margin-top-4 govuk-!-margin-bottom-2">
+        <li><strong>Interview No</strong> → Check your answers (a7) → Predictor scores (a8) (static scores)</li>
+        <li><strong>Interview Yes</strong> → Accommodation to Risk of serious harm (b1–b10)</li>
+        <li><strong>Within dynamic questions</strong> — Drug detail (b4) and Alcohol detail (b6 or b6c) only appear when needed</li>
+      </ul>
+
+      <figcaption class="govuk-hint">
+        Full page order is in the list and table below.
+      </figcaption>
+      <details class="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">Dynamic journey steps as a list</span>
+        </summary>
+        <div class="govuk-details__text">
+          <ol class="govuk-list govuk-list--number assessment-bullet-list govuk-!-margin-bottom-0">
+            <li>Interview (a6) — Yes continues; No → Check your answers (a7) → Predictor scores (a8) (static scores)</li>
+            <li>Accommodation (b1) → Employment and education (b2) → Drug use (b3)</li>
+            <li>Drug detail (b4) — only if drugs misused = yes; otherwise skip to Alcohol use (b5)</li>
+            <li>Alcohol use (b5) — last 3 months → Alcohol detail (b6); yes not last 3 months → Alcohol binge (b6c); No/Unknown → Relationships (b7)</li>
+            <li>Personal relationships (b7) → Thinking, attitudes and behaviours (b8) → Offence analysis (b9) → Risk of serious harm (b10)</li>
+            <li>Check your answers (b11) — static plus dynamic; editing can re-enter earlier steps</li>
+            <li>Reoffending predictor scores (a8) — dynamic origin; mark the section complete</li>
+          </ol>
+        </div>
+      </details>
+
+      <h4 class="govuk-heading-s">Dynamic</h4>
+      <ul class="govuk-list govuk-list--bullet assessment-bullet-list govuk-!-margin-bottom-0">
+        <li><a class="govuk-link" href="/dev/a6.html" data-clear-session-on-start data-prototype-version="dev">Start the dynamic assessment</a></li>
+        <li><a class="govuk-link" href="https://miro.com/app/board/uXjVHRJpm_4=/?moveToWidget=3458764679442244597&amp;cot=14" rel="noopener noreferrer" target="_blank">View dynamic user flow (Miro)</a></li>
+      </ul>
+    </figure>
+
+    <h3 class="govuk-heading-m">Dynamic page table</h3>
+    <table class="govuk-table ux-docs-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Page title</th>
+          <th scope="col" class="govuk-table__header">Number of Qs</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/a6.html">Interview (a6)</a></th>
+          <td class="govuk-table__cell">1</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/b1.html">Accommodation (b1)</a></th>
+          <td class="govuk-table__cell">2</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/b2.html">Employment and education (b2)</a></th>
+          <td class="govuk-table__cell">1</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/b3.html">Drug use (b3)</a></th>
+          <td class="govuk-table__cell">1</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/b4.html">Drug use detail (b4)</a></th>
+          <td class="govuk-table__cell">2+</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/b5.html">Alcohol use (b5)</a></th>
+          <td class="govuk-table__cell">1</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/b6.html">Alcohol detail (b6)</a></th>
+          <td class="govuk-table__cell">3</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/b6c.html">Alcohol binge only (b6c)</a></th>
+          <td class="govuk-table__cell">1</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/b7.html">Personal relationships and community (b7)</a></th>
+          <td class="govuk-table__cell">2</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/b8.html">Thinking, attitudes and behaviours (b8)</a></th>
+          <td class="govuk-table__cell">4</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/b9.html">Offence analysis (b9)</a></th>
+          <td class="govuk-table__cell">3+</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/b10.html">Risk of serious harm (b10)</a></th>
+          <td class="govuk-table__cell">1</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/b11.html">Check your answers (b11)</a></th>
+          <td class="govuk-table__cell">0</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header"><a class="govuk-link" href="/dev/a8.html">Reoffending predictor scores (a8)</a></th>
+          <td class="govuk-table__cell">0</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="govuk-hint">Alcohol alternate layout (b6b) is a layout experiment only and is not on the main dynamic route.</p>
+
+    <h3 class="govuk-heading-m">When dynamic questions appear</h3>
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Interview done</dt>
+        <dd class="govuk-summary-list__value">
+          <ul class="govuk-list govuk-list--bullet assessment-bullet-list govuk-!-margin-bottom-0">
+            <li>Yes → first incomplete dynamic page (usually Accommodation (b1))</li>
+            <li>No → static Check your answers (a7), then static scores on Predictor scores (a8)</li>
+            <li>Changing Yes → No from Check your answers (b11) pauses dynamic answers and returns to Check your answers (a7)</li>
+          </ul>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Drug detail (b4)</dt>
+        <dd class="govuk-summary-list__value">
+          <ul class="govuk-list govuk-list--bullet assessment-bullet-list govuk-!-margin-bottom-0">
+            <li>Shown only if “ever misused drugs” is yes on Drug use (b3)</li>
+            <li>Changing off yes clears stored drug detail</li>
+          </ul>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Alcohol detail (b6 / b6c)</dt>
+        <dd class="govuk-summary-list__value">
+          <ul class="govuk-list govuk-list--bullet assessment-bullet-list govuk-!-margin-bottom-0">
+            <li>Yes including last 3 months → Alcohol detail (b6) (frequency, units, binge)</li>
+            <li>Yes but not in last 3 months → Alcohol binge only (b6c)</li>
+            <li>No or Unknown → skip to Personal relationships (b7) and clear alcohol detail</li>
+          </ul>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Domestic abuse conditionals (b9)</dt>
+        <dd class="govuk-summary-list__value">
+          <ul class="govuk-list govuk-list--bullet assessment-bullet-list govuk-!-margin-bottom-0">
+            <li>Perpetrator yes reveals “against whom”</li>
+            <li>Victim yes reveals “by whom”</li>
+            <li>Changing off yes clears the follow-up</li>
+          </ul>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Relationship status Unknown</dt>
+        <dd class="govuk-summary-list__value">
+          <ul class="govuk-list govuk-list--bullet assessment-bullet-list govuk-!-margin-bottom-0">
+            <li>On Predictor scores (a8), ARP and VRP fall back to <strong>Static</strong> tags even when other predictors are Dynamic</li>
+          </ul>
+        </dd>
+      </div>
+    </dl>
+    </div>
   </div>
 
   {# ───────────────────────────────────────────── Screens ───────────────────────────────────────────── #}
   <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="screens">
     <h2 class="govuk-heading-l">Screens and content</h2>
+
+    {{ mojSubNavigation({
+      label: "Screen types",
+      classes: "ux-docs-topic-subnav",
+      attributes: { "data-ux-docs-topic-subnav": true },
+      items: [
+        { text: "Static screens", href: "#screens-static", active: true, attributes: { "data-topic": "screens-static" } },
+        { text: "Dynamic screens", href: "#screens-dynamic", attributes: { "data-topic": "screens-dynamic" } }
+      ]
+    }) }}
+
+    <div class="ux-docs-topic-block" id="screens-static" data-topic-panel="screens-static">
+    <h3 class="govuk-heading-m">Static screens</h3>
 
     {{ govukSummaryList({
       card: {
@@ -347,11 +618,11 @@
       rows: [
         {
           key: { text: "Purpose" },
-          value: { text: "Confirm NDelius current offence and collect static history inputs. This is the journey start page (a1 / a2 are not used)." }
+          value: { text: "Confirm NDelius current offence and collect static history inputs. This is the static journey start page." }
         },
         {
           key: { text: "H1" },
-          value: { text: "Current offence and offending history (not “Offending”)" }
+          value: { text: "Current offence and offending history" }
         },
         {
           key: { text: "Current offence" },
@@ -360,10 +631,6 @@
         {
           key: { text: "Warning" },
           value: { text: "Under the table — incorrect details impact scores; contact PDU case admin (not editable in-product)." }
-        },
-        {
-          key: { text: "Highlighted inset" },
-          value: { text: "Earlier blue highlighted-inset experiment was removed." }
         },
         {
           key: { text: "Offending history" },
@@ -403,7 +670,7 @@
       rows: [
         {
           key: { text: "Purpose" },
-          value: { text: "Collect sexual predictor inputs when history indicates sexual / sexually motivated offending. Merged earlier a3 / a3dc / a3iic into one page with three sections." }
+          value: { text: "Collect sexual predictor inputs when history indicates sexual / sexually motivated offending. One page with three sections." }
         },
         {
           key: { text: "Page inset" },
@@ -415,7 +682,7 @@
         },
         {
           key: { text: "Direct contact" },
-          value: { html: "Adult count, child count; stranger victim Y/N sits at the <em>bottom</em> of this section (plus “When to answer yes” details)." }
+          value: { html: "Adult count, child count; stranger victim Y/N sits at the <em>bottom</em> of this section (plus “When to answer yes” details under the radios)." }
         },
         {
           key: { text: "Images / indirect" },
@@ -423,14 +690,18 @@
         },
         {
           key: { text: "Details guidance" },
-          value: { html: "Physical contact with a <em>child</em> victim for direct contact child offences; AI-generated images called out for IIOC; bold “and” in stranger guidance." }
+          value: { html: "Physical contact with a <em>child</em> victim for direct contact child offences; AI-generated images called out for IIOC; bold “and” in stranger guidance. Non-contact details: offences that do not involve contact, images of children, or indirect contact with children." }
+        },
+        {
+          key: { text: "Validation" },
+          value: { text: "Stranger Yes requires at least 1 adult or child direct-contact sanction. Error on the stranger question + GOV.UK error summary (not on the count fields)." }
         },
         {
           key: { text: "Guard" },
           value: { text: "If not on sexual path, redirect to a2b." }
         },
         {
-          key: { text: "Handover note" },
+          key: { text: "Summary note" },
           value: { text: "Stranger victim sits under Direct contact on a3, but appears under “Current and recent” on the a7 summary." }
         }
       ]
@@ -455,7 +726,7 @@
       rows: [
         {
           key: { text: "Purpose" },
-          value: { text: "Capture when current community supervision began. Replaced an earlier Yes/No + conditional date pattern." }
+          value: { text: "Capture when current community supervision began." }
         },
         {
           key: { text: "Question" },
@@ -468,10 +739,6 @@
         {
           key: { text: "Input" },
           value: { html: "Date input only; prototype prefill <strong>2 May 2015</strong> (<code class=\"ux-docs-code\">2/5/2015</code>)." }
-        },
-        {
-          key: { text: "Session" },
-          value: { html: "<code class=\"ux-docs-code\">supervisedInCommunity</code> treated as yes in JS." }
         }
       ]
     }) }}
@@ -495,7 +762,11 @@
       rows: [
         {
           key: { text: "Purpose" },
-          value: { text: "Ask whether any offences occurred since the community start date. Continues to a7 (a6 is not on this journey)." }
+          value: { text: "Ask whether any offences occurred since the community start date. On the static journey continues to a7." }
+        },
+        {
+          key: { text: "Hint" },
+          value: { text: "Under the H1: “This does not include their current offence.”" }
         },
         {
           key: { text: "Answers" },
@@ -504,10 +775,6 @@
         {
           key: { text: "Conditional" },
           value: { text: "Yes reveals most recent offence date." }
-        },
-        {
-          key: { text: "Session" },
-          value: { html: "Sets <code class=\"ux-docs-code\">staticAssessmentCompleteSeen</code> on continue." }
         }
       ]
     }) }}
@@ -531,15 +798,15 @@
       rows: [
         {
           key: { text: "Purpose" },
-          value: { text: "Review all answers before calculating scores." }
+          value: { text: "Review static answers before calculating scores. Also used when interview on a6 is No." }
         },
         {
           key: { text: "Layout" },
-          value: { html: "Grouped <code class=\"ux-docs-code\">govuk-summary-list</code> sections from session." }
+          value: { html: "Grouped <code class=\"ux-docs-code\">govuk-summary-list</code> sections." }
         },
         {
           key: { text: "Sections" },
-          value: { html: "<strong>Current offence details</strong>, Offending history, sexual sections (if any), <strong>Community supervision</strong>, <strong>Offences since community date</strong> (not a combined “Time since last offence” block)." }
+          value: { html: "<strong>Current offence details</strong>, Offending history, sexual sections (if any), <strong>Community supervision</strong>, <strong>Offences since community date</strong>." }
         },
         {
           key: { text: "Current offence" },
@@ -547,7 +814,7 @@
         },
         {
           key: { text: "Conditional sections" },
-          value: { text: "Sexual and a5 sections only when applicable; a6 / dynamic continue is not shown." }
+          value: { text: "Sexual and a5 sections only when applicable." }
         },
         {
           key: { text: "Change links" },
@@ -579,7 +846,7 @@
       rows: [
         {
           key: { text: "Purpose" },
-          value: { text: "Present static predictor outputs and complete the section." }
+          value: { text: "Present predictor outputs and complete the section. Shared by static and dynamic journeys." }
         },
         {
           key: { text: "Status" },
@@ -590,12 +857,16 @@
           value: { text: "ARP, VRP, Combined serious, SVRP, Direct contact sexual, Images/indirect sexual." }
         },
         {
+          key: { text: "Static vs Dynamic tags" },
+          value: { text: "Origin from a7 → Static. Origin from b11 → Dynamic (except ARP/VRP when relationship status is Unknown, which stay Static)." }
+        },
+        {
           key: { text: "Sexual scores" },
           value: { text: "Show scores or “Not applicable” empty state." }
         },
         {
           key: { text: "Secondary action" },
-          value: { text: "Check answers → a7" }
+          value: { text: "Check answers → a7 (static origin) or b11 (dynamic origin)" }
         },
         {
           key: { text: "Primary action" },
@@ -608,16 +879,360 @@
       ]
     }) }}
 
+    </div>
+
+    <div class="ux-docs-topic-block" id="screens-dynamic" data-topic-panel="screens-dynamic">
+    <h3 class="govuk-heading-m">Dynamic screens</h3>
+
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Interview (a6)",
+          headingLevel: 3
+        },
+        attributes: { id: "screen-a6" },
+        actions: {
+          items: [
+            {
+              href: "/dev/a6.html",
+              text: "View page",
+              attributes: { "data-clear-session-on-start": true, "data-prototype-version": "dev" }
+            }
+          ]
+        }
+      },
+      rows: [
+        {
+          key: { text: "Purpose" },
+          value: { text: "Gate between static-only scores and the dynamic question set. Dynamic assessment entry from the index." }
+        },
+        {
+          key: { text: "Question" },
+          value: { text: "Have you done an interview with Alex?" }
+        },
+        {
+          key: { text: "Yes" },
+          value: { text: "“Yes, continue assessment” — hint: answer questions needed for dynamic scores → b1 (or first incomplete dynamic page)." }
+        },
+        {
+          key: { text: "No" },
+          value: { text: "Hint: check answers and view static scores → a7." }
+        },
+        {
+          key: { text: "Seeding" },
+          value: { text: "Starting from the index seeds static a2b–a5 answers so CYA and scores still work without walking those pages." }
+        },
+        {
+          key: { text: "Pause / restore" },
+          value: { text: "Switching Yes → No pauses dynamic answers; switching back restores them." }
+        }
+      ]
+    }) }}
+
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Accommodation (b1)",
+          headingLevel: 3
+        },
+        attributes: { id: "screen-b1" },
+        actions: {
+          items: [
+            {
+              href: "/dev/b1.html",
+              text: "View page"
+            }
+          ]
+        }
+      },
+      rows: [
+        {
+          key: { text: "Purpose" },
+          value: { text: "Collect who the person is living with and whether accommodation is suitable." }
+        },
+        {
+          key: { text: "Living with" },
+          value: { text: "Multi-select (Family, Friends, Partner, Person under 18, Other); Alone and Unknown under the “or” divider — exclusive of the group and of each other. Mandatory with error summary." }
+        },
+        {
+          key: { text: "Suitability" },
+          value: { text: "Yes / Yes with concerns / No / Unknown. Hint covers safety and amenities." }
+        }
+      ]
+    }) }}
+
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Employment and education (b2)",
+          headingLevel: 3
+        },
+        attributes: { id: "screen-b2" },
+        actions: {
+          items: [
+            {
+              href: "/dev/b2.html",
+              text: "View page"
+            }
+          ]
+        }
+      },
+      rows: [
+        {
+          key: { text: "Purpose" },
+          value: { text: "Single employment-status question for dynamic predictors." }
+        },
+        {
+          key: { text: "Answers" },
+          value: { text: "Employed/self-employed, Retired, Currently unavailable, Unemployed, or Unknown." }
+        }
+      ]
+    }) }}
+
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Drug use (b3 / b4)",
+          headingLevel: 3
+        },
+        attributes: { id: "screen-b3" },
+        actions: {
+          items: [
+            {
+              href: "/dev/b3.html",
+              text: "View b3"
+            },
+            {
+              href: "/dev/b4.html",
+              text: "View b4"
+            }
+          ]
+        }
+      },
+      rows: [
+        {
+          key: { text: "b3" },
+          value: { text: "Ever misused drugs? Yes / No / Unknown. Hint covers illegal and prescription misuse." }
+        },
+        {
+          key: { text: "b4" },
+          value: { text: "Only if yes — H1 “Drug misuse”; which drugs (period per drug) plus motivation to stop/reduce. Cleared if drugs later changed off yes." }
+        }
+      ]
+    }) }}
+
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Alcohol use (b5 / b6 / b6c)",
+          headingLevel: 3
+        },
+        attributes: { id: "screen-b5" },
+        actions: {
+          items: [
+            {
+              href: "/dev/b5.html",
+              text: "View b5"
+            },
+            {
+              href: "/dev/b6.html",
+              text: "View b6"
+            },
+            {
+              href: "/dev/b6c.html",
+              text: "View b6c"
+            }
+          ]
+        }
+      },
+      rows: [
+        {
+          key: { text: "b5" },
+          value: { text: "Ever drunk alcohol? Branches to b6, b6c, or b7." }
+        },
+        {
+          key: { text: "b6" },
+          value: { text: "Last 3 months path — frequency, typical-day units (with units help; Calculate units radio hidden on dev), binge evidence." }
+        },
+        {
+          key: { text: "b6c" },
+          value: { text: "Yes but not last 3 months — binge evidence only." }
+        },
+        {
+          key: { text: "Note" },
+          value: { text: "b6b is an alternate layout experiment, not on the main route." }
+        }
+      ]
+    }) }}
+
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Personal relationships and community (b7)",
+          headingLevel: 3
+        },
+        attributes: { id: "screen-b7" },
+        actions: {
+          items: [
+            {
+              href: "/dev/b7.html",
+              text: "View page"
+            }
+          ]
+        }
+      },
+      rows: [
+        {
+          key: { text: "Purpose" },
+          value: { text: "Important people plus happiness with relationship status." }
+        },
+        {
+          key: { text: "Important people" },
+          value: { text: "Multi-select with exclusive Unknown." }
+        },
+        {
+          key: { text: "Relationship status" },
+          value: { text: "Three narrative options plus Unknown. Unknown forces ARP/VRP to Static on a8." }
+        }
+      ]
+    }) }}
+
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Thinking, attitudes and behaviours (b8)",
+          headingLevel: 3
+        },
+        attributes: { id: "screen-b8" },
+        actions: {
+          items: [
+            {
+              href: "/dev/b8.html",
+              text: "View page"
+            }
+          ]
+        }
+      },
+      rows: [
+        {
+          key: { text: "Purpose" },
+          value: { text: "Four attitude/behaviour radios, each with Help to answer this question details under the options." }
+        },
+        {
+          key: { text: "Questions" },
+          value: { text: "Activities linked to offending; manage temper; act on impulse; support or excuse criminal behaviour. Unknown on each." }
+        },
+        {
+          key: { text: "Details a11y" },
+          value: { text: "Visually hidden question context on each summary; heading hierarchy inside details (not bold-only sub-headers)." }
+        }
+      ]
+    }) }}
+
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Offence analysis (b9)",
+          headingLevel: 3
+        },
+        attributes: { id: "screen-b9" },
+        actions: {
+          items: [
+            {
+              href: "/dev/b9.html",
+              text: "View page"
+            }
+          ]
+        }
+      },
+      rows: [
+        {
+          key: { text: "Purpose" },
+          value: { text: "Offence elements and domestic abuse perpetrator / victim questions." }
+        },
+        {
+          key: { text: "Conditionals" },
+          value: { text: "Perpetrator and victim yes answers reveal against / by whom follow-ups." }
+        }
+      ]
+    }) }}
+
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Risk of serious harm (b10)",
+          headingLevel: 3
+        },
+        attributes: { id: "screen-b10" },
+        actions: {
+          items: [
+            {
+              href: "/dev/b10.html",
+              text: "View page"
+            }
+          ]
+        }
+      },
+      rows: [
+        {
+          key: { text: "Purpose" },
+          value: { text: "Prior conviction checklist for serious harm types, or exclusive None of these." }
+        },
+        {
+          key: { text: "Continue" },
+          value: { text: "→ b11 check answers" }
+        }
+      ]
+    }) }}
+
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Check your answers — dynamic (b11)",
+          headingLevel: 3
+        },
+        attributes: { id: "screen-b11" },
+        actions: {
+          items: [
+            {
+              href: "/dev/b11.html",
+              text: "View page"
+            }
+          ]
+        }
+      },
+      rows: [
+        {
+          key: { text: "Purpose" },
+          value: { text: "Review static plus dynamic answers before scores." }
+        },
+        {
+          key: { text: "Guards" },
+          value: { text: "Redirects to the first incomplete static or dynamic page if anything is missing." }
+        },
+        {
+          key: { text: "Change links" },
+          value: { text: "Deep-link into static and dynamic questions; interview Yes → No returns to a7." }
+        },
+        {
+          key: { text: "CTA" },
+          value: { text: "View reoffending predictors scores → a8 with dynamic origin" }
+        }
+      ]
+    }) }}
+
+    </div>
+
     <h3 class="govuk-heading-m">Chrome on every journey page</h3>
     <ul class="govuk-list govuk-list--bullet assessment-bullet-list">
       <li>Black HMPPS header: <strong>HMPPS</strong> Assess and plan + blue <strong>TEST</strong> tag (not “Probation Digital Services”)</li>
-      <li>Primary navigation hidden on the static reference</li>
+      <li>Primary navigation hidden on the static and dynamic reference</li>
       <li>Beta phase banner directly under the black header — “Give feedback to help us improve it, or report a problem.” (tighter spacing around the Beta tag)</li>
       <li>Grey PDS footer (not blue) with Accessibility / Cookies / Privacy policy links</li>
       <li>Offender header landmark: name, then CRN / PNC / DOB on one secondary-text line (19pt, #484949), with spacing under the name</li>
       <li>Service header: nested caption <span class="ux-docs-code">Reoffending predictors</span> inside the H1 + Incomplete/Complete tag</li>
       <li>Return to OASys secondary button aligned with the first line of the H1 (full width on mobile); inactive in prototype</li>
-      <li>Back link (journey-aware; returns to a7 when editing from check answers)</li>
+      <li>Back link (journey-aware; returns to a7 or b11 when editing from check answers)</li>
     </ul>
   </div>
 
@@ -627,12 +1242,23 @@
 
     <h3 class="govuk-heading-m">How things behave</h3>
     <ul class="govuk-list govuk-list--bullet assessment-bullet-list">
-      <li><strong>Errors:</strong> Prototype only focuses the first missing field. Live service should use a full error summary.</li>
-      <li><strong>Extra questions:</strong> Answering yes can reveal a follow-up (for example, most recent offence date). Changing to no clears it.</li>
+      <li><strong>Errors:</strong> a3 (stranger victim) and b1 (living with) use a GOV.UK error summary plus field errors. Other pages may still focus the first missing field — live service should use a full error summary everywhere.</li>
+      <li><strong>Extra questions:</strong> Answering yes can reveal a follow-up (for example, most recent offence date, drug detail, alcohol detail, domestic abuse against/by). Changing to no clears it.</li>
       <li><strong>Current offence:</strong> Shown from NDelius. If wrong, contact PDU — not editable here.</li>
-      <li><strong>Change answer:</strong> Goes back to that question, then returns to Check your answers.</li>
+      <li><strong>Change answer:</strong> Goes back to that question, then returns to Check your answers (a7 or b11).</li>
       <li><strong>Mark complete:</strong> Shows a success message, status becomes Complete, and the main button is hidden.</li>
       <li><strong>Return to OASys:</strong> Link is shown but not active in this prototype.</li>
+    </ul>
+
+    <h3 class="govuk-heading-m">Dynamic-specific behaviours</h3>
+    <ul class="govuk-list govuk-list--bullet assessment-bullet-list">
+      <li><strong>Entry seeding:</strong> Starting dynamic from the index clears session, seeds current offence, then backfills static history so a6 can run without walking a2b–a5.</li>
+      <li><strong>Interview gate:</strong> Yes opens the dynamic path; No goes to a7 for static scores.</li>
+      <li><strong>Pause / restore:</strong> Interview Yes → No moves dynamic answers into <code class="ux-docs-code">pausedDynamicSection</code>; Yes again restores them.</li>
+      <li><strong>Two CYA pages:</strong> a7 is static-only; b11 includes static and dynamic sections and sets scores origin to b11.</li>
+      <li><strong>Incomplete guards:</strong> a7 and b11 redirect to the first incomplete page before showing the summary.</li>
+      <li><strong>Score tags:</strong> Dynamic origin shows Dynamic on predictors, except ARP and VRP when relationship status is Unknown (forced Static) — including after Change from b11.</li>
+      <li><strong>Exclusive checkboxes:</strong> Alone / Unknown (living with — under “or”, mutually exclusive), Unknown (important people), and None of these patterns clear other selections.</li>
     </ul>
 
     <h3 class="govuk-heading-m">Components used</h3>
@@ -642,12 +1268,14 @@
       <li><a class="govuk-link" href="https://design-system.service.gov.uk/components/phase-banner/" rel="noreferrer noopener" target="_blank">Phase banner</a></li>
       <li><a class="govuk-link" href="https://design-system.service.gov.uk/components/back-link/" rel="noreferrer noopener" target="_blank">Back link</a></li>
       <li><a class="govuk-link" href="https://design-system.service.gov.uk/styles/headings/#headings-with-captions" rel="noreferrer noopener" target="_blank">Headings with captions</a></li>
-      <li><a class="govuk-link" href="https://design-system.service.gov.uk/components/radios/" rel="noreferrer noopener" target="_blank">Radios</a> (inline Yes/No)</li>
+      <li><a class="govuk-link" href="https://design-system.service.gov.uk/components/radios/" rel="noreferrer noopener" target="_blank">Radios</a> (inline Yes/No; longer options on dynamic pages)</li>
+      <li><a class="govuk-link" href="https://design-system.service.gov.uk/components/checkboxes/" rel="noreferrer noopener" target="_blank">Checkboxes</a> with exclusive “or” dividers on dynamic multi-selects</li>
       <li><a class="govuk-link" href="https://design-system.service.gov.uk/components/date-input/" rel="noreferrer noopener" target="_blank">Date inputs</a> (<code class="ux-docs-code">inputmode="numeric"</code>)</li>
       <li>Narrow <a class="govuk-link" href="https://design-system.service.gov.uk/components/text-input/" rel="noreferrer noopener" target="_blank">text inputs</a> for counts (<code class="ux-docs-code">govuk-input--width-4</code>)</li>
       <li><a class="govuk-link" href="https://design-system.service.gov.uk/components/table/" rel="noreferrer noopener" target="_blank">Tables</a>, <a class="govuk-link" href="https://design-system.service.gov.uk/components/details/" rel="noreferrer noopener" target="_blank">details</a>, <a class="govuk-link" href="https://design-system.service.gov.uk/components/inset-text/" rel="noreferrer noopener" target="_blank">inset text</a>, <a class="govuk-link" href="https://design-system.service.gov.uk/components/warning-text/" rel="noreferrer noopener" target="_blank">warning text</a>, <a class="govuk-link" href="https://design-system.service.gov.uk/styles/section-break/" rel="noreferrer noopener" target="_blank">section breaks</a></li>
       <li><a class="govuk-link" href="https://design-system.service.gov.uk/components/summary-list/" rel="noreferrer noopener" target="_blank">Summary lists</a> with Change actions</li>
-      <li><a class="govuk-link" href="https://design-system.service.gov.uk/components/tag/" rel="noreferrer noopener" target="_blank">Tags</a> (status, risk band, Static)</li>
+      <li><a class="govuk-link" href="https://design-system.service.gov.uk/components/error-summary/" rel="noreferrer noopener" target="_blank">Error summary</a> (a3 stranger validation; b1 living with)</li>
+      <li><a class="govuk-link" href="https://design-system.service.gov.uk/components/tag/" rel="noreferrer noopener" target="_blank">Tags</a> (status, risk band, Static / Dynamic)</li>
       <li><a class="govuk-link" href="https://design-system.service.gov.uk/components/notification-banner/" rel="noreferrer noopener" target="_blank">Notification banners</a> (success; scores summary region)</li>
       <li>Primary / secondary <a class="govuk-link" href="https://design-system.service.gov.uk/components/button/" rel="noreferrer noopener" target="_blank">buttons</a></li>
       <li><a class="govuk-link" href="https://design-patterns.service.justice.gov.uk/probation/components/pds-footer/" rel="noreferrer noopener" target="_blank">PDS footer</a></li>
@@ -662,24 +1290,27 @@
       <li>Status appears in H1 as visually hidden text; visible tag is <code class="ux-docs-code">aria-hidden</code></li>
       <li>Score sections: <code class="ux-docs-code">role="region"</code> + <code class="ux-docs-code">aria-labelledby</code></li>
       <li>Focus management after mark complete and when using <code class="ux-docs-code">#top</code></li>
+      <li>b8 Help details: visually hidden question text after “Help to answer this question”</li>
     </ul>
 
     <h3 class="govuk-heading-m">Design decisions baked into behaviour</h3>
     <ul class="govuk-list govuk-list--bullet assessment-bullet-list">
-      <li><strong>Entry:</strong> Static assessment starts at a2b — index “Static assessment” links there; a1 / a2 are out of path</li>
-      <li><strong>Skip a6:</strong> a5 continues to a7; no “continue to dynamic” question on this journey or on CYA</li>
-      <li><strong>CYA edit loop:</strong> Change → edit → Save returns to a7 (including sexual yes → no, which drops sexual sections)</li>
+      <li><strong>Static entry:</strong> Static assessment starts at a2b — index “Static assessment” links there (design frozen 23 July 2026); a1 / a2 are out of path</li>
+      <li><strong>Skip a6 on static:</strong> a5 continues to a7; no “continue to dynamic” question on the static journey or on a7 CYA</li>
+      <li><strong>Dynamic entry:</strong> Index “Dynamic assessment” links to a6 with static answers seeded (design frozen 31 July 2026); uses the same /dev chrome</li>
+      <li><strong>Interview incentive:</strong> a6 copy steers Yes toward dynamic scores and No toward static check answers</li>
+      <li><strong>CYA edit loop:</strong> Change → edit → Save returns to a7 or b11 (including sexual yes → no, and interview yes → no which drops to a7)</li>
       <li><strong>Caption nesting:</strong> Caption is a <code class="ux-docs-code">&lt;span&gt;</code> inside the H1 so screen readers announce both</li>
-      <li><strong>Single-question pages:</strong> H1 / caption sit in the fieldset legend (a4 pattern)</li>
+      <li><strong>Single-question pages:</strong> H1 / caption sit in the fieldset legend (a4 / a6 pattern)</li>
     </ul>
   </div>
 
   {# ───────────────────────────────────────────── Design changes ───────────────────────────────────────────── #}
-  {% set githubPr = "https://github.com/ministryofjustice/hmpps-arns-research-prototype/pull/" %}
   <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="design-changes">
     <h2 class="govuk-heading-l">Design changes</h2>
     <p class="govuk-body">
-      Inventory of design changes that shaped the <strong>static journey</strong>.
+      Inventory of design changes that shaped the <strong>static journey</strong> (frozen 23 July 2026) and the <strong>dynamic journey</strong> (frozen 31 July 2026).
+      Static topic counts below are unchanged; dynamic changes are listed as an additional topic.
     </p>
 
     <div class="ux-docs-stats" role="group" aria-labelledby="at-a-glance-heading">
@@ -687,17 +1318,31 @@
 
       <ul class="ux-docs-stats__churn-list ux-docs-stats__summary">
         <li class="ux-docs-stats__churn-item ux-docs-stats__churn-item--1">
-          <span class="ux-docs-stats__churn-count">55</span>
+          <span class="ux-docs-stats__churn-count">75</span>
           <span class="ux-docs-stats__churn-name">design changes</span>
         </li>
         <li class="ux-docs-stats__churn-item ux-docs-stats__churn-item--2">
-          <span class="ux-docs-stats__churn-count">9</span>
+          <span class="ux-docs-stats__churn-count">10</span>
           <span class="ux-docs-stats__churn-name">topics</span>
         </li>
       </ul>
 
       <h4 class="govuk-heading-s ux-docs-stats__topics-heading">Number of changes by topic</h4>
       <ul class="ux-docs-stats__topics">
+        <li class="ux-docs-stats__topic" data-topic="dynamic">
+          <span class="ux-docs-stats__count">14</span>
+          <span class="ux-docs-stats__topic-body">
+            <span class="ux-docs-stats__topic-name">Dynamic journey</span>
+            <span class="ux-docs-stats__topic-desc">Interview gate, b-pages, branching, CYA</span>
+          </span>
+        </li>
+        <li class="ux-docs-stats__topic" data-topic="content">
+          <span class="ux-docs-stats__count">11</span>
+          <span class="ux-docs-stats__topic-body">
+            <span class="ux-docs-stats__topic-name">Content &amp; guidance</span>
+            <span class="ux-docs-stats__topic-desc">Questions, hints, details, insets</span>
+          </span>
+        </li>
         <li class="ux-docs-stats__topic" data-topic="chrome">
           <span class="ux-docs-stats__count">9</span>
           <span class="ux-docs-stats__topic-body">
@@ -705,18 +1350,25 @@
             <span class="ux-docs-stats__topic-desc">Header, phase banner, nav, footer, OASys</span>
           </span>
         </li>
-        <li class="ux-docs-stats__topic" data-topic="content">
-          <span class="ux-docs-stats__count">8</span>
-          <span class="ux-docs-stats__topic-body">
-            <span class="ux-docs-stats__topic-name">Content &amp; guidance</span>
-            <span class="ux-docs-stats__topic-desc">Questions, hints, details, insets</span>
-          </span>
-        </li>
         <li class="ux-docs-stats__topic" data-topic="journey">
-          <span class="ux-docs-stats__count">8</span>
+          <span class="ux-docs-stats__count">9</span>
           <span class="ux-docs-stats__topic-body">
             <span class="ux-docs-stats__topic-name">Journey structure</span>
-            <span class="ux-docs-stats__topic-desc">Entry point, skips, branching</span>
+            <span class="ux-docs-stats__topic-desc">Static entry point, skips, branching</span>
+          </span>
+        </li>
+        <li class="ux-docs-stats__topic" data-topic="forms">
+          <span class="ux-docs-stats__count">6</span>
+          <span class="ux-docs-stats__topic-body">
+            <span class="ux-docs-stats__topic-name">Form patterns</span>
+            <span class="ux-docs-stats__topic-desc">Date inputs, fieldsets, validation, counters</span>
+          </span>
+        </li>
+        <li class="ux-docs-stats__topic" data-topic="accessibility">
+          <span class="ux-docs-stats__count">6</span>
+          <span class="ux-docs-stats__topic-body">
+            <span class="ux-docs-stats__topic-name">Accessibility</span>
+            <span class="ux-docs-stats__topic-desc">Captions, landmarks, legends, details help</span>
           </span>
         </li>
         <li class="ux-docs-stats__topic" data-topic="current-offence">
@@ -740,20 +1392,6 @@
             <span class="ux-docs-stats__topic-desc">Sections, change loops, headers</span>
           </span>
         </li>
-        <li class="ux-docs-stats__topic" data-topic="forms">
-          <span class="ux-docs-stats__count">5</span>
-          <span class="ux-docs-stats__topic-body">
-            <span class="ux-docs-stats__topic-name">Form patterns</span>
-            <span class="ux-docs-stats__topic-desc">Date inputs, fieldsets, age, counters</span>
-          </span>
-        </li>
-        <li class="ux-docs-stats__topic" data-topic="accessibility">
-          <span class="ux-docs-stats__count">5</span>
-          <span class="ux-docs-stats__topic-body">
-            <span class="ux-docs-stats__topic-name">Accessibility</span>
-            <span class="ux-docs-stats__topic-desc">Captions, landmarks, legends, zoom</span>
-          </span>
-        </li>
         <li class="ux-docs-stats__topic" data-topic="offender-header">
           <span class="ux-docs-stats__count">4</span>
           <span class="ux-docs-stats__topic-body">
@@ -764,31 +1402,31 @@
       </ul>
 
       <div class="ux-docs-stats__churn" role="group" aria-labelledby="highest-churn-heading">
-        <h4 class="govuk-heading-s ux-docs-stats__churn-heading" id="highest-churn-heading">Highest churn</h4>
+        <h4 class="govuk-heading-s ux-docs-stats__churn-heading" id="highest-churn-heading">Top 3 most iterated</h4>
         <p class="ux-docs-stats__churn-lead">
           The areas where design moved most between research iterations and the agreed reference.
         </p>
         <ol class="ux-docs-stats__churn-list">
-          <li class="ux-docs-stats__churn-item ux-docs-stats__churn-item--1" data-topic="chrome">
+          <li class="ux-docs-stats__churn-item ux-docs-stats__churn-item--1" data-topic="dynamic">
             <span class="ux-docs-stats__churn-rank" aria-hidden="true">1</span>
-            <span class="ux-docs-stats__churn-count">9</span>
-            <span class="ux-docs-stats__churn-name">Service chrome</span>
+            <span class="ux-docs-stats__churn-count">14</span>
+            <span class="ux-docs-stats__churn-name">Dynamic journey</span>
           </li>
           <li class="ux-docs-stats__churn-item ux-docs-stats__churn-item--2" data-topic="content">
             <span class="ux-docs-stats__churn-rank" aria-hidden="true">2</span>
-            <span class="ux-docs-stats__churn-count">8</span>
+            <span class="ux-docs-stats__churn-count">11</span>
             <span class="ux-docs-stats__churn-name">Content &amp; guidance</span>
           </li>
-          <li class="ux-docs-stats__churn-item ux-docs-stats__churn-item--3" data-topic="journey">
+          <li class="ux-docs-stats__churn-item ux-docs-stats__churn-item--3" data-topic="chrome">
             <span class="ux-docs-stats__churn-rank" aria-hidden="true">3</span>
-            <span class="ux-docs-stats__churn-count">8</span>
-            <span class="ux-docs-stats__churn-name">Journey structure</span>
+            <span class="ux-docs-stats__churn-count">9</span>
+            <span class="ux-docs-stats__churn-name">Service chrome</span>
           </li>
         </ol>
       </div>
 
       <div class="ux-docs-stats__impact" role="group" aria-labelledby="most-impactful-heading">
-        <h4 class="govuk-heading-s ux-docs-stats__impact-heading" id="most-impactful-heading">Most impactful</h4>
+        <h4 class="govuk-heading-s ux-docs-stats__impact-heading" id="most-impactful-heading">Most impactful (static)</h4>
         <p class="ux-docs-stats__impact-lead">
           The 10 design changes that were most impactful for the static journey.
         </p>
@@ -806,7 +1444,7 @@
           <li class="ux-docs-stats__impact-item" data-topic="journey">
             <span class="ux-docs-stats__impact-rank" aria-hidden="true">3.</span>
             <span class="ux-docs-stats__impact-name">Skip a6 — static path ends at scores</span>
-            <span class="ux-docs-stats__impact-why">September reference is static-only; no “continue to dynamic” question on this journey.</span>
+            <span class="ux-docs-stats__impact-why">September static reference never visits a6; dynamic is a separate entry from the index.</span>
           </li>
           <li class="ux-docs-stats__impact-item" data-topic="current-offence">
             <span class="ux-docs-stats__impact-rank" aria-hidden="true">4.</span>
@@ -845,38 +1483,203 @@
           </li>
         </ol>
       </div>
+
+      <div class="ux-docs-stats__impact" role="group" aria-labelledby="most-impactful-dynamic-heading">
+        <h4 class="govuk-heading-s ux-docs-stats__impact-heading" id="most-impactful-dynamic-heading">Most impactful (dynamic)</h4>
+        <p class="ux-docs-stats__impact-lead">
+          The design changes that most shaped the dynamic journey reference.
+        </p>
+        <ol class="ux-docs-stats__impact-list">
+          <li class="ux-docs-stats__impact-item" data-topic="dynamic">
+            <span class="ux-docs-stats__impact-rank" aria-hidden="true">1.</span>
+            <span class="ux-docs-stats__impact-name">Interview gate on a6</span>
+            <span class="ux-docs-stats__impact-why">Yes opens dynamic questions; No keeps practitioners on static check answers and scores.</span>
+          </li>
+          <li class="ux-docs-stats__impact-item" data-topic="dynamic">
+            <span class="ux-docs-stats__impact-rank" aria-hidden="true">2.</span>
+            <span class="ux-docs-stats__impact-name">First-pass dynamic path (b1–b11)</span>
+            <span class="ux-docs-stats__impact-why">Accommodation through risk of serious harm, then combined check answers and scores.</span>
+          </li>
+          <li class="ux-docs-stats__impact-item" data-topic="dynamic">
+            <span class="ux-docs-stats__impact-rank" aria-hidden="true">3.</span>
+            <span class="ux-docs-stats__impact-name">Drugs and alcohol branching</span>
+            <span class="ux-docs-stats__impact-why">Detail pages only when needed — keeps the path short when misuse or drinking is No/Unknown.</span>
+          </li>
+          <li class="ux-docs-stats__impact-item" data-topic="dynamic">
+            <span class="ux-docs-stats__impact-rank" aria-hidden="true">4.</span>
+            <span class="ux-docs-stats__impact-name">Combined CYA on b11</span>
+            <span class="ux-docs-stats__impact-why">Static plus dynamic summaries in one place before dynamic scores.</span>
+          </li>
+          <li class="ux-docs-stats__impact-item" data-topic="dynamic">
+            <span class="ux-docs-stats__impact-rank" aria-hidden="true">5.</span>
+            <span class="ux-docs-stats__impact-name">Accommodation and relationship questions</span>
+            <span class="ux-docs-stats__impact-why">Suitability and relationship happiness; Unknown relationship forces ARP/VRP static.</span>
+          </li>
+        </ol>
+      </div>
     </div>
 
-    <h3 class="govuk-heading-m">All changes <span class="govuk-caption-m">(55)</span></h3>
+    <h3 class="govuk-heading-m">All changes <span class="govuk-caption-m">(75)</span></h3>
     {{ mojSubNavigation({
       label: "Design change topics",
       classes: "ux-docs-topic-subnav",
       attributes: { "data-ux-docs-topic-subnav": true },
       items: [
-        { text: "Journey structure (8)", href: "#topic-journey", active: true, attributes: { "data-topic": "journey" } },
+        { text: "Dynamic journey (14)", href: "#topic-dynamic", active: true, attributes: { "data-topic": "dynamic" } },
+        { text: "Journey structure (9)", href: "#topic-journey", attributes: { "data-topic": "journey" } },
         { text: "Service chrome (9)", href: "#topic-chrome", attributes: { "data-topic": "chrome" } },
         { text: "Offender header (4)", href: "#topic-offender-header", attributes: { "data-topic": "offender-header" } },
         { text: "Labelling & captions (5)", href: "#topic-labelling", attributes: { "data-topic": "labelling" } },
         { text: "Current offence / NDelius (6)", href: "#topic-current-offence", attributes: { "data-topic": "current-offence" } },
-        { text: "Content & guidance (8)", href: "#topic-content", attributes: { "data-topic": "content" } },
-        { text: "Form patterns (5)", href: "#topic-forms", attributes: { "data-topic": "forms" } },
+        { text: "Content & guidance (11)", href: "#topic-content", attributes: { "data-topic": "content" } },
+        { text: "Form patterns (6)", href: "#topic-forms", attributes: { "data-topic": "forms" } },
         { text: "Check your answers (5)", href: "#topic-cya", attributes: { "data-topic": "cya" } },
-        { text: "Accessibility (5)", href: "#topic-accessibility", attributes: { "data-topic": "accessibility" } }
+        { text: "Accessibility (6)", href: "#topic-accessibility", attributes: { "data-topic": "accessibility" } }
       ]
     }) }}
 
+    {# ── Dynamic journey ── #}
+    <div class="ux-docs-topic-block" id="topic-dynamic" data-topic-panel="dynamic">
+      <h3 class="govuk-heading-m">Dynamic journey <span class="govuk-caption-m">(14)</span></h3>
+      <p class="govuk-body ux-docs-topic-block__intro">How the interview gate and b-pages were introduced and refined.</p>
+
+      <div class="ux-docs-change ux-docs-change--dynamic">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Dynamic</span>
+          <span class="ux-docs-change__pages">Index → a6</span>
+          <span class="ux-docs-change__when">Proto 2 · Jun 2026</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0">Added the first step for starting the <strong>dynamic journey</strong> alongside the static path (index “Dynamic assessment” → a6).</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--dynamic">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Dynamic</span>
+          <span class="ux-docs-change__pages">a6 → b1–b11 → a8</span>
+          <span class="ux-docs-change__when">Proto 2 · 1/7/26</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0"><strong>First pass on the dynamic journey</strong>: interview gate, topic pages through risk of serious harm, then check answers and scores.</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--dynamic">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Dynamic</span>
+          <span class="ux-docs-change__pages">a6</span>
+          <span class="ux-docs-change__when">Proto 2 · R3</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Interview question</strong>: Yes continues into dynamic questions for dynamic scores; No goes to static check answers (a7). Copy and routing refined in later iterations.</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--dynamic">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Dynamic</span>
+          <span class="ux-docs-change__pages">b3 → b4</span>
+          <span class="ux-docs-change__when">Proto 2 · 1/7/26</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Drugs branch</strong>: drug detail (b4) only when “ever misused drugs” is yes; otherwise skip to alcohol.</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--dynamic">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Dynamic</span>
+          <span class="ux-docs-change__pages">b5 → b6 / b6c</span>
+          <span class="ux-docs-change__when">Proto 2 · R3</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Alcohol branch</strong>: last 3 months → full detail (b6); yes not last 3 months → binge only (b6c); No/Unknown → relationships (b7).</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--dynamic">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Dynamic</span>
+          <span class="ux-docs-change__pages">b11</span>
+          <span class="ux-docs-change__when">R3 · 17/7/26</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Dynamic summaries</strong> on check answers (b11): static plus dynamic sections, with Change links into both.</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--dynamic">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Dynamic</span>
+          <span class="ux-docs-change__pages">a8</span>
+          <span class="ux-docs-change__when">R3 · 17/7/26</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Scores origin</strong>: arriving from b11 marks predictors Dynamic (Static / Dynamic tags); Check answers returns to b11.</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--dynamic">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Dynamic</span>
+          <span class="ux-docs-change__pages">a6 / routes</span>
+          <span class="ux-docs-change__when">R3 · 23/7/26</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Content, replace dynamic Q, JS checks, review routes</strong> — tightened interview copy, incomplete-page guards, and review/edit routing for dynamic pages.</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--dynamic">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Dynamic</span>
+          <span class="ux-docs-change__pages">b1</span>
+          <span class="ux-docs-change__when">Dev · 29/7/26</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0">After clarifications from Howard Smith: added <strong>Is Alex’s accommodation suitable?</strong> on accommodation (b1).</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--dynamic">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Dynamic</span>
+          <span class="ux-docs-change__pages">b7 / a8 / b11</span>
+          <span class="ux-docs-change__when">Dev · 29/7/26 · it8 31/7/26</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0">Added <strong>Is Alex happy with their current relationship status?</strong> on b7. Unknown forces ARP and VRP to Static on a8 even on a dynamic journey — including when changed via b11 Change → b7 → Save → View scores.</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--dynamic">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Dynamic</span>
+          <span class="ux-docs-change__pages">b1</span>
+          <span class="ux-docs-change__when">Iterations 8 · 31/7/26</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Who is Alex living with?</strong> Alone and Unknown sit under the “or” divider (exclusive; clear each other and the multi-select group). Question is mandatory — error summary + “Select who [Name] is living with, or select ‘Alone’ or 'Unknown'” (same summary pattern as a3).</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--dynamic">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Dynamic</span>
+          <span class="ux-docs-change__pages">b2</span>
+          <span class="ux-docs-change__when">Iterations 8 · 31/7/26</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0">Employment status radios: Employed or self-employed; Retired; Currently unavailable for work; Unemployed; or Unknown.</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--dynamic">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Dynamic</span>
+          <span class="ux-docs-change__pages">b4</span>
+          <span class="ux-docs-change__when">Iterations 8 · 31/7/26</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0">b4 H1 is <strong>Drug misuse</strong>. After which drugs, add motivation to stop/reduce (Does not show / Shows some / Motivated / or Unknown).</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--dynamic">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Dynamic</span>
+          <span class="ux-docs-change__pages">b6</span>
+          <span class="ux-docs-change__when">Dev · 31/7/26</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0">Dev dynamic only: inside alcohol units details, hide the <strong>Calculate units</strong> radio (keep the units guidance).</p>
+      </div>
+    </div>
+
     {# ── Journey structure ── #}
     <div class="ux-docs-topic-block" id="topic-journey" data-topic-panel="journey">
-      <h3 class="govuk-heading-m">Journey structure <span class="govuk-caption-m">(8)</span></h3>
-      <p class="govuk-body ux-docs-topic-block__intro">How practitioners enter and move through the static path.</p>
+      <h3 class="govuk-heading-m">Journey structure <span class="govuk-caption-m">(9)</span></h3>
+      <p class="govuk-body ux-docs-topic-block__intro">How practitioners enter and move through the static and dynamic paths.</p>
 
       <div class="ux-docs-change ux-docs-change--journey">
         <div class="ux-docs-change__meta">
           <span class="ux-docs-change__tag">Journey</span>
           <span class="ux-docs-change__pages">Index → a2b</span>
           <span class="ux-docs-change__when">Dev iterations · 21/7/26</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}51" rel="noreferrer noopener" target="_blank">PR #51</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}53" rel="noreferrer noopener" target="_blank">PR #53</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Start the static journey on <strong>a2b</strong>. Ignore a1 and a2. Index “Static assessment” links to a2b.</p>
       </div>
@@ -884,9 +1687,17 @@
       <div class="ux-docs-change ux-docs-change--journey">
         <div class="ux-docs-change__meta">
           <span class="ux-docs-change__tag">Journey</span>
+          <span class="ux-docs-change__pages">Index</span>
+          <span class="ux-docs-change__when">Dev · 31/7/26</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0">Dev tab freeze labels: Static assessment <strong>(design frozen on 23 July 2026)</strong>; Dynamic assessment live under /dev chrome from a6, <strong>(design frozen on 31 July 2026)</strong>. Static path unchanged.</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--journey">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Journey</span>
           <span class="ux-docs-change__pages">a2b</span>
           <span class="ux-docs-change__when">R3 iteration 6</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}48" rel="noreferrer noopener" target="_blank">PR #48</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Merged a1 + a2 into <strong>a2b</strong> (“Current offence and offending history”) as the combined entry page.</p>
       </div>
@@ -896,10 +1707,8 @@
           <span class="ux-docs-change__tag">Journey</span>
           <span class="ux-docs-change__pages">a5 → a7</span>
           <span class="ux-docs-change__when">Dev iterations · 21/7/26</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}51" rel="noreferrer noopener" target="_blank">PR #51</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}53" rel="noreferrer noopener" target="_blank">PR #53</a>
         </div>
-        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Skip a6</strong> (continue to dynamic). a5 goes to a7; remove that question from Check your answers.</p>
+        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Skip a6 on the static path</strong>. a5 goes to a7; remove the continue-to-dynamic question from static Check your answers. Dynamic assessment is entered separately from the index.</p>
       </div>
 
       <div class="ux-docs-change ux-docs-change--journey">
@@ -907,7 +1716,6 @@
           <span class="ux-docs-change__tag">Journey</span>
           <span class="ux-docs-change__pages">a3</span>
           <span class="ux-docs-change__when">Proto 2 · R2</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}41" rel="noreferrer noopener" target="_blank">PR #41</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Merged sexual pages a3 / a3dc / a3iic into one a3 with three clear sections and separators.</p>
       </div>
@@ -917,7 +1725,6 @@
           <span class="ux-docs-change__tag">Journey</span>
           <span class="ux-docs-change__pages">All pages</span>
           <span class="ux-docs-change__when">Proto 1 · R2</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}41" rel="noreferrer noopener" target="_blank">PR #41</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Removed the <strong>View all answers</strong> shortcut from the journey chrome so practitioners stay on the linear path until Check your answers.</p>
       </div>
@@ -927,7 +1734,6 @@
           <span class="ux-docs-change__tag">Journey</span>
           <span class="ux-docs-change__pages">a2b</span>
           <span class="ux-docs-change__when">Revert · 23/7/26</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}54" rel="noreferrer noopener" target="_blank">PR #54</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">a2b H1 is <strong>Current offence and offending history</strong> (not “Offending”).</p>
       </div>
@@ -937,7 +1743,6 @@
           <span class="ux-docs-change__tag">Journey</span>
           <span class="ux-docs-change__pages">a4</span>
           <span class="ux-docs-change__when">R3 iteration 6</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}45" rel="noreferrer noopener" target="_blank">PR #45</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">a4 redesigned from Yes/No (+ conditional date) to a single community supervision start-date question.</p>
       </div>
@@ -947,7 +1752,6 @@
           <span class="ux-docs-change__tag">Journey</span>
           <span class="ux-docs-change__pages">Index</span>
           <span class="ux-docs-change__when">Dev iterations · 21/7/26</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}51" rel="noreferrer noopener" target="_blank">PR #51</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Index caption “Reoffending predictors”; browser title “Reoffending predictors - Research prototypes”; removed “What this prototype shows”.</p>
       </div>
@@ -956,15 +1760,13 @@
     {# ── Service chrome ── #}
     <div class="ux-docs-topic-block" id="topic-chrome" data-topic-panel="chrome">
       <h3 class="govuk-heading-m">Service chrome <span class="govuk-caption-m">(9)</span></h3>
-      <p class="govuk-body ux-docs-topic-block__intro">Global shell applied on every static journey page.</p>
+      <p class="govuk-body ux-docs-topic-block__intro">Global shell applied on every static and dynamic journey page.</p>
 
       <div class="ux-docs-change ux-docs-change--chrome">
         <div class="ux-docs-change__meta">
           <span class="ux-docs-change__tag">Chrome</span>
           <span class="ux-docs-change__pages">All pages</span>
           <span class="ux-docs-change__when">Dev iterations · 21/7/26</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}47" rel="noreferrer noopener" target="_blank">PR #47</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}48" rel="noreferrer noopener" target="_blank">PR #48</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Black header service name: <strong>HMPPS</strong> Assess and plan (HMPPS bold). Replaced “Probation Digital Services”.</p>
       </div>
@@ -974,7 +1776,6 @@
           <span class="ux-docs-change__tag">Chrome</span>
           <span class="ux-docs-change__pages">All pages</span>
           <span class="ux-docs-change__when">Dev iterations · 21/7/26</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}51" rel="noreferrer noopener" target="_blank">PR #51</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Blue <strong>TEST</strong> tag to the right of the service name.</p>
       </div>
@@ -984,8 +1785,6 @@
           <span class="ux-docs-change__tag">Chrome</span>
           <span class="ux-docs-change__pages">All pages</span>
           <span class="ux-docs-change__when">Dev iterations · 21/7/26</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}51" rel="noreferrer noopener" target="_blank">PR #51</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}53" rel="noreferrer noopener" target="_blank">PR #53</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Hide primary navigation on the static reference.</p>
       </div>
@@ -995,7 +1794,6 @@
           <span class="ux-docs-change__tag">Chrome</span>
           <span class="ux-docs-change__pages">All pages</span>
           <span class="ux-docs-change__when">Dev iterations · 21/7/26</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}51" rel="noreferrer noopener" target="_blank">PR #51</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Phase banner moved under the black header; tighter gap above/below the Beta tag; copy: “Give feedback to help us improve it, or report a problem.”</p>
       </div>
@@ -1005,7 +1803,6 @@
           <span class="ux-docs-change__tag">Chrome</span>
           <span class="ux-docs-change__pages">All pages</span>
           <span class="ux-docs-change__when">Dev iterations · 21/7/26</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}51" rel="noreferrer noopener" target="_blank">PR #51</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Footer uses the grey PDS style (not blue), matching proto 2.</p>
       </div>
@@ -1015,8 +1812,6 @@
           <span class="ux-docs-change__tag">Chrome</span>
           <span class="ux-docs-change__pages">Footer</span>
           <span class="ux-docs-change__when">R3 iteration 6</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}47" rel="noreferrer noopener" target="_blank">PR #47</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}48" rel="noreferrer noopener" target="_blank">PR #48</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Footer links: Accessibility, Cookies policy, Privacy policy (placeholder content pages).</p>
       </div>
@@ -1026,7 +1821,6 @@
           <span class="ux-docs-change__tag">Chrome</span>
           <span class="ux-docs-change__pages">All pages</span>
           <span class="ux-docs-change__when">Dev iterations · 21/7/26</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}51" rel="noreferrer noopener" target="_blank">PR #51</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Return to OASys secondary button aligned with the first line of the H1; full-width on mobile like the primary Save button.</p>
       </div>
@@ -1036,7 +1830,6 @@
           <span class="ux-docs-change__tag">Chrome</span>
           <span class="ux-docs-change__pages">All pages</span>
           <span class="ux-docs-change__when">Early iterations</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}41" rel="noreferrer noopener" target="_blank">PR #41</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Grey “Return to OASys” button added on every journey page (inactive / aria-disabled in prototype).</p>
       </div>
@@ -1046,8 +1839,6 @@
           <span class="ux-docs-change__tag">Chrome</span>
           <span class="ux-docs-change__pages">Layout</span>
           <span class="ux-docs-change__when">R3 iteration 6</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}45" rel="noreferrer noopener" target="_blank">PR #45</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}47" rel="noreferrer noopener" target="_blank">PR #47</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Caption + H1 position standardised across pages (a1 layout as reference); removed line separators under H1s.</p>
       </div>
@@ -1063,8 +1854,6 @@
           <span class="ux-docs-change__tag">Offender</span>
           <span class="ux-docs-change__pages">All pages</span>
           <span class="ux-docs-change__when">Dev iterations · 21/7/26</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}51" rel="noreferrer noopener" target="_blank">PR #51</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}53" rel="noreferrer noopener" target="_blank">PR #53</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">CRN line sits to the right of the person’s name: <code class="ux-docs-code">CRN: X769773  |  PNC: 01/17658481A  |  Date of birth: 2 October 1969</code> (extra spacing around pipes).</p>
       </div>
@@ -1074,7 +1863,6 @@
           <span class="ux-docs-change__tag">Offender</span>
           <span class="ux-docs-change__pages">All pages</span>
           <span class="ux-docs-change__when">Dev iterations · 21/7/26</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}51" rel="noreferrer noopener" target="_blank">PR #51</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">CRN line: 19pt, secondary-text grey (#484949).</p>
       </div>
@@ -1084,8 +1872,6 @@
           <span class="ux-docs-change__tag">Offender</span>
           <span class="ux-docs-change__pages">All pages</span>
           <span class="ux-docs-change__when">R3 iteration 6 · a11y</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}47" rel="noreferrer noopener" target="_blank">PR #47</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}48" rel="noreferrer noopener" target="_blank">PR #48</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Wrap identifiers in a <code class="ux-docs-code">&lt;section&gt;</code> landmark labelled by the person name heading; add spacing between name and CRN line.</p>
       </div>
@@ -1095,8 +1881,6 @@
           <span class="ux-docs-change__tag">Offender</span>
           <span class="ux-docs-change__pages">All pages</span>
           <span class="ux-docs-change__when">R3 iteration 6</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}47" rel="noreferrer noopener" target="_blank">PR #47</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}48" rel="noreferrer noopener" target="_blank">PR #48</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Keep person name as h2 inside the landmark so the page H1 remains the primary heading for the task.</p>
       </div>
@@ -1112,8 +1896,6 @@
           <span class="ux-docs-change__tag">Labelling</span>
           <span class="ux-docs-change__pages">All pages</span>
           <span class="ux-docs-change__when">ARNS · 23/6/26 → R3 it6</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}47" rel="noreferrer noopener" target="_blank">PR #47</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}48" rel="noreferrer noopener" target="_blank">PR #48</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Settled terminology: <strong>Reoffending predictors</strong> / reoffending score — not “Risk predictors”. Captions and nav use this label (briefly shortened to “Predictors”, then restored).</p>
       </div>
@@ -1123,8 +1905,6 @@
           <span class="ux-docs-change__tag">Labelling</span>
           <span class="ux-docs-change__pages">All pages</span>
           <span class="ux-docs-change__when">R3 it6 · Mockup C</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}47" rel="noreferrer noopener" target="_blank">PR #47</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}48" rel="noreferrer noopener" target="_blank">PR #48</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Caption consistent on every page (option C): nest caption <code class="ux-docs-code">&lt;span&gt;</code> inside the H1.</p>
       </div>
@@ -1134,7 +1914,6 @@
           <span class="ux-docs-change__tag">Labelling</span>
           <span class="ux-docs-change__pages">a7</span>
           <span class="ux-docs-change__when">Revert · 23/7/26</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}54" rel="noreferrer noopener" target="_blank">PR #54</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">CYA section header: <strong>Current offence details</strong> (was “Current offence”).</p>
       </div>
@@ -1144,7 +1923,6 @@
           <span class="ux-docs-change__tag">Labelling</span>
           <span class="ux-docs-change__pages">a3</span>
           <span class="ux-docs-change__when">R3 iteration 6</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}45" rel="noreferrer noopener" target="_blank">PR #45</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Section title “Current and recent sexual offending” (was “Sexual or sexually motivated offending”).</p>
       </div>
@@ -1154,7 +1932,6 @@
           <span class="ux-docs-change__tag">Labelling</span>
           <span class="ux-docs-change__pages">a8</span>
           <span class="ux-docs-change__when">R3 iteration 5</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}45" rel="noreferrer noopener" target="_blank">PR #45</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Remove the complete tick next to Predictors in service nav when marking the section complete.</p>
       </div>
@@ -1170,7 +1947,6 @@
           <span class="ux-docs-change__tag">NDelius</span>
           <span class="ux-docs-change__pages">a2b</span>
           <span class="ux-docs-change__when">R3 iteration 7</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}54" rel="noreferrer noopener" target="_blank">PR #54</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Inset shortened to “This information comes from NDelius.” Warning under the table covers incorrect details / PDU contact / score impact.</p>
       </div>
@@ -1180,7 +1956,6 @@
           <span class="ux-docs-change__tag">NDelius</span>
           <span class="ux-docs-change__pages">a2b</span>
           <span class="ux-docs-change__when">R3 iteration 7</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}44" rel="noreferrer noopener" target="_blank">PR #44</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Removed the highlighted inset-text toggle experiment; keep the standard inset + table + warning pattern.</p>
       </div>
@@ -1190,8 +1965,6 @@
           <span class="ux-docs-change__tag">NDelius</span>
           <span class="ux-docs-change__pages">a2b / a7</span>
           <span class="ux-docs-change__when">R3 iteration 5</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}44" rel="noreferrer noopener" target="_blank">PR #44</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}45" rel="noreferrer noopener" target="_blank">PR #45</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Current offence shown as a summary-list style table (name, code, conviction date). No in-product change of offence. Same table mirrored on a7.</p>
       </div>
@@ -1201,7 +1974,6 @@
           <span class="ux-docs-change__tag">NDelius</span>
           <span class="ux-docs-change__pages">a2b, a4</span>
           <span class="ux-docs-change__when">R3 iteration 7</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}54" rel="noreferrer noopener" target="_blank">PR #54</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Date hints: “We will fill in this date from <strong>NDelius</strong> if it is available…” (not “previous assessment data”).</p>
       </div>
@@ -1211,7 +1983,6 @@
           <span class="ux-docs-change__tag">NDelius</span>
           <span class="ux-docs-change__pages">a4</span>
           <span class="ux-docs-change__when">R3 iteration 6</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}45" rel="noreferrer noopener" target="_blank">PR #45</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Community date prefill: <strong>2 May 2015</strong>.</p>
       </div>
@@ -1221,7 +1992,6 @@
           <span class="ux-docs-change__tag">NDelius</span>
           <span class="ux-docs-change__pages">a1 → a2b</span>
           <span class="ux-docs-change__when">R3 iteration 5</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}44" rel="noreferrer noopener" target="_blank">PR #44</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Settled on the table presentation for current offence (other display options removed).</p>
       </div>
@@ -1229,7 +1999,7 @@
 
     {# ── Content ── #}
     <div class="ux-docs-topic-block" id="topic-content" data-topic-panel="content">
-      <h3 class="govuk-heading-m">Content &amp; guidance <span class="govuk-caption-m">(8)</span></h3>
+      <h3 class="govuk-heading-m">Content &amp; guidance <span class="govuk-caption-m">(11)</span></h3>
       <p class="govuk-body ux-docs-topic-block__intro">Question copy, hints, and expandable guidance.</p>
 
       <div class="ux-docs-change ux-docs-change--content">
@@ -1237,7 +2007,6 @@
           <span class="ux-docs-change__tag">Content</span>
           <span class="ux-docs-change__pages">a3</span>
           <span class="ux-docs-change__when">R3 iteration 7</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}54" rel="noreferrer noopener" target="_blank">PR #54</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Direct contact child guidance: “physical contact with a <strong>child</strong> victim” (was adult). Stranger details: bold “and”. IIOC: mention AI-generated images.</p>
       </div>
@@ -1247,7 +2016,6 @@
           <span class="ux-docs-change__tag">Content</span>
           <span class="ux-docs-change__pages">a3</span>
           <span class="ux-docs-change__when">R3 iteration 6</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}45" rel="noreferrer noopener" target="_blank">PR #45</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Inset under sexual offending: scores come from guidance; do not reclassify with professional judgement.</p>
       </div>
@@ -1257,7 +2025,6 @@
           <span class="ux-docs-change__tag">Content</span>
           <span class="ux-docs-change__pages">a3</span>
           <span class="ux-docs-change__when">R3 iteration 6</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}45" rel="noreferrer noopener" target="_blank">PR #45</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Move stranger-victim question to the bottom of the Direct contact section.</p>
       </div>
@@ -1266,10 +2033,36 @@
         <div class="ux-docs-change__meta">
           <span class="ux-docs-change__tag">Content</span>
           <span class="ux-docs-change__pages">a3</span>
-          <span class="ux-docs-change__when">Proto 2 early</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}41" rel="noreferrer noopener" target="_blank">PR #41</a>
+          <span class="ux-docs-change__when">Proto 2 early · it8 31/7/26</span>
         </div>
-        <p class="govuk-body govuk-!-margin-bottom-0">Expanded details for IIOC / indirect, other non-contact, and “When to answer yes” for stranger contact.</p>
+        <p class="govuk-body govuk-!-margin-bottom-0">Expanded details for IIOC / indirect, other non-contact, and “When to answer yes” for stranger contact. Non-contact details clarify offences that do not involve contact, images of children, or indirect contact with children (then list counted sanctions).</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--content">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Content</span>
+          <span class="ux-docs-change__pages">a3 / b8</span>
+          <span class="ux-docs-change__when">Dev · 31/7/26</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0">Place Details links <strong>under</strong> the related text inputs or radio options (dev static a3; dev dynamic b8) so guidance follows the control.</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--content">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Content</span>
+          <span class="ux-docs-change__pages">a5</span>
+          <span class="ux-docs-change__when">Iterations 8 · 31/7/26</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0">Hint under the a5 H1: “This does not include their current offence.”</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--content">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Content</span>
+          <span class="ux-docs-change__pages">b8</span>
+          <span class="ux-docs-change__when">Iterations 8 · 31/7/26</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0">Under each thinking question, add <strong>Help to answer this question</strong> details with guidance for activities linked to offending, managing temper, impulse control, and supporting/excusing criminal behaviour (including sexual-offence subsections).</p>
       </div>
 
       <div class="ux-docs-change ux-docs-change--content">
@@ -1277,7 +2070,6 @@
           <span class="ux-docs-change__tag">Content</span>
           <span class="ux-docs-change__pages">a2b</span>
           <span class="ux-docs-change__when">R3 iteration 5</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}45" rel="noreferrer noopener" target="_blank">PR #45</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Hints on sanction counts: “Include their current offence.” Sanction definition shown before history questions.</p>
       </div>
@@ -1287,7 +2079,6 @@
           <span class="ux-docs-change__tag">Content</span>
           <span class="ux-docs-change__pages">a3</span>
           <span class="ux-docs-change__when">R3 iteration 3</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}40" rel="noreferrer noopener" target="_blank">PR #40</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Contact adult guidance: “physical contact with an adult victim.”</p>
       </div>
@@ -1297,7 +2088,6 @@
           <span class="ux-docs-change__tag">Content</span>
           <span class="ux-docs-change__pages">a4</span>
           <span class="ux-docs-change__when">R3 iteration 6</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}45" rel="noreferrer noopener" target="_blank">PR #45</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Question wording: “What date did Alex’s current supervision in the community begin?”</p>
       </div>
@@ -1307,7 +2097,6 @@
           <span class="ux-docs-change__tag">Content</span>
           <span class="ux-docs-change__pages">a8</span>
           <span class="ux-docs-change__when">R3 / Proto 2</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}45" rel="noreferrer noopener" target="_blank">PR #45</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Success banner after mark complete; supporting line linking back to Summary (a7). Dev: remove completed-date inset once marked complete.</p>
       </div>
@@ -1315,15 +2104,14 @@
 
     {# ── Forms ── #}
     <div class="ux-docs-topic-block" id="topic-forms" data-topic-panel="forms">
-      <h3 class="govuk-heading-m">Form patterns <span class="govuk-caption-m">(5)</span></h3>
-      <p class="govuk-body ux-docs-topic-block__intro">Input patterns retained on the static path.</p>
+      <h3 class="govuk-heading-m">Form patterns <span class="govuk-caption-m">(6)</span></h3>
+      <p class="govuk-body ux-docs-topic-block__intro">Input patterns on the static and dynamic paths.</p>
 
       <div class="ux-docs-change ux-docs-change--forms">
         <div class="ux-docs-change__meta">
           <span class="ux-docs-change__tag">Forms</span>
           <span class="ux-docs-change__pages">a4</span>
           <span class="ux-docs-change__when">R3 iteration 6</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}45" rel="noreferrer noopener" target="_blank">PR #45</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Community supervision uses a date input (not radios). Reflected on Check your answers.</p>
       </div>
@@ -1333,8 +2121,6 @@
           <span class="ux-docs-change__tag">Forms</span>
           <span class="ux-docs-change__pages">Single-Q pages</span>
           <span class="ux-docs-change__when">R3 iteration 6 · a11y #21</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}47" rel="noreferrer noopener" target="_blank">PR #47</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}48" rel="noreferrer noopener" target="_blank">PR #48</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">On single-question pages, put caption + question in the fieldset legend (H1-as-legend pattern).</p>
       </div>
@@ -1344,7 +2130,6 @@
           <span class="ux-docs-change__tag">Forms</span>
           <span class="ux-docs-change__pages">a2b</span>
           <span class="ux-docs-change__when">Design variations</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}44" rel="noreferrer noopener" target="_blank">PR #44</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Sanction history uses a compact <strong>unit counter</strong> pattern (narrow numeric width) so counts stay scannable next to the question labels.</p>
       </div>
@@ -1354,8 +2139,6 @@
           <span class="ux-docs-change__tag">Forms</span>
           <span class="ux-docs-change__pages">a2b</span>
           <span class="ux-docs-change__when">Dev only</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}47" rel="noreferrer noopener" target="_blank">PR #47</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}48" rel="noreferrer noopener" target="_blank">PR #48</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Age calculator removed from first-sanction date on the dev reference (kept on research proto 2 where needed).</p>
       </div>
@@ -1365,9 +2148,17 @@
           <span class="ux-docs-change__tag">Forms</span>
           <span class="ux-docs-change__pages">a5</span>
           <span class="ux-docs-change__when">Core pattern</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}45" rel="noreferrer noopener" target="_blank">PR #45</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Conditional reveal: Yes to offences since community date reveals most recent offence date; clearing Yes clears the stored date. Other conditional reveals were removed where they added noise without helping scoring.</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--forms">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">Forms</span>
+          <span class="ux-docs-change__pages">a3</span>
+          <span class="ux-docs-change__when">Iterations 8 · 31/7/26</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0">Stranger-victim Yes is invalid when adult and child direct-contact sanction counts are both 0 or empty. Error attaches to the stranger question (not the count fields), with a GOV.UK <a class="govuk-link" href="https://design-system.service.gov.uk/components/error-summary/" rel="noreferrer noopener" target="_blank">error summary</a>: “Direct contact against a victim who was a stranger can only be 'yes' if [Name] has at least 1 sanction for contact adult, or direct contact child, sexual or sexually motivated offences.”</p>
       </div>
     </div>
 
@@ -1381,7 +2172,6 @@
           <span class="ux-docs-change__tag">CYA</span>
           <span class="ux-docs-change__pages">a7</span>
           <span class="ux-docs-change__when">Revert · 23/7/26</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}54" rel="noreferrer noopener" target="_blank">PR #54</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Do <strong>not</strong> bundle community + offences-since under “Time since last offence”. Keep separate headers: <strong>Community supervision</strong> and <strong>Offences since community date</strong>.</p>
       </div>
@@ -1391,7 +2181,6 @@
           <span class="ux-docs-change__tag">CYA</span>
           <span class="ux-docs-change__pages">a7</span>
           <span class="ux-docs-change__when">Revert · 23/7/26</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}54" rel="noreferrer noopener" target="_blank">PR #54</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Section header <strong>Current offence details</strong>.</p>
       </div>
@@ -1401,7 +2190,6 @@
           <span class="ux-docs-change__tag">CYA</span>
           <span class="ux-docs-change__pages">a7 ↔ a2b</span>
           <span class="ux-docs-change__when">Dev iterations · 21/7/26</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}51" rel="noreferrer noopener" target="_blank">PR #51</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Fix Change loop for sexual offence yes → no (and other questions): Save returns to a7 with updated answers / dropped sections.</p>
       </div>
@@ -1411,8 +2199,6 @@
           <span class="ux-docs-change__tag">CYA</span>
           <span class="ux-docs-change__pages">a7</span>
           <span class="ux-docs-change__when">Dev iterations · 21/7/26</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}51" rel="noreferrer noopener" target="_blank">PR #51</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}53" rel="noreferrer noopener" target="_blank">PR #53</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">a6 / dynamic-continue question removed from the summary.</p>
       </div>
@@ -1422,8 +2208,6 @@
           <span class="ux-docs-change__tag">CYA</span>
           <span class="ux-docs-change__pages">a7</span>
           <span class="ux-docs-change__when">R3 iteration 5</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}41" rel="noreferrer noopener" target="_blank">PR #41</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}45" rel="noreferrer noopener" target="_blank">PR #45</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Current offence details on CYA use the same read-only table fields as a2b (no Change links) — summary treated as view-only for sourced data.</p>
       </div>
@@ -1431,16 +2215,14 @@
 
     {# ── Accessibility ── #}
     <div class="ux-docs-topic-block" id="topic-accessibility" data-topic-panel="accessibility">
-      <h3 class="govuk-heading-m">Accessibility <span class="govuk-caption-m">(5)</span></h3>
-      <p class="govuk-body ux-docs-topic-block__intro">Audit-driven structure applied across the static path.</p>
+      <h3 class="govuk-heading-m">Accessibility <span class="govuk-caption-m">(6)</span></h3>
+      <p class="govuk-body ux-docs-topic-block__intro">Audit-driven structure applied across the static and dynamic paths.</p>
 
       <div class="ux-docs-change ux-docs-change--a11y">
         <div class="ux-docs-change__meta">
           <span class="ux-docs-change__tag">A11y</span>
           <span class="ux-docs-change__pages">All pages</span>
           <span class="ux-docs-change__when">Audit item 1</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}47" rel="noreferrer noopener" target="_blank">PR #47</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}48" rel="noreferrer noopener" target="_blank">PR #48</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Nest captions inside H1s so screen readers announce caption + title together.</p>
       </div>
@@ -1450,8 +2232,6 @@
           <span class="ux-docs-change__tag">A11y</span>
           <span class="ux-docs-change__pages">All pages</span>
           <span class="ux-docs-change__when">Audit item 3</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}47" rel="noreferrer noopener" target="_blank">PR #47</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}48" rel="noreferrer noopener" target="_blank">PR #48</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Offender details in a section landmark so users can jump to identity without treating the person name as the page H1.</p>
       </div>
@@ -1461,8 +2241,6 @@
           <span class="ux-docs-change__tag">A11y</span>
           <span class="ux-docs-change__pages">Single-Q pages</span>
           <span class="ux-docs-change__when">Audit item 21</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}47" rel="noreferrer noopener" target="_blank">PR #47</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}48" rel="noreferrer noopener" target="_blank">PR #48</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">H1 as legend when there is only one question on the page.</p>
       </div>
@@ -1472,7 +2250,6 @@
           <span class="ux-docs-change__tag">A11y</span>
           <span class="ux-docs-change__pages">Layout</span>
           <span class="ux-docs-change__when">R3 iteration</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}45" rel="noreferrer noopener" target="_blank">PR #45</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Reworked layouts for <strong>400% zoom</strong> so headings, tables, and form groups remain usable without horizontal overflow.</p>
       </div>
@@ -1482,10 +2259,17 @@
           <span class="ux-docs-change__tag">A11y</span>
           <span class="ux-docs-change__pages">Dates (proto 2)</span>
           <span class="ux-docs-change__when">R3 iteration 6</span>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}47" rel="noreferrer noopener" target="_blank">PR #47</a>
-          <a class="govuk-link ux-docs-change__pr" href="{{ githubPr }}48" rel="noreferrer noopener" target="_blank">PR #48</a>
         </div>
         <p class="govuk-body govuk-!-margin-bottom-0">Where age-from-date is shown (research proto), aria-live should update as the user types; no-JS fallback “Calculate age” button. Dev static path does not show age.</p>
+      </div>
+
+      <div class="ux-docs-change ux-docs-change--a11y">
+        <div class="ux-docs-change__meta">
+          <span class="ux-docs-change__tag">A11y</span>
+          <span class="ux-docs-change__pages">b8</span>
+          <span class="ux-docs-change__when">Iterations 8 · 31/7/26</span>
+        </div>
+        <p class="govuk-body govuk-!-margin-bottom-0">Each “Help to answer this question” details includes visually hidden question text (for example “: Does Alex engage in activities that could link to offending?”). Inside details, use proper heading hierarchy (h2 / h3 / h4) — not bold-only sub-headers (for example sexual-offence guidance).</p>
       </div>
     </div>
 
@@ -1778,6 +2562,7 @@
 
 <p class="govuk-hint ux-handover-meta">
   <span class="ux-handover-meta__line">Created on 23 July 2026</span>
+  <span class="ux-handover-meta__line">Last updated on 31 July 2026</span>
 </p>
 
 {% include "includes/assessment-page-close.html" %}

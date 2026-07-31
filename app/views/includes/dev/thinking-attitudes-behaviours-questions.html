@@ -1,0 +1,172 @@
+{# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
+
+<h2 id="predictors-activities-linked-to-offending" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  Does {{ offenderFirstName }} engage in activities that could link to offending?
+</h2>
+
+<div class="govuk-form-group govuk-!-margin-bottom-0">
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      Does {{ offenderFirstName }} engage in activities that could link to offending?
+    </legend>
+    <div class="govuk-radios" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="activities-linked-pro-social" name="activities_linked_to_offending" type="radio" value="pro-social-understands-link">
+        <label class="govuk-label govuk-radios__label" for="activities-linked-pro-social">Engages in pro-social activities and understands the link to offending</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="activities-linked-sometimes" name="activities_linked_to_offending" type="radio" value="sometimes-linked-recognises">
+        <label class="govuk-label govuk-radios__label" for="activities-linked-sometimes">Sometimes engages in activities linked to offending but recognises the link</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="activities-linked-regularly" name="activities_linked_to_offending" type="radio" value="regularly-encourages-unaware">
+        <label class="govuk-label govuk-radios__label" for="activities-linked-regularly">Regularly engages in activities which encourage offending and is not aware or does not care about the link to offending</label>
+      </div>
+      <div class="govuk-radios__divider">or</div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="activities-linked-unknown" name="activities_linked_to_offending" type="radio" value="unknown">
+        <label class="govuk-label govuk-radios__label" for="activities-linked-unknown">Unknown</label>
+      </div>
+    </div>
+  </fieldset>
+</div>
+
+<details class="govuk-details govuk-!-margin-top-4 govuk-!-margin-bottom-8">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">
+      Help to answer this question<span class="govuk-visually-hidden">: Does {{ offenderFirstName }} engage in activities that could link to offending?</span>
+    </span>
+  </summary>
+  <div class="govuk-details__text">
+    {% include "includes/02/thinking-activities-linked-help.html" %}
+  </div>
+</details>
+
+<h2 id="predictors-manage-temper" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  Is {{ offenderFirstName }} able to manage their temper?
+</h2>
+
+<div class="govuk-form-group govuk-!-margin-bottom-0">
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      Is {{ offenderFirstName }} able to manage their temper?
+    </legend>
+    <div class="govuk-radios" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="manage-temper-yes" name="manage_temper" type="radio" value="manages-well">
+        <label class="govuk-label govuk-radios__label" for="manage-temper-yes">Yes, is able to manage their temper well</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="manage-temper-sometimes" name="manage_temper" type="radio" value="sometimes-uncontrolled-anger">
+        <label class="govuk-label govuk-radios__label" for="manage-temper-sometimes">Sometimes has outbreaks of uncontrolled anger</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="manage-temper-no" name="manage_temper" type="radio" value="easily-loses-temper" aria-describedby="manage-temper-no-hint">
+        <label class="govuk-label govuk-radios__label" for="manage-temper-no">No, easily loses their temper</label>
+        <div id="manage-temper-no-hint" class="govuk-hint govuk-radios__hint">
+          This may result in a loss of control or inability to stay calm until they have expressed their anger.
+        </div>
+      </div>
+      <div class="govuk-radios__divider">or</div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="manage-temper-unknown" name="manage_temper" type="radio" value="unknown">
+        <label class="govuk-label govuk-radios__label" for="manage-temper-unknown">Unknown</label>
+      </div>
+    </div>
+  </fieldset>
+</div>
+
+<details class="govuk-details govuk-!-margin-top-4 govuk-!-margin-bottom-8">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">
+      Help to answer this question<span class="govuk-visually-hidden">: Is {{ offenderFirstName }} able to manage their temper?</span>
+    </span>
+  </summary>
+  <div class="govuk-details__text">
+    {% include "includes/02/thinking-manage-temper-help.html" %}
+  </div>
+</details>
+
+<h2 id="predictors-act-on-impulse" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  Does {{ offenderFirstName }} act on impulse?
+</h2>
+
+<div class="govuk-form-group govuk-!-margin-bottom-0">
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      Does {{ offenderFirstName }} act on impulse?
+    </legend>
+    <div class="govuk-radios" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="act-on-impulse-considers" name="act_on_impulse" type="radio" value="considers-before-acting">
+        <label class="govuk-label govuk-radios__label" for="act-on-impulse-considers">Considers all aspects of a situation before acting on or making a decision</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="act-on-impulse-sometimes" name="act_on_impulse" type="radio" value="sometimes-causes-problems">
+        <label class="govuk-label govuk-radios__label" for="act-on-impulse-sometimes">Sometimes acts on impulse which causes problems</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="act-on-impulse-significant" name="act_on_impulse" type="radio" value="significant-problems">
+        <label class="govuk-label govuk-radios__label" for="act-on-impulse-significant">Acts on impulse which causes significant problems</label>
+      </div>
+      <div class="govuk-radios__divider">or</div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="act-on-impulse-unknown" name="act_on_impulse" type="radio" value="unknown">
+        <label class="govuk-label govuk-radios__label" for="act-on-impulse-unknown">Unknown</label>
+      </div>
+    </div>
+  </fieldset>
+</div>
+
+<details class="govuk-details govuk-!-margin-top-4 govuk-!-margin-bottom-8">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">
+      Help to answer this question<span class="govuk-visually-hidden">: Does {{ offenderFirstName }} act on impulse?</span>
+    </span>
+  </summary>
+  <div class="govuk-details__text">
+    {% include "includes/02/thinking-impulse-help.html" %}
+  </div>
+</details>
+
+<h2 id="predictors-support-criminal-behaviour" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  Does {{ offenderFirstName }} support or excuse criminal behaviour?
+</h2>
+
+<div class="govuk-form-group govuk-!-margin-bottom-0">
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      Does {{ offenderFirstName }} support or excuse criminal behaviour?
+    </legend>
+    <div class="govuk-radios" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="support-criminal-behaviour-no" name="support_criminal_behaviour" type="radio" value="does-not-support">
+        <label class="govuk-label govuk-radios__label" for="support-criminal-behaviour-no">Does not support or excuse criminal behaviour</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="support-criminal-behaviour-sometimes" name="support_criminal_behaviour" type="radio" value="sometimes-supports">
+        <label class="govuk-label govuk-radios__label" for="support-criminal-behaviour-sometimes">Sometimes supports or excuses criminal behaviour</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="support-criminal-behaviour-yes" name="support_criminal_behaviour" type="radio" value="supports-or-excuses-issue">
+        <label class="govuk-label govuk-radios__label" for="support-criminal-behaviour-yes">Supports or excuses criminal behaviour or their pattern of behaviour and other evidence indicates this is an issue</label>
+      </div>
+      <div class="govuk-radios__divider">or</div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="support-criminal-behaviour-unknown" name="support_criminal_behaviour" type="radio" value="unknown">
+        <label class="govuk-label govuk-radios__label" for="support-criminal-behaviour-unknown">Unknown</label>
+      </div>
+    </div>
+  </fieldset>
+</div>
+
+<details class="govuk-details govuk-!-margin-top-4 govuk-!-margin-bottom-8">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">
+      Help to answer this question<span class="govuk-visually-hidden">: Does {{ offenderFirstName }} support or excuse criminal behaviour?</span>
+    </span>
+  </summary>
+  <div class="govuk-details__text">
+    {% include "includes/02/thinking-support-criminal-behaviour-help.html" %}
+  </div>
+</details>

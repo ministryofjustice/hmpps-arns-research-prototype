@@ -79,6 +79,13 @@ window.GOVUKPrototypeKit.documentReady(() => {
 
   restoreMisusedDrugsToForm(form, getMisusedDrugsFromSession(session))
 
+  if (session.drugsMotivation) {
+    const motivationInput = form.querySelector(
+      `input[name="drugs_motivation"][value="${session.drugsMotivation}"]`
+    )
+    if (motivationInput) motivationInput.checked = true
+  }
+
   if (isPredictorsCheckAnswersEdit()) {
     captureCheckAnswersEditSnapshot(getB4FieldsFromForm(form))
   }

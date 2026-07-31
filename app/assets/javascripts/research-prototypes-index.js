@@ -35,6 +35,12 @@ window.GOVUKPrototypeKit.documentReady(() => {
       if (!href) return
 
       await clearSessionForPrototypeVersion(version)
+
+      if (link.getAttribute('target') === '_blank') {
+        window.open(href, '_blank', 'noopener,noreferrer')
+        return
+      }
+
       window.location.assign(href)
     })
   })

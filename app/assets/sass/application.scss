@@ -49,11 +49,23 @@ $desktop: 48.0625em;
     margin-top: 0;
   }
 
+  > .govuk-back-link.assessment-layout__back-link + .govuk-error-summary + .assessment-offender-header {
+    margin-top: 0;
+  }
+
   > .govuk-back-link.assessment-layout__back-link:not(.assessment-layout__back-link--hidden) + .assessment-layout__section-complete-banner + .assessment-offender-header {
     margin-top: 0;
   }
 
+  > .govuk-back-link.assessment-layout__back-link:not(.assessment-layout__back-link--hidden) + .assessment-layout__section-complete-banner + .govuk-error-summary + .assessment-offender-header {
+    margin-top: 0;
+  }
+
   > .govuk-back-link.assessment-layout__back-link--hidden + .assessment-offender-header {
+    margin-top: 25px;
+  }
+
+  > .govuk-back-link.assessment-layout__back-link--hidden + .govuk-error-summary + .assessment-offender-header {
     margin-top: 25px;
   }
 
@@ -63,6 +75,10 @@ $desktop: 48.0625em;
   }
 
   > .govuk-back-link.assessment-layout__back-link--hidden + .assessment-layout__section-complete-banner + .assessment-offender-header {
+    margin-top: 25px;
+  }
+
+  > .govuk-back-link.assessment-layout__back-link--hidden + .assessment-layout__section-complete-banner + .govuk-error-summary + .assessment-offender-header {
     margin-top: 25px;
   }
 
@@ -3216,6 +3232,36 @@ body.assessment-page {
   color: #0b0c0c;
 }
 
+.ux-docs-ltr--simplified {
+  .ux-docs-ltr__track {
+    gap: 0;
+  }
+
+  .ux-docs-ltr__step {
+    padding: 12px 10px;
+    min-height: 4.5rem;
+  }
+
+  .ux-docs-ltr__id {
+    font-size: 0.875rem;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+
+  .ux-docs-ltr__name {
+    margin-top: 6px;
+    font-size: 0.8125rem;
+  }
+
+  .ux-docs-ltr__join {
+    flex: 0 0 2rem;
+  }
+}
+
+.ux-docs-ltr-notes {
+  max-width: 40rem;
+}
+
 @media (max-width: $tablet) {
   .ux-docs-ltr__track {
     flex-wrap: wrap;
@@ -3668,6 +3714,10 @@ body.assessment-page {
 
 .ux-docs-change--journey {
   border-left-color: #1d70b8;
+}
+
+.ux-docs-change--dynamic {
+  border-left-color: #003078;
 }
 
 .ux-docs-change--chrome {
