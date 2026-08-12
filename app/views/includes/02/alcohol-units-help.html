@@ -6,6 +6,7 @@
   </summary>
   <div class="govuk-details__text">
     <div class="alcohol-units-help" data-module="alcohol-units-help">
+      {# Temporarily hidden — keep for later (Reference table / Calculate units radios)
       {% if not alcoholUnitsHelpHideCalculator %}
       <div class="govuk-form-group govuk-!-margin-top-0 govuk-!-margin-bottom-4">
         <fieldset class="govuk-fieldset">
@@ -44,6 +45,7 @@
         </fieldset>
       </div>
       {% endif %}
+      #}
 
       <div data-alcohol-units-variant="table">
         <table class="govuk-table govuk-!-margin-bottom-0">
@@ -94,6 +96,7 @@
         </table>
       </div>
 
+      {# Temporarily hidden — keep for later (Calculate units calculator UI)
       {% if not alcoholUnitsHelpHideCalculator %}
       <div data-alcohol-units-variant="calculator" hidden>
         <table class="govuk-table alcohol-units-help__calculator-table govuk-!-margin-bottom-4">
@@ -191,6 +194,7 @@
         </div>
       </div>
       {% endif %}
+      #}
     </div>
   </div>
 </details>

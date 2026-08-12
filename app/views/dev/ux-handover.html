@@ -564,7 +564,6 @@
         <dd class="govuk-summary-list__value">
           <ul class="govuk-list govuk-list--bullet assessment-bullet-list govuk-!-margin-bottom-0">
             <li>Perpetrator yes reveals “against whom”</li>
-            <li>Victim yes reveals “by whom”</li>
             <li>Changing off yes clears the follow-up</li>
           </ul>
         </dd>
@@ -1148,11 +1147,11 @@
       rows: [
         {
           key: { text: "Purpose" },
-          value: { text: "Offence elements and domestic abuse perpetrator / victim questions." }
+          value: { text: "Offence elements and domestic abuse perpetrator question." }
         },
         {
           key: { text: "Conditionals" },
-          value: { text: "Perpetrator and victim yes answers reveal against / by whom follow-ups." }
+          value: { text: "Perpetrator yes answers reveal against whom follow-up." }
         }
       ]
     }) }}
@@ -1243,11 +1242,12 @@
     <h3 class="govuk-heading-m">How things behave</h3>
     <ul class="govuk-list govuk-list--bullet assessment-bullet-list">
       <li><strong>Errors:</strong> a3 (stranger victim) and b1 (living with) use a GOV.UK error summary plus field errors. Other pages may still focus the first missing field — live service should use a full error summary everywhere.</li>
-      <li><strong>Extra questions:</strong> Answering yes can reveal a follow-up (for example, most recent offence date, drug detail, alcohol detail, domestic abuse against/by). Changing to no clears it.</li>
+      <li><strong>Extra questions:</strong> Answering yes can reveal a follow-up (for example, most recent offence date, drug detail, alcohol detail, domestic abuse against whom). Changing to no clears it.</li>
       <li><strong>Current offence:</strong> Shown from NDelius. If wrong, contact PDU — not editable here.</li>
       <li><strong>Change answer:</strong> Goes back to that question, then returns to Check your answers (a7 or b11).</li>
       <li><strong>Mark complete:</strong> Shows a success message, status becomes Complete, and the main button is hidden.</li>
       <li><strong>Return to OASys:</strong> Link is shown but not active in this prototype.</li>
+      <li><strong>Unknown answers:</strong> Selecting 'Unknown' is usually treated the same as 'No' or null — it does not reveal follow-up questions or change the scoring path.</li>
     </ul>
 
     <h3 class="govuk-heading-m">Dynamic-specific behaviours</h3>
@@ -1309,7 +1309,7 @@
   <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="design-changes">
     <h2 class="govuk-heading-l">Design changes</h2>
     <p class="govuk-body">
-      Inventory of design changes that shaped the <strong>static journey</strong> (frozen 23 July 2026) and the <strong>dynamic journey</strong> (frozen 31 July 2026).
+      Inventory of design changes that shaped the <strong>static journey</strong> and the <strong>dynamic journey</strong>.
       Static topic counts below are unchanged; dynamic changes are listed as an additional topic.
     </p>
 
@@ -2562,7 +2562,7 @@
 
 <p class="govuk-hint ux-handover-meta">
   <span class="ux-handover-meta__line">Created on 23 July 2026</span>
-  <span class="ux-handover-meta__line">Last updated on 31 July 2026</span>
+  <span class="ux-handover-meta__line">Last updated on 12 August 2026</span>
 </p>
 
 {% include "includes/assessment-page-close.html" %}

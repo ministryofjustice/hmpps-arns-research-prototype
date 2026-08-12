@@ -1,8 +1,4 @@
 {# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
-{# Period reveals (Used in the last 6 months / more than 6 months ago / Unknown) are
-   temporarily disabled for all drugs. Other still reveals the name field only.
-   Restore from includes/02/drugs-misused-types-questions.html or uncomment the
-   conditional blocks below and restore data-aria-controls on each checkbox. #}
 
 {% set misusedDrugTypes = [
   { "id": "amphetamines", "label": "Amphetamines" },
@@ -13,6 +9,7 @@
   { "id": "ecstasy", "label": "Ecstasy (also known as MDMA)" },
   { "id": "hallucinogens", "label": "Hallucinogens" },
   { "id": "heroin", "label": "Heroin" },
+  { "id": "ketamine", "label": "Ketamine" },
   { "id": "methadone", "label": "Methadone (not prescribed)" },
   { "id": "prescribed-drugs", "label": "Misused prescribed drugs" },
   { "id": "other-opiates", "label": "Other opiates" },
@@ -31,46 +28,19 @@
       name="drugs_misused_types"
       type="checkbox"
       value="{{ drug.id }}"
-      {% if drug.hasNameField %}
       data-aria-controls="conditional-drugs-{{ drug.id }}"
-      {% endif %}
     >
     <label class="govuk-label govuk-checkboxes__label" for="drugs-{{ drug.id }}">
       {{ drug.label }}
     </label>
   </div>
-  {% if drug.hasNameField %}
   <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-drugs-{{ drug.id }}">
-    <div class="govuk-form-group govuk-!-margin-bottom-0">
+    {% if drug.hasNameField %}
+    <div class="govuk-form-group govuk-!-margin-bottom-4">
       <label class="govuk-label" for="other-drug-name">Add drug name</label>
       <input class="govuk-input govuk-input--width-20" id="other-drug-name" name="other_drug_name" type="text" autocomplete="off">
     </div>
-    {# Temporarily hidden – period radios for Other
-    <fieldset class="govuk-fieldset govuk-!-margin-bottom-0 govuk-!-margin-top-4">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-visually-hidden">
-        When did {{ offenderFirstName }} last use {{ drug.label | lower }}?
-      </legend>
-      <div class="govuk-radios" data-module="govuk-radios">
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="{{ drug.id }}-period-last-6-months" name="{{ drug.id }}_period" type="radio" value="last-6-months">
-          <label class="govuk-label govuk-radios__label" for="{{ drug.id }}-period-last-6-months">Used in the last 6 months</label>
-        </div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="{{ drug.id }}-period-more-than-6-months" name="{{ drug.id }}_period" type="radio" value="more-than-6-months">
-          <label class="govuk-label govuk-radios__label" for="{{ drug.id }}-period-more-than-6-months">Used more than 6 months ago</label>
-        </div>
-        <div class="govuk-radios__divider">or</div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="{{ drug.id }}-period-unknown" name="{{ drug.id }}_period" type="radio" value="unknown">
-          <label class="govuk-label govuk-radios__label" for="{{ drug.id }}-period-unknown">Unknown</label>
-        </div>
-      </div>
-    </fieldset>
-    #}
-  </div>
-  {% else %}
-  {# Temporarily hidden – period reveal for {{ drug.label }}
-  <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-drugs-{{ drug.id }}">
+    {% endif %}
     <fieldset class="govuk-fieldset govuk-!-margin-bottom-0">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-visually-hidden">
         When did {{ offenderFirstName }} last use {{ drug.label | lower }}?
@@ -92,7 +62,5 @@
       </div>
     </fieldset>
   </div>
-  #}
-  {% endif %}
   {% endfor %}
 </div>
