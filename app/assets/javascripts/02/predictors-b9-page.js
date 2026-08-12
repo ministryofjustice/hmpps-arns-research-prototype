@@ -24,7 +24,6 @@ import {
 import { getPredictorsAssessmentSession } from './predictors-assessment-session.js'
 
 const PERPETRATOR_CONDITIONAL_ID = 'conditional-domestic-abuse-perpetrator-yes'
-const VICTIM_CONDITIONAL_ID = 'conditional-domestic-abuse-victim-yes'
 
 const restoreRadioField = (form, name, value) => {
   if (!value) return
@@ -46,13 +45,6 @@ const restoreDomesticAbuseFields = (form, session) => {
   if (session.domesticAbusePerpetrator === 'yes') {
     setConditionalVisible(PERPETRATOR_CONDITIONAL_ID, true)
     restoreRadioField(form, 'domestic_abuse_perpetrator_against', session.domesticAbusePerpetratorAgainst)
-  }
-
-  restoreRadioField(form, 'domestic_abuse_victim', session.domesticAbuseVictim)
-
-  if (session.domesticAbuseVictim === 'yes') {
-    setConditionalVisible(VICTIM_CONDITIONAL_ID, true)
-    restoreRadioField(form, 'domestic_abuse_victim_by', session.domesticAbuseVictimBy)
   }
 }
 

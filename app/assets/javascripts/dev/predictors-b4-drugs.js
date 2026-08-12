@@ -1,12 +1,8 @@
 //
 // Drug types for b4 – which drugs has Alex misused?
 //
-// Period reveals are disabled for all drugs (Other still reveals the name field).
-// Set true and restore the conditionals in
-// includes/dev/drugs-misused-types-questions.html to re-enable.
-//
 
-export const MISUSED_DRUG_PERIOD_REVEALS_ENABLED = false
+export const MISUSED_DRUG_PERIOD_REVEALS_ENABLED = true
 
 export const MISUSED_DRUG_TYPES = [
   { id: 'amphetamines', label: 'Amphetamines' },
@@ -17,6 +13,7 @@ export const MISUSED_DRUG_TYPES = [
   { id: 'ecstasy', label: 'Ecstasy (also known as MDMA)' },
   { id: 'hallucinogens', label: 'Hallucinogens' },
   { id: 'heroin', label: 'Heroin' },
+  { id: 'ketamine', label: 'Ketamine' },
   { id: 'methadone', label: 'Methadone (not prescribed)' },
   { id: 'prescribed-drugs', label: 'Misused prescribed drugs' },
   { id: 'other-opiates', label: 'Other opiates' },

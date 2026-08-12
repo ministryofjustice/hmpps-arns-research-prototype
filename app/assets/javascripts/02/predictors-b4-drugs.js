@@ -11,6 +11,7 @@ export const MISUSED_DRUG_TYPES = [
   { id: 'ecstasy', label: 'Ecstasy (also known as MDMA)' },
   { id: 'hallucinogens', label: 'Hallucinogens' },
   { id: 'heroin', label: 'Heroin' },
+  { id: 'ketamine', label: 'Ketamine' },
   { id: 'methadone', label: 'Methadone (not prescribed)' },
   { id: 'prescribed-drugs', label: 'Misused prescribed drugs' },
   { id: 'other-opiates', label: 'Other opiates' },

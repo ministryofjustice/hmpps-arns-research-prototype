@@ -554,9 +554,8 @@ export const applyBranchingCleanup = (currentPage, session, updates) => {
       cleaned.domesticAbusePerpetratorAgainst = ''
     }
 
-    if (cleaned.domesticAbuseVictim !== 'yes') {
-      cleaned.domesticAbuseVictimBy = ''
-    }
+    cleaned.domesticAbuseVictim = ''
+    cleaned.domesticAbuseVictimBy = ''
 
     return cleaned
   }
@@ -923,7 +922,7 @@ export const getFirstIncompleteAlcoholPage = (session = getPredictorsAssessmentS
   if (session.alcoholUse === 'no' || session.alcoholUse === 'unknown') return null
 
   if (session.alcoholUse === 'yes-in-last-3-months') {
-    if (!session.alcoholFrequencyLast3Months || !session.alcoholUnitsTypicalDay || !session.alcoholBingeEvidence) {
+    if (!session.alcoholFrequencyLast3Months || !session.alcoholBingeEvidence) {
       return 'b6.html'
     }
     return null
@@ -959,7 +958,6 @@ export const isAlcoholSectionComplete = (session = getPredictorsAssessmentSessio
   if (session.alcoholUse === 'yes-in-last-3-months') {
     return Boolean(
       session.alcoholFrequencyLast3Months &&
-        session.alcoholUnitsTypicalDay &&
         session.alcoholBingeEvidence
     )
   }
@@ -1004,7 +1002,6 @@ export const getB6cFieldsFromForm = (form) => ({
 export const isB6Complete = (session = getPredictorsAssessmentSession()) =>
   Boolean(
     session.alcoholFrequencyLast3Months &&
-      session.alcoholUnitsTypicalDay &&
       session.alcoholBingeEvidence
   )
 
@@ -1136,11 +1133,7 @@ export const getB9FieldsFromForm = (form) => ({
   domesticAbusePerpetrator:
     form.querySelector('input[name="domestic_abuse_perpetrator"]:checked')?.value || '',
   domesticAbusePerpetratorAgainst:
-    form.querySelector('input[name="domestic_abuse_perpetrator_against"]:checked')?.value || '',
-  domesticAbuseVictim:
-    form.querySelector('input[name="domestic_abuse_victim"]:checked')?.value || '',
-  domesticAbuseVictimBy:
-    form.querySelector('input[name="domestic_abuse_victim_by"]:checked')?.value || ''
+    form.querySelector('input[name="domestic_abuse_perpetrator_against"]:checked')?.value || ''
 })
 
 export const getB9ValidationError = (form) => {
@@ -1168,21 +1161,6 @@ export const getB9ValidationError = (form) => {
     }
   }
 
-  if (!fields.domesticAbuseVictim) {
-    return {
-      anchor: '#predictors-domestic-abuse-victim',
-      focusSelector: 'input[name="domestic_abuse_victim"]'
-    }
-  }
-
-  if (fields.domesticAbuseVictim === 'yes' && !fields.domesticAbuseVictimBy) {
-    return {
-      anchor: '#predictors-domestic-abuse-victim',
-      conditionalId: 'conditional-domestic-abuse-victim-yes',
-      focusSelector: 'input[name="domestic_abuse_victim_by"]'
-    }
-  }
-
   return null
 }
 
@@ -1192,8 +1170,6 @@ export const isB9Complete = (session = getPredictorsAssessmentSession()) => {
   if (session.domesticAbusePerpetrator === 'yes' && !session.domesticAbusePerpetratorAgainst) {
     return false
   }
-  if (!session.domesticAbuseVictim) return false
-  if (session.domesticAbuseVictim === 'yes' && !session.domesticAbuseVictimBy) return false
 
   return true
 }

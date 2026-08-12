@@ -209,7 +209,10 @@ const formatMisusedDrugs = (misusedDrugs = {}) => {
   return entries
     .map(([id, entry]) => {
       const drug = MISUSED_DRUG_TYPES.find((item) => item.id === id)
-      const label = id === 'other' && entry.name ? entry.name : drug?.label || id
+      const label =
+        id === 'other' && entry.name
+          ? `${drug?.label || 'Other'} (${entry.name.toLowerCase()})`
+          : drug?.label || id
       const period = entry.period
         ? DRUG_PERIOD_LABELS[entry.period] || entry.period
         : ''
@@ -427,30 +430,6 @@ export const buildDynamicPredictorsSummarySections = (session, offenderFirstName
         'Who was this committed against?',
         false,
         'predictors-domestic-abuse-perpetrator'
-      )
-    )
-  }
-
-  offenceAnalysisRows.push(
-    createRow(
-      `Is there evidence that ${name} has ever been a victim of domestic abuse?`,
-      formatYesNo(session.domesticAbuseVictim),
-      'b9.html',
-      `Is there evidence that ${name} has ever been a victim of domestic abuse?`,
-      false,
-      'predictors-domestic-abuse-victim'
-    )
-  )
-
-  if (session.domesticAbuseVictim === 'yes') {
-    offenceAnalysisRows.push(
-      createRow(
-        'Who was this committed by?',
-        formatLabelledChoice(session.domesticAbuseVictimBy, DOMESTIC_ABUSE_RELATION_LABELS),
-        'b9.html',
-        'Who was this committed by?',
-        false,
-        'predictors-domestic-abuse-victim'
       )
     )
   }
