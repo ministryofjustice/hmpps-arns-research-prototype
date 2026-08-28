@@ -1,0 +1,37 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Nature of the risk" %}
+{% set predictorsSectionCaption = "ROSH full analysis" %}
+{% set pageHeading = "What is the nature of the risk?" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set roshNavSection = "full-analysis" %}
+{% set hideSideNav = false %}
+{% set sideNavigationInclude = "includes/03/rosh-side-navigation.html" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "rosh-full-who.html" %}
+{% set pageErrorSummaryInclude = "includes/03/rosh-error-summary.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="rosh-full-nature-form" novalidate data-offender-first-name="{{ offenderFirstName }}">
+  <div class="govuk-form-group" data-rosh-error-group="rosh-full-nature">
+    {% set fieldId = "rosh-full-nature" %}
+    {% set fieldName = "rosh_full_nature" %}
+    {% set fieldLabel = false %}
+    {% set fieldHint = "Describe the type of harm and how serious it would be. Include physical, psychological or sexual harm, and whether the risk is to a person or to a group of people." %}
+    {% set fieldRows = 10 %}
+    {% include "includes/03/rosh-full-textarea.html" %}
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

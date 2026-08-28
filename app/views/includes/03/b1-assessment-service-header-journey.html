@@ -1,0 +1,31 @@
+{# b1-only layout variants toggled by Return to OASys #}
+<div class="govuk-grid-row assessment-service-header{% if hidePageHeaderSeparator %} assessment-service-header--no-separator{% endif %}" data-b1-layout-header>
+  <div class="govuk-grid-column-full">
+    <div class="assessment-layout__row assessment-layout__row--tight assessment-service-header__question-row" data-b1-layout-heading>
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-0{% if pageHeadingClass %} {{ pageHeadingClass }}{% endif %}" data-b1-heading-variant="default"{% if pageHeadingId %} id="{{ pageHeadingId }}"{% endif %}>
+        <span class="govuk-caption-l assessment-service-header__section-caption">{{ predictorsSectionCaption | default("Reoffending predictors") }}</span>
+        {% if pageHeadingHtml %}{{ pageHeadingHtml | safe }}{% endif %}{% if statusTag %}<span class="govuk-visually-hidden">, {{ statusTag }}</span>{% endif %}
+      </h1>
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-0" data-b1-heading-variant="section" hidden>
+        <span class="govuk-caption-l assessment-service-header__section-caption">{{ predictorsSectionCaptionSection | default("Reoffending predictors") }}</span>
+        {{ pageHeadingSection | default("Accommodation") }}{% if statusTag %}<span class="govuk-visually-hidden">, {{ statusTag }}</span>{% endif %}
+      </h1>
+      <div class="assessment-service-header__actions">
+        {% if statusTag %}
+        <strong class="govuk-tag {% if statusTag == 'Complete' %}govuk-tag--light-blue{% else %}govuk-tag--light-grey{% endif %} assessment-layout__status-tag" aria-hidden="true">{{ statusTag }}</strong>
+        {% endif %}
+        {% include returnToOasysButtonInclude | default("includes/03/return-to-oasys-button.html") %}
+      </div>
+    </div>
+    {% if pageHeadingHint %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <p{% if pageHeadingHintId %} id="{{ pageHeadingHintId }}"{% endif %} class="govuk-hint assessment-service-header__heading-hint govuk-!-margin-bottom-0" data-b1-header-hint>{{ pageHeadingHint }}</p>
+      </div>
+    </div>
+    {% endif %}
+    {% if not hidePageHeaderSeparator %}
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+    {% endif %}
+  </div>
+</div>

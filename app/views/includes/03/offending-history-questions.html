@@ -1,0 +1,121 @@
+{# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
+
+<h2 id="predictors-first-sanction-date" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  What was the date of {{ offenderFirstName }}'s first sanction?
+</h2>
+
+<div id="first-sanction-date-hint" class="govuk-hint govuk-!-margin-bottom-4">
+  We will fill in this date from NDelius if it is available. Change the date if it is wrong.
+</div>
+
+<div class="govuk-form-group" data-first-sanction-date-field>
+  <fieldset class="govuk-fieldset" role="group" aria-describedby="first-sanction-date-hint first-sanction-age-result">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      What was the date of {{ offenderFirstName }}'s first sanction?
+    </legend>
+    <div class="govuk-date-input" id="first-sanction-date">
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="first-sanction-date-day">Day</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="first-sanction-date-day" name="first_sanction_date_day" type="text" inputmode="numeric" autocomplete="off" value="{{ firstSanctionDateDay | default('15') }}">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="first-sanction-date-month">Month</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="first-sanction-date-month" name="first_sanction_date_month" type="text" inputmode="numeric" autocomplete="off" value="{{ firstSanctionDateMonth | default('5') }}">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="first-sanction-date-year">Year</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="first-sanction-date-year" name="first_sanction_date_year" type="text" inputmode="numeric" autocomplete="off" value="{{ firstSanctionDateYear | default('2012') }}">
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>
+
+{# Visible only when JavaScript is off – hidden by .js-enabled in CSS #}
+<button type="submit" class="govuk-button first-sanction-calculate-age" name="calculateAge" value="1">
+  Calculate age
+</button>
+
+<p id="first-sanction-age-result" class="govuk-body govuk-!-margin-top-4 govuk-!-margin-bottom-8 first-sanction-age-result{% if not firstSanctionCalculatedAge %} first-sanction-age-result--hidden{% endif %}" data-first-sanction-age-result role="status" aria-live="polite" aria-atomic="true"{% if firstSanctionCalculatedAge %} data-age-message="Age: {{ offenderFirstName }} was {{ firstSanctionCalculatedAge }} on this date"{% endif %}>{% if firstSanctionCalculatedAge %}<strong>Age:</strong> {{ offenderFirstName }} was {{ firstSanctionCalculatedAge }} on this date{% endif %}</p>
+
+<h2 id="predictors-total-sanctions" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  How many sanctions does {{ offenderFirstName }} have in total for all offences?
+</h2>
+
+<div id="total-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
+  Include their current offence.
+</div>
+
+<div class="govuk-form-group govuk-!-margin-bottom-8">
+  <label class="govuk-label govuk-visually-hidden" for="total-sanctions">
+    How many sanctions does {{ offenderFirstName }} have in total for all offences?
+  </label>
+  <input
+    class="govuk-input govuk-input--width-4"
+    id="total-sanctions"
+    name="total_sanctions"
+    type="text"
+    inputmode="numeric"
+    aria-describedby="total-sanctions-hint"
+    autocomplete="off"
+  >
+</div>
+
+<h2 id="predictors-violent-sanctions" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  How many of {{ offenderFirstName }}'s total sanctions involved violent offences?
+</h2>
+
+<div id="violent-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
+  Include their current offence.
+</div>
+
+{% include "includes/03/violent-offence-check.html" %}
+
+<div class="govuk-form-group govuk-!-margin-bottom-0">
+  <label class="govuk-label govuk-visually-hidden" for="violent-sanctions-other">
+    How many of {{ offenderFirstName }}'s total sanctions involved violent offences?
+  </label>
+  <input
+    class="govuk-input govuk-input--width-4"
+    id="violent-sanctions-other"
+    name="violent_sanctions_other"
+    type="text"
+    inputmode="numeric"
+    aria-describedby="violent-sanctions-hint"
+    autocomplete="off"
+  >
+</div>
+
+<h2 id="predictors-sexual-offence" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-8 govuk-!-margin-bottom-2">
+  Has {{ offenderFirstName }} ever committed a sexual or sexually motivated offence?
+</h2>
+
+<div class="govuk-form-group">
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      Has {{ offenderFirstName }} ever committed a sexual or sexually motivated offence?
+    </legend>
+    <div id="sexual-offence-hint" class="govuk-hint">
+      This includes their current offence.
+    </div>
+    <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="sexual-offence-yes" name="sexual_offence" type="radio" value="yes" aria-describedby="sexual-offence-hint">
+        <label class="govuk-label govuk-radios__label" for="sexual-offence-yes">Yes</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="sexual-offence-no" name="sexual_offence" type="radio" value="no">
+        <label class="govuk-label govuk-radios__label" for="sexual-offence-no">No</label>
+      </div>
+      <div class="govuk-radios__item" hidden aria-hidden="true" style="display: none;">
+        <input class="govuk-radios__input" id="sexual-offence-unknown" name="sexual_offence" type="radio" value="unknown" disabled>
+        <label class="govuk-label govuk-radios__label" for="sexual-offence-unknown">Unknown</label>
+      </div>
+    </div>
+  </fieldset>
+</div>

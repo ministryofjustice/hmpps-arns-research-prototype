@@ -1,0 +1,33 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Offending history" %}
+{% set activeSection = "rosh" %}
+{% set pageHeading = "Offending history" %}
+{% set statusTag = "Incomplete" %}
+{% set returnToOasysButtonInclude = "includes/03/a2-layout-toggle-to-a2b.html" %}
+{% set backLinkHref = "a1.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-sanction-inset-slot="header">
+  {% include "includes/03/sanction-definition-inset.html" %}
+</div>
+
+{% include "includes/assessment-question-header.html" %}
+
+{% include "includes/03/violent-offence-check-search-form.html" %}
+
+<form id="predictors-a2-form" novalidate data-offender-first-name="{{ offenderFirstName }}">
+
+  {% include "includes/03/offending-history-questions.html" %}
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

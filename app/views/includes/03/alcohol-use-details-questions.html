@@ -1,0 +1,99 @@
+{# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
+
+<div data-b6-question-block="1">
+  {% if not pageHeadingHtml and not alcoholHideFirstQuestionHeading %}
+  <h2 id="predictors-alcohol-frequency" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2" data-b6-question-heading>
+    How often has {{ offenderFirstName }} drunk alcohol in the last 3 months?
+  </h2>
+  {% endif %}
+
+  <div class="govuk-form-group{% if pageHeadingHtml or alcoholHideFirstQuestionHeading %} govuk-!-margin-top-0{% endif %} govuk-!-margin-bottom-8">
+    <fieldset class="govuk-fieldset">
+      {% if questionLegendAsHeading and pageHeadingHtml %}
+        {% set questionLegendAttributes = 'data-b6-question-heading' %}
+        {% include "includes/assessment-question-legend-heading.html" %}
+      {% else %}
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+        How often has {{ offenderFirstName }} drunk alcohol in the last 3 months?
+      </legend>
+      {% endif %}
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-frequency-once-month-or-less" name="alcohol_frequency_last_3_months" type="radio" value="once-month-or-less">
+          <label class="govuk-label govuk-radios__label" for="alcohol-frequency-once-month-or-less">Once a month or less</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-frequency-2-4-times-month" name="alcohol_frequency_last_3_months" type="radio" value="2-4-times-month">
+          <label class="govuk-label govuk-radios__label" for="alcohol-frequency-2-4-times-month">2 to 4 times a month</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-frequency-2-3-times-week" name="alcohol_frequency_last_3_months" type="radio" value="2-3-times-week">
+          <label class="govuk-label govuk-radios__label" for="alcohol-frequency-2-3-times-week">2 to 3 times a week</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-frequency-more-than-4-times-week" name="alcohol_frequency_last_3_months" type="radio" value="more-than-4-times-week">
+          <label class="govuk-label govuk-radios__label" for="alcohol-frequency-more-than-4-times-week">More than 4 times a week</label>
+        </div>
+        <div class="govuk-radios__divider">or</div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-frequency-unknown" name="alcohol_frequency_last_3_months" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="alcohol-frequency-unknown">Unknown</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+</div>
+
+<div data-b6-question-block="2">
+  <h2 id="predictors-alcohol-units" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2" data-b6-question-heading>
+    How many units of alcohol does {{ offenderFirstName }} have on a typical day of drinking?
+  </h2>
+
+  {% if not alcoholUnitsHelpAfterRadios %}
+  {% include "includes/03/alcohol-units-help.html" %}
+  {% endif %}
+
+  <div class="govuk-form-group{% if alcoholUnitsHelpAfterRadios %} govuk-!-margin-bottom-4{% else %} govuk-!-margin-bottom-8{% endif %}">
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+        How many units of alcohol does {{ offenderFirstName }} have on a typical day of drinking?
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-units-1-2" name="alcohol_units_typical_day" type="radio" value="1-2">
+          <label class="govuk-label govuk-radios__label" for="alcohol-units-1-2">1 to 2 units</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-units-3-4" name="alcohol_units_typical_day" type="radio" value="3-4">
+          <label class="govuk-label govuk-radios__label" for="alcohol-units-3-4">3 to 4 units</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-units-5-6" name="alcohol_units_typical_day" type="radio" value="5-6">
+          <label class="govuk-label govuk-radios__label" for="alcohol-units-5-6">5 to 6 units</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-units-7-9" name="alcohol_units_typical_day" type="radio" value="7-9">
+          <label class="govuk-label govuk-radios__label" for="alcohol-units-7-9">7 to 9 units</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-units-10-or-more" name="alcohol_units_typical_day" type="radio" value="10-or-more">
+          <label class="govuk-label govuk-radios__label" for="alcohol-units-10-or-more">10 or more units</label>
+        </div>
+        <div class="govuk-radios__divider">or</div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-units-unknown" name="alcohol_units_typical_day" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="alcohol-units-unknown">Unknown</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  {% if alcoholUnitsHelpAfterRadios %}
+  {% include "includes/03/alcohol-units-help.html" %}
+  {% endif %}
+</div>
+
+<div data-b6-question-block="3">
+  {% set alcoholBingeShowHeading = true %}
+  {% include "includes/03/alcohol-binge-evidence-question.html" %}
+</div>

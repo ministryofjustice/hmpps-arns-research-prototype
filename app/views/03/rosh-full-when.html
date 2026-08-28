@@ -1,0 +1,55 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "When is the risk greatest" %}
+{% set predictorsSectionCaption = "ROSH full analysis" %}
+{% set pageHeading = "When is the risk likely to be greatest?" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set roshNavSection = "full-analysis" %}
+{% set hideSideNav = false %}
+{% set sideNavigationInclude = "includes/03/rosh-side-navigation.html" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "rosh-full-nature.html" %}
+{% set pageErrorSummaryInclude = "includes/03/rosh-error-summary.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="rosh-full-when-form" novalidate data-offender-first-name="{{ offenderFirstName }}">
+  <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-error-group="rosh-full-when">
+    {% set fieldId = "rosh-full-when" %}
+    {% set fieldName = "rosh_full_when" %}
+    {% set fieldLabel = false %}
+    {% set fieldHint = "Consider the timescale and whether the risk is different in custody and in the community. Include any situations, dates or events when the risk would be greatest." %}
+    {% set fieldRows = 8 %}
+    {% include "includes/03/rosh-full-textarea.html" %}
+  </div>
+
+  <div class="govuk-form-group" data-rosh-error-group="rosh-full-imminent">
+    <fieldset class="govuk-fieldset" id="rosh-full-imminent">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h3 class="govuk-fieldset__heading">Is the risk imminent?</h3>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-full-imminent-yes" name="rosh_full_imminent" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="rosh-full-imminent-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-full-imminent-no" name="rosh_full_imminent" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="rosh-full-imminent-no">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

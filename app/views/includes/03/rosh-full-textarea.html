@@ -1,0 +1,13 @@
+{# Requires: fieldId, fieldName. Optional: fieldLabel, fieldHint, fieldRows (default 8), fieldLabelClass #}
+<div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="4000">
+  {% if fieldLabel %}
+  <label class="govuk-label {{ fieldLabelClass | default('') }}" for="{{ fieldId }}">{{ fieldLabel }}</label>
+  {% else %}
+  <label class="govuk-visually-hidden" for="{{ fieldId }}">{{ pageHeading }}</label>
+  {% endif %}
+  {% if fieldHint %}
+  <div id="{{ fieldId }}-hint" class="govuk-hint">{{ fieldHint }}</div>
+  {% endif %}
+  <textarea class="govuk-textarea govuk-js-character-count" id="{{ fieldId }}" name="{{ fieldName }}" rows="{{ fieldRows | default(8) }}" maxlength="4000" aria-describedby="{% if fieldHint %}{{ fieldId }}-hint {% endif %}{{ fieldId }}-info"></textarea>
+  <div id="{{ fieldId }}-info" class="govuk-hint govuk-character-count__message">You have 4,000 characters remaining.</div>
+</div>

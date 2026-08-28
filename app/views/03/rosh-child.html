@@ -1,0 +1,188 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Identifiable child" %}
+{% set predictorsSectionCaption = "ROSH screening" %}
+{% set pageHeading = "Risk to children" %}
+{% set pageSubheadingHtml %}<span id="rosh-child-page-heading">Add details of an identifiable child</span>{% endset %}
+{% set pageSubheadingHint = "A child is under 18 years of age." %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set roshNavSection = "screening" %}
+{% set hideSideNav = false %}
+{% set sideNavigationInclude = "includes/03/rosh-side-navigation.html" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "rosh-children.html" %}
+{% set pageErrorSummaryInclude = "includes/03/rosh-error-summary.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<div class="govuk-warning-text">
+  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+  <strong class="govuk-warning-text__text">
+    <span class="govuk-visually-hidden">Warning</span>
+    Information that could put the child at risk if disclosed to {{ offenderFirstName }} must not be recorded here.
+  </strong>
+</div>
+
+<form id="rosh-child-form" novalidate data-offender-first-name="{{ offenderFirstName }}">
+  <input type="hidden" id="rosh-child-id" name="rosh_child_id" value="">
+  <div class="govuk-form-group" data-rosh-error-group="rosh-child-name">
+    <label class="govuk-label govuk-label--s" for="rosh-child-name">Child’s name</label>
+    <div id="rosh-child-name-hint" class="govuk-hint">Enter the full name or enter ‘Non-disclosable’.</div>
+    <input class="govuk-input" id="rosh-child-name" name="rosh_child_name" type="text" spellcheck="false" aria-describedby="rosh-child-name-hint">
+  </div>
+
+  <fieldset class="govuk-fieldset govuk-!-margin-top-6" aria-describedby="rosh-child-dob-hint">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Date of birth or age (optional)</legend>
+    <div id="rosh-child-dob-hint" class="govuk-hint">For example, 31 3 2016.</div>
+    <div class="govuk-date-input rosh-child-dob" id="rosh-child-dob">
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="rosh-child-dob-day">Day</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="rosh-child-dob-day" name="rosh_child_dob_day" type="text" inputmode="numeric">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="rosh-child-dob-month">Month</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="rosh-child-dob-month" name="rosh_child_dob_month" type="text" inputmode="numeric">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="rosh-child-dob-year">Year</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="rosh-child-dob-year" name="rosh_child_dob_year" type="text" inputmode="numeric">
+        </div>
+      </div>
+      <div class="govuk-date-input__item rosh-child-dob__or">
+        <div class="govuk-form-group">
+          <span class="govuk-label govuk-date-input__label" aria-hidden="true">&nbsp;</span>
+          <span class="rosh-child-dob__or-text">or</span>
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="rosh-child-age">Age</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="rosh-child-age" name="rosh_child_age" type="text" inputmode="numeric">
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="govuk-form-group govuk-!-margin-top-6">
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Sex (optional)</legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-child-sex-male" name="rosh_child_sex" type="radio" value="male">
+          <label class="govuk-label govuk-radios__label" for="rosh-child-sex-male">Male</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-child-sex-female" name="rosh_child_sex" type="radio" value="female">
+          <label class="govuk-label govuk-radios__label" for="rosh-child-sex-female">Female</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-child-sex-intersex" name="rosh_child_sex" type="radio" value="intersex">
+          <label class="govuk-label govuk-radios__label" for="rosh-child-sex-intersex">Intersex</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-child-sex-unknown" name="rosh_child_sex" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="rosh-child-sex-unknown">Unknown</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <fieldset class="govuk-fieldset govuk-!-margin-top-6">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Address if disclosable (optional)</legend>
+    <div class="govuk-form-group">
+      <label class="govuk-label" for="rosh-child-address1">Address line 1</label>
+      <input class="govuk-input" id="rosh-child-address1" name="rosh_child_address1" type="text" autocomplete="address-line1">
+    </div>
+    <div class="govuk-form-group">
+      <label class="govuk-label" for="rosh-child-address2">Address line 2</label>
+      <input class="govuk-input" id="rosh-child-address2" name="rosh_child_address2" type="text" autocomplete="address-line2">
+    </div>
+    <div class="govuk-form-group">
+      <label class="govuk-label" for="rosh-child-town">Town or city</label>
+      <input class="govuk-input govuk-!-width-two-thirds" id="rosh-child-town" name="rosh_child_town" type="text" autocomplete="address-level2">
+    </div>
+    <div class="govuk-form-group">
+      <label class="govuk-label" for="rosh-child-county">County</label>
+      <input class="govuk-input govuk-!-width-two-thirds" id="rosh-child-county" name="rosh_child_county" type="text">
+    </div>
+    <div class="govuk-form-group">
+      <label class="govuk-label" for="rosh-child-postcode">Postcode</label>
+      <input class="govuk-input govuk-input--width-10" id="rosh-child-postcode" name="rosh_child_postcode" type="text" autocomplete="postal-code">
+    </div>
+  </fieldset>
+
+  <div class="govuk-form-group govuk-!-margin-top-6" data-rosh-error-group="rosh-child-relationship">
+    <fieldset class="govuk-fieldset" id="rosh-child-relationship">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">What is {{ offenderFirstName }}’s relationship or connection to this child?</legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-child-relationship-parent" name="rosh_child_relationship" type="radio" value="parent">
+          <label class="govuk-label govuk-radios__label" for="rosh-child-relationship-parent">Parent or step-parent</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-child-relationship-carer" name="rosh_child_relationship" type="radio" value="carer">
+          <label class="govuk-label govuk-radios__label" for="rosh-child-relationship-carer">Carer</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-child-relationship-grandparent" name="rosh_child_relationship" type="radio" value="grandparent">
+          <label class="govuk-label govuk-radios__label" for="rosh-child-relationship-grandparent">Grandparent</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-child-relationship-sibling" name="rosh_child_relationship" type="radio" value="sibling">
+          <label class="govuk-label govuk-radios__label" for="rosh-child-relationship-sibling">Sibling</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-child-relationship-other-family" name="rosh_child_relationship" type="radio" value="other-family">
+          <label class="govuk-label govuk-radios__label" for="rosh-child-relationship-other-family">Other family member</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-child-relationship-friend" name="rosh_child_relationship" type="radio" value="friend">
+          <label class="govuk-label govuk-radios__label" for="rosh-child-relationship-friend">Friend</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-child-relationship-other" name="rosh_child_relationship" type="radio" value="other" data-aria-controls="conditional-rosh-child-relationship-details">
+          <label class="govuk-label govuk-radios__label" for="rosh-child-relationship-other">Other</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-rosh-child-relationship-details">
+          <div class="govuk-form-group" data-rosh-error-group="rosh-child-relationship-details">
+            <label class="govuk-label" for="rosh-child-relationship-details">Give details</label>
+            <textarea class="govuk-textarea" id="rosh-child-relationship-details" name="rosh_child_relationship_details" rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-rosh-error-group="rosh-child-contact">
+    <fieldset class="govuk-fieldset" id="rosh-child-contact">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Does {{ offenderFirstName }} have contact or is seeking contact with this child?</legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-child-contact-yes" name="rosh_child_contact" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="rosh-child-contact-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-child-contact-no" name="rosh_child_contact" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="rosh-child-contact-no">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

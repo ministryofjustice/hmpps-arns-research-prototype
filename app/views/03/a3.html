@@ -1,0 +1,28 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Sexual offending" %}
+{% set activeSection = "rosh" %}
+{% set pageHeading = "Sexual offending" %}
+{% set pageHeadingInset = "These questions calculate sexual reoffending predictors scores. Use the guidance provided to decide if an offence should be counted. Do not use your professional judgement to reclassify any offences." %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "a2b.html" %}
+{% set pageErrorSummaryInclude = "includes/03/a3-error-summary.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="predictors-a3-form" novalidate>
+
+  {% include "includes/03/sexual-offending-questions.html" %}
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-9" data-module="govuk-button">Save and continue</button>
+
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

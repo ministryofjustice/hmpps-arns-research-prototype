@@ -9,7 +9,7 @@ const VARIANTS = ['default', 'section']
 
 const isB1Page = () => {
   const path = window.location.pathname
-  return path.includes('/02/') && (path.endsWith('/b1') || path.includes('/b1.html'))
+  return (path.includes('/02/') || path.includes('/03/')) && (path.endsWith('/b1') || path.includes('/b1.html'))
 }
 
 const getStoredVariant = () => {

@@ -1,0 +1,89 @@
+<div class="govuk-checkboxes" data-module="govuk-checkboxes">
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-conviction-murder-manslaughter" name="rosh_convictions" type="checkbox" value="murder-manslaughter">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-conviction-murder-manslaughter">Murder, attempted murder, threat or conspiracy to murder or manslaughter</label>
+  </div>
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-conviction-wounding-gbh" name="rosh_convictions" type="checkbox" value="wounding-gbh">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-conviction-wounding-gbh">Wounding or GBH</label>
+  </div>
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-conviction-rape-serious-sexual-adult" name="rosh_convictions" type="checkbox" value="rape-serious-sexual-adult">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-conviction-rape-serious-sexual-adult">Rape or serious sexual offence against an adult</label>
+  </div>
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-conviction-sexual-offence-child" name="rosh_convictions" type="checkbox" value="sexual-offence-child">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-conviction-sexual-offence-child">Any sexual offence against a child</label>
+  </div>
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-conviction-other-offence-child" name="rosh_convictions" type="checkbox" value="other-offence-child">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-conviction-other-offence-child">Any other offence against a child</label>
+  </div>
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-conviction-criminal-damage-endanger-life" name="rosh_convictions" type="checkbox" value="criminal-damage-endanger-life">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-conviction-criminal-damage-endanger-life">Criminal damage with intent to endanger life</label>
+  </div>
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-conviction-weapons" name="rosh_convictions" type="checkbox" value="weapons" data-aria-controls="conditional-rosh-weapons-firearm">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-conviction-weapons">Any offence involving possession or use of weapons</label>
+  </div>
+  <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-rosh-weapons-firearm">
+    <div class="govuk-form-group" data-rosh-error-group="rosh-weapons-firearm">
+      <fieldset class="govuk-fieldset" id="rosh-weapons-firearm">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Did this involve possession of a firearm with intent to endanger life or resist arrest?</legend>
+        <div class="govuk-radios" data-module="govuk-radios">
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="rosh-weapons-firearm-yes" name="rosh_weapons_firearm" type="radio" value="yes">
+            <label class="govuk-label govuk-radios__label" for="rosh-weapons-firearm-yes">Yes</label>
+          </div>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="rosh-weapons-firearm-no" name="rosh_weapons_firearm" type="radio" value="no">
+            <label class="govuk-label govuk-radios__label" for="rosh-weapons-firearm-no">No</label>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-conviction-kidnapping" name="rosh_convictions" type="checkbox" value="kidnapping">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-conviction-kidnapping">Kidnapping or false imprisonment</label>
+  </div>
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-conviction-arson" name="rosh_convictions" type="checkbox" value="arson">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-conviction-arson">Arson</label>
+  </div>
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-conviction-racially-motivated" name="rosh_convictions" type="checkbox" value="racially-motivated">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-conviction-racially-motivated">Racially motivated or racially aggravated offence</label>
+  </div>
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-conviction-aggravated-burglary" name="rosh_convictions" type="checkbox" value="aggravated-burglary">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-conviction-aggravated-burglary">Aggravated burglary</label>
+  </div>
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-conviction-robbery" name="rosh_convictions" type="checkbox" value="robbery">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-conviction-robbery">Robbery</label>
+  </div>
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-conviction-other-serious" name="rosh_convictions" type="checkbox" value="other-serious" data-aria-controls="conditional-rosh-other-serious">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-conviction-other-serious">Any other serious offence (for example, blackmail, harassment, stalking, indecent images of children, child neglect or abduction)</label>
+  </div>
+  <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-rosh-other-serious">
+    <div class="govuk-form-group" data-rosh-error-group="rosh-other-serious-details">
+      <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="4000">
+        <label class="govuk-label" for="rosh-other-serious-details">Give details</label>
+        <textarea class="govuk-textarea govuk-js-character-count" id="rosh-other-serious-details" name="rosh_other_serious_details" rows="5" maxlength="4000"></textarea>
+        <div id="rosh-other-serious-details-info" class="govuk-hint govuk-character-count__message">You have 4,000 characters remaining.</div>
+      </div>
+    </div>
+  </div>
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-conviction-offence-in-custody" name="rosh_convictions" type="checkbox" value="offence-in-custody">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-conviction-offence-in-custody">Any offence committed in custody</label>
+  </div>
+  <div class="govuk-checkboxes__divider">or</div>
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-conviction-none" name="rosh_convictions" type="checkbox" value="none" data-behaviour="exclusive">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-conviction-none">None of these offences</label>
+  </div>
+</div>

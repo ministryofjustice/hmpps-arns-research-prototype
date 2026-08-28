@@ -1,0 +1,69 @@
+{# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
+
+{# Temporarily hidden
+{% include "includes/indirect-contact-sexual-predictor-guidance.html" %}
+#}
+
+<h3 id="predictors-indirect-child-sanctions" class="govuk-heading-s predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  How many sanctions does {{ offenderFirstName }} have for indecent child image, or indirect contact child, sexual or sexually motivated offences?
+</h3>
+
+<p id="indirect-child-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
+  Include their current offence.
+</p>
+
+<details class="govuk-details govuk-!-margin-bottom-4">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">Offences that should be counted as indecent child image, or indirect contact, sexual or sexually motivated</span>
+  </summary>
+  <div class="govuk-details__text">
+    {% include "includes/03/indirect-contact-child-offences-counted.html" %}
+  </div>
+</details>
+
+<div class="govuk-form-group govuk-!-margin-bottom-8">
+  <label class="govuk-label govuk-visually-hidden" for="indirect-child-sanctions">
+    How many sanctions does {{ offenderFirstName }} have for indecent child image, or indirect contact child, sexual or sexually motivated offences?
+  </label>
+  <input
+    class="govuk-input govuk-input--width-4"
+    id="indirect-child-sanctions"
+    name="indirect_child_sanctions"
+    type="text"
+    inputmode="numeric"
+    autocomplete="off"
+    aria-describedby="indirect-child-sanctions-hint"
+  >
+</div>
+
+<h3 id="predictors-non-contact-sanctions" class="govuk-heading-s predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  How many sanctions does {{ offenderFirstName }} have for other non-contact sexual or sexually motivated offences?
+</h3>
+
+<p id="non-contact-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
+  Include their current offence.
+</p>
+
+<details class="govuk-details govuk-!-margin-bottom-4">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">Offences that should be counted as other non-contact sexual or sexually motivated</span>
+  </summary>
+  <div class="govuk-details__text">
+    {% include "includes/03/indirect-contact-non-contact-offences-counted.html" %}
+  </div>
+</details>
+
+<div class="govuk-form-group govuk-!-margin-bottom-0">
+  <label class="govuk-label govuk-visually-hidden" for="non-contact-sanctions">
+    How many sanctions does {{ offenderFirstName }} have for other non-contact sexual or sexually motivated offences?
+  </label>
+  <input
+    class="govuk-input govuk-input--width-4"
+    id="non-contact-sanctions"
+    name="non_contact_sanctions"
+    type="text"
+    inputmode="numeric"
+    autocomplete="off"
+    aria-describedby="non-contact-sanctions-hint"
+  >
+</div>

@@ -22,6 +22,9 @@
       <a class="govuk-tabs__tab" href="#research-prototypes">Research</a>
     </li>
     <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="#reference-prototypes">Reference</a>
+    </li>
+    <li class="govuk-tabs__list-item">
       <a class="govuk-tabs__tab" href="#dev-prototypes">Dev</a>
     </li>
   </ul>
@@ -29,17 +32,40 @@
   <div class="govuk-tabs__panel" id="research-prototypes">
 
 <ul class="govuk-list assessment-research-prototypes">
+  {% set href = "/03/a2b.html" %}
+  {% set itemHeading = "Prototype 3" %}
+  {% set title = "Static assessment" %}
+  {% set prototypeVersion = "03" %}
+  {% set secondaryHref = "/03/a6.html" %}
+  {% set secondaryTitle = "Dynamic assessment" %}
+  {% set secondaryClearSessionOnStart = true %}
+  {% set secondaryPrototypeVersion = "03" %}
+  {% set titleTagText = "Aug-Sept 2026" %}
+  {% set secondaryTitleTagText = "To be tested in R4" %}
+  {% set secondaryTitleTagColour = "yellow" %}
+  {% set hint = "Submitting reoffending assessments (static & dynamic)" %}
+  {% set clearSessionOnStart = true %}
+  {% include "includes/research-prototype-entry.html" %}
+
   {% set href = "/02/a2b.html" %}
   {% set itemHeading = "Prototype 2" %}
+  {% set linkGroupHeading = null %}
+  {% set tertiaryGroupHeading = null %}
   {% set title = "Static assessment" %}
   {% set prototypeVersion = "02" %}
   {% set secondaryHref = "/02/a6.html" %}
   {% set secondaryTitle = "Dynamic assessment" %}
   {% set secondaryClearSessionOnStart = true %}
   {% set secondaryPrototypeVersion = "02" %}
-  {% set titleTagText = "June-August 2026" %}
-  {% set secondaryTitleTagText = "To be tested in R3" %}
-  {% set secondaryTitleTagColour = "yellow" %}
+  {% set tertiaryHref = null %}
+  {% set tertiaryTitle = null %}
+  {% set tertiaryClearSessionOnStart = null %}
+  {% set tertiaryPrototypeVersion = null %}
+  {% set quaternaryTitle = null %}
+  {% set quaternaryInactive = null %}
+  {% set titleTagText = "Jun-Aug 2026" %}
+  {% set secondaryTitleTagText = "Tested in R3" %}
+  {% set secondaryTitleTagColour = "green" %}
   {% set hint = "Submitting reoffending assessments (static & dynamic)" %}
   {% set clearSessionOnStart = true %}
   {% include "includes/research-prototype-entry.html" %}
@@ -50,10 +76,16 @@
   {% set secondaryTitle = null %}
   {% set secondaryClearSessionOnStart = null %}
   {% set secondaryPrototypeVersion = null %}
+  {% set tertiaryHref = null %}
+  {% set tertiaryTitle = null %}
+  {% set tertiaryClearSessionOnStart = null %}
+  {% set tertiaryPrototypeVersion = null %}
+  {% set quaternaryTitle = null %}
+  {% set quaternaryInactive = null %}
   {% set href = "/01/a1.html" %}
   {% set itemHeading = "Prototype 1" %}
   {% set title = "Static assessment" %}
-  {% set titleTagText = "May-June 2026" %}
+  {% set titleTagText = "May-Jun 2026" %}
   {% set titleTagColour = "blue" %}
   {% set secondaryTitleTagText = "Tested in R2" %}
   {% set secondaryTitleTagColour = "green" %}
@@ -61,6 +93,41 @@
   {% set skipToEndHref = "/01/skip-to-end.html" %}
   {% set clearSessionOnStart = true %}
   {% set prototypeVersion = "01" %}
+  {% include "includes/research-prototype-entry.html" %}
+</ul>
+  </div>
+
+  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="reference-prototypes">
+
+<ul class="govuk-list assessment-research-prototypes">
+  {% set skipToEndHref = null %}
+  {% set href = "/03/rosh-risk-to-others.html" %}
+  {% set itemHeading = "Risk of serious harm (ROSH)" %}
+  {% set title = "ROSH screening" %}
+  {% set prototypeVersion = "03" %}
+  {% set secondaryHref = "/03/rosh-full-start.html" %}
+  {% set secondaryTitle = "ROSH full analysis" %}
+  {% set secondaryInactive = true %}
+  {% set secondaryClearSessionOnStart = true %}
+  {% set secondaryPrototypeVersion = "03" %}
+  {% set linkGroupHeading = null %}
+  {% set tertiaryHref = null %}
+  {% set tertiaryTitle = null %}
+  {% set tertiaryGroupHeading = null %}
+  {% set tertiaryClearSessionOnStart = null %}
+  {% set tertiaryPrototypeVersion = null %}
+  {% set quaternaryHref = null %}
+  {% set quaternaryTitle = null %}
+  {% set quaternaryInactive = null %}
+  {% set quaternaryClearSessionOnStart = null %}
+  {% set quaternaryPrototypeVersion = null %}
+  {% set titleTagText = null %}
+  {% set titleTagColour = null %}
+  {% set secondaryTitleTagText = null %}
+  {% set secondaryTitleTagColour = null %}
+  {% set hint = null %}
+  {% set hintHtml = 'This prototype is based on <a class="govuk-link" href="https://www.figma.com/design/DwWR9PLfLLmPyNqTfuUbwe/Full-risk-journey?node-id=1-30&amp;p=f&amp;t=yJM4jBGB4fcvtCwh-0" rel="noopener noreferrer" target="_blank">Figma designs</a>. It has not been user tested.' %}
+  {% set clearSessionOnStart = true %}
   {% include "includes/research-prototype-entry.html" %}
 </ul>
   </div>
@@ -77,10 +144,17 @@
   {% set secondaryClearSessionOnStart = true %}
   {% set secondaryPrototypeVersion = "dev" %}
   {% set secondaryInactive = null %}
-  {% set titleTagText = "September 2026" %}
+  {% set tertiaryHref = null %}
+  {% set tertiaryTitle = null %}
+  {% set tertiaryClearSessionOnStart = null %}
+  {% set tertiaryPrototypeVersion = null %}
+  {% set quaternaryTitle = null %}
+  {% set quaternaryInactive = null %}
+  {% set titleTagText = "Sept 2026" %}
   {% set titleTagColour = "blue" %}
   {% set secondaryTitleTagText = null %}
   {% set secondaryTitleTagColour = null %}
+  {% set hintHtml = null %}
   {% set hint = "Reference prototype for development" %}
   {% set titleHint = "(design frozen on 23 July 2026)" %}
   {% set secondaryTitleHint = "(design frozen on 12 August 2026)" %}
