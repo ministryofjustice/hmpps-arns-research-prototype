@@ -1,0 +1,29 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Alcohol use" %}
+{% set pageHeadingHtml = "How often has " ~ offenderFirstName ~ " drunk alcohol in the last 3 months?" %}
+{% set pageHeadingId = "predictors-alcohol-frequency" %}
+{% set pageHeadingClass = "predictors-question-anchor" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set statusTag = "Incomplete" %}
+{% set returnToOasysButtonInclude = "includes/03/b6-layout-toggle-to-b6.html" %}
+{% set backLinkHref = "b5.html" %}
+{% set backLinkId = "predictors-b6b-back" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="predictors-b6b-form" novalidate>
+  {% include "includes/03/alcohol-use-details-questions.html" %}
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

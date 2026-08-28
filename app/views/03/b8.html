@@ -1,0 +1,26 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Thinking, attitudes and behaviours" %}
+{% set predictorsSectionCaption = "Reoffending predictors" %}
+{% set pageHeading = "Thinking, attitudes and behaviours" %}
+{% set activeSection = "rosh" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "b7.html" %}
+{% set backLinkId = "predictors-b8-back" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="predictors-b8-form" novalidate>
+  {% include "includes/03/thinking-attitudes-behaviours-questions.html" %}
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

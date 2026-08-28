@@ -1,0 +1,61 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Employment and education" %}
+{% set pageHeadingHtml = "What is " ~ offenderFirstName ~ "'s current employment status?" %}
+{% set pageHeadingId = "predictors-employment-status" %}
+{% set pageHeadingClass = "predictors-question-anchor" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "b1.html" %}
+{% set backLinkId = "predictors-b2-back" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="predictors-b2-form" novalidate>
+  <div class="govuk-form-group govuk-!-margin-top-0">
+    <fieldset class="govuk-fieldset">
+      {% if questionLegendAsHeading and pageHeadingHtml %}
+        {% include "includes/assessment-question-legend-heading.html" %}
+      {% else %}
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+        What is {{ offenderFirstName }}'s current employment status?
+      </legend>
+      {% endif %}
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="employment-status-employed-or-self-employed" name="employment_history" type="radio" value="employed-or-self-employed">
+          <label class="govuk-label govuk-radios__label" for="employment-status-employed-or-self-employed">Employed or self-employed</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="employment-status-retired" name="employment_history" type="radio" value="retired">
+          <label class="govuk-label govuk-radios__label" for="employment-status-retired">Retired</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="employment-status-currently-unavailable" name="employment_history" type="radio" value="currently-unavailable">
+          <label class="govuk-label govuk-radios__label" for="employment-status-currently-unavailable">Currently unavailable for work</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="employment-status-unemployed" name="employment_history" type="radio" value="unemployed">
+          <label class="govuk-label govuk-radios__label" for="employment-status-unemployed">Unemployed</label>
+        </div>
+        <div class="govuk-radios__divider">or</div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="employment-status-unknown" name="employment_history" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="employment-status-unknown">Unknown</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

@@ -114,7 +114,7 @@ const getFirstSanctionAgeLocals = (query = {}) => {
 
 router.use((req, res, next) => {
   res.locals.offenceBrowseCategories = offenceBrowseCategories
-  if (req.path.startsWith('/02') || req.path.startsWith('/dev')) {
+  if (req.path.startsWith('/02') || req.path.startsWith('/03') || req.path.startsWith('/dev')) {
     res.locals.predictorsSectionCaption = 'Reoffending predictors'
     res.locals.useReoffendingServiceNavigation = true
     res.locals.hideOffenderViewAnswers = true
@@ -122,7 +122,7 @@ router.use((req, res, next) => {
   if (/^\/dev\/ux-handover(\.html)?$/.test(req.path)) {
     res.locals.uxHandoverLastUpdated = getUxHandoverLastUpdatedLabel()
   }
-  if (/^\/(01|02|dev)\/a2(b)?(\.html)?$/.test(req.path)) {
+  if (/^\/(01|02|03|dev)\/a2(b)?(\.html)?$/.test(req.path)) {
     Object.assign(res.locals, getFirstSanctionAgeLocals(req.query))
   }
   next()

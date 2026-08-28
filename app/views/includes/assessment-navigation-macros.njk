@@ -42,6 +42,7 @@
       {
         text: "Risk",
         href: "#",
+        current: activeSection == "rosh",
         attributes: { "data-section": "rosh" }
       },
       {
@@ -80,6 +81,7 @@
       {
         text: "Risk of serious harm",
         href: "#",
+        current: activeSection == "rosh",
         attributes: { "data-section": "rosh" }
       },
       {
@@ -118,7 +120,7 @@
               <a class="moj-primary-navigation__link" href="#" data-section="strengths-and-needs" data-predictors-inactive-link>Strengths and needs</a>
             </li>
             <li class="moj-primary-navigation__item">
-              <a class="moj-primary-navigation__link" href="#" data-section="rosh" data-predictors-inactive-link>Risk</a>
+              <a class="moj-primary-navigation__link" href="#"{% if activeSection == "rosh" %} aria-current="page"{% endif %} data-section="rosh" data-predictors-inactive-link>Risk</a>
             </li>
             <li class="moj-primary-navigation__item">
               <a class="moj-primary-navigation__link" href="#" data-section="risk-management-plan" data-predictors-inactive-link>Summary sheet</a>
@@ -137,7 +139,7 @@
               <a class="moj-primary-navigation__link" href="#" data-section="strengths-and-needs">Strengths and needs</a>
             </li>
             <li class="moj-primary-navigation__item">
-              <a class="moj-primary-navigation__link" href="#" data-section="rosh">Risk of serious harm</a>
+              <a class="moj-primary-navigation__link" href="#"{% if activeSection == "rosh" %} aria-current="page"{% endif %} data-section="rosh">Risk of serious harm</a>
             </li>
             <li class="moj-primary-navigation__item">
               <a class="moj-primary-navigation__link" href="#" data-section="risk-management-plan">Risk management plan</a>

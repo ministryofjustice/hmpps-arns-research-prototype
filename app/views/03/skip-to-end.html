@@ -1,0 +1,23 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set hideJourneyServiceHeader = true %}
+{% set hideOffenderViewAnswers = true %}
+{% set hideOffenderHeader = true %}
+
+{% set afterJourneyHeaderHtml %}
+<div class="assessment-layout__row assessment-layout__row--tight">
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Skipping to the end…</h1>
+  {% include "includes/03/return-to-oasys-button.html" %}
+</div>
+{% endset %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<p class="govuk-body">Setting up a completed example session and taking you to the summary page.</p>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}
+

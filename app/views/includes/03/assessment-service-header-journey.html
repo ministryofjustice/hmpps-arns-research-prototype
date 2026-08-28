@@ -1,0 +1,42 @@
+{# Set pageHeading per page; optional predictorsSectionCaption (default Reoffending predictors) and statusTag #}
+<div class="govuk-grid-row assessment-service-header{% if hidePageHeaderSeparator %} assessment-service-header--no-separator{% endif %}">
+  <div class="govuk-grid-column-full">
+    <div class="assessment-layout__row assessment-layout__row--tight assessment-service-header__question-row">
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-0{% if pageHeadingClass %} {{ pageHeadingClass }}{% endif %}"{% if pageHeadingId %} id="{{ pageHeadingId }}"{% endif %}>
+        {% if predictorsSectionCaption !== false %}
+        <span class="govuk-caption-l assessment-service-header__section-caption">{{ predictorsSectionCaption | default("Reoffending predictors") }}</span>
+        {% endif %}
+        {% if pageHeadingHtml %}{{ pageHeadingHtml | safe }}{% else %}{{ pageHeading | default("Reoffending predictors assessment") }}{% endif %}{% if statusTag %}<span class="govuk-visually-hidden">, {{ statusTag }}</span>{% endif %}
+      </h1>
+      <div class="assessment-service-header__actions">
+        {% if statusTag %}
+        <strong class="govuk-tag {% if statusTag == 'Complete' %}govuk-tag--light-blue{% else %}govuk-tag--light-grey{% endif %} assessment-layout__status-tag" aria-hidden="true">{{ statusTag }}</strong>
+        {% endif %}
+        {% include returnToOasysButtonInclude | default("includes/03/return-to-oasys-button.html") %}
+      </div>
+    </div>
+    {% if pageHeadingSourceToggle and pageHeadingInset and pageHeadingHint %}
+    <div class="govuk-grid-row" data-a1-source-notice>
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-inset-text assessment-service-header__heading-inset govuk-!-margin-bottom-0" data-a1-source-notice-variant="inset">{{ pageHeadingInset }}</div>
+        <p{% if pageHeadingHintId %} id="{{ pageHeadingHintId }}"{% endif %} class="govuk-hint assessment-service-header__heading-hint govuk-!-margin-bottom-0" data-a1-source-notice-variant="hint" hidden>{{ pageHeadingHint }}</p>
+      </div>
+    </div>
+    {% elif pageHeadingInset %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-inset-text assessment-service-header__heading-inset">{{ pageHeadingInset }}</div>
+      </div>
+    </div>
+    {% elif pageHeadingHint %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <p{% if pageHeadingHintId %} id="{{ pageHeadingHintId }}"{% endif %} class="govuk-hint assessment-service-header__heading-hint govuk-!-margin-bottom-0">{{ pageHeadingHint }}</p>
+      </div>
+    </div>
+    {% endif %}
+    {% if not hidePageHeaderSeparator %}
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+    {% endif %}
+  </div>
+</div>

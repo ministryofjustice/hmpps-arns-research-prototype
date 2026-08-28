@@ -23,7 +23,7 @@ import {
 import { getTieringAssessmentSession, setTieringAssessmentSession } from './tiering-assessment-session.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  if (window.location.pathname.includes('/02/') || window.location.pathname.includes('/dev/')) return
+  if (window.location.pathname.includes('/02/') || window.location.pathname.includes('/03/') || window.location.pathname.includes('/dev/')) return
 
   const form = document.getElementById('tiering-a6-form')
   if (!form) return

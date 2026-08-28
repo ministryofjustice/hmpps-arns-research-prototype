@@ -7,6 +7,17 @@
 $tablet: 40.0625em;
 $desktop: 48.0625em;
 
+// GOV.UK Frontend 6 removed pale tag colours. Restore them for assessment status.
+.govuk-tag--light-grey {
+  color: govuk-colour("black", $variant: "tint-25");
+  background-color: govuk-colour("black", $variant: "tint-95");
+}
+
+.govuk-tag--light-blue {
+  color: govuk-colour("blue", $variant: "shade-50");
+  background-color: govuk-colour("blue", $variant: "tint-80");
+}
+
 .assessment-layout {
   max-width: 1200px;
   margin-left: auto;
@@ -53,11 +64,11 @@ $desktop: 48.0625em;
     margin-top: 0;
   }
 
-  > .govuk-back-link.assessment-layout__back-link:not(.assessment-layout__back-link--hidden) + .assessment-layout__section-complete-banner + .assessment-offender-header {
+  > .govuk-back-link.assessment-layout__back-link:not(.assessment-layout__back-link--hidden) + :is(.assessment-layout__section-complete-banner, .assessment-layout__section-complete-alert) + .assessment-offender-header {
     margin-top: 0;
   }
 
-  > .govuk-back-link.assessment-layout__back-link:not(.assessment-layout__back-link--hidden) + .assessment-layout__section-complete-banner + .govuk-error-summary + .assessment-offender-header {
+  > .govuk-back-link.assessment-layout__back-link:not(.assessment-layout__back-link--hidden) + :is(.assessment-layout__section-complete-banner, .assessment-layout__section-complete-alert) + .govuk-error-summary + .assessment-offender-header {
     margin-top: 0;
   }
 
@@ -69,16 +80,16 @@ $desktop: 48.0625em;
     margin-top: 25px;
   }
 
-  > .govuk-back-link.assessment-layout__back-link--hidden + .assessment-layout__section-complete-banner {
+  > .govuk-back-link.assessment-layout__back-link--hidden + :is(.assessment-layout__section-complete-banner, .assessment-layout__section-complete-alert) {
     margin-top: 25px;
     margin-bottom: 0;
   }
 
-  > .govuk-back-link.assessment-layout__back-link--hidden + .assessment-layout__section-complete-banner + .assessment-offender-header {
+  > .govuk-back-link.assessment-layout__back-link--hidden + :is(.assessment-layout__section-complete-banner, .assessment-layout__section-complete-alert) + .assessment-offender-header {
     margin-top: 25px;
   }
 
-  > .govuk-back-link.assessment-layout__back-link--hidden + .assessment-layout__section-complete-banner + .govuk-error-summary + .assessment-offender-header {
+  > .govuk-back-link.assessment-layout__back-link--hidden + :is(.assessment-layout__section-complete-banner, .assessment-layout__section-complete-alert) + .govuk-error-summary + .assessment-offender-header {
     margin-top: 25px;
   }
 
@@ -118,8 +129,49 @@ $desktop: 48.0625em;
     margin-top: 50px;
   }
 
-  .assessment-offender-header + .assessment-service-header {
+  .assessment-offender-header + .assessment-service-header,
+  .assessment-offender-header + .assessment-section-title {
     margin-top: 0;
+  }
+
+  .assessment-section-title {
+    .govuk-section-break--m {
+      margin-top: 10px;
+      margin-bottom: 25px;
+    }
+  }
+
+  .assessment-layout__back-link--in-content {
+    display: inline-block;
+    margin-top: 0;
+    margin-bottom: 20px;
+
+    &.assessment-layout__back-link--hidden {
+      display: none !important;
+    }
+  }
+
+  .assessment-content-header {
+    margin-bottom: 30px;
+
+    &--with-subheading {
+      margin-bottom: 20px;
+    }
+
+    .govuk-heading-l {
+      flex: 1;
+      min-width: 0;
+    }
+
+    &__title-row {
+      align-items: flex-start;
+    }
+  }
+
+  &.assessment-layout--content-header {
+    > .assessment-offender-header {
+      margin-bottom: 20px;
+    }
   }
 
   .assessment-service-header__section-caption {
@@ -289,6 +341,11 @@ $desktop: 48.0625em;
   &__status-tag {
     // Hidden in the prototype; must not reserve flex space or page titles wrap early
     display: none;
+
+    &--visible {
+      display: inline-block;
+      flex-shrink: 0;
+    }
   }
 
   &__row {
@@ -471,6 +528,41 @@ $desktop: 48.0625em;
     align-items: flex-start;
     justify-content: space-between;
     gap: 15px;
+  }
+
+  &__title-groups {
+    min-width: 0;
+    flex: 1;
+  }
+
+  &__title-groups--columns {
+    @media (min-width: 40.0625em) {
+      display: flex;
+      align-items: flex-start;
+      gap: 30px;
+    }
+
+    .assessment-research-prototypes__title-group {
+      @media (min-width: 40.0625em) {
+        flex: 1;
+      }
+    }
+
+    .assessment-research-prototypes__title-group + .assessment-research-prototypes__title-group {
+      margin-top: 20px;
+
+      @media (min-width: 40.0625em) {
+        margin-top: 0;
+      }
+    }
+  }
+
+  &__title-group {
+    min-width: 0;
+  }
+
+  &__title-group-heading {
+    margin-top: 0;
   }
 
   &__title-links {
@@ -758,6 +850,25 @@ body.assessment-page {
       align-items: center;
       justify-content: space-between;
       gap: 8px;
+    }
+
+    .assessment-section-navigation__complete-icon {
+      display: none;
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+
+      &--visible {
+        display: inline-block;
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    .assessment-section-navigation__tick {
+      display: block;
+      width: 16px;
+      height: 16px;
     }
 
     a:hover {
@@ -2848,6 +2959,41 @@ body.assessment-page {
       color: #0b0c0c;
     }
   }
+}
+
+.rosh-child-dob {
+  .govuk-date-input__item {
+    vertical-align: top;
+  }
+
+  &__or-text {
+    @include govuk-font($size: 19);
+    display: inline-block;
+    min-height: 2.5rem;
+    line-height: 2.5rem;
+  }
+}
+
+.rosh-confirmation-variant-links {
+  margin-top: govuk-spacing(4);
+
+  &__heading {
+    @include govuk-font($size: 16, $weight: bold);
+    margin: 0 0 govuk-spacing(2);
+  }
+
+  &__list {
+    margin-bottom: 0;
+  }
+
+  [aria-current="page"] {
+    font-weight: 700;
+  }
+}
+
+.moj-banner[hidden],
+.moj-alert[hidden] {
+  display: none !important;
 }
 
 .govuk-footer__crown-link {

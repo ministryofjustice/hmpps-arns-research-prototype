@@ -1,0 +1,70 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Other risks" %}
+{% set predictorsSectionCaption = "ROSH full analysis" %}
+{% set pageHeading = "Other risks" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set roshNavSection = "full-analysis" %}
+{% set hideSideNav = false %}
+{% set sideNavigationInclude = "includes/03/rosh-side-navigation.html" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "rosh-full-individual.html" %}
+{% set pageErrorSummaryInclude = "includes/03/rosh-error-summary.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="rosh-full-other-form" novalidate data-offender-first-name="{{ offenderFirstName }}">
+  <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-error-group="rosh-full-escape">
+    <fieldset class="govuk-fieldset" id="rosh-full-escape">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h3 class="govuk-fieldset__heading">Are there any concerns about {{ offenderFirstName }}’s risk of escape or absconding?</h3>
+      </legend>
+      {% set radioName = "rosh_full_escape" %}
+      {% set radioLegendId = "rosh-full-escape" %}
+      {% set detailsName = "rosh_full_escape_details" %}
+      {% set detailsId = "rosh-full-escape-details" %}
+      {% set detailsLabel = "Give details of the concerns about risk of escape or absconding" %}
+      {% include "includes/03/rosh-full-yes-no-details.html" %}
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-error-group="rosh-full-control-issues">
+    <fieldset class="govuk-fieldset" id="rosh-full-control-issues">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h3 class="govuk-fieldset__heading">Are there any concerns about {{ offenderFirstName }}’s risk of control issues, disruptive behaviour or breach of trust?</h3>
+      </legend>
+      {% set radioName = "rosh_full_control_issues" %}
+      {% set radioLegendId = "rosh-full-control-issues" %}
+      {% set detailsName = "rosh_full_control_issues_details" %}
+      {% set detailsId = "rosh-full-control-issues-details" %}
+      {% set detailsLabel = "Give details of the concerns about control issues, disruptive behaviour or breach of trust" %}
+      {% include "includes/03/rosh-full-yes-no-details.html" %}
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-rosh-error-group="rosh-full-risk-to-prisoners">
+    <fieldset class="govuk-fieldset" id="rosh-full-risk-to-prisoners">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h3 class="govuk-fieldset__heading">Are there any concerns about {{ offenderFirstName }}’s risk to other prisoners?</h3>
+      </legend>
+      {% set radioName = "rosh_full_risk_to_prisoners" %}
+      {% set radioLegendId = "rosh-full-risk-to-prisoners" %}
+      {% set detailsName = "rosh_full_risk_to_prisoners_details" %}
+      {% set detailsId = "rosh-full-risk-to-prisoners-details" %}
+      {% set detailsLabel = "Give details of the concerns about risk to other prisoners" %}
+      {% include "includes/03/rosh-full-yes-no-details.html" %}
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

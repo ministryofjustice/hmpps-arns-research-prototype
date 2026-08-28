@@ -1,0 +1,75 @@
+{# Layout snapshot of rosh-risk-to-others (Aug 2026). Not in the live journey — keep for a future iteration. #}
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Risk to others" %}
+{% set predictorsSectionCaption = "ROSH screening" %}
+{% set pageHeading = "Risk to others" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set roshNavSection = "screening" %}
+{% set hideSideNav = false %}
+{% set sideNavigationInclude = "includes/03/rosh-side-navigation.html" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "/" %}
+{% set pageErrorSummaryInclude = "includes/03/rosh-error-summary.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="rosh-risk-to-others-form" novalidate data-offender-first-name="{{ offenderFirstName }}">
+  <div class="govuk-form-group govuk-!-margin-top-0 govuk-!-margin-bottom-8" data-rosh-error-group="rosh-convictions">
+    <fieldset class="govuk-fieldset" aria-describedby="rosh-convictions-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m" id="rosh-convictions">
+        <h3 class="govuk-fieldset__heading">Has {{ offenderFirstName }} previously been convicted of any of these offences?</h3>
+      </legend>
+      <div id="rosh-convictions-hint" class="govuk-hint">Select all that apply, or select ‘None of these offences’.</div>
+      {% include "includes/03/rosh-convictions-questions.html" %}
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-error-group="rosh-behaviours">
+    <fieldset class="govuk-fieldset" aria-describedby="rosh-behaviours-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m" id="rosh-behaviours">
+        <h3 class="govuk-fieldset__heading">Has {{ offenderFirstName }} been involved in these significant behaviours or events?</h3>
+      </legend>
+      <div id="rosh-behaviours-hint" class="govuk-hint">Select all that apply, or select ‘None of these significant behaviours or events’.</div>
+      {% include "includes/03/rosh-behaviours-questions.html" %}
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-rosh-error-group="rosh-civil-orders">
+    <fieldset class="govuk-fieldset" id="rosh-civil-orders">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h3 class="govuk-fieldset__heading">Is {{ offenderFirstName }} currently subject to any civil or ancillary orders?</h3>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-civil-orders-yes" name="rosh_civil_orders" type="radio" value="yes" data-aria-controls="conditional-rosh-civil-order-types">
+          <label class="govuk-label govuk-radios__label" for="rosh-civil-orders-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-rosh-civil-order-types">
+          <div class="govuk-form-group" data-rosh-error-group="rosh-civil-order-types">
+            <fieldset class="govuk-fieldset" id="rosh-civil-order-types">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Select all that apply.</legend>
+              {% include "includes/03/rosh-civil-orders-questions.html" %}
+            </fieldset>
+          </div>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-civil-orders-no" name="rosh_civil_orders" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="rosh-civil-orders-no">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}
