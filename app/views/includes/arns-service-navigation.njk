@@ -1,0 +1,28 @@
+{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
+
+{{ govukServiceNavigation({
+  classes: "arns-service-navigation",
+  navigationLabel: "Services",
+  navigation: [
+    {
+      text: "Home",
+      href: "/",
+      current: arnsServiceNavCurrent == "home"
+    },
+    {
+      text: "Reoffending predictors",
+      href: "/reoffending-predictors",
+      current: arnsServiceNavCurrent == "predictors"
+    },
+    {
+      text: "Risk of serious harm",
+      href: "/rosh",
+      current: arnsServiceNavCurrent == "rosh"
+    },
+    {
+      text: "Strengths and needs",
+      href: "/san",
+      current: arnsServiceNavCurrent == "san"
+    }
+  ]
+}) }}

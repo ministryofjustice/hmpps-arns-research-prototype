@@ -76,21 +76,9 @@ export const clearPrototypeDataForPredictors = async () => {
   }
 }
 
-/** Reset prototype 3 session for a fresh static assessment start from the index */
+/** Reset ROSH session for a fresh start from the index */
 export const resetPredictorsSessionForFreshStart = async () => {
   await clearPrototypeDataForPredictors()
-
-  const { PROTOTYPE_DEFAULT_CURRENT_OFFENCE } = await import('./predictors-journey.js')
-
-  setPredictorsAssessmentSession({
-    currentOffence: { ...PROTOTYPE_DEFAULT_CURRENT_OFFENCE },
-    convictionDate: getDefaultConvictionDateParts(),
-    convictionDateEditMode: false,
-    returnToCheckAnswers: false,
-    staticAssessmentCompleteSeen: false,
-    scoreCalculated: false,
-    section1Complete: false
-  })
 }
 
 export const getPredictorsCurrentOffence = () => getPredictorsAssessmentSession().currentOffence || null

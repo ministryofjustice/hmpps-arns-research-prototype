@@ -1,0 +1,47 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Offence analysis" %}
+{% set sanCaption = "Offence analysis" %}
+{% set sanSection = "offence" %}
+{% set backLinkHref = "offence-analysis-victim-details.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san/content-header.html" %}
+
+<form id="san-offence-involved-form" novalidate data-oa-page="involved">
+  <div class="govuk-form-group" data-san-error-group="involved">
+    <fieldset class="govuk-fieldset" id="offence-involved">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">How many other people were involved with committing the current index offence(s)?</h1>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {% for option in [
+          { id: "none", label: "None" },
+          { id: "1", label: "1" },
+          { id: "2", label: "2" },
+          { id: "3", label: "3" },
+          { id: "4", label: "4" },
+          { id: "5", label: "5" },
+          { id: "6-10", label: "6 to 10" },
+          { id: "11-15", label: "11 to 15" },
+          { id: "more-than-15", label: "More than 15" }
+        ] %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="involved-{{ option.id }}" name="offence_involved" type="radio" value="{{ option.id }}">
+          <label class="govuk-label govuk-radios__label" for="involved-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        {% endfor %}
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

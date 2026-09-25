@@ -1,0 +1,218 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Offence analysis" %}
+{% set sanHeading = "Offence analysis" %}
+{% set sanHeadingClass = "govuk-heading-xl" %}
+{% set sanSection = "offence" %}
+{% set backLinkHref = "offence-analysis-involved-parties.html" %}
+
+{% macro yesNoDetails(id, legend, legendSize, hint, yesOptional, noOptional) %}
+<div class="govuk-form-group{% if id != 'leader' %} san-question{% endif %}" data-san-error-group="{{ id }}">
+  <fieldset class="govuk-fieldset" id="{{ id }}"{% if hint %} aria-describedby="{{ id }}-hint"{% endif %}>
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--{{ legendSize }}">
+      <h2 class="govuk-fieldset__heading">{{ legend }}</h2>
+    </legend>
+    {% if hint %}
+    <div id="{{ id }}-hint" class="govuk-hint">{{ hint }}</div>
+    {% endif %}
+    <div class="govuk-radios" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="{{ id }}-yes" name="{{ id }}" type="radio" value="yes" data-aria-controls="conditional-{{ id }}-yes">
+        <label class="govuk-label govuk-radios__label" for="{{ id }}-yes">Yes</label>
+      </div>
+      <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ id }}-yes">
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="{{ id }}-yes-details">Give details{% if yesOptional %} (optional){% endif %}</label>
+          <textarea class="govuk-textarea" id="{{ id }}-yes-details" name="{{ id }}_yes_details" rows="5" maxlength="2000"></textarea>
+          <div class="govuk-hint san-character-count" data-san-character-count="{{ id }}-yes-details">You have 2,000 characters remaining</div>
+        </div>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="{{ id }}-no" name="{{ id }}" type="radio" value="no" data-aria-controls="conditional-{{ id }}-no">
+        <label class="govuk-label govuk-radios__label" for="{{ id }}-no">No</label>
+      </div>
+      <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ id }}-no">
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="{{ id }}-no-details">Give details{% if noOptional %} (optional){% endif %}</label>
+          <textarea class="govuk-textarea" id="{{ id }}-no-details" name="{{ id }}_no_details" rows="5" maxlength="2000"></textarea>
+          <div class="govuk-hint san-character-count" data-san-character-count="{{ id }}-no-details">You have 2,000 characters remaining</div>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>
+{% endmacro %}
+
+{% macro againstOptions(id, prompt) %}
+<div class="govuk-form-group" data-san-error-group="{{ id }}-who">
+  <fieldset class="govuk-fieldset" id="{{ id }}-who">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ prompt }}</legend>
+    <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+      {% for option in [
+        { value: "family", label: "Family member" },
+        { value: "partner", label: "Intimate partner" },
+        { value: "both", label: "Family member and intimate partner" }
+      ] %}
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="{{ id }}-{{ option.value }}" name="{{ id }}_who" type="radio" value="{{ option.value }}" data-aria-controls="conditional-{{ id }}-{{ option.value }}">
+        <label class="govuk-label govuk-radios__label" for="{{ id }}-{{ option.value }}">{{ option.label }}</label>
+      </div>
+      <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ id }}-{{ option.value }}">
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="{{ id }}-{{ option.value }}-details">Give details</label>
+          <textarea class="govuk-textarea" id="{{ id }}-{{ option.value }}-details" name="{{ id }}_{{ option.value }}_details" rows="5" maxlength="2000"></textarea>
+          <div class="govuk-hint san-character-count" data-san-character-count="{{ id }}-{{ option.value }}-details">You have 2,000 characters remaining</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </fieldset>
+</div>
+{% endmacro %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san/content-header.html" %}
+
+<form id="san-offence-impact-form" novalidate data-oa-page="impact">
+  {{ yesNoDetails(
+    "leader",
+    "Was Alex the leader of the current index offence(s)?",
+    "m",
+    "",
+    false,
+    true
+  ) }}
+
+  {{ yesNoDetails(
+    "recognise",
+    "Does Alex recognise the impact on the victims or wider community?",
+    "m",
+    "",
+    true,
+    true
+  ) }}
+
+  {{ yesNoDetails(
+    "responsibility",
+    "Does Alex accept responsibility for the current index offence(s)?",
+    "m",
+    "",
+    true,
+    true
+  ) }}
+
+  <div class="govuk-form-group san-question" data-san-error-group="escalation">
+    <fieldset class="govuk-fieldset" id="escalation">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Is there an escalation in seriousness from previous offending?</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="escalation-yes" name="escalation" type="radio" value="yes" data-aria-controls="conditional-escalation-yes">
+          <label class="govuk-label govuk-radios__label" for="escalation-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-escalation-yes">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="escalation-yes-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="escalation-yes-details" name="escalation_yes_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="escalation-yes-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="escalation-no" name="escalation" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="escalation-no">No</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="escalation-not-applicable" name="escalation" type="radio" value="not-applicable">
+          <label class="govuk-label govuk-radios__label" for="escalation-not-applicable">Not applicable</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="perpetrator">
+    <fieldset class="govuk-fieldset" id="perpetrator">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Is there evidence that Alex has ever been a perpetrator of domestic abuse?</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="perpetrator-yes" name="perpetrator" type="radio" value="yes" data-aria-controls="conditional-perpetrator-yes">
+          <label class="govuk-label govuk-radios__label" for="perpetrator-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-perpetrator-yes">
+          {{ againstOptions("perpetrator", "Who was this committed against?") }}
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="perpetrator-no" name="perpetrator" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="perpetrator-no">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="victim-da">
+    <fieldset class="govuk-fieldset" id="victim-da">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Is there evidence that Alex has ever been a victim of domestic abuse?</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="victim-da-yes" name="victim_da" type="radio" value="yes" data-aria-controls="conditional-victim-da-yes">
+          <label class="govuk-label govuk-radios__label" for="victim-da-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-victim-da-yes">
+          {{ againstOptions("victim-da", "Who was this committed by?") }}
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="victim-da-no" name="victim_da" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="victim-da-no">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="patterns">
+    <h2 class="govuk-label-wrapper">
+      <label class="govuk-label govuk-label--m" for="patterns">What are the patterns of offending?</label>
+    </h2>
+    <div id="patterns-hint" class="govuk-hint">Analyse whether the current index offence(s) is (or are) part of a wider pattern of offending and identify any established or emerging themes. You do not need to list all previous convictions.</div>
+    <textarea class="govuk-textarea" id="patterns" name="patterns" rows="5" maxlength="2000" aria-describedby="patterns-hint"></textarea>
+    <div class="govuk-hint san-character-count" data-san-character-count="patterns">You have 2,000 characters remaining</div>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="linked">
+    <fieldset class="govuk-fieldset" id="linked">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Are the current or previous offences linked to risk of serious harm, risks to the individual or other risks?</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="linked-yes" name="linked" type="radio" value="yes" data-aria-controls="conditional-linked-yes">
+          <label class="govuk-label govuk-radios__label" for="linked-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-linked-yes">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="linked-yes-details">Give details</label>
+            <textarea class="govuk-textarea" id="linked-yes-details" name="linked_yes_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="linked-yes-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="linked-no" name="linked" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="linked-no">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Mark as complete</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

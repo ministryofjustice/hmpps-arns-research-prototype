@@ -487,6 +487,10 @@ $desktop: 48.0625em;
   margin-bottom: 40px;
 }
 
+.assessment-home-header--with-back-link {
+  margin-top: 0;
+}
+
 .assessment-home-title {
   margin-bottom: 10px;
 }
@@ -496,10 +500,140 @@ $desktop: 48.0625em;
   margin-bottom: 0;
 }
 
+// MOJ card – https://design-patterns.service.justice.gov.uk/components/card/#code-tab
+.card {
+  margin-bottom: 40px;
+  background: govuk-colour("white");
+  border: 1px solid #d9dadb;
+  position: relative;
+  width: 100%;
+  padding: 25px;
+}
+
+.card__heading {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.card__description {
+  margin-bottom: 0;
+}
+
+.card--clickable {
+  border-bottom-width: 5px;
+
+  &:hover,
+  &:active {
+    cursor: pointer;
+  }
+
+  &:hover .card__heading a,
+  &:hover .card__link,
+  &:active .card__heading a,
+  &:active .card__link {
+    color: #003078;
+    text-decoration: none;
+  }
+
+  &:hover .card__heading a:focus,
+  &:hover .card__link:focus,
+  &:active .card__heading a:focus,
+  &:active .card__link:focus {
+    outline: 3px solid transparent;
+    color: #0b0c0c;
+    background-color: #fd0;
+    box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
+    text-decoration: none;
+  }
+
+  &:hover {
+    border-color: #b1b4b6;
+  }
+
+  &:active {
+    border-color: #b1b4b6;
+    bottom: -1px;
+  }
+
+  .card__link::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}
+
+.card-group {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+  padding: 0;
+
+  @media (max-width: $desktop) {
+    margin-bottom: 30px;
+  }
+}
+
+.card-group__item {
+  display: flex;
+  list-style-type: none;
+  margin-bottom: 0;
+
+  @media (max-width: $desktop) {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .card {
+    margin-bottom: 25px;
+  }
+
+  @media (max-width: $desktop) {
+    .card {
+      margin-bottom: 15px;
+    }
+
+    &:last-child .card {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.assessment-home-cards {
+  margin-bottom: 15px;
+
+  .card__heading {
+    padding-right: 6.75rem;
+  }
+
+  .card__date {
+    position: absolute;
+    top: 25px;
+    right: 15px;
+    pointer-events: none;
+  }
+}
+
 .assessment-home-tabs {
   .govuk-section-break--l {
     margin-top: 0;
     margin-bottom: 25px;
+  }
+}
+
+.govuk-frontend-supported .assessment-research-prototypes-accordion {
+  .govuk-accordion__section-heading-text .govuk-accordion__section-heading-text-focus {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    width: 100%;
+  }
+
+  .assessment-research-prototypes__accordion-heading-tags {
+    margin-left: auto;
   }
 }
 
@@ -574,6 +708,24 @@ $desktop: 48.0625em;
     list-style-type: disc;
   }
 
+  &__title-links--inactive {
+    color: $govuk-secondary-text-colour;
+
+    .govuk-heading-m,
+    .govuk-link,
+    .govuk-link:link,
+    .govuk-link:visited,
+    .govuk-link:hover,
+    .govuk-link:active,
+    .govuk-link:focus {
+      color: $govuk-secondary-text-colour;
+    }
+
+    .govuk-link {
+      text-decoration: none;
+    }
+  }
+
   &__title-link-item {
     &:last-child {
       .govuk-heading-m {
@@ -605,6 +757,8 @@ $desktop: 48.0625em;
 
   &__title-tag {
     flex: 0 0 auto;
+    max-width: none;
+    white-space: nowrap;
     background-color: #d2e2f1;
     color: #0b0c0c;
   }
@@ -653,6 +807,16 @@ $desktop: 48.0625em;
     & + & {
       padding-top: 30px;
       border-top: 1px solid #b1b4b6;
+    }
+  }
+
+  &--in-accordion &__item {
+    padding-bottom: 0;
+    border-bottom: 0;
+
+    &:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
     }
   }
 }
@@ -848,8 +1012,39 @@ body.assessment-page {
     .assessment-section-navigation__link {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
       gap: 8px;
+
+      // Match the accommodation tick, which sits just inside the right padding
+      // because the bold label fills the row. Keep every tick on that edge.
+      &:has(.assessment-section-navigation__complete-icon--visible) {
+        padding-right: 13.5px;
+      }
+    }
+
+    .assessment-section-navigation__label {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .assessment-section-navigation__complete-icon {
+      display: none;
+      flex-shrink: 0;
+      margin-left: auto;
+      width: 16px;
+      height: 16px;
+
+      &--visible {
+        display: block;
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    .assessment-section-navigation__tick {
+      display: block;
+      width: 16px;
+      height: 16px;
     }
 
     .assessment-section-navigation__complete-icon {
@@ -895,6 +1090,11 @@ body.assessment-page {
       }
     }
   }
+}
+
+// Strengths and needs side navigation – GOV.UK body (19px), not the MoJ 16px default
+.san-side-navigation.moj-side-navigation {
+  @include govuk-font(19);
 }
 
 // Offence autocomplete (Home Office long-list pattern)
@@ -2882,7 +3082,7 @@ body.assessment-page {
 .assessment-phase-banner--below-header {
   margin-top: 0;
   margin-bottom: 0;
-  border-bottom: 1px solid #b1b4b6;
+  border-bottom: 0;
   background-color: #ffffff;
 
   .govuk-phase-banner {
@@ -4066,4 +4266,218 @@ body.assessment-page {
   font-size: 0.875rem;
   line-height: 1.45;
   white-space: pre;
+}
+
+// Strengths and needs – offender header, status and summary
+.assessment-layout .san-offender-header.assessment-offender-header {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+.san-offender-header__meta,
+.san-offender-header__identity {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.san-offender-header__identifiers {
+  margin: 0;
+  color: #505a5f;
+  font-size: 17px;
+  line-height: 1.3;
+}
+
+.san-offender-header__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: 0;
+}
+
+.san-offender-header__identity {
+  margin-top: 15px;
+}
+
+.san-offender-header__rule {
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+// Keep the tab underline. Hide the box around the panel content, and let
+// the content run to the same left and right edges as the underline.
+.san-tabs .govuk-tabs__panel {
+  padding-right: 0;
+  padding-left: 0;
+  border-right-width: 0;
+  border-left-width: 0;
+  border-bottom-color: transparent;
+}
+
+.san-content-header {
+  margin-bottom: 25px;
+
+  // Caption sits directly above the question heading on each screen.
+  &--caption {
+    margin-bottom: 5px;
+  }
+
+  // Sexual concerns page: section name and "Risk of sexual harm" stack
+  // above the question, with the status tag on the first line only.
+  &--sexual {
+    margin-bottom: 10px;
+
+    .san-content-header__row {
+      align-items: flex-start;
+      margin-bottom: 0;
+    }
+  }
+
+  &--victims {
+    margin-bottom: 45px;
+
+    .govuk-heading-xl {
+      margin-top: 5px;
+    }
+  }
+}
+
+[data-oa-victim-details] > .san-content-header__row {
+  margin-bottom: govuk-spacing(3);
+}
+
+.san-sexual-kicker {
+  margin-top: 0;
+  color: #0b0c0c;
+  font-size: 24px;
+  line-height: 1.25;
+  font-weight: 400;
+}
+
+// Narrower than the shared one-third column so longer section names wrap
+// like the strengths and needs reference. The content column takes the rest.
+// MoJ side navigation adds 20px above the first item; match that on the
+// content column so the section caption lines up with the nav.
+.assessment-layout__content-row:has(.san-side-navigation) {
+  > .assessment-layout__nav-column {
+    @media (min-width: $desktop) {
+      flex: 0 0 230px;
+      width: 230px;
+      max-width: 230px;
+    }
+  }
+
+  > .govuk-grid-column-two-thirds-from-desktop {
+    @media (min-width: $desktop) {
+      flex: 1 1 0;
+      width: auto;
+      min-width: 0;
+      max-width: none;
+      padding-top: govuk-spacing(4);
+      container-type: inline-size;
+      container-name: san-content;
+    }
+  }
+
+  // Question content stops at the right edge of the "Give details" box:
+  // three-quarters of the content column. Measured against the tab underline,
+  // which stays full width, as does the summary.
+  form[data-san-page],
+  form[data-ee-page],
+  form[data-fi-page],
+  form[data-du-page]:not([data-du-page="before"]),
+  form[data-al-page],
+  form[data-hw-page],
+  form[data-tb-page],
+  form[data-pc-page],
+  form[data-oa-page],
+  [data-oa-victim-details] {
+    @media (min-width: $desktop) {
+      max-width: 75cqw;
+    }
+  }
+}
+
+.san-content-header__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.san-status-tag {
+  flex-shrink: 0;
+}
+
+.san-question {
+  margin-top: 45px;
+}
+
+.san-label-hint {
+  font-weight: 400;
+}
+
+// GOV.UK lists set body text colour, which overrides a parent hint.
+.govuk-hint .govuk-list {
+  color: inherit;
+}
+
+.govuk-checkboxes__divider {
+  margin-bottom: 10px;
+  margin-left: 0;
+  color: #0b0c0c;
+}
+
+.govuk-textarea:has(+ .san-character-count) {
+  margin-bottom: 5px;
+}
+
+.san-character-count {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.san-summary-list {
+  .govuk-summary-list__key {
+    width: 38%;
+    font-weight: 700;
+  }
+
+  .govuk-summary-list__actions {
+    width: 12%;
+    text-align: right;
+  }
+
+  .san-summary-list__secondary {
+    font-size: 17px;
+    line-height: 1.3;
+  }
+}
+
+.san-go-analysis--hidden,
+.san-is-hidden {
+  display: none !important;
+}
+
+.san-tabs {
+  .govuk-summary-list + .govuk-heading-l,
+  .govuk-summary-card + .govuk-heading-l,
+  .govuk-summary-list + .govuk-heading-m,
+  .govuk-summary-card + .govuk-heading-m {
+    margin-top: 40px;
+  }
+
+  .govuk-summary-card {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: $tablet) {
+  .san-offender-header__meta,
+  .san-offender-header__identity,
+  .san-content-header__row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

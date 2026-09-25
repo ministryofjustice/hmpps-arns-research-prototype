@@ -1,0 +1,359 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Accommodation" %}
+{% set sanHeading = "Accommodation" %}
+{% set backLinkHref = "accommodation.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san/content-header.html" %}
+
+<form id="san-accommodation-details-form" novalidate data-san-page="details">
+  <div class="govuk-form-group" data-san-question="no-accommodation" data-san-error-group="no-accommodation" hidden>
+    <fieldset class="govuk-fieldset" id="no-accommodation" aria-describedby="no-accommodation-hint no-accommodation-select-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Why does Alex have no accommodation?</h2>
+      </legend>
+      <div id="no-accommodation-hint" class="govuk-hint">Consider current and past homelessness issues.</div>
+      <div id="no-accommodation-select-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="no-accommodation-alcohol" name="no_accommodation_reasons" type="checkbox" value="alcohol">
+          <label class="govuk-label govuk-checkboxes__label" for="no-accommodation-alcohol">Alcohol related problems</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="no-accommodation-drugs" name="no_accommodation_reasons" type="checkbox" value="drugs">
+          <label class="govuk-label govuk-checkboxes__label" for="no-accommodation-drugs">Drug related problems</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="no-accommodation-financial" name="no_accommodation_reasons" type="checkbox" value="financial">
+          <label class="govuk-label govuk-checkboxes__label" for="no-accommodation-financial">Financial difficulties</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="no-accommodation-risk" name="no_accommodation_reasons" type="checkbox" value="risk-to-others">
+          <label class="govuk-label govuk-checkboxes__label" for="no-accommodation-risk">Left previous accommodation due to risk to others</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="no-accommodation-safety" name="no_accommodation_reasons" type="checkbox" value="own-safety">
+          <label class="govuk-label govuk-checkboxes__label" for="no-accommodation-safety">Left previous accommodation for their own safety</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="no-accommodation-released" name="no_accommodation_reasons" type="checkbox" value="released">
+          <label class="govuk-label govuk-checkboxes__label" for="no-accommodation-released">No accommodation when released from prison</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="no-accommodation-other" name="no_accommodation_reasons" type="checkbox" value="other" data-aria-controls="conditional-no-accommodation-other">
+          <label class="govuk-label govuk-checkboxes__label" for="no-accommodation-other">Other</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-no-accommodation-other">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="no-accommodation-other-details">Give details</label>
+            <textarea class="govuk-textarea" id="no-accommodation-other-details" name="no_accommodation_other_details" rows="4" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="no-accommodation-other-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" id="past-help" data-san-question="past-help" hidden>
+    <label class="govuk-label govuk-label--m" for="past-accommodation-help">What's helped Alex stay in accommodation in the past? <strong>(optional)</strong></label>
+    <textarea class="govuk-textarea" id="past-accommodation-help" name="past_accommodation_help" rows="5" maxlength="2000"></textarea>
+    <div class="govuk-hint san-character-count" data-san-character-count="past-accommodation-help">You have 2,000 characters remaining</div>
+  </div>
+
+  <div class="govuk-form-group" data-san-question="living-with" data-san-error-group="living-with" hidden>
+    <fieldset class="govuk-fieldset" id="living-with" aria-describedby="living-with-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Who is Alex living with?</h2>
+      </legend>
+      <div id="living-with-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="living-family" name="living_with" type="checkbox" value="family">
+          <label class="govuk-label govuk-checkboxes__label" for="living-family">Family</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="living-friends" name="living_with" type="checkbox" value="friends">
+          <label class="govuk-label govuk-checkboxes__label" for="living-friends">Friends</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="living-partner" name="living_with" type="checkbox" value="partner" data-aria-controls="conditional-living-partner">
+          <label class="govuk-label govuk-checkboxes__label" for="living-partner">Partner</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-living-partner">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="living-partner-details">Give details (optional)</label>
+            <div class="govuk-hint">Include name, age and gender.</div>
+            <textarea class="govuk-textarea" id="living-partner-details" name="living_partner_details" rows="4" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="living-partner-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="living-under-18" name="living_with" type="checkbox" value="under-18">
+          <label class="govuk-label govuk-checkboxes__label" for="living-under-18">Person under 18 years old</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="living-other" name="living_with" type="checkbox" value="other" data-aria-controls="conditional-living-other">
+          <label class="govuk-label govuk-checkboxes__label" for="living-other">Other</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-living-other">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="living-other-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="living-other-details" name="living_other_details" rows="4" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="living-other-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="living-unknown" name="living_with" type="checkbox" value="unknown">
+          <label class="govuk-label govuk-checkboxes__label" for="living-unknown">Unknown</label>
+        </div>
+        <div class="govuk-checkboxes__divider">or</div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="living-alone" name="living_with" type="checkbox" value="alone" data-behaviour="exclusive">
+          <label class="govuk-label govuk-checkboxes__label" for="living-alone">Alone</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-san-question="location" data-san-error-group="location" hidden>
+    <fieldset class="govuk-fieldset" id="location">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Is the location of Alex's accommodation suitable?</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="location-yes" name="location_suitable" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="location-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="location-no" name="location_suitable" type="radio" value="no" data-aria-controls="conditional-location-no">
+          <label class="govuk-label govuk-radios__label" for="location-no">No</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-location-no">
+          <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset" id="location-reasons">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Select all that apply (optional).</legend>
+              <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="location-associates" name="location_reasons" type="checkbox" value="associates">
+                  <label class="govuk-label govuk-checkboxes__label" for="location-associates">Close to criminal associates</label>
+                </div>
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="location-victimised" name="location_reasons" type="checkbox" value="victimised">
+                  <label class="govuk-label govuk-checkboxes__label" for="location-victimised">Close to someone who has victimised them</label>
+                </div>
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="location-victim" name="location_reasons" type="checkbox" value="victim">
+                  <label class="govuk-label govuk-checkboxes__label" for="location-victim">Close to victim or possible victims</label>
+                </div>
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="location-neighbours" name="location_reasons" type="checkbox" value="neighbours">
+                  <label class="govuk-label govuk-checkboxes__label" for="location-neighbours">Difficulty with neighbours</label>
+                </div>
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="location-safety" name="location_reasons" type="checkbox" value="safety">
+                  <label class="govuk-label govuk-checkboxes__label" for="location-safety">Safety of the area</label>
+                </div>
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="location-other" name="location_reasons" type="checkbox" value="other" data-aria-controls="conditional-location-other">
+                  <label class="govuk-label govuk-checkboxes__label" for="location-other">Other</label>
+                </div>
+                <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-location-other">
+                  <div class="govuk-form-group">
+                    <label class="govuk-label" for="location-other-details">Give details</label>
+                    <textarea class="govuk-textarea" id="location-other-details" name="location_other_details" rows="3" maxlength="2000"></textarea>
+                    <div class="govuk-hint san-character-count" data-san-character-count="location-other-details">You have 2,000 characters remaining</div>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-san-question="suitable" data-san-error-group="suitable" hidden>
+    <fieldset class="govuk-fieldset" id="suitable" aria-describedby="suitable-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Is Alex's accommodation suitable?</h2>
+      </legend>
+      <div id="suitable-hint" class="govuk-hint">This includes things like safety or having appropriate amenities.</div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="suitable-yes" name="accommodation_suitable" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="suitable-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="suitable-concerns" name="accommodation_suitable" type="radio" value="yes-concerns" data-aria-controls="conditional-suitable-concerns">
+          <label class="govuk-label govuk-radios__label" for="suitable-concerns">Yes, with concerns</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-suitable-concerns">
+          {% set prefix = "concerns" %}
+          {% set name = "suitability_reasons_concerns" %}
+          {% set detailsName = "concerns_other_details" %}
+          {% set fieldsetId = "suitability-concerns" %}
+          {% include "includes/san/concern-checkboxes.html" %}
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="suitable-no" name="accommodation_suitable" type="radio" value="no" data-aria-controls="conditional-suitable-no">
+          <label class="govuk-label govuk-radios__label" for="suitable-no">No</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-suitable-no">
+          {% set prefix = "unsuitable" %}
+          {% set name = "suitability_reasons_no" %}
+          {% set detailsName = "unsuitable_other_details" %}
+          {% set fieldsetId = "suitability-no" %}
+          {% include "includes/san/concern-checkboxes.html" %}
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-san-question="future" data-san-error-group="future" hidden>
+    <fieldset class="govuk-fieldset" id="future">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Does Alex have future accommodation planned?</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="future-yes" name="future_planned" type="radio" value="yes" data-aria-controls="conditional-future-yes">
+          <label class="govuk-label govuk-radios__label" for="future-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-future-yes">
+          <fieldset class="govuk-fieldset" id="future-type">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-visually-hidden">What future accommodation does Alex have planned?</legend>
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="future-awaiting-assessment" name="future_type" type="radio" value="awaiting-assessment" data-aria-controls="conditional-future-awaiting-assessment">
+                <label class="govuk-label govuk-radios__label" for="future-awaiting-assessment">Awaiting assessment</label>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-future-awaiting-assessment">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="future-awaiting-assessment-details">Give details</label>
+                  <textarea class="govuk-textarea" id="future-awaiting-assessment-details" name="future_awaiting_assessment_details" rows="4" maxlength="2000"></textarea>
+                  <div class="govuk-hint san-character-count" data-san-character-count="future-awaiting-assessment-details">You have 2,000 characters remaining</div>
+                </div>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="future-awaiting-placement" name="future_type" type="radio" value="awaiting-placement" data-aria-controls="conditional-future-awaiting-placement">
+                <label class="govuk-label govuk-radios__label" for="future-awaiting-placement">Awaiting placement</label>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-future-awaiting-placement">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="future-awaiting-placement-details">Give details</label>
+                  <textarea class="govuk-textarea" id="future-awaiting-placement-details" name="future_awaiting_placement_details" rows="4" maxlength="2000"></textarea>
+                  <div class="govuk-hint san-character-count" data-san-character-count="future-awaiting-placement-details">You have 2,000 characters remaining</div>
+                </div>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="future-buy" name="future_type" type="radio" value="buy">
+                <label class="govuk-label govuk-radios__label" for="future-buy">Buy a house</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="future-friends-family" name="future_type" type="radio" value="friends-family">
+                <label class="govuk-label govuk-radios__label" for="future-friends-family">Living with friends or family</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="future-rent-privately" name="future_type" type="radio" value="rent-privately">
+                <label class="govuk-label govuk-radios__label" for="future-rent-privately">Rent privately</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="future-rent-social" name="future_type" type="radio" value="rent-social">
+                <label class="govuk-label govuk-radios__label" for="future-rent-social">Rent from social, local authority or other</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="future-healthcare" name="future_type" type="radio" value="healthcare">
+                <label class="govuk-label govuk-radios__label" for="future-healthcare">Residential healthcare</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="future-supported" name="future_type" type="radio" value="supported">
+                <label class="govuk-label govuk-radios__label" for="future-supported">Supported accommodation</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="future-other" name="future_type" type="radio" value="other" data-aria-controls="conditional-future-other">
+                <label class="govuk-label govuk-radios__label" for="future-other">Other</label>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-future-other">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="future-other-details">Give details</label>
+                  <div class="govuk-hint">Include where and who with.</div>
+                  <textarea class="govuk-textarea" id="future-other-details" name="future_other_details" rows="4" maxlength="2000"></textarea>
+                  <div class="govuk-hint san-character-count" data-san-character-count="future-other-details">You have 2,000 characters remaining</div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="future-no" name="future_planned" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="future-no">No</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="future-unknown" name="future_planned" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="future-unknown">Unknown</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-san-question="changes" data-san-error-group="changes" hidden>
+    <fieldset class="govuk-fieldset" id="changes" aria-describedby="changes-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Does Alex want to make changes to their accommodation?</h2>
+      </legend>
+      <div id="changes-hint" class="govuk-hint">Alex must answer this question.</div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {% set changeOptions = [
+          { id: "maintain", label: "I have already made positive changes and want to maintain them" },
+          { id: "active", label: "I am actively making changes" },
+          { id: "know-how", label: "I want to make changes and know how to" },
+          { id: "need-help", label: "I want to make changes but need help" },
+          { id: "thinking", label: "I am thinking about making changes" },
+          { id: "no", label: "I do not want to make changes" },
+          { id: "no-answer", label: "I do not want to answer" }
+        ] %}
+        {% for option in changeOptions %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="changes-{{ option.id }}" name="changes" type="radio" value="{{ option.id }}" data-aria-controls="conditional-changes-{{ option.id }}">
+          <label class="govuk-label govuk-radios__label" for="changes-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-changes-{{ option.id }}">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="changes-{{ option.id }}-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="changes-{{ option.id }}-details" name="changes_{{ option.id | replace('-', '_') }}_details" rows="4" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="changes-{{ option.id }}-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        {% endfor %}
+        <div class="govuk-radios__divider">or</div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="changes-not-present" name="changes" type="radio" value="not-present" data-aria-controls="conditional-changes-not-present">
+          <label class="govuk-label govuk-radios__label" for="changes-not-present">Alex is not present</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-changes-not-present">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="changes-not-present-details">Give details</label>
+            <textarea class="govuk-textarea" id="changes-not-present-details" name="changes_not_present_details" rows="4" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="changes-not-present-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="changes-not-applicable" name="changes" type="radio" value="not-applicable">
+          <label class="govuk-label govuk-radios__label" for="changes-not-applicable">Not applicable</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

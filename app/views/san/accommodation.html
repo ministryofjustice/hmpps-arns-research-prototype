@@ -1,0 +1,168 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Accommodation" %}
+{% set sanCaption = "Accommodation" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san/content-header.html" %}
+
+<form id="san-accommodation-type-form" novalidate data-san-page="type">
+  <div class="govuk-form-group" data-san-error-group="accommodation-type">
+    <fieldset class="govuk-fieldset" id="accommodation-type">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">What type of accommodation does Alex currently have?</h1>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="accommodation-settled" name="accommodation_type" type="radio" value="settled" data-aria-controls="conditional-settled">
+          <label class="govuk-label govuk-radios__label" for="accommodation-settled">Settled</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-settled">
+          <fieldset class="govuk-fieldset" id="settled-type">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-visually-hidden">Select the type of settled accommodation</legend>
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="settled-homeowner" name="settled_type" type="radio" value="homeowner">
+                <label class="govuk-label govuk-radios__label" for="settled-homeowner">Homeowner</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="settled-friends-family" name="settled_type" type="radio" value="friends-family">
+                <label class="govuk-label govuk-radios__label" for="settled-friends-family">Living with friends or family</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="settled-renting-privately" name="settled_type" type="radio" value="renting-privately">
+                <label class="govuk-label govuk-radios__label" for="settled-renting-privately">Renting privately</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="settled-renting-social" name="settled_type" type="radio" value="renting-social">
+                <label class="govuk-label govuk-radios__label" for="settled-renting-social">Renting from social, local authority or other</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="settled-healthcare" name="settled_type" type="radio" value="healthcare">
+                <label class="govuk-label govuk-radios__label" for="settled-healthcare">Residential healthcare</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="settled-supported" name="settled_type" type="radio" value="supported">
+                <label class="govuk-label govuk-radios__label" for="settled-supported">Supported accommodation</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="settled-unknown" name="settled_type" type="radio" value="unknown">
+                <label class="govuk-label govuk-radios__label" for="settled-unknown">Unknown</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="accommodation-temporary" name="accommodation_type" type="radio" value="temporary" data-aria-controls="conditional-temporary">
+          <label class="govuk-label govuk-radios__label" for="accommodation-temporary">Temporary</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-temporary">
+          <fieldset class="govuk-fieldset" id="temporary-type">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-visually-hidden">Select the type of temporary accommodation</legend>
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="temporary-approved-premises" name="temporary_type" type="radio" value="approved-premises" data-aria-controls="conditional-temporary-approved-premises">
+                <label class="govuk-label govuk-radios__label" for="temporary-approved-premises">Approved premises</label>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-temporary-approved-premises">
+                {% set endDateId = "temporary-approved-premises-end-date" %}
+                {% include "includes/san/expected-end-date.html" %}
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="temporary-cas2" name="temporary_type" type="radio" value="cas2" data-aria-controls="conditional-temporary-cas2">
+                <label class="govuk-label govuk-radios__label" for="temporary-cas2">Community Accommodation Service Tier 2 (CAS2)</label>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-temporary-cas2">
+                {% set endDateId = "temporary-cas2-end-date" %}
+                {% include "includes/san/expected-end-date.html" %}
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="temporary-cas3" name="temporary_type" type="radio" value="cas3" data-aria-controls="conditional-temporary-cas3">
+                <label class="govuk-label govuk-radios__label" for="temporary-cas3">Community Accommodation Service Tier 3 (CAS3)</label>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-temporary-cas3">
+                {% set endDateId = "temporary-cas3-end-date" %}
+                {% include "includes/san/expected-end-date.html" %}
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="temporary-immigration" name="temporary_type" type="radio" value="immigration" aria-describedby="temporary-immigration-hint" data-aria-controls="conditional-temporary-immigration">
+                <label class="govuk-label govuk-radios__label" for="temporary-immigration">Immigration accommodation</label>
+                <div id="temporary-immigration-hint" class="govuk-hint govuk-radios__hint">
+                  <p class="govuk-hint govuk-!-margin-bottom-1">This includes:</p>
+                  <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+                    <li>Schedule 10 - Home Office provides accommodation under the Immigration Act 2016</li>
+                    <li>Section 4 - Home Office provides accommodation for those on immigration bail, prior to the Immigration Act 2016</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-temporary-immigration">
+                {% set endDateId = "temporary-immigration-end-date" %}
+                {% include "includes/san/expected-end-date.html" %}
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="temporary-short-term" name="temporary_type" type="radio" value="short-term" aria-describedby="temporary-short-term-hint" data-aria-controls="conditional-temporary-short-term">
+                <label class="govuk-label govuk-radios__label" for="temporary-short-term">Short term accommodation</label>
+                <div id="temporary-short-term-hint" class="govuk-hint govuk-radios__hint">Includes living with friends or family</div>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-temporary-short-term">
+                {% set endDateId = "temporary-short-term-end-date" %}
+                {% include "includes/san/expected-end-date.html" %}
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="temporary-unknown" name="temporary_type" type="radio" value="unknown">
+                <label class="govuk-label govuk-radios__label" for="temporary-unknown">Unknown</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="accommodation-none" name="accommodation_type" type="radio" value="none" data-aria-controls="conditional-none">
+          <label class="govuk-label govuk-radios__label" for="accommodation-none">No accommodation</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-none">
+          <fieldset class="govuk-fieldset" id="none-type">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-visually-hidden">Select the type of accommodation</legend>
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="none-campsite" name="none_type" type="radio" value="campsite">
+                <label class="govuk-label govuk-radios__label" for="none-campsite">Campsite</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="none-emergency-hostel" name="none_type" type="radio" value="emergency-hostel">
+                <label class="govuk-label govuk-radios__label" for="none-emergency-hostel">Emergency hostel</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="none-homeless" name="none_type" type="radio" value="homeless">
+                <label class="govuk-label govuk-radios__label" for="none-homeless">Homeless <span class="san-label-hint">- includes squatting</span></label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="none-rough-sleeping" name="none_type" type="radio" value="rough-sleeping">
+                <label class="govuk-label govuk-radios__label" for="none-rough-sleeping">Rough sleeping</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="none-shelter" name="none_type" type="radio" value="shelter">
+                <label class="govuk-label govuk-radios__label" for="none-shelter">Shelter</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="none-unknown" name="none_type" type="radio" value="unknown">
+                <label class="govuk-label govuk-radios__label" for="none-unknown">Unknown</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}
