@@ -1,0 +1,150 @@
+{% extends "layouts/drug-use.html" %}
+
+{% block pageTitle %}Drug use background{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    background: #b7d9c9;
+  }
+
+  .gds-flow-layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px 0 60px;
+  }
+
+  .gds-flow-card {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    min-height: 760px;
+    box-shadow: none;
+  }
+
+  .gds-flow-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 8px;
+  }
+
+  .gds-flow-card .govuk-heading-xl {
+    letter-spacing: -0.04em;
+    margin: 0;
+  }
+
+  .gds-flow-card .govuk-tag {
+    background: rgba(11,12,12,0.08);
+    color: #0b0c0c;
+    border: 1px solid rgba(11,12,12,0.15);
+    border-radius: 0;
+    font-size: 1rem;
+    padding: 8px 16px;
+  }
+
+  .gds-flow-card .govuk-label,
+  .gds-flow-card .govuk-body,
+  .gds-flow-card .govuk-radios__label {
+    color: #0b0c0c;
+  }
+
+  .gds-flow-card .govuk-label {
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .gds-flow-card .govuk-checkboxes__label,
+  .gds-flow-card .govuk-radios__label {
+    font-weight: 400;
+  }
+
+  .gds-flow-card .govuk-textarea {
+    min-height: 150px;
+  }
+
+  .gds-flow-card .govuk-inset-text {
+    margin: 24px 0 48px;
+    font-size: 1.5rem;
+    line-height: 1.35;
+  }
+
+  .gds-flow-card .injected-drugs-or {
+    margin: 0 0 16px 20px;
+  }
+
+</style>
+
+<div class="gds-flow-layout">
+  <div class="gds-flow-card">
+    <div class="gds-flow-header">
+      <h1 class="govuk-heading-xl">Drug use background</h1>
+      <span class="govuk-tag">Incomplete</span>
+    </div>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-6 govuk-!-margin-bottom-2">Used in the last 6 months</h2>
+
+    <a class="govuk-link" href="#frequency-help">How to record frequency</a>
+
+    <div data-drug-use-used></div>
+
+    <div class="govuk-!-margin-top-9">
+      <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Not used in the last 6 months</h2>
+      <div class="govuk-inset-text" data-drug-use-not-used></div>
+
+      <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Give details about Tito's use of these drugs</h2>
+      <p class="govuk-body-l govuk-!-margin-bottom-4">For example, how often they used these drugs, when they stopped using, and if their use was an issue.</p>
+
+      <textarea class="govuk-textarea" id="not-used-details" name="not-used-details" rows="6"></textarea>
+      <span class="govuk-hint">You have 2,000 characters remaining</span>
+    </div>
+
+    <div class="govuk-form-group govuk-!-margin-top-6">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Is Tito receiving treatment for their drug use?</legend>
+        <div class="govuk-radios" data-module="govuk-radios">
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="treatment-yes" name="drug-treatment" type="radio" value="yes" data-aria-controls="conditional-treatment-details">
+            <label class="govuk-label govuk-radios__label" for="treatment-yes">Yes</label>
+          </div>
+          <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-treatment-details">
+            <label class="govuk-label" for="treatment-details">Give details</label>
+            <textarea class="govuk-textarea" id="treatment-details" name="treatment-details" rows="6"></textarea>
+            <span class="govuk-hint">You have 2,000 characters remaining</span>
+          </div>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="treatment-no" name="drug-treatment" type="radio" value="no" data-aria-controls="conditional-treatment-no-details">
+            <label class="govuk-label govuk-radios__label" for="treatment-no">No</label>
+          </div>
+          <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-treatment-no-details">
+            <label class="govuk-label" for="treatment-no-details">Give details</label>
+            <textarea class="govuk-textarea" id="treatment-no-details" name="treatment-no-details" rows="6"></textarea>
+            <span class="govuk-hint">You have 2,000 characters remaining</span>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="govuk-!-margin-top-6">
+      <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Which drugs has Tito injected?</h2>
+      <p class="govuk-body govuk-!-margin-bottom-3">Select all that apply.</p>
+
+      <div class="govuk-form-group govuk-!-margin-bottom-6">
+        <fieldset class="govuk-fieldset">
+          <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+            <div class="govuk-checkboxes__item">
+              <input class="govuk-checkboxes__input" id="injected-none" name="injected-drugs" type="checkbox" value="none">
+              <label class="govuk-label govuk-checkboxes__label" for="injected-none">None</label>
+            </div>
+            <p class="govuk-body-l injected-drugs-or">or</p>
+            <div data-drug-use-injected></div>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+
+    <a class="govuk-button" href="/experiments/drug-use-injected-frequency">Continue</a>
+  </div>
+</div>
+{% endblock %}

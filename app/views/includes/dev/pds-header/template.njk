@@ -48,7 +48,7 @@
         </svg>
 
         <strong>HMPPS</strong>
-        <span class="probation-common-header__title__service-name">Assess and plan</span>
+        <span class="probation-common-header__title__service-name">{{ params.serviceName | default("Assess and plan") }}</span>
       </a>
 
       {% if params.environmentName !== 'PRODUCTION' %}
