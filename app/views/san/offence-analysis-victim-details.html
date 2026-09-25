@@ -1,0 +1,23 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Victims" %}
+{% set sanSection = "offence" %}
+{% set backLinkHref = "offence-analysis.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div class="san-content-header san-content-header--victims">
+  <div class="san-content-header__row">
+    <p class="govuk-caption-l govuk-!-margin-bottom-0">Offence analysis<span class="govuk-visually-hidden">, <span data-san-status-text>Incomplete</span></span></p>
+    <strong class="govuk-tag govuk-tag--light-grey san-status-tag" data-san-status>Incomplete</strong>
+  </div>
+  <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">Victims</h1>
+</div>
+
+<div data-oa-victim-details></div>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

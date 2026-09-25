@@ -1,0 +1,81 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Factors that reduce risk" %}
+{% set predictorsSectionCaption = "ROSH full analysis" %}
+{% set pageHeading = "What factors are likely to reduce the risk?" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set roshNavSection = "full-analysis" %}
+{% set hideSideNav = false %}
+{% set sideNavigationInclude = "includes/03/rosh-side-navigation.html" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "rosh-full-increase.html" %}
+{% set pageErrorSummaryInclude = "includes/03/rosh-error-summary.html" %}
+{% set stickySideNav = true %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<p class="govuk-hint govuk-!-margin-bottom-6">Describe the factors, actions or events that may reduce or contain the risk. Include what has previously stopped {{ offenderFirstName }}. Only groups you selected as being at risk are shown.</p>
+
+<form id="rosh-full-reduce-form" novalidate data-offender-first-name="{{ offenderFirstName }}">
+  <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-full-group="children" data-rosh-error-group="rosh-full-reduce-children" hidden>
+    {% set fieldId = "rosh-full-reduce-children" %}
+    {% set fieldName = "rosh_full_reduce_children" %}
+    {% set fieldLabel = "Factors likely to reduce the risk to children" %}
+    {% set fieldLabelClass = "govuk-label--m" %}
+    {% set fieldHint = "" %}
+    {% set fieldRows = 8 %}
+    {% include "includes/03/rosh-full-textarea.html" %}
+  </div>
+
+  <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-full-group="public" data-rosh-error-group="rosh-full-reduce-public" hidden>
+    {% set fieldId = "rosh-full-reduce-public" %}
+    {% set fieldName = "rosh_full_reduce_public" %}
+    {% set fieldLabel = "Factors likely to reduce the risk to the public" %}
+    {% set fieldLabelClass = "govuk-label--m" %}
+    {% set fieldHint = "" %}
+    {% set fieldRows = 8 %}
+    {% include "includes/03/rosh-full-textarea.html" %}
+  </div>
+
+  <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-full-group="known-adult" data-rosh-error-group="rosh-full-reduce-known-adult" hidden>
+    {% set fieldId = "rosh-full-reduce-known-adult" %}
+    {% set fieldName = "rosh_full_reduce_known-adult" %}
+    {% set fieldLabel = "Factors likely to reduce the risk to a known adult" %}
+    {% set fieldLabelClass = "govuk-label--m" %}
+    {% set fieldHint = "" %}
+    {% set fieldRows = 8 %}
+    {% include "includes/03/rosh-full-textarea.html" %}
+  </div>
+
+  <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-full-group="staff" data-rosh-error-group="rosh-full-reduce-staff" hidden>
+    {% set fieldId = "rosh-full-reduce-staff" %}
+    {% set fieldName = "rosh_full_reduce_staff" %}
+    {% set fieldLabel = "Factors likely to reduce the risk to staff" %}
+    {% set fieldLabelClass = "govuk-label--m" %}
+    {% set fieldHint = "" %}
+    {% set fieldRows = 8 %}
+    {% include "includes/03/rosh-full-textarea.html" %}
+  </div>
+
+  <div class="govuk-form-group" data-rosh-full-group="prisoners" data-rosh-error-group="rosh-full-reduce-prisoners" hidden>
+    {% set fieldId = "rosh-full-reduce-prisoners" %}
+    {% set fieldName = "rosh_full_reduce_prisoners" %}
+    {% set fieldLabel = "Factors likely to reduce the risk to prisoners" %}
+    {% set fieldLabelClass = "govuk-label--m" %}
+    {% set fieldHint = "" %}
+    {% set fieldRows = 8 %}
+    {% include "includes/03/rosh-full-textarea.html" %}
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

@@ -1,0 +1,198 @@
+{% extends "layouts/assessment.html" %}
+
+{% from "govuk/components/accordion/macro.njk" import govukAccordion %}
+
+{% set showArnsServiceNavigation = true %}
+{% set arnsServiceNavCurrent = "predictors" %}
+{% set hideServiceHeader = true %}
+
+{% block pageTitle %}Actuarials team - Reoffending predictors{% endblock %}
+
+{% block content %}
+
+{% include "includes/assessment-home-page-open.html" %}
+
+<a class="govuk-back-link" href="/">Back</a>
+
+<div class="assessment-home-header assessment-home-header--with-back-link">
+  <span class="govuk-caption-xl">Squad 3</span>
+  <h1 class="govuk-heading-xl assessment-home-title">Reoffending predictors</h1>
+  <p class="govuk-hint assessment-home-hint">Research, reference and development prototypes.</p>
+</div>
+
+<div class="govuk-tabs assessment-home-tabs" data-module="govuk-tabs">
+  <h2 class="govuk-tabs__title">Contents</h2>
+  <ul class="govuk-tabs__list">
+    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+      <a class="govuk-tabs__tab" href="#research-prototypes">Research</a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="#reference-prototypes">Reference</a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="#dev-prototypes">Dev</a>
+    </li>
+  </ul>
+
+  <div class="govuk-tabs__panel" id="research-prototypes">
+
+{% set prototype2AccordionContent %}
+<ul class="govuk-list assessment-research-prototypes assessment-research-prototypes--in-accordion">
+  {% set href = "/02/a2b.html" %}
+  {% set itemHeading = null %}
+  {% set nestedHeading = true %}
+  {% set title = "Static assessment" %}
+  {% set prototypeVersion = "02" %}
+  {% set secondaryHref = "/02/a6.html" %}
+  {% set secondaryTitle = "Dynamic assessment" %}
+  {% set secondaryClearSessionOnStart = true %}
+  {% set secondaryPrototypeVersion = "02" %}
+  {% set titleTagText = null %}
+  {% set secondaryTitleTagText = null %}
+  {% set secondaryTitleTagColour = null %}
+  {% set hint = null %}
+  {% set clearSessionOnStart = true %}
+  {% set skipToEndHref = null %}
+  {% include "includes/research-prototype-entry.html" %}
+</ul>
+{% endset %}
+
+{% set prototype1AccordionContent %}
+<ul class="govuk-list assessment-research-prototypes assessment-research-prototypes--in-accordion">
+  {# When SESSION_TELEMETRY_UI_ENABLED is true in tiering-session-telemetry.js, use /01/agree.html #}
+  {% set skipToEndHref = null %}
+  {% set secondaryHref = null %}
+  {% set secondaryTitle = null %}
+  {% set secondaryClearSessionOnStart = null %}
+  {% set secondaryPrototypeVersion = null %}
+  {% set href = "/01/a1.html" %}
+  {% set itemHeading = null %}
+  {% set nestedHeading = true %}
+  {% set title = "Static assessment" %}
+  {% set titleTagText = null %}
+  {% set titleTagColour = null %}
+  {% set secondaryTitleTagText = null %}
+  {% set secondaryTitleTagColour = null %}
+  {% set hint = null %}
+  {% set skipToEndHref = "/01/skip-to-end.html" %}
+  {% set clearSessionOnStart = true %}
+  {% set prototypeVersion = "01" %}
+  {% include "includes/research-prototype-entry.html" %}
+</ul>
+{% endset %}
+
+{% set prototype2HeadingHtml -%}
+Prototype 2<span class="assessment-research-prototypes__title-tags assessment-research-prototypes__accordion-heading-tags"><strong class="govuk-tag govuk-tag--green assessment-research-prototypes__title-tag-secondary">Tested in R3</strong><strong class="govuk-tag assessment-research-prototypes__title-tag">Jun-Aug 2026</strong></span>
+{%- endset %}
+{% set prototype1HeadingHtml -%}
+Prototype 1<span class="assessment-research-prototypes__title-tags assessment-research-prototypes__accordion-heading-tags"><strong class="govuk-tag govuk-tag--green assessment-research-prototypes__title-tag-secondary">Tested in R2</strong><strong class="govuk-tag govuk-tag--blue">May-Jun 2026</strong></span>
+{%- endset %}
+
+{{ govukAccordion({
+  id: "research-prototypes-accordion",
+  classes: "assessment-research-prototypes-accordion",
+  items: [
+    {
+      heading: {
+        html: prototype2HeadingHtml
+      },
+      summary: {
+        text: "Submitting reoffending assessments (static & dynamic)"
+      },
+      content: {
+        html: prototype2AccordionContent
+      }
+    },
+    {
+      heading: {
+        html: prototype1HeadingHtml
+      },
+      summary: {
+        text: "Submitting a Tiering assessment (static)"
+      },
+      content: {
+        html: prototype1AccordionContent
+      }
+    }
+  ]
+}) }}
+{% set nestedHeading = null %}
+  </div>
+
+  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="reference-prototypes">
+
+<ul class="govuk-list assessment-research-prototypes">
+  {% set skipToEndHref = null %}
+  {% set href = "/03/rosh-risk-to-others.html" %}
+  {% set itemHeading = "Risk of serious harm (ROSH)" %}
+  {% set title = "ROSH screening" %}
+  {% set prototypeVersion = "03" %}
+  {% set secondaryHref = "/03/rosh-full-start.html" %}
+  {% set secondaryTitle = "ROSH full analysis" %}
+  {% set secondaryInactive = true %}
+  {% set secondaryClearSessionOnStart = true %}
+  {% set secondaryPrototypeVersion = "03" %}
+  {% set titleTagText = null %}
+  {% set titleTagColour = null %}
+  {% set secondaryTitleTagText = null %}
+  {% set secondaryTitleTagColour = null %}
+  {% set hint = null %}
+  {% set hintHtml = 'This prototype is based on <a class="govuk-link" href="https://www.figma.com/design/DwWR9PLfLLmPyNqTfuUbwe/Full-risk-journey?node-id=1-30&amp;p=f&amp;t=yJM4jBGB4fcvtCwh-0" rel="noopener noreferrer" target="_blank">Figma designs</a>. It has not been user tested.' %}
+  {% set clearSessionOnStart = true %}
+  {% include "includes/research-prototype-entry.html" %}
+  {% set hintHtml = null %}
+  {% set secondaryInactive = null %}
+</ul>
+  </div>
+
+  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="dev-prototypes">
+
+<ul class="govuk-list assessment-research-prototypes">
+  {% set href = "/dev/a2b.html" %}
+  {% set itemHeading = "Dev reference" %}
+  {% set title = "Static assessment" %}
+  {% set prototypeVersion = "dev" %}
+  {% set secondaryHref = "/dev/a6.html" %}
+  {% set secondaryTitle = "Dynamic assessment" %}
+  {% set secondaryClearSessionOnStart = true %}
+  {% set secondaryPrototypeVersion = "dev" %}
+  {% set secondaryInactive = null %}
+  {% set titleTagText = "Sept 2026" %}
+  {% set titleTagColour = "blue" %}
+  {% set secondaryTitleTagText = null %}
+  {% set secondaryTitleTagColour = null %}
+  {% set hint = "Reference prototype for development" %}
+  {% set titleHint = "(design frozen on 23 July 2026)" %}
+  {% set secondaryTitleHint = "(design frozen on 12 August 2026)" %}
+  {% set skipToEndHref = null %}
+  {% set clearSessionOnStart = true %}
+  {% include "includes/research-prototype-entry.html" %}
+
+  {% set href = "/dev/ux-handover.html" %}
+  {% set itemHeading = "Documentation" %}
+  {% set title = "UX documentation" %}
+  {% set titleRegularWeight = true %}
+  {% set prototypeVersion = null %}
+  {% set secondaryHref = null %}
+  {% set secondaryTitle = null %}
+  {% set secondaryClearSessionOnStart = null %}
+  {% set secondaryPrototypeVersion = null %}
+  {% set secondaryInactive = null %}
+  {% set titleTagText = null %}
+  {% set titleTagColour = null %}
+  {% set secondaryTitleTagText = null %}
+  {% set secondaryTitleTagColour = null %}
+  {% set hint = null %}
+  {% set titleHint = null %}
+  {% set secondaryTitleHint = null %}
+  {% set skipToEndHref = null %}
+  {% set clearSessionOnStart = null %}
+  {% include "includes/research-prototype-entry.html" %}
+  {% set titleRegularWeight = null %}
+</ul>
+  </div>
+</div>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

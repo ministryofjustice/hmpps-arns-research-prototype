@@ -1,0 +1,29 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Offence analysis" %}
+{% set sanHeading = "Offence analysis" %}
+{% set sanSection = "offence" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san/content-header.html" %}
+
+<div class="govuk-tabs san-tabs" data-module="govuk-tabs">
+  <h2 class="govuk-tabs__title">Contents</h2>
+  <ul class="govuk-tabs__list">
+    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+      <a class="govuk-tabs__tab" href="#summary" id="tab-summary">Summary</a>
+    </li>
+  </ul>
+  <div class="govuk-tabs__panel" id="summary">
+    <div data-oa-summary></div>
+    <button type="button" class="govuk-button san-is-hidden" data-oa-mark-complete data-module="govuk-button" hidden>Mark as complete</button>
+  </div>
+</div>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

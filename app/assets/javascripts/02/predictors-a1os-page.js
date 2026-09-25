@@ -31,6 +31,8 @@ const getRestartSearchUrl = (returnUrl) => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
+  if (!window.location.pathname.includes('/02/')) return
+
   const form = document.getElementById('predictors-a1os-form')
   if (!form) return
 

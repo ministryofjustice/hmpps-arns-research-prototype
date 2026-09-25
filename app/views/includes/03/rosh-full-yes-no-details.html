@@ -1,0 +1,26 @@
+{# Requires: radioName, radioLegendId, detailsName, detailsId, detailsLabel. Optional: detailsHint #}
+<div class="govuk-radios" data-module="govuk-radios">
+  <div class="govuk-radios__item">
+    <input class="govuk-radios__input" id="{{ radioLegendId }}-yes" name="{{ radioName }}" type="radio" value="yes" data-aria-controls="conditional-{{ detailsId }}">
+    <label class="govuk-label govuk-radios__label" for="{{ radioLegendId }}-yes">Yes</label>
+  </div>
+  <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ detailsId }}">
+    <div class="govuk-form-group" data-rosh-error-group="{{ detailsId }}">
+      {% set fieldId = detailsId %}
+      {% set fieldName = detailsName %}
+      {% set fieldLabel = detailsLabel %}
+      {% set fieldHint = detailsHint | default('') %}
+      {% set fieldRows = 5 %}
+      {% set fieldLabelClass = '' %}
+      {% include "includes/03/rosh-full-textarea.html" %}
+    </div>
+  </div>
+  <div class="govuk-radios__item">
+    <input class="govuk-radios__input" id="{{ radioLegendId }}-no" name="{{ radioName }}" type="radio" value="no">
+    <label class="govuk-label govuk-radios__label" for="{{ radioLegendId }}-no">No</label>
+  </div>
+  <div class="govuk-radios__item">
+    <input class="govuk-radios__input" id="{{ radioLegendId }}-unknown" name="{{ radioName }}" type="radio" value="unknown">
+    <label class="govuk-label govuk-radios__label" for="{{ radioLegendId }}-unknown">Unknown</label>
+  </div>
+</div>

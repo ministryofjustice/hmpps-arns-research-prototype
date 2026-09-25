@@ -1,0 +1,15 @@
+{# Requires radioName, radioLegendId. Optional: radioHint #}
+<div class="govuk-radios" data-module="govuk-radios">
+  <div class="govuk-radios__item">
+    <input class="govuk-radios__input" id="{{ radioLegendId }}-yes" name="{{ radioName }}" type="radio" value="yes">
+    <label class="govuk-label govuk-radios__label" for="{{ radioLegendId }}-yes">Yes</label>
+  </div>
+  <div class="govuk-radios__item">
+    <input class="govuk-radios__input" id="{{ radioLegendId }}-no" name="{{ radioName }}" type="radio" value="no">
+    <label class="govuk-label govuk-radios__label" for="{{ radioLegendId }}-no">No</label>
+  </div>
+  <div class="govuk-radios__item">
+    <input class="govuk-radios__input" id="{{ radioLegendId }}-unknown" name="{{ radioName }}" type="radio" value="unknown">
+    <label class="govuk-label govuk-radios__label" for="{{ radioLegendId }}-unknown">Unknown</label>
+  </div>
+</div>

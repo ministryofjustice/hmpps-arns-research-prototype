@@ -1,0 +1,34 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "ROSH screening answers" %}
+{% set predictorsSectionCaption = "ROSH screening" %}
+{% set pageHeading = "Summary" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set roshNavSection = "screening" %}
+{% set hideSideNav = false %}
+{% set sideNavigationInclude = "includes/03/rosh-side-navigation.html" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "rosh-confirmation.html" %}
+{% set backLinkId = "rosh-answers-back" %}
+{% set beforeBackLinkInclude = "includes/03/rosh-removed-child-alert.html" %}
+{% set afterJourneyHeaderInclude = "includes/03/rosh-complete-alert.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<div id="rosh-answers-page" data-offender-first-name="{{ offenderFirstName }}">
+  <div data-rosh-answers-others></div>
+  <div data-rosh-answers-children></div>
+  <div data-rosh-answers-individual></div>
+  <div data-rosh-answers-other></div>
+  <div data-rosh-answers-confirmation></div>
+</div>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

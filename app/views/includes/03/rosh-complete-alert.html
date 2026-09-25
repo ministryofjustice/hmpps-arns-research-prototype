@@ -1,0 +1,13 @@
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
+
+{{ mojAlert({
+  variant: "information",
+  title: "ROSH screening is complete",
+  showTitleAsHeading: true,
+  dismissible: false,
+  html: '<span data-rosh-complete-body></span>',
+  attributes: {
+    "data-rosh-complete-alert": "",
+    hidden: "hidden"
+  }
+}) }}

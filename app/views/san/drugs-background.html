@@ -1,0 +1,190 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Drug use" %}
+{% set sanCaption = "Drug use" %}
+{% set sanSection = "drugs" %}
+{% set backLinkHref = "drugs-before.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san/content-header.html" %}
+
+<form id="san-drugs-background-form" novalidate data-du-page="background">
+  <h1 class="govuk-heading-l">Drug use background</h1>
+
+  <div class="govuk-form-group" data-san-error-group="treatment">
+    <fieldset class="govuk-fieldset" id="treatment" aria-describedby="treatment-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Is Alex receiving treatment for their drug use?</h2>
+      </legend>
+      <div id="treatment-hint" class="govuk-hint">Treatment includes medication (for example, methadone), rehab and talking therapy. Support could include programmes or groups they have attended (for example, Narcotics Anonymous).</div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="treatment-yes" name="receiving_treatment" type="radio" value="yes" data-aria-controls="conditional-treatment-yes">
+          <label class="govuk-label govuk-radios__label" for="treatment-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-treatment-yes">
+          <div class="govuk-form-group" data-san-error-group="treatment-yes-details">
+            <label class="govuk-label" for="treatment-yes-details">Give details</label>
+            <textarea class="govuk-textarea" id="treatment-yes-details" name="treatment_yes_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="treatment-yes-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="treatment-no" name="receiving_treatment" type="radio" value="no" data-aria-controls="conditional-treatment-no">
+          <label class="govuk-label govuk-radios__label" for="treatment-no">No</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-treatment-no">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="treatment-no-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="treatment-no-details" name="treatment_no_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="treatment-no-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="why">
+    <fieldset class="govuk-fieldset" id="why" aria-describedby="why-hint why-select-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Why does Alex use drugs?</h2>
+      </legend>
+      <div id="why-hint" class="govuk-hint">Consider why they started using, their history, and any triggers.</div>
+      <div id="why-select-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        {% set whyOptions = [
+          { id: "cultural", label: "Cultural or religious practice" },
+          { id: "curiosity", label: "Curiosity or experimentation" },
+          { id: "performance", label: "Enhance performance" },
+          { id: "escapism", label: "Escapism or avoidance" },
+          { id: "stress", label: "Manage stress or emotional issues" },
+          { id: "peer-pressure", label: "Peer pressure or social influence" },
+          { id: "recreation", label: "Recreation or pleasure" },
+          { id: "self-medication", label: "Self-medication" },
+          { id: "other", label: "Other" }
+        ] %}
+        {% for option in whyOptions %}
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="why-{{ option.id }}" name="why_drug_use" type="checkbox" value="{{ option.id }}">
+          <label class="govuk-label govuk-checkboxes__label" for="why-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        {% endfor %}
+      </div>
+    </fieldset>
+    <div class="govuk-form-group govuk-!-margin-top-4">
+      <label class="govuk-label" for="why-details">Give details (optional)</label>
+      <textarea class="govuk-textarea" id="why-details" name="why_details" rows="5" maxlength="2000"></textarea>
+      <div class="govuk-hint san-character-count" data-san-character-count="why-details">You have 2,000 characters remaining</div>
+    </div>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="affect">
+    <fieldset class="govuk-fieldset" id="affect" aria-describedby="affect-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">How has Alex's drug use affected their life?</h2>
+      </legend>
+      <div id="affect-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        {% set affectOptions = [
+          { id: "behaviour", label: "Behaviour", hint: "Includes unemployment, disruption on education or lack of productivity." },
+          { id: "community", label: "Community", hint: "Includes limited opportunities or judgement from others." },
+          { id: "finances", label: "Finances", hint: "Includes having no money." },
+          { id: "offending", label: "Links to offending", hint: "" },
+          { id: "health", label: "Physical or mental health", hint: "Includes overdose." },
+          { id: "relationships", label: "Relationships", hint: "Includes isolation or neglecting responsibilities, and exposure to peer groups with a negative influence." },
+          { id: "other", label: "Other", hint: "" }
+        ] %}
+        {% for option in affectOptions %}
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="affect-{{ option.id }}" name="drug_affect" type="checkbox" value="{{ option.id }}"{% if option.hint %} aria-describedby="affect-{{ option.id }}-hint"{% endif %}>
+          <label class="govuk-label govuk-checkboxes__label" for="affect-{{ option.id }}">{{ option.label }}</label>
+          {% if option.hint %}
+          <div id="affect-{{ option.id }}-hint" class="govuk-hint govuk-checkboxes__hint">{{ option.hint }}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </fieldset>
+    <div class="govuk-form-group govuk-!-margin-top-4">
+      <label class="govuk-label" for="affect-details">Give details (optional)</label>
+      <textarea class="govuk-textarea" id="affect-details" name="affect_details" rows="5" maxlength="2000"></textarea>
+      <div class="govuk-hint san-character-count" data-san-character-count="affect-details">You have 2,000 characters remaining</div>
+    </div>
+  </div>
+
+  <div class="govuk-form-group san-question">
+    <label class="govuk-label govuk-label--m" for="helped-reduce">Has anything helped Alex stop or reduce their drug use? (optional)</label>
+    <div class="govuk-hint">Note any treatment or lifestyle changes that have helped them.</div>
+    <textarea class="govuk-textarea" id="helped-reduce" name="helped_reduce" rows="5" maxlength="2000"></textarea>
+    <div class="govuk-hint san-character-count" data-san-character-count="helped-reduce">You have 2,000 characters remaining</div>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="changes">
+    <fieldset class="govuk-fieldset" id="changes" aria-describedby="changes-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Does Alex want to make changes to their drug use?</h2>
+      </legend>
+      <div id="changes-hint" class="govuk-hint">Alex must answer this question.</div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {% set changeOptions = [
+          { id: "maintain", label: "I have already made positive changes and want to maintain them", details: "optional" },
+          { id: "active", label: "I am actively making changes", details: "optional" },
+          { id: "know-how", label: "I want to make changes and know how to", details: "optional" },
+          { id: "need-help", label: "I want to make changes but need help", details: "optional" },
+          { id: "thinking", label: "I am thinking about making changes", details: "optional" },
+          { id: "no", label: "I do not want to make changes", details: "optional" }
+        ] %}
+        {% for option in changeOptions %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="changes-{{ option.id }}" name="drug_changes" type="radio" value="{{ option.id }}" data-aria-controls="conditional-changes-{{ option.id }}">
+          <label class="govuk-label govuk-radios__label" for="changes-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-changes-{{ option.id }}">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="changes-{{ option.id }}-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="changes-{{ option.id }}-details" name="changes_{{ option.id | replace('-', '_') }}_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="changes-{{ option.id }}-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        {% endfor %}
+        <div class="govuk-radios__divider">or</div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="changes-no-answer" name="drug_changes" type="radio" value="no-answer" data-aria-controls="conditional-changes-no-answer">
+          <label class="govuk-label govuk-radios__label" for="changes-no-answer">I do not want to answer</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-changes-no-answer">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="changes-no-answer-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="changes-no-answer-details" name="changes_no_answer_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="changes-no-answer-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="changes-not-present" name="drug_changes" type="radio" value="not-present" data-aria-controls="conditional-changes-not-present">
+          <label class="govuk-label govuk-radios__label" for="changes-not-present">Alex is not present</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-changes-not-present">
+          <div class="govuk-form-group" data-san-error-group="changes-not-present-details">
+            <label class="govuk-label" for="changes-not-present-details">Give details</label>
+            <textarea class="govuk-textarea" id="changes-not-present-details" name="changes_not_present_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="changes-not-present-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="changes-not-applicable" name="drug_changes" type="radio" value="not-applicable">
+          <label class="govuk-label govuk-radios__label" for="changes-not-applicable">Not applicable</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}
