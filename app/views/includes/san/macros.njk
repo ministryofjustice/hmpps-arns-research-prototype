@@ -1,0 +1,10 @@
+{% macro sanTextarea(id, name, label, maxlength, rows, hint) %}
+<div class="govuk-form-group san-details">
+  <label class="govuk-label" for="{{ id }}">{{ label }}</label>
+  {% if hint %}
+  <div class="govuk-hint">{{ hint }}</div>
+  {% endif %}
+  <textarea class="govuk-textarea" id="{{ id }}" name="{{ name }}" rows="{{ rows | default(5) }}" maxlength="{{ maxlength }}"></textarea>
+  <div class="govuk-hint san-character-count" data-san-character-count="{{ id }}">You have {{ maxlength }} characters remaining</div>
+</div>
+{% endmacro %}

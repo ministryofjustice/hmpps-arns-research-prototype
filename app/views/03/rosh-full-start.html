@@ -1,0 +1,52 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "ROSH full analysis" %}
+{% set predictorsSectionCaption = "ROSH full analysis" %}
+{% set pageHeading = "What is the ROSH full analysis?" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set roshNavSection = "full-analysis" %}
+{% set hideSideNav = false %}
+{% set sideNavigationInclude = "includes/03/rosh-side-navigation.html" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "/" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<div data-offender-first-name="{{ offenderFirstName }}">
+  <p class="govuk-body-l">
+    Use this analysis to record the risk of serious harm {{ offenderFirstName }} poses, who is at risk, and what could increase or reduce that risk.
+  </p>
+
+  <p class="govuk-body">
+    Complete a ROSH full analysis after the screening has indicated that one is needed, or when you have additional information that means a full analysis should be done.
+  </p>
+
+  <h3 class="govuk-heading-m">What you will record</h3>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>Who is at risk of serious harm and why</li>
+    <li>The nature of the risk</li>
+    <li>When the risk is likely to be greatest, including whether it is imminent</li>
+    <li>Circumstances that are likely to increase the risk</li>
+    <li>Factors that are likely to reduce the risk</li>
+    <li>The current risk of serious harm in the community and in custody</li>
+    <li>Risks to {{ offenderFirstName }}, including suicide, self-harm, coping in custody and vulnerability</li>
+    <li>Other risks, including escape or absconding, control issues and risk to other prisoners</li>
+  </ul>
+
+  <a href="rosh-full-who.html" role="button" draggable="false" class="govuk-button govuk-button--start govuk-!-margin-top-4" data-module="govuk-button">
+    Start now
+    <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+    </svg>
+  </a>
+</div>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

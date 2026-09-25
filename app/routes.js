@@ -114,7 +114,7 @@ const getFirstSanctionAgeLocals = (query = {}) => {
 
 router.use((req, res, next) => {
   res.locals.offenceBrowseCategories = offenceBrowseCategories
-  if (req.path.startsWith('/02') || req.path.startsWith('/dev')) {
+  if (req.path.startsWith('/02') || req.path.startsWith('/03') || req.path.startsWith('/dev')) {
     res.locals.predictorsSectionCaption = 'Reoffending predictors'
     res.locals.useReoffendingServiceNavigation = true
     res.locals.hideOffenderViewAnswers = true

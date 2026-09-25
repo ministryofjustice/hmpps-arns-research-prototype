@@ -1,0 +1,22 @@
+{# Caption + page heading + status in the content column. Optional nested subheading and hint. #}
+<div class="assessment-content-header{% if pageSubheading or pageSubheadingHtml %} assessment-content-header--with-subheading{% endif %}">
+  <div class="assessment-layout__row assessment-layout__row--tight assessment-content-header__title-row">
+    <h2 class="govuk-heading-l govuk-!-margin-bottom-0{% if pageHeadingClass %} {{ pageHeadingClass }}{% endif %}"{% if pageHeadingId %} id="{{ pageHeadingId }}"{% endif %}>
+      {% if predictorsSectionCaption !== false %}
+      <span class="govuk-caption-l assessment-service-header__section-caption">{{ predictorsSectionCaption | default("Reoffending predictors") }}</span>
+      {% endif %}
+      {% if pageHeadingHtml %}{{ pageHeadingHtml | safe }}{% else %}{{ pageHeading | default("Reoffending predictors assessment") }}{% endif %}{% if statusTag %}<span class="govuk-visually-hidden">, {{ statusTag }}</span>{% endif %}
+    </h2>
+    {% if statusTag %}
+    <strong class="govuk-tag {% if statusTag == 'Complete' %}govuk-tag--light-blue{% else %}govuk-tag--light-grey{% endif %} assessment-layout__status-tag assessment-layout__status-tag--visible" aria-hidden="true">{{ statusTag }}</strong>
+    {% endif %}
+  </div>
+  {% if pageSubheadingHtml or pageSubheading %}
+  <h3 class="govuk-heading-m govuk-!-margin-top-6{% if pageSubheadingHint %} govuk-!-margin-bottom-2{% endif %}">
+    {% if pageSubheadingHtml %}{{ pageSubheadingHtml | safe }}{% else %}{{ pageSubheading }}{% endif %}
+  </h3>
+  {% endif %}
+  {% if pageSubheadingHint %}
+  <p class="govuk-hint"{% if pageSubheadingHintId %} id="{{ pageSubheadingHintId }}"{% endif %}>{{ pageSubheadingHint }}</p>
+  {% endif %}
+</div>

@@ -1,0 +1,12 @@
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
+
+{{ mojAlert({
+  variant: "success",
+  title: "Child removed",
+  dismissible: false,
+  text: "You have removed a child from the list of identifiable children.",
+  attributes: {
+    "data-rosh-removed-child-alert": "",
+    hidden: "hidden"
+  }
+}) }}

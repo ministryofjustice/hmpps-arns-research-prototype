@@ -1,0 +1,189 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Alcohol use" %}
+{% set sanHeading = "Alcohol use" %}
+{% set sanSection = "alcohol" %}
+{% set backLinkHref = "alcohol.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san/content-header.html" %}
+
+<form id="san-alcohol-before-form" novalidate data-al-page="before">
+  <div data-al-recent-section hidden>
+    <div class="govuk-form-group" data-san-error-group="alcohol-frequency">
+      <fieldset class="govuk-fieldset" id="alcohol-frequency">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          <h2 class="govuk-fieldset__heading">How often has Alex drunk alcohol in the last 3 months?</h2>
+        </legend>
+        <div class="govuk-radios" data-module="govuk-radios">
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="alcohol-frequency-monthly" name="alcohol_frequency" type="radio" value="monthly">
+            <label class="govuk-label govuk-radios__label" for="alcohol-frequency-monthly">Once a month or less</label>
+          </div>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="alcohol-frequency-2to4monthly" name="alcohol_frequency" type="radio" value="2to4monthly">
+            <label class="govuk-label govuk-radios__label" for="alcohol-frequency-2to4monthly">2 to 4 times a month</label>
+          </div>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="alcohol-frequency-2to3weekly" name="alcohol_frequency" type="radio" value="2to3weekly">
+            <label class="govuk-label govuk-radios__label" for="alcohol-frequency-2to3weekly">2 to 3 times a week</label>
+          </div>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="alcohol-frequency-more4weekly" name="alcohol_frequency" type="radio" value="more4weekly">
+            <label class="govuk-label govuk-radios__label" for="alcohol-frequency-more4weekly">More than 4 times a week</label>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="govuk-form-group san-question" data-san-error-group="alcohol-units">
+      <fieldset class="govuk-fieldset" id="alcohol-units">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          <h2 class="govuk-fieldset__heading">How many units of alcohol does Alex have on a typical day of drinking?</h2>
+        </legend>
+        {% include "includes/san/alcohol-units-help.html" %}
+        <div class="govuk-radios" data-module="govuk-radios">
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="alcohol-units-1to2" name="alcohol_units" type="radio" value="1to2">
+            <label class="govuk-label govuk-radios__label" for="alcohol-units-1to2">1 to 2 units</label>
+          </div>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="alcohol-units-3to4" name="alcohol_units" type="radio" value="3to4">
+            <label class="govuk-label govuk-radios__label" for="alcohol-units-3to4">3 to 4 units</label>
+          </div>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="alcohol-units-5to6" name="alcohol_units" type="radio" value="5to6">
+            <label class="govuk-label govuk-radios__label" for="alcohol-units-5to6">5 to 6 units</label>
+          </div>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="alcohol-units-7to9" name="alcohol_units" type="radio" value="7to9">
+            <label class="govuk-label govuk-radios__label" for="alcohol-units-7to9">7 to 9 units</label>
+          </div>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="alcohol-units-10plus" name="alcohol_units" type="radio" value="10plus">
+            <label class="govuk-label govuk-radios__label" for="alcohol-units-10plus">10 or more units</label>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="govuk-form-group san-question" data-san-error-group="alcohol-binge">
+      <fieldset class="govuk-fieldset" id="alcohol-binge">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          <h2 class="govuk-fieldset__heading">Has Alex had 6 or more units within a single day of drinking in the last 3 months?</h2>
+        </legend>
+        <div class="govuk-radios" data-module="govuk-radios">
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="alcohol-binge-yes" name="alcohol_binge" type="radio" value="yes" data-aria-controls="conditional-alcohol-binge-yes">
+            <label class="govuk-label govuk-radios__label" for="alcohol-binge-yes">Yes</label>
+          </div>
+          <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-alcohol-binge-yes">
+            <div class="govuk-form-group" data-san-error-group="alcohol-binge-frequency">
+              <fieldset class="govuk-fieldset" id="alcohol-binge-frequency">
+                <legend class="govuk-fieldset__legend">Select how often</legend>
+                <div class="govuk-radios" data-module="govuk-radios">
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="alcohol-binge-frequency-less-month" name="alcohol_binge_frequency" type="radio" value="less-month">
+                    <label class="govuk-label govuk-radios__label" for="alcohol-binge-frequency-less-month">Less than once a month</label>
+                  </div>
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="alcohol-binge-frequency-monthly" name="alcohol_binge_frequency" type="radio" value="monthly">
+                    <label class="govuk-label govuk-radios__label" for="alcohol-binge-frequency-monthly">Monthly</label>
+                  </div>
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="alcohol-binge-frequency-weekly" name="alcohol_binge_frequency" type="radio" value="weekly">
+                    <label class="govuk-label govuk-radios__label" for="alcohol-binge-frequency-weekly">Weekly</label>
+                  </div>
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="alcohol-binge-frequency-daily" name="alcohol_binge_frequency" type="radio" value="daily">
+                    <label class="govuk-label govuk-radios__label" for="alcohol-binge-frequency-daily">Daily or almost daily</label>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="alcohol-binge-no" name="alcohol_binge" type="radio" value="no">
+            <label class="govuk-label govuk-radios__label" for="alcohol-binge-no">No</label>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
+  <div class="govuk-form-group" data-san-error-group="alcohol-evidence" data-al-evidence-group>
+    <fieldset class="govuk-fieldset" id="alcohol-evidence">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Has Alex shown evidence of binge drinking or excessive alcohol use in the last 6 months?</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-evidence-none" name="alcohol_evidence" type="radio" value="none">
+          <label class="govuk-label govuk-radios__label" for="alcohol-evidence-none">No evidence of binge drinking or excessive alcohol use</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-evidence-some" name="alcohol_evidence" type="radio" value="some" aria-describedby="alcohol-evidence-some-hint">
+          <label class="govuk-label govuk-radios__label" for="alcohol-evidence-some">Some evidence of binge drinking or excessive alcohol use</label>
+          <div id="alcohol-evidence-some-hint" class="govuk-hint govuk-radios__hint">There is a pattern of alcohol use but has not caused any serious problems.</div>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-evidence-detrimental" name="alcohol_evidence" type="radio" value="detrimental" aria-describedby="alcohol-evidence-detrimental-hint">
+          <label class="govuk-label govuk-radios__label" for="alcohol-evidence-detrimental">Evidence of binge drinking or excessive alcohol use</label>
+          <div id="alcohol-evidence-detrimental-hint" class="govuk-hint govuk-radios__hint">There is a detrimental effect on other areas of their life and is often directly related to offending.</div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="san-question" data-al-recent-follow-on hidden>
+    {% include "includes/san/alcohol-background-questions.html" %}
+  </div>
+
+  <div data-al-custody-section>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+  <h2 class="govuk-heading-l">Alcohol use in custody</h2>
+
+  <div class="govuk-form-group" data-san-error-group="alcohol-custody">
+    <fieldset class="govuk-fieldset" id="alcohol-custody">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Is there evidence Alex has been drinking alcohol in custody?</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-custody-yes" name="alcohol_custody" type="radio" value="yes" data-aria-controls="conditional-alcohol-custody-yes">
+          <label class="govuk-label govuk-radios__label" for="alcohol-custody-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-alcohol-custody-yes">
+          <div class="govuk-form-group" data-san-error-group="alcohol-custody-yes-details">
+            <label class="govuk-label" for="alcohol-custody-yes-details">Give details</label>
+            <textarea class="govuk-textarea" id="alcohol-custody-yes-details" name="alcohol_custody_yes_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="alcohol-custody-yes-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-custody-no" name="alcohol_custody" type="radio" value="no" data-aria-controls="conditional-alcohol-custody-no">
+          <label class="govuk-label govuk-radios__label" for="alcohol-custody-no">No</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-alcohol-custody-no">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="alcohol-custody-no-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="alcohol-custody-no-details" name="alcohol_custody_no_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="alcohol-custody-no-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

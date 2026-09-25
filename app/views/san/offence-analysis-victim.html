@@ -1,0 +1,153 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Offence analysis" %}
+{% set sanHeading = "Offence analysis" %}
+{% set sanSection = "offence" %}
+{% set backLinkHref = "offence-analysis.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san/content-header.html" %}
+
+<form id="san-offence-victim-form" novalidate data-oa-page="victim">
+  <div class="govuk-form-group" data-san-error-group="relationship">
+    <fieldset class="govuk-fieldset" id="victim-relationship">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Who is the victim?</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="relationship-stranger" name="victim_relationship" type="radio" value="stranger">
+          <label class="govuk-label govuk-radios__label" for="relationship-stranger">A stranger</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="relationship-staff" name="victim_relationship" type="radio" value="staff">
+          <label class="govuk-label govuk-radios__label" for="relationship-staff">Criminal justice staff</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="relationship-parent" name="victim_relationship" type="radio" value="parent">
+          <label class="govuk-label govuk-radios__label" for="relationship-parent">Alex's parent or step-parent</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="relationship-partner" name="victim_relationship" type="radio" value="partner">
+          <label class="govuk-label govuk-radios__label" for="relationship-partner">Alex's partner</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="relationship-ex-partner" name="victim_relationship" type="radio" value="ex-partner">
+          <label class="govuk-label govuk-radios__label" for="relationship-ex-partner">Alex's ex-partner</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="relationship-child" name="victim_relationship" type="radio" value="child">
+          <label class="govuk-label govuk-radios__label" for="relationship-child">Alex's child or step-child</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="relationship-family" name="victim_relationship" type="radio" value="family">
+          <label class="govuk-label govuk-radios__label" for="relationship-family">Other family member</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="relationship-other" name="victim_relationship" type="radio" value="other" data-aria-controls="conditional-relationship-other">
+          <label class="govuk-label govuk-radios__label" for="relationship-other">Other</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-relationship-other">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="relationship-other-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="relationship-other-details" name="relationship_other_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="relationship-other-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="age">
+    <fieldset class="govuk-fieldset" id="victim-age">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">What is the victim's approximate age?</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {% for option in [
+          { id: "0-4", label: "0 to 4 years" },
+          { id: "5-11", label: "5 to 11 years" },
+          { id: "12-15", label: "12 to 15 years" },
+          { id: "16-17", label: "16 to 17 years" },
+          { id: "18-20", label: "18 to 20 years" },
+          { id: "21-25", label: "21 to 25 years" },
+          { id: "26-49", label: "26 to 49 years" },
+          { id: "50-64", label: "50 to 64 years" },
+          { id: "65-over", label: "65 years and over" },
+          { id: "unknown", label: "Unknown" }
+        ] %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="victim-age-{{ option.id }}" name="victim_age" type="radio" value="{{ option.id }}">
+          <label class="govuk-label govuk-radios__label" for="victim-age-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        {% endfor %}
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="sex">
+    <fieldset class="govuk-fieldset" id="victim-sex" aria-describedby="victim-sex-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">What is the victim's sex?</h2>
+      </legend>
+      <div id="victim-sex-hint" class="govuk-hint">Childhood is the period up to and including 18 years old.</div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="victim-sex-male" name="victim_sex" type="radio" value="male">
+          <label class="govuk-label govuk-radios__label" for="victim-sex-male">Male</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="victim-sex-female" name="victim_sex" type="radio" value="female">
+          <label class="govuk-label govuk-radios__label" for="victim-sex-female">Female</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="victim-sex-intersex" name="victim_sex" type="radio" value="intersex">
+          <label class="govuk-label govuk-radios__label" for="victim-sex-intersex">Intersex</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="victim-sex-unknown" name="victim_sex" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="victim-sex-unknown">Unknown</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="ethnicity">
+    <h2 class="govuk-label-wrapper">
+      <label class="govuk-label govuk-label--m" for="victim-ethnicity">What is the victim's race or ethnicity?</label>
+    </h2>
+    <select class="govuk-select" id="victim-ethnicity" name="victim_ethnicity">
+      <option value="">Select the victim's ethnicity</option>
+      <option value="white-british">White – English, Welsh, Scottish, Northern Irish or British</option>
+      <option value="white-irish">White – Irish</option>
+      <option value="white-gypsy">White – Gypsy or Irish Traveller</option>
+      <option value="white-roma">White – Roma</option>
+      <option value="white-other">White – Any other White background</option>
+      <option value="mixed-caribbean">Mixed – White and Black Caribbean</option>
+      <option value="mixed-african">Mixed – White and Black African</option>
+      <option value="mixed-asian">Mixed – White and Asian</option>
+      <option value="mixed-other">Mixed – Any other mixed or multiple ethnic background</option>
+      <option value="asian-indian">Asian or Asian British – Indian</option>
+      <option value="asian-pakistani">Asian or Asian British – Pakistani</option>
+      <option value="asian-bangladeshi">Asian or Asian British – Bangladeshi</option>
+      <option value="asian-chinese">Asian or Asian British – Chinese</option>
+      <option value="asian-other">Asian or Asian British – Any other Asian background</option>
+      <option value="black-caribbean">Black or Black British – Caribbean</option>
+      <option value="black-african">Black or Black British – African</option>
+      <option value="black-other">Black or Black British – Any other Black background</option>
+      <option value="arab">Arab</option>
+      <option value="other">Any other ethnic group</option>
+      <option value="unknown">Unknown</option>
+    </select>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

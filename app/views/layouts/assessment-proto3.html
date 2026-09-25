@@ -1,0 +1,26 @@
+{#
+  Proto 3 assessment pages – Return to OASys in page headers
+#}
+
+{% extends "layouts/assessment.html" %}
+
+{% set showReturnToOasysButton = true %}
+{% set activeSection = activeSection if activeSection is defined else "rosh" %}
+{% set returnToOasysButtonInclude = returnToOasysButtonInclude | default("includes/03/return-to-oasys-button.html") %}
+{% set journeyServiceHeaderInclude = journeyServiceHeaderInclude | default("includes/03/assessment-service-header-journey.html") %}
+{% set offenderHeaderInclude = offenderHeaderInclude | default("includes/03/assessment-offender-header.html") %}
+{% set pdsFooterInclude = "includes/03/pds-footer.njk" %}
+{% set usePdsFooter = true %}
+{% set hidePageHeaderSeparator = true %}
+{# Keep caption + page heading in the service header (a1 layout), not as a fieldset legend #}
+{% set questionLegendAsHeading = false %}
+{# ROSH pages: section title “Risk”, then caption + page heading in the content column #}
+{% if roshNavSection is defined %}
+{% set pageSectionTitle = pageSectionTitle if pageSectionTitle is defined else "Risk" %}
+{% set contentColumnPageHeader = true %}
+{% endif %}
+{% set contentColumnClass = contentColumnClass if contentColumnClass is defined else "govuk-grid-column-two-thirds-from-desktop" %}
+{# Side nav can scroll with the page; set stickySideNav = true on long screens if needed #}
+{% set stickySideNav = stickySideNav if stickySideNav is defined else false %}
+
+{% block pageTitle %}{% include "includes/assessment-journey-page-title.html" %}{% endblock %}

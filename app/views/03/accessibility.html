@@ -1,0 +1,23 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set hideJourneyServiceHeader = true %}
+{% set hideOffenderHeader = true %}
+{% set hideServiceNavigation = true %}
+{% set showReturnToOasysButton = false %}
+{% set backLinkHref = "javascript:history.back()" %}
+{% set pageHeading = "Accessibility" %}
+{% set pageName = "Accessibility" %}
+
+{% block pageTitle %}Accessibility{% endblock %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+{% include "includes/policy-page-content.html" %}
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Alcohol use" %}
+{% set sanCaption = "Alcohol use" %}
+{% set sanSection = "alcohol" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san/content-header.html" %}
+
+<form id="san-alcohol-use-form" novalidate data-al-page="use">
+  <div class="govuk-form-group" data-san-error-group="alcohol-use">
+    <fieldset class="govuk-fieldset" id="alcohol-use">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">Has Alex ever drunk alcohol?</h1>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-use-yes-in-last-3-months" name="alcohol_use" type="radio" value="yes-in-last-3-months">
+          <label class="govuk-label govuk-radios__label" for="alcohol-use-yes-in-last-3-months">Yes, including the last 3 months</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-use-yes-not-in-last-3-months" name="alcohol_use" type="radio" value="yes-not-in-last-3-months">
+          <label class="govuk-label govuk-radios__label" for="alcohol-use-yes-not-in-last-3-months">Yes, but not in the last 3 months</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-use-no" name="alcohol_use" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="alcohol-use-no">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

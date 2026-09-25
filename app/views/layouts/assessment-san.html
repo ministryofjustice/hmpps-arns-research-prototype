@@ -1,0 +1,27 @@
+{#
+  Strengths and needs journey pages.
+  PDS header, beta banner, offender header and section side navigation.
+#}
+
+{% extends "layouts/assessment.html" %}
+
+{% set showReturnToOasysButton = true %}
+{% set hideSideNav = false %}
+{% set hideJourneyServiceHeader = true %}
+{% set contentColumnPageHeader = true %}
+{% set stickySideNav = false %}
+{% set predictorsSectionCaption = false %}
+{% set usePdsHeader = true %}
+{% set usePdsFooter = true %}
+{% set hideServiceNavigation = true %}
+{% set phaseBannerBelowHeader = true %}
+{% set pdsHeaderInclude = "includes/san/pds-header.njk" %}
+{% set pdsFooterInclude = "includes/san/footer.njk" %}
+{% set offenderHeaderInclude = "includes/san/offender-header.html" %}
+{% set sideNavigationInclude = "includes/san/side-navigation.html" %}
+
+{% block pageTitle %}{{ pageName | default("Strengths and needs") }} - Strengths and needs{% endblock %}
+
+{% block headerEnd %}
+  {% include "includes/san/phase-banner.html" %}
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Drug use" %}
+{% set sanCaption = "Drug use" %}
+{% set sanSection = "drugs" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san/content-header.html" %}
+
+<form id="san-drugs-use-form" novalidate data-du-page="use">
+  <div class="govuk-form-group" data-san-error-group="drug-use">
+    <fieldset class="govuk-fieldset" id="drug-use" aria-describedby="drug-use-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">Has Alex ever misused drugs?</h1>
+      </legend>
+      <div id="drug-use-hint" class="govuk-hint">This includes illegal and prescription drugs.</div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="drug-use-yes" name="drug_use" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="drug-use-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="drug-use-no" name="drug_use" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="drug-use-no">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

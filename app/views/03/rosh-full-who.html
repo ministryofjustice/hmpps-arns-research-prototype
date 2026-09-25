@@ -1,0 +1,39 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Who is at risk" %}
+{% set predictorsSectionCaption = "ROSH full analysis" %}
+{% set pageHeading = "Who is at risk?" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set roshNavSection = "full-analysis" %}
+{% set hideSideNav = false %}
+{% set sideNavigationInclude = "includes/03/rosh-side-navigation.html" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "rosh-full-start.html" %}
+{% set pageErrorSummaryInclude = "includes/03/rosh-error-summary.html" %}
+{% set stickySideNav = true %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="rosh-full-who-form" novalidate data-offender-first-name="{{ offenderFirstName }}">
+  <div class="govuk-form-group" data-rosh-error-group="rosh-full-groups">
+    <fieldset class="govuk-fieldset" aria-describedby="rosh-full-groups-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m" id="rosh-full-groups">
+        <h3 class="govuk-fieldset__heading">Who is at risk of serious harm from {{ offenderFirstName }}?</h3>
+      </legend>
+      <div id="rosh-full-groups-hint" class="govuk-hint">Select all that apply. For each group you select, give details of who is at risk and why.</div>
+      {% include "includes/03/rosh-full-who-groups.html" %}
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

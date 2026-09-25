@@ -1,0 +1,81 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Circumstances that increase risk" %}
+{% set predictorsSectionCaption = "ROSH full analysis" %}
+{% set pageHeading = "What circumstances are likely to increase the risk?" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set roshNavSection = "full-analysis" %}
+{% set hideSideNav = false %}
+{% set sideNavigationInclude = "includes/03/rosh-side-navigation.html" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "rosh-full-when.html" %}
+{% set pageErrorSummaryInclude = "includes/03/rosh-error-summary.html" %}
+{% set stickySideNav = true %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<p class="govuk-hint govuk-!-margin-bottom-6">Describe the factors, actions or events that might increase the level of risk, now and in the future. Only groups you selected as being at risk are shown.</p>
+
+<form id="rosh-full-increase-form" novalidate data-offender-first-name="{{ offenderFirstName }}">
+  <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-full-group="children" data-rosh-error-group="rosh-full-increase-children" hidden>
+    {% set fieldId = "rosh-full-increase-children" %}
+    {% set fieldName = "rosh_full_increase_children" %}
+    {% set fieldLabel = "Circumstances likely to increase the risk to children" %}
+    {% set fieldLabelClass = "govuk-label--m" %}
+    {% set fieldHint = "Include situations, behaviours or events that would increase the risk to identifiable children or children in general." %}
+    {% set fieldRows = 8 %}
+    {% include "includes/03/rosh-full-textarea.html" %}
+  </div>
+
+  <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-full-group="public" data-rosh-error-group="rosh-full-increase-public" hidden>
+    {% set fieldId = "rosh-full-increase-public" %}
+    {% set fieldName = "rosh_full_increase_public" %}
+    {% set fieldLabel = "Circumstances likely to increase the risk to the public" %}
+    {% set fieldLabelClass = "govuk-label--m" %}
+    {% set fieldHint = "" %}
+    {% set fieldRows = 8 %}
+    {% include "includes/03/rosh-full-textarea.html" %}
+  </div>
+
+  <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-full-group="known-adult" data-rosh-error-group="rosh-full-increase-known-adult" hidden>
+    {% set fieldId = "rosh-full-increase-known-adult" %}
+    {% set fieldName = "rosh_full_increase_known-adult" %}
+    {% set fieldLabel = "Circumstances likely to increase the risk to a known adult" %}
+    {% set fieldLabelClass = "govuk-label--m" %}
+    {% set fieldHint = "" %}
+    {% set fieldRows = 8 %}
+    {% include "includes/03/rosh-full-textarea.html" %}
+  </div>
+
+  <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-full-group="staff" data-rosh-error-group="rosh-full-increase-staff" hidden>
+    {% set fieldId = "rosh-full-increase-staff" %}
+    {% set fieldName = "rosh_full_increase_staff" %}
+    {% set fieldLabel = "Circumstances likely to increase the risk to staff" %}
+    {% set fieldLabelClass = "govuk-label--m" %}
+    {% set fieldHint = "" %}
+    {% set fieldRows = 8 %}
+    {% include "includes/03/rosh-full-textarea.html" %}
+  </div>
+
+  <div class="govuk-form-group" data-rosh-full-group="prisoners" data-rosh-error-group="rosh-full-increase-prisoners" hidden>
+    {% set fieldId = "rosh-full-increase-prisoners" %}
+    {% set fieldName = "rosh_full_increase_prisoners" %}
+    {% set fieldLabel = "Circumstances likely to increase the risk to prisoners" %}
+    {% set fieldLabelClass = "govuk-label--m" %}
+    {% set fieldHint = "" %}
+    {% set fieldRows = 8 %}
+    {% include "includes/03/rosh-full-textarea.html" %}
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

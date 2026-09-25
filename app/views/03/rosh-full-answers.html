@@ -1,0 +1,38 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "ROSH full analysis answers" %}
+{% set predictorsSectionCaption = "ROSH full analysis" %}
+{% set pageHeading = "Check your answers" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set roshNavSection = "full-analysis" %}
+{% set hideSideNav = false %}
+{% set sideNavigationInclude = "includes/03/rosh-side-navigation.html" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "rosh-full-other.html" %}
+{% set afterJourneyHeaderInclude = "includes/03/rosh-full-complete-alert.html" %}
+{% set stickySideNav = true %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<div id="rosh-full-answers-page" data-offender-first-name="{{ offenderFirstName }}">
+  <div data-rosh-full-answers-who></div>
+  <div data-rosh-full-answers-nature></div>
+  <div data-rosh-full-answers-when></div>
+  <div data-rosh-full-answers-increase></div>
+  <div data-rosh-full-answers-reduce></div>
+  <div data-rosh-full-answers-ratings></div>
+  <div data-rosh-full-answers-individual></div>
+  <div data-rosh-full-answers-other></div>
+
+  <button type="button" class="govuk-button" data-module="govuk-button" id="rosh-full-confirm">Confirm and save</button>
+</div>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}
