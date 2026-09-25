@@ -18,7 +18,7 @@ const TIERING_FROM_CHECK_ANSWERS_LEGACY = 'a8'
 export const TIERING_BACK_FROM_CHECK_ANSWERS = 'a7-back'
 
 const isProto1TieringPage = () =>
-  !window.location.pathname.includes('/02/') && !window.location.pathname.includes('/dev/')
+  !window.location.pathname.includes('/02/') && !window.location.pathname.includes('/03/') && !window.location.pathname.includes('/dev/')
 
 const isFromCheckAnswersParam = (from) =>
   from === TIERING_FROM_CHECK_ANSWERS || from === TIERING_FROM_CHECK_ANSWERS_LEGACY

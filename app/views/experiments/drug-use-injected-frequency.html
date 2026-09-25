@@ -1,0 +1,43 @@
+{% extends "layouts/drug-use.html" %}
+
+{% block pageTitle %}When has Tito injected drugs?{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    background: #b7d9c9;
+  }
+
+  .gds-flow-layout {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 30px 0 60px;
+  }
+
+  .gds-flow-card {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .gds-flow-card .govuk-heading-xl {
+    letter-spacing: -0.04em;
+    margin-bottom: 36px;
+  }
+
+  .gds-flow-card .govuk-checkboxes__label {
+    font-weight: 400;
+  }
+</style>
+
+<div class="gds-flow-layout">
+  <div class="gds-flow-card">
+    <h1 class="govuk-heading-xl">When has Tito injected drugs?</h1>
+
+    <div data-drug-use-injected-frequency></div>
+
+    <a class="govuk-button" href="/#dev-prototypes">Continue</a>
+  </div>
+</div>
+{% endblock %}

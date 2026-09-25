@@ -1,0 +1,94 @@
+{# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
+
+{% set offenceElements = [
+  { "id": "arson", "label": "Arson" },
+  { "id": "domestic-abuse", "label": "Domestic abuse" },
+  { "id": "excessive-violence-sadistic", "label": "Excessive violence or sadistic violence" },
+  { "id": "hatred-identifiable-groups", "label": "Hatred of identifiable groups" },
+  { "id": "physical-violence-child", "label": "Physical violence against a child" },
+  { "id": "sexual-element", "label": "Sexual element" },
+  { "id": "stalking-element", "label": "Stalking element" },
+  { "id": "violence-threat-weapon", "label": "Violence or threat of violence with a weapon" },
+  { "id": "weapon", "label": "Weapon" }
+] %}
+
+<h2 id="predictors-offence-elements" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  Does {{ offenderFirstName }}'s current offence have any of the following elements?
+</h2>
+
+<div class="govuk-form-group govuk-!-margin-bottom-8">
+  <fieldset class="govuk-fieldset" aria-describedby="offence-elements-hint">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      Does {{ offenderFirstName }}'s current offence have any of the following elements?
+    </legend>
+    <div id="offence-elements-hint" class="govuk-hint govuk-!-margin-bottom-4">Select all that apply.</div>
+    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+      {% for element in offenceElements %}
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="offence-element-{{ element.id }}" name="offence_elements" type="checkbox" value="{{ element.id }}">
+        <label class="govuk-label govuk-checkboxes__label" for="offence-element-{{ element.id }}">{{ element.label }}</label>
+      </div>
+      {% endfor %}
+      <div class="govuk-checkboxes__divider">or</div>
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="offence-element-none" name="offence_elements" type="checkbox" value="none" data-behaviour="exclusive">
+        <label class="govuk-label govuk-checkboxes__label" for="offence-element-none">None of these elements</label>
+      </div>
+    </div>
+  </fieldset>
+</div>
+
+<h2 id="predictors-domestic-abuse-perpetrator" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+  Is there evidence that {{ offenderFirstName }} has ever been a perpetrator of domestic abuse?
+</h2>
+
+<div class="govuk-form-group govuk-!-margin-bottom-8">
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      Is there evidence that {{ offenderFirstName }} has ever been a perpetrator of domestic abuse?
+    </legend>
+    <div class="govuk-radios" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input
+          class="govuk-radios__input"
+          id="domestic-abuse-perpetrator-yes"
+          name="domestic_abuse_perpetrator"
+          type="radio"
+          value="yes"
+          data-aria-controls="conditional-domestic-abuse-perpetrator-yes"
+        >
+        <label class="govuk-label govuk-radios__label" for="domestic-abuse-perpetrator-yes">Yes</label>
+      </div>
+      <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-domestic-abuse-perpetrator-yes">
+        <fieldset class="govuk-fieldset govuk-!-margin-bottom-0">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-!-margin-bottom-3">
+            Who was this committed against?
+          </legend>
+          <div class="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="domestic-abuse-perpetrator-against-family" name="domestic_abuse_perpetrator_against" type="radio" value="family-member">
+              <label class="govuk-label govuk-radios__label" for="domestic-abuse-perpetrator-against-family">Family member</label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="domestic-abuse-perpetrator-against-intimate" name="domestic_abuse_perpetrator_against" type="radio" value="intimate-partner">
+              <label class="govuk-label govuk-radios__label" for="domestic-abuse-perpetrator-against-intimate">Intimate partner</label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="domestic-abuse-perpetrator-against-both" name="domestic_abuse_perpetrator_against" type="radio" value="family-and-intimate-partner">
+              <label class="govuk-label govuk-radios__label" for="domestic-abuse-perpetrator-against-both">Family member and intimate partner</label>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="domestic-abuse-perpetrator-no" name="domestic_abuse_perpetrator" type="radio" value="no">
+        <label class="govuk-label govuk-radios__label" for="domestic-abuse-perpetrator-no">No</label>
+      </div>
+      <div class="govuk-radios__divider">or</div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="domestic-abuse-perpetrator-unknown" name="domestic_abuse_perpetrator" type="radio" value="unknown">
+        <label class="govuk-label govuk-radios__label" for="domestic-abuse-perpetrator-unknown">Unknown</label>
+      </div>
+    </div>
+  </fieldset>
+</div>

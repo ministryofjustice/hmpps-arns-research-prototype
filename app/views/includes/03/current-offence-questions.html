@@ -1,0 +1,76 @@
+{# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
+
+<h2 id="predictors-current-offence" class="govuk-heading-m predictors-question-anchor govuk-visually-hidden">
+  What is {{ offenderFirstName }}'s current offence?
+</h2>
+
+<div
+        class="offence-autocomplete offence-autocomplete--with-search-button govuk-!-margin-bottom-6"
+        data-module="offence-search"
+        data-offence-search-summary-card="true"
+        data-offence-search-summary-list-only="true"
+        data-offence-search-results-url="a1r"
+        id="current-offence-search"
+>
+  <div data-offence-search-panel>
+    <div class="offence-autocomplete__search-row">
+      <div class="govuk-form-group offence-autocomplete__combobox govuk-!-margin-bottom-0">
+        <label class="govuk-label govuk-visually-hidden" for="current-offence-search-input">
+          What is {{ offenderFirstName }}'s current offence?
+        </label>
+        <input
+                class="govuk-input offence-autocomplete__input"
+                id="current-offence-search-input"
+                name="current_offence_search"
+                type="text"
+                spellcheck="false"
+                autocomplete="off"
+                role="combobox"
+                aria-autocomplete="list"
+                aria-expanded="false"
+                aria-controls="current-offence-search-listbox"
+                data-offence-search-input
+        >
+        <ul
+                id="current-offence-search-listbox"
+                class="offence-autocomplete__menu"
+                role="listbox"
+                data-offence-search-listbox
+                hidden
+        ></ul>
+      </div>
+      <button
+              type="button"
+              class="govuk-button offence-autocomplete__search-button"
+              data-offence-search-submit
+              data-module="govuk-button"
+      >Search</button>
+    </div>
+    <p class="govuk-body govuk-!-margin-top-3 govuk-!-margin-bottom-0">
+      <a class="govuk-link" href="a1o.html" data-predictors-offence-browse-link>Find an offence</a>
+    </p>
+  </div>
+
+  <div data-offence-search-selected hidden>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-0" data-offence-summary-list></dl>
+    <details class="govuk-details govuk-!-margin-top-4">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">If this information is incorrect</span>
+      </summary>
+      <div class="govuk-details__text">
+        <p class="govuk-body">If any of the details shown are wrong, update them in NDelius. Once the record has been corrected there, the updated information should appear here automatically.</p>
+      </div>
+    </details>
+    <input type="hidden" name="current_offence_id" value="" data-offence-selected-id>
+    <input type="hidden" name="current_offence_code" value="" data-offence-selected-code>
+    <input type="hidden" name="current_offence_subcode" value="" data-offence-selected-subcode>
+  </div>
+</div>
+
+<h2 id="predictors-conviction-date" class="govuk-heading-m predictors-question-anchor govuk-visually-hidden">
+  What is the date of {{ offenderFirstName }}'s current conviction?
+</h2>
+
+<input type="hidden" id="current-conviction-date-day" name="current_conviction_date_day" value="18">
+<input type="hidden" id="current-conviction-date-month" name="current_conviction_date_month" value="3">
+<input type="hidden" id="current-conviction-date-year" name="current_conviction_date_year" value="2026">

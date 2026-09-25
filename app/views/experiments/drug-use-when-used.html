@@ -1,0 +1,49 @@
+{% extends "layouts/drug-use.html" %}
+
+{% block pageTitle %}When were these drugs used?{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    background: #b7d9c9;
+  }
+
+  .gds-flow-layout {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 30px 0 60px;
+  }
+
+  .gds-flow-card {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    min-height: 520px;
+    box-shadow: none;
+  }
+
+  .gds-flow-card .govuk-heading-xl {
+    letter-spacing: -0.04em;
+    margin-bottom: 24px;
+  }
+
+  .gds-flow-card .govuk-body {
+    font-size: 2rem;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    display: block;
+    color: #0b0c0c;
+  }
+
+</style>
+
+<div class="gds-flow-layout">
+  <div class="gds-flow-card">
+    <h1 class="govuk-heading-xl">When were these drugs used?</h1>
+
+    <div data-drug-use-radios></div>
+
+    <a class="govuk-button" href="/experiments/drug-use-background">Continue</a>
+  </div>
+</div>
+{% endblock %}
