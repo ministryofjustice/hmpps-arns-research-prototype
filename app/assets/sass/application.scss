@@ -1047,6 +1047,25 @@ body.assessment-page {
       height: 16px;
     }
 
+    .assessment-section-navigation__complete-icon {
+      display: none;
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+
+      &--visible {
+        display: inline-block;
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    .assessment-section-navigation__tick {
+      display: block;
+      width: 16px;
+      height: 16px;
+    }
+
     a:hover {
       text-decoration: underline;
     }

@@ -122,7 +122,7 @@ router.use((req, res, next) => {
   if (/^\/dev\/ux-handover(\.html)?$/.test(req.path)) {
     res.locals.uxHandoverLastUpdated = getUxHandoverLastUpdatedLabel()
   }
-  if (/^\/(01|02|dev)\/a2(b)?(\.html)?$/.test(req.path)) {
+  if (/^\/(01|02|03|dev)\/a2(b)?(\.html)?$/.test(req.path)) {
     Object.assign(res.locals, getFirstSanctionAgeLocals(req.query))
   }
   next()

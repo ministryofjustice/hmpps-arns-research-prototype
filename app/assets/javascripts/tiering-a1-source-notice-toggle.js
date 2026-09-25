@@ -8,7 +8,7 @@ const VARIANTS = ['inset', 'hint']
 const isA1Page = () => {
   const path = window.location.pathname
   return (
-    (path.includes('/02/') || path.includes('/dev/')) &&
+    (path.includes('/02/') || path.includes('/03/') || path.includes('/dev/')) &&
     (path.endsWith('/a1') || path.includes('/a1.html'))
   )
 }
