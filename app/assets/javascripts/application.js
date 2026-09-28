@@ -87,7 +87,9 @@ import './dev/predictors-b11-page.js'
 import './dev/predictors-a7-page.js'
 import './dev/predictors-a8-page.js'
 import './dev/assessment-section-complete.js'
+import './dev/drug-use-flow.js'
 import './02/predictors-change-scroll.js'
+import './03/predictors-change-scroll.js'
 import './violent-offence-check.js'
 import './alcohol-units-help.js'
 import './tiering-change-scroll.js'
@@ -96,6 +98,9 @@ import { initTieringInactiveLinks } from './tiering-inactive-links.js'
 import { initB6LayoutToggleButtons } from './02/predictors-b6-layout-toggle.js'
 import { initA2LayoutToggleButtons } from './02/predictors-a2-layout-toggle.js'
 import { initA1LayoutToggleButtons } from './02/predictors-a1-layout-toggle.js'
+import { initB6LayoutToggleButtons as initB6LayoutToggleButtons03 } from './03/predictors-b6-layout-toggle.js'
+import { initA2LayoutToggleButtons as initA2LayoutToggleButtons03 } from './03/predictors-a2-layout-toggle.js'
+import { initA1LayoutToggleButtons as initA1LayoutToggleButtons03 } from './03/predictors-a1-layout-toggle.js'
 import { initA1SourceNoticeToggle } from './tiering-a1-source-notice-toggle.js'
 import { initB1CaptionProgressToggle } from './tiering-b1-caption-progress-toggle.js'
 import { initUxHandoverTopicSubnav } from './dev/ux-handover-docs.js'
@@ -106,6 +111,9 @@ window.GOVUKPrototypeKit.documentReady(() => {
   initB6LayoutToggleButtons()
   initA2LayoutToggleButtons()
   initA1LayoutToggleButtons()
+  initB6LayoutToggleButtons03()
+  initA2LayoutToggleButtons03()
+  initA1LayoutToggleButtons03()
   initA1SourceNoticeToggle()
   initB1CaptionProgressToggle()
   initUxHandoverTopicSubnav()

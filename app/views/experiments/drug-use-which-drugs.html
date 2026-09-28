@@ -1,0 +1,113 @@
+{% extends "layouts/drug-use.html" %}
+
+{% block pageTitle %}Which drugs has [Name] used?{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    background: #b7d9c9;
+  }
+
+  .gds-flow-layout {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 30px 0 60px;
+  }
+
+  .gds-flow-card {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    min-height: 620px;
+    box-shadow: none;
+  }
+
+  .gds-flow-card .govuk-heading-xl {
+    letter-spacing: -0.04em;
+    margin-bottom: 16px;
+  }
+
+  .gds-flow-card .govuk-body {
+    font-size: 1.2rem;
+    line-height: 1.35;
+  }
+
+</style>
+
+<div class="gds-flow-layout">
+  <div class="gds-flow-card">
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Which drugs has [Name] used?</h1>
+    <p class="govuk-body govuk-!-margin-bottom-4">Include current and previous drugs.</p>
+    <p class="govuk-body govuk-!-margin-bottom-3">Select all that apply.</p>
+
+    <div class="govuk-form-group govuk-!-margin-bottom-0">
+      <fieldset class="govuk-fieldset">
+        <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="drug-amphetamines" name="drugs-used" type="checkbox" value="amphetamines">
+            <label class="govuk-label govuk-checkboxes__label" for="drug-amphetamines">Amphetamines</label>
+          </div>
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="drug-benzodiazepines" name="drugs-used" type="checkbox" value="benzodiazepines">
+            <label class="govuk-label govuk-checkboxes__label" for="drug-benzodiazepines">Benzodiazepines</label>
+          </div>
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="drug-cannabis" name="drugs-used" type="checkbox" value="cannabis">
+            <label class="govuk-label govuk-checkboxes__label" for="drug-cannabis">Cannabis</label>
+          </div>
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="drug-cocaine-hydrochloride" name="drugs-used" type="checkbox" value="cocaine-hydrochloride">
+            <label class="govuk-label govuk-checkboxes__label" for="drug-cocaine-hydrochloride">Cocaine hydrochloride</label>
+          </div>
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="drug-crack-or-cocaine" name="drugs-used" type="checkbox" value="crack-or-cocaine" checked>
+            <label class="govuk-label govuk-checkboxes__label" for="drug-crack-or-cocaine">Crack or cocaine</label>
+          </div>
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="drug-ecstasy" name="drugs-used" type="checkbox" value="ecstasy">
+            <label class="govuk-label govuk-checkboxes__label" for="drug-ecstasy">Ecstasy (also known as MDMA)</label>
+          </div>
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="drug-hallucinogens" name="drugs-used" type="checkbox" value="hallucinogens">
+            <label class="govuk-label govuk-checkboxes__label" for="drug-hallucinogens">Hallucinogens</label>
+          </div>
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="drug-heroin" name="drugs-used" type="checkbox" value="heroin" checked>
+            <label class="govuk-label govuk-checkboxes__label" for="drug-heroin">Heroin</label>
+          </div>
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="drug-methadone" name="drugs-used" type="checkbox" value="methadone">
+            <label class="govuk-label govuk-checkboxes__label" for="drug-methadone">Methadone (not prescribed)</label>
+          </div>
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="drug-misused-prescribed" name="drugs-used" type="checkbox" value="misused-prescribed" checked>
+            <label class="govuk-label govuk-checkboxes__label" for="drug-misused-prescribed">Misused prescribed drugs</label>
+          </div>
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="drug-other-opiates" name="drugs-used" type="checkbox" value="other-opiates">
+            <label class="govuk-label govuk-checkboxes__label" for="drug-other-opiates">Other opiates</label>
+          </div>
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="drug-solvents" name="drugs-used" type="checkbox" value="solvents">
+            <label class="govuk-label govuk-checkboxes__label" for="drug-solvents">Solvents (including gases and glues)</label>
+          </div>
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="drug-spice" name="drugs-used" type="checkbox" value="spice">
+            <label class="govuk-label govuk-checkboxes__label" for="drug-spice">Spice</label>
+          </div>
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="drug-steroids" name="drugs-used" type="checkbox" value="steroids">
+            <label class="govuk-label govuk-checkboxes__label" for="drug-steroids">Steroids</label>
+          </div>
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="drug-other" name="drugs-used" type="checkbox" value="other">
+            <label class="govuk-label govuk-checkboxes__label" for="drug-other">Other</label>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <a class="govuk-button govuk-!-margin-top-4" href="/experiments/drug-use-when-used">Continue</a>
+  </div>
+</div>
+{% endblock %}

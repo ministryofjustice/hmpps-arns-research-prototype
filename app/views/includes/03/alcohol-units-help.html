@@ -1,0 +1,200 @@
+{# Alcohol units reference table and calculator for b6 #}
+
+<details class="govuk-details{% if alcoholUnitsHelpAfterRadios %} govuk-!-margin-bottom-8{% else %} govuk-!-margin-bottom-4{% endif %} alcohol-units-help-details" id="alcohol-units-help">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">Check how many units are consumed</span>
+  </summary>
+  <div class="govuk-details__text">
+    <div class="alcohol-units-help" data-module="alcohol-units-help">
+      {# Temporarily hidden — keep for later (Reference table / Calculate units radios)
+      {% if not alcoholUnitsHelpHideCalculator %}
+      <div class="govuk-form-group govuk-!-margin-top-0 govuk-!-margin-bottom-4">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-visually-hidden">
+            Reference table or calculate units
+          </legend>
+          <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input
+                class="govuk-radios__input"
+                id="alcohol-units-help-view-table"
+                name="alcohol_units_help_view"
+                type="radio"
+                value="table"
+                checked
+                data-alcohol-units-view-input
+              >
+              <label class="govuk-label govuk-radios__label" for="alcohol-units-help-view-table">
+                Reference table
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input
+                class="govuk-radios__input"
+                id="alcohol-units-help-view-calculator"
+                name="alcohol_units_help_view"
+                type="radio"
+                value="calculator"
+                data-alcohol-units-view-input
+              >
+              <label class="govuk-label govuk-radios__label" for="alcohol-units-help-view-calculator">
+                Calculate units
+              </label>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      {% endif %}
+      #}
+
+      <div data-alcohol-units-variant="table">
+        <table class="govuk-table govuk-!-margin-bottom-0">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">Type of drink</th>
+              <th scope="col" class="govuk-table__header govuk-table__header--numeric">Number of alcohol units</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">Single small shot of spirits (25ml, ABV 40%) For example, whisky or vodka.</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">1 unit</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">Alcopop (275ml, ABV 5.5%)</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">1.5 units</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">Small glass of red/white/rosé wine (125ml, ABV 12%)</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">1.5 units</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">Bottle of lager/beer/cider (330ml, ABV 5%)</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">1.7 units</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">Can of lager/beer/cider (440ml, ABV 5.5%)</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">2.4 units</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">Pint of lower-strength lager/beer/cider (ABV 3.6%)</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">2 units</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">Standard glass of red/white/rosé wine (175ml, ABV 12%)</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">2.1 units</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">Pint of higher-strength lager/beer/cider (ABV 5.2%)</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">3 units</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">Large glass of red/white/rosé wine (250ml, ABV 12%)</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">3 units</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {# Temporarily hidden — keep for later (Calculate units calculator UI)
+      {% if not alcoholUnitsHelpHideCalculator %}
+      <div data-alcohol-units-variant="calculator" hidden>
+        <table class="govuk-table alcohol-units-help__calculator-table govuk-!-margin-bottom-4">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header alcohol-units-help__drinks-header" id="alcohol-units-drinks-header">Number of drinks</th>
+              <th scope="col" class="govuk-table__header alcohol-units-help__drink-type-header" id="alcohol-units-drink-type-header">Type of drink</th>
+              <th scope="col" class="govuk-table__header govuk-table__header--numeric alcohol-units-help__units-header">Number of alcohol units</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell alcohol-units-help__drinks-cell">
+                <label class="govuk-label govuk-visually-hidden" for="alcohol-units-drinks-alcopop">Number of drinks for Alcopop (275ml, ABV 5.5%)</label>
+                <input class="govuk-input govuk-input--width-2 alcohol-units-help__drinks-input" id="alcohol-units-drinks-alcopop" name="alcohol_units_drinks_alcopop" type="text" inputmode="numeric" autocomplete="off" data-alcohol-units-drinks-input data-alcohol-units-per-drink="1.5" aria-labelledby="alcohol-units-drinks-header alcohol-units-drink-alcopop">
+              </td>
+              <th scope="row" class="govuk-table__cell" id="alcohol-units-drink-alcopop">Alcopop (275ml, ABV 5.5%)</th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">1.5 units</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell alcohol-units-help__drinks-cell">
+                <label class="govuk-label govuk-visually-hidden" for="alcohol-units-drinks-bottle-lager">Number of drinks for Bottle of lager/beer/cider (330ml, ABV 5%)</label>
+                <input class="govuk-input govuk-input--width-2 alcohol-units-help__drinks-input" id="alcohol-units-drinks-bottle-lager" name="alcohol_units_drinks_bottle_lager" type="text" inputmode="numeric" autocomplete="off" data-alcohol-units-drinks-input data-alcohol-units-per-drink="1.7" aria-labelledby="alcohol-units-drinks-header alcohol-units-drink-bottle-lager">
+              </td>
+              <th scope="row" class="govuk-table__cell" id="alcohol-units-drink-bottle-lager">Bottle of lager/beer/cider (330ml, ABV 5%)</th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">1.7 units</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell alcohol-units-help__drinks-cell">
+                <label class="govuk-label govuk-visually-hidden" for="alcohol-units-drinks-can-lager">Number of drinks for Can of lager/beer/cider (440ml, ABV 5.5%)</label>
+                <input class="govuk-input govuk-input--width-2 alcohol-units-help__drinks-input" id="alcohol-units-drinks-can-lager" name="alcohol_units_drinks_can_lager" type="text" inputmode="numeric" autocomplete="off" data-alcohol-units-drinks-input data-alcohol-units-per-drink="2.4" aria-labelledby="alcohol-units-drinks-header alcohol-units-drink-can-lager">
+              </td>
+              <th scope="row" class="govuk-table__cell" id="alcohol-units-drink-can-lager">Can of lager/beer/cider (440ml, ABV 5.5%)</th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">2.4 units</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell alcohol-units-help__drinks-cell">
+                <label class="govuk-label govuk-visually-hidden" for="alcohol-units-drinks-large-wine">Number of drinks for Large glass of red/white/rosé wine (250ml, ABV 12%)</label>
+                <input class="govuk-input govuk-input--width-2 alcohol-units-help__drinks-input" id="alcohol-units-drinks-large-wine" name="alcohol_units_drinks_large_wine" type="text" inputmode="numeric" autocomplete="off" data-alcohol-units-drinks-input data-alcohol-units-per-drink="3" aria-labelledby="alcohol-units-drinks-header alcohol-units-drink-large-wine">
+              </td>
+              <th scope="row" class="govuk-table__cell" id="alcohol-units-drink-large-wine">Large glass of red/white/rosé wine (250ml, ABV 12%)</th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">3 units</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell alcohol-units-help__drinks-cell">
+                <label class="govuk-label govuk-visually-hidden" for="alcohol-units-drinks-pint-higher">Number of drinks for Pint of higher-strength lager/beer/cider (ABV 5.2%)</label>
+                <input class="govuk-input govuk-input--width-2 alcohol-units-help__drinks-input" id="alcohol-units-drinks-pint-higher" name="alcohol_units_drinks_pint_higher" type="text" inputmode="numeric" autocomplete="off" data-alcohol-units-drinks-input data-alcohol-units-per-drink="3" aria-labelledby="alcohol-units-drinks-header alcohol-units-drink-pint-higher">
+              </td>
+              <th scope="row" class="govuk-table__cell" id="alcohol-units-drink-pint-higher">Pint of higher-strength lager/beer/cider (ABV 5.2%)</th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">3 units</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell alcohol-units-help__drinks-cell">
+                <label class="govuk-label govuk-visually-hidden" for="alcohol-units-drinks-pint-lower">Number of drinks for Pint of lower-strength lager/beer/cider (ABV 3.6%)</label>
+                <input class="govuk-input govuk-input--width-2 alcohol-units-help__drinks-input" id="alcohol-units-drinks-pint-lower" name="alcohol_units_drinks_pint_lower" type="text" inputmode="numeric" autocomplete="off" data-alcohol-units-drinks-input data-alcohol-units-per-drink="2" aria-labelledby="alcohol-units-drinks-header alcohol-units-drink-pint-lower">
+              </td>
+              <th scope="row" class="govuk-table__cell" id="alcohol-units-drink-pint-lower">Pint of lower-strength lager/beer/cider (ABV 3.6%)</th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">2 units</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell alcohol-units-help__drinks-cell">
+                <label class="govuk-label govuk-visually-hidden" for="alcohol-units-drinks-spirits">Number of drinks for Single small shot of spirits (25ml, ABV 40%). For example, whisky or vodka.</label>
+                <input class="govuk-input govuk-input--width-2 alcohol-units-help__drinks-input" id="alcohol-units-drinks-spirits" name="alcohol_units_drinks_spirits" type="text" inputmode="numeric" autocomplete="off" data-alcohol-units-drinks-input data-alcohol-units-per-drink="1" aria-labelledby="alcohol-units-drinks-header alcohol-units-drink-spirits">
+              </td>
+              <th scope="row" class="govuk-table__cell" id="alcohol-units-drink-spirits">Single small shot of spirits (25ml, ABV 40%) For example, whisky or vodka.</th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">1 unit</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell alcohol-units-help__drinks-cell">
+                <label class="govuk-label govuk-visually-hidden" for="alcohol-units-drinks-small-wine">Number of drinks for Small glass of red/white/rosé wine (125ml, ABV 12%)</label>
+                <input class="govuk-input govuk-input--width-2 alcohol-units-help__drinks-input" id="alcohol-units-drinks-small-wine" name="alcohol_units_drinks_small_wine" type="text" inputmode="numeric" autocomplete="off" data-alcohol-units-drinks-input data-alcohol-units-per-drink="1.5" aria-labelledby="alcohol-units-drinks-header alcohol-units-drink-small-wine">
+              </td>
+              <th scope="row" class="govuk-table__cell" id="alcohol-units-drink-small-wine">Small glass of red/white/rosé wine (125ml, ABV 12%)</th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">1.5 units</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell alcohol-units-help__drinks-cell">
+                <label class="govuk-label govuk-visually-hidden" for="alcohol-units-drinks-standard-wine">Number of drinks for Standard glass of red/white/rosé wine (175ml, ABV 12%)</label>
+                <input class="govuk-input govuk-input--width-2 alcohol-units-help__drinks-input" id="alcohol-units-drinks-standard-wine" name="alcohol_units_drinks_standard_wine" type="text" inputmode="numeric" autocomplete="off" data-alcohol-units-drinks-input data-alcohol-units-per-drink="2.1" aria-labelledby="alcohol-units-drinks-header alcohol-units-drink-standard-wine">
+              </td>
+              <th scope="row" class="govuk-table__cell" id="alcohol-units-drink-standard-wine">Standard glass of red/white/rosé wine (175ml, ABV 12%)</th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">2.1 units</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="alcohol-units-help__actions">
+          <div class="alcohol-units-help__actions-main">
+            <button type="button" class="govuk-button govuk-button--secondary alcohol-units-help__calculate-button" data-alcohol-units-calculate data-module="govuk-button">
+              Calculate units
+            </button>
+            <div class="alcohol-units-help__result" data-alcohol-units-result></div>
+          </div>
+          <a class="govuk-link alcohol-units-help__clear-all" href="#" data-alcohol-units-clear-all hidden>Clear all</a>
+        </div>
+      </div>
+      {% endif %}
+      #}
+    </div>
+  </div>
+</details>

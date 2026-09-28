@@ -1,0 +1,20 @@
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
+
+{% set sectionCompleteSuccessAlertHtml %}
+{% if sectionCompleteSuccessBannerSecondaryLinkHref and sectionCompleteSuccessBannerSecondaryLinkText %}
+You can still make changes from the <a class="govuk-link" href="{{ sectionCompleteSuccessBannerSecondaryLinkHref }}">{{ sectionCompleteSuccessBannerSecondaryLinkText }}</a>.
+{% endif %}
+{% endset %}
+
+{{ mojAlert({
+  variant: "success",
+  title: "You have marked this section as complete",
+  showTitleAsHeading: true,
+  dismissible: false,
+  html: sectionCompleteSuccessAlertHtml,
+  classes: "assessment-layout__section-complete-alert",
+  attributes: {
+    id: "predictors-section-complete-success-alert",
+    hidden: "hidden"
+  }
+}) }}

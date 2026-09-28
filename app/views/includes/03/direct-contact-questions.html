@@ -1,0 +1,109 @@
+{# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
+
+{# Temporarily hidden
+{% include "includes/direct-contact-sexual-predictor-guidance.html" %}
+#}
+
+<div class="govuk-form-group govuk-!-margin-bottom-8" data-predictors-question="contact-adult-sanctions">
+  <h3 id="predictors-contact-adult-sanctions" class="govuk-heading-s predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+    How many sanctions does {{ offenderFirstName }} have for contact adult sexual or sexually motivated offences?
+  </h3>
+
+  <p id="contact-adult-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
+    Include their current offence.
+  </p>
+
+  <details class="govuk-details govuk-!-margin-bottom-4">
+    <summary class="govuk-details__summary">
+      <span class="govuk-details__summary-text">Offences that should be counted as contact adult sexual or sexually motivated</span>
+    </summary>
+    <div class="govuk-details__text">
+      {% include "includes/03/direct-contact-adult-offences-counted.html" %}
+    </div>
+  </details>
+
+  <label class="govuk-label govuk-visually-hidden" for="contact-adult-sanctions">
+    How many sanctions does {{ offenderFirstName }} have for contact adult sexual or sexually motivated offences?
+  </label>
+  <input
+    class="govuk-input govuk-input--width-4"
+    id="contact-adult-sanctions"
+    name="contact_adult_sanctions"
+    type="text"
+    inputmode="numeric"
+    autocomplete="off"
+    aria-describedby="contact-adult-sanctions-hint"
+  >
+</div>
+
+<div class="govuk-form-group govuk-!-margin-bottom-8" data-predictors-question="contact-child-sanctions">
+  <h3 id="predictors-contact-child-sanctions" class="govuk-heading-s predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+    How many sanctions does {{ offenderFirstName }} have for direct contact child sexual or sexually motivated offences?
+  </h3>
+
+  <p id="contact-child-sanctions-hint" class="govuk-hint govuk-!-margin-bottom-4">
+    Include their current offence.
+  </p>
+
+  <details class="govuk-details govuk-!-margin-bottom-4">
+    <summary class="govuk-details__summary">
+      <span class="govuk-details__summary-text">Offences that should be counted as direct contact child sexual or sexually motivated</span>
+    </summary>
+    <div class="govuk-details__text">
+      {% include "includes/03/direct-contact-child-offences-counted.html" %}
+    </div>
+  </details>
+
+  <label class="govuk-label govuk-visually-hidden" for="contact-child-sanctions">
+    How many sanctions does {{ offenderFirstName }} have for direct contact child sexual or sexually motivated offences?
+  </label>
+  <input
+    class="govuk-input govuk-input--width-4"
+    id="contact-child-sanctions"
+    name="contact_child_sanctions"
+    type="text"
+    inputmode="numeric"
+    autocomplete="off"
+    aria-describedby="contact-child-sanctions-hint"
+  >
+</div>
+
+<div
+  id="predictors-stranger-contact"
+  class="govuk-form-group govuk-!-margin-bottom-0 predictors-question-anchor"
+  data-predictors-question="stranger-contact"
+  tabindex="-1"
+>
+  <h3 class="govuk-heading-s govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+    Does {{ offenderFirstName }}'s current offence involve actual or attempted direct contact against a victim who was a stranger?
+  </h3>
+
+  <details class="govuk-details govuk-!-margin-bottom-4">
+    <summary class="govuk-details__summary">
+      <span class="govuk-details__summary-text">When to answer yes to this question</span>
+    </summary>
+    <div class="govuk-details__text">
+      {% include "includes/03/stranger-contact-yes-guidance.html" %}
+    </div>
+  </details>
+
+  <fieldset class="govuk-fieldset" id="stranger-contact-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+      Does {{ offenderFirstName }}'s current offence involve actual or attempted direct contact against a victim who was a stranger?
+    </legend>
+    <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="stranger-contact-yes" name="stranger_contact" type="radio" value="yes">
+        <label class="govuk-label govuk-radios__label" for="stranger-contact-yes">Yes</label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="stranger-contact-no" name="stranger_contact" type="radio" value="no">
+        <label class="govuk-label govuk-radios__label" for="stranger-contact-no">No</label>
+      </div>
+      <div class="govuk-radios__item" hidden aria-hidden="true" style="display: none;">
+        <input class="govuk-radios__input" id="stranger-contact-unknown" name="stranger_contact" type="radio" value="unknown" disabled>
+        <label class="govuk-label govuk-radios__label" for="stranger-contact-unknown">Unknown</label>
+      </div>
+    </div>
+  </fieldset>
+</div>

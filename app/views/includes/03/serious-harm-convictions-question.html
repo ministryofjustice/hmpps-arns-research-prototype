@@ -1,0 +1,33 @@
+{# Requires offenderFirstName, e.g. {% set offenderFirstName = "Alex" %} #}
+
+{% set seriousHarmConvictions = [
+  { "id": "murder-attempted-murder-threat-conspiracy-manslaughter", "label": "Murder, attempted murder, threat or conspiracy to murder or manslaughter" },
+  { "id": "wounding-gbh", "label": "Wounding or GBH" },
+  { "id": "rape-serious-sexual-adult", "label": "Rape or serious sexual offence against an adult" },
+  { "id": "sexual-offence-child", "label": "Any sexual offence against a child" },
+  { "id": "other-offence-child", "label": "Any other offence against a child" },
+  { "id": "criminal-damage-endanger-life", "label": "Criminal damage with intent to endanger life" },
+  { "id": "possession-use-weapons", "label": "Any offence involving possession or use of weapons" },
+  { "id": "kidnapping-false-imprisonment", "label": "Kidnapping or false imprisonment" },
+  { "id": "arson", "label": "Arson" },
+  { "id": "racially-motivated", "label": "Racially motivated or racially aggravated offence" },
+  { "id": "aggravated-burglary", "label": "Aggravated burglary" },
+  { "id": "robbery", "label": "Robbery" },
+  { "id": "other-serious-offence", "label": "Any other serious offence (for example, blackmail, harassment, stalking, indecent images of children, child neglect or abduction)" },
+  { "id": "offence-in-custody", "label": "Any offence committed in custody" },
+  { "id": "firearm-intent-endanger-life", "label": "Possession of a firearm with intent to endanger life or resist arrest" }
+] %}
+
+<div class="govuk-checkboxes" data-module="govuk-checkboxes">
+  {% for offence in seriousHarmConvictions %}
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="serious-harm-conviction-{{ offence.id }}" name="serious_harm_convictions" type="checkbox" value="{{ offence.id }}">
+    <label class="govuk-label govuk-checkboxes__label" for="serious-harm-conviction-{{ offence.id }}">{{ offence.label }}</label>
+  </div>
+  {% endfor %}
+  <div class="govuk-checkboxes__divider">or</div>
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="serious-harm-conviction-none" name="serious_harm_convictions" type="checkbox" value="none" data-behaviour="exclusive">
+    <label class="govuk-label govuk-checkboxes__label" for="serious-harm-conviction-none">None of these offences</label>
+  </div>
+</div>

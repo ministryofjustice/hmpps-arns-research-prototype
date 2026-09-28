@@ -1,0 +1,41 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Risk of serious harm" %}
+{% set pageHeadingHtml = "Has " ~ offenderFirstName ~ " previously been convicted of any of these offences?" %}
+{% set pageHeadingId = "predictors-serious-harm-convictions" %}
+{% set pageHeadingClass = "predictors-question-anchor" %}
+{% set compactPageHeader = true %}
+{% set pageHeadingHint = "Select all that apply, or select ‘None of these offences’." %}
+{% set pageHeadingHintId = "serious-harm-convictions-hint" %}
+{% set activeSection = "rosh" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "b9.html" %}
+{% set backLinkId = "predictors-b10-back" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="predictors-b10-form" novalidate>
+  <div class="govuk-form-group govuk-!-margin-top-0">
+    <fieldset class="govuk-fieldset" aria-describedby="serious-harm-convictions-hint">
+      {% if questionLegendAsHeading and pageHeadingHtml %}
+        {% include "includes/assessment-question-legend-heading.html" %}
+      {% else %}
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+        Has {{ offenderFirstName }} previously been convicted of any of these offences?
+      </legend>
+      {% endif %}
+      {% include "includes/03/serious-harm-convictions-question.html" %}
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

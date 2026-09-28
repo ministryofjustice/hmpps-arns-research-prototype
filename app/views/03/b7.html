@@ -1,0 +1,88 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Personal relationships and community" %}
+{% set predictorsSectionCaption = "Reoffending predictors" %}
+{% set pageHeading = "Personal relationships and community" %}
+{% set activeSection = "rosh" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "b6b.html" %}
+{% set backLinkId = "predictors-b7-back" %}
+
+{% set importantPeopleOptions = [
+  { "id": "partner", "label": "Partner or someone they're in an intimate relationship with" },
+  { "id": "children-parenting", "label": "Their children or anyone they have parenting responsibilities for" },
+  { "id": "other-children", "label": "Other children" },
+  { "id": "family", "label": "Family members" },
+  { "id": "friends", "label": "Friends" },
+  { "id": "other", "label": "Other" }
+] %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="predictors-b7-form" novalidate>
+  <h2 id="predictors-important-people" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+    Who are the important people in {{ offenderFirstName }}'s life?
+  </h2>
+  <div class="govuk-form-group govuk-!-margin-bottom-8">
+    <fieldset class="govuk-fieldset" aria-describedby="important-people-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+        Who are the important people in {{ offenderFirstName }}'s life?
+      </legend>
+      <div id="important-people-hint" class="govuk-hint govuk-!-margin-bottom-4">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        {% for option in importantPeopleOptions %}
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="important-people-{{ option.id }}" name="important_people" type="checkbox" value="{{ option.id }}">
+          <label class="govuk-label govuk-checkboxes__label" for="important-people-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        {% endfor %}
+        <div class="govuk-checkboxes__divider">or</div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="important-people-unknown" name="important_people" type="checkbox" value="unknown" data-behaviour="exclusive">
+          <label class="govuk-label govuk-checkboxes__label" for="important-people-unknown">Unknown</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <h2 id="predictors-relationship-status" class="govuk-heading-m predictors-question-anchor govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+    Is {{ offenderFirstName }} happy with their current relationship status?
+  </h2>
+  <div class="govuk-form-group">
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-visually-hidden">
+        Is {{ offenderFirstName }} happy with their current relationship status?
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="relationship-status-happy-protective" name="relationship_status" type="radio" value="happy-protective">
+          <label class="govuk-label govuk-radios__label" for="relationship-status-happy-protective">Happy and positive about their relationship status, or their relationship is likely to act as a protective factor</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="relationship-status-some-concerns" name="relationship_status" type="radio" value="some-concerns">
+          <label class="govuk-label govuk-radios__label" for="relationship-status-some-concerns">Has some concerns about their relationship status but is overall happy</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="relationship-status-unhappy-unhealthy" name="relationship_status" type="radio" value="unhappy-unhealthy">
+          <label class="govuk-label govuk-radios__label" for="relationship-status-unhappy-unhealthy">Unhappy about their relationship status, or their relationship is unhealthy and directly linked to offending</label>
+        </div>
+        <div class="govuk-radios__divider">or</div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="relationship-status-unknown" name="relationship_status" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="relationship-status-unknown">Unknown</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}
