@@ -1,0 +1,23 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Alcohol use" %}
+{% set sanCaption = "Alcohol use" %}
+{% set sanSection = "alcohol" %}
+{% set backLinkHref = "alcohol-before.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san/content-header.html" %}
+
+<form id="san-alcohol-background-form" novalidate data-al-page="background">
+  {% include "includes/san/alcohol-background-questions.html" %}
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

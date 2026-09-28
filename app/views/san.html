@@ -1,0 +1,129 @@
+{% extends "layouts/assessment.html" %}
+
+{% set showArnsServiceNavigation = true %}
+{% set arnsServiceNavCurrent = "san" %}
+{% set hideServiceHeader = true %}
+
+{% block pageTitle %}Strengths and needs (SAN) - Prototypes{% endblock %}
+
+{% block content %}
+
+{% include "includes/assessment-home-page-open.html" %}
+
+<a class="govuk-back-link" href="/">Back</a>
+
+<div class="assessment-home-header assessment-home-header--with-back-link">
+  <span class="govuk-caption-xl">Squad 3</span>
+  <h1 class="govuk-heading-xl assessment-home-title">Strengths and needs (SAN)</h1>
+  <p class="govuk-hint assessment-home-hint">Prototype for the community Strengths and needs assessment.</p>
+</div>
+
+<div class="govuk-tabs assessment-home-tabs" data-module="govuk-tabs">
+  <h2 class="govuk-tabs__title">Contents</h2>
+  <ul class="govuk-tabs__list">
+    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+      <a class="govuk-tabs__tab" href="#research-prototypes">Research</a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="#reference-prototypes">Reference</a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="#experiment-prototypes">Experiments</a>
+    </li>
+  </ul>
+
+  {% macro sanPrivateBetaEntry(entryHint, showDetails, entryHeading, linksInactive, titleTag) %}
+<ul class="govuk-list assessment-research-prototypes">
+  {% set skipToEndHref = null %}
+  {% set href = "/san/accommodation.html" %}
+  {% set itemHeading = entryHeading %}
+  {% set nestedHeading = null %}
+  {% set title = "Accommodation" %}
+  {% set prototypeVersion = "san" %}
+  {% set secondaryHref = "/san/employment.html" %}
+  {% set secondaryTitle = "Employment and education" %}
+  {% set secondaryInactive = null %}
+  {% set secondaryClearSessionOnStart = true %}
+  {% set secondaryPrototypeVersion = "san" %}
+  {% set tertiaryHref = "/san/finances.html" %}
+  {% set tertiaryTitle = "Finances" %}
+  {% set tertiaryClearSessionOnStart = true %}
+  {% set tertiaryPrototypeVersion = "san" %}
+  {% set quaternaryHref = "/san/drugs.html" %}
+  {% set quaternaryTitle = "Drug use" %}
+  {% set quaternaryClearSessionOnStart = true %}
+  {% set quaternaryPrototypeVersion = "san" %}
+  {% set quinaryHref = "/san/alcohol.html" %}
+  {% set quinaryTitle = "Alcohol use" %}
+  {% set quinaryClearSessionOnStart = true %}
+  {% set quinaryPrototypeVersion = "san" %}
+  {% set senaryHref = "/san/health.html" %}
+  {% set senaryTitle = "Health and wellbeing" %}
+  {% set senaryClearSessionOnStart = true %}
+  {% set senaryPrototypeVersion = "san" %}
+  {% set septenaryHref = "/san/personal-relationships-children.html" %}
+  {% set septenaryTitle = "Personal relationships and community" %}
+  {% set septenaryClearSessionOnStart = true %}
+  {% set septenaryPrototypeVersion = "san" %}
+  {% set octonaryHref = "/san/thinking-behaviours.html" %}
+  {% set octonaryTitle = "Thinking, behaviours and attitudes" %}
+  {% set octonaryClearSessionOnStart = true %}
+  {% set octonaryPrototypeVersion = "san" %}
+  {% set nonaryHref = "/san/offence-analysis.html" %}
+  {% set nonaryTitle = "Offence analysis" %}
+  {% set nonaryClearSessionOnStart = true %}
+  {% set nonaryPrototypeVersion = "san" %}
+  {% set titleTagText = titleTag %}
+  {% set titleTagColour = null %}
+  {% set secondaryTitleTagText = null %}
+  {% set secondaryTitleTagColour = null %}
+  {% set hint = entryHint %}
+  {% set hintHtml = null %}
+  {% set titleHint = null %}
+  {% set secondaryTitleHint = null %}
+  {% set titleRegularWeight = null %}
+  {% set clearSessionOnStart = true %}
+  {% set detailsHtml %}{% if showDetails %}<details class="govuk-details govuk-!-margin-top-4 govuk-!-margin-bottom-0" data-module="govuk-details">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">View SAN in Assess and plan (AAP)</span>
+      </summary>
+      <div class="govuk-details__text">
+        <p class="govuk-body">Steps to open the SAN private beta:</p>
+        <ol class="govuk-list govuk-list--number govuk-!-margin-bottom-0">
+          <li><a class="govuk-link" href="https://arns-assessment-platform-test.hmpps.service.justice.gov.uk/training-session-launcher/browse?scenario=default" rel="noreferrer noopener" target="_blank">Go to Assess and plan (AAP)</a></li>
+          <li>Select scenario: SP Private Beta</li>
+          <li>Press ‘Start session’</li>
+          <li>Target service: Strengths and Needs (SAN)</li>
+          <li>Press ‘Generate link’</li>
+        </ol>
+      </div>
+    </details>{% endif %}{% endset %}
+  {% include "includes/research-prototype-entry.html" %}
+</ul>
+  {% endmacro %}
+
+  <div class="govuk-tabs__panel" id="research-prototypes">
+    {{ sanPrivateBetaEntry("This prototype shows the new iterations that are proposed for User Research.", false, "SAN research", true, "Oct 2026") | safe }}
+  </div>
+
+  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="reference-prototypes">
+    {{ sanPrivateBetaEntry("'As-is' replica (for reference only)", true, "SAN private beta reference", false, "25 Sep 2026") | safe }}
+  </div>
+
+  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="experiment-prototypes">
+    <ul class="govuk-list assessment-research-prototypes">
+      <li class="assessment-research-prototypes__item">
+        <div class="assessment-research-prototypes__prototype-header">
+          <div class="assessment-research-prototypes__prototype-header-text">
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-2 assessment-research-prototypes__item-heading">SAN design experiments</h2>
+            <p class="govuk-hint govuk-!-margin-top-0 govuk-!-margin-bottom-2">These are smaller experiments to test ideas and changes.</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

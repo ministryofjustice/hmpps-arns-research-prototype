@@ -19,7 +19,9 @@
 {% endblock %}
 
 {% block govukServiceNavigation %}
-  {% if serviceName and not hideServiceNavigation %}
+  {% if showArnsServiceNavigation and not hideServiceNavigation %}
+    {% include "includes/arns-service-navigation.njk" %}
+  {% elif serviceName and not hideServiceNavigation %}
     {% if usePrimaryNavigation %}
       {% include primaryNavigationInclude | default("includes/02/primary-navigation.njk") %}
     {% else %}

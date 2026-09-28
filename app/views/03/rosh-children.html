@@ -1,0 +1,42 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Risk to children" %}
+{% set predictorsSectionCaption = "ROSH screening" %}
+{% set pageHeading = "Risk to children" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set roshNavSection = "screening" %}
+{% set hideSideNav = false %}
+{% set sideNavigationInclude = "includes/03/rosh-side-navigation.html" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "rosh-risk-to-children.html" %}
+{% set beforeBackLinkInclude = "includes/03/rosh-removed-child-alert.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<div id="rosh-children-page" data-offender-first-name="{{ offenderFirstName }}">
+  <div data-rosh-children-empty hidden>
+    <p class="govuk-body">No identifiable children have been added yet.</p>
+    <p class="govuk-body">
+      <a class="govuk-button govuk-button--secondary" href="rosh-child.html" data-module="govuk-button">Add a child</a>
+    </p>
+  </div>
+
+  <div data-rosh-children-actions hidden>
+    <h3 class="govuk-heading-m">Current list of identifiable children at risk</h3>
+    <div data-rosh-children-list></div>
+    <div class="govuk-button-group">
+      <button type="button" class="govuk-button" id="rosh-children-continue" data-module="govuk-button">Save and continue</button>
+      <a class="govuk-button govuk-button--secondary" href="rosh-child.html" data-module="govuk-button">Add another child</a>
+    </div>
+  </div>
+</div>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

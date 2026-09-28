@@ -1,0 +1,318 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Finances" %}
+{% set sanHeading = "Finances" %}
+{% set sanSection = "finances" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san/content-header.html" %}
+
+<form id="san-finances-form" novalidate data-fi-page="questions">
+  <div class="govuk-form-group san-question" data-san-error-group="income">
+    <fieldset class="govuk-fieldset" id="income" aria-describedby="income-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Where does Alex currently get their money from?</h2>
+      </legend>
+      <div id="income-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="income-carers" name="income" type="checkbox" value="carers">
+          <label class="govuk-label govuk-checkboxes__label" for="income-carers">Carer's Allowance</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="income-disability" name="income" type="checkbox" value="disability" aria-describedby="income-disability-hint">
+          <label class="govuk-label govuk-checkboxes__label" for="income-disability">Disability benefits</label>
+          <div id="income-disability-hint" class="govuk-hint govuk-checkboxes__hint">For example, Personal Independence Payment (PIP, also known as Disability Living Allowance) or Severe Disablement Allowance.</div>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="income-employment" name="income" type="checkbox" value="employment">
+          <label class="govuk-label govuk-checkboxes__label" for="income-employment">Employment</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="income-family" name="income" type="checkbox" value="family" data-aria-controls="conditional-income-family">
+          <label class="govuk-label govuk-checkboxes__label" for="income-family">Family or friends</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-income-family">
+          <div class="govuk-form-group" data-san-error-group="overreliant">
+            <fieldset class="govuk-fieldset" id="overreliant">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Is Alex overreliant on family or friends for money?</legend>
+              <div class="govuk-radios" data-module="govuk-radios">
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="overreliant-yes" name="overreliant" type="radio" value="yes">
+                  <label class="govuk-label govuk-radios__label" for="overreliant-yes">Yes</label>
+                </div>
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="overreliant-no" name="overreliant" type="radio" value="no">
+                  <label class="govuk-label govuk-radios__label" for="overreliant-no">No</label>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="income-offending" name="income" type="checkbox" value="offending">
+          <label class="govuk-label govuk-checkboxes__label" for="income-offending">Offending</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="income-pension" name="income" type="checkbox" value="pension">
+          <label class="govuk-label govuk-checkboxes__label" for="income-pension">Pension</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="income-student-loan" name="income" type="checkbox" value="student-loan">
+          <label class="govuk-label govuk-checkboxes__label" for="income-student-loan">Student loan</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="income-undeclared" name="income" type="checkbox" value="undeclared">
+          <label class="govuk-label govuk-checkboxes__label" for="income-undeclared">Undeclared (includes cash in hand)</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="income-work-benefits" name="income" type="checkbox" value="work-benefits" aria-describedby="income-work-benefits-hint">
+          <label class="govuk-label govuk-checkboxes__label" for="income-work-benefits">Work related benefits</label>
+          <div id="income-work-benefits-hint" class="govuk-hint govuk-checkboxes__hint">For example, Universal Credit or Jobseeker's Allowance (JSA).</div>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="income-other" name="income" type="checkbox" value="other" data-aria-controls="conditional-income-other">
+          <label class="govuk-label govuk-checkboxes__label" for="income-other">Other</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-income-other">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="income-other-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="income-other-details" name="income_other_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="income-other-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-checkboxes__divider">or</div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="income-none" name="income" type="checkbox" value="none" data-behaviour="exclusive">
+          <label class="govuk-label govuk-checkboxes__label" for="income-none">No money</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="bank-account">
+    <fieldset class="govuk-fieldset" id="bank-account">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Does Alex have their own bank account?</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="bank-yes" name="bank_account" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="bank-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="bank-no" name="bank_account" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="bank-no">No</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="bank-unknown" name="bank_account" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="bank-unknown">Unknown</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="money-management">
+    <fieldset class="govuk-fieldset" id="money-management" aria-describedby="money-management-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">How good is Alex at managing their money?</h2>
+      </legend>
+      <div id="money-management-hint" class="govuk-hint">This includes things like budgeting, prioritising bills and paying rent.</div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {% set moneyOptions = [
+          { id: "well", label: "Able to manage their money well and is a strength" },
+          { id: "necessities", label: "Able to manage their money for everyday necessities" },
+          { id: "unable", label: "Unable to manage their money well" },
+          { id: "problems", label: "Unable to manage their money which is creating other problems" }
+        ] %}
+        {% for option in moneyOptions %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="money-{{ option.id }}" name="money_management" type="radio" value="{{ option.id }}" data-aria-controls="conditional-money-{{ option.id }}">
+          <label class="govuk-label govuk-radios__label" for="money-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-money-{{ option.id }}">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="money-{{ option.id }}-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="money-{{ option.id }}-details" name="money_{{ option.id }}_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="money-{{ option.id }}-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="gambling">
+    <fieldset class="govuk-fieldset" id="gambling" aria-describedby="gambling-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Is Alex affected by gambling?</h2>
+      </legend>
+      <div id="gambling-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="gambling-own" name="gambling" type="checkbox" value="own" data-aria-controls="conditional-gambling-own">
+          <label class="govuk-label govuk-checkboxes__label" for="gambling-own">Yes, their own gambling</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-gambling-own">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="gambling-own-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="gambling-own-details" name="gambling_own_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="gambling-own-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="gambling-someone" name="gambling" type="checkbox" value="someone" data-aria-controls="conditional-gambling-someone">
+          <label class="govuk-label govuk-checkboxes__label" for="gambling-someone">Yes, someone else's gambling</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-gambling-someone">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="gambling-someone-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="gambling-someone-details" name="gambling_someone_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="gambling-someone-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-checkboxes__divider">or</div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="gambling-no" name="gambling" type="checkbox" value="no" data-behaviour="exclusive">
+          <label class="govuk-label govuk-checkboxes__label" for="gambling-no">No</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="gambling-unknown" name="gambling" type="checkbox" value="unknown" data-behaviour="exclusive" data-aria-controls="conditional-gambling-unknown">
+          <label class="govuk-label govuk-checkboxes__label" for="gambling-unknown">Unknown</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-gambling-unknown">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="gambling-unknown-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="gambling-unknown-details" name="gambling_unknown_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="gambling-unknown-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="debt">
+    <fieldset class="govuk-fieldset" id="debt" aria-describedby="debt-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Is Alex affected by debt?</h2>
+      </legend>
+      <div id="debt-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        {% set debtReveals = [
+          { id: "own", label: "Yes, their own debt", name: "own_debt_types" },
+          { id: "someone", label: "Yes, someone else's debt", name: "someone_debt_types" }
+        ] %}
+        {% for reveal in debtReveals %}
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="debt-{{ reveal.id }}" name="debt" type="checkbox" value="{{ reveal.id }}" data-aria-controls="conditional-debt-{{ reveal.id }}">
+          <label class="govuk-label govuk-checkboxes__label" for="debt-{{ reveal.id }}">{{ reveal.label }}</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-debt-{{ reveal.id }}">
+          <div class="govuk-form-group" data-san-error-group="debt-{{ reveal.id }}-types">
+            <fieldset class="govuk-fieldset" id="debt-{{ reveal.id }}-types">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Select all that apply.</legend>
+              <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="debt-{{ reveal.id }}-others" name="{{ reveal.name }}" type="checkbox" value="others" aria-describedby="debt-{{ reveal.id }}-others-hint" data-aria-controls="conditional-debt-{{ reveal.id }}-others">
+                  <label class="govuk-label govuk-checkboxes__label" for="debt-{{ reveal.id }}-others">Debt to others</label>
+                  <div id="debt-{{ reveal.id }}-others-hint" class="govuk-hint govuk-checkboxes__hint">Includes things like owing money to family, friends, other prisoners or loan sharks.</div>
+                </div>
+                <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-debt-{{ reveal.id }}-others">
+                  <div class="govuk-form-group">
+                    <label class="govuk-label" for="debt-{{ reveal.id }}-others-details">Give details (optional)</label>
+                    <textarea class="govuk-textarea" id="debt-{{ reveal.id }}-others-details" name="debt_{{ reveal.id }}_others_details" rows="5" maxlength="2000"></textarea>
+                    <div class="govuk-hint san-character-count" data-san-character-count="debt-{{ reveal.id }}-others-details">You have 2,000 characters remaining</div>
+                  </div>
+                </div>
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="debt-{{ reveal.id }}-formal" name="{{ reveal.name }}" type="checkbox" value="formal" aria-describedby="debt-{{ reveal.id }}-formal-hint" data-aria-controls="conditional-debt-{{ reveal.id }}-formal">
+                  <label class="govuk-label govuk-checkboxes__label" for="debt-{{ reveal.id }}-formal">Formal debt</label>
+                  <div id="debt-{{ reveal.id }}-formal-hint" class="govuk-hint govuk-checkboxes__hint">Includes things like credit cards, phone bills or rent arrears.</div>
+                </div>
+                <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-debt-{{ reveal.id }}-formal">
+                  <div class="govuk-form-group">
+                    <label class="govuk-label" for="debt-{{ reveal.id }}-formal-details">Give details (optional)</label>
+                    <textarea class="govuk-textarea" id="debt-{{ reveal.id }}-formal-details" name="debt_{{ reveal.id }}_formal_details" rows="5" maxlength="2000"></textarea>
+                    <div class="govuk-hint san-character-count" data-san-character-count="debt-{{ reveal.id }}-formal-details">You have 2,000 characters remaining</div>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        {% endfor %}
+        <div class="govuk-checkboxes__divider">or</div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="debt-no" name="debt" type="checkbox" value="no" data-behaviour="exclusive">
+          <label class="govuk-label govuk-checkboxes__label" for="debt-no">No</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="debt-unknown" name="debt" type="checkbox" value="unknown" data-behaviour="exclusive" data-aria-controls="conditional-debt-unknown">
+          <label class="govuk-label govuk-checkboxes__label" for="debt-unknown">Unknown</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-debt-unknown">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="debt-unknown-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="debt-unknown-details" name="debt_unknown_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="debt-unknown-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="changes">
+    <fieldset class="govuk-fieldset" id="changes" aria-describedby="changes-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Does Alex want to make changes to their finances?</h2>
+      </legend>
+      <div id="changes-hint" class="govuk-hint">This question must be directly answered by Alex.</div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {% set changeOptions = [
+          { id: "maintain", label: "I have already made positive changes and want to maintain them" },
+          { id: "active", label: "I am actively making changes" },
+          { id: "know-how", label: "I want to make changes and know how to" },
+          { id: "need-help", label: "I want to make changes but need help" },
+          { id: "thinking", label: "I am thinking about making changes" },
+          { id: "no", label: "I do not want to make changes" }
+        ] %}
+        {% for option in changeOptions %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="changes-{{ option.id }}" name="finance_changes" type="radio" value="{{ option.id }}" data-aria-controls="conditional-changes-{{ option.id }}">
+          <label class="govuk-label govuk-radios__label" for="changes-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-changes-{{ option.id }}">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="changes-{{ option.id }}-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="changes-{{ option.id }}-details" name="changes_{{ option.id | replace('-', '_') }}_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="changes-{{ option.id }}-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        {% endfor %}
+        <div class="govuk-radios__divider">or</div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="changes-no-answer" name="finance_changes" type="radio" value="no-answer">
+          <label class="govuk-label govuk-radios__label" for="changes-no-answer">I do not want to answer</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="changes-not-present" name="finance_changes" type="radio" value="not-present">
+          <label class="govuk-label govuk-radios__label" for="changes-not-present">Alex is not present</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="changes-not-applicable" name="finance_changes" type="radio" value="not-applicable">
+          <label class="govuk-label govuk-radios__label" for="changes-not-applicable">Not applicable</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

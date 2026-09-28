@@ -1,39 +1,70 @@
-<div class="assessment-layout{% if usePdsHeader and not phaseBannerBelowHeader %} assessment-layout--phase-banner-above-footer{% endif %}"{% if tieringTelemetryPage %} data-tiering-telemetry-page="{{ tieringTelemetryPage }}" data-tiering-telemetry-page-label="{{ tieringTelemetryPageLabel | default(tieringTelemetryPage) }}"{% endif %}>
+{# ROSH pages (and any page that sets contentColumnPageHeader) put caption + title in the content column #}
+{% set useContentColumnHeader = contentColumnPageHeader if contentColumnPageHeader is defined else (roshNavSection is defined) %}
+<div class="assessment-layout{% if usePdsHeader and not phaseBannerBelowHeader %} assessment-layout--phase-banner-above-footer{% endif %}{% if useContentColumnHeader %} assessment-layout--content-header{% endif %}"{% if tieringTelemetryPage %} data-tiering-telemetry-page="{{ tieringTelemetryPage }}" data-tiering-telemetry-page-label="{{ tieringTelemetryPageLabel | default(tieringTelemetryPage) }}"{% endif %}>
   <div id="top" tabindex="-1"></div>
   {% if not usePdsHeader %}
   {% include "includes/assessment-phase-banner.html" %}
   {% endif %}
-  {% if backLinkHref %}
+  {% if beforeBackLinkInclude and not useContentColumnHeader %}
+  {% include beforeBackLinkInclude %}
+  {% endif %}
+  {% if backLinkHref and not useContentColumnHeader %}
   <a href="{{ backLinkHref }}" class="govuk-back-link assessment-layout__back-link"{% if backLinkId %} id="{{ backLinkId }}"{% endif %}{% if backLinkHref == "#" %}{% if useReoffendingServiceNavigation %} data-predictors-inactive-link{% else %} data-tiering-inactive-link{% endif %}{% endif %}>{{ backLinkText | default('Back') }}</a>
   {% endif %}
   {% if sectionCompleteSuccessBannerInclude %}
   {% include sectionCompleteSuccessBannerInclude %}
   {% endif %}
+  {% if not useContentColumnHeader %}
   {% if pageErrorSummaryInclude %}
   {% include pageErrorSummaryInclude %}
   {% elif offenceBrowseErrorSummary %}
   {% include "includes/offence-browse-error-summary.html" %}
   {% endif %}
+  {% endif %}
   {% if not hideOffenderHeader %}
   {% include offenderHeaderInclude | default("includes/assessment-offender-header.html") %}
   {% endif %}
-  {% if not hideJourneyServiceHeader %}
+  {% if useContentColumnHeader and not hideJourneyServiceHeader %}
+  {% include "includes/03/assessment-section-title.html" %}
+  {% elif not hideJourneyServiceHeader %}
   {% include journeyServiceHeaderInclude | default("includes/assessment-service-header-journey.html") %}
   {% endif %}
 
-  {% if afterJourneyHeaderInclude %}
+  {% if afterJourneyHeaderInclude and not useContentColumnHeader %}
   {% include afterJourneyHeaderInclude %}
   {% endif %}
-  {% if afterJourneyHeaderHtml %}
+  {% if afterJourneyHeaderHtml and not useContentColumnHeader %}
   {{ afterJourneyHeaderHtml | safe }}
   {% endif %}
 
   <div class="govuk-grid-row assessment-layout__content-row{% if hideSideNav %} assessment-layout__content-row--no-nav{% endif %}">
     {% if not hideSideNav %}
     <div class="govuk-grid-column-one-third-from-desktop assessment-layout__nav-column">
-      <div class="assessment-layout__nav-sticky">
-        {% include "includes/assessment-side-navigation.html" %}
+      <div{% if stickySideNav | default(true) %} class="assessment-layout__nav-sticky"{% endif %}>
+        {% include sideNavigationInclude | default("includes/assessment-side-navigation.html") %}
       </div>
     </div>
     {% endif %}
     <div class="{% if contentColumnClass %}{{ contentColumnClass }}{% elif hideSideNav %}govuk-grid-column-full{% else %}govuk-grid-column-two-thirds-from-desktop{% endif %}">
+      {% if useContentColumnHeader %}
+      {% if beforeBackLinkInclude %}
+      {% include beforeBackLinkInclude %}
+      {% endif %}
+      {% if backLinkHref %}
+      <a href="{{ backLinkHref }}" class="govuk-back-link assessment-layout__back-link assessment-layout__back-link--in-content"{% if backLinkId %} id="{{ backLinkId }}"{% endif %}{% if backLinkHref == "#" %}{% if useReoffendingServiceNavigation %} data-predictors-inactive-link{% else %} data-tiering-inactive-link{% endif %}{% endif %}>{{ backLinkText | default('Back') }}</a>
+      {% endif %}
+      {% if pageErrorSummaryInclude %}
+      {% include pageErrorSummaryInclude %}
+      {% elif offenceBrowseErrorSummary %}
+      {% include "includes/offence-browse-error-summary.html" %}
+      {% endif %}
+      {% if afterJourneyHeaderInclude %}
+      {% include afterJourneyHeaderInclude %}
+      {% endif %}
+      {% if afterJourneyHeaderHtml %}
+      {{ afterJourneyHeaderHtml | safe }}
+      {% endif %}
+      {% if not hideJourneyServiceHeader %}
+      {% include "includes/03/assessment-content-header.html" %}
+      {% endif %}
+      {% endif %}

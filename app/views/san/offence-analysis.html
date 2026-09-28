@@ -1,0 +1,176 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Offence analysis" %}
+{% set sanHeading = "Offence analysis" %}
+{% set sanSection = "offence" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san/content-header.html" %}
+
+<form id="san-offence-questions-form" novalidate data-oa-page="questions">
+  <div class="govuk-form-group" data-san-error-group="description">
+    <h2 class="govuk-label-wrapper">
+      <label class="govuk-label govuk-label--m" for="offence-description">Enter a brief description of the current index offence(s)</label>
+    </h2>
+    <textarea class="govuk-textarea" id="offence-description" name="offence_description" rows="5" maxlength="2000"></textarea>
+    <div class="govuk-hint san-character-count" data-san-character-count="offence-description">You have 2,000 characters remaining</div>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="elements">
+    <fieldset class="govuk-fieldset" id="offence-elements" aria-describedby="offence-elements-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Did the current index offence(s) have any of the following elements?</h2>
+      </legend>
+      <div id="offence-elements-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="element-arson" name="offence_elements" type="checkbox" value="arson">
+          <label class="govuk-label govuk-checkboxes__label" for="element-arson">Arson</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="element-domestic-abuse" name="offence_elements" type="checkbox" value="domestic-abuse">
+          <label class="govuk-label govuk-checkboxes__label" for="element-domestic-abuse">Domestic abuse</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="element-excessive-violence" name="offence_elements" type="checkbox" value="excessive-violence">
+          <label class="govuk-label govuk-checkboxes__label" for="element-excessive-violence">Excessive violence or sadistic violence</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="element-hatred" name="offence_elements" type="checkbox" value="hatred">
+          <label class="govuk-label govuk-checkboxes__label" for="element-hatred">Hatred of identifiable groups</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="element-property" name="offence_elements" type="checkbox" value="property">
+          <label class="govuk-label govuk-checkboxes__label" for="element-property">Physical damage to property</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="element-sexual" name="offence_elements" type="checkbox" value="sexual">
+          <label class="govuk-label govuk-checkboxes__label" for="element-sexual">Sexual element</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="element-victim-targeted" name="offence_elements" type="checkbox" value="victim-targeted" data-aria-controls="conditional-element-victim-targeted">
+          <label class="govuk-label govuk-checkboxes__label" for="element-victim-targeted">Victim targeted</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-element-victim-targeted">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="element-victim-targeted-details">Give details</label>
+            <textarea class="govuk-textarea" id="element-victim-targeted-details" name="element_victim_targeted_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="element-victim-targeted-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="element-violence" name="offence_elements" type="checkbox" value="violence">
+          <label class="govuk-label govuk-checkboxes__label" for="element-violence">Violence, or threat of violence or coercion</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="element-weapon" name="offence_elements" type="checkbox" value="weapon">
+          <label class="govuk-label govuk-checkboxes__label" for="element-weapon">Weapon</label>
+        </div>
+        <div class="govuk-checkboxes__divider">or</div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="element-none" name="offence_elements" type="checkbox" value="none" data-behaviour="exclusive">
+          <label class="govuk-label govuk-checkboxes__label" for="element-none">None</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="why">
+    <h2 class="govuk-label-wrapper">
+      <label class="govuk-label govuk-label--m" for="offence-why">Why did the current index offence(s) happen?</label>
+    </h2>
+    <textarea class="govuk-textarea" id="offence-why" name="offence_why" rows="5" maxlength="2000"></textarea>
+    <div class="govuk-hint san-character-count" data-san-character-count="offence-why">You have 2,000 characters remaining</div>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="motivations">
+    <fieldset class="govuk-fieldset" id="offence-motivations" aria-describedby="offence-motivations-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Did the current index offence(s) involve any of the following motivations?</h2>
+      </legend>
+      <div id="offence-motivations-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="motivation-addictions" name="offence_motivations" type="checkbox" value="addictions">
+          <label class="govuk-label govuk-checkboxes__label" for="motivation-addictions">Addictions or perceived needs</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="motivation-pressurised" name="offence_motivations" type="checkbox" value="pressurised">
+          <label class="govuk-label govuk-checkboxes__label" for="motivation-pressurised">Being pressurised or led into offending by others</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="motivation-emotional" name="offence_motivations" type="checkbox" value="emotional">
+          <label class="govuk-label govuk-checkboxes__label" for="motivation-emotional">Emotional state of Alex</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="motivation-financial" name="offence_motivations" type="checkbox" value="financial">
+          <label class="govuk-label govuk-checkboxes__label" for="motivation-financial">Financial motivation</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="motivation-hatred" name="offence_motivations" type="checkbox" value="hatred">
+          <label class="govuk-label govuk-checkboxes__label" for="motivation-hatred">Hatred of identifiable groups</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="motivation-power" name="offence_motivations" type="checkbox" value="power">
+          <label class="govuk-label govuk-checkboxes__label" for="motivation-power">Seeking or exerting power</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="motivation-sexual" name="offence_motivations" type="checkbox" value="sexual">
+          <label class="govuk-label govuk-checkboxes__label" for="motivation-sexual">Sexual motivation</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="motivation-thrill" name="offence_motivations" type="checkbox" value="thrill">
+          <label class="govuk-label govuk-checkboxes__label" for="motivation-thrill">Thrill seeking</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="motivation-other" name="offence_motivations" type="checkbox" value="other" data-aria-controls="conditional-motivation-other">
+          <label class="govuk-label govuk-checkboxes__label" for="motivation-other">Other</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-motivation-other">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="motivation-other-details">Give details</label>
+            <textarea class="govuk-textarea" id="motivation-other-details" name="motivation_other_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="motivation-other-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="committed-against">
+    <fieldset class="govuk-fieldset" id="offence-committed-against" aria-describedby="offence-committed-against-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Who was the offence committed against?</h2>
+      </legend>
+      <div id="offence-committed-against-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="committed-people" name="offence_committed_against" type="checkbox" value="people">
+          <label class="govuk-label govuk-checkboxes__label" for="committed-people">One or more people</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="committed-other" name="offence_committed_against" type="checkbox" value="other" data-aria-controls="conditional-committed-other" aria-describedby="committed-other-hint">
+          <label class="govuk-label govuk-checkboxes__label" for="committed-other">Other</label>
+          <div id="committed-other-hint" class="govuk-hint govuk-checkboxes__hint">For example, a business or the wider community.</div>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-committed-other">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="committed-other-details">Give details</label>
+            <textarea class="govuk-textarea" id="committed-other-details" name="committed_other_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="committed-other-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

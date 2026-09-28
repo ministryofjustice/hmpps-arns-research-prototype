@@ -1,0 +1,84 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Risk to the individual" %}
+{% set predictorsSectionCaption = "ROSH full analysis" %}
+{% set pageHeading = "Risk to the individual" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set roshNavSection = "full-analysis" %}
+{% set hideSideNav = false %}
+{% set sideNavigationInclude = "includes/03/rosh-side-navigation.html" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "rosh-full-ratings.html" %}
+{% set pageErrorSummaryInclude = "includes/03/rosh-error-summary.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="rosh-full-individual-form" novalidate data-offender-first-name="{{ offenderFirstName }}">
+  <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-error-group="rosh-full-suicide">
+    <fieldset class="govuk-fieldset" id="rosh-full-suicide">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h3 class="govuk-fieldset__heading">Are there any concerns about {{ offenderFirstName }}’s risk of suicide?</h3>
+      </legend>
+      {% set radioName = "rosh_full_suicide" %}
+      {% set radioLegendId = "rosh-full-suicide" %}
+      {% set detailsName = "rosh_full_suicide_details" %}
+      {% set detailsId = "rosh-full-suicide-details" %}
+      {% set detailsLabel = "Give details of the concerns about risk of suicide" %}
+      {% include "includes/03/rosh-full-yes-no-details.html" %}
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-error-group="rosh-full-self-harm">
+    <fieldset class="govuk-fieldset" id="rosh-full-self-harm">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h3 class="govuk-fieldset__heading">Are there any concerns about {{ offenderFirstName }}’s risk of self-harm?</h3>
+      </legend>
+      {% set radioName = "rosh_full_self_harm" %}
+      {% set radioLegendId = "rosh-full-self-harm" %}
+      {% set detailsName = "rosh_full_self_harm_details" %}
+      {% set detailsId = "rosh-full-self-harm-details" %}
+      {% set detailsLabel = "Give details of the concerns about risk of self-harm" %}
+      {% include "includes/03/rosh-full-yes-no-details.html" %}
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-error-group="rosh-full-coping-custody">
+    <fieldset class="govuk-fieldset" id="rosh-full-coping-custody">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h3 class="govuk-fieldset__heading">Are there any concerns about {{ offenderFirstName }} coping in custody, approved premises or a hostel?</h3>
+      </legend>
+      {% set radioName = "rosh_full_coping_custody" %}
+      {% set radioLegendId = "rosh-full-coping-custody" %}
+      {% set detailsName = "rosh_full_coping_custody_details" %}
+      {% set detailsId = "rosh-full-coping-custody-details" %}
+      {% set detailsLabel = "Give details of the concerns about coping in custody, approved premises or a hostel" %}
+      {% include "includes/03/rosh-full-yes-no-details.html" %}
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-rosh-error-group="rosh-full-vulnerability">
+    <fieldset class="govuk-fieldset" id="rosh-full-vulnerability">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h3 class="govuk-fieldset__heading">Are there any concerns about {{ offenderFirstName }}’s vulnerability?</h3>
+      </legend>
+      {% set radioName = "rosh_full_vulnerability" %}
+      {% set radioLegendId = "rosh-full-vulnerability" %}
+      {% set detailsName = "rosh_full_vulnerability_details" %}
+      {% set detailsId = "rosh-full-vulnerability-details" %}
+      {% set detailsLabel = "Give details of the concerns about vulnerability" %}
+      {% include "includes/03/rosh-full-yes-no-details.html" %}
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

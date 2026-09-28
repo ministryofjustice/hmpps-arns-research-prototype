@@ -1,0 +1,131 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Personal relationships and community" %}
+{% set sanHeading = "Personal relationships and community" %}
+{% set sanSection = "relationships" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san/content-header.html" %}
+
+<div class="govuk-tabs san-tabs" data-module="govuk-tabs">
+  <h2 class="govuk-tabs__title">Contents</h2>
+  <ul class="govuk-tabs__list">
+    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+      <a class="govuk-tabs__tab" href="#summary" id="tab-summary">Summary</a>
+    </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="#practitioner-analysis" id="tab-practitioner-analysis">Practitioner analysis</a>
+    </li>
+  </ul>
+
+  <div class="govuk-tabs__panel" id="summary">
+    <div data-san-summary></div>
+    <button type="button" class="govuk-button govuk-button--secondary san-go-analysis--hidden" data-san-go-analysis data-module="govuk-button" hidden>Go to practitioner analysis</button>
+  </div>
+
+  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="practitioner-analysis">
+    <div data-san-analysis-summary hidden></div>
+    <form id="san-relationships-analysis-form" novalidate data-pc-page="summary">
+      <div class="govuk-form-group" data-san-error-group="analysis-strengths">
+        <fieldset class="govuk-fieldset" id="analysis-strengths" aria-describedby="analysis-strengths-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Are there any strengths or protective factors related to Alex's personal relationships and community?</legend>
+          <div id="analysis-strengths-hint" class="govuk-hint">Include any strategies, people or support networks that helped.</div>
+          <div class="govuk-radios" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="analysis-strengths-yes" name="analysis_strengths" type="radio" value="yes" data-aria-controls="conditional-analysis-strengths-yes">
+              <label class="govuk-label govuk-radios__label" for="analysis-strengths-yes">Yes</label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-analysis-strengths-yes">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="analysis-strengths-yes-details">Give details</label>
+                <textarea class="govuk-textarea" id="analysis-strengths-yes-details" name="analysis_strengths_yes_details" rows="5" maxlength="2000"></textarea>
+                <div class="govuk-hint san-character-count" data-san-character-count="analysis-strengths-yes-details">You have 2,000 characters remaining</div>
+              </div>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="analysis-strengths-no" name="analysis_strengths" type="radio" value="no" data-aria-controls="conditional-analysis-strengths-no">
+              <label class="govuk-label govuk-radios__label" for="analysis-strengths-no">No</label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-analysis-strengths-no">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="analysis-strengths-no-details">Give details (optional)</label>
+                <textarea class="govuk-textarea" id="analysis-strengths-no-details" name="analysis_strengths_no_details" rows="5" maxlength="2000"></textarea>
+                <div class="govuk-hint san-character-count" data-san-character-count="analysis-strengths-no-details">You have 2,000 characters remaining</div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group" data-san-error-group="analysis-harm">
+        <fieldset class="govuk-fieldset" id="analysis-harm">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Is Alex's personal relationships and community linked to risk of serious harm?</legend>
+          <div class="govuk-radios" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="analysis-harm-yes" name="analysis_harm" type="radio" value="yes" data-aria-controls="conditional-analysis-harm-yes">
+              <label class="govuk-label govuk-radios__label" for="analysis-harm-yes">Yes</label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-analysis-harm-yes">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="analysis-harm-yes-details">Give details</label>
+                <textarea class="govuk-textarea" id="analysis-harm-yes-details" name="analysis_harm_yes_details" rows="5" maxlength="2000"></textarea>
+                <div class="govuk-hint san-character-count" data-san-character-count="analysis-harm-yes-details">You have 2,000 characters remaining</div>
+              </div>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="analysis-harm-no" name="analysis_harm" type="radio" value="no" data-aria-controls="conditional-analysis-harm-no">
+              <label class="govuk-label govuk-radios__label" for="analysis-harm-no">No</label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-analysis-harm-no">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="analysis-harm-no-details">Give details (optional)</label>
+                <textarea class="govuk-textarea" id="analysis-harm-no-details" name="analysis_harm_no_details" rows="5" maxlength="2000"></textarea>
+                <div class="govuk-hint san-character-count" data-san-character-count="analysis-harm-no-details">You have 2,000 characters remaining</div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group" data-san-error-group="analysis-reoffending">
+        <fieldset class="govuk-fieldset" id="analysis-reoffending">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Is Alex's personal relationships and community linked to risk of reoffending?</legend>
+          <div class="govuk-radios" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="analysis-reoffending-yes" name="analysis_reoffending" type="radio" value="yes" data-aria-controls="conditional-analysis-reoffending-yes">
+              <label class="govuk-label govuk-radios__label" for="analysis-reoffending-yes">Yes</label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-analysis-reoffending-yes">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="analysis-reoffending-yes-details">Give details</label>
+                <textarea class="govuk-textarea" id="analysis-reoffending-yes-details" name="analysis_reoffending_yes_details" rows="5" maxlength="2000"></textarea>
+                <div class="govuk-hint san-character-count" data-san-character-count="analysis-reoffending-yes-details">You have 2,000 characters remaining</div>
+              </div>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="analysis-reoffending-no" name="analysis_reoffending" type="radio" value="no" data-aria-controls="conditional-analysis-reoffending-no">
+              <label class="govuk-label govuk-radios__label" for="analysis-reoffending-no">No</label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-analysis-reoffending-no">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="analysis-reoffending-no-details">Give details (optional)</label>
+                <textarea class="govuk-textarea" id="analysis-reoffending-no-details" name="analysis_reoffending_no_details" rows="5" maxlength="2000"></textarea>
+                <div class="govuk-hint san-character-count" data-san-character-count="analysis-reoffending-no-details">You have 2,000 characters remaining</div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <button type="submit" class="govuk-button" data-module="govuk-button">Mark as complete</button>
+    </form>
+  </div>
+</div>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

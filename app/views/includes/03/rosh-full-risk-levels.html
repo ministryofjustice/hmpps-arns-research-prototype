@@ -1,0 +1,27 @@
+{# Requires: radioName, radioLegendId. Optional: radioLegend, radioHint #}
+<fieldset class="govuk-fieldset" id="{{ radioLegendId }}"{% if radioHint %} aria-describedby="{{ radioLegendId }}-hint"{% endif %}>
+  {% if radioLegend %}
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ radioLegend }}</legend>
+  {% endif %}
+  {% if radioHint %}
+  <div id="{{ radioLegendId }}-hint" class="govuk-hint">{{ radioHint }}</div>
+  {% endif %}
+  <div class="govuk-radios" data-module="govuk-radios">
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="{{ radioLegendId }}-low" name="{{ radioName }}" type="radio" value="low">
+      <label class="govuk-label govuk-radios__label" for="{{ radioLegendId }}-low">Low</label>
+    </div>
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="{{ radioLegendId }}-medium" name="{{ radioName }}" type="radio" value="medium">
+      <label class="govuk-label govuk-radios__label" for="{{ radioLegendId }}-medium">Medium</label>
+    </div>
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="{{ radioLegendId }}-high" name="{{ radioName }}" type="radio" value="high">
+      <label class="govuk-label govuk-radios__label" for="{{ radioLegendId }}-high">High</label>
+    </div>
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="{{ radioLegendId }}-very-high" name="{{ radioName }}" type="radio" value="very-high">
+      <label class="govuk-label govuk-radios__label" for="{{ radioLegendId }}-very-high">Very high</label>
+    </div>
+  </div>
+</fieldset>

@@ -1,0 +1,45 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Thinking, behaviours and attitudes" %}
+{% set sanSection = "thinking" %}
+{% set backLinkHref = "thinking-behaviours.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+<div class="san-content-header san-content-header--sexual">
+  <div class="san-content-header__row">
+    <p class="san-sexual-kicker govuk-!-margin-bottom-0">Thinking, behaviours and attitudes<span class="govuk-visually-hidden">, <span data-san-status-text>Incomplete</span></span></p>
+    <strong class="govuk-tag govuk-tag--light-grey san-status-tag" data-san-status>Incomplete</strong>
+  </div>
+  <p class="san-sexual-kicker govuk-!-margin-bottom-0">Risk of sexual harm</p>
+</div>
+
+<form id="san-thinking-sexual-form" novalidate data-tb-page="sexual">
+  <div class="govuk-form-group" data-san-error-group="sexual-concerns">
+    <fieldset class="govuk-fieldset" id="sexual-concerns">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">Are there any concerns that Alex poses a risk of sexual harm to others?</h1>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="sexual-concerns-yes" name="thinking_sexual_concerns" type="radio" value="yes" aria-describedby="sexual-concerns-yes-hint">
+          <label class="govuk-label govuk-radios__label" for="sexual-concerns-yes">Yes</label>
+          <div id="sexual-concerns-yes-hint" class="govuk-hint govuk-radios__hint">Information suggests that there is evidence of sexual behaviour that could pose a risk of sexual harm to others</div>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="sexual-concerns-no" name="thinking_sexual_concerns" type="radio" value="no" disabled>
+          <label class="govuk-label govuk-radios__label" for="sexual-concerns-no">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Risk to children" %}
+{% set predictorsSectionCaption = "ROSH screening" %}
+{% set pageHeading = "Risk to children" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set roshNavSection = "screening" %}
+{% set hideSideNav = false %}
+{% set sideNavigationInclude = "includes/03/rosh-side-navigation.html" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "rosh-risk-to-others.html" %}
+{% set pageErrorSummaryInclude = "includes/03/rosh-error-summary.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="rosh-risk-to-children-form" novalidate data-offender-first-name="{{ offenderFirstName }}">
+  <div class="govuk-warning-text">
+    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text">
+      <span class="govuk-visually-hidden">Warning</span>
+      Use all information available to you to complete this section, particularly anything about child safeguarding or domestic abuse.
+    </strong>
+  </div>
+
+  <div class="govuk-form-group govuk-!-margin-bottom-6" data-rosh-error-group="rosh-child-impact">
+    <fieldset class="govuk-fieldset" aria-describedby="rosh-child-impact-hint" id="rosh-child-impact">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h3 class="govuk-fieldset__heading">Could {{ offenderFirstName }}’s behaviour and circumstances negatively impact the wellbeing of any children?</h3>
+      </legend>
+      <div id="rosh-child-impact-hint" class="govuk-hint">A child is under 18 years of age.</div>
+
+      <div class="govuk-inset-text">
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-2">Factors to consider for child wellbeing based on answers already provided in this assessment</h3>
+        <ul class="govuk-list govuk-!-margin-bottom-0">
+          <li>Sexual or sexually motivated offences</li>
+          <li>Violent behaviours</li>
+          <li>Relationship issues</li>
+          <li>Substance misuse issues</li>
+          <li>Self-harm issues</li>
+        </ul>
+      </div>
+
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-child-impact-yes" name="rosh_child_impact" type="radio" value="yes" data-aria-controls="conditional-rosh-child-groups">
+          <label class="govuk-label govuk-radios__label" for="rosh-child-impact-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-rosh-child-groups">
+          <div class="govuk-form-group" data-rosh-error-group="rosh-child-groups">
+            <fieldset class="govuk-fieldset" id="rosh-child-groups">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Which children could this negatively impact?</legend>
+              <div class="govuk-hint">Select all that apply.</div>
+              <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="rosh-child-groups-identifiable" name="rosh_child_groups" type="checkbox" value="identifiable" aria-describedby="rosh-child-groups-identifiable-hint">
+                  <label class="govuk-label govuk-checkboxes__label" for="rosh-child-groups-identifiable">Identifiable children</label>
+                  <div id="rosh-child-groups-identifiable-hint" class="govuk-hint govuk-checkboxes__hint">Children that are known to {{ offenderFirstName }} and can be identified by name.</div>
+                </div>
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="rosh-child-groups-general" name="rosh_child_groups" type="checkbox" value="general" aria-describedby="rosh-child-groups-general-hint">
+                  <label class="govuk-label govuk-checkboxes__label" for="rosh-child-groups-general">Children in general</label>
+                  <div id="rosh-child-groups-general-hint" class="govuk-hint govuk-checkboxes__hint">Any ‘stranger’ children unknown to {{ offenderFirstName }}, for example in public.</div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="rosh-child-impact-no" name="rosh_child_impact" type="radio" value="no" data-aria-controls="conditional-rosh-child-impact-none">
+          <label class="govuk-label govuk-radios__label" for="rosh-child-impact-no">No</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-rosh-child-impact-none">
+          <div class="govuk-form-group" data-rosh-error-group="rosh-child-impact-none-details">
+            <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="4000">
+              <label class="govuk-label" for="rosh-child-impact-none-details">Explain why you think there will be no negative impact, even though there are factors to consider for child wellbeing.</label>
+              <textarea class="govuk-textarea govuk-js-character-count" id="rosh-child-impact-none-details" name="rosh_child_impact_none_details" rows="5" maxlength="4000"></textarea>
+              <div id="rosh-child-impact-none-details-info" class="govuk-hint govuk-character-count__message">You have 4,000 characters remaining.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

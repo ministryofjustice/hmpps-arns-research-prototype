@@ -1,0 +1,49 @@
+{% extends "layouts/assessment.html" %}
+
+{% set showArnsServiceNavigation = true %}
+{% set arnsServiceNavCurrent = "rosh" %}
+{% set hideServiceHeader = true %}
+
+{% block pageTitle %}Risk of serious harm (ROSH) - Prototypes{% endblock %}
+
+{% block content %}
+
+{% include "includes/assessment-home-page-open.html" %}
+
+<a class="govuk-back-link" href="/">Back</a>
+
+<div class="assessment-home-header assessment-home-header--with-back-link">
+  <span class="govuk-caption-xl">Squad 3</span>
+  <h1 class="govuk-heading-xl assessment-home-title">Risk of serious harm (ROSH)</h1>
+  <p class="govuk-hint assessment-home-hint">Prototypes for the risk of serious harm assessment. This prototype is based on <a class="govuk-link" href="https://www.figma.com/design/DwWR9PLfLLmPyNqTfuUbwe/Full-risk-journey?node-id=1-30&amp;p=f&amp;t=yJM4jBGB4fcvtCwh-0" rel="noopener noreferrer" target="_blank">Figma designs</a>. It has not been user tested.</p>
+</div>
+
+<ul class="govuk-list assessment-research-prototypes">
+  {% set skipToEndHref = null %}
+  {% set href = "/03/rosh-risk-to-others.html" %}
+  {% set itemHeading = null %}
+  {% set nestedHeading = null %}
+  {% set title = "ROSH screening" %}
+  {% set prototypeVersion = "03" %}
+  {% set secondaryHref = "/03/rosh-full-start.html" %}
+  {% set secondaryTitle = "ROSH full analysis" %}
+  {% set secondaryInactive = true %}
+  {% set secondaryClearSessionOnStart = true %}
+  {% set secondaryPrototypeVersion = "03" %}
+  {% set titleTagText = null %}
+  {% set titleTagColour = null %}
+  {% set secondaryTitleTagText = null %}
+  {% set secondaryTitleTagColour = null %}
+  {% set hint = null %}
+  {% set hintHtml = null %}
+  {% set titleHint = null %}
+  {% set secondaryTitleHint = null %}
+  {% set titleRegularWeight = null %}
+  {% set clearSessionOnStart = true %}
+  {% include "includes/research-prototype-entry.html" %}
+  {% set secondaryInactive = null %}
+</ul>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

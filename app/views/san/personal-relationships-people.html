@@ -1,0 +1,81 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Personal relationships and community" %}
+{% set sanCaption = "Personal relationships and community" %}
+{% set sanSection = "relationships" %}
+{% set backLinkHref = "personal-relationships-children.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san/content-header.html" %}
+
+<form id="san-relationships-people-form" novalidate data-pc-page="people">
+  <div class="govuk-form-group" data-san-error-group="relationships-people">
+    <fieldset class="govuk-fieldset" id="relationships-people" aria-describedby="relationships-people-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">Who are the important people in Alex's life?</h1>
+      </legend>
+      <div id="relationships-people-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        {% set peopleOptions = [
+          {
+            id: "partner",
+            label: "Partner or someone they're in an intimate relationship with",
+            detailsLabel: "Give details (optional)",
+            detailsHint: "Include their name, age, gender and the nature of their relationship. For example, if they're in a casual or committed relationship."
+          },
+          {
+            id: "children",
+            label: "Their children or anyone they have parenting responsibilities for",
+            detailsLabel: "Give details of any children not captured by the previous question (optional)"
+          },
+          {
+            id: "other-children",
+            label: "Other children",
+            detailsLabel: "Give details about their relationship (optional)"
+          },
+          {
+            id: "family",
+            label: "Family members",
+            detailsLabel: "Give details about their relationship (optional)"
+          },
+          {
+            id: "friends",
+            label: "Friends",
+            detailsLabel: "Give details about their friendship (optional)"
+          },
+          {
+            id: "other",
+            label: "Other",
+            detailsLabel: "Give details"
+          }
+        ] %}
+        {% for option in peopleOptions %}
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="people-{{ option.id }}" name="relationships_people" type="checkbox" value="{{ option.id }}" data-aria-controls="conditional-people-{{ option.id }}">
+          <label class="govuk-label govuk-checkboxes__label" for="people-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-people-{{ option.id }}">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="people-{{ option.id }}-details">{{ option.detailsLabel }}</label>
+            {% if option.detailsHint %}
+            <div id="people-{{ option.id }}-details-hint" class="govuk-hint">{{ option.detailsHint }}</div>
+            {% endif %}
+            <textarea class="govuk-textarea" id="people-{{ option.id }}-details" name="people_{{ option.id | replace('-', '_') }}_details" rows="5" maxlength="2000"{% if option.detailsHint %} aria-describedby="people-{{ option.id }}-details-hint"{% endif %}></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="people-{{ option.id }}-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

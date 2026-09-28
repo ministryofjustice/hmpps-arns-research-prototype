@@ -1,0 +1,118 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Current risk of serious harm" %}
+{% set predictorsSectionCaption = "ROSH full analysis" %}
+{% set pageHeading = "Current risk of serious harm" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set roshNavSection = "full-analysis" %}
+{% set hideSideNav = false %}
+{% set sideNavigationInclude = "includes/03/rosh-side-navigation.html" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "rosh-full-reduce.html" %}
+{% set pageErrorSummaryInclude = "includes/03/rosh-error-summary.html" %}
+{% set stickySideNav = true %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<p class="govuk-hint">Assess the current risk of serious harm for each group you identified as being at risk.</p>
+
+<details class="govuk-details govuk-!-margin-bottom-6">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">What the risk levels mean</span>
+  </summary>
+  <div class="govuk-details__text">
+    <p class="govuk-body"><strong>Low</strong> — Current evidence does not indicate a likelihood of causing serious harm.</p>
+    <p class="govuk-body"><strong>Medium</strong> — There are identifiable indicators of risk of serious harm. The person has the potential to cause serious harm but is unlikely to do so unless there is a change in circumstances.</p>
+    <p class="govuk-body"><strong>High</strong> — There are identifiable indicators of risk of serious harm. The potential event could happen at any time and the impact would be serious.</p>
+    <p class="govuk-body govuk-!-margin-bottom-0"><strong>Very high</strong> — There is an imminent risk of serious harm. The potential event is more likely than not to happen imminently and the impact would be serious.</p>
+  </div>
+</details>
+
+<form id="rosh-full-ratings-form" novalidate data-offender-first-name="{{ offenderFirstName }}">
+  <div data-rosh-full-group="children" hidden>
+    <h3 class="govuk-heading-m">Children</h3>
+    <div class="govuk-form-group govuk-!-margin-bottom-6" data-rosh-error-group="rosh-full-rating-children-community">
+      {% set radioName = "rosh_full_rating_children_community" %}
+      {% set radioLegendId = "rosh-full-rating-children-community" %}
+      {% set radioLegend = "Risk to children in the community" %}
+      {% set radioHint = "" %}
+      {% include "includes/03/rosh-full-risk-levels.html" %}
+    </div>
+    <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-error-group="rosh-full-rating-children-custody">
+      {% set radioName = "rosh_full_rating_children_custody" %}
+      {% set radioLegendId = "rosh-full-rating-children-custody" %}
+      {% set radioLegend = "Risk to children in custody" %}
+      {% include "includes/03/rosh-full-risk-levels.html" %}
+    </div>
+  </div>
+
+  <div data-rosh-full-group="public" hidden>
+    <h3 class="govuk-heading-m">The public</h3>
+    <div class="govuk-form-group govuk-!-margin-bottom-6" data-rosh-error-group="rosh-full-rating-public-community">
+      {% set radioName = "rosh_full_rating_public_community" %}
+      {% set radioLegendId = "rosh-full-rating-public-community" %}
+      {% set radioLegend = "Risk to the public in the community" %}
+      {% include "includes/03/rosh-full-risk-levels.html" %}
+    </div>
+    <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-error-group="rosh-full-rating-public-custody">
+      {% set radioName = "rosh_full_rating_public_custody" %}
+      {% set radioLegendId = "rosh-full-rating-public-custody" %}
+      {% set radioLegend = "Risk to the public in custody" %}
+      {% include "includes/03/rosh-full-risk-levels.html" %}
+    </div>
+  </div>
+
+  <div data-rosh-full-group="known-adult" hidden>
+    <h3 class="govuk-heading-m">A known adult</h3>
+    <div class="govuk-form-group govuk-!-margin-bottom-6" data-rosh-error-group="rosh-full-rating-known-adult-community">
+      {% set radioName = "rosh_full_rating_known-adult_community" %}
+      {% set radioLegendId = "rosh-full-rating-known-adult-community" %}
+      {% set radioLegend = "Risk to a known adult in the community" %}
+      {% include "includes/03/rosh-full-risk-levels.html" %}
+    </div>
+    <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-error-group="rosh-full-rating-known-adult-custody">
+      {% set radioName = "rosh_full_rating_known-adult_custody" %}
+      {% set radioLegendId = "rosh-full-rating-known-adult-custody" %}
+      {% set radioLegend = "Risk to a known adult in custody" %}
+      {% include "includes/03/rosh-full-risk-levels.html" %}
+    </div>
+  </div>
+
+  <div data-rosh-full-group="staff" hidden>
+    <h3 class="govuk-heading-m">Staff</h3>
+    <div class="govuk-form-group govuk-!-margin-bottom-6" data-rosh-error-group="rosh-full-rating-staff-community">
+      {% set radioName = "rosh_full_rating_staff_community" %}
+      {% set radioLegendId = "rosh-full-rating-staff-community" %}
+      {% set radioLegend = "Risk to staff in the community" %}
+      {% include "includes/03/rosh-full-risk-levels.html" %}
+    </div>
+    <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-error-group="rosh-full-rating-staff-custody">
+      {% set radioName = "rosh_full_rating_staff_custody" %}
+      {% set radioLegendId = "rosh-full-rating-staff-custody" %}
+      {% set radioLegend = "Risk to staff in custody" %}
+      {% include "includes/03/rosh-full-risk-levels.html" %}
+    </div>
+  </div>
+
+  <div data-rosh-full-group="prisoners" hidden>
+    <h3 class="govuk-heading-m">Prisoners</h3>
+    <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-error-group="rosh-full-rating-prisoners-custody">
+      {% set radioName = "rosh_full_rating_prisoners_custody" %}
+      {% set radioLegendId = "rosh-full-rating-prisoners-custody" %}
+      {% set radioLegend = "Risk to prisoners in custody" %}
+      {% include "includes/03/rosh-full-risk-levels.html" %}
+    </div>
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-2" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

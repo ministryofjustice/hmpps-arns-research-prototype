@@ -1,0 +1,57 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Personal relationships and community" %}
+{% set sanCaption = "Personal relationships and community" %}
+{% set sanSection = "relationships" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san/content-header.html" %}
+
+<form id="san-relationships-children-form" novalidate data-pc-page="children">
+  <div class="govuk-form-group" data-san-error-group="relationships-children">
+    <fieldset class="govuk-fieldset" id="relationships-children" aria-describedby="relationships-children-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">Are there any children in Alex's life?</h1>
+      </legend>
+      <div id="relationships-children-hint" class="govuk-hint">
+        <p class="govuk-hint">This refers to any children (under 18 years) Alex has regular contact with, even if they do not have parental responsibility.</p>
+        <p class="govuk-hint govuk-!-margin-bottom-0">Select all that apply.</p>
+      </div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        {% set childOptions = [
+          { id: "live", label: "Yes, children that live with Alex" },
+          { id: "away", label: "Yes, children that do not live with Alex" },
+          { id: "visit", label: "Yes, children that visit Alex regularly" }
+        ] %}
+        {% for option in childOptions %}
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="children-{{ option.id }}" name="relationships_children" type="checkbox" value="{{ option.id }}" data-aria-controls="conditional-children-{{ option.id }}">
+          <label class="govuk-label govuk-checkboxes__label" for="children-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-children-{{ option.id }}">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="children-{{ option.id }}-details">Include the name, age and sex of any children, and their relationship to Alex</label>
+            <textarea class="govuk-textarea" id="children-{{ option.id }}-details" name="children_{{ option.id }}_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="children-{{ option.id }}-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        {% endfor %}
+        <div class="govuk-checkboxes__divider">or</div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="children-none" name="relationships_children" type="checkbox" value="none" data-behaviour="exclusive">
+          <label class="govuk-label govuk-checkboxes__label" for="children-none">No, there are no children in Alex's life</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

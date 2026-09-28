@@ -1,0 +1,93 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Employment and education" %}
+{% set sanCaption = "Employment and education" %}
+{% set sanSection = "employment" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san/content-header.html" %}
+
+<form id="san-employment-status-form" novalidate data-ee-page="status">
+  <div class="govuk-form-group" data-san-error-group="employment-status">
+    <fieldset class="govuk-fieldset" id="employment-status">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">What is Alex's current employment status?</h1>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="employment-employed" name="employment_status" type="radio" value="employed" data-aria-controls="conditional-employed">
+          <label class="govuk-label govuk-radios__label" for="employment-employed">Employed</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-employed">
+          <fieldset class="govuk-fieldset" id="employed-type">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-visually-hidden">Select the type of employment</legend>
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="employed-full-time" name="employed_type" type="radio" value="full-time">
+                <label class="govuk-label govuk-radios__label" for="employed-full-time">Full-time</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="employed-part-time" name="employed_type" type="radio" value="part-time">
+                <label class="govuk-label govuk-radios__label" for="employed-part-time">Part-time</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="employed-temporary" name="employed_type" type="radio" value="temporary">
+                <label class="govuk-label govuk-radios__label" for="employed-temporary">Temporary or casual</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="employed-apprenticeship" name="employed_type" type="radio" value="apprenticeship">
+                <label class="govuk-label govuk-radios__label" for="employed-apprenticeship">Apprenticeship</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="employment-self-employed" name="employment_status" type="radio" value="self-employed">
+          <label class="govuk-label govuk-radios__label" for="employment-self-employed">Self-employed</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="employment-retired" name="employment_status" type="radio" value="retired">
+          <label class="govuk-label govuk-radios__label" for="employment-retired">Retired</label>
+        </div>
+
+        {% set beforeStatuses = [
+          { id: "unavailable", value: "unavailable", label: "Currently unavailable for work" },
+          { id: "unemployed-active", value: "unemployed-active", label: "Unemployed - actively looking for work" },
+          { id: "unemployed-not-active", value: "unemployed-not-active", label: "Unemployed - not actively looking for work" }
+        ] %}
+        {% for status in beforeStatuses %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="employment-{{ status.id }}" name="employment_status" type="radio" value="{{ status.value }}" data-aria-controls="conditional-{{ status.id }}">
+          <label class="govuk-label govuk-radios__label" for="employment-{{ status.id }}">{{ status.label }}</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ status.id }}">
+          <fieldset class="govuk-fieldset" id="{{ status.id }}-before">
+            <legend class="govuk-fieldset__legend govuk-body govuk-!-font-weight-regular">Have they been employed before?</legend>
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="{{ status.id }}-before-yes" name="employed_before_{{ status.id }}" type="radio" value="yes">
+                <label class="govuk-label govuk-radios__label" for="{{ status.id }}-before-yes">Yes, has been employed before</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="{{ status.id }}-before-no" name="employed_before_{{ status.id }}" type="radio" value="no">
+                <label class="govuk-label govuk-radios__label" for="{{ status.id }}-before-no">No, has never been employed</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        {% endfor %}
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

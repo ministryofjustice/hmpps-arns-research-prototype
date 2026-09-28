@@ -1,0 +1,141 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "ROSH confirmation" %}
+{% set predictorsSectionCaption = "ROSH screening" %}
+{% set pageHeading = "ROSH confirmation" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set roshNavSection = "screening" %}
+{% set hideSideNav = false %}
+{% set sideNavigationInclude = "includes/03/rosh-side-navigation.html" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "rosh-other-risks.html" %}
+{% set pageErrorSummaryInclude = "includes/03/rosh-error-summary.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<form id="rosh-confirmation-form" novalidate data-offender-first-name="{{ offenderFirstName }}">
+  <div data-rosh-confirm-variant="must-screening">
+    <div class="govuk-form-group" data-rosh-error-group="rosh-confirm-exempt">
+      <fieldset class="govuk-fieldset" id="rosh-confirm-exempt">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          Your screening answers indicate that a ROSH full analysis must be completed for {{ offenderFirstName }}. Do you want to exempt {{ offenderFirstName }} from a full analysis?
+        </legend>
+        <div class="govuk-radios" data-module="govuk-radios">
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="rosh-confirm-exempt-yes" name="rosh_confirm_exempt" type="radio" value="yes" data-aria-controls="conditional-rosh-confirm-exempt-details">
+            <label class="govuk-label govuk-radios__label" for="rosh-confirm-exempt-yes">Yes</label>
+          </div>
+          <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-rosh-confirm-exempt-details">
+            <div class="govuk-form-group" data-rosh-error-group="rosh-confirm-exempt-details">
+              <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="4000">
+                <label class="govuk-label" for="rosh-confirm-exempt-details">Give details. Ensure the reason for exempting is defensible and a clear rationale is provided.</label>
+                <textarea class="govuk-textarea govuk-js-character-count" id="rosh-confirm-exempt-details" name="rosh_confirm_exempt_details" rows="5" maxlength="4000"></textarea>
+                <div id="rosh-confirm-exempt-details-info" class="govuk-hint govuk-character-count__message">You have 4,000 characters remaining.</div>
+              </div>
+            </div>
+          </div>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="rosh-confirm-exempt-no" name="rosh_confirm_exempt" type="radio" value="no">
+            <label class="govuk-label govuk-radios__label" for="rosh-confirm-exempt-no">No</label>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
+  <div data-rosh-confirm-variant="must-children" hidden>
+    <p class="govuk-heading-m">Your ‘Risk to children’ answers indicate that a ROSH full analysis must be completed for {{ offenderFirstName }}.</p>
+  </div>
+
+  <div data-rosh-confirm-variant="not-needed" hidden>
+    <div class="govuk-form-group" data-rosh-error-group="rosh-confirm-additional">
+      <fieldset class="govuk-fieldset" id="rosh-confirm-additional-not-needed">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          Your screening answers indicate that a ROSH full analysis is not needed for {{ offenderFirstName }}. Do you have any additional information that makes you think that a ROSH full analysis should be done?
+        </legend>
+        <div class="govuk-radios" data-module="govuk-radios">
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="rosh-confirm-additional-yes" name="rosh_confirm_additional" type="radio" value="yes" data-aria-controls="conditional-rosh-confirm-additional-details">
+            <label class="govuk-label govuk-radios__label" for="rosh-confirm-additional-yes">Yes</label>
+          </div>
+          <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-rosh-confirm-additional-details">
+            <div class="govuk-form-group" data-rosh-error-group="rosh-confirm-additional-details">
+              <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="4000">
+                <label class="govuk-label" for="rosh-confirm-additional-details">Provide any additional information that makes you think a ROSH full analysis should be completed.</label>
+                <textarea class="govuk-textarea govuk-js-character-count" id="rosh-confirm-additional-details" name="rosh_confirm_additional_details" rows="5" maxlength="4000"></textarea>
+                <div id="rosh-confirm-additional-details-info" class="govuk-hint govuk-character-count__message">You have 4,000 characters remaining.</div>
+              </div>
+            </div>
+          </div>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="rosh-confirm-additional-no" name="rosh_confirm_additional" type="radio" value="no">
+            <label class="govuk-label govuk-radios__label" for="rosh-confirm-additional-no">No</label>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
+  <div data-rosh-confirm-variant="should" hidden>
+    <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-error-group="rosh-confirm-additional">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m" data-rosh-should-intro>Do you have any additional information?</legend>
+        <div class="govuk-radios" data-module="govuk-radios">
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="rosh-confirm-should-additional-yes" name="rosh_confirm_additional" type="radio" value="yes" data-aria-controls="conditional-rosh-confirm-should-additional-details">
+            <label class="govuk-label govuk-radios__label" for="rosh-confirm-should-additional-yes">Yes</label>
+          </div>
+          <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-rosh-confirm-should-additional-details">
+            <div class="govuk-form-group" data-rosh-error-group="rosh-confirm-additional-details">
+              <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="4000">
+                <label class="govuk-label" for="rosh-confirm-should-additional-details">Provide any additional information about {{ offenderFirstName }} that has not been covered in this screening.</label>
+                <textarea class="govuk-textarea govuk-js-character-count" id="rosh-confirm-should-additional-details" name="rosh_confirm_additional_details" rows="5" maxlength="4000"></textarea>
+                <div id="rosh-confirm-should-additional-details-info" class="govuk-hint govuk-character-count__message">You have 4,000 characters remaining.</div>
+              </div>
+            </div>
+          </div>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="rosh-confirm-should-additional-no" name="rosh_confirm_additional" type="radio" value="no">
+            <label class="govuk-label govuk-radios__label" for="rosh-confirm-should-additional-no">No</label>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="govuk-form-group" data-rosh-error-group="rosh-confirm-should-exempt">
+      <fieldset class="govuk-fieldset" id="rosh-confirm-should-exempt">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Do you want to exempt {{ offenderFirstName }} from a ROSH full analysis?</legend>
+        <div class="govuk-radios" data-module="govuk-radios">
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="rosh-confirm-should-exempt-yes" name="rosh_confirm_should_exempt" type="radio" value="yes" data-aria-controls="conditional-rosh-confirm-should-exempt-details">
+            <label class="govuk-label govuk-radios__label" for="rosh-confirm-should-exempt-yes">Yes</label>
+          </div>
+          <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-rosh-confirm-should-exempt-details">
+            <div class="govuk-form-group" data-rosh-error-group="rosh-confirm-should-exempt-details">
+              <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="4000">
+                <label class="govuk-label" for="rosh-confirm-should-exempt-details">Give details. Ensure the reason for exempting is defensible and a clear rationale is provided.</label>
+                <textarea class="govuk-textarea govuk-js-character-count" id="rosh-confirm-should-exempt-details" name="rosh_confirm_should_exempt_details" rows="5" maxlength="4000"></textarea>
+                <div id="rosh-confirm-should-exempt-details-info" class="govuk-hint govuk-character-count__message">You have 4,000 characters remaining.</div>
+              </div>
+            </div>
+          </div>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="rosh-confirm-should-exempt-no" name="rosh_confirm_should_exempt" type="radio" value="no">
+            <label class="govuk-label govuk-radios__label" for="rosh-confirm-should-exempt-no">No</label>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Mark as complete</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

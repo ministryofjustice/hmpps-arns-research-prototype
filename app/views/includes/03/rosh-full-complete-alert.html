@@ -1,0 +1,13 @@
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
+
+{{ mojAlert({
+  variant: "information",
+  title: "ROSH full analysis is complete",
+  showTitleAsHeading: true,
+  dismissible: false,
+  html: '<span data-rosh-full-complete-body>You have completed the ROSH full analysis.</span>',
+  attributes: {
+    "data-rosh-full-complete-alert": "",
+    hidden: "hidden"
+  }
+}) }}

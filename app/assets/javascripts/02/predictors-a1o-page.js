@@ -23,6 +23,8 @@ import {
 } from './predictors-offence-sort-select.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
+  if (!window.location.pathname.includes('/02/')) return
+
   const form = document.getElementById('predictors-a1o-form')
   const listContainer = document.querySelector('[data-offence-list-container]')
   const listRoot = document.querySelector('[data-offence-category-list]')
