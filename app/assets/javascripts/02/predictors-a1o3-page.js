@@ -13,6 +13,8 @@ import {
 import { withFromCheckAnswers } from './predictors-change-scroll.js'
 
 window.GOVUKPrototypeKit.documentReady(() => {
+  if (!window.location.pathname.includes('/02/')) return
+
   const form = document.getElementById('predictors-a1o3-form')
   const heading = document.querySelector('[data-active-category-heading]')
   const tableRoot = document.querySelector('[data-sub-offences-root]')

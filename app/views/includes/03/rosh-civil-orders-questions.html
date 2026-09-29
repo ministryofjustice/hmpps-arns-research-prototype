@@ -1,0 +1,30 @@
+<div class="govuk-checkboxes" data-module="govuk-checkboxes">
+  {% set civilOrders = [
+    { "id": "banning-order", "label": "Banning order" },
+    { "id": "child-arrangement-order", "label": "Child arrangement order" },
+    { "id": "civil-injunction", "label": "Civil injunction" },
+    { "id": "community-protection-notice", "label": "Community protection notice" },
+    { "id": "criminal-behaviour-order", "label": "Criminal behaviour order" },
+    { "id": "fgm-order", "label": "Female genital mutilation order" },
+    { "id": "forced-marriage-order", "label": "Forced marriage order" },
+    { "id": "knife-crime-prevention-order", "label": "Knife crime prevention order" },
+    { "id": "non-molestation-order", "label": "Non-molestation order" },
+    { "id": "occupation-order", "label": "Occupation order" },
+    { "id": "prohibited-steps-order", "label": "Prohibited steps order" },
+    { "id": "public-spaces-protection-order", "label": "Public spaces protection order" },
+    { "id": "restraining-orders", "label": "Restraining orders" },
+    { "id": "serious-crime-prevention-order", "label": "Serious crime prevention order" },
+    { "id": "serious-violence-reduction-order", "label": "Serious violence reduction order" },
+    { "id": "sexual-harm-prevention-orders", "label": "Sexual harm prevention orders" },
+    { "id": "sexual-risk-order", "label": "Sexual risk order" },
+    { "id": "slavery-trafficking-orders", "label": "Slavery and trafficking prevention and risk orders" },
+    { "id": "stalking-protection-order", "label": "Stalking protection order" },
+    { "id": "violent-offender-order", "label": "Violent offender order" }
+  ] %}
+  {% for order in civilOrders %}
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-civil-order-{{ order.id }}" name="rosh_civil_order_types" type="checkbox" value="{{ order.id }}">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-civil-order-{{ order.id }}">{{ order.label }}</label>
+  </div>
+  {% endfor %}
+</div>

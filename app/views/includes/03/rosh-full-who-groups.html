@@ -1,0 +1,81 @@
+<div class="govuk-checkboxes" data-module="govuk-checkboxes">
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-full-group-children" name="rosh_full_groups" type="checkbox" value="children" data-aria-controls="conditional-rosh-full-who-children">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-full-group-children">Children</label>
+    <div id="rosh-full-group-children-hint" class="govuk-hint govuk-checkboxes__hint">Identifiable children and children in general</div>
+  </div>
+  <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-rosh-full-who-children">
+    <div class="govuk-form-group" data-rosh-error-group="rosh-full-who-children">
+      {% set fieldId = "rosh-full-who-children" %}
+      {% set fieldName = "rosh_full_who_children" %}
+      {% set fieldLabel = "Who is at risk and why?" %}
+      {% set fieldHint = "Give details of identifiable children and children in general." %}
+      {% set fieldRows = 5 %}
+      {% include "includes/03/rosh-full-textarea.html" %}
+    </div>
+  </div>
+
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-full-group-public" name="rosh_full_groups" type="checkbox" value="public" data-aria-controls="conditional-rosh-full-who-public">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-full-group-public">The public</label>
+    <div class="govuk-hint govuk-checkboxes__hint">People who are not known to {{ offenderFirstName }}</div>
+  </div>
+  <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-rosh-full-who-public">
+    <div class="govuk-form-group" data-rosh-error-group="rosh-full-who-public">
+      {% set fieldId = "rosh-full-who-public" %}
+      {% set fieldName = "rosh_full_who_public" %}
+      {% set fieldLabel = "Who is at risk and why?" %}
+      {% set fieldHint = "Give details of who in the public is at risk and why." %}
+      {% set fieldRows = 5 %}
+      {% include "includes/03/rosh-full-textarea.html" %}
+    </div>
+  </div>
+
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-full-group-known-adult" name="rosh_full_groups" type="checkbox" value="known-adult" data-aria-controls="conditional-rosh-full-who-known-adult">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-full-group-known-adult">A known adult</label>
+    <div class="govuk-hint govuk-checkboxes__hint">A specific adult, such as a partner, ex-partner or other named person</div>
+  </div>
+  <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-rosh-full-who-known-adult">
+    <div class="govuk-form-group" data-rosh-error-group="rosh-full-who-known-adult">
+      {% set fieldId = "rosh-full-who-known-adult" %}
+      {% set fieldName = "rosh_full_who_known-adult" %}
+      {% set fieldLabel = "Who is at risk and why?" %}
+      {% set fieldHint = "Name the known adult if you can, and explain why they are at risk." %}
+      {% set fieldRows = 5 %}
+      {% include "includes/03/rosh-full-textarea.html" %}
+    </div>
+  </div>
+
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-full-group-staff" name="rosh_full_groups" type="checkbox" value="staff" data-aria-controls="conditional-rosh-full-who-staff">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-full-group-staff">Staff</label>
+    <div class="govuk-hint govuk-checkboxes__hint">Prison, probation, police or other staff</div>
+  </div>
+  <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-rosh-full-who-staff">
+    <div class="govuk-form-group" data-rosh-error-group="rosh-full-who-staff">
+      {% set fieldId = "rosh-full-who-staff" %}
+      {% set fieldName = "rosh_full_who_staff" %}
+      {% set fieldLabel = "Who is at risk and why?" %}
+      {% set fieldHint = "Give details of which staff are at risk and why." %}
+      {% set fieldRows = 5 %}
+      {% include "includes/03/rosh-full-textarea.html" %}
+    </div>
+  </div>
+
+  <div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" id="rosh-full-group-prisoners" name="rosh_full_groups" type="checkbox" value="prisoners" data-aria-controls="conditional-rosh-full-who-prisoners">
+    <label class="govuk-label govuk-checkboxes__label" for="rosh-full-group-prisoners">Prisoners</label>
+    <div class="govuk-hint govuk-checkboxes__hint">Other people in custody</div>
+  </div>
+  <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-rosh-full-who-prisoners">
+    <div class="govuk-form-group" data-rosh-error-group="rosh-full-who-prisoners">
+      {% set fieldId = "rosh-full-who-prisoners" %}
+      {% set fieldName = "rosh_full_who_prisoners" %}
+      {% set fieldLabel = "Who is at risk and why?" %}
+      {% set fieldHint = "Give details of which prisoners are at risk and why." %}
+      {% set fieldRows = 5 %}
+      {% include "includes/03/rosh-full-textarea.html" %}
+    </div>
+  </div>
+</div>

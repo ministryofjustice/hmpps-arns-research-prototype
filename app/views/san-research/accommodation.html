@@ -1,0 +1,37 @@
+{% extends "layouts/assessment-san-research.html" %}
+
+{% set pageName = "Accommodation" %}
+{% set sanCaption = "Accommodation" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san-research/content-header.html" %}
+
+<form id="san-accommodation-somewhere-form" novalidate data-san-page="somewhere">
+  <div class="govuk-form-group" data-san-error-group="somewhere-to-live">
+    <fieldset class="govuk-fieldset" id="somewhere-to-live">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">Does Alex currently have somewhere to live?</h1>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="somewhere-to-live-yes" name="somewhere_to_live" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="somewhere-to-live-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="somewhere-to-live-no" name="somewhere_to_live" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="somewhere-to-live-no">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

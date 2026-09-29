@@ -1,0 +1,64 @@
+{% extends "layouts/assessment-san-research.html" %}
+
+{% set pageName = "Accommodation" %}
+{% set sanHeading = "Accommodation" %}
+{% set backLinkHref = "accommodation-details.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san-research/content-header.html" %}
+
+<form id="san-accommodation-concerns-form" novalidate data-san-page="concerns">
+  <div class="govuk-form-group" id="location-concerns" data-san-question="location-concerns" hidden>
+    <fieldset class="govuk-fieldset" aria-describedby="location-concerns-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">What are your concerns about the location? (optional)</h2>
+      </legend>
+      <div id="location-concerns-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="location-associates" name="location_reasons" type="checkbox" value="associates">
+          <label class="govuk-label govuk-checkboxes__label" for="location-associates">Close to criminal associates</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="location-victimised" name="location_reasons" type="checkbox" value="victimised">
+          <label class="govuk-label govuk-checkboxes__label" for="location-victimised">Close to someone who has victimised them</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="location-victim" name="location_reasons" type="checkbox" value="victim">
+          <label class="govuk-label govuk-checkboxes__label" for="location-victim">Close to victim or possible victims</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="location-neighbours" name="location_reasons" type="checkbox" value="neighbours">
+          <label class="govuk-label govuk-checkboxes__label" for="location-neighbours">Difficulty with neighbours</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="location-safety" name="location_reasons" type="checkbox" value="safety">
+          <label class="govuk-label govuk-checkboxes__label" for="location-safety">Safety of the area</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="location-other" name="location_reasons" type="checkbox" value="other" data-aria-controls="conditional-location-other">
+          <label class="govuk-label govuk-checkboxes__label" for="location-other">Other</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-location-other">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="location-other-details">Give details</label>
+            <textarea class="govuk-textarea" id="location-other-details" name="location_other_details" rows="3" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="location-other-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  {% include "includes/san-research/concern-checkboxes.html" %}
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

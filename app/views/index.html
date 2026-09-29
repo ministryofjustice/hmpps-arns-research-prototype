@@ -1,6 +1,7 @@
 {% extends "layouts/assessment.html" %}
 
-{% set hideServiceNavigation = true %}
+{% set showArnsServiceNavigation = true %}
+{% set arnsServiceNavCurrent = "home" %}
 {% set hideServiceHeader = true %}
 
 {% block pageTitle %}Reoffending predictors - Research prototypes{% endblock %}
@@ -10,108 +11,40 @@
 {% include "includes/assessment-home-page-open.html" %}
 
 <div class="assessment-home-header">
-  <span class="govuk-caption-xl">Reoffending predictors</span>
+  <span class="govuk-caption-xl">Squad 3</span>
   <h1 class="govuk-heading-xl assessment-home-title">Prototypes</h1>
   <p class="govuk-hint assessment-home-hint">These prototypes have been built by the ARNS Actuarials team (squad 3). It shows reference designs and experiments for research.</p>
 </div>
 
-<div class="govuk-tabs assessment-home-tabs" data-module="govuk-tabs">
-  <h2 class="govuk-tabs__title">Contents</h2>
-  <ul class="govuk-tabs__list">
-    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-      <a class="govuk-tabs__tab" href="#research-prototypes">Research</a>
-    </li>
-    <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="#dev-prototypes">Dev</a>
-    </li>
-  </ul>
-
-  <div class="govuk-tabs__panel" id="research-prototypes">
-
-<ul class="govuk-list assessment-research-prototypes">
-  {% set href = "/02/a2b.html" %}
-  {% set itemHeading = "Prototype 2" %}
-  {% set title = "Static assessment" %}
-  {% set prototypeVersion = "02" %}
-  {% set secondaryHref = "/02/a6.html" %}
-  {% set secondaryTitle = "Dynamic assessment" %}
-  {% set secondaryClearSessionOnStart = true %}
-  {% set secondaryPrototypeVersion = "02" %}
-  {% set titleTagText = "June-August 2026" %}
-  {% set secondaryTitleTagText = "To be tested in R3" %}
-  {% set secondaryTitleTagColour = "yellow" %}
-  {% set hint = "Submitting reoffending assessments (static & dynamic)" %}
-  {% set clearSessionOnStart = true %}
-  {% include "includes/research-prototype-entry.html" %}
-
-  {# When SESSION_TELEMETRY_UI_ENABLED is true in tiering-session-telemetry.js, use /01/agree.html #}
-  {% set skipToEndHref = null %}
-  {% set secondaryHref = null %}
-  {% set secondaryTitle = null %}
-  {% set secondaryClearSessionOnStart = null %}
-  {% set secondaryPrototypeVersion = null %}
-  {% set href = "/01/a1.html" %}
-  {% set itemHeading = "Prototype 1" %}
-  {% set title = "Static assessment" %}
-  {% set titleTagText = "May-June 2026" %}
-  {% set titleTagColour = "blue" %}
-  {% set secondaryTitleTagText = "Tested in R2" %}
-  {% set secondaryTitleTagColour = "green" %}
-  {% set hint = "Submitting a Tiering assessment (static)" %}
-  {% set skipToEndHref = "/01/skip-to-end.html" %}
-  {% set clearSessionOnStart = true %}
-  {% set prototypeVersion = "01" %}
-  {% include "includes/research-prototype-entry.html" %}
+<ul class="govuk-grid-row card-group assessment-home-cards">
+  <li class="govuk-grid-column-one-half card-group__item">
+    <div class="card card--clickable">
+      <strong class="govuk-tag govuk-tag--light-blue card__date">Jul 2026</strong>
+      <h2 class="govuk-heading-m card__heading">
+        <a class="govuk-link card__link govuk-link--no-visited-state" href="/reoffending-predictors">Reoffending predictors</a>
+      </h2>
+      <p class="govuk-body card__description">Research, reference and development prototypes.</p>
+    </div>
+  </li>
+  <li class="govuk-grid-column-one-half card-group__item">
+    <div class="card card--clickable">
+      <strong class="govuk-tag govuk-tag--light-blue card__date">Sep 2026</strong>
+      <h2 class="govuk-heading-m card__heading">
+        <a class="govuk-link card__link govuk-link--no-visited-state" href="/san">Strengths and needs (SAN)</a>
+      </h2>
+      <p class="govuk-body card__description">Prototypes for the strengths and needs assessment.</p>
+    </div>
+  </li>
+  <li class="govuk-grid-column-one-half card-group__item">
+    <div class="card card--clickable">
+      <strong class="govuk-tag govuk-tag--light-blue card__date">Aug 2026</strong>
+      <h2 class="govuk-heading-m card__heading">
+        <a class="govuk-link card__link govuk-link--no-visited-state" href="/rosh">Risk of serious harm (ROSH)</a>
+      </h2>
+      <p class="govuk-body card__description">Prototypes for the risk of serious harm assessment.</p>
+    </div>
+  </li>
 </ul>
-  </div>
-
-  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="dev-prototypes">
-
-<ul class="govuk-list assessment-research-prototypes">
-  {% set href = "/dev/a2b.html" %}
-  {% set itemHeading = "Dev reference" %}
-  {% set title = "Static assessment" %}
-  {% set prototypeVersion = "dev" %}
-  {% set secondaryHref = "/dev/a6.html" %}
-  {% set secondaryTitle = "Dynamic assessment" %}
-  {% set secondaryClearSessionOnStart = true %}
-  {% set secondaryPrototypeVersion = "dev" %}
-  {% set secondaryInactive = null %}
-  {% set titleTagText = "September 2026" %}
-  {% set titleTagColour = "blue" %}
-  {% set secondaryTitleTagText = null %}
-  {% set secondaryTitleTagColour = null %}
-  {% set hint = "Reference prototype for development" %}
-  {% set titleHint = "(design frozen on 23 July 2026)" %}
-  {% set secondaryTitleHint = "(design frozen on 12 August 2026)" %}
-  {% set skipToEndHref = null %}
-  {% set clearSessionOnStart = true %}
-  {% include "includes/research-prototype-entry.html" %}
-
-  {% set href = "/dev/ux-handover.html" %}
-  {% set itemHeading = "Documentation" %}
-  {% set title = "UX documentation" %}
-  {% set titleRegularWeight = true %}
-  {% set prototypeVersion = null %}
-  {% set secondaryHref = null %}
-  {% set secondaryTitle = null %}
-  {% set secondaryClearSessionOnStart = null %}
-  {% set secondaryPrototypeVersion = null %}
-  {% set secondaryInactive = null %}
-  {% set titleTagText = null %}
-  {% set titleTagColour = null %}
-  {% set secondaryTitleTagText = null %}
-  {% set secondaryTitleTagColour = null %}
-  {% set hint = null %}
-  {% set titleHint = null %}
-  {% set secondaryTitleHint = null %}
-  {% set skipToEndHref = null %}
-  {% set clearSessionOnStart = null %}
-  {% include "includes/research-prototype-entry.html" %}
-  {% set titleRegularWeight = null %}
-</ul>
-  </div>
-</div>
 
 {% include "includes/assessment-page-close.html" %}
 

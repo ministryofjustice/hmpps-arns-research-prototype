@@ -1,0 +1,85 @@
+{% extends "layouts/assessment-san.html" %}
+
+{% set pageName = "Health and wellbeing" %}
+{% set sanHeading = "Health and wellbeing" %}
+{% set sanSection = "health" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san/content-header.html" %}
+
+<form id="san-health-start-form" novalidate data-hw-page="start">
+  <div class="govuk-form-group" data-san-error-group="physical">
+    <fieldset class="govuk-fieldset" id="physical">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Does Alex have any physical health conditions?</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="physical-yes" name="health_physical" type="radio" value="yes" data-aria-controls="conditional-physical-yes">
+          <label class="govuk-label govuk-radios__label" for="physical-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-physical-yes">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="physical-yes-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="physical-yes-details" name="health_physical_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="physical-yes-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="physical-no" name="health_physical" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="physical-no">No</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="physical-unknown" name="health_physical" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="physical-unknown">Unknown</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="mental">
+    <fieldset class="govuk-fieldset" id="mental">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Does Alex have any diagnosed or documented mental health problems?</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {% set mentalOptions = [
+          { id: "severe", label: "Yes, ongoing - severe and documented over a prolonged period of time" },
+          { id: "ongoing", label: "Yes, ongoing - duration is not known or there is no link to offending" },
+          { id: "past", label: "Yes, in the past" }
+        ] %}
+        {% for option in mentalOptions %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="mental-{{ option.id }}" name="health_mental" type="radio" value="{{ option.id }}" data-aria-controls="conditional-mental-{{ option.id }}">
+          <label class="govuk-label govuk-radios__label" for="mental-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-mental-{{ option.id }}">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="mental-{{ option.id }}-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="mental-{{ option.id }}-details" name="health_mental_{{ option.id }}_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="mental-{{ option.id }}-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        {% endfor %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="mental-no" name="health_mental" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="mental-no">No</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="mental-unknown" name="health_mental" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="mental-unknown">Unknown</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

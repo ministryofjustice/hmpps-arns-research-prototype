@@ -1,0 +1,12 @@
+{# Full-width section title (e.g. Risk) above the side nav and page heading #}
+<div class="govuk-grid-row assessment-section-title">
+  <div class="govuk-grid-column-full">
+    <div class="assessment-layout__row assessment-layout__row--tight assessment-section-title__row">
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-0">{{ pageSectionTitle | default("Risk") }}</h1>
+      <div class="assessment-service-header__actions">
+        {% include returnToOasysButtonInclude | default("includes/03/return-to-oasys-button.html") %}
+      </div>
+    </div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+  </div>
+</div>

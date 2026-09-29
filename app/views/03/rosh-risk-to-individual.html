@@ -1,0 +1,81 @@
+{% extends "layouts/assessment-proto3.html" %}
+
+{% set offenderFirstName = "Alex" %}
+{% set pageName = "Risk to individual" %}
+{% set predictorsSectionCaption = "ROSH screening" %}
+{% set pageHeading = "Risk to individual" %}
+{% set compactPageHeader = true %}
+{% set activeSection = "rosh" %}
+{% set roshNavSection = "screening" %}
+{% set hideSideNav = false %}
+{% set sideNavigationInclude = "includes/03/rosh-side-navigation.html" %}
+{% set statusTag = "Incomplete" %}
+{% set backLinkHref = "rosh-risk-to-children.html" %}
+{% set backLinkId = "rosh-individual-back" %}
+{% set pageErrorSummaryInclude = "includes/03/rosh-error-summary.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+{% include "includes/assessment-question-header.html" %}
+
+<div class="govuk-inset-text">
+  <h3 class="govuk-heading-s govuk-!-margin-bottom-2">Areas of concern based on answers already provided in this assessment</h3>
+  <ul class="govuk-list govuk-!-margin-bottom-0">
+    <li>Personal relationships and community</li>
+    <li>Drug use</li>
+  </ul>
+</div>
+
+<form id="rosh-risk-to-individual-form" novalidate data-offender-first-name="{{ offenderFirstName }}">
+  <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-error-group="rosh-suicide">
+    <fieldset class="govuk-fieldset" id="rosh-suicide">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h3 class="govuk-fieldset__heading">Are there any concerns about {{ offenderFirstName }}’s risk of suicide?</h3>
+      </legend>
+      {% set radioName = "rosh_suicide" %}
+      {% set radioLegendId = "rosh-suicide" %}
+      {% include "includes/03/rosh-yes-no-unknown.html" %}
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-error-group="rosh-self-harm">
+    <fieldset class="govuk-fieldset" id="rosh-self-harm">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h3 class="govuk-fieldset__heading">Are there any concerns about {{ offenderFirstName }}’s risk of self-harm?</h3>
+      </legend>
+      {% set radioName = "rosh_self_harm" %}
+      {% set radioLegendId = "rosh-self-harm" %}
+      {% include "includes/03/rosh-yes-no-unknown.html" %}
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group govuk-!-margin-bottom-8" data-rosh-error-group="rosh-coping-custody">
+    <fieldset class="govuk-fieldset" id="rosh-coping-custody">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h3 class="govuk-fieldset__heading">Are there any concerns about {{ offenderFirstName }} coping in custody, approved premises or a hostel?</h3>
+      </legend>
+      {% set radioName = "rosh_coping_custody" %}
+      {% set radioLegendId = "rosh-coping-custody" %}
+      {% include "includes/03/rosh-yes-no-unknown.html" %}
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-rosh-error-group="rosh-vulnerability">
+    <fieldset class="govuk-fieldset" id="rosh-vulnerability">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h3 class="govuk-fieldset__heading">Are there any concerns about {{ offenderFirstName }}’s vulnerability?</h3>
+      </legend>
+      {% set radioName = "rosh_vulnerability" %}
+      {% set radioLegendId = "rosh-vulnerability" %}
+      {% include "includes/03/rosh-yes-no-unknown.html" %}
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

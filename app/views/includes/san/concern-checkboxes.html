@@ -1,0 +1,42 @@
+<div class="govuk-form-group">
+  <fieldset class="govuk-fieldset" id="{{ fieldsetId }}">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Select all that apply (optional).</legend>
+    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="{{ prefix }}-issues" name="{{ name }}" type="checkbox" value="issues">
+        <label class="govuk-label govuk-checkboxes__label" for="{{ prefix }}-issues">Issues with the property - for example, poor kitchen or bathroom facilities</label>
+      </div>
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="{{ prefix }}-overcrowding" name="{{ name }}" type="checkbox" value="overcrowding">
+        <label class="govuk-label govuk-checkboxes__label" for="{{ prefix }}-overcrowding">Overcrowding</label>
+      </div>
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="{{ prefix }}-exploited" name="{{ name }}" type="checkbox" value="exploited">
+        <label class="govuk-label govuk-checkboxes__label" for="{{ prefix }}-exploited">Risk of their accommodation being exploited by others - for example, cuckooing</label>
+      </div>
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="{{ prefix }}-safety" name="{{ name }}" type="checkbox" value="safety">
+        <label class="govuk-label govuk-checkboxes__label" for="{{ prefix }}-safety">Safety of accommodation</label>
+      </div>
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="{{ prefix }}-victim-lives" name="{{ name }}" type="checkbox" value="victim-lives">
+        <label class="govuk-label govuk-checkboxes__label" for="{{ prefix }}-victim-lives">Victim lives with them</label>
+      </div>
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="{{ prefix }}-victimised" name="{{ name }}" type="checkbox" value="victimised">
+        <label class="govuk-label govuk-checkboxes__label" for="{{ prefix }}-victimised">Victimised by someone living with them</label>
+      </div>
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="{{ prefix }}-other" name="{{ name }}" type="checkbox" value="other" data-aria-controls="conditional-{{ prefix }}-other">
+        <label class="govuk-label govuk-checkboxes__label" for="{{ prefix }}-other">Other</label>
+      </div>
+      <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-{{ prefix }}-other">
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="{{ prefix }}-other-details">Give details</label>
+          <textarea class="govuk-textarea" id="{{ prefix }}-other-details" name="{{ detailsName }}" rows="3" maxlength="2000"></textarea>
+          <div class="govuk-hint san-character-count" data-san-character-count="{{ prefix }}-other-details">You have 2,000 characters remaining</div>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>
