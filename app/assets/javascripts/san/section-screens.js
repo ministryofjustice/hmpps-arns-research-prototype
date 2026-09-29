@@ -30,6 +30,7 @@ const rememberCurrentScreen = () => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
+  if (!window.location.pathname.startsWith("/san/")) return
   if (!document.querySelector('[data-san-section-link]')) return
   rememberCurrentScreen()
   window.addEventListener('hashchange', rememberCurrentScreen)

@@ -976,5 +976,6 @@ const initSanAccommodation = () => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
+  if (!window.location.pathname.startsWith("/san/")) return
   initSanAccommodation()
 })

@@ -1,0 +1,45 @@
+<div class="govuk-form-group" id="suitability-concerns" data-san-question="suitability-concerns" hidden>
+  <fieldset class="govuk-fieldset" aria-describedby="suitability-concerns-hint">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+      <h2 class="govuk-fieldset__heading">What are your concerns about the accommodation? (optional)</h2>
+    </legend>
+    <div id="suitability-concerns-hint" class="govuk-hint">Select all that apply.</div>
+    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="suitability-issues" name="suitability_reasons" type="checkbox" value="issues">
+        <label class="govuk-label govuk-checkboxes__label" for="suitability-issues">Issues with the property - for example, poor kitchen or bathroom facilities</label>
+      </div>
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="suitability-overcrowding" name="suitability_reasons" type="checkbox" value="overcrowding">
+        <label class="govuk-label govuk-checkboxes__label" for="suitability-overcrowding">Overcrowding</label>
+      </div>
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="suitability-exploited" name="suitability_reasons" type="checkbox" value="exploited">
+        <label class="govuk-label govuk-checkboxes__label" for="suitability-exploited">Risk of their accommodation being exploited by others - for example, cuckooing</label>
+      </div>
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="suitability-safety" name="suitability_reasons" type="checkbox" value="safety">
+        <label class="govuk-label govuk-checkboxes__label" for="suitability-safety">Safety of accommodation</label>
+      </div>
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="suitability-victim-lives" name="suitability_reasons" type="checkbox" value="victim-lives">
+        <label class="govuk-label govuk-checkboxes__label" for="suitability-victim-lives">Victim lives with them</label>
+      </div>
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="suitability-victimised" name="suitability_reasons" type="checkbox" value="victimised">
+        <label class="govuk-label govuk-checkboxes__label" for="suitability-victimised">Victimised by someone living with them</label>
+      </div>
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="suitability-other" name="suitability_reasons" type="checkbox" value="other" data-aria-controls="conditional-suitability-other">
+        <label class="govuk-label govuk-checkboxes__label" for="suitability-other">Other</label>
+      </div>
+      <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-suitability-other">
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="suitability-other-details">Give details</label>
+          <textarea class="govuk-textarea" id="suitability-other-details" name="suitability_other_details" rows="3" maxlength="2000"></textarea>
+          <div class="govuk-hint san-character-count" data-san-character-count="suitability-other-details">You have 2,000 characters remaining</div>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>

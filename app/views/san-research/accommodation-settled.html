@@ -1,0 +1,38 @@
+{% extends "layouts/assessment-san-research.html" %}
+
+{% set pageName = "Accommodation" %}
+{% set sanCaption = "Accommodation" %}
+{% set backLinkHref = "accommodation.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san-research/content-header.html" %}
+
+<form id="san-accommodation-settled-form" novalidate data-san-page="settled">
+  <div class="govuk-form-group" data-san-error-group="accommodation-settled">
+    <fieldset class="govuk-fieldset" id="accommodation-settled">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">Is Alex's accommodation settled?</h1>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="accommodation-settled-yes" name="accommodation_settled" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="accommodation-settled-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="accommodation-settled-no" name="accommodation_settled" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="accommodation-settled-no">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

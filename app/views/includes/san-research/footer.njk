@@ -1,0 +1,13 @@
+{% from "govuk/components/footer/macro.njk" import govukFooter %}
+
+{{ govukFooter({
+  meta: {
+    items: [
+      {
+        href: "/san-research/accessibility.html",
+        text: "Accessibility statement"
+      }
+    ],
+    visuallyHiddenTitle: "Support links"
+  }
+}) }}

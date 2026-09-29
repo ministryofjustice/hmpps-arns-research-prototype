@@ -1,5 +1,7 @@
 {% extends "layouts/assessment.html" %}
 
+{% from "govuk/components/accordion/macro.njk" import govukAccordion %}
+
 {% set showArnsServiceNavigation = true %}
 {% set arnsServiceNavCurrent = "san" %}
 {% set hideServiceHeader = true %}
@@ -13,7 +15,7 @@
 <a class="govuk-back-link" href="/">Back</a>
 
 <div class="assessment-home-header assessment-home-header--with-back-link">
-  <span class="govuk-caption-xl">Squad 3</span>
+  <span class="govuk-caption-xl">Prototypes</span>
   <h1 class="govuk-heading-xl assessment-home-title">Strengths and needs (SAN)</h1>
   <p class="govuk-hint assessment-home-hint">Prototype for the community Strengths and needs assessment.</p>
 </div>
@@ -32,52 +34,54 @@
     </li>
   </ul>
 
-  {% macro sanPrivateBetaEntry(entryHint, showDetails, entryHeading, linksInactive, titleTag) %}
-<ul class="govuk-list assessment-research-prototypes">
+  {% macro sanPrivateBetaEntry(entryHint, showDetails, entryHeading, linksInactive, titleTag, basePath, inAccordion) %}
+<ul class="govuk-list assessment-research-prototypes{% if inAccordion %} assessment-research-prototypes--in-accordion{% endif %}">
+  {% set prototypeBase = basePath | default("/san") %}
+  {% set entryVersion = "san-research" if prototypeBase == "/san-research" else "san" %}
   {% set skipToEndHref = null %}
-  {% set href = "/san/accommodation.html" %}
-  {% set itemHeading = entryHeading %}
-  {% set nestedHeading = null %}
+  {% set href = prototypeBase ~ "/accommodation.html" %}
+  {% set itemHeading = null if inAccordion else entryHeading %}
+  {% set nestedHeading = true if inAccordion else null %}
   {% set title = "Accommodation" %}
-  {% set prototypeVersion = "san" %}
-  {% set secondaryHref = "/san/employment.html" %}
+  {% set prototypeVersion = entryVersion %}
+  {% set secondaryHref = prototypeBase ~ "/employment.html" %}
   {% set secondaryTitle = "Employment and education" %}
   {% set secondaryInactive = null %}
   {% set secondaryClearSessionOnStart = true %}
-  {% set secondaryPrototypeVersion = "san" %}
-  {% set tertiaryHref = "/san/finances.html" %}
+  {% set secondaryPrototypeVersion = entryVersion %}
+  {% set tertiaryHref = prototypeBase ~ "/finances.html" %}
   {% set tertiaryTitle = "Finances" %}
   {% set tertiaryClearSessionOnStart = true %}
-  {% set tertiaryPrototypeVersion = "san" %}
-  {% set quaternaryHref = "/san/drugs.html" %}
+  {% set tertiaryPrototypeVersion = entryVersion %}
+  {% set quaternaryHref = prototypeBase ~ "/drugs.html" %}
   {% set quaternaryTitle = "Drug use" %}
   {% set quaternaryClearSessionOnStart = true %}
-  {% set quaternaryPrototypeVersion = "san" %}
-  {% set quinaryHref = "/san/alcohol.html" %}
+  {% set quaternaryPrototypeVersion = entryVersion %}
+  {% set quinaryHref = prototypeBase ~ "/alcohol.html" %}
   {% set quinaryTitle = "Alcohol use" %}
   {% set quinaryClearSessionOnStart = true %}
-  {% set quinaryPrototypeVersion = "san" %}
-  {% set senaryHref = "/san/health.html" %}
+  {% set quinaryPrototypeVersion = entryVersion %}
+  {% set senaryHref = prototypeBase ~ "/health.html" %}
   {% set senaryTitle = "Health and wellbeing" %}
   {% set senaryClearSessionOnStart = true %}
-  {% set senaryPrototypeVersion = "san" %}
-  {% set septenaryHref = "/san/personal-relationships-children.html" %}
+  {% set senaryPrototypeVersion = entryVersion %}
+  {% set septenaryHref = prototypeBase ~ "/personal-relationships-children.html" %}
   {% set septenaryTitle = "Personal relationships and community" %}
   {% set septenaryClearSessionOnStart = true %}
-  {% set septenaryPrototypeVersion = "san" %}
-  {% set octonaryHref = "/san/thinking-behaviours.html" %}
+  {% set septenaryPrototypeVersion = entryVersion %}
+  {% set octonaryHref = prototypeBase ~ "/thinking-behaviours.html" %}
   {% set octonaryTitle = "Thinking, behaviours and attitudes" %}
   {% set octonaryClearSessionOnStart = true %}
-  {% set octonaryPrototypeVersion = "san" %}
-  {% set nonaryHref = "/san/offence-analysis.html" %}
+  {% set octonaryPrototypeVersion = entryVersion %}
+  {% set nonaryHref = prototypeBase ~ "/offence-analysis.html" %}
   {% set nonaryTitle = "Offence analysis" %}
   {% set nonaryClearSessionOnStart = true %}
-  {% set nonaryPrototypeVersion = "san" %}
-  {% set titleTagText = titleTag %}
+  {% set nonaryPrototypeVersion = entryVersion %}
+  {% set titleTagText = null if inAccordion else titleTag %}
   {% set titleTagColour = null %}
   {% set secondaryTitleTagText = null %}
   {% set secondaryTitleTagColour = null %}
-  {% set hint = entryHint %}
+  {% set hint = null if inAccordion else entryHint %}
   {% set hintHtml = null %}
   {% set titleHint = null %}
   {% set secondaryTitleHint = null %}
@@ -102,12 +106,35 @@
 </ul>
   {% endmacro %}
 
+  {% set sanResearchAccordionContent %}
+    {{ sanPrivateBetaEntry("This prototype shows the new iterations that are proposed for User Research.", false, "SAN research", false, "Oct 2026", "/san-research", true) | safe }}
+  {% endset %}
+  {% set sanResearchHeadingHtml -%}
+SAN research<span class="assessment-research-prototypes__title-tags assessment-research-prototypes__accordion-heading-tags"><strong class="govuk-tag assessment-research-prototypes__title-tag">Oct 2026</strong></span>
+  {%- endset %}
+
   <div class="govuk-tabs__panel" id="research-prototypes">
-    {{ sanPrivateBetaEntry("This prototype shows the new iterations that are proposed for User Research.", false, "SAN research", true, "Oct 2026") | safe }}
+    {{ govukAccordion({
+      id: "san-research-prototypes-accordion",
+      classes: "assessment-research-prototypes-accordion",
+      items: [
+        {
+          heading: {
+            html: sanResearchHeadingHtml
+          },
+          summary: {
+            text: "This prototype shows the new iterations that are proposed for User Research."
+          },
+          content: {
+            html: sanResearchAccordionContent
+          }
+        }
+      ]
+    }) }}
   </div>
 
   <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="reference-prototypes">
-    {{ sanPrivateBetaEntry("'As-is' replica (for reference only)", true, "SAN private beta reference", false, "25 Sep 2026") | safe }}
+    {{ sanPrivateBetaEntry("'As-is' replica (for reference only)", true, "SAN private beta reference", false, "25 Sep 2026", "/san") | safe }}
   </div>
 
   <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="experiment-prototypes">

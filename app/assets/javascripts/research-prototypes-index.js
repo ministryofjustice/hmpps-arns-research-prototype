@@ -7,13 +7,15 @@ import { resetPredictorsSessionForFreshStart as resetProto2Session } from './02/
 import { resetPredictorsSessionForFreshStart as resetRoshSession } from './03/predictors-assessment-session.js'
 import { resetPredictorsSessionForFreshStart as resetDevSession } from './dev/predictors-assessment-session.js'
 import { resetSanSessionForFreshStart } from './san/session.js'
+import { resetSanSessionForFreshStart as resetSanResearchSession } from './san-research/session.js'
 
 const PROTOTYPE_BASE_PATHS = {
   '01': '/01',
   '02': '/02',
   '03': '/03',
   dev: '/dev',
-  san: '/san'
+  san: '/san',
+  'san-research': '/san-research'
 }
 
 const clearSessionForPrototypeVersion = (version) => {
@@ -21,6 +23,7 @@ const clearSessionForPrototypeVersion = (version) => {
   if (version === '03') return resetRoshSession()
   if (version === 'dev') return resetDevSession()
   if (version === 'san') return resetSanSessionForFreshStart()
+  if (version === 'san-research') return resetSanResearchSession()
   return clearPrototypeDataForTiering()
 }
 
@@ -28,7 +31,7 @@ const resolvePrototypeHref = (version, href) => {
   const basePath = PROTOTYPE_BASE_PATHS[version]
   if (!basePath || !href) return href
 
-  const pagePath = href.replace(/^\/(01|02|03|dev|san)\//, '')
+  const pagePath = href.replace(/^\/(01|02|03|dev|san-research|san)\//, '')
   return `${basePath}/${pagePath}`
 }
 

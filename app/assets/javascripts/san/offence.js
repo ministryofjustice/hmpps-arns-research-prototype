@@ -763,5 +763,6 @@ const initOffence = () => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
+  if (!window.location.pathname.startsWith("/san/")) return
   initOffence()
 })

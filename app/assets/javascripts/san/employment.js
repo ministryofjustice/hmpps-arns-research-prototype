@@ -1034,5 +1034,6 @@ const initEmployment = () => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
+  if (!window.location.pathname.startsWith("/san/")) return
   initEmployment()
 })
