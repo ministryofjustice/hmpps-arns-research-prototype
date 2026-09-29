@@ -1103,5 +1103,6 @@ const initDrugs = () => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
+  if (!window.location.pathname.startsWith("/san/")) return
   initDrugs()
 })

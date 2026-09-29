@@ -768,5 +768,6 @@ const initSanRelationships = () => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
+  if (!window.location.pathname.startsWith("/san/")) return
   initSanRelationships()
 })
