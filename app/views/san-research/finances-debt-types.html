@@ -1,0 +1,56 @@
+{% extends "layouts/assessment-san-research.html" %}
+
+{% set pageName = "Finances" %}
+{% set sanCaption = "Finances" %}
+{% set sanSection = "finances" %}
+{% set backLinkHref = "finances-debt.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san-research/content-header.html" %}
+
+<form id="san-finances-debt-types-form" novalidate data-fi-page="debt-types">
+  <div class="govuk-form-group" data-san-error-group="debt-types">
+    <fieldset class="govuk-fieldset" id="debt-types" aria-describedby="debt-types-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">What type of debt do they have?</h1>
+      </legend>
+      <div id="debt-types-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="debt-own-others" name="own_debt_types" type="checkbox" value="others" aria-describedby="debt-own-others-hint" data-aria-controls="conditional-debt-own-others">
+          <label class="govuk-label govuk-checkboxes__label" for="debt-own-others">Debt to others</label>
+          <div id="debt-own-others-hint" class="govuk-hint govuk-checkboxes__hint">Includes things like owing money to family, friends, other prisoners or loan sharks.</div>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-debt-own-others">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="debt-own-others-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="debt-own-others-details" name="debt_own_others_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="debt-own-others-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="debt-own-formal" name="own_debt_types" type="checkbox" value="formal" aria-describedby="debt-own-formal-hint" data-aria-controls="conditional-debt-own-formal">
+          <label class="govuk-label govuk-checkboxes__label" for="debt-own-formal">Formal debt</label>
+          <div id="debt-own-formal-hint" class="govuk-hint govuk-checkboxes__hint">Includes things like credit cards, phone bills or rent arrears.</div>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-debt-own-formal">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="debt-own-formal-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="debt-own-formal-details" name="debt_own_formal_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="debt-own-formal-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

@@ -9,11 +9,11 @@ const EXAMPLE_COMPLETE = {
   financeIncome: ['employment', 'family'],
   financeIncomeOther: '',
   financeOverreliant: 'no',
-  financeBankAccount: 'yes',
+  financeOverreliantDetails: '',
+  financeFurtherAssessment: 'yes',
+  financeFurtherAssessmentDetails: '',
   financeMoneyManagement: 'necessities',
   financeMoneyManagementDetails: 'Pays rent and bills first.',
-  financeGambling: ['no'],
-  financeGamblingDetails: {},
   financeDebt: ['own'],
   financeDebtTypes: { own: ['formal'] },
   financeDebtDetails: { own: { formal: 'Phone bill arrears.' } },
@@ -42,9 +42,19 @@ const INCOME_LABELS = {
   none: 'No money'
 }
 
-const OVERRELIANT_LABELS = {
-  yes: 'Yes, over reliant on family or friends for money',
-  no: 'No, not over reliant on family or friends for money'
+const needsOverreliant = (session) => Array.isArray(session.financeIncome) && session.financeIncome.includes('family')
+
+const overreliantTriggerChanged = (next, previous) => needsOverreliant(next) !== needsOverreliant(previous)
+
+const keepOverreliantAnswers = (answers, previous) => {
+  if (needsOverreliant(answers)) {
+    answers.financeOverreliant = previous.financeOverreliant || ''
+    answers.financeOverreliantDetails = previous.financeOverreliantDetails || ''
+  } else {
+    answers.financeOverreliant = ''
+    answers.financeOverreliantDetails = ''
+  }
+  return answers
 }
 
 const YES_NO_UNKNOWN = { yes: 'Yes', no: 'No', unknown: 'Unknown' }
@@ -54,13 +64,6 @@ const MONEY_LABELS = {
   necessities: 'Able to manage their money for everyday necessities',
   unable: 'Unable to manage their money well',
   problems: 'Unable to manage their money which is creating other problems'
-}
-
-const GAMBLING_LABELS = {
-  own: 'Yes, their own gambling',
-  someone: "Yes, someone else's gambling",
-  no: 'No',
-  unknown: 'Unknown'
 }
 
 const DEBT_LABELS = {
@@ -247,20 +250,51 @@ const applyProgress = (session) => {
   }
 }
 
-const questionsAnswered = (session) => {
-  if (!(Array.isArray(session.financeIncome) && session.financeIncome.length)) return false
-  if (session.financeIncome.includes('family') && !session.financeOverreliant) return false
-  if (!session.financeBankAccount) return false
+const skipsFurtherFinance = (session) => session.financeFurtherAssessment === 'no'
+
+const needsOwnDebtTypes = (session) => Array.isArray(session.financeDebt) && session.financeDebt.includes('own')
+
+const ownDebtTypesAnswered = (session) => {
+  const types = session.financeDebtTypes && session.financeDebtTypes.own
+  return Array.isArray(types) && types.length > 0
+}
+
+const followOnAnswered = (session) => {
   if (!session.financeMoneyManagement) return false
-  if (!(Array.isArray(session.financeGambling) && session.financeGambling.length)) return false
   if (!(Array.isArray(session.financeDebt) && session.financeDebt.length)) return false
-  const debtPeople = session.financeDebt.filter((value) => value === 'own' || value === 'someone')
-  if (debtPeople.some((who) => !(Array.isArray(session.financeDebtTypes && session.financeDebtTypes[who]) && session.financeDebtTypes[who].length))) return false
+  if (needsOwnDebtTypes(session) && !ownDebtTypesAnswered(session)) return false
   if (!session.financeChanges) return false
   return true
 }
 
-const summaryChangeHref = (hash = '') => `finances?from=summary${hash ? `#${hash}` : ''}`
+const questionsAnswered = (session) => {
+  if (!(Array.isArray(session.financeIncome) && session.financeIncome.length)) return false
+  if (needsOverreliant(session) && !session.financeOverreliant) return false
+  if (!session.financeFurtherAssessment) return false
+  if (skipsFurtherFinance(session)) return true
+  if (!followOnAnswered(session)) return false
+  return true
+}
+
+const nextFollowOnPage = (session, fromSummaryFlow = false) => {
+  const query = fromSummaryFlow ? '?from=summary' : ''
+  if (!session.financeMoneyManagement) return `finances-further${query}`
+  if (!(Array.isArray(session.financeDebt) && session.financeDebt.length)) return `finances-debt${query}`
+  if (needsOwnDebtTypes(session) && !ownDebtTypesAnswered(session)) return `finances-debt-types${query}`
+  if (!session.financeChanges) return `finances-changes${query}`
+  return 'finances-summary.html'
+}
+
+const continueHref = (session) => {
+  if (!(Array.isArray(session.financeIncome) && session.financeIncome.length)) return 'finances.html'
+  if (needsOverreliant(session) && !session.financeOverreliant) return 'finances-overreliant.html'
+  if (!session.financeFurtherAssessment) return 'finances-assessment.html'
+  if (session.financeFurtherAssessment === 'yes' && !followOnAnswered(session)) return nextFollowOnPage(session)
+  return 'finances.html'
+}
+
+// Extensionless paths keep ?from=summary. The kit redirects *.html and drops the query.
+const summaryChangeHref = (page, hash = '') => `${page}?from=summary${hash ? `#${hash}` : ''}`
 
 const summaryRow = (question, lines, href, options = {}) => {
   const value = lines.filter(Boolean).map((line, index) => {
@@ -289,25 +323,42 @@ const financeRows = (session) => {
     const lines = []
     session.financeIncome.forEach((value) => {
       lines.push(labelled(INCOME_LABELS, value))
-      if (value === 'family' && session.financeOverreliant) {
-        lines.push(labelled(OVERRELIANT_LABELS, session.financeOverreliant))
-      }
       if (value === 'other' && session.financeIncomeOther) lines.push(session.financeIncomeOther)
     })
     rows.push(summaryRow(
       'Where does Alex currently get their money from?',
       lines,
-      summaryChangeHref('income')
+      summaryChangeHref('finances', 'income')
     ))
   }
 
-  if (session.financeBankAccount) {
+  if (needsOverreliant(session) && session.financeOverreliant) {
+    const overreliantLines = [labelled(YES_NO_UNKNOWN, session.financeOverreliant)]
+    if (session.financeOverreliant === 'yes' && session.financeOverreliantDetails) {
+      overreliantLines.push(session.financeOverreliantDetails)
+    }
     rows.push(summaryRow(
-      'Does Alex have their own bank account?',
-      [labelled(YES_NO_UNKNOWN, session.financeBankAccount)],
-      summaryChangeHref('bank-account')
+      'Is Alex over-reliant on family or friends for money?',
+      overreliantLines,
+      summaryChangeHref('finances-overreliant'),
+      { secondaryFrom: 1 }
     ))
   }
+
+  if (session.financeFurtherAssessment) {
+    const lines = [labelled(YES_NO_UNKNOWN, session.financeFurtherAssessment)]
+    if (session.financeFurtherAssessment === 'no' && session.financeFurtherAssessmentDetails) {
+      lines.push(session.financeFurtherAssessmentDetails)
+    }
+    rows.push(summaryRow(
+      "Is there anything about Alex's financial situation that may need further assessment?",
+      lines,
+      summaryChangeHref('finances-assessment'),
+      { secondaryFrom: 1 }
+    ))
+  }
+
+  if (skipsFurtherFinance(session)) return rows
 
   if (session.financeMoneyManagement) {
     const lines = [labelled(MONEY_LABELS, session.financeMoneyManagement)]
@@ -315,22 +366,8 @@ const financeRows = (session) => {
     rows.push(summaryRow(
       'How good is Alex at managing their money?',
       lines,
-      summaryChangeHref('money-management'),
+      summaryChangeHref('finances-further', 'money-management'),
       { secondaryFrom: 1 }
-    ))
-  }
-
-  if (Array.isArray(session.financeGambling) && session.financeGambling.length) {
-    const lines = []
-    session.financeGambling.forEach((value) => {
-      lines.push(labelled(GAMBLING_LABELS, value))
-      const detail = session.financeGamblingDetails && session.financeGamblingDetails[value]
-      if (detail) lines.push(detail)
-    })
-    rows.push(summaryRow(
-      'Is Alex affected by gambling?',
-      lines,
-      summaryChangeHref('gambling')
     ))
   }
 
@@ -338,14 +375,6 @@ const financeRows = (session) => {
     const lines = []
     session.financeDebt.forEach((value) => {
       lines.push(labelled(DEBT_LABELS, value))
-      if (value === 'own' || value === 'someone') {
-        const types = (session.financeDebtTypes && session.financeDebtTypes[value]) || []
-        types.forEach((type) => {
-          lines.push(labelled(DEBT_TYPE_LABELS, type))
-          const detail = session.financeDebtDetails && session.financeDebtDetails[value] && session.financeDebtDetails[value][type]
-          if (detail) lines.push(detail)
-        })
-      }
       if (value === 'unknown' && session.financeDebtDetails && session.financeDebtDetails.unknown) {
         lines.push(session.financeDebtDetails.unknown)
       }
@@ -353,7 +382,22 @@ const financeRows = (session) => {
     rows.push(summaryRow(
       'Is Alex affected by debt?',
       lines,
-      summaryChangeHref('debt')
+      summaryChangeHref('finances-debt'),
+      session.financeDebt.includes('unknown') ? { secondaryFrom: 1 } : {}
+    ))
+  }
+
+  if (needsOwnDebtTypes(session) && ownDebtTypesAnswered(session)) {
+    const lines = []
+    session.financeDebtTypes.own.forEach((type) => {
+      lines.push(labelled(DEBT_TYPE_LABELS, type))
+      const detail = session.financeDebtDetails && session.financeDebtDetails.own && session.financeDebtDetails.own[type]
+      if (detail) lines.push(detail)
+    })
+    rows.push(summaryRow(
+      'What type of debt do they have?',
+      lines,
+      summaryChangeHref('finances-debt-types')
     ))
   }
 
@@ -363,7 +407,7 @@ const financeRows = (session) => {
     rows.push(summaryRow(
       'Does Alex want to make changes to their finances?',
       lines,
-      summaryChangeHref('changes'),
+      summaryChangeHref('finances-changes'),
       { secondaryFrom: 1 }
     ))
   }
@@ -420,7 +464,7 @@ const renderSummary = (session) => {
   } else {
     let followOn = ''
     if (!complete && !questionsAnswered(session)) {
-      followOn = '<p class="govuk-body"><a class="govuk-link" href="finances.html">Continue</a></p>'
+      followOn = `<p class="govuk-body"><a class="govuk-link" href="${continueHref(session)}">Continue</a></p>`
     }
     mount.innerHTML = `<dl class="govuk-summary-list san-summary-list">${rows.join('')}</dl>${followOn}`
   }
@@ -469,50 +513,91 @@ const openAnalysisTab = () => {
   if (tab instanceof HTMLElement) tab.click()
 }
 
+const emptyFollowOnAnswers = () => ({
+  financeMoneyManagement: '',
+  financeMoneyManagementDetails: '',
+  financeGambling: [],
+  financeGamblingDetails: {},
+  financeDebt: [],
+  financeDebtTypes: {},
+  financeDebtDetails: {},
+  financeChanges: '',
+  financeChangesDetails: ''
+})
+
 const readQuestionAnswers = () => {
   const financeIncome = checkedValues('income')
-  const financeGambling = checkedValues('gambling')
-  const financeDebt = checkedValues('debt')
-  const financeDebtTypes = {}
-  const financeDebtDetails = {}
-  ;['own', 'someone'].forEach((who) => {
-    if (!financeDebt.includes(who)) return
-    const types = checkedValues(`${who}_debt_types`)
-    financeDebtTypes[who] = types
-    const details = {}
-    types.forEach((type) => {
-      const text = fieldValue(`debt-${who}-${type}-details`)
-      if (text) details[type] = text
-    })
-    if (Object.keys(details).length) financeDebtDetails[who] = details
-  })
-  if (financeDebt.includes('unknown')) {
-    const text = fieldValue('debt-unknown-details')
-    if (text) financeDebtDetails.unknown = text
-  }
-
-  const gamblingDetails = {}
-  financeGambling.forEach((value) => {
-    const text = fieldValue(`gambling-${value}-details`)
-    if (text) gamblingDetails[value] = text
-  })
-
-  const financeMoneyManagement = checkedValue('money_management')
-  const financeChanges = checkedValue('finance_changes')
-  const changesWithDetails = ['maintain', 'active', 'know-how', 'need-help', 'thinking', 'no']
-
   return {
     financeIncome,
     financeIncomeOther: financeIncome.includes('other') ? fieldValue('income-other-details') : '',
-    financeOverreliant: financeIncome.includes('family') ? checkedValue('overreliant') : '',
-    financeBankAccount: checkedValue('bank_account'),
+    financeBankAccount: ''
+  }
+}
+
+const readAssessmentAnswers = () => {
+  const financeFurtherAssessment = checkedValue('further_assessment')
+  const answers = {
+    financeFurtherAssessment,
+    financeFurtherAssessmentDetails: financeFurtherAssessment === 'no' ? fieldValue('further-assessment-no-details') : ''
+  }
+  if (financeFurtherAssessment === 'no') return { ...answers, ...emptyFollowOnAnswers() }
+  return answers
+}
+
+const readMoneyAnswers = () => {
+  const financeMoneyManagement = checkedValue('money_management')
+  return {
     financeMoneyManagement,
-    financeMoneyManagementDetails: financeMoneyManagement ? fieldValue(`money-${financeMoneyManagement}-details`) : '',
-    financeGambling,
-    financeGamblingDetails: gamblingDetails,
-    financeDebt,
-    financeDebtTypes,
-    financeDebtDetails,
+    financeMoneyManagementDetails: financeMoneyManagement ? fieldValue(`money-${financeMoneyManagement}-details`) : ''
+  }
+}
+
+const applyDebtSelection = (financeDebt, unknownDetails, previous) => {
+  const financeDebtTypes = { ...(previous.financeDebtTypes || {}) }
+  const financeDebtDetails = { ...(previous.financeDebtDetails || {}) }
+  delete financeDebtTypes.someone
+  delete financeDebtDetails.someone
+
+  if (financeDebt.includes('unknown') && unknownDetails) {
+    financeDebtDetails.unknown = unknownDetails
+  } else {
+    delete financeDebtDetails.unknown
+  }
+
+  if (!financeDebt.includes('own')) {
+    delete financeDebtTypes.own
+    delete financeDebtDetails.own
+  }
+
+  return { financeDebt, financeDebtTypes, financeDebtDetails }
+}
+
+const readDebtAnswers = (previous) => {
+  const financeDebt = checkedValues('debt')
+  const unknownDetails = financeDebt.includes('unknown') ? fieldValue('debt-unknown-details') : ''
+  return applyDebtSelection(financeDebt, unknownDetails, previous)
+}
+
+const readDebtTypesAnswers = (previous) => {
+  const types = checkedValues('own_debt_types')
+  const details = {}
+  types.forEach((type) => {
+    const text = fieldValue(`debt-own-${type}-details`)
+    if (text) details[type] = text
+  })
+  const financeDebtTypes = { ...(previous.financeDebtTypes || {}), own: types }
+  delete financeDebtTypes.someone
+  const financeDebtDetails = { ...(previous.financeDebtDetails || {}) }
+  delete financeDebtDetails.someone
+  if (Object.keys(details).length) financeDebtDetails.own = details
+  else delete financeDebtDetails.own
+  return { financeDebtTypes, financeDebtDetails }
+}
+
+const readChangesAnswers = () => {
+  const financeChanges = checkedValue('finance_changes')
+  const changesWithDetails = ['maintain', 'active', 'know-how', 'need-help', 'thinking', 'no']
+  return {
     financeChanges,
     financeChangesDetails: changesWithDetails.includes(financeChanges) ? fieldValue(`changes-${financeChanges}-details`) : ''
   }
@@ -540,20 +625,24 @@ const validateQuestions = (answers) => {
       href: '#income',
       text: 'Select where Alex currently gets their money from'
     })
-  } else if (answers.financeIncome.includes('family') && !answers.financeOverreliant) {
+  }
+  return errors
+}
+
+const validateAssessment = (answers) => {
+  const errors = []
+  if (!answers.financeFurtherAssessment) {
     errors.push({
-      group: 'overreliant',
-      href: '#overreliant',
-      text: 'Select if Alex is overreliant on family or friends for money'
+      group: 'further-assessment',
+      href: '#further-assessment',
+      text: "Select if anything about Alex's financial situation may need further assessment"
     })
   }
-  if (!answers.financeBankAccount) {
-    errors.push({
-      group: 'bank-account',
-      href: '#bank-account',
-      text: 'Select if Alex has their own bank account'
-    })
-  }
+  return errors
+}
+
+const validateMoney = (answers) => {
+  const errors = []
   if (!answers.financeMoneyManagement) {
     errors.push({
       group: 'money-management',
@@ -561,37 +650,67 @@ const validateQuestions = (answers) => {
       text: 'Select how good Alex is at managing their money'
     })
   }
-  if (!answers.financeGambling.length) {
-    errors.push({
-      group: 'gambling',
-      href: '#gambling',
-      text: 'Select if Alex is affected by gambling'
-    })
-  }
+  return errors
+}
+
+const validateDebt = (answers) => {
+  const errors = []
   if (!answers.financeDebt.length) {
     errors.push({
       group: 'debt',
       href: '#debt',
       text: 'Select if Alex is affected by debt'
     })
-  } else {
-    ;['own', 'someone'].forEach((who) => {
-      if (!answers.financeDebt.includes(who)) return
-      const types = answers.financeDebtTypes[who] || []
-      if (!types.length) {
-        errors.push({
-          group: `debt-${who}-types`,
-          href: `#debt-${who}-types`,
-          text: 'Select the type of debt'
-        })
-      }
+  }
+  return errors
+}
+
+const validateDebtTypes = (answers) => {
+  const errors = []
+  const types = (answers.financeDebtTypes && answers.financeDebtTypes.own) || []
+  if (!types.length) {
+    errors.push({
+      group: 'debt-types',
+      href: '#debt-types',
+      text: 'Select the type of debt'
     })
   }
+  return errors
+}
+
+const validateChanges = (answers) => {
+  const errors = []
   if (!answers.financeChanges) {
     errors.push({
       group: 'changes',
       href: '#changes',
       text: 'Select if Alex wants to make changes to their finances'
+    })
+  }
+  return errors
+}
+
+const readOverreliantAnswers = () => {
+  const financeOverreliant = checkedValue('overreliant')
+  return {
+    financeOverreliant,
+    financeOverreliantDetails: financeOverreliant === 'yes' ? fieldValue('overreliant-yes-details') : ''
+  }
+}
+
+const validateOverreliant = (answers) => {
+  const errors = []
+  if (!answers.financeOverreliant) {
+    errors.push({
+      group: 'overreliant',
+      href: '#overreliant',
+      text: 'Select if Alex is over-reliant on family or friends for money'
+    })
+  } else if (answers.financeOverreliant === 'yes' && !answers.financeOverreliantDetails) {
+    errors.push({
+      group: 'overreliant-details',
+      href: '#overreliant-yes-details',
+      text: 'Enter details about Alex being over-reliant on family or friends for money'
     })
   }
   return errors
@@ -619,34 +738,47 @@ const validateAnalysis = (answers) => {
 const restoreQuestions = (session) => {
   selectChecks('income', session.financeIncome)
   setField('income-other-details', session.financeIncomeOther)
-  selectRadio('overreliant', session.financeOverreliant)
-  selectRadio('bank_account', session.financeBankAccount)
+}
+
+const restoreAssessment = (session) => {
+  selectRadio('further_assessment', session.financeFurtherAssessment)
+  if (session.financeFurtherAssessment === 'no') {
+    setField('further-assessment-no-details', session.financeFurtherAssessmentDetails)
+  }
+}
+
+const restoreMoney = (session) => {
   selectRadio('money_management', session.financeMoneyManagement)
   if (session.financeMoneyManagement) {
     setField(`money-${session.financeMoneyManagement}-details`, session.financeMoneyManagementDetails)
   }
-  selectChecks('gambling', session.financeGambling)
-  if (session.financeGamblingDetails) {
-    Object.entries(session.financeGamblingDetails).forEach(([key, value]) => {
-      setField(`gambling-${key}-details`, value)
-    })
-  }
+}
+
+const restoreDebt = (session) => {
   selectChecks('debt', session.financeDebt)
-  ;['own', 'someone'].forEach((who) => {
-    if (!(Array.isArray(session.financeDebt) && session.financeDebt.includes(who))) return
-    selectChecks(`${who}_debt_types`, session.financeDebtTypes && session.financeDebtTypes[who])
-    const details = session.financeDebtDetails && session.financeDebtDetails[who]
-    if (details && typeof details === 'object') {
-      Object.entries(details).forEach(([key, value]) => {
-        setField(`debt-${who}-${key}-details`, value)
-      })
-    }
-  })
   if (Array.isArray(session.financeDebt) && session.financeDebt.includes('unknown') && session.financeDebtDetails) {
     setField('debt-unknown-details', session.financeDebtDetails.unknown)
   }
+}
+
+const restoreDebtTypes = (session) => {
+  selectChecks('own_debt_types', session.financeDebtTypes && session.financeDebtTypes.own)
+  const details = session.financeDebtDetails && session.financeDebtDetails.own
+  if (details && typeof details === 'object') {
+    Object.entries(details).forEach(([key, value]) => {
+      setField(`debt-own-${key}-details`, value)
+    })
+  }
+}
+
+const restoreChanges = (session) => {
   selectRadio('finance_changes', session.financeChanges)
   if (session.financeChanges) setField(`changes-${session.financeChanges}-details`, session.financeChangesDetails)
+}
+
+const restoreOverreliant = (session) => {
+  selectRadio('overreliant', session.financeOverreliant)
+  if (session.financeOverreliant === 'yes') setField('overreliant-yes-details', session.financeOverreliantDetails)
 }
 
 const restoreAnalysis = (session) => {
@@ -696,6 +828,72 @@ const initFinances = () => {
 
   const pageName = page.getAttribute('data-fi-page')
   if (pageName === 'questions') restoreQuestions(session)
+  if (pageName === 'overreliant') {
+    if (!needsOverreliant(session)) {
+      window.location.assign(fromSummary() ? 'finances-summary.html' : 'finances.html')
+      return
+    }
+    restoreOverreliant(session)
+  }
+  if (pageName === 'assessment') {
+    if (!(Array.isArray(session.financeIncome) && session.financeIncome.length)) {
+      window.location.assign('finances.html')
+      return
+    }
+    if (!fromSummary() && needsOverreliant(session) && !session.financeOverreliant) {
+      window.location.assign('finances-overreliant')
+      return
+    }
+    restoreAssessment(session)
+    if (!fromSummary() && needsOverreliant(session)) ensureBackLink('finances-overreliant.html')
+  }
+  if (pageName === 'further') {
+    if (session.financeFurtherAssessment !== 'yes') {
+      window.location.assign(fromSummary() ? 'finances-summary.html' : 'finances-assessment')
+      return
+    }
+    restoreMoney(session)
+  }
+  if (pageName === 'debt') {
+    if (session.financeFurtherAssessment !== 'yes') {
+      window.location.assign(fromSummary() ? 'finances-summary.html' : 'finances-assessment')
+      return
+    }
+    if (!fromSummary() && !session.financeMoneyManagement) {
+      window.location.assign('finances-further')
+      return
+    }
+    restoreDebt(session)
+  }
+  if (pageName === 'debt-types') {
+    if (session.financeFurtherAssessment !== 'yes') {
+      window.location.assign(fromSummary() ? 'finances-summary.html' : 'finances-assessment')
+      return
+    }
+    if (!needsOwnDebtTypes(session)) {
+      window.location.assign(fromSummary() ? 'finances-summary.html' : 'finances-debt')
+      return
+    }
+    restoreDebtTypes(session)
+  }
+  if (pageName === 'changes') {
+    if (session.financeFurtherAssessment !== 'yes') {
+      window.location.assign(fromSummary() ? 'finances-summary.html' : 'finances-assessment')
+      return
+    }
+    if (!fromSummary() && !(Array.isArray(session.financeDebt) && session.financeDebt.length)) {
+      window.location.assign('finances-debt')
+      return
+    }
+    if (!fromSummary() && needsOwnDebtTypes(session) && !ownDebtTypesAnswered(session)) {
+      window.location.assign('finances-debt-types')
+      return
+    }
+    if (!fromSummary()) {
+      ensureBackLink(needsOwnDebtTypes(session) ? 'finances-debt-types.html' : 'finances-debt.html')
+    }
+    restoreChanges(session)
+  }
   if (pageName === 'summary') {
     restoreAnalysis(session)
     renderSummary(session)
@@ -728,7 +926,140 @@ const initFinances = () => {
       return
     }
     clearErrors()
+    const previous = getSanSession()
+    const nextAnswers = keepOverreliantAnswers(answers, previous)
+    setSanSession({ ...nextAnswers, financeComplete: false })
+    const next = { ...previous, ...nextAnswers }
+    if (needsOverreliant(next) && (!fromSummary() || overreliantTriggerChanged(next, previous) || !next.financeOverreliant)) {
+      window.location.assign(fromSummary() ? 'finances-overreliant?from=summary' : 'finances-overreliant')
+      return
+    }
+    if (!fromSummary() || !next.financeFurtherAssessment) {
+      window.location.assign(fromSummary() ? 'finances-assessment?from=summary' : 'finances-assessment')
+      return
+    }
+    window.location.assign('finances-summary.html')
+  })
+
+  const assessmentForm = document.getElementById('san-finances-assessment-form')
+  assessmentForm?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    revealCheckedConditionals()
+    const answers = readAssessmentAnswers()
+    const errors = validateAssessment(answers)
+    if (errors.length) {
+      showErrors(errors)
+      return
+    }
+    clearErrors()
+    const previous = getSanSession()
     setSanSession({ ...answers, financeComplete: false })
+    const next = { ...previous, ...answers }
+    if (next.financeFurtherAssessment === 'yes' && (!fromSummary() || !followOnAnswered(next))) {
+      window.location.assign(fromSummary() ? nextFollowOnPage(next, true) : 'finances-further')
+      return
+    }
+    window.location.assign('finances-summary.html')
+  })
+
+  const furtherForm = document.getElementById('san-finances-further-form')
+  furtherForm?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    revealCheckedConditionals()
+    const answers = readMoneyAnswers()
+    const errors = validateMoney(answers)
+    if (errors.length) {
+      showErrors(errors)
+      return
+    }
+    clearErrors()
+    setSanSession({ ...answers, financeComplete: false })
+    const next = getSanSession()
+    if (fromSummary() && followOnAnswered(next)) {
+      window.location.assign('finances-summary.html')
+      return
+    }
+    window.location.assign(fromSummary() ? nextFollowOnPage(next, true) : 'finances-debt')
+  })
+
+  const debtForm = document.getElementById('san-finances-debt-form')
+  debtForm?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    revealCheckedConditionals()
+    const previous = getSanSession()
+    const answers = readDebtAnswers(previous)
+    const errors = validateDebt(answers)
+    if (errors.length) {
+      showErrors(errors)
+      return
+    }
+    clearErrors()
+    setSanSession({ ...answers, financeComplete: false })
+    const next = getSanSession()
+    if (fromSummary() && followOnAnswered(next)) {
+      window.location.assign('finances-summary.html')
+      return
+    }
+    if (fromSummary()) {
+      window.location.assign(nextFollowOnPage(next, true))
+      return
+    }
+    window.location.assign(needsOwnDebtTypes(next) ? 'finances-debt-types' : 'finances-changes')
+  })
+
+  const debtTypesForm = document.getElementById('san-finances-debt-types-form')
+  debtTypesForm?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    revealCheckedConditionals()
+    const previous = getSanSession()
+    const answers = readDebtTypesAnswers(previous)
+    const errors = validateDebtTypes(answers)
+    if (errors.length) {
+      showErrors(errors)
+      return
+    }
+    clearErrors()
+    setSanSession({ ...answers, financeComplete: false })
+    const next = getSanSession()
+    if (fromSummary() && followOnAnswered(next)) {
+      window.location.assign('finances-summary.html')
+      return
+    }
+    window.location.assign(fromSummary() ? nextFollowOnPage(next, true) : 'finances-changes')
+  })
+
+  const changesForm = document.getElementById('san-finances-changes-form')
+  changesForm?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    revealCheckedConditionals()
+    const answers = readChangesAnswers()
+    const errors = validateChanges(answers)
+    if (errors.length) {
+      showErrors(errors)
+      return
+    }
+    clearErrors()
+    setSanSession({ ...answers, financeComplete: false })
+    window.location.assign('finances-summary.html')
+  })
+
+  const overreliantForm = document.getElementById('san-finances-overreliant-form')
+  overreliantForm?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    revealCheckedConditionals()
+    const answers = readOverreliantAnswers()
+    const errors = validateOverreliant(answers)
+    if (errors.length) {
+      showErrors(errors)
+      return
+    }
+    clearErrors()
+    const previous = getSanSession()
+    setSanSession({ ...answers, financeComplete: false })
+    if (!fromSummary() || !previous.financeFurtherAssessment) {
+      window.location.assign(fromSummary() ? 'finances-assessment?from=summary' : 'finances-assessment')
+      return
+    }
     window.location.assign('finances-summary.html')
   })
 

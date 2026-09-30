@@ -95,68 +95,33 @@
     </fieldset>
   </div>
 
-  <div class="govuk-form-group" data-ee-question="academic" data-san-error-group="academic" hidden>
-    <fieldset class="govuk-fieldset" id="academic">
+  <div class="govuk-form-group" data-ee-question="qualifications" data-san-error-group="qualifications" hidden>
+    <fieldset class="govuk-fieldset" id="qualifications" aria-describedby="qualifications-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Select the highest level of academic qualification Alex has completed</h2>
+        <h2 class="govuk-fieldset__heading">Does Alex have any completed academic, professional or vocational qualifications?</h2>
       </legend>
-      <div class="govuk-radios" data-module="govuk-radios">
-        {% set academicOptions = [
-          { id: "entry", label: "Entry level", hint: "For example, entry level diploma" },
-          { id: "level-1", label: "Level 1", hint: "For example, GCSE grades 3, 2, 1 or grades D, E, F, G" },
-          { id: "level-2", label: "Level 2", hint: "For example, GCSE grades 9, 8, 7, 6, 5, 4 or grades A*, A, B, C" },
-          { id: "level-3", label: "Level 3", hint: "For example, A level" },
-          { id: "level-4", label: "Level 4", hint: "For example, higher apprenticeship" },
-          { id: "level-5", label: "Level 5", hint: "For example, foundation degree" },
-          { id: "level-6", label: "Level 6", hint: "For example, degree with honours" },
-          { id: "level-7", label: "Level 7", hint: "For example, master's degree" },
-          { id: "level-8", label: "Level 8", hint: "For example, doctorate" }
-        ] %}
-        {% for option in academicOptions %}
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="academic-{{ option.id }}" name="academic_qualification" type="radio" value="{{ option.id }}" aria-describedby="academic-{{ option.id }}-hint">
-          <label class="govuk-label govuk-radios__label" for="academic-{{ option.id }}">{{ option.label }}</label>
-          <div id="academic-{{ option.id }}-hint" class="govuk-hint govuk-radios__hint">{{ option.hint }}</div>
-        </div>
-        {% endfor %}
-        <div class="govuk-radios__divider">or</div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="academic-none" name="academic_qualification" type="radio" value="none">
-          <label class="govuk-label govuk-radios__label" for="academic-none">None of these</label>
-        </div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="academic-unknown" name="academic_qualification" type="radio" value="unknown">
-          <label class="govuk-label govuk-radios__label" for="academic-unknown">Unknown</label>
-        </div>
-      </div>
-    </fieldset>
-  </div>
-
-  <div class="govuk-form-group" data-ee-question="vocational" data-san-error-group="vocational" hidden>
-    <fieldset class="govuk-fieldset" id="vocational">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Does Alex have any professional or vocational qualifications?</h2>
-      </legend>
+      <div id="qualifications-hint" class="govuk-hint">For example, GCSEs, A levels, degrees, apprenticeships, trade qualifications, driving qualifications or professional certifications.</div>
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="vocational-yes" name="vocational" type="radio" value="yes" data-aria-controls="conditional-vocational-yes">
-          <label class="govuk-label govuk-radios__label" for="vocational-yes">Yes</label>
+          <input class="govuk-radios__input" id="qualifications-yes" name="qualifications" type="radio" value="yes" data-aria-controls="conditional-qualifications-yes">
+          <label class="govuk-label govuk-radios__label" for="qualifications-yes">Yes</label>
         </div>
-        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-vocational-yes">
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="vocational-yes-details">Give details</label>
-            <textarea class="govuk-textarea" id="vocational-yes-details" name="vocational_yes_details" rows="5" maxlength="2000"></textarea>
-            <div class="govuk-hint san-character-count" data-san-character-count="vocational-yes-details">You have 2,000 characters remaining</div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-qualifications-yes">
+          <div class="govuk-form-group" data-san-error-group="qualifications-details">
+            <label class="govuk-label" for="qualifications-yes-details">Give details</label>
+            <div id="qualifications-yes-details-hint" class="govuk-hint">Include the qualifications, subjects and grades, if known.</div>
+            <textarea class="govuk-textarea" id="qualifications-yes-details" name="qualifications_yes_details" rows="5" maxlength="400" aria-describedby="qualifications-yes-details-hint"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="qualifications-yes-details">You have 400 characters remaining</div>
           </div>
         </div>
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="vocational-no" name="vocational" type="radio" value="no">
-          <label class="govuk-label govuk-radios__label" for="vocational-no">No</label>
+          <input class="govuk-radios__input" id="qualifications-no" name="qualifications" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="qualifications-no">No</label>
         </div>
         <div class="govuk-radios__divider">or</div>
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="vocational-unknown" name="vocational" type="radio" value="unknown">
-          <label class="govuk-label govuk-radios__label" for="vocational-unknown">Unknown</label>
+          <input class="govuk-radios__input" id="qualifications-unknown" name="qualifications" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="qualifications-unknown">Unknown</label>
         </div>
       </div>
     </fieldset>
@@ -165,21 +130,20 @@
   <div class="govuk-form-group" data-ee-question="skills" data-san-error-group="skills" hidden>
     <fieldset class="govuk-fieldset" id="skills">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Does Alex have any skills that could help them in a job or to get a job?</h2>
+        <h2 class="govuk-fieldset__heading">How would you describe Alex's skills for work?</h2>
       </legend>
       <div class="govuk-radios" data-module="govuk-radios">
         {% set skillOptions = [
-          { id: "yes", label: "Yes", hint: "This includes any completed training, qualifications, work experience or transferable skills.", details: true },
-          { id: "some", label: "Some skills", hint: "This includes partially completed training or qualifications, limited on the job experience or skills that are not directly transferable.", details: true },
-          { id: "no", label: "No", hint: "This includes having no other qualifications, incomplete apprenticeships or no history of working in the same industry.", details: false }
+          { id: "strong", label: "Strong work-related skills", hint: "Has completed training, work experience or transferable skills that could help them get or keep a job." },
+          { id: "some", label: "Some work-related skills", hint: "Has limited work experience, partially completed training or skills that are not directly transferable." },
+          { id: "no", label: "No work-related skills", hint: "Has no skills or experience that could help them get a job." }
         ] %}
         {% for option in skillOptions %}
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="skills-{{ option.id }}" name="skills" type="radio" value="{{ option.id }}" aria-describedby="skills-{{ option.id }}-hint"{% if option.details %} data-aria-controls="conditional-skills-{{ option.id }}"{% endif %}>
+          <input class="govuk-radios__input" id="skills-{{ option.id }}" name="skills" type="radio" value="{{ option.id }}" aria-describedby="skills-{{ option.id }}-hint" data-aria-controls="conditional-skills-{{ option.id }}">
           <label class="govuk-label govuk-radios__label" for="skills-{{ option.id }}">{{ option.label }}</label>
           <div id="skills-{{ option.id }}-hint" class="govuk-hint govuk-radios__hint">{{ option.hint }}</div>
         </div>
-        {% if option.details %}
         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-skills-{{ option.id }}">
           <div class="govuk-form-group">
             <label class="govuk-label" for="skills-{{ option.id }}-details">Give details (optional)</label>
@@ -187,7 +151,6 @@
             <div class="govuk-hint san-character-count" data-san-character-count="skills-{{ option.id }}-details">You have 2,000 characters remaining</div>
           </div>
         </div>
-        {% endif %}
         {% endfor %}
       </div>
     </fieldset>

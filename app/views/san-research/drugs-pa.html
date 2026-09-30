@@ -1,0 +1,271 @@
+{% extends "layouts/assessment-san-research.html" %}
+
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% set pageName = "Drug use" %}
+{% set sanHeading = "Drug use" %}
+{% set sanSection = "drugs" %}
+{% set sanIsolated = true %}
+{% set sanHeaderTitleLink = "/san-research/drugs-pa" %}
+
+{% block content %}
+
+<script>
+  if (!window.location.hash) {
+    history.replaceState(null, '', window.location.pathname + window.location.search + '#practitioner-analysis')
+  }
+</script>
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san-research/content-header.html" %}
+
+<div class="govuk-tabs san-tabs" data-module="govuk-tabs">
+  <h2 class="govuk-tabs__title">Contents</h2>
+  <ul class="govuk-tabs__list">
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="#summary" id="tab-summary">Summary</a>
+    </li>
+    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+      <a class="govuk-tabs__tab" href="#practitioner-analysis" id="tab-practitioner-analysis">Practitioner analysis</a>
+    </li>
+  </ul>
+
+  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="summary">
+    <dl class="govuk-summary-list san-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Has Alex ever used illegal drugs or misused medication?</dt>
+        <dd class="govuk-summary-list__value">Yes</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="#" data-pa-stay>Change<span class="govuk-visually-hidden"> whether Alex has ever used illegal drugs or misused medication</span></a>
+        </dd>
+      </div>
+    </dl>
+
+    <h3 class="govuk-heading-m">Used in the last 6 months</h3>
+
+    <div class="govuk-summary-card">
+      <div class="govuk-summary-card__title-wrapper">
+        <h3 class="govuk-summary-card__title">Cannabis</h3>
+        <ul class="govuk-summary-card__actions">
+          <li class="govuk-summary-card__action">
+            <a class="govuk-link" href="#" data-pa-stay>Change<span class="govuk-visually-hidden"> cannabis</span></a>
+          </li>
+        </ul>
+      </div>
+      <div class="govuk-summary-card__content">
+        <dl class="govuk-summary-list">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Last used</dt>
+            <dd class="govuk-summary-list__value">In the last 6 months</dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="#" data-pa-stay>Change<span class="govuk-visually-hidden"> when cannabis was last used</span></a>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="govuk-summary-card">
+      <div class="govuk-summary-card__title-wrapper">
+        <h3 class="govuk-summary-card__title">Cocaine</h3>
+        <ul class="govuk-summary-card__actions">
+          <li class="govuk-summary-card__action">
+            <a class="govuk-link" href="#" data-pa-stay>Change<span class="govuk-visually-hidden"> cocaine</span></a>
+          </li>
+        </ul>
+      </div>
+      <div class="govuk-summary-card__content">
+        <dl class="govuk-summary-list">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Last used</dt>
+            <dd class="govuk-summary-list__value">In the last 6 months</dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="#" data-pa-stay>Change<span class="govuk-visually-hidden"> when cocaine was last used</span></a>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <div class="govuk-tabs__panel" id="practitioner-analysis">
+    {% set previousAnalysis %}
+      <p class="govuk-!-font-weight-bold">This is a mock practitioner analysis/review.</p>
+      <p>Alex reports a long history of drug use, primarily involving cannabis and cocaine. Their use has varied over time and appears to increase during periods of stress, relationship difficulties and when spending time with peers who also use drugs. Alex describes cannabis use as a way of relaxing and managing difficult emotions. Cocaine use is less frequent but tends to take place socially and alongside alcohol.</p>
+      <p>Alex shows some motivation to stop or reduce their drug use. They recognise that their use has had a negative impact on several areas of their life, including their finances, relationships and ability to maintain a stable routine. Alex stated that they would like to stop using cocaine and reduce their cannabis use. They have previously managed periods without using drugs, particularly when they have had stable accommodation, employment and less contact with peers who use substances.</p>
+      <p>However, Alex appears to have mixed feelings about making longer-term changes. Although they acknowledge some of the negative consequences of their drug use, they do not currently view all of their substance use as problematic. In particular, Alex feels that cannabis helps them manage stress and does not believe that stopping completely is necessary. This may make it more difficult for them to recognise situations where cannabis use contributes indirectly to other problems or increases their vulnerability to further substance use.</p>
+      <p>There are identifiable strengths and protective factors. Alex has previously demonstrated that they can reduce their drug use for sustained periods and can identify some of the circumstances that make them more likely to use. They report having a positive relationship with their sister, who does not use drugs and has encouraged them to make changes. Alex has said they are more likely to avoid drugs when they have structure and purposeful activity in their day. Employment has previously provided this structure and reduced the amount of time they spent with peers associated with drug use.</p>
+      <p>Alex has also previously engaged with substance misuse support, although this engagement was inconsistent. They described some of the strategies discussed with the service, including avoiding particular people and locations, contacting supportive family members when experiencing cravings, and keeping occupied through exercise and work. Alex reports that these strategies were helpful when they used them consistently. Re-engagement with appropriate drug treatment or support could help Alex build on these existing strategies and develop a more sustainable plan for reducing their use.</p>
+      <p>There is a link between Alex's drug use and risk of reoffending. Their index offence took place during a period of increased cocaine and alcohol use. Alex reports that they had been using cocaine on the day of the offence and accepts that this affected their judgement and increased their impulsivity. Their drug use has also contributed to financial difficulties. During previous periods of heavier use, Alex has borrowed money from friends and family and accumulated other debts. These pressures may increase the likelihood of further offending if their substance use escalates.</p>
+      <p>Peer association is also relevant. Some of Alex's drug use takes place with people who have previously been involved in offending. Increased contact with these peers has coincided with periods of heavier substance use and reduced stability. Reducing contact with drug-using and pro-criminal peers is therefore likely to be important in reducing Alex's risk of further offending.</p>
+      <p>Alex's drug use is also linked to risk of serious harm. There is evidence that cocaine use, particularly when combined with alcohol, is associated with increased impulsivity and aggression for Alex. The current offence involved aggressive behaviour following substance use. Alex describes becoming more confrontational when using cocaine and acknowledges that they can react without considering the consequences. This increases concern where substance use occurs alongside interpersonal conflict or other emotionally charged situations.</p>
+      <p>The risk is not considered to arise from drug use in isolation. It appears to increase when several factors occur together, particularly cocaine and alcohol use, emotional distress, contact with certain peers and relationship conflict. Cannabis use has a less direct relationship with serious harm, although frequent use may affect Alex's motivation, routine and ability to use more constructive coping strategies.</p>
+      <p>Overall, Alex demonstrates some motivation to change and has identifiable strengths that could support this. Their previous periods of reduced use show that change is achievable, particularly when they have structure, positive relationships and distance from drug-using peers. However, their motivation is currently inconsistent and they continue to minimise some aspects of their substance use.</p>
+      <p>Work should focus on increasing Alex's understanding of the relationship between substance use, emotional regulation, peer associations and offending. Supporting Alex to identify triggers, strengthen existing coping strategies and re-engage with specialist substance misuse services would help address these needs. Maintaining stable accommodation, developing purposeful activity and strengthening contact with positive support networks are also likely to reduce the circumstances in which Alex has previously returned to heavier drug use.</p>
+      <p class="govuk-!-margin-bottom-0">Analysis made on 27 April 2025 by John Smith</p>
+    {% endset %}
+
+    {{ govukInsetText({
+      classes: "guidance-panel govuk-!-margin-top-0",
+      html: '<p>An analysis from a previous OASys assessment is available.</p><p>Please review it before continuing</p>' + govukDetails({
+        summaryText: "Show previous analysis",
+        html: previousAnalysis,
+        classes: "govuk-!-margin-bottom-0"
+      })
+    }) }}
+
+    <form id="san-drugs-pa-form" novalidate>
+      <div class="govuk-form-group" data-san-error-group="analysis-motivation">
+        <fieldset class="govuk-fieldset" id="analysis-motivation">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Does Alex seem motivated to stop or reduce their drug use?</legend>
+          <div class="govuk-radios" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="analysis-motivation-does-not-show" name="analysis_motivation" type="radio" value="does-not-show">
+              <label class="govuk-label govuk-radios__label" for="analysis-motivation-does-not-show">Does not show motivation to stop or reduce</label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="analysis-motivation-some" name="analysis_motivation" type="radio" value="some">
+              <label class="govuk-label govuk-radios__label" for="analysis-motivation-some">Shows some motivation to stop or reduce</label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="analysis-motivation-motivated" name="analysis_motivation" type="radio" value="motivated">
+              <label class="govuk-label govuk-radios__label" for="analysis-motivation-motivated">Motivated to stop or reduce</label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="analysis-motivation-unknown" name="analysis_motivation" type="radio" value="unknown">
+              <label class="govuk-label govuk-radios__label" for="analysis-motivation-unknown">Unknown</label>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group" data-san-error-group="analysis-strengths">
+        <fieldset class="govuk-fieldset" id="analysis-strengths" aria-describedby="analysis-strengths-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Are there any strengths or protective factors related to Alex's drug use?</legend>
+          <div id="analysis-strengths-hint" class="govuk-hint">Include any strategies, people or support networks that helped.</div>
+          <div class="govuk-radios" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="analysis-strengths-yes" name="analysis_strengths" type="radio" value="yes" data-aria-controls="conditional-analysis-strengths-yes">
+              <label class="govuk-label govuk-radios__label" for="analysis-strengths-yes">Yes</label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-analysis-strengths-yes">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="analysis-strengths-yes-details">Give details</label>
+                <textarea class="govuk-textarea" id="analysis-strengths-yes-details" name="analysis_strengths_yes_details" rows="5" maxlength="2000"></textarea>
+                <div class="govuk-hint san-character-count" data-san-character-count="analysis-strengths-yes-details">You have 2,000 characters remaining</div>
+              </div>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="analysis-strengths-no" name="analysis_strengths" type="radio" value="no" data-aria-controls="conditional-analysis-strengths-no">
+              <label class="govuk-label govuk-radios__label" for="analysis-strengths-no">No</label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-analysis-strengths-no">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="analysis-strengths-no-details">Give details (optional)</label>
+                <textarea class="govuk-textarea" id="analysis-strengths-no-details" name="analysis_strengths_no_details" rows="5" maxlength="2000"></textarea>
+                <div class="govuk-hint san-character-count" data-san-character-count="analysis-strengths-no-details">You have 2,000 characters remaining</div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group" data-san-error-group="analysis-harm">
+        <fieldset class="govuk-fieldset" id="analysis-harm">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Is Alex's drug use linked to risk of serious harm?</legend>
+          <div class="govuk-radios" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="analysis-harm-yes" name="analysis_harm" type="radio" value="yes" data-aria-controls="conditional-analysis-harm-yes">
+              <label class="govuk-label govuk-radios__label" for="analysis-harm-yes">Yes</label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-analysis-harm-yes">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="analysis-harm-yes-details">Give details</label>
+                <textarea class="govuk-textarea" id="analysis-harm-yes-details" name="analysis_harm_yes_details" rows="5" maxlength="2000"></textarea>
+                <div class="govuk-hint san-character-count" data-san-character-count="analysis-harm-yes-details">You have 2,000 characters remaining</div>
+              </div>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="analysis-harm-no" name="analysis_harm" type="radio" value="no" data-aria-controls="conditional-analysis-harm-no">
+              <label class="govuk-label govuk-radios__label" for="analysis-harm-no">No</label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-analysis-harm-no">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="analysis-harm-no-details">Give details (optional)</label>
+                <textarea class="govuk-textarea" id="analysis-harm-no-details" name="analysis_harm_no_details" rows="5" maxlength="2000"></textarea>
+                <div class="govuk-hint san-character-count" data-san-character-count="analysis-harm-no-details">You have 2,000 characters remaining</div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group" data-san-error-group="analysis-reoffending">
+        <fieldset class="govuk-fieldset" id="analysis-reoffending">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Is Alex's drug use linked to risk of reoffending?</legend>
+          <div class="govuk-radios" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="analysis-reoffending-yes" name="analysis_reoffending" type="radio" value="yes" data-aria-controls="conditional-analysis-reoffending-yes">
+              <label class="govuk-label govuk-radios__label" for="analysis-reoffending-yes">Yes</label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-analysis-reoffending-yes">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="analysis-reoffending-yes-details">Give details</label>
+                <textarea class="govuk-textarea" id="analysis-reoffending-yes-details" name="analysis_reoffending_yes_details" rows="5" maxlength="2000"></textarea>
+                <div class="govuk-hint san-character-count" data-san-character-count="analysis-reoffending-yes-details">You have 2,000 characters remaining</div>
+              </div>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="analysis-reoffending-no" name="analysis_reoffending" type="radio" value="no" data-aria-controls="conditional-analysis-reoffending-no">
+              <label class="govuk-label govuk-radios__label" for="analysis-reoffending-no">No</label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-analysis-reoffending-no">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="analysis-reoffending-no-details">Give details (optional)</label>
+                <textarea class="govuk-textarea" id="analysis-reoffending-no-details" name="analysis_reoffending_no_details" rows="5" maxlength="2000"></textarea>
+                <div class="govuk-hint san-character-count" data-san-character-count="analysis-reoffending-no-details">You have 2,000 characters remaining</div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <button type="submit" class="govuk-button" data-module="govuk-button">Mark as complete</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('[data-pa-stay]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault()
+    })
+  })
+
+  const form = document.getElementById('san-drugs-pa-form')
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault()
+  })
+
+  const updateCount = (textarea) => {
+    const hint = document.querySelector(`[data-san-character-count="${textarea.id}"]`)
+    if (!hint) return
+    const max = Number(textarea.getAttribute('maxlength'))
+    if (!max) return
+    const remaining = Math.max(0, max - textarea.value.length)
+    const noun = remaining === 1 ? 'character' : 'characters'
+    hint.textContent = `You have ${remaining.toLocaleString('en-GB')} ${noun} remaining`
+  }
+
+  document.querySelectorAll('textarea[maxlength]').forEach((textarea) => {
+    updateCount(textarea)
+    textarea.addEventListener('input', () => updateCount(textarea))
+  })
+</script>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

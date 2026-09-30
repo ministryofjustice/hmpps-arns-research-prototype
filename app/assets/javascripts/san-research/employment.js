@@ -6,18 +6,17 @@ import { getSanSession, replaceSanSession, sectionLinkHref, setSanSession } from
 import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, labelled, scrollToHash } from './form.js'
 
 const EXAMPLE_COMPLETE = {
-  employmentStatus: 'employed',
-  employmentSubtype: 'full-time',
+  employmentStatus: 'employed-or-self-employed',
+  employmentSubtype: '',
   employedBefore: '',
   jobSector: 'Construction',
   employmentHistory: 'continuous',
   employmentHistoryDetails: 'Site labouring for a local firm.',
   commitments: ['caring'],
   commitmentDetails: { caring: 'Supports an elderly parent.' },
-  academicQualification: 'level-2',
-  vocational: 'yes',
-  vocationalDetails: 'CSCS card.',
-  skills: 'yes',
+  qualifications: 'yes',
+  qualificationsDetails: 'GCSEs including English and maths, CSCS card.',
+  skills: 'strong',
   skillsDetails: 'Experienced in groundworks.',
   difficulties: ['none'],
   difficultyLevels: {},
@@ -36,27 +35,18 @@ const EXAMPLE_COMPLETE = {
   employmentComplete: true
 }
 
-const BEFORE_STATUSES = ['unavailable', 'unemployed-active', 'unemployed-not-active']
+const BEFORE_STATUSES = ['unavailable', 'unemployed']
 
 const STATUS_LABELS = {
-  employed: 'Employed',
-  'self-employed': 'Self-employed',
+  'employed-or-self-employed': 'Employed or self-employed',
   retired: 'Retired',
   unavailable: 'Currently unavailable for work',
-  'unemployed-active': 'Unemployed - actively looking for work',
-  'unemployed-not-active': 'Unemployed - not actively looking for work'
-}
-
-const SUBTYPE_LABELS = {
-  'full-time': 'Full-time',
-  'part-time': 'Part-time',
-  temporary: 'Temporary or casual',
-  apprenticeship: 'Apprenticeship'
+  unemployed: 'Unemployed'
 }
 
 const BEFORE_LABELS = {
-  yes: 'Yes, has been employed before',
-  no: 'No, has never been employed'
+  yes: 'Yes',
+  no: 'No'
 }
 
 const HISTORY_LABELS = {
@@ -76,38 +66,12 @@ const COMMITMENT_LABELS = {
   none: 'None'
 }
 
-const ACADEMIC_LABELS = {
-  entry: 'Entry level',
-  'level-1': 'Level 1',
-  'level-2': 'Level 2',
-  'level-3': 'Level 3',
-  'level-4': 'Level 4',
-  'level-5': 'Level 5',
-  'level-6': 'Level 6',
-  'level-7': 'Level 7',
-  'level-8': 'Level 8',
-  none: 'None of these',
-  unknown: 'Unknown'
-}
-
-const ACADEMIC_HINTS = {
-  entry: 'For example, entry level diploma',
-  'level-1': 'For example, GCSE grades 3, 2, 1 or grades D, E, F, G',
-  'level-2': 'For example, GCSE grades 9, 8, 7, 6, 5, 4 or grades A*, A, B, C',
-  'level-3': 'For example, A level',
-  'level-4': 'For example, higher apprenticeship',
-  'level-5': 'For example, foundation degree',
-  'level-6': 'For example, degree with honours',
-  'level-7': "For example, master's degree",
-  'level-8': 'For example, doctorate'
-}
-
 const YES_NO_UNKNOWN = { yes: 'Yes', no: 'No', unknown: 'Unknown' }
 
 const SKILLS_LABELS = {
-  yes: 'Yes',
-  some: 'Some skills',
-  no: 'No'
+  strong: 'Strong work-related skills',
+  some: 'Some work-related skills',
+  no: 'No work-related skills'
 }
 
 const DIFFICULTY_LABELS = {
@@ -143,15 +107,17 @@ const CHANGES_LABELS = {
   'not-applicable': 'Not applicable'
 }
 
+// EF2 (job sector), overall experience of employment and overall experience of education are hidden in this prototype.
+// EF4 and EF5 are replaced by EF6 (qualifications), which is followed by EF7 (skills).
 const ROUTE_QUESTIONS = {
-  employed: ['job-sector', 'history', 'commitments', 'academic', 'vocational', 'skills', 'difficulties', 'employment-experience', 'education-experience', 'changes'],
-  retired: ['history', 'commitments', 'academic', 'vocational', 'skills', 'difficulties', 'changes'],
-  'has-been-employed': ['history', 'commitments', 'academic', 'vocational', 'skills', 'difficulties', 'employment-experience', 'education-experience', 'changes'],
-  'never-employed': ['commitments', 'academic', 'vocational', 'skills', 'difficulties', 'education-experience', 'changes']
+  employed: ['history', 'commitments', 'qualifications', 'skills', 'difficulties', 'changes'],
+  retired: ['history', 'commitments', 'qualifications', 'skills', 'difficulties', 'changes'],
+  'has-been-employed': ['history', 'commitments', 'qualifications', 'skills', 'difficulties', 'changes'],
+  'never-employed': ['commitments', 'qualifications', 'skills', 'difficulties', 'changes']
 }
 
 const employmentRoute = (session) => {
-  if (session.employmentStatus === 'employed' || session.employmentStatus === 'self-employed') return 'employed'
+  if (session.employmentStatus === 'employed-or-self-employed' || session.employmentStatus === 'employed' || session.employmentStatus === 'self-employed') return 'employed'
   if (session.employmentStatus === 'retired') return 'retired'
   if (BEFORE_STATUSES.includes(session.employmentStatus)) {
     if (session.employedBefore === 'yes') return 'has-been-employed'
@@ -159,6 +125,8 @@ const employmentRoute = (session) => {
   }
   return ''
 }
+
+const needsJobPage = (session) => BEFORE_STATUSES.includes(session.employmentStatus)
 
 const routeShows = (route, question) => (ROUTE_QUESTIONS[route] || []).includes(question)
 
@@ -329,9 +297,8 @@ const detailsAnswered = (session) => {
   if (!route || !session.employmentChanges) return false
   if (routeShows(route, 'history') && !session.employmentHistory) return false
   if (routeShows(route, 'commitments') && !(Array.isArray(session.commitments) && session.commitments.length)) return false
-  if (routeShows(route, 'academic') && !session.academicQualification) return false
-  if (routeShows(route, 'vocational') && !session.vocational) return false
-  if (routeShows(route, 'vocational') && session.vocational === 'yes' && !session.vocationalDetails) return false
+  if (routeShows(route, 'qualifications') && !session.qualifications) return false
+  if (routeShows(route, 'qualifications') && session.qualifications === 'yes' && !session.qualificationsDetails) return false
   if (routeShows(route, 'skills') && !session.skills) return false
   if (routeShows(route, 'difficulties') && !(Array.isArray(session.difficulties) && session.difficulties.length)) return false
   if (routeShows(route, 'employment-experience') && !session.employmentExperience) return false
@@ -366,18 +333,18 @@ const employmentRows = (session) => {
   const rows = []
 
   if (session.employmentStatus) {
-    const lines = [labelled(STATUS_LABELS, session.employmentStatus)]
-    if (session.employmentStatus === 'employed' && session.employmentSubtype) {
-      lines.push(labelled(SUBTYPE_LABELS, session.employmentSubtype))
-    }
-    if (BEFORE_STATUSES.includes(session.employmentStatus) && session.employedBefore) {
-      lines.push(labelled(BEFORE_LABELS, session.employedBefore))
-    }
     rows.push(summaryRow(
       "What is Alex's current employment status?",
-      lines,
-      summaryChangeHref('employment'),
-      { secondaryFrom: 1 }
+      [labelled(STATUS_LABELS, session.employmentStatus)],
+      summaryChangeHref('employment')
+    ))
+  }
+
+  if (needsJobPage(session) && session.employedBefore) {
+    rows.push(summaryRow(
+      'Have they ever had a job?',
+      [labelled(BEFORE_LABELS, session.employedBefore)],
+      summaryChangeHref('employment-job')
     ))
   }
 
@@ -414,24 +381,13 @@ const employmentRows = (session) => {
     ))
   }
 
-  if (routeShows(route, 'academic') && session.academicQualification) {
-    const lines = [labelled(ACADEMIC_LABELS, session.academicQualification)]
-    if (ACADEMIC_HINTS[session.academicQualification]) lines.push(ACADEMIC_HINTS[session.academicQualification])
+  if (routeShows(route, 'qualifications') && session.qualifications) {
+    const lines = [labelled(YES_NO_UNKNOWN, session.qualifications)]
+    if (session.qualifications === 'yes' && session.qualificationsDetails) lines.push(session.qualificationsDetails)
     rows.push(summaryRow(
-      'Select the highest level of academic qualification Alex has completed',
+      'Does Alex have any completed academic, professional or vocational qualifications?',
       lines,
-      summaryChangeHref('employment-details', 'academic'),
-      { secondaryFrom: 1 }
-    ))
-  }
-
-  if (routeShows(route, 'vocational') && session.vocational) {
-    const lines = [labelled(YES_NO_UNKNOWN, session.vocational)]
-    if (session.vocational === 'yes' && session.vocationalDetails) lines.push(session.vocationalDetails)
-    rows.push(summaryRow(
-      'Does Alex have any professional or vocational qualifications?',
-      lines,
-      summaryChangeHref('employment-details', 'vocational'),
+      summaryChangeHref('employment-details', 'qualifications'),
       { secondaryFrom: 1 }
     ))
   }
@@ -440,7 +396,7 @@ const employmentRows = (session) => {
     const lines = [labelled(SKILLS_LABELS, session.skills)]
     if (session.skillsDetails) lines.push(session.skillsDetails)
     rows.push(summaryRow(
-      'Does Alex have any skills that could help them in a job or to get a job?',
+      "How would you describe Alex's skills for work?",
       lines,
       summaryChangeHref('employment-details', 'skills'),
       { secondaryFrom: 1 }
@@ -546,7 +502,10 @@ const renderSummary = (session) => {
   } else {
     let followOn = ''
     if (!complete && !detailsAnswered(session)) {
-      followOn = '<p class="govuk-body"><a class="govuk-link" href="employment-details.html">Continue</a></p>'
+      const nextPage = needsJobPage(session) && !session.employedBefore
+        ? 'employment-job.html'
+        : 'employment-details.html'
+      followOn = `<p class="govuk-body"><a class="govuk-link" href="${nextPage}">Continue</a></p>`
     }
     mount.innerHTML = `<dl class="govuk-summary-list san-summary-list">${rows.join('')}</dl>${followOn}`
   }
@@ -597,11 +556,13 @@ const openAnalysisTab = () => {
 
 const readStatusAnswers = () => {
   const employmentStatus = checkedValue('employment_status')
-  const employmentSubtype = employmentStatus === 'employed' ? checkedValue('employed_type') : ''
-  const employedBefore = BEFORE_STATUSES.includes(employmentStatus)
-    ? checkedValue(`employed_before_${employmentStatus}`)
-    : ''
-  return { employmentStatus, employmentSubtype, employedBefore }
+  return {
+    employmentStatus,
+    employmentSubtype: '',
+    employedBefore: needsJobPage({ employmentStatus })
+      ? getSanSession().employedBefore || ''
+      : ''
+  }
 }
 
 const emptyDetailAnswers = () => ({
@@ -613,6 +574,8 @@ const emptyDetailAnswers = () => ({
   academicQualification: '',
   vocational: '',
   vocationalDetails: '',
+  qualifications: '',
+  qualificationsDetails: '',
   skills: '',
   skillsDetails: '',
   difficulties: [],
@@ -649,18 +612,14 @@ const readDetailsAnswers = (route) => {
     answers.commitmentDetails = details
   }
 
-  if (routeShows(route, 'academic')) {
-    answers.academicQualification = checkedValue('academic_qualification')
-  }
-
-  if (routeShows(route, 'vocational')) {
-    answers.vocational = checkedValue('vocational')
-    answers.vocationalDetails = answers.vocational === 'yes' ? fieldValue('vocational-yes-details') : ''
+  if (routeShows(route, 'qualifications')) {
+    answers.qualifications = checkedValue('qualifications')
+    answers.qualificationsDetails = answers.qualifications === 'yes' ? fieldValue('qualifications-yes-details') : ''
   }
 
   if (routeShows(route, 'skills')) {
     answers.skills = checkedValue('skills')
-    answers.skillsDetails = answers.skills && answers.skills !== 'no'
+    answers.skillsDetails = answers.skills
       ? fieldValue(`skills-${answers.skills}-details`)
       : ''
   }
@@ -717,27 +676,21 @@ const readAnalysisAnswers = () => {
 }
 
 const validateStatus = (answers) => {
-  const errors = []
-  if (!answers.employmentStatus) {
-    errors.push({
-      group: 'employment-status',
-      href: '#employment-status',
-      text: "Select Alex's current employment status"
-    })
-  } else if (answers.employmentStatus === 'employed' && !answers.employmentSubtype) {
-    errors.push({
-      group: 'employment-status',
-      href: '#employed-type',
-      text: 'Select the type of employment'
-    })
-  } else if (BEFORE_STATUSES.includes(answers.employmentStatus) && !answers.employedBefore) {
-    errors.push({
-      group: 'employment-status',
-      href: `#${answers.employmentStatus}-before`,
-      text: 'Select if they have been employed before'
-    })
-  }
-  return errors
+  if (answers.employmentStatus) return []
+  return [{
+    group: 'employment-status',
+    href: '#employment-status',
+    text: "Select Alex's current employment status"
+  }]
+}
+
+const validateJob = (employedBefore) => {
+  if (employedBefore) return []
+  return [{
+    group: 'employed-before',
+    href: '#employed-before',
+    text: 'Select if they have ever had a job'
+  }]
 }
 
 const validateDetails = (answers, route) => {
@@ -756,31 +709,24 @@ const validateDetails = (answers, route) => {
       text: 'Select if Alex has any additional day-to-day commitments'
     })
   }
-  if (routeShows(route, 'academic') && !answers.academicQualification) {
+  if (routeShows(route, 'qualifications') && !answers.qualifications) {
     errors.push({
-      group: 'academic',
-      href: '#academic',
-      text: 'Select the highest level of academic qualification Alex has completed'
+      group: 'qualifications',
+      href: '#qualifications',
+      text: 'Select if Alex has any completed academic, professional or vocational qualifications'
     })
-  }
-  if (routeShows(route, 'vocational') && !answers.vocational) {
+  } else if (routeShows(route, 'qualifications') && answers.qualifications === 'yes' && !answers.qualificationsDetails) {
     errors.push({
-      group: 'vocational',
-      href: '#vocational',
-      text: 'Select if Alex has any professional or vocational qualifications'
-    })
-  } else if (routeShows(route, 'vocational') && answers.vocational === 'yes' && !answers.vocationalDetails) {
-    errors.push({
-      group: 'vocational',
-      href: '#vocational-yes-details',
-      text: "Enter details about Alex's professional or vocational qualifications"
+      group: 'qualifications-details',
+      href: '#qualifications-yes-details',
+      text: "Enter details about Alex's qualifications"
     })
   }
   if (routeShows(route, 'skills') && !answers.skills) {
     errors.push({
       group: 'skills',
       href: '#skills',
-      text: 'Select if Alex has any skills that could help them in a job or to get a job'
+      text: "Select how you would describe Alex's skills for work"
     })
   }
   if (routeShows(route, 'difficulties') && !answers.difficulties.length) {
@@ -864,10 +810,10 @@ const applyDetailsRoute = (route) => {
 
 const restoreStatus = (session) => {
   selectRadio('employment_status', session.employmentStatus)
-  if (session.employmentStatus === 'employed') selectRadio('employed_type', session.employmentSubtype)
-  if (BEFORE_STATUSES.includes(session.employmentStatus)) {
-    selectRadio(`employed_before_${session.employmentStatus}`, session.employedBefore)
-  }
+}
+
+const restoreJob = (session) => {
+  selectRadio('employed_before', session.employedBefore)
 }
 
 const restoreDetails = (session) => {
@@ -880,11 +826,10 @@ const restoreDetails = (session) => {
       setField(`commitment-${key}-details`, value)
     })
   }
-  selectRadio('academic_qualification', session.academicQualification)
-  selectRadio('vocational', session.vocational)
-  if (session.vocational === 'yes') setField('vocational-yes-details', session.vocationalDetails)
+  selectRadio('qualifications', session.qualifications)
+  if (session.qualifications === 'yes') setField('qualifications-yes-details', session.qualificationsDetails)
   selectRadio('skills', session.skills)
-  if (session.skills && session.skills !== 'no') setField(`skills-${session.skills}-details`, session.skillsDetails)
+  if (session.skills) setField(`skills-${session.skills}-details`, session.skillsDetails)
   selectChecks('difficulties', session.difficulties)
   if (session.difficultyLevels) {
     Object.entries(session.difficultyLevels).forEach(([key, value]) => {
@@ -950,11 +895,25 @@ const initEmployment = () => {
 
   const pageName = page.getAttribute('data-ee-page')
   if (pageName === 'status') restoreStatus(session)
+  if (pageName === 'job') {
+    if (!needsJobPage(session)) {
+      window.location.assign(session.employmentStatus ? 'employment-details' : 'employment')
+      return
+    }
+    restoreJob(session)
+  }
   if (pageName === 'details') {
+    if (needsJobPage(session) && !session.employedBefore) {
+      window.location.assign('employment-job')
+      return
+    }
     const route = employmentRoute(session)
     if (!route) {
       window.location.assign('employment')
       return
+    }
+    if (!fromSummary()) {
+      ensureBackLink(needsJobPage(session) ? 'employment-job.html' : 'employment.html')
     }
     applyDetailsRoute(route)
     restoreDetails(session)
@@ -983,7 +942,6 @@ const initEmployment = () => {
   const statusForm = document.getElementById('san-employment-status-form')
   statusForm?.addEventListener('submit', (event) => {
     event.preventDefault()
-    revealCheckedConditionals()
     const answers = readStatusAnswers()
     const errors = validateStatus(answers)
     if (errors.length) {
@@ -991,13 +949,43 @@ const initEmployment = () => {
       return
     }
     clearErrors()
-    const previousRoute = employmentRoute(getSanSession())
+    const previous = getSanSession()
+    const previousRoute = employmentRoute(previous)
     const nextRoute = employmentRoute(answers)
     const updates = { ...answers, employmentComplete: false }
     if (nextRoute !== previousRoute) Object.assign(updates, emptyDetailAnswers())
     setSanSession(updates)
-    const returnToSummary = fromSummary() && nextRoute === previousRoute
-    window.location.assign(returnToSummary ? 'employment-summary' : 'employment-details')
+
+    if (needsJobPage(answers)) {
+      window.location.assign(fromSummary() && needsJobPage(previous) && previous.employedBefore
+        ? 'employment-summary'
+        : 'employment-job')
+      return
+    }
+
+    window.location.assign(fromSummary() && nextRoute === previousRoute
+      ? 'employment-summary'
+      : 'employment-details')
+  })
+
+  const jobForm = document.getElementById('san-employment-job-form')
+  jobForm?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    const employedBefore = checkedValue('employed_before')
+    const errors = validateJob(employedBefore)
+    if (errors.length) {
+      showErrors(errors)
+      return
+    }
+    clearErrors()
+    const previous = getSanSession()
+    const updates = { employedBefore, employmentComplete: false }
+    const nextRoute = employmentRoute({ ...previous, ...updates })
+    if (nextRoute !== employmentRoute(previous)) Object.assign(updates, emptyDetailAnswers())
+    setSanSession(updates)
+    window.location.assign(fromSummary() && nextRoute === employmentRoute(previous)
+      ? 'employment-summary'
+      : 'employment-details')
   })
 
   const detailsForm = document.getElementById('san-employment-details-form')

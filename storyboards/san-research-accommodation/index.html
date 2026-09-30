@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SAN research — Accommodation</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #0b0c0c;
+      --muted: #505a5f;
+      --line: #b1b4b6;
+      --paper: #f3f2f1;
+      --card: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px 32px 64px;
+      font-family: "GDS Transport", arial, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    h1 { font-size: 28px; margin: 0 0 8px; }
+    h2 { font-size: 22px; margin: 0 0 8px; }
+    h3 { font-size: 16px; margin: 0 0 8px; }
+    p { margin: 0 0 8px; }
+    .lede { color: var(--muted); max-width: 72ch; margin-bottom: 24px; }
+    .flow {
+      list-style: none;
+      margin: 0 0 32px;
+      padding: 16px 20px;
+      background: var(--card);
+      border: 1px solid var(--line);
+    }
+    .flow__item {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: baseline;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--paper);
+    }
+    .flow__item:last-child { border-bottom: 0; }
+    .flow__arrow { color: var(--muted); }
+    .flow__when { color: var(--muted); font-size: 14px; }
+    .journey { margin-bottom: 40px; }
+    .journey__header { margin-bottom: 16px; max-width: 80ch; }
+    .journey__header p { color: var(--muted); }
+    .journey__steps {
+      display: flex;
+      gap: 16px;
+      list-style: none;
+      margin: 0;
+      padding: 8px 0 16px;
+      overflow-x: auto;
+    }
+    .card {
+      flex: 0 0 420px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 12px;
+    }
+    .card__step {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .card__note, .card__file {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .card__file { font-family: ui-monospace, monospace; word-break: break-all; }
+    .card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--line);
+      margin-top: 12px;
+    }
+    .howto {
+      margin: 0 0 28px;
+      padding: 12px 16px;
+      background: var(--card);
+      border-left: 4px solid #1d70b8;
+      max-width: 80ch;
+    }
+    @media print {
+      body { padding: 0; background: #fff; }
+      .journey__steps { overflow: visible; flex-wrap: wrap; }
+      .card { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <h1>SAN research — Accommodation</h1>
+  <p class="lede">Filled answers so summaries and conditionals match a real assessment. Temporary accommodation uses the same details questions as settled in this prototype, so it is not a separate row.</p>
+  <p class="howto">Open this file in a browser. For Miro, drag the <code>images</code> folder onto a board — filenames sort in journey order. Print to PDF if you want a single file to share.</p>
+  <h2>Routes</h2>
+  <ol class="flow"><li class="flow__item">
+      <span class="flow__from">Somewhere to live</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Is it settled?</span>
+      <span class="flow__when">Yes</span>
+    </li><li class="flow__item">
+      <span class="flow__from">Somewhere to live</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Details (no accommodation)</span>
+      <span class="flow__when">No</span>
+    </li><li class="flow__item">
+      <span class="flow__from">Is it settled?</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Details (location and suitability)</span>
+      <span class="flow__when">Yes or no</span>
+    </li><li class="flow__item">
+      <span class="flow__from">Details</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Concerns</span>
+      <span class="flow__when">Location no, or suitability concerns</span>
+    </li><li class="flow__item">
+      <span class="flow__from">Details</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Summary</span>
+      <span class="flow__when">No concerns, or no accommodation</span>
+    </li><li class="flow__item">
+      <span class="flow__from">Concerns</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Summary</span>
+      
+    </li><li class="flow__item">
+      <span class="flow__from">Summary</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Practitioner analysis</span>
+      
+    </li></ol>
+  <section class="journey">
+      <header class="journey__header">
+        <h2>Settled, with concerns</h2>
+        <p>Has somewhere to live, settled. Location is not suitable and there are suitability concerns, so the concerns page is shown.</p>
+      </header>
+      <ol class="journey__steps">
+      <li class="card">
+        <p class="card__step">Step 1</p>
+        <h3 class="card__title">Does Alex currently have somewhere to live?</h3>
+        <p class="card__note">Yes selected</p>
+        <p class="card__file">01-settled-with-concerns__01__somewhere-to-live.png</p>
+        <img src="images/01-settled-with-concerns__01__somewhere-to-live.png" alt="Does Alex currently have somewhere to live?">
+      </li>
+      <li class="card">
+        <p class="card__step">Step 2</p>
+        <h3 class="card__title">Is Alex's accommodation settled?</h3>
+        <p class="card__note">Yes selected</p>
+        <p class="card__file">01-settled-with-concerns__02__settled.png</p>
+        <img src="images/01-settled-with-concerns__02__settled.png" alt="Is Alex's accommodation settled?">
+      </li>
+      <li class="card">
+        <p class="card__step">Step 3</p>
+        <h3 class="card__title">Location, suitability and changes</h3>
+        <p class="card__note">Location no · suitability yes, with concerns</p>
+        <p class="card__file">01-settled-with-concerns__03__details.png</p>
+        <img src="images/01-settled-with-concerns__03__details.png" alt="Location, suitability and changes">
+      </li>
+      <li class="card">
+        <p class="card__step">Step 4</p>
+        <h3 class="card__title">Location and suitability concerns</h3>
+        <p class="card__note">Only shown when location or suitability triggers concerns</p>
+        <p class="card__file">01-settled-with-concerns__04__concerns.png</p>
+        <img src="images/01-settled-with-concerns__04__concerns.png" alt="Location and suitability concerns">
+      </li>
+      <li class="card">
+        <p class="card__step">Step 5</p>
+        <h3 class="card__title">Summary</h3>
+        <p class="card__note">Answers tab</p>
+        <p class="card__file">01-settled-with-concerns__05__summary.png</p>
+        <img src="images/01-settled-with-concerns__05__summary.png" alt="Summary">
+      </li>
+      <li class="card">
+        <p class="card__step">Step 6</p>
+        <h3 class="card__title">Practitioner analysis</h3>
+        <p class="card__note">Completed analysis</p>
+        <p class="card__file">01-settled-with-concerns__06__practitioner-analysis.png</p>
+        <img src="images/01-settled-with-concerns__06__practitioner-analysis.png" alt="Practitioner analysis">
+      </li></ol>
+    </section>
+<section class="journey">
+      <header class="journey__header">
+        <h2>No accommodation</h2>
+        <p>Skips the settled and concerns pages. Details shows homelessness reasons and changes only.</p>
+      </header>
+      <ol class="journey__steps">
+      <li class="card">
+        <p class="card__step">Step 1</p>
+        <h3 class="card__title">Does Alex currently have somewhere to live?</h3>
+        <p class="card__note">No selected</p>
+        <p class="card__file">02-no-accommodation__01__somewhere-to-live.png</p>
+        <img src="images/02-no-accommodation__01__somewhere-to-live.png" alt="Does Alex currently have somewhere to live?">
+      </li>
+      <li class="card">
+        <p class="card__step">Step 2</p>
+        <h3 class="card__title">Why no accommodation, and changes</h3>
+        <p class="card__note">Settled page skipped</p>
+        <p class="card__file">02-no-accommodation__02__details.png</p>
+        <img src="images/02-no-accommodation__02__details.png" alt="Why no accommodation, and changes">
+      </li>
+      <li class="card">
+        <p class="card__step">Step 3</p>
+        <h3 class="card__title">Summary</h3>
+        <p class="card__note">Answers tab</p>
+        <p class="card__file">02-no-accommodation__03__summary.png</p>
+        <img src="images/02-no-accommodation__03__summary.png" alt="Summary">
+      </li></ol>
+    </section>
+<section class="journey">
+      <header class="journey__header">
+        <h2>Settled, no concerns</h2>
+        <p>Has somewhere to live, settled. Location and suitability are both yes, so concerns is skipped.</p>
+      </header>
+      <ol class="journey__steps">
+      <li class="card">
+        <p class="card__step">Step 1</p>
+        <h3 class="card__title">Does Alex currently have somewhere to live?</h3>
+        <p class="card__note">Yes selected</p>
+        <p class="card__file">03-settled-no-concerns__01__somewhere-to-live.png</p>
+        <img src="images/03-settled-no-concerns__01__somewhere-to-live.png" alt="Does Alex currently have somewhere to live?">
+      </li>
+      <li class="card">
+        <p class="card__step">Step 2</p>
+        <h3 class="card__title">Is Alex's accommodation settled?</h3>
+        <p class="card__note">Yes selected</p>
+        <p class="card__file">03-settled-no-concerns__02__settled.png</p>
+        <img src="images/03-settled-no-concerns__02__settled.png" alt="Is Alex's accommodation settled?">
+      </li>
+      <li class="card">
+        <p class="card__step">Step 3</p>
+        <h3 class="card__title">Location, suitability and changes</h3>
+        <p class="card__note">Location yes · suitability yes · skips concerns</p>
+        <p class="card__file">03-settled-no-concerns__03__details.png</p>
+        <img src="images/03-settled-no-concerns__03__details.png" alt="Location, suitability and changes">
+      </li>
+      <li class="card">
+        <p class="card__step">Step 4</p>
+        <h3 class="card__title">Summary</h3>
+        <p class="card__note">Answers tab</p>
+        <p class="card__file">03-settled-no-concerns__04__summary.png</p>
+        <img src="images/03-settled-no-concerns__04__summary.png" alt="Summary">
+      </li></ol>
+    </section>
+</body>
+</html>

@@ -34,8 +34,8 @@
     </li>
   </ul>
 
-  {% macro sanPrivateBetaEntry(entryHint, showDetails, entryHeading, linksInactive, titleTag, basePath, inAccordion) %}
-<ul class="govuk-list assessment-research-prototypes{% if inAccordion %} assessment-research-prototypes--in-accordion{% endif %}">
+  {% macro sanPrivateBetaEntry(entryHint, showDetails, entryHeading, linksInactive, titleTag, basePath, inAccordion, hideLinkSeparators) %}
+<ul class="govuk-list assessment-research-prototypes{% if inAccordion %} assessment-research-prototypes--in-accordion{% endif %}{% if hideLinkSeparators %} assessment-research-prototypes--no-link-separators{% endif %}">
   {% set prototypeBase = basePath | default("/san") %}
   {% set entryVersion = "san-research" if prototypeBase == "/san-research" else "san" %}
   {% set skipToEndHref = null %}
@@ -57,24 +57,30 @@
   {% set quaternaryTitle = "Drug use" %}
   {% set quaternaryClearSessionOnStart = true %}
   {% set quaternaryPrototypeVersion = entryVersion %}
+  {% set researchSectionsPaused = prototypeBase == "/san-research" %}
   {% set quinaryHref = prototypeBase ~ "/alcohol.html" %}
   {% set quinaryTitle = "Alcohol use" %}
+  {% set quinaryInactive = researchSectionsPaused %}
   {% set quinaryClearSessionOnStart = true %}
   {% set quinaryPrototypeVersion = entryVersion %}
   {% set senaryHref = prototypeBase ~ "/health.html" %}
   {% set senaryTitle = "Health and wellbeing" %}
+  {% set senaryInactive = researchSectionsPaused %}
   {% set senaryClearSessionOnStart = true %}
   {% set senaryPrototypeVersion = entryVersion %}
   {% set septenaryHref = prototypeBase ~ "/personal-relationships-children.html" %}
   {% set septenaryTitle = "Personal relationships and community" %}
+  {% set septenaryInactive = researchSectionsPaused %}
   {% set septenaryClearSessionOnStart = true %}
   {% set septenaryPrototypeVersion = entryVersion %}
   {% set octonaryHref = prototypeBase ~ "/thinking-behaviours.html" %}
   {% set octonaryTitle = "Thinking, behaviours and attitudes" %}
+  {% set octonaryInactive = researchSectionsPaused %}
   {% set octonaryClearSessionOnStart = true %}
   {% set octonaryPrototypeVersion = entryVersion %}
   {% set nonaryHref = prototypeBase ~ "/offence-analysis.html" %}
   {% set nonaryTitle = "Offence analysis" %}
+  {% set nonaryInactive = researchSectionsPaused %}
   {% set nonaryClearSessionOnStart = true %}
   {% set nonaryPrototypeVersion = entryVersion %}
   {% set titleTagText = null if inAccordion else titleTag %}
@@ -84,8 +90,15 @@
   {% set hint = null if inAccordion else entryHint %}
   {% set hintHtml = null %}
   {% set titleHint = null %}
+  {% set titleSectionHint = "<li>2 new questions replace accommodation type, each on its own page</li><li>Location and suitability concerns on a separate page</li><li>Living with, past help and future accommodation are hidden</li>" if prototypeBase == "/san-research" else null %}
   {% set secondaryTitleHint = null %}
+  {% set secondaryTitleSectionHint = "<li>Employment status options updated, with ever had a job on a separate page</li><li>Academic and vocational qualifications merged into one question</li><li>Skills question asks how you would describe their skills for work</li><li>Job sector, employment experience and education experience are hidden</li>" if prototypeBase == "/san-research" else null %}
+  {% set tertiaryTitleHint = null %}
+  {% set tertiaryTitleSectionHint = "<li>Family and friends over-reliance is on a separate page</li><li>Further assessment question added; yes continues to later finance questions</li><li>Debt split: own or someone else's, then type of debt on a separate page</li><li>Unable to manage money includes a hint about being stopped from managing money</li><li>Gambling and bank account questions are hidden</li>" if prototypeBase == "/san-research" else null %}
+  {% set quaternaryTitleHint = null %}
+  {% set quaternaryTitleSectionHint = "<li>Question asks about illegal drugs or misused medication</li><li>Choosing drugs and when they were used are on separate pages, with add another drug</li><li>Details labels name the drug; hints ask about history and triggers</li><li>Inset text replaced with a bulleted list of drugs used</li><li>Inject question only lists injectable drugs, with timing on a separate page</li>" if prototypeBase == "/san-research" else null %}
   {% set titleRegularWeight = null %}
+  {% set hideTitleBullets = true if inAccordion else null %}
   {% set clearSessionOnStart = true %}
   {% set detailsHtml %}{% if showDetails %}<details class="govuk-details govuk-!-margin-top-4 govuk-!-margin-bottom-0" data-module="govuk-details">
       <summary class="govuk-details__summary">
@@ -107,10 +120,10 @@
   {% endmacro %}
 
   {% set sanResearchAccordionContent %}
-    {{ sanPrivateBetaEntry("This prototype shows the new iterations that are proposed for User Research.", false, "SAN research", false, "Oct 2026", "/san-research", true) | safe }}
+    {{ sanPrivateBetaEntry("This prototype shows the new iterations that are proposed for User Research.", false, "SAN research", false, "Sep-Oct 2026", "/san-research", true) | safe }}
   {% endset %}
   {% set sanResearchHeadingHtml -%}
-SAN research<span class="assessment-research-prototypes__title-tags assessment-research-prototypes__accordion-heading-tags"><strong class="govuk-tag assessment-research-prototypes__title-tag">Oct 2026</strong></span>
+Prototype 1<span class="assessment-research-prototypes__title-tags assessment-research-prototypes__accordion-heading-tags"><strong class="govuk-tag assessment-research-prototypes__title-tag">Sep-Oct 2026</strong></span>
   {%- endset %}
 
   <div class="govuk-tabs__panel" id="research-prototypes">
@@ -123,7 +136,7 @@ SAN research<span class="assessment-research-prototypes__title-tags assessment-r
             html: sanResearchHeadingHtml
           },
           summary: {
-            text: "This prototype shows the new iterations that are proposed for User Research."
+            text: "This prototype shows content and interaction changes proposed for user research."
           },
           content: {
             html: sanResearchAccordionContent
@@ -134,7 +147,7 @@ SAN research<span class="assessment-research-prototypes__title-tags assessment-r
   </div>
 
   <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="reference-prototypes">
-    {{ sanPrivateBetaEntry("'As-is' replica (for reference only)", true, "SAN private beta reference", false, "25 Sep 2026", "/san") | safe }}
+    {{ sanPrivateBetaEntry("'As-is' replica (for reference only)", true, "SAN private beta reference", false, "Late Sep 2026", "/san", false, true) | safe }}
   </div>
 
   <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="experiment-prototypes">
