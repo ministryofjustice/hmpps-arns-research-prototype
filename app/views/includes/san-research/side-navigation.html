@@ -1,8 +1,10 @@
 {% set currentSection = sanSection | default("accommodation") %}
+{% set navIsolated = sanIsolated | default(false) %}
+{% set isolatedHref = "/san-research/drugs-pa#practitioner-analysis" %}
 <nav class="moj-side-navigation assessment-side-navigation assessment-section-navigation san-side-navigation" aria-label="Strengths and needs">
   <ul class="moj-side-navigation__list">
     <li class="moj-side-navigation__item{% if currentSection == "accommodation" %} moj-side-navigation__item--active{% endif %}">
-      <a href="accommodation.html" class="assessment-section-navigation__link" data-san-section-link="accommodation"{% if currentSection == "accommodation" %} aria-current="location"{% endif %}>
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="accommodation.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="accommodation"{% endif %}{% if currentSection == "accommodation" %} aria-current="location"{% endif %}>
         <span class="assessment-section-navigation__label">Accommodation</span>
         <span class="assessment-section-navigation__complete-icon" data-section-complete="accommodation" aria-hidden="true">
           <svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
@@ -13,7 +15,7 @@
       </a>
     </li>
     <li class="moj-side-navigation__item{% if currentSection == "employment" %} moj-side-navigation__item--active{% endif %}">
-      <a href="employment.html" class="assessment-section-navigation__link" data-san-section-link="employment"{% if currentSection == "employment" %} aria-current="location"{% endif %}>
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="employment.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="employment"{% endif %}{% if currentSection == "employment" %} aria-current="location"{% endif %}>
         <span class="assessment-section-navigation__label">Employment and education</span>
         <span class="assessment-section-navigation__complete-icon" data-section-complete="employment" aria-hidden="true">
           <svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
@@ -24,7 +26,7 @@
       </a>
     </li>
     <li class="moj-side-navigation__item{% if currentSection == "finances" %} moj-side-navigation__item--active{% endif %}">
-      <a href="finances.html" class="assessment-section-navigation__link" data-san-section-link="finances"{% if currentSection == "finances" %} aria-current="location"{% endif %}>
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="finances.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="finances"{% endif %}{% if currentSection == "finances" %} aria-current="location"{% endif %}>
         <span class="assessment-section-navigation__label">Finances</span>
         <span class="assessment-section-navigation__complete-icon" data-section-complete="finances" aria-hidden="true">
           <svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
@@ -35,7 +37,7 @@
       </a>
     </li>
     <li class="moj-side-navigation__item{% if currentSection == "drugs" %} moj-side-navigation__item--active{% endif %}">
-      <a href="drugs.html" class="assessment-section-navigation__link" data-san-section-link="drugs"{% if currentSection == "drugs" %} aria-current="location"{% endif %}>
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="drugs.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="drugs"{% endif %}{% if currentSection == "drugs" %} aria-current="location"{% endif %}>
         <span class="assessment-section-navigation__label">Drug use</span>
         <span class="assessment-section-navigation__complete-icon" data-section-complete="drugs" aria-hidden="true">
           <svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
@@ -46,8 +48,9 @@
       </a>
     </li>
     <li class="moj-side-navigation__item{% if currentSection == "alcohol" %} moj-side-navigation__item--active{% endif %}">
-      <a href="alcohol.html" class="assessment-section-navigation__link" data-san-section-link="alcohol"{% if currentSection == "alcohol" %} aria-current="location"{% endif %}>
+      <a class="assessment-section-navigation__link san-side-navigation__link--disabled"{% if not navIsolated %} data-san-section-link="alcohol"{% endif %} data-san-nav-disabled aria-disabled="true" tabindex="-1"{% if currentSection == "alcohol" %} aria-current="location"{% endif %}>
         <span class="assessment-section-navigation__label">Alcohol use</span>
+        <span class="govuk-visually-hidden"> (not available in this prototype)</span>
         <span class="assessment-section-navigation__complete-icon" data-section-complete="alcohol" aria-hidden="true">
           <svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
             <circle cx="12" cy="12" r="12" fill="#1d70b8"/>
@@ -57,8 +60,9 @@
       </a>
     </li>
     <li class="moj-side-navigation__item{% if currentSection == "health" %} moj-side-navigation__item--active{% endif %}">
-      <a href="health.html" class="assessment-section-navigation__link" data-san-section-link="health"{% if currentSection == "health" %} aria-current="location"{% endif %}>
+      <a class="assessment-section-navigation__link san-side-navigation__link--disabled"{% if not navIsolated %} data-san-section-link="health"{% endif %} data-san-nav-disabled aria-disabled="true" tabindex="-1"{% if currentSection == "health" %} aria-current="location"{% endif %}>
         <span class="assessment-section-navigation__label">Health and wellbeing</span>
+        <span class="govuk-visually-hidden"> (not available in this prototype)</span>
         <span class="assessment-section-navigation__complete-icon" data-section-complete="health" aria-hidden="true">
           <svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
             <circle cx="12" cy="12" r="12" fill="#1d70b8"/>
@@ -68,8 +72,9 @@
       </a>
     </li>
     <li class="moj-side-navigation__item{% if currentSection == "relationships" %} moj-side-navigation__item--active{% endif %}">
-      <a href="personal-relationships-children.html" class="assessment-section-navigation__link" data-san-section-link="relationships"{% if currentSection == "relationships" %} aria-current="location"{% endif %}>
+      <a class="assessment-section-navigation__link san-side-navigation__link--disabled"{% if not navIsolated %} data-san-section-link="relationships"{% endif %} data-san-nav-disabled aria-disabled="true" tabindex="-1"{% if currentSection == "relationships" %} aria-current="location"{% endif %}>
         <span class="assessment-section-navigation__label">Personal relationships and community</span>
+        <span class="govuk-visually-hidden"> (not available in this prototype)</span>
         <span class="assessment-section-navigation__complete-icon" data-section-complete="relationships" aria-hidden="true">
           <svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
             <circle cx="12" cy="12" r="12" fill="#1d70b8"/>
@@ -79,8 +84,9 @@
       </a>
     </li>
     <li class="moj-side-navigation__item{% if currentSection == "thinking" %} moj-side-navigation__item--active{% endif %}">
-      <a href="thinking-behaviours.html" class="assessment-section-navigation__link" data-san-section-link="thinking"{% if currentSection == "thinking" %} aria-current="location"{% endif %}>
+      <a class="assessment-section-navigation__link san-side-navigation__link--disabled"{% if not navIsolated %} data-san-section-link="thinking"{% endif %} data-san-nav-disabled aria-disabled="true" tabindex="-1"{% if currentSection == "thinking" %} aria-current="location"{% endif %}>
         <span class="assessment-section-navigation__label">Thinking, behaviours and attitudes</span>
+        <span class="govuk-visually-hidden"> (not available in this prototype)</span>
         <span class="assessment-section-navigation__complete-icon" data-section-complete="thinking" aria-hidden="true">
           <svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
             <circle cx="12" cy="12" r="12" fill="#1d70b8"/>
@@ -90,8 +96,9 @@
       </a>
     </li>
     <li class="moj-side-navigation__item{% if currentSection == "offence" %} moj-side-navigation__item--active{% endif %}">
-      <a href="offence-analysis.html" class="assessment-section-navigation__link" data-san-section-link="offence"{% if currentSection == "offence" %} aria-current="location"{% endif %}>
+      <a class="assessment-section-navigation__link san-side-navigation__link--disabled"{% if not navIsolated %} data-san-section-link="offence"{% endif %} data-san-nav-disabled aria-disabled="true" tabindex="-1"{% if currentSection == "offence" %} aria-current="location"{% endif %}>
         <span class="assessment-section-navigation__label">Offence analysis</span>
+        <span class="govuk-visually-hidden"> (not available in this prototype)</span>
         <span class="assessment-section-navigation__complete-icon" data-section-complete="offence" aria-hidden="true">
           <svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
             <circle cx="12" cy="12" r="12" fill="#1d70b8"/>

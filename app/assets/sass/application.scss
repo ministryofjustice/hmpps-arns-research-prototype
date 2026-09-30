@@ -708,6 +708,12 @@ $desktop: 48.0625em;
     list-style-type: disc;
   }
 
+  &__title-links--plain {
+    margin-left: 0;
+    padding-left: 0;
+    list-style: none;
+  }
+
   &__title-links--inactive {
     color: $govuk-secondary-text-colour;
 
@@ -727,10 +733,82 @@ $desktop: 48.0625em;
   }
 
   &__title-link-item {
-    &:last-child {
-      .govuk-heading-m {
-        margin-bottom: 0;
+    margin-bottom: 0;
+
+    .govuk-heading-m,
+    .govuk-hint {
+      margin-bottom: 0;
+    }
+
+    .assessment-research-prototypes__section-hints {
+      margin-bottom: 0;
+      padding-left: 20px;
+
+      li {
+        margin-bottom: 5px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
       }
+    }
+
+    .assessment-research-prototypes__key-changes {
+      margin-top: 5px;
+      margin-bottom: 0;
+
+      .govuk-details__text {
+        padding-bottom: 0;
+      }
+
+      // Closed details leave the layout, so opening them widened every separator.
+      // Keep the closed content in the width calculation and clip it, so the
+      // rules stay at the expanded width.
+      &:not([open]) > .govuk-details__text {
+        display: block;
+        visibility: hidden;
+        block-size: 0;
+        overflow: hidden;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      @supports selector(::details-content) {
+        &:not([open])::details-content {
+          content-visibility: visible;
+          block-size: 0;
+          overflow: hidden;
+        }
+
+        &:not([open]) > .govuk-details__text {
+          block-size: auto;
+          overflow: visible;
+          padding-top: revert;
+          padding-bottom: 0;
+        }
+      }
+    }
+
+    & + & {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #b1b4b6;
+    }
+  }
+
+  &__title-link-item--inactive {
+    color: $govuk-secondary-text-colour;
+
+    .govuk-heading-m,
+    .govuk-link,
+    .govuk-link:link,
+    .govuk-link:visited,
+    .govuk-link:hover,
+    .govuk-link:active,
+    .govuk-link:focus {
+      color: $govuk-secondary-text-colour;
+      pointer-events: none;
+      text-decoration: none;
     }
   }
 
@@ -818,6 +896,11 @@ $desktop: 48.0625em;
       padding-bottom: 0;
       border-bottom: 0;
     }
+  }
+
+  &--no-link-separators &__title-link-item + &__title-link-item {
+    padding-top: 0;
+    border-top: 0;
   }
 }
 
@@ -1076,6 +1159,20 @@ body.assessment-page {
 // Strengths and needs side navigation – GOV.UK body (19px), not the MoJ 16px default
 .san-side-navigation.moj-side-navigation {
   @include govuk-font(19);
+
+  .moj-side-navigation__item {
+    a.san-side-navigation__link--disabled,
+    a.san-side-navigation__link--disabled:link,
+    a.san-side-navigation__link--disabled:visited,
+    a.san-side-navigation__link--disabled:hover,
+    a.san-side-navigation__link--disabled:focus,
+    a.san-side-navigation__link--disabled:active {
+      color: $govuk-secondary-text-colour;
+      text-decoration: none;
+      cursor: default;
+      pointer-events: none;
+    }
+  }
 }
 
 // Offence autocomplete (Home Office long-list pattern)
@@ -4452,6 +4549,19 @@ body.assessment-page {
   .govuk-summary-card {
     margin-bottom: 20px;
   }
+}
+
+.san-extra-drugs {
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.san-extra-drugs__heading {
+  margin-top: 10px;
+}
+
+.san-extra-drugs__item {
+  margin-bottom: 10px;
 }
 
 @media (max-width: $tablet) {

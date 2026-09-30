@@ -38,6 +38,11 @@ const resolvePrototypeHref = (version, href) => {
 window.GOVUKPrototypeKit.documentReady(() => {
   document.querySelectorAll('[data-clear-session-on-start]').forEach((link) => {
     link.addEventListener('click', async (event) => {
+      if (link.getAttribute('aria-disabled') === 'true') {
+        event.preventDefault()
+        return
+      }
+
       event.preventDefault()
       const version = link.getAttribute('data-prototype-version') || '01'
       const href = resolvePrototypeHref(version, link.getAttribute('href'))

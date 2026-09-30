@@ -22,6 +22,7 @@
   { id: "hallucinogens", label: "Hallucinogens" },
   { id: "heroin", label: "Heroin" },
   { id: "ketamine", label: "Ketamine" },
+  { id: "mephedrone", label: "Mephedrone (M, M-CAT, meow-meow)" },
   { id: "methadone", label: "Methadone (not prescribed)" },
   { id: "prescribed-drugs", label: "Prescribed drugs" },
   { id: "other-opiates", label: "Other opiates" },
@@ -41,32 +42,8 @@
       <div class="govuk-checkboxes" data-module="govuk-checkboxes">
         {% for drug in drugOptions %}
         <div class="govuk-checkboxes__item">
-          <input class="govuk-checkboxes__input" id="drug-type-{{ drug.id }}" name="drug_types" type="checkbox" value="{{ drug.id }}" data-aria-controls="conditional-drug-type-{{ drug.id }}">
+          <input class="govuk-checkboxes__input" id="drug-type-{{ drug.id }}" name="drug_types" type="checkbox" value="{{ drug.id }}">
           <label class="govuk-label govuk-checkboxes__label" for="drug-type-{{ drug.id }}">{{ drug.label }}</label>
-        </div>
-        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-drug-type-{{ drug.id }}">
-          {% if drug.id == "other" %}
-          <div class="govuk-form-group" data-san-error-group="other-drug-details">
-            <label class="govuk-label" for="other-drug-details">Give details</label>
-            <textarea class="govuk-textarea" id="other-drug-details" name="other_drug_details" rows="5" maxlength="2000"></textarea>
-            <div class="govuk-hint san-character-count" data-san-character-count="other-drug-details">You have 2,000 characters remaining</div>
-          </div>
-          {% endif %}
-          <div class="govuk-form-group" data-san-error-group="last-used-{{ drug.id }}">
-            <fieldset class="govuk-fieldset" id="last-used-{{ drug.id }}">
-              <legend class="govuk-fieldset__legend govuk-visually-hidden">When did they last use {{ drug.label }}?</legend>
-              <div class="govuk-radios" data-module="govuk-radios">
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="last-used-{{ drug.id }}-last-six" name="last_used_{{ drug.id }}" type="radio" value="last-six">
-                  <label class="govuk-label govuk-radios__label" for="last-used-{{ drug.id }}-last-six">Used in the 6 months before custody</label>
-                </div>
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="last-used-{{ drug.id }}-more-than-six" name="last_used_{{ drug.id }}" type="radio" value="more-than-six">
-                  <label class="govuk-label govuk-radios__label" for="last-used-{{ drug.id }}-more-than-six">Used more than 6 months before custody</label>
-                </div>
-              </div>
-            </fieldset>
-          </div>
         </div>
         {% endfor %}
       </div>

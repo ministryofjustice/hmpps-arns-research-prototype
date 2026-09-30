@@ -54,6 +54,20 @@ export const labelled = (labels, value) => labels[value] || ''
 
 export const scrollToHash = () => {
   if (!window.location.hash) return
-  const target = document.querySelector(window.location.hash)
-  if (target instanceof HTMLElement) target.scrollIntoView()
+  let id = window.location.hash.slice(1)
+  try { id = decodeURIComponent(id) } catch (error) { /* keep the raw hash */ }
+  const target = document.getElementById(id)
+  if (!(target instanceof HTMLElement) || target.closest('[hidden], .san-is-hidden')) return
+
+  const form = target.closest('form')
+  const pageHeading = form?.querySelector('h1')
+  let scrollTarget = target
+  if (pageHeading) {
+    const headingTop = pageHeading.getBoundingClientRect().top + window.scrollY
+    const targetTop = target.getBoundingClientRect().top + window.scrollY
+    if (targetTop - headingTop < 240) scrollTarget = pageHeading
+  }
+
+  const top = scrollTarget.getBoundingClientRect().top + window.scrollY - 16
+  window.scrollTo({ top: Math.max(0, top) })
 }

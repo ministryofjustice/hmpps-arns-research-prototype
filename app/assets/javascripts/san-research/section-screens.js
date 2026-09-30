@@ -25,13 +25,31 @@ const rememberCurrentScreen = () => {
   if (!section) return
   rememberSectionScreen(section, screenFromLocation())
   const link = document.querySelector(`[data-san-section-link="${section}"]`)
+  if (!link || link.hasAttribute('data-san-nav-disabled')) return
   const href = sectionLinkHref(section, '')
-  if (link && href) link.setAttribute('href', href)
+  if (href) link.setAttribute('href', href)
+}
+
+const lockDisabledNavLinks = () => {
+  document.querySelectorAll('[data-san-nav-disabled]').forEach((link) => {
+    const lock = () => {
+      if (link.hasAttribute('href')) link.removeAttribute('href')
+    }
+
+    lock()
+    link.addEventListener('click', (event) => {
+      event.preventDefault()
+    })
+
+    const observer = new MutationObserver(lock)
+    observer.observe(link, { attributes: true, attributeFilter: ['href'] })
+  })
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
   if (!window.location.pathname.startsWith("/san-research/")) return
   if (!document.querySelector('[data-san-section-link]')) return
+  lockDisabledNavLinks()
   rememberCurrentScreen()
   window.addEventListener('hashchange', rememberCurrentScreen)
   document.addEventListener('click', (event) => {

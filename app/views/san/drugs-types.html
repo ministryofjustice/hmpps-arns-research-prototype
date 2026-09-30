@@ -22,6 +22,7 @@
   { id: "hallucinogens", label: "Hallucinogens" },
   { id: "heroin", label: "Heroin" },
   { id: "ketamine", label: "Ketamine" },
+  { id: "mephedrone", label: "Mephedrone (M, M-CAT, meow-meow)" },
   { id: "methadone", label: "Methadone (not prescribed)" },
   { id: "prescribed-drugs", label: "Prescribed drugs" },
   { id: "other-opiates", label: "Other opiates" },
@@ -40,6 +41,7 @@
       <div id="drug-types-hint" class="govuk-hint">Select all that apply.</div>
       <div class="govuk-checkboxes" data-module="govuk-checkboxes">
         {% for drug in drugOptions %}
+        <div data-du-type-option="{{ drug.id }}">
         <div class="govuk-checkboxes__item">
           <input class="govuk-checkboxes__input" id="drug-type-{{ drug.id }}" name="drug_types" type="checkbox" value="{{ drug.id }}" data-aria-controls="conditional-drug-type-{{ drug.id }}">
           <label class="govuk-label govuk-checkboxes__label" for="drug-type-{{ drug.id }}">{{ drug.label }}</label>
@@ -67,6 +69,7 @@
               </div>
             </fieldset>
           </div>
+        </div>
         </div>
         {% endfor %}
       </div>

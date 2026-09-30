@@ -2,7 +2,7 @@
 
 {{ govukFooter({
   meta: {
-    items: [
+    items: [] if sanIsolated else [
       {
         href: "/san-research/accessibility.html",
         text: "Accessibility statement"

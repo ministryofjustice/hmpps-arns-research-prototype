@@ -3,7 +3,7 @@
 {% set pageName = "Drug use" %}
 {% set sanCaption = "Drug use" %}
 {% set sanSection = "drugs" %}
-{% set backLinkHref = "drugs-types.html" %}
+{% set backLinkHref = "drugs-when.html" %}
 
 {% block content %}
 
@@ -22,6 +22,7 @@
   { id: "hallucinogens", label: "Hallucinogens" },
   { id: "heroin", label: "Heroin" },
   { id: "ketamine", label: "Ketamine" },
+  { id: "mephedrone", label: "Mephedrone (M, M-CAT, meow-meow)" },
   { id: "methadone", label: "Methadone (not prescribed)" },
   { id: "prescribed-drugs", label: "Prescribed drugs" },
   { id: "other-opiates", label: "Other opiates" },
@@ -71,20 +72,21 @@
         </div>
       </fieldset>
       <div class="govuk-form-group govuk-!-margin-top-4">
-        <label class="govuk-label" for="frequency-{{ drug.id }}-details">Give details (optional)</label>
-        <div class="govuk-hint">Include details of any evidence.</div>
+        <label class="govuk-label" for="frequency-{{ drug.id }}-details">Give details about their use of {{ drug.label[0] | lower }}{{ drug.label.slice(1) }} (optional)</label>
+        <div class="govuk-hint">Consider why they started using, their history, and any triggers.</div>
         <textarea class="govuk-textarea" id="frequency-{{ drug.id }}-details" name="frequency_{{ drug.id }}_details" rows="5" maxlength="2000"></textarea>
         <div class="govuk-hint san-character-count" data-san-character-count="frequency-{{ drug.id }}-details">You have 2,000 characters remaining</div>
       </div>
     </div>
     {% endfor %}
+    <div data-du-recent-extra></div>
   </div>
 
   <div class="san-question" data-du-older-section hidden>
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
     <h2 class="govuk-heading-m">Used more than 6 months before custody</h2>
-    <div class="govuk-inset-text" data-du-older-list></div>
-    <div class="govuk-form-group">
+    <div data-du-older-list></div>
+    <div class="govuk-form-group govuk-!-padding-top-4">
       <h3 class="govuk-heading-m">Give details about Alex's use of these drugs</h3>
       <div class="govuk-hint">For example, how often they used these drugs, when they stopped using, and if their use was an issue.</div>
       <textarea class="govuk-textarea" id="older-drug-details" name="older_drug_details" rows="5" maxlength="2000"></textarea>
@@ -92,7 +94,7 @@
     </div>
   </div>
 
-  <div class="govuk-form-group san-question" data-san-error-group="injected">
+  <div class="govuk-form-group san-question" data-du-inject-section data-san-error-group="injected">
     <fieldset class="govuk-fieldset" id="injected" aria-describedby="injected-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
         <h2 class="govuk-fieldset__heading">Which drugs did Alex inject before custody?</h2>
@@ -100,31 +102,14 @@
       <div id="injected-hint" class="govuk-hint">Select all that apply.</div>
       <div class="govuk-checkboxes" data-module="govuk-checkboxes">
         {% for drug in drugOptions %}
-        <div data-du-inject="{{ drug.id }}" hidden>
-          <div class="govuk-checkboxes__item">
-            <input class="govuk-checkboxes__input" id="injected-{{ drug.id }}" name="injected_drugs" type="checkbox" value="{{ drug.id }}" data-aria-controls="conditional-injected-{{ drug.id }}">
-            <label class="govuk-label govuk-checkboxes__label" for="injected-{{ drug.id }}">{{ drug.label }}</label>
-          </div>
-          <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-injected-{{ drug.id }}">
-            <div class="govuk-form-group" data-san-error-group="injected-when-{{ drug.id }}">
-              <fieldset class="govuk-fieldset" id="injected-when-{{ drug.id }}" aria-describedby="injected-when-{{ drug.id }}-hint">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">When has Alex injected this drug?</legend>
-                <div id="injected-when-{{ drug.id }}-hint" class="govuk-hint">Select one or both.</div>
-                <div class="govuk-checkboxes">
-                  <div class="govuk-checkboxes__item">
-                    <input class="govuk-checkboxes__input" id="injected-when-{{ drug.id }}-last-six" name="injected_when_{{ drug.id }}" type="checkbox" value="last-six">
-                    <label class="govuk-label govuk-checkboxes__label" for="injected-when-{{ drug.id }}-last-six">In the 6 months before custody</label>
-                  </div>
-                  <div class="govuk-checkboxes__item">
-                    <input class="govuk-checkboxes__input" id="injected-when-{{ drug.id }}-more-than-six" name="injected_when_{{ drug.id }}" type="checkbox" value="more-than-six">
-                    <label class="govuk-label govuk-checkboxes__label" for="injected-when-{{ drug.id }}-more-than-six">More than 6 months before custody</label>
-                  </div>
-                </div>
-              </fieldset>
-            </div>
-          </div>
+        {% if drug.id not in ["cannabis", "ecstasy", "hallucinogens", "solvents", "synthetic-cannabinoids"] %}
+        <div class="govuk-checkboxes__item" data-du-inject="{{ drug.id }}" hidden>
+          <input class="govuk-checkboxes__input" id="injected-{{ drug.id }}" name="injected_drugs" type="checkbox" value="{{ drug.id }}">
+          <label class="govuk-label govuk-checkboxes__label" for="injected-{{ drug.id }}">{{ drug.label }}</label>
         </div>
+        {% endif %}
         {% endfor %}
+        <div data-du-inject-extra></div>
         <div class="govuk-checkboxes__divider">or</div>
         <div class="govuk-checkboxes__item">
           <input class="govuk-checkboxes__input" id="injected-none" name="injected_drugs" type="checkbox" value="none" data-behaviour="exclusive">

@@ -1,0 +1,69 @@
+{% extends "layouts/assessment-san-research.html" %}
+
+{% set pageName = "Drug use" %}
+{% set sanCaption = "Drug use" %}
+{% set sanSection = "drugs" %}
+{% set backLinkHref = "drugs-types.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san-research/content-header.html" %}
+
+{% set drugOptions = [
+  { id: "amphetamines", label: "Amphetamines (including speed, methamphetamine)" },
+  { id: "benzodiazepines", label: "Benzodiazepines (including diazepam, temazepam)" },
+  { id: "cannabis", label: "Cannabis" },
+  { id: "cocaine", label: "Cocaine" },
+  { id: "crack-cocaine", label: "Crack cocaine" },
+  { id: "ecstasy", label: "Ecstasy (MDMA)" },
+  { id: "hallucinogens", label: "Hallucinogens" },
+  { id: "heroin", label: "Heroin" },
+  { id: "ketamine", label: "Ketamine" },
+  { id: "mephedrone", label: "Mephedrone (M, M-CAT, meow-meow)" },
+  { id: "methadone", label: "Methadone (not prescribed)" },
+  { id: "prescribed-drugs", label: "Prescribed drugs" },
+  { id: "other-opiates", label: "Other opiates" },
+  { id: "solvents", label: "Solvents (including gases and glues)" },
+  { id: "steroids", label: "Steroids" },
+  { id: "synthetic-cannabinoids", label: "Synthetic cannabinoids (spice)" },
+  { id: "other", label: "Other" }
+] %}
+
+<form id="san-drugs-when-form" novalidate data-du-page="when">
+  <h1 class="govuk-heading-l">When did Alex use these drugs?</h1>
+
+  {% for drug in drugOptions %}
+  <div class="govuk-form-group" data-du-when="{{ drug.id }}" data-san-error-group="last-used-{{ drug.id }}" hidden>
+    <fieldset class="govuk-fieldset" id="last-used-{{ drug.id }}">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">{{ drug.label }}</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="last-used-{{ drug.id }}-last-six" name="last_used_{{ drug.id }}" type="radio" value="last-six">
+          <label class="govuk-label govuk-radios__label" for="last-used-{{ drug.id }}-last-six">Used in the last 6 months</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="last-used-{{ drug.id }}-more-than-six" name="last_used_{{ drug.id }}" type="radio" value="more-than-six">
+          <label class="govuk-label govuk-radios__label" for="last-used-{{ drug.id }}-more-than-six">Used more than 6 months ago</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+  {% endfor %}
+
+  <div class="san-extra-drugs" data-du-extra-drugs data-san-error-group="extra-drugs">
+    <h2 class="govuk-heading-l san-extra-drugs__heading" data-du-extra-heading hidden>Add another drug</h2>
+    <div data-du-extra-list></div>
+    <button type="button" class="govuk-button govuk-button--secondary govuk-!-margin-top-4" data-module="govuk-button" data-du-add-drug>Add another drug</button>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

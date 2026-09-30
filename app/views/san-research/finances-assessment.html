@@ -1,0 +1,49 @@
+{% extends "layouts/assessment-san-research.html" %}
+
+{% set pageName = "Finances" %}
+{% set sanCaption = "Finances" %}
+{% set sanSection = "finances" %}
+{% set backLinkHref = "finances.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san-research/content-header.html" %}
+
+<form id="san-finances-assessment-form" novalidate data-fi-page="assessment">
+  <div class="govuk-form-group" data-san-error-group="further-assessment">
+    <fieldset class="govuk-fieldset" id="further-assessment" aria-describedby="further-assessment-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">Is there anything about Alex's financial situation that may need further assessment?</h1>
+      </legend>
+      <div id="further-assessment-hint" class="govuk-hint">This could include debt, money owed to others, difficulty paying bills, financial exploitation, gambling-related financial problems or difficulty managing money.</div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="further-assessment-yes" name="further_assessment" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="further-assessment-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="further-assessment-no" name="further_assessment" type="radio" value="no" aria-describedby="further-assessment-no-hint" data-aria-controls="conditional-further-assessment-no">
+          <label class="govuk-label govuk-radios__label" for="further-assessment-no">No</label>
+          <div id="further-assessment-no-hint" class="govuk-hint govuk-radios__hint">You will not see any further finance questions.</div>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-further-assessment-no">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="further-assessment-no-details">Give details (optional)</label>
+            <div class="govuk-hint">Briefly explain why further assessment is not needed.</div>
+            <textarea class="govuk-textarea" id="further-assessment-no-details" name="further_assessment_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="further-assessment-no-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

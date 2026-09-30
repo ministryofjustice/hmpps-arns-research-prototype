@@ -1,0 +1,52 @@
+{% extends "layouts/assessment-san-research.html" %}
+
+{% set pageName = "Finances" %}
+{% set sanCaption = "Finances" %}
+{% set sanSection = "finances" %}
+{% set backLinkHref = "finances.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san-research/content-header.html" %}
+
+<form id="san-finances-overreliant-form" novalidate data-fi-page="overreliant">
+  <div class="govuk-form-group" data-san-error-group="overreliant">
+    <fieldset class="govuk-fieldset" id="overreliant">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">Is Alex over-reliant on family or friends for money?</h1>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="overreliant-yes" name="overreliant" type="radio" value="yes" data-aria-controls="conditional-overreliant-yes">
+          <label class="govuk-label govuk-radios__label" for="overreliant-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-overreliant-yes">
+          <div class="govuk-form-group" data-san-error-group="overreliant-details">
+            <label class="govuk-label" for="overreliant-yes-details">Give details</label>
+            <div id="overreliant-yes-details-hint" class="govuk-hint">Include who supports them, how often support is provided and why it is needed.</div>
+            <textarea class="govuk-textarea" id="overreliant-yes-details" name="overreliant_yes_details" rows="5" maxlength="2000" aria-describedby="overreliant-yes-details-hint"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="overreliant-yes-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="overreliant-no" name="overreliant" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="overreliant-no">No</label>
+        </div>
+        <div class="govuk-radios__divider">or</div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="overreliant-unknown" name="overreliant" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="overreliant-unknown">Unknown</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}
