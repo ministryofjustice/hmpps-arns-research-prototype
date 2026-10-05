@@ -761,6 +761,23 @@ $desktop: 48.0625em;
         padding-bottom: 0;
       }
 
+      .assessment-research-prototypes__change-tag {
+        display: inline-block;
+        margin-right: 5px;
+        padding: 2px 5px 1px;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: 0.3px;
+        vertical-align: 1px;
+        color: #0b0c0c;
+        background-color: #f3f2f1;
+      }
+
+      .assessment-research-prototypes__change-tag--iteration {
+        background-color: #d2e2f1;
+      }
+
       // Closed details leave the layout, so opening them widened every separator.
       // Keep the closed content in the width calculation and clip it, so the
       // rules stay at the expanded width.
@@ -4494,6 +4511,10 @@ body.assessment-page {
 
 .san-label-hint {
   font-weight: 400;
+}
+
+.san-drug-name-label {
+  color: $govuk-secondary-text-colour;
 }
 
 // GOV.UK lists set body text colour, which overrides a parent hint.

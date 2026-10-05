@@ -14,8 +14,6 @@ const DRUG_LABELS = {
   ecstasy: 'Ecstasy (MDMA)',
   hallucinogens: 'Hallucinogens',
   heroin: 'Heroin',
-  ketamine: 'Ketamine',
-  mephedrone: 'Mephedrone (M, M-CAT, meow-meow)',
   methadone: 'Methadone (not prescribed)',
   'prescribed-drugs': 'Prescribed drugs',
   'other-opiates': 'Other opiates',
@@ -27,6 +25,11 @@ const DRUG_LABELS = {
 
 const DRUG_IDS = Object.keys(DRUG_LABELS)
 
+const displayDrugLabel = (session, id) => {
+  if (id === 'other' && session && session.otherDrugDetails) return session.otherDrugDetails
+  return DRUG_LABELS[id] || id
+}
+
 const NON_INJECTABLE_DRUG_IDS = new Set([
   'cannabis',
   'ecstasy',
@@ -37,11 +40,9 @@ const NON_INJECTABLE_DRUG_IDS = new Set([
 
 const isInjectableDrug = (id) => !NON_INJECTABLE_DRUG_IDS.has(id)
 
-const sentenceDrugLabel = (label) => (label ? label.charAt(0).toLowerCase() + label.slice(1) : label)
-
 const LAST_USED_LABELS = {
   'last-six': 'In the last 6 months',
-  'more-than-six': 'Used more than 6 months ago'
+  'more-than-six': 'More than 6 months ago'
 }
 
 const FREQUENCY_LABELS = {
@@ -53,8 +54,8 @@ const FREQUENCY_LABELS = {
 }
 
 const INJECTED_WHEN_LABELS = {
-  'last-six': 'In the 6 months before custody',
-  'more-than-six': 'More than 6 months before custody'
+  'last-six': 'In the last 6 months',
+  'more-than-six': 'More than 6 months ago'
 }
 
 const YES_NO = { yes: 'Yes', no: 'No' }
@@ -157,9 +158,11 @@ const checkedValues = (name) => {
     .map((input) => input.value)
 }
 
+const isTextField = (field) => field instanceof HTMLTextAreaElement || (field instanceof HTMLInputElement && field.type === 'text')
+
 const fieldValue = (id) => {
   const field = document.getElementById(id)
-  if (!(field instanceof HTMLTextAreaElement) || isInHiddenConditional(field)) return ''
+  if (!isTextField(field) || isInHiddenConditional(field)) return ''
   return field.value.trim()
 }
 
@@ -178,7 +181,7 @@ const selectChecks = (name, values) => {
 
 const setField = (id, value) => {
   const field = document.getElementById(id)
-  if (field instanceof HTMLTextAreaElement) field.value = value || ''
+  if (isTextField(field)) field.value = value || ''
 }
 
 const showErrors = (errors) => {
@@ -317,15 +320,16 @@ const beforeAnswered = (session) => {
   if (recentDrugs(session).some((id) => !(session.drugFrequency && session.drugFrequency[id]))) return false
   if (!(Array.isArray(session.injectedDrugs) && session.injectedDrugs.length)) return false
   if (session.injectedDrugs.some((id) => {
-    if (id === 'none' || !isInjectableDrug(id)) return false
+    if (id === 'none' || id === 'heroin' || !isInjectableDrug(id)) return false
     return !(Array.isArray(session.injectedWhen && session.injectedWhen[id]) && session.injectedWhen[id].length)
   })) return false
+  if (!session.treatment) return false
+  if (session.treatment === 'yes' && !session.treatmentDetails) return false
   return true
 }
 
 const backgroundAnswered = (session) => {
-  if (!session.treatment) return false
-  if (session.treatment === 'yes' && !session.treatmentDetails) return false
+  if (!beforeAnswered(session)) return false
   if (!(Array.isArray(session.whyDrugUse) && session.whyDrugUse.length)) return false
   if (!(Array.isArray(session.drugAffect) && session.drugAffect.length)) return false
   if (!session.drugChanges) return false
@@ -367,7 +371,7 @@ const drugCard = (session, id) => {
   const rows = [summaryRow(
     'Last used',
     [labelled(LAST_USED_LABELS, lastUsed)],
-      summaryChangeHref('drugs-types', `last-used-${id}`)
+      summaryChangeHref('drugs-types')
   )]
 
   if (lastUsed === 'last-six') {
@@ -379,32 +383,33 @@ const drugCard = (session, id) => {
       summaryChangeHref('drugs-before', `frequency-${id}`)
     ))
     rows.push(summaryRow(
-      `Give details about their use of ${sentenceDrugLabel(DRUG_LABELS[id] || id)} (optional)`,
+      'Give details (optional)',
       [details],
       summaryChangeHref('drugs-before', `frequency-${id}`),
       { blankIfEmpty: true }
     ))
-
-    if (isInjectableDrug(id)) {
-      const injected = Array.isArray(session.injectedDrugs) && session.injectedDrugs.includes(id)
-      const when = injected && session.injectedWhen && session.injectedWhen[id]
-      const injectLines = injected
-        ? ['Yes', ...(Array.isArray(when) ? when.map((value) => labelled(INJECTED_WHEN_LABELS, value)) : [])]
-        : ['No']
-      rows.push(summaryRow(
-        'Injected',
-        injectLines,
-        summaryChangeHref('drugs-before', 'injected')
-      ))
-    }
   }
 
+  if (isInjectableDrug(id)) {
+    const injected = Array.isArray(session.injectedDrugs) && session.injectedDrugs.includes(id)
+    const when = injected && session.injectedWhen && session.injectedWhen[id]
+    const injectLines = injected
+      ? ['Yes', ...(Array.isArray(when) ? when.map((value) => labelled(INJECTED_WHEN_LABELS, value)) : [])]
+      : ['No']
+    rows.push(summaryRow(
+      'Injected',
+      injectLines,
+      summaryChangeHref('drugs-before', 'injected')
+    ))
+  }
+
+  const label = displayDrugLabel(session, id)
   return `<div class="govuk-summary-card">
     <div class="govuk-summary-card__title-wrapper">
-      <h3 class="govuk-summary-card__title">${escapeHtml(DRUG_LABELS[id] || id)}</h3>
+      <h3 class="govuk-summary-card__title">${escapeHtml(label)}</h3>
       <ul class="govuk-summary-card__actions">
         <li class="govuk-summary-card__action">
-          <a class="govuk-link" href="${summaryChangeHref('drugs-types')}">Change<span class="govuk-visually-hidden"> (${escapeHtml(DRUG_LABELS[id] || id)})</span></a>
+          <a class="govuk-link" href="${summaryChangeHref('drugs-types')}">Change<span class="govuk-visually-hidden"> (${escapeHtml(label)})</span></a>
         </li>
       </ul>
     </div>
@@ -459,7 +464,7 @@ const drugRows = (session) => {
       rows.push(summaryRow(
         'Is Alex receiving treatment for their drug use?',
         lines,
-        summaryChangeHref('drugs-background', 'treatment'),
+        summaryChangeHref('drugs-before', 'treatment'),
         { secondaryFrom: 1 }
       ))
     }
@@ -481,12 +486,13 @@ const drugRows = (session) => {
         summaryChangeHref('drugs-background', 'affect')
       ))
     }
-    rows.push(summaryRow(
-      'Has anything helped Alex stop or reduce their drug use? (optional)',
-      [session.helpedReduce],
-      summaryChangeHref('drugs-background', 'helped-reduce'),
-      { blankIfEmpty: true }
-    ))
+    if (session.helpedReduce) {
+      rows.push(summaryRow(
+        'Has anything helped Alex stop or reduce their drug use? (optional)',
+        [session.helpedReduce],
+        summaryChangeHref('drugs-background', 'helped-reduce')
+      ))
+    }
     if (session.drugChanges) {
       const lines = [labelled(CHANGES_LABELS, session.drugChanges)]
       if (session.drugChangesDetails) lines.push(session.drugChangesDetails)
@@ -646,27 +652,14 @@ const readUseAnswers = () => ({
   drugUse: checkedValue('drug_use')
 })
 
-const summaryFocusDrugId = () => {
-  if (!fromSummary()) return ''
-  const match = /^#last-used-(.+)$/.exec(decodeURIComponent(window.location.hash || ''))
-  return match ? match[1] : ''
-}
-
-const readTypesAnswers = (session = {}) => {
-  const focusId = summaryFocusDrugId()
-  let drugTypes = checkedValues('drug_types')
+const readTypesAnswers = () => {
+  const drugTypes = checkedValues('drug_types')
   const drugLastUsed = {}
-  if (focusId) {
-    drugTypes = Array.isArray(session.drugTypes) ? session.drugTypes.slice() : drugTypes
-    Object.assign(drugLastUsed, session.drugLastUsed || {})
-  }
   drugTypes.forEach((id) => {
     const value = checkedValue(`last_used_${id}`)
     if (value) drugLastUsed[id] = value
   })
-  const otherDrugDetails = drugTypes.includes('other')
-    ? (focusId && focusId !== 'other' ? (session.otherDrugDetails || '') : fieldValue('other-drug-details'))
-    : ''
+  const otherDrugDetails = drugTypes.includes('other') ? fieldValue('other-drug-details') : ''
   return { drugTypes, drugLastUsed, otherDrugDetails }
 }
 
@@ -685,26 +678,26 @@ const readBeforeAnswers = (session) => {
     : ['none']
   const injectedWhen = {}
   injectedDrugs.forEach((id) => {
-    if (id === 'none' || !isInjectableDrug(id)) return
+    if (id === 'none' || id === 'heroin' || !isInjectableDrug(id)) return
     const when = checkedValues(`injected_when_${id}`)
     if (when.length) injectedWhen[id] = when
   })
+  const treatment = checkedValue('receiving_treatment')
 
   return {
     drugFrequency,
     drugFrequencyDetails,
     olderDrugDetails: fieldValue('older-drug-details'),
     injectedDrugs,
-    injectedWhen
+    injectedWhen,
+    treatment,
+    treatmentDetails: treatment ? fieldValue(`treatment-${treatment}-details`) : ''
   }
 }
 
 const readBackgroundAnswers = () => {
-  const treatment = checkedValue('receiving_treatment')
   const drugChanges = checkedValue('drug_changes')
   return {
-    treatment,
-    treatmentDetails: treatment ? fieldValue(`treatment-${treatment}-details`) : '',
     whyDrugUse: checkedValues('why_drug_use'),
     whyDetails: fieldValue('why-details'),
     drugAffect: checkedValues('drug_affect'),
@@ -754,7 +747,7 @@ const validateTypes = (answers) => {
     errors.push({
       group: 'other-drug-details',
       href: '#other-drug-details',
-      text: 'Enter details about the other drug'
+      text: 'Enter the drug name'
     })
   }
   answers.drugTypes.forEach((id) => {
@@ -784,11 +777,11 @@ const validateBefore = (answers, session) => {
     errors.push({
       group: 'injected',
       href: '#injected',
-      text: 'Select which drugs Alex injected before custody'
+      text: 'Select which drugs Alex injected'
     })
   } else {
     answers.injectedDrugs.forEach((id) => {
-      if (id === 'none' || !isInjectableDrug(id)) return
+      if (id === 'none' || id === 'heroin' || !isInjectableDrug(id)) return
       if (!(answers.injectedWhen[id] && answers.injectedWhen[id].length)) {
         errors.push({
           group: `injected-when-${id}`,
@@ -798,11 +791,6 @@ const validateBefore = (answers, session) => {
       }
     })
   }
-  return errors
-}
-
-const validateBackground = (answers) => {
-  const errors = []
   if (!answers.treatment) {
     errors.push({
       group: 'treatment',
@@ -816,6 +804,11 @@ const validateBackground = (answers) => {
       text: 'Enter details about treatment or support'
     })
   }
+  return errors
+}
+
+const validateBackground = (answers) => {
+  const errors = []
   if (!answers.whyDrugUse.length) {
     errors.push({
       group: 'why',
@@ -888,9 +881,11 @@ const applyBeforePage = (session) => {
   setHidden(olderSection, !older.length)
   const olderList = document.querySelector('[data-du-older-list]')
   if (olderList) {
-    const labels = older.map((id) => DRUG_LABELS[id] || id)
-    const items = labels.map((label) => `<li>${escapeHtml(label)}</li>`).join('')
-    olderList.innerHTML = `<p class="govuk-body">More than 6 months before custody, Alex used:</p><ul class="govuk-list govuk-list--bullet">${items}</ul>`
+    const names = older.map((id) => {
+      const label = displayDrugLabel(session, id)
+      return escapeHtml(label ? label.charAt(0).toLowerCase() + label.slice(1) : label)
+    }).join(', ')
+    olderList.innerHTML = `<div class="govuk-inset-text">Alex used ${names} more than 6 months ago.</div>`
   }
 
   const types = selectedDrugs(session)
@@ -902,6 +897,14 @@ const applyBeforePage = (session) => {
 
   const injectSection = document.querySelector('[data-du-inject-section]')
   setHidden(injectSection, injectableSelectedDrugs(session).length === 0)
+
+  const otherName = (session.otherDrugDetails || '').trim()
+  if (!otherName) return
+  document.querySelectorAll('[data-du-recent="other"] .govuk-fieldset__heading').forEach((heading) => {
+    heading.textContent = otherName
+  })
+  const injectLabel = document.querySelector('label[for="injected-other"]')
+  if (injectLabel) injectLabel.textContent = otherName
 }
 
 const restoreUse = (session) => {
@@ -916,28 +919,6 @@ const restoreTypes = (session) => {
     })
   }
   setField('other-drug-details', session.otherDrugDetails)
-}
-
-const applyTypesFocus = (session) => {
-  const focusId = summaryFocusDrugId()
-  if (!focusId || !(Array.isArray(session.drugTypes) && session.drugTypes.includes(focusId))) return
-  document.querySelectorAll('[data-du-type-option]').forEach((block) => {
-    const match = block.getAttribute('data-du-type-option') === focusId
-    setHidden(block, !match)
-    if (!match) return
-    const item = block.querySelector('.govuk-checkboxes__item')
-    if (item) setHidden(item, true)
-    const panel = block.querySelector('.govuk-checkboxes__conditional')
-    if (panel instanceof HTMLElement) {
-      panel.style.marginLeft = '0'
-      panel.style.paddingLeft = '0'
-      panel.style.borderLeft = '0'
-    }
-  })
-  const hint = document.getElementById('drug-types-hint')
-  if (hint) hint.hidden = true
-  const heading = document.querySelector('#drug-types .govuk-fieldset__heading')
-  if (heading) heading.textContent = `When did they last use ${DRUG_LABELS[focusId] || focusId}?`
 }
 
 const restoreBefore = (session) => {
@@ -958,11 +939,11 @@ const restoreBefore = (session) => {
       selectChecks(`injected_when_${id}`, values)
     })
   }
+  selectRadio('receiving_treatment', session.treatment)
+  if (session.treatment) setField(`treatment-${session.treatment}-details`, session.treatmentDetails)
 }
 
 const restoreBackground = (session) => {
-  selectRadio('receiving_treatment', session.treatment)
-  if (session.treatment) setField(`treatment-${session.treatment}-details`, session.treatmentDetails)
   selectChecks('why_drug_use', session.whyDrugUse)
   setField('why-details', session.whyDetails)
   selectChecks('drug_affect', session.drugAffect)
@@ -1026,7 +1007,6 @@ const initDrugs = () => {
       return
     }
     restoreTypes(session)
-    applyTypesFocus(session)
   }
   if (pageName === 'before') {
     if (session.drugUse !== 'yes') {
@@ -1067,7 +1047,6 @@ const initDrugs = () => {
   revealSoon()
   updateAllCharacterCounts()
   window.setTimeout(scrollToHash, 50)
-  if (summaryFocusDrugId()) window.setTimeout(scrollToHash, 350)
 
   document.addEventListener('input', (event) => {
     if (event.target instanceof HTMLTextAreaElement) updateCharacterCount(event.target)
@@ -1099,7 +1078,7 @@ const initDrugs = () => {
   typesForm?.addEventListener('submit', (event) => {
     event.preventDefault()
     revealCheckedConditionals()
-    const answers = readTypesAnswers(getSanSession())
+    const answers = readTypesAnswers()
     const errors = validateTypes(answers)
     if (errors.length) {
       showErrors(errors)
