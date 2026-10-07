@@ -674,7 +674,7 @@ const renderAnalysisSummary = (session) => {
     setHidden(mount, true)
     setHidden(notice, false)
     setHidden(questions, true)
-    setHidden(form, true)
+    setHidden(form, !!session.drugComplete)
     return
   }
 
@@ -713,6 +713,15 @@ const showAnalysisForm = (focusId) => {
 const openAnalysisTab = () => {
   const tab = document.querySelector('.govuk-tabs__tab[href="#practitioner-analysis"]')
   if (tab instanceof HTMLElement) tab.click()
+}
+
+const showCompletedAnalysis = () => {
+  const hash = '#practitioner-analysis'
+  if (window.location.hash === hash) {
+    window.location.reload()
+    return
+  }
+  window.location.assign(`drugs-summary.html${hash}`)
 }
 
 const emptyFollowOnAnswers = () => ({
@@ -1423,12 +1432,7 @@ const initDrugs = () => {
     restoreAnalysis(session)
     renderSummary(session)
     document.querySelector('[data-du-go-analysis]')?.addEventListener('click', () => {
-      if (!analysisNotRequired(getSanSession())) {
-        openAnalysisTab()
-        return
-      }
-      setSanSession({ drugComplete: true })
-      window.location.assign('drugs-summary.html#practitioner-analysis')
+      openAnalysisTab()
     })
     document.querySelector('[data-du-analysis-summary]')?.addEventListener('click', (event) => {
       const link = event.target.closest('[data-du-edit-analysis]')
@@ -1586,7 +1590,7 @@ const initDrugs = () => {
     if (analysisNotRequired(getSanSession())) {
       clearErrors()
       setSanSession({ drugComplete: true })
-      window.location.assign('drugs-summary.html#practitioner-analysis')
+      showCompletedAnalysis()
       return
     }
     revealCheckedConditionals()
@@ -1599,7 +1603,7 @@ const initDrugs = () => {
     }
     clearErrors()
     setSanSession({ ...answers, drugComplete: true })
-    window.location.assign('drugs-summary.html#practitioner-analysis')
+    showCompletedAnalysis()
   })
 }
 

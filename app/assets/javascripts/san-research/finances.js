@@ -284,7 +284,7 @@ const questionsAnswered = (session) => {
   return true
 }
 
-const analysisNotRequired = (session) => session.financeFurtherAssessment === 'yes'
+const analysisNotRequired = (session) => skipsFurtherFinance(session)
 
 const nextFollowOnPage = (session, fromSummaryFlow = false) => {
   const query = fromSummaryFlow ? '?from=summary' : ''
@@ -503,7 +503,7 @@ const renderAnalysisSummary = (session) => {
     setHidden(mount, true)
     setHidden(notice, false)
     setHidden(questions, true)
-    setHidden(form, true)
+    setHidden(form, !!session.financeComplete)
     return
   }
 
@@ -542,6 +542,15 @@ const showAnalysisForm = (focusId) => {
 const openAnalysisTab = () => {
   const tab = document.querySelector('.govuk-tabs__tab[href="#practitioner-analysis"]')
   if (tab instanceof HTMLElement) tab.click()
+}
+
+const showCompletedAnalysis = () => {
+  const hash = '#practitioner-analysis'
+  if (window.location.hash === hash) {
+    window.location.reload()
+    return
+  }
+  window.location.assign(`finances-summary.html${hash}`)
 }
 
 const emptyFollowOnAnswers = () => ({
@@ -938,12 +947,7 @@ const initFinances = () => {
     restoreAnalysis(session)
     renderSummary(session)
     document.querySelector('[data-fi-go-analysis]')?.addEventListener('click', () => {
-      if (!analysisNotRequired(getSanSession())) {
-        openAnalysisTab()
-        return
-      }
-      setSanSession({ financeComplete: true })
-      window.location.assign('finances-summary.html#practitioner-analysis')
+      openAnalysisTab()
     })
     document.querySelector('[data-fi-analysis-summary]')?.addEventListener('click', (event) => {
       const link = event.target.closest('[data-fi-edit-analysis]')
@@ -1139,7 +1143,7 @@ const initFinances = () => {
     if (analysisNotRequired(getSanSession())) {
       clearErrors()
       setSanSession({ financeComplete: true })
-      window.location.assign('finances-summary.html#practitioner-analysis')
+      showCompletedAnalysis()
       return
     }
     revealCheckedConditionals()
@@ -1152,7 +1156,7 @@ const initFinances = () => {
     }
     clearErrors()
     setSanSession({ ...answers, financeComplete: true })
-    window.location.assign('finances-summary.html#practitioner-analysis')
+    showCompletedAnalysis()
   })
 }
 
