@@ -24,8 +24,8 @@
   { id: "ketamine", label: "Ketamine" },
   { id: "mephedrone", label: "Mephedrone (M, M-CAT, meow-meow)" },
   { id: "methadone", label: "Methadone (not prescribed)" },
-  { id: "prescribed-drugs", label: "Prescribed drugs" },
   { id: "other-opiates", label: "Other opiates" },
+  { id: "prescribed-drugs", label: "Prescribed or over the counter drugs, such as paracetamol", hint: "Do not select it if it was taken as prescribed or according to the instructions on the packaging." },
   { id: "solvents", label: "Solvents (including gases and glues)" },
   { id: "steroids", label: "Steroids" },
   { id: "synthetic-cannabinoids", label: "Synthetic cannabinoids (spice)" },
@@ -36,14 +36,17 @@
   <div class="govuk-form-group" data-san-error-group="drug-types">
     <fieldset class="govuk-fieldset" id="drug-types" aria-describedby="drug-types-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-        <h1 class="govuk-fieldset__heading">Which drugs has Alex misused?</h1>
+        <h1 class="govuk-fieldset__heading">Which drugs has Alex used?</h1>
       </legend>
       <div id="drug-types-hint" class="govuk-hint">Select all that apply.</div>
       <div class="govuk-checkboxes" data-module="govuk-checkboxes">
         {% for drug in drugOptions %}
         <div class="govuk-checkboxes__item">
-          <input class="govuk-checkboxes__input" id="drug-type-{{ drug.id }}" name="drug_types" type="checkbox" value="{{ drug.id }}">
+          <input class="govuk-checkboxes__input" id="drug-type-{{ drug.id }}" name="drug_types" type="checkbox" value="{{ drug.id }}"{% if drug.hint %} aria-describedby="drug-type-{{ drug.id }}-hint"{% endif %}>
           <label class="govuk-label govuk-checkboxes__label" for="drug-type-{{ drug.id }}">{{ drug.label }}</label>
+          {% if drug.hint %}
+          <div id="drug-type-{{ drug.id }}-hint" class="govuk-hint govuk-checkboxes__hint">{{ drug.hint }}</div>
+          {% endif %}
         </div>
         {% endfor %}
       </div>

@@ -24,8 +24,8 @@
   { id: "ketamine", label: "Ketamine" },
   { id: "mephedrone", label: "Mephedrone (M, M-CAT, meow-meow)" },
   { id: "methadone", label: "Methadone (not prescribed)" },
-  { id: "prescribed-drugs", label: "Prescribed drugs" },
   { id: "other-opiates", label: "Other opiates" },
+  { id: "prescribed-drugs", label: "Prescribed or over the counter drugs, such as paracetamol" },
   { id: "solvents", label: "Solvents (including gases and glues)" },
   { id: "steroids", label: "Steroids" },
   { id: "synthetic-cannabinoids", label: "Synthetic cannabinoids (spice)" },
@@ -33,7 +33,7 @@
 ] %}
 
 <form id="san-drugs-when-form" novalidate data-du-page="when">
-  <h1 class="govuk-heading-l">When did Alex use these drugs?</h1>
+  <h1 class="govuk-heading-l" data-du-when-heading>When did Alex use these drugs?</h1>
 
   {% for drug in drugOptions %}
   <div class="govuk-form-group" data-du-when="{{ drug.id }}" data-san-error-group="last-used-{{ drug.id }}" hidden>
@@ -44,11 +44,11 @@
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="last-used-{{ drug.id }}-last-six" name="last_used_{{ drug.id }}" type="radio" value="last-six">
-          <label class="govuk-label govuk-radios__label" for="last-used-{{ drug.id }}-last-six">Used in the last 6 months</label>
+          <label class="govuk-label govuk-radios__label" for="last-used-{{ drug.id }}-last-six">In the last 6 months</label>
         </div>
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="last-used-{{ drug.id }}-more-than-six" name="last_used_{{ drug.id }}" type="radio" value="more-than-six">
-          <label class="govuk-label govuk-radios__label" for="last-used-{{ drug.id }}-more-than-six">Used more than 6 months ago</label>
+          <label class="govuk-label govuk-radios__label" for="last-used-{{ drug.id }}-more-than-six">More than 6 months ago</label>
         </div>
       </div>
     </fieldset>
