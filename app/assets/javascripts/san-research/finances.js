@@ -486,7 +486,6 @@ const renderSummary = (session) => {
     const showButton = !complete && questionsAnswered(session)
     goButton.hidden = !showButton
     goButton.classList.toggle('san-go-analysis--hidden', !showButton)
-    goButton.textContent = analysisNotRequired(session) ? 'Mark as complete' : 'Go to practitioner analysis'
   }
 
   renderAnalysisSummary(session)
