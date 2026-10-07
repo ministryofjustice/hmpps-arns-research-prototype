@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "govuk-prototype-kit dev",
     "serve": "govuk-prototype-kit serve",
-    "start": "govuk-prototype-kit start"
+    "start": "govuk-prototype-kit start",
+    "storyboard": "node scripts/capture-san-research-journeys.mjs"
   },
   "engines": {
     "node": ">=24"

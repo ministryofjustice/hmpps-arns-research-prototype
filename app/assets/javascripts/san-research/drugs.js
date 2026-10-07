@@ -17,8 +17,8 @@ const DRUG_LABELS = {
   ketamine: 'Ketamine',
   mephedrone: 'Mephedrone (M, M-CAT, meow-meow)',
   methadone: 'Methadone (not prescribed)',
-  'prescribed-drugs': 'Prescribed drugs',
   'other-opiates': 'Other opiates',
+  'prescribed-drugs': 'Prescribed or over the counter drugs, such as paracetamol',
   solvents: 'Solvents (including gases and glues)',
   steroids: 'Steroids',
   'synthetic-cannabinoids': 'Synthetic cannabinoids (spice)',
@@ -51,6 +51,11 @@ const injectableAssessedDrugs = (session) => assessedDrugs(session).filter(isInj
 
 const otherSelected = (session) => selectedDrugs(session).includes('other')
 
+const onlyOtherSelected = (session) => {
+  const selected = selectedDrugs(session)
+  return selected.length === 1 && selected[0] === 'other'
+}
+
 const nextExtraDrugId = () => `extra-${extraDrugSeq++}`
 
 const emptyExtraDrug = () => ({ id: nextExtraDrugId(), name: '', lastUsed: '' })
@@ -63,21 +68,20 @@ const syncExtraDrugSeq = (extras) => {
 }
 
 const LAST_USED_LABELS = {
-  'last-six': 'Used in the last 6 months',
-  'more-than-six': 'Used more than 6 months ago'
+  'last-six': 'In the last 6 months',
+  'more-than-six': 'More than 6 months ago'
 }
 
 const FREQUENCY_LABELS = {
   daily: 'Daily',
   weekly: 'Weekly',
   monthly: 'Monthly',
-  occasionally: 'Occasionally',
-  unknown: 'Unknown'
+  occasionally: 'Occasionally'
 }
 
 const INJECTED_WHEN_LABELS = {
-  'last-six': 'In the 6 months before custody',
-  'more-than-six': 'More than 6 months before custody'
+  'last-six': 'In the last 6 months',
+  'more-than-six': 'More than 6 months ago'
 }
 
 const YES_NO = { yes: 'Yes', no: 'No' }
@@ -418,6 +422,8 @@ const questionsAnswered = (session) => {
   return beforeAnswered(session) && backgroundAnswered(session)
 }
 
+const analysisNotRequired = (session) => session.drugUse === 'no'
+
 const summaryChangeHref = (page, hash = '') => `${page}?from=summary${hash ? `#${hash}` : ''}`
 
 const summaryRow = (question, lines, href, options = {}) => {
@@ -463,22 +469,22 @@ const drugCard = (session, id) => {
       summaryChangeHref('drugs-before', `frequency-${id}`),
       { blankIfEmpty: true }
     ))
+  }
 
-    if (isInjectableDrug(id)) {
-      const injected = injectedDrugIds(session).includes(id)
+  if (isInjectableDrug(id)) {
+    const injected = injectedDrugIds(session).includes(id)
+    rows.push(summaryRow(
+      'Injected',
+      [injected ? 'Yes' : 'No'],
+      summaryChangeHref('drugs-before', 'injected')
+    ))
+    if (injected) {
+      const when = session.injectedWhen && session.injectedWhen[id]
       rows.push(summaryRow(
-        'Injected',
-        [injected ? 'Yes' : 'No'],
-        summaryChangeHref('drugs-before', 'injected')
+        'When has Alex injected this drug?',
+        Array.isArray(when) ? when.map((value) => labelled(INJECTED_WHEN_LABELS, value)) : [],
+        summaryChangeHref('drugs-injected', `injected-when-${id}`)
       ))
-      if (injected) {
-        const when = session.injectedWhen && session.injectedWhen[id]
-        rows.push(summaryRow(
-          'When has Alex injected this drug?',
-          Array.isArray(when) ? when.map((value) => labelled(INJECTED_WHEN_LABELS, value)) : [],
-          summaryChangeHref('drugs-injected', `injected-when-${id}`)
-        ))
-      }
     }
   }
 
@@ -523,7 +529,7 @@ const drugRows = (session) => {
   }
 
   if (older.length) {
-    parts.push('<h3 class="govuk-heading-m">Not used in the 6 months</h3>')
+    parts.push('<h3 class="govuk-heading-m">Not used in the last 6 months</h3>')
     parts.push(older.map((id) => drugCard(session, id)).join(''))
     parts.push(`<dl class="govuk-summary-list san-summary-list">${summaryRow(
       "Give details about Alex's use of these drugs",
@@ -659,7 +665,20 @@ const renderSummary = (session) => {
 const renderAnalysisSummary = (session) => {
   const mount = document.querySelector('[data-du-analysis-summary]')
   const form = document.getElementById('san-drugs-analysis-form')
+  const notice = document.querySelector('[data-du-analysis-not-required]')
+  const questions = document.querySelector('[data-du-analysis-questions]')
   if (!mount || !form) return
+
+  if (analysisNotRequired(session)) {
+    setHidden(mount, true)
+    setHidden(notice, false)
+    setHidden(questions, true)
+    setHidden(form, !!session.drugComplete)
+    return
+  }
+
+  setHidden(notice, true)
+  setHidden(questions, false)
 
   if (!session.drugComplete) {
     setHidden(mount, true)
@@ -676,6 +695,10 @@ const renderAnalysisSummary = (session) => {
 }
 
 const showAnalysisForm = (focusId) => {
+  if (analysisNotRequired(getSanSession())) {
+    openAnalysisTab()
+    return
+  }
   const mount = document.querySelector('[data-du-analysis-summary]')
   const form = document.getElementById('san-drugs-analysis-form')
   setHidden(mount, true)
@@ -689,6 +712,15 @@ const showAnalysisForm = (focusId) => {
 const openAnalysisTab = () => {
   const tab = document.querySelector('.govuk-tabs__tab[href="#practitioner-analysis"]')
   if (tab instanceof HTMLElement) tab.click()
+}
+
+const showCompletedAnalysis = () => {
+  const hash = '#practitioner-analysis'
+  if (window.location.hash === hash) {
+    window.location.reload()
+    return
+  }
+  window.location.assign(`drugs-summary.html${hash}`)
 }
 
 const emptyFollowOnAnswers = () => ({
@@ -844,7 +876,7 @@ const validateTypes = (answers) => {
   return [{
     group: 'drug-types',
     href: '#drug-types',
-    text: 'Select which drugs Alex has misused'
+    text: 'Select which drugs Alex has used'
   }]
 }
 
@@ -901,7 +933,7 @@ const validateBefore = (answers, session) => {
     errors.push({
       group: 'injected',
       href: '#injected',
-      text: 'Select which drugs Alex injected before custody'
+      text: 'Select which drugs Alex injected'
     })
   }
   return errors
@@ -1004,7 +1036,7 @@ const extraFrequencyHtml = (session, id, withSpacing) => {
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
           <h3 class="govuk-fieldset__heading">${label}</h3>
         </legend>
-        <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-2">How often was Alex using this drug before custody?</p>
+        <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-2">How often was Alex using this drug?</p>
         <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
           ${options}
         </div>
@@ -1039,11 +1071,11 @@ const injectedWhenHtml = (id, label) => {
         <div class="govuk-checkboxes">
           <div class="govuk-checkboxes__item">
             <input class="govuk-checkboxes__input" id="injected-when-${safeId}-last-six" name="injected_when_${safeId}" type="checkbox" value="last-six">
-            <label class="govuk-label govuk-checkboxes__label" for="injected-when-${safeId}-last-six">In the 6 months before custody</label>
+            <label class="govuk-label govuk-checkboxes__label" for="injected-when-${safeId}-last-six">In the last 6 months</label>
           </div>
           <div class="govuk-checkboxes__item">
             <input class="govuk-checkboxes__input" id="injected-when-${safeId}-more-than-six" name="injected_when_${safeId}" type="checkbox" value="more-than-six">
-            <label class="govuk-label govuk-checkboxes__label" for="injected-when-${safeId}-more-than-six">More than 6 months before custody</label>
+            <label class="govuk-label govuk-checkboxes__label" for="injected-when-${safeId}-more-than-six">More than 6 months ago</label>
           </div>
         </div>
       </fieldset>
@@ -1075,7 +1107,7 @@ const applyBeforePage = (session) => {
   if (olderList) {
     const labels = older.map((id) => drugLabel(session, id))
     const items = labels.map((label) => `<li>${escapeHtml(label)}</li>`).join('')
-    olderList.innerHTML = `<p class="govuk-body">More than 6 months before custody, Alex used:</p><ul class="govuk-list govuk-list--bullet">${items}</ul>`
+    olderList.innerHTML = `<p class="govuk-body">More than 6 months ago, Alex used:</p><ul class="govuk-list govuk-list--bullet">${items}</ul>`
   }
 
   const types = assessedDrugs(session)
@@ -1131,11 +1163,14 @@ const readExtraDrugsFromForm = () => {
   })
 }
 
-const extraDrugItemHtml = (drug, index) => {
+const extraDrugItemHtml = (drug, index, hideRemove = false) => {
   const id = escapeHtml(drug.id)
   const name = escapeHtml(drug.name || '')
   const lastSix = drug.lastUsed === 'last-six' ? ' checked' : ''
   const moreThan = drug.lastUsed === 'more-than-six' ? ' checked' : ''
+  const removeButton = hideRemove
+    ? ''
+    : '<button type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button" data-du-remove-drug>Remove drug</button>'
   return `<div class="san-extra-drugs__item" data-du-extra-item data-extra-id="${id}">
     <h3 class="govuk-heading-m">Drug ${index + 1}</h3>
     <div class="govuk-form-group" data-san-error-group="extra-name-${id}">
@@ -1148,26 +1183,27 @@ const extraDrugItemHtml = (drug, index) => {
         <div class="govuk-radios" data-module="govuk-radios">
           <div class="govuk-radios__item">
             <input class="govuk-radios__input" id="last-used-${id}-last-six" name="last_used_${id}" type="radio" value="last-six"${lastSix}>
-            <label class="govuk-label govuk-radios__label" for="last-used-${id}-last-six">Used in the last 6 months</label>
+            <label class="govuk-label govuk-radios__label" for="last-used-${id}-last-six">In the last 6 months</label>
           </div>
           <div class="govuk-radios__item">
             <input class="govuk-radios__input" id="last-used-${id}-more-than-six" name="last_used_${id}" type="radio" value="more-than-six"${moreThan}>
-            <label class="govuk-label govuk-radios__label" for="last-used-${id}-more-than-six">Used more than 6 months ago</label>
+            <label class="govuk-label govuk-radios__label" for="last-used-${id}-more-than-six">More than 6 months ago</label>
           </div>
         </div>
       </fieldset>
     </div>
-    <button type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button" data-du-remove-drug>Remove drug</button>
+    ${removeButton}
     <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-6">
   </div>`
 }
 
-const renderExtraDrugList = (extras) => {
+const renderExtraDrugList = (extras, { onlyOther = false } = {}) => {
   const heading = document.querySelector('[data-du-extra-heading]')
   const list = document.querySelector('[data-du-extra-list]')
   if (!list) return
-  list.innerHTML = extras.map((drug, index) => extraDrugItemHtml(drug, index)).join('')
-  setHidden(heading, extras.length === 0)
+  const hideRemove = onlyOther && extras.length < 2
+  list.innerHTML = extras.map((drug, index) => extraDrugItemHtml(drug, index, hideRemove)).join('')
+  setHidden(heading, onlyOther || extras.length === 0)
 }
 
 const extrasForWhenPage = (session) => {
@@ -1178,6 +1214,14 @@ const extrasForWhenPage = (session) => {
 }
 
 const applyWhenPage = (session) => {
+  const onlyOther = onlyOtherSelected(session)
+  const pageHeading = document.querySelector('[data-du-when-heading]')
+  if (pageHeading) {
+    pageHeading.textContent = onlyOther
+      ? 'What other drugs did Alex use?'
+      : 'When did Alex use these drugs?'
+  }
+
   const selected = selectedDrugs(session)
   const focusId = summaryFocusDrugId()
   const focusOne = Boolean(focusId) && (selected.includes(focusId) || extraDrugIds(session).includes(focusId))
@@ -1196,7 +1240,7 @@ const applyWhenPage = (session) => {
 
   setHidden(extraSection, false)
   const extras = extrasForWhenPage(session)
-  renderExtraDrugList(focusOne ? extras.filter((drug) => drug.id === focusId) : extras)
+  renderExtraDrugList(focusOne ? extras.filter((drug) => drug.id === focusId) : extras, { onlyOther })
 }
 
 const restoreWhen = (session) => {
@@ -1213,7 +1257,7 @@ const bindExtraDrugControls = (form, session) => {
       event.preventDefault()
       const extras = readExtraDrugsFromForm()
       extras.push(emptyExtraDrug())
-      renderExtraDrugList(extras)
+      renderExtraDrugList(extras, { onlyOther: onlyOtherSelected(session) })
       const names = form.querySelectorAll('[data-du-extra-item] input[type="text"]')
       const last = names[names.length - 1]
       if (last instanceof HTMLInputElement) last.focus()
@@ -1224,9 +1268,8 @@ const bindExtraDrugControls = (form, session) => {
     event.preventDefault()
     const item = remove.closest('[data-du-extra-item]')
     const removeId = item ? item.getAttribute('data-extra-id') : ''
-    let extras = readExtraDrugsFromForm().filter((drug) => drug.id !== removeId)
-    if (otherSelected(session) && extras.length === 0) extras = [emptyExtraDrug()]
-    renderExtraDrugList(extras)
+    const extras = readExtraDrugsFromForm().filter((drug) => drug.id !== removeId)
+    renderExtraDrugList(extras, { onlyOther: onlyOtherSelected(session) })
     const addButton = form.querySelector('[data-du-add-drug]')
     if (addButton instanceof HTMLElement) addButton.focus()
   })
@@ -1387,7 +1430,9 @@ const initDrugs = () => {
   if (pageName === 'summary') {
     restoreAnalysis(session)
     renderSummary(session)
-    document.querySelector('[data-du-go-analysis]')?.addEventListener('click', openAnalysisTab)
+    document.querySelector('[data-du-go-analysis]')?.addEventListener('click', () => {
+      openAnalysisTab()
+    })
     document.querySelector('[data-du-analysis-summary]')?.addEventListener('click', (event) => {
       const link = event.target.closest('[data-du-edit-analysis]')
       if (!link) return
@@ -1541,6 +1586,12 @@ const initDrugs = () => {
   const analysisForm = document.getElementById('san-drugs-analysis-form')
   analysisForm?.addEventListener('submit', (event) => {
     event.preventDefault()
+    if (analysisNotRequired(getSanSession())) {
+      clearErrors()
+      setSanSession({ drugComplete: true })
+      showCompletedAnalysis()
+      return
+    }
     revealCheckedConditionals()
     const answers = readAnalysisAnswers()
     const errors = validateAnalysis(answers)
@@ -1551,7 +1602,7 @@ const initDrugs = () => {
     }
     clearErrors()
     setSanSession({ ...answers, drugComplete: true })
-    window.location.assign('drugs-summary.html#practitioner-analysis')
+    showCompletedAnalysis()
   })
 }
 

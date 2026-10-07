@@ -1,8 +1,8 @@
 {% extends "layouts/assessment-san-research.html" %}
 
 {% set pageName = "Accommodation" %}
-{% set sanHeading = "Accommodation" %}
-{% set backLinkHref = "accommodation-details.html" %}
+{% set sanCaption = "Accommodation" %}
+{% set backLinkHref = "accommodation-details" %}
 
 {% block content %}
 
@@ -14,8 +14,8 @@
 <form id="san-accommodation-concerns-form" novalidate data-san-page="concerns">
   <div class="govuk-form-group" id="location-concerns" data-san-question="location-concerns" hidden>
     <fieldset class="govuk-fieldset" aria-describedby="location-concerns-hint">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">What are your concerns about the location? (optional)</h2>
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">What are your concerns about the location of Alex's accommodation? (optional)</h1>
       </legend>
       <div id="location-concerns-hint" class="govuk-hint">Select all that apply.</div>
       <div class="govuk-checkboxes" data-module="govuk-checkboxes">
