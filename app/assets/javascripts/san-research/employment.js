@@ -86,14 +86,6 @@ const LEVEL_LABELS = {
   some: 'Some difficulties'
 }
 
-const DIFFICULTY_AREAS = ['reading', 'writing', 'numeracy']
-
-const DIFFICULTY_AREA_LABELS = {
-  reading: 'reading',
-  writing: 'writing',
-  numeracy: 'numeracy'
-}
-
 const EXPERIENCE_LABELS = {
   positive: 'Positive',
   'mostly-positive': 'Mostly positive',
@@ -137,29 +129,6 @@ const employmentRoute = (session) => {
 const needsJobPage = (session) => BEFORE_STATUSES.includes(session.employmentStatus)
 
 const routeShows = (route, question) => (ROUTE_QUESTIONS[route] || []).includes(question)
-
-const selectedDifficultyAreas = (difficulties) => {
-  return DIFFICULTY_AREAS.filter((area) => Array.isArray(difficulties) && difficulties.includes(area))
-}
-
-const difficultyLevelsAnswered = (session) => {
-  const areas = selectedDifficultyAreas(session.difficulties)
-  if (!areas.length) return true
-  const levels = session.difficultyLevels || {}
-  return areas.every((area) => levels[area])
-}
-
-const difficultyHref = (options = {}) => {
-  const params = new URLSearchParams()
-  if (options.fromSummary) params.set('from', 'summary')
-  const query = params.toString()
-  const hash = options.hash ? `#${options.hash}` : ''
-  return `employment-difficulty${query ? `?${query}` : ''}${hash}`
-}
-
-const difficultyQuestion = (area) => {
-  return `How much difficulty does Alex have with ${DIFFICULTY_AREA_LABELS[area] || area}?`
-}
 
 const isInHiddenConditional = (element) => {
   return !!element.closest('.govuk-radios__conditional--hidden, .govuk-checkboxes__conditional--hidden, .san-is-hidden, [hidden]')
@@ -323,7 +292,7 @@ const applyProgress = (session) => {
   }
 }
 
-const detailsFormAnswered = (session) => {
+const detailsAnswered = (session) => {
   const route = employmentRoute(session)
   if (!route || !session.employmentChanges) return false
   if (routeShows(route, 'history') && !session.employmentHistory) return false
@@ -335,14 +304,6 @@ const detailsFormAnswered = (session) => {
   if (routeShows(route, 'employment-experience') && !session.employmentExperience) return false
   if (routeShows(route, 'education-experience') && !session.educationExperience) return false
   return true
-}
-
-const detailsAnswered = (session) => detailsFormAnswered(session) && difficultyLevelsAnswered(session)
-
-const continueDetailsHref = (session) => {
-  if (needsJobPage(session) && !session.employedBefore) return 'employment-job'
-  if (detailsFormAnswered(session) && !difficultyLevelsAnswered(session)) return difficultyHref()
-  return 'employment-details'
 }
 
 const summaryChangeHref = (page, hash = '') => `${page}?from=summary${hash ? `#${hash}` : ''}`
@@ -381,7 +342,7 @@ const employmentRows = (session) => {
 
   if (needsJobPage(session) && session.employedBefore) {
     rows.push(summaryRow(
-      'Has Alex ever had a job?',
+      'Have they ever had a job?',
       [labelled(BEFORE_LABELS, session.employedBefore)],
       summaryChangeHref('employment-job')
     ))
@@ -443,20 +404,17 @@ const employmentRows = (session) => {
   }
 
   if (routeShows(route, 'difficulties') && Array.isArray(session.difficulties) && session.difficulties.length) {
+    const lines = []
+    session.difficulties.forEach((value) => {
+      lines.push(labelled(DIFFICULTY_LABELS, value))
+      const level = session.difficultyLevels && session.difficultyLevels[value]
+      if (level) lines.push(labelled(LEVEL_LABELS, level))
+    })
     rows.push(summaryRow(
       'Does Alex have difficulties with reading, writing or numeracy?',
-      session.difficulties.map((value) => labelled(DIFFICULTY_LABELS, value)),
+      lines,
       summaryChangeHref('employment-details', 'difficulties')
     ))
-    selectedDifficultyAreas(session.difficulties).forEach((area) => {
-      const level = session.difficultyLevels && session.difficultyLevels[area]
-      if (!level) return
-      rows.push(summaryRow(
-        difficultyQuestion(area),
-        [labelled(LEVEL_LABELS, level)],
-        difficultyHref({ fromSummary: true, hash: `difficulty-${area}-level` })
-      ))
-    })
   }
 
   if (routeShows(route, 'employment-experience') && session.employmentExperience) {
@@ -524,36 +482,6 @@ const analysisRows = (session) => {
   return rows
 }
 
-const setHeadingLevel = (heading, level) => {
-  if (!(heading instanceof HTMLElement) || heading.tagName === level) return heading
-  const next = document.createElement(level)
-  next.className = heading.className
-  next.innerHTML = heading.innerHTML
-  heading.replaceWith(next)
-  return next
-}
-
-const showSelectedDifficulties = (areas) => {
-  let shown = 0
-  document.querySelectorAll('[data-ee-difficulty]').forEach((block) => {
-    const show = areas.includes(block.getAttribute('data-ee-difficulty'))
-    block.hidden = !show
-    block.classList.toggle('san-is-hidden', !show)
-    if (!show) return
-    const first = shown === 0
-    shown += 1
-    const only = areas.length === 1
-    block.classList.toggle('san-question', !first)
-    const legend = block.querySelector('.govuk-fieldset__legend')
-    if (legend) {
-      legend.classList.toggle('govuk-fieldset__legend--l', only)
-      legend.classList.toggle('govuk-fieldset__legend--m', !only)
-    }
-    const heading = block.querySelector('.govuk-fieldset__heading')
-    setHeadingLevel(heading, first ? 'h1' : 'h2')
-  })
-}
-
 const setHidden = (element, hidden) => {
   if (!element) return
   element.hidden = hidden
@@ -574,7 +502,10 @@ const renderSummary = (session) => {
   } else {
     let followOn = ''
     if (!complete && !detailsAnswered(session)) {
-      followOn = `<p class="govuk-body"><a class="govuk-link" href="${continueDetailsHref(session)}">Continue</a></p>`
+      const nextPage = needsJobPage(session) && !session.employedBefore
+        ? 'employment-job.html'
+        : 'employment-details.html'
+      followOn = `<p class="govuk-body"><a class="govuk-link" href="${nextPage}">Continue</a></p>`
     }
     mount.innerHTML = `<dl class="govuk-summary-list san-summary-list">${rows.join('')}</dl>${followOn}`
   }
@@ -695,10 +626,12 @@ const readDetailsAnswers = (route) => {
 
   if (routeShows(route, 'difficulties')) {
     answers.difficulties = checkedValues('difficulties')
-    const previous = getSanSession().difficultyLevels || {}
     const levels = {}
-    selectedDifficultyAreas(answers.difficulties).forEach((value) => {
-      if (previous[value]) levels[value] = previous[value]
+    ;['reading', 'writing', 'numeracy'].forEach((value) => {
+      if (answers.difficulties.includes(value)) {
+        const level = checkedValue(`difficulty_${value}`)
+        if (level) levels[value] = level
+      }
     })
     answers.difficultyLevels = levels
   }
@@ -756,7 +689,7 @@ const validateJob = (employedBefore) => {
   return [{
     group: 'employed-before',
     href: '#employed-before',
-    text: 'Select if Alex has ever had a job'
+    text: 'Select if they have ever had a job'
   }]
 }
 
@@ -801,6 +734,20 @@ const validateDetails = (answers, route) => {
       group: 'difficulties',
       href: '#difficulties',
       text: 'Select if Alex has difficulties with reading, writing or numeracy'
+    })
+  } else if (routeShows(route, 'difficulties')) {
+    ;[
+      ['reading', 'reading'],
+      ['writing', 'writing'],
+      ['numeracy', 'numeracy']
+    ].forEach(([value, label]) => {
+      if (answers.difficulties.includes(value) && !answers.difficultyLevels[value]) {
+        errors.push({
+          group: `difficulty-${value}`,
+          href: `#difficulty-${value}-level`,
+          text: `Select the level of difficulty with ${label}`
+        })
+      }
     })
   }
   if (routeShows(route, 'employment-experience') && !answers.employmentExperience) {
@@ -884,6 +831,11 @@ const restoreDetails = (session) => {
   selectRadio('skills', session.skills)
   if (session.skills) setField(`skills-${session.skills}-details`, session.skillsDetails)
   selectChecks('difficulties', session.difficulties)
+  if (session.difficultyLevels) {
+    Object.entries(session.difficultyLevels).forEach(([key, value]) => {
+      selectRadio(`difficulty_${key}`, value)
+    })
+  }
   selectRadio('employment_experience', session.employmentExperience)
   if (session.employmentExperience && session.employmentExperience !== 'unknown') {
     setField(`employment-experience-${session.employmentExperience}-details`, session.employmentExperienceDetails)
@@ -965,24 +917,6 @@ const initEmployment = () => {
     }
     applyDetailsRoute(route)
     restoreDetails(session)
-  }
-  if (pageName === 'difficulty') {
-    const route = employmentRoute(session)
-    if (!route) {
-      window.location.replace('employment')
-      return
-    }
-    const areas = selectedDifficultyAreas(session.difficulties)
-    if (!areas.length) {
-      window.location.replace(fromSummary() ? 'employment-summary' : 'employment-details')
-      return
-    }
-    showSelectedDifficulties(areas)
-    areas.forEach((area) => {
-      const level = session.difficultyLevels && session.difficultyLevels[area]
-      if (level) selectRadio(`difficulty_${area}`, level)
-    })
-    if (!fromSummary()) ensureBackLink('employment-details#difficulties')
   }
   if (pageName === 'summary') {
     restoreAnalysis(session)
@@ -1067,44 +1001,7 @@ const initEmployment = () => {
     }
     clearErrors()
     setSanSession({ ...answers, employmentComplete: false })
-    const areas = selectedDifficultyAreas(answers.difficulties)
-    if (!areas.length || (fromSummary() && areas.every((value) => answers.difficultyLevels[value]))) {
-      window.location.assign('employment-summary')
-      return
-    }
-    window.location.assign(difficultyHref({ fromSummary: fromSummary() }))
-  })
-
-  const difficultyForm = document.getElementById('san-employment-difficulty-form')
-  difficultyForm?.addEventListener('submit', (event) => {
-    event.preventDefault()
-    const current = getSanSession()
-    const areas = selectedDifficultyAreas(current.difficulties)
-    if (!areas.length) {
-      window.location.assign(fromSummary() ? 'employment-summary' : 'employment-details')
-      return
-    }
-    const errors = []
-    const levels = {}
-    areas.forEach((area) => {
-      const level = checkedValue(`difficulty_${area}`)
-      if (!level) {
-        errors.push({
-          group: `difficulty-${area}`,
-          href: `#difficulty-${area}-level`,
-          text: `Select how much difficulty Alex has with ${DIFFICULTY_AREA_LABELS[area] || area}`
-        })
-      } else {
-        levels[area] = level
-      }
-    })
-    if (errors.length) {
-      showErrors(errors)
-      return
-    }
-    clearErrors()
-    setSanSession({ difficultyLevels: levels, employmentComplete: false })
-    window.location.assign('employment-summary')
+    window.location.assign('employment-summary.html')
   })
 
   const analysisForm = document.getElementById('san-employment-analysis-form')

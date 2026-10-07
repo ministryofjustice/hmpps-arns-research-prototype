@@ -1,7 +1,7 @@
 {% extends "layouts/assessment-san.html" %}
 
 {% set pageName = "Drug use" %}
-{% set sanHeading = "Drug use" %}
+{% set sanCaption = "Drug use" %}
 {% set sanSection = "drugs" %}
 {% set backLinkHref = "drugs-before.html" %}
 
@@ -13,7 +13,42 @@
 {% include "includes/san/content-header.html" %}
 
 <form id="san-drugs-background-form" novalidate data-du-page="background">
-  <div class="govuk-form-group" data-san-error-group="why">
+  <h1 class="govuk-heading-l">Drug use background</h1>
+
+  <div class="govuk-form-group" data-san-error-group="treatment">
+    <fieldset class="govuk-fieldset" id="treatment" aria-describedby="treatment-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Is Alex receiving treatment for their drug use?</h2>
+      </legend>
+      <div id="treatment-hint" class="govuk-hint">Treatment includes medication (for example, methadone), rehab and talking therapy. Support could include programmes or groups they have attended (for example, Narcotics Anonymous).</div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="treatment-yes" name="receiving_treatment" type="radio" value="yes" data-aria-controls="conditional-treatment-yes">
+          <label class="govuk-label govuk-radios__label" for="treatment-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-treatment-yes">
+          <div class="govuk-form-group" data-san-error-group="treatment-yes-details">
+            <label class="govuk-label" for="treatment-yes-details">Give details</label>
+            <textarea class="govuk-textarea" id="treatment-yes-details" name="treatment_yes_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="treatment-yes-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="treatment-no" name="receiving_treatment" type="radio" value="no" data-aria-controls="conditional-treatment-no">
+          <label class="govuk-label govuk-radios__label" for="treatment-no">No</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-treatment-no">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="treatment-no-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="treatment-no-details" name="treatment_no_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="treatment-no-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group san-question" data-san-error-group="why">
     <fieldset class="govuk-fieldset" id="why" aria-describedby="why-hint why-select-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
         <h2 class="govuk-fieldset__heading">Why does Alex use drugs?</h2>

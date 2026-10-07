@@ -20,8 +20,6 @@ const EXAMPLE_COMPLETE = {
   accommodationSuitable: 'yes-concerns',
   suitabilityReasons: ['exploited'],
   suitabilityOtherDetails: '',
-  locationConcernsSeen: true,
-  suitabilityConcernsSeen: true,
   changes: 'active',
   changesDetails: '',
   analysisStrengths: 'yes',
@@ -53,9 +51,9 @@ const LOCATION_REASON_LABELS = {
 }
 
 const SUITABILITY_REASON_LABELS = {
-  issues: 'Issues with the property',
+  issues: 'Issues with the property - for example, poor kitchen or bathroom facilities',
   overcrowding: 'Overcrowding',
-  exploited: 'Risk of their accommodation being exploited by others',
+  exploited: 'Risk of their accommodation being exploited by others - for example, cuckooing',
   safety: 'Safety of accommodation',
   'victim-lives': 'Victim lives with them',
   victimised: 'Victimised by someone living with them',
@@ -113,13 +111,11 @@ const FUTURE_DETAILS_IDS = {
 const AP_CAS_SUBTYPES = ['approved-premises', 'cas2', 'cas3']
 
 // AC2 (living with), AC5 (past help) and AC6 (future accommodation) are hidden in this prototype.
-// Each remaining question is its own screen, except no accommodation, which asks why and about changes together.
-// A concern question follows when the answer needs it.
 const ROUTE_QUESTIONS = {
   settled: ['location', 'suitable', 'changes'],
   'temporary-short-term': ['location', 'suitable', 'changes'],
   'temporary-ap-cas': ['location', 'suitable', 'changes'],
-  none: ['no-accommodation']
+  none: ['no-accommodation', 'changes']
 }
 
 const accommodationRoute = (session) => {
@@ -136,184 +132,36 @@ const accommodationRoute = (session) => {
 
 const routeShows = (route, question) => (ROUTE_QUESTIONS[route] || []).includes(question)
 
-const detailSteps = (route) => ROUTE_QUESTIONS[route] || []
-
-const firstDetailStep = (route) => detailSteps(route)[0] || ''
-
-const CONCERN_BLOCK = {
-  location: 'location-concerns',
-  suitable: 'suitability-concerns'
-}
-
+// Concerns are a group of inputs, so they follow the parent questions on the next page.
 const needsLocationConcerns = (session, route) => routeShows(route, 'location') && session.locationSuitable === 'no'
 
 const needsSuitabilityConcerns = (session, route) => {
   return routeShows(route, 'suitable') && (session.accommodationSuitable === 'yes-concerns' || session.accommodationSuitable === 'no')
 }
 
-const followOnConcern = (session, route, step) => {
-  if (step === 'location' && needsLocationConcerns(session, route)) return 'location'
-  if (step === 'suitable' && needsSuitabilityConcerns(session, route)) return 'suitable'
-  return ''
+const concernsNeeded = (session, route) => needsLocationConcerns(session, route) || needsSuitabilityConcerns(session, route)
+
+const concernTriggers = (session) => ({
+  location: session.locationSuitable === 'no',
+  suitable: session.accommodationSuitable === 'yes-concerns' || session.accommodationSuitable === 'no'
+})
+
+const concernTriggersChanged = (next, previous) => {
+  const nextTriggers = concernTriggers(next)
+  const previousTriggers = concernTriggers(previous)
+  return nextTriggers.location !== previousTriggers.location || nextTriggers.suitable !== previousTriggers.suitable
 }
 
-const concernSeen = (session, step) => {
-  if (step === 'location') return !!session.locationConcernsSeen
-  if (step === 'suitable') return !!session.suitabilityConcernsSeen
-  return true
-}
-
-const concernTriggerChanged = (previous, next, step) => {
-  if (step === 'location') return (previous.locationSuitable === 'no') !== (next.locationSuitable === 'no')
-  if (step === 'suitable') {
-    const needs = (value) => value === 'yes-concerns' || value === 'no'
-    return needs(previous.accommodationSuitable) !== needs(next.accommodationSuitable)
+const keepConcernAnswers = (answers, previous) => {
+  if (answers.locationSuitable === 'no') {
+    answers.locationReasons = Array.isArray(previous.locationReasons) ? previous.locationReasons : []
+    answers.locationOtherDetails = previous.locationOtherDetails || ''
   }
-  return false
-}
-
-const stepParam = () => new URLSearchParams(window.location.search).get('step') || ''
-
-const stepHref = (page, step, options = {}) => {
-  const params = new URLSearchParams()
-  if (step) params.set('step', step)
-  if (options.fromSummary) params.set('from', 'summary')
-  const query = params.toString()
-  return query ? `${page}?${query}` : page
-}
-
-const pageFile = (page) => (page === 'concerns' ? 'accommodation-concerns' : 'accommodation-details')
-
-const stepAnswered = (session, step) => {
-  if (step === 'location') return !!session.locationSuitable
-  if (step === 'suitable') return !!session.accommodationSuitable
-  if (step === 'changes') return !!session.changes
-  if (step === 'no-accommodation') {
-    return Array.isArray(session.noAccommodationReasons) && session.noAccommodationReasons.length > 0 && !!session.changes
+  if (answers.accommodationSuitable === 'yes-concerns' || answers.accommodationSuitable === 'no') {
+    answers.suitabilityReasons = Array.isArray(previous.suitabilityReasons) ? previous.suitabilityReasons : []
+    answers.suitabilityOtherDetails = previous.suitabilityOtherDetails || ''
   }
-  if (step === 'living-with') return Array.isArray(session.livingWith) && session.livingWith.length > 0
-  if (step === 'future') {
-    if (!session.futurePlanned) return false
-    if (session.futurePlanned === 'yes' && !session.futureType) return false
-    return true
-  }
-  if (step === 'past-help') return true
-  return false
-}
-
-const nextDetailStep = (route, step) => {
-  const steps = detailSteps(route)
-  const index = steps.indexOf(step)
-  if (index < 0 || index >= steps.length - 1) return ''
-  return steps[index + 1]
-}
-
-const resumeTarget = (session, route) => {
-  for (const step of detailSteps(route)) {
-    if (!stepAnswered(session, step)) return { page: 'details', step }
-    const concern = followOnConcern(session, route, step)
-    if (concern && !concernSeen(session, step)) return { page: 'concerns', step: concern }
-  }
-  return null
-}
-
-const resumeHref = (session) => {
-  if (session.hasSomewhereToLive !== 'yes' && session.hasSomewhereToLive !== 'no') return 'accommodation.html'
-  if (session.hasSomewhereToLive === 'yes' && !session.accommodationSettled) return 'accommodation-settled.html'
-  const route = accommodationRoute(session)
-  if (!route) return 'accommodation.html'
-  const resume = resumeTarget(session, route)
-  if (!resume) return stepHref('accommodation-details', firstDetailStep(route))
-  return stepHref(pageFile(resume.page), resume.step)
-}
-
-const backHrefForDetail = (session, route, step) => {
-  const steps = detailSteps(route)
-  const index = steps.indexOf(step)
-  if (index <= 0) {
-    return session.hasSomewhereToLive === 'yes' ? 'accommodation-settled.html' : 'accommodation.html'
-  }
-  const previous = steps[index - 1]
-  const concern = followOnConcern(session, route, previous)
-  if (concern) return stepHref('accommodation-concerns', concern)
-  return stepHref('accommodation-details', previous)
-}
-
-const continueAfterDetail = (previous, next, route, step) => {
-  const concern = followOnConcern(next, route, step)
-  if (concern && (!fromSummary() || concernTriggerChanged(previous, next, step) || !concernSeen(next, step))) {
-    window.location.assign(stepHref('accommodation-concerns', concern, { fromSummary: fromSummary() }))
-    return
-  }
-  if (fromSummary() && detailsAnswered(next)) {
-    window.location.assign('accommodation-summary.html')
-    return
-  }
-  const following = nextDetailStep(route, step)
-  if (following) {
-    window.location.assign(stepHref('accommodation-details', following, { fromSummary: fromSummary() }))
-    return
-  }
-  window.location.assign('accommodation-summary.html')
-}
-
-const continueAfterConcern = (session, route, step) => {
-  if (fromSummary()) {
-    const resume = resumeTarget(session, route)
-    if (resume) {
-      window.location.assign(stepHref(pageFile(resume.page), resume.step, { fromSummary: true }))
-      return
-    }
-    window.location.assign('accommodation-summary.html')
-    return
-  }
-  const following = nextDetailStep(route, step)
-  window.location.assign(following ? stepHref('accommodation-details', following) : 'accommodation-summary.html')
-}
-
-const flowOrder = (route) => {
-  const order = []
-  detailSteps(route).forEach((step) => {
-    order.push(`details:${step}`)
-    if (step === 'location' || step === 'suitable') order.push(`concerns:${step}`)
-  })
-  return order
-}
-
-const comesBefore = (route, target, current) => {
-  const order = flowOrder(route)
-  const targetIndex = order.indexOf(`${target.page}:${target.step}`)
-  const currentIndex = order.indexOf(`${current.page}:${current.step}`)
-  return targetIndex !== -1 && currentIndex !== -1 && targetIndex < currentIndex
-}
-
-const setChangesHeading = (secondary) => {
-  const block = document.querySelector('[data-san-question="changes"]')
-  if (!block) return
-  const legend = block.querySelector('.govuk-fieldset__legend')
-  const heading = block.querySelector('.govuk-fieldset__heading')
-  if (!legend || !heading) return
-  const level = secondary ? 'h2' : 'h1'
-  legend.classList.toggle('govuk-fieldset__legend--l', !secondary)
-  legend.classList.toggle('govuk-fieldset__legend--m', secondary)
-  if (heading.tagName.toLowerCase() !== level) {
-    const next = document.createElement(level)
-    next.className = heading.className
-    next.textContent = heading.textContent
-    heading.replaceWith(next)
-  }
-  block.classList.toggle('govuk-!-margin-top-6', secondary)
-}
-
-const showQuestion = (name) => {
-  const paired = name === 'no-accommodation' ? ['changes'] : []
-  document.querySelectorAll('[data-san-question]').forEach((block) => {
-    const question = block.getAttribute('data-san-question')
-    const show = question === name || paired.includes(question)
-    setHidden(block, !show)
-    block.classList.remove('san-question')
-    if (question === 'changes') setChangesHeading(paired.includes(question))
-  })
+  return answers
 }
 
 const isInHiddenConditional = (element) => {
@@ -490,8 +338,8 @@ const detailsAnswered = (session) => {
   return true
 }
 
-// Extensionless paths keep query strings. The kit redirects *.html and drops the query.
-const summaryChangeHref = (page, step = '') => stepHref(page, step, { fromSummary: true })
+// Extensionless paths keep ?from=summary. The kit redirects *.html and drops the query.
+const summaryChangeHref = (page, hash = '') => `${page}?from=summary${hash ? `#${hash}` : ''}`
 
 const summaryRow = (question, lines, href, options = {}) => {
   const value = lines.filter(Boolean).map((line, index) => {
@@ -583,9 +431,9 @@ const accommodationRows = (session) => {
       const reasons = Array.isArray(session.locationReasons) ? session.locationReasons : []
       const lines = reasonLines(LOCATION_REASON_LABELS, reasons, session.locationOtherDetails)
       rows.push(summaryRow(
-        "What are your concerns about the location of Alex's accommodation? (optional)",
+        'What are your concerns about the location? (optional)',
         lines.length ? lines : ['Not provided'],
-        summaryChangeHref('accommodation-concerns', 'location'),
+        summaryChangeHref('accommodation-concerns', 'location-concerns'),
         lines.length ? { secondaryFrom: reasons.length } : {}
       ))
     }
@@ -601,9 +449,9 @@ const accommodationRows = (session) => {
       const reasons = Array.isArray(session.suitabilityReasons) ? session.suitabilityReasons : []
       const lines = reasonLines(SUITABILITY_REASON_LABELS, reasons, session.suitabilityOtherDetails)
       rows.push(summaryRow(
-        "What are your concerns about the suitability of Alex's accommodation? (optional)",
+        'What are your concerns about the accommodation? (optional)',
         lines.length ? lines : ['Not provided'],
-        summaryChangeHref('accommodation-concerns', 'suitable'),
+        summaryChangeHref('accommodation-concerns', 'suitability-concerns'),
         lines.length ? { secondaryFrom: reasons.length } : {}
       ))
     }
@@ -629,7 +477,7 @@ const accommodationRows = (session) => {
     rows.push(summaryRow(
       'Does Alex want to make changes to their accommodation?',
       lines,
-      summaryChangeHref('accommodation-details', route === 'none' ? 'no-accommodation' : 'changes'),
+      summaryChangeHref('accommodation-details', 'changes'),
       { secondaryFrom: 1 }
     ))
   }
@@ -686,7 +534,10 @@ const renderSummary = (session) => {
   } else {
     let followOn = ''
     if (!complete && !detailsAnswered(session)) {
-      followOn = `<p class="govuk-body"><a class="govuk-link" href="${escapeHtml(resumeHref(session))}">Continue</a></p>`
+      const continueHref = session.hasSomewhereToLive === 'yes' && !session.accommodationSettled
+        ? 'accommodation-settled.html'
+        : 'accommodation-details.html'
+      followOn = `<p class="govuk-body"><a class="govuk-link" href="${continueHref}">Continue</a></p>`
     }
     mount.innerHTML = `<dl class="govuk-summary-list san-summary-list">${rows.join('')}</dl>${followOn}`
   }
@@ -780,8 +631,6 @@ const emptyDetailAnswers = () => ({
   accommodationSuitable: '',
   suitabilityReasons: [],
   suitabilityOtherDetails: '',
-  locationConcernsSeen: false,
-  suitabilityConcernsSeen: false,
   noAccommodationReasons: [],
   noAccommodationOtherDetails: '',
   pastAccommodationHelp: '',
@@ -792,68 +641,45 @@ const emptyDetailAnswers = () => ({
   changesDetails: ''
 })
 
-const readChangesAnswers = () => {
-  const changes = checkedValue('changes')
-  return { changes, changesDetails: changes ? fieldValue(`changes-${changes}-details`) : '' }
-}
+const readDetailsAnswers = (route) => {
+  const answers = emptyDetailAnswers()
 
-const readStepAnswers = (step) => {
-  if (step === 'living-with') {
-    return {
-      livingWith: checkedValues('living_with'),
-      livingPartnerDetails: fieldValue('living-partner-details'),
-      livingOtherDetails: fieldValue('living-other-details')
-    }
+  if (routeShows(route, 'living-with')) {
+    answers.livingWith = checkedValues('living_with')
+    answers.livingPartnerDetails = fieldValue('living-partner-details')
+    answers.livingOtherDetails = fieldValue('living-other-details')
   }
-  if (step === 'location') return { locationSuitable: checkedValue('location_suitable') }
-  if (step === 'suitable') return { accommodationSuitable: checkedValue('accommodation_suitable') }
-  if (step === 'no-accommodation') {
-    return {
-      noAccommodationReasons: checkedValues('no_accommodation_reasons'),
-      noAccommodationOtherDetails: fieldValue('no-accommodation-other-details'),
-      ...readChangesAnswers()
-    }
-  }
-  if (step === 'past-help') return { pastAccommodationHelp: fieldValue('past-accommodation-help') }
-  if (step === 'future') {
-    const futurePlanned = checkedValue('future_planned')
-    const futureType = futurePlanned === 'yes' ? checkedValue('future_type') : ''
-    const detailsId = FUTURE_DETAILS_IDS[futureType]
-    return { futurePlanned, futureType, futureDetails: detailsId ? fieldValue(detailsId) : '' }
-  }
-  if (step === 'changes') return readChangesAnswers()
-  return {}
-}
 
-const patchForStep = (step, answers) => {
-  const patch = { ...answers, accommodationComplete: false }
-  if (step === 'location' && answers.locationSuitable !== 'no') {
-    patch.locationReasons = []
-    patch.locationOtherDetails = ''
-    patch.locationConcernsSeen = false
+  if (routeShows(route, 'location')) {
+    answers.locationSuitable = checkedValue('location_suitable')
   }
-  if (step === 'suitable' && answers.accommodationSuitable !== 'yes-concerns' && answers.accommodationSuitable !== 'no') {
-    patch.suitabilityReasons = []
-    patch.suitabilityOtherDetails = ''
-    patch.suitabilityConcernsSeen = false
-  }
-  return patch
-}
 
-const readConcernStep = (step) => {
-  if (step === 'location') {
-    return {
-      locationReasons: checkedValues('location_reasons'),
-      locationOtherDetails: fieldValue('location-other-details')
-    }
+  if (routeShows(route, 'suitable')) {
+    answers.accommodationSuitable = checkedValue('accommodation_suitable')
   }
-  if (step === 'suitable') {
-    return {
-      suitabilityReasons: checkedValues('suitability_reasons'),
-      suitabilityOtherDetails: fieldValue('suitability-other-details')
-    }
+
+  if (routeShows(route, 'no-accommodation')) {
+    answers.noAccommodationReasons = checkedValues('no_accommodation_reasons')
+    answers.noAccommodationOtherDetails = fieldValue('no-accommodation-other-details')
   }
-  return {}
+
+  if (routeShows(route, 'past-help')) {
+    answers.pastAccommodationHelp = fieldValue('past-accommodation-help')
+  }
+
+  if (routeShows(route, 'future')) {
+    answers.futurePlanned = checkedValue('future_planned')
+    answers.futureType = answers.futurePlanned === 'yes' ? checkedValue('future_type') : ''
+    const detailsId = FUTURE_DETAILS_IDS[answers.futureType]
+    answers.futureDetails = detailsId ? fieldValue(detailsId) : ''
+  }
+
+  if (routeShows(route, 'changes')) {
+    answers.changes = checkedValue('changes')
+    answers.changesDetails = answers.changes ? fieldValue(`changes-${answers.changes}-details`) : ''
+  }
+
+  return answers
 }
 
 const readAnalysisAnswers = () => {
@@ -888,52 +714,52 @@ const validateSettled = (value) => {
   }]
 }
 
-const validateStep = (answers, step) => {
+const validateDetails = (answers, route) => {
   const errors = []
-  if (step === 'living-with' && !(answers.livingWith || []).length) {
+  if (routeShows(route, 'living-with') && !answers.livingWith.length) {
     errors.push({ group: 'living-with', href: '#living-with', text: 'Select who Alex is living with' })
   }
-  if (step === 'location' && !answers.locationSuitable) {
+  if (routeShows(route, 'location') && !answers.locationSuitable) {
     errors.push({
       group: 'location',
       href: '#location',
       text: "Select if the location of Alex's accommodation is suitable"
     })
   }
-  if (step === 'suitable' && !answers.accommodationSuitable) {
+  if (routeShows(route, 'suitable') && !answers.accommodationSuitable) {
     errors.push({
       group: 'suitable',
       href: '#suitable',
       text: "Select if Alex's accommodation is suitable"
     })
   }
-  if (step === 'no-accommodation' && !(answers.noAccommodationReasons || []).length) {
+  if (routeShows(route, 'no-accommodation') && !answers.noAccommodationReasons.length) {
     errors.push({
       group: 'no-accommodation',
       href: '#no-accommodation',
       text: 'Select why Alex has no accommodation'
     })
   }
-  if (step === 'future' && !answers.futurePlanned) {
+  if (routeShows(route, 'future') && !answers.futurePlanned) {
     errors.push({
       group: 'future',
       href: '#future',
       text: 'Select if Alex has future accommodation planned'
     })
-  } else if (step === 'future' && answers.futurePlanned === 'yes' && !answers.futureType) {
+  } else if (routeShows(route, 'future') && answers.futurePlanned === 'yes' && !answers.futureType) {
     errors.push({
       group: 'future',
       href: '#future-type',
       text: 'Select the future accommodation Alex has planned'
     })
   }
-  if ((step === 'changes' || step === 'no-accommodation') && !answers.changes) {
+  if (!answers.changes) {
     errors.push({
       group: 'changes',
       href: '#changes',
       text: 'Select if Alex wants to make changes to their accommodation'
     })
-  } else if ((step === 'changes' || step === 'no-accommodation') && answers.changes === 'not-present' && !answers.changesDetails) {
+  } else if (answers.changes === 'not-present' && !answers.changesDetails) {
     errors.push({
       group: 'changes',
       href: '#changes-not-present-details',
@@ -962,11 +788,59 @@ const validateAnalysis = (answers) => {
   return errors
 }
 
+const applyConcerns = (session, route) => {
+  const show = {
+    'location-concerns': needsLocationConcerns(session, route),
+    'suitability-concerns': needsSuitabilityConcerns(session, route)
+  }
+  const visible = []
+  document.querySelectorAll('[data-san-question]').forEach((block) => {
+    const on = !!show[block.getAttribute('data-san-question')]
+    setHidden(block, !on)
+    block.classList.remove('san-question')
+    if (on) visible.push(block)
+  })
+  visible.slice(1).forEach((block) => block.classList.add('san-question'))
+}
+
 const restoreConcerns = (session) => {
   selectChecks('location_reasons', session.locationReasons)
   setField('location-other-details', session.locationOtherDetails)
   selectChecks('suitability_reasons', session.suitabilityReasons)
   setField('suitability-other-details', session.suitabilityOtherDetails)
+}
+
+const readConcernAnswers = (session, route) => {
+  const answers = {
+    locationReasons: [],
+    locationOtherDetails: '',
+    suitabilityReasons: [],
+    suitabilityOtherDetails: ''
+  }
+  if (needsLocationConcerns(session, route)) {
+    answers.locationReasons = checkedValues('location_reasons')
+    answers.locationOtherDetails = fieldValue('location-other-details')
+  }
+  if (needsSuitabilityConcerns(session, route)) {
+    answers.suitabilityReasons = checkedValues('suitability_reasons')
+    answers.suitabilityOtherDetails = fieldValue('suitability-other-details')
+  }
+  return answers
+}
+
+const applyDetailsRoute = (route) => {
+  const form = document.getElementById('san-accommodation-details-form')
+  if (form) form.setAttribute('data-san-route', route)
+
+  const visible = []
+  document.querySelectorAll('[data-san-question]').forEach((block) => {
+    const show = routeShows(route, block.getAttribute('data-san-question'))
+    block.hidden = !show
+    block.classList.toggle('san-is-hidden', !show)
+    block.classList.remove('san-question')
+    if (show) visible.push(block)
+  })
+  visible.slice(1).forEach((block) => block.classList.add('san-question'))
 }
 
 const restoreDetails = (session) => {
@@ -1041,64 +915,35 @@ const initSanAccommodation = () => {
   }
   if (pageName === 'details') {
     if (session.hasSomewhereToLive === 'yes' && !session.accommodationSettled) {
-      window.location.replace('accommodation-settled')
+      window.location.assign('accommodation-settled')
       return
     }
     const route = accommodationRoute(session)
     if (!route) {
-      window.location.replace('accommodation')
+      window.location.assign('accommodation')
       return
     }
-    const steps = detailSteps(route)
-    const step = stepParam()
-    const resume = resumeTarget(session, route)
-    if (!steps.includes(step)) {
-      if (resume && resume.page === 'concerns' && !fromSummary()) {
-        window.location.replace(stepHref('accommodation-concerns', resume.step))
-        return
-      }
-      const fallback = resume && resume.page === 'details' ? resume.step : steps[0]
-      window.location.replace(stepHref('accommodation-details', fallback, { fromSummary: fromSummary() }))
-      return
+    if (!fromSummary()) {
+      ensureBackLink(session.hasSomewhereToLive === 'yes' ? 'accommodation-settled.html' : 'accommodation.html')
     }
-    if (!fromSummary() && resume && comesBefore(route, resume, { page: 'details', step })) {
-      window.location.replace(stepHref(pageFile(resume.page), resume.step))
-      return
-    }
-    const form = document.getElementById('san-accommodation-details-form')
-    if (form) form.setAttribute('data-san-route', route)
-    if (!fromSummary()) ensureBackLink(backHrefForDetail(session, route, step))
-    showQuestion(step)
+    applyDetailsRoute(route)
     restoreDetails(session)
   }
   if (pageName === 'concerns') {
     if (session.hasSomewhereToLive === 'yes' && !session.accommodationSettled) {
-      window.location.replace('accommodation-settled')
+      window.location.assign('accommodation-settled')
       return
     }
     const route = accommodationRoute(session)
     if (!route) {
-      window.location.replace('accommodation')
+      window.location.assign('accommodation')
       return
     }
-    const step = stepParam()
-    const allowed = (step === 'location' && needsLocationConcerns(session, route))
-      || (step === 'suitable' && needsSuitabilityConcerns(session, route))
-    const resume = resumeTarget(session, route)
-    if (!allowed) {
-      if (resume) {
-        window.location.replace(stepHref(pageFile(resume.page), resume.step, { fromSummary: fromSummary() }))
-      } else {
-        window.location.replace(fromSummary() ? 'accommodation-summary' : stepHref('accommodation-details', firstDetailStep(route)))
-      }
+    if (!concernsNeeded(session, route)) {
+      window.location.assign(detailsAnswered(session) ? 'accommodation-summary' : 'accommodation-details')
       return
     }
-    if (!fromSummary() && resume && comesBefore(route, resume, { page: 'concerns', step })) {
-      window.location.replace(stepHref(pageFile(resume.page), resume.step))
-      return
-    }
-    if (!fromSummary()) ensureBackLink(stepHref('accommodation-details', step))
-    showQuestion(CONCERN_BLOCK[step])
+    applyConcerns(session, route)
     restoreConcerns(session)
   }
   if (pageName === 'summary') {
@@ -1139,7 +984,7 @@ const initSanAccommodation = () => {
       const updates = { ...accommodationAnswers('no', ''), accommodationComplete: false }
       if (previousRoute !== 'none') Object.assign(updates, emptyDetailAnswers())
       setSanSession(updates)
-      window.location.assign(fromSummary() && previousRoute === 'none' ? 'accommodation-summary' : stepHref('accommodation-details', 'no-accommodation'))
+      window.location.assign(fromSummary() && previousRoute === 'none' ? 'accommodation-summary' : 'accommodation-details')
       return
     }
 
@@ -1171,41 +1016,42 @@ const initSanAccommodation = () => {
     setSanSession(updates)
     window.location.assign(fromSummary() && nextRoute === accommodationRoute(previous)
       ? 'accommodation-summary'
-      : stepHref('accommodation-details', firstDetailStep(nextRoute)))
+      : 'accommodation-details')
   })
 
   const detailsForm = document.getElementById('san-accommodation-details-form')
   detailsForm?.addEventListener('submit', (event) => {
     event.preventDefault()
     revealCheckedConditionals()
-    const previous = getSanSession()
-    const route = accommodationRoute(previous)
-    const step = stepParam()
-    const answers = readStepAnswers(step)
-    const errors = validateStep(answers, step)
+    const route = accommodationRoute(getSanSession())
+    const answers = readDetailsAnswers(route)
+    const errors = validateDetails(answers, route)
     if (errors.length) {
       showErrors(errors)
       return
     }
     clearErrors()
-    const patch = patchForStep(step, answers)
-    setSanSession(patch)
-    continueAfterDetail(previous, { ...previous, ...patch }, route, step)
+    const previous = getSanSession()
+    const nextAnswers = keepConcernAnswers(answers, previous)
+    setSanSession({ ...nextAnswers, accommodationComplete: false })
+    const next = { ...previous, ...nextAnswers }
+    if (concernsNeeded(next, route) && (!fromSummary() || concernTriggersChanged(next, previous))) {
+      window.location.assign('accommodation-concerns')
+      return
+    }
+    window.location.assign('accommodation-summary.html')
   })
 
   const concernsForm = document.getElementById('san-accommodation-concerns-form')
   concernsForm?.addEventListener('submit', (event) => {
     event.preventDefault()
     revealCheckedConditionals()
-    const previous = getSanSession()
-    const route = accommodationRoute(previous)
-    const step = stepParam()
-    const patch = { ...readConcernStep(step), accommodationComplete: false }
-    if (step === 'location') patch.locationConcernsSeen = true
-    if (step === 'suitable') patch.suitabilityConcernsSeen = true
+    const session = getSanSession()
+    const route = accommodationRoute(session)
+    const answers = readConcernAnswers(session, route)
     clearErrors()
-    setSanSession(patch)
-    continueAfterConcern({ ...previous, ...patch }, route, step)
+    setSanSession({ ...answers, accommodationComplete: false })
+    window.location.assign('accommodation-summary.html')
   })
 
   const analysisForm = document.getElementById('san-accommodation-analysis-form')

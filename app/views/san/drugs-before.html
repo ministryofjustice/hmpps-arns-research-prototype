@@ -21,6 +21,8 @@
   { id: "ecstasy", label: "Ecstasy (MDMA)" },
   { id: "hallucinogens", label: "Hallucinogens" },
   { id: "heroin", label: "Heroin" },
+  { id: "ketamine", label: "Ketamine" },
+  { id: "mephedrone", label: "Mephedrone (M, M-CAT, meow-meow)" },
   { id: "methadone", label: "Methadone (not prescribed)" },
   { id: "prescribed-drugs", label: "Prescribed drugs" },
   { id: "other-opiates", label: "Other opiates" },
@@ -31,18 +33,18 @@
 ] %}
 
 <form id="san-drugs-before-form" novalidate data-du-page="before">
-  <h1 class="govuk-heading-l">Drug use background</h1>
+  <h1 class="govuk-heading-l">Drug use before custody</h1>
 
   <div data-du-recent-section hidden>
-    <h2 class="govuk-heading-m">Used in the last 6 months</h2>
+    <h2 class="govuk-heading-m">Used in the 6 months before custody</h2>
     <details class="govuk-details">
       <summary class="govuk-details__summary">
         <span class="govuk-details__summary-text">How to record frequency</span>
       </summary>
       <div class="govuk-details__text">
-        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Daily</strong>: uses every day or most days.</p>
-        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Weekly</strong>: uses once or more a week but not daily (for example, every Friday and Saturday night).</p>
-        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Monthly</strong>: uses once or more a month but not every week.</p>
+        <p class="govuk-body"><strong>Daily</strong>: uses every day or most days.</p>
+        <p class="govuk-body"><strong>Weekly</strong>: uses once or more a week but not daily (for example, every Friday and Saturday night).</p>
+        <p class="govuk-body"><strong>Monthly</strong>: uses once or more a month but not every week.</p>
         <p class="govuk-body govuk-!-margin-bottom-0"><strong>Occasionally</strong>: uses less than once a month.</p>
       </div>
     </details>
@@ -53,13 +55,14 @@
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
           <h3 class="govuk-fieldset__heading">{{ drug.label }}</h3>
         </legend>
-        <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-2">How often was Alex using this drug?</p>
+        <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-2">How often was Alex using this drug before custody?</p>
         <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
           {% for option in [
             { id: "daily", label: "Daily" },
             { id: "weekly", label: "Weekly" },
             { id: "monthly", label: "Monthly" },
-            { id: "occasionally", label: "Occasionally" }
+            { id: "occasionally", label: "Occasionally" },
+            { id: "unknown", label: "Unknown" }
           ] %}
           <div class="govuk-radios__item">
             <input class="govuk-radios__input" id="frequency-{{ drug.id }}-{{ option.id }}" name="frequency_{{ drug.id }}" type="radio" value="{{ option.id }}">
@@ -69,7 +72,8 @@
         </div>
       </fieldset>
       <div class="govuk-form-group govuk-!-margin-top-4">
-        <label class="govuk-label" for="frequency-{{ drug.id }}-details">Give details (optional)</label>
+        <label class="govuk-label" for="frequency-{{ drug.id }}-details">Give details about their use of {{ drug.label[0] | lower }}{{ drug.label.slice(1) }} (optional)</label>
+        <div class="govuk-hint">Consider why they started using, their history, and any triggers.</div>
         <textarea class="govuk-textarea" id="frequency-{{ drug.id }}-details" name="frequency_{{ drug.id }}_details" rows="5" maxlength="2000"></textarea>
         <div class="govuk-hint san-character-count" data-san-character-count="frequency-{{ drug.id }}-details">You have 2,000 characters remaining</div>
       </div>
@@ -79,7 +83,7 @@
 
   <div class="san-question" data-du-older-section hidden>
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-    <h2 class="govuk-heading-m">Not used in the last 6 months</h2>
+    <h2 class="govuk-heading-m">Used more than 6 months before custody</h2>
     <div data-du-older-list></div>
     <div class="govuk-form-group govuk-!-padding-top-4">
       <h3 class="govuk-heading-m">Give details about Alex's use of these drugs</h3>
@@ -92,23 +96,17 @@
   <div class="govuk-form-group san-question" data-du-inject-section data-san-error-group="injected">
     <fieldset class="govuk-fieldset" id="injected" aria-describedby="injected-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Which drugs has Alex injected?</h2>
+        <h2 class="govuk-fieldset__heading">Which drugs did Alex inject before custody?</h2>
       </legend>
       <div id="injected-hint" class="govuk-hint">Select all that apply.</div>
       <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-        <div class="govuk-checkboxes__item">
-          <input class="govuk-checkboxes__input" id="injected-none" name="injected_drugs" type="checkbox" value="none" data-behaviour="exclusive">
-          <label class="govuk-label govuk-checkboxes__label" for="injected-none">None</label>
-        </div>
-        <div class="govuk-checkboxes__divider">or</div>
         {% for drug in drugOptions %}
         {% if drug.id not in ["cannabis", "ecstasy", "hallucinogens", "solvents", "synthetic-cannabinoids"] %}
         <div data-du-inject="{{ drug.id }}" hidden>
-          <div class="govuk-checkboxes__item{% if drug.id == 'heroin' %} govuk-!-margin-bottom-2{% endif %}">
-            <input class="govuk-checkboxes__input" id="injected-{{ drug.id }}" name="injected_drugs" type="checkbox" value="{{ drug.id }}"{% if drug.id != "heroin" %} data-aria-controls="conditional-injected-{{ drug.id }}"{% endif %}>
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="injected-{{ drug.id }}" name="injected_drugs" type="checkbox" value="{{ drug.id }}" data-aria-controls="conditional-injected-{{ drug.id }}">
             <label class="govuk-label govuk-checkboxes__label" for="injected-{{ drug.id }}">{{ drug.label }}</label>
           </div>
-          {% if drug.id != "heroin" %}
           <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-injected-{{ drug.id }}">
             <div class="govuk-form-group" data-san-error-group="injected-when-{{ drug.id }}">
               <fieldset class="govuk-fieldset" id="injected-when-{{ drug.id }}" aria-describedby="injected-when-{{ drug.id }}-hint">
@@ -117,51 +115,23 @@
                 <div class="govuk-checkboxes">
                   <div class="govuk-checkboxes__item">
                     <input class="govuk-checkboxes__input" id="injected-when-{{ drug.id }}-last-six" name="injected_when_{{ drug.id }}" type="checkbox" value="last-six">
-                    <label class="govuk-label govuk-checkboxes__label" for="injected-when-{{ drug.id }}-last-six">In the last 6 months</label>
+                    <label class="govuk-label govuk-checkboxes__label" for="injected-when-{{ drug.id }}-last-six">In the 6 months before custody</label>
                   </div>
                   <div class="govuk-checkboxes__item">
                     <input class="govuk-checkboxes__input" id="injected-when-{{ drug.id }}-more-than-six" name="injected_when_{{ drug.id }}" type="checkbox" value="more-than-six">
-                    <label class="govuk-label govuk-checkboxes__label" for="injected-when-{{ drug.id }}-more-than-six">More than 6 months ago</label>
+                    <label class="govuk-label govuk-checkboxes__label" for="injected-when-{{ drug.id }}-more-than-six">More than 6 months before custody</label>
                   </div>
                 </div>
               </fieldset>
             </div>
           </div>
-          {% endif %}
         </div>
         {% endif %}
         {% endfor %}
-      </div>
-    </fieldset>
-  </div>
-
-  <div class="govuk-form-group san-question" data-san-error-group="treatment">
-    <fieldset class="govuk-fieldset" id="treatment">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Is Alex receiving treatment for their drug use?</h2>
-      </legend>
-      <div class="govuk-radios" data-module="govuk-radios">
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="treatment-yes" name="receiving_treatment" type="radio" value="yes" data-aria-controls="conditional-treatment-yes">
-          <label class="govuk-label govuk-radios__label" for="treatment-yes">Yes</label>
-        </div>
-        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-treatment-yes">
-          <div class="govuk-form-group" data-san-error-group="treatment-yes-details">
-            <label class="govuk-label" for="treatment-yes-details">Give details</label>
-            <textarea class="govuk-textarea" id="treatment-yes-details" name="treatment_yes_details" rows="5" maxlength="2000"></textarea>
-            <div class="govuk-hint san-character-count" data-san-character-count="treatment-yes-details">You have 2,000 characters remaining</div>
-          </div>
-        </div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="treatment-no" name="receiving_treatment" type="radio" value="no" data-aria-controls="conditional-treatment-no">
-          <label class="govuk-label govuk-radios__label" for="treatment-no">No</label>
-        </div>
-        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-treatment-no">
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="treatment-no-details">Give details (optional)</label>
-            <textarea class="govuk-textarea" id="treatment-no-details" name="treatment_no_details" rows="5" maxlength="2000"></textarea>
-            <div class="govuk-hint san-character-count" data-san-character-count="treatment-no-details">You have 2,000 characters remaining</div>
-          </div>
+        <div class="govuk-checkboxes__divider">or</div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="injected-none" name="injected_drugs" type="checkbox" value="none" data-behaviour="exclusive">
+          <label class="govuk-label govuk-checkboxes__label" for="injected-none">None</label>
         </div>
       </div>
     </fieldset>

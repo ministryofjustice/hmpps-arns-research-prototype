@@ -24,8 +24,8 @@
   { id: "ketamine", label: "Ketamine" },
   { id: "mephedrone", label: "Mephedrone (M, M-CAT, meow-meow)" },
   { id: "methadone", label: "Methadone (not prescribed)" },
+  { id: "prescribed-drugs", label: "Prescribed drugs" },
   { id: "other-opiates", label: "Other opiates" },
-  { id: "prescribed-drugs", label: "Prescribed or over the counter drugs, such as paracetamol" },
   { id: "solvents", label: "Solvents (including gases and glues)" },
   { id: "steroids", label: "Steroids" },
   { id: "synthetic-cannabinoids", label: "Synthetic cannabinoids (spice)" },
@@ -46,11 +46,11 @@
       <div class="govuk-checkboxes" data-module="govuk-checkboxes">
         <div class="govuk-checkboxes__item">
           <input class="govuk-checkboxes__input" id="injected-when-{{ drug.id }}-last-six" name="injected_when_{{ drug.id }}" type="checkbox" value="last-six">
-          <label class="govuk-label govuk-checkboxes__label" for="injected-when-{{ drug.id }}-last-six">In the last 6 months</label>
+          <label class="govuk-label govuk-checkboxes__label" for="injected-when-{{ drug.id }}-last-six">In the 6 months before custody</label>
         </div>
         <div class="govuk-checkboxes__item">
           <input class="govuk-checkboxes__input" id="injected-when-{{ drug.id }}-more-than-six" name="injected_when_{{ drug.id }}" type="checkbox" value="more-than-six">
-          <label class="govuk-label govuk-checkboxes__label" for="injected-when-{{ drug.id }}-more-than-six">More than 6 months ago</label>
+          <label class="govuk-label govuk-checkboxes__label" for="injected-when-{{ drug.id }}-more-than-six">More than 6 months before custody</label>
         </div>
       </div>
     </fieldset>

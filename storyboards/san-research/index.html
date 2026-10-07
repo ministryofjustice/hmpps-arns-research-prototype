@@ -26,7 +26,6 @@
     h2 { font-size: 22px; margin: 0 0 8px; }
     h3 { font-size: 16px; margin: 0 0 8px; }
     p { margin: 0 0 8px; }
-    code { font-family: ui-monospace, monospace; }
     .lede { color: var(--muted); max-width: 72ch; margin-bottom: 24px; }
     .tabs {
       display: flex;
@@ -113,7 +112,7 @@
     }
     @media print {
       body { padding: 0; background: #fff; }
-      .tabs, .howto { display: none; }
+      .tabs { display: none; }
       .tab-panel[hidden] { display: block !important; }
       .journey__steps { overflow: visible; flex-wrap: wrap; }
       .card { break-inside: avoid; }
@@ -122,11 +121,11 @@
 </head>
 <body>
   <h1>SAN research storyboard</h1>
-  <p class="lede">Screen-by-screen journeys for accommodation, employment and education, finances and drug use.</p>
-  <p class="howto">For Miro, open <code>storyboards/san-research/images</code> and drag a section folder onto the board. Filenames sort in journey order, so the screens land in step sequence. You can also copy the PNGs and paste them straight onto a frame.</p>
+  <p class="lede">Screen-by-screen journeys for the active SAN research sections. Use the tabs to switch section.</p>
+  <p class="howto">For Miro, drag the matching folder under <code>images</code> onto a board — filenames sort in journey order. Print to PDF if you want a single file to share (print includes every section).</p>
   <nav class="tabs" role="tablist" aria-label="SAN research sections"><a class="tabs__tab" role="tab" href="#accommodation" id="tab-accommodation" aria-selected="true" aria-controls="accommodation">Accommodation</a><a class="tabs__tab" role="tab" href="#employment" id="tab-employment" aria-selected="false" aria-controls="employment">Employment and education</a><a class="tabs__tab" role="tab" href="#finances" id="tab-finances" aria-selected="false" aria-controls="finances">Finances</a><a class="tabs__tab" role="tab" href="#drugs" id="tab-drugs" aria-selected="false" aria-controls="drugs">Drug use</a></nav>
   <section class="tab-panel" role="tabpanel" id="accommodation" aria-labelledby="tab-accommodation">
-    <p class="lede">Settled accommodation asks location, then suitability. A concern page follows only when the answer needs it. No accommodation skips settled and both concern pages, and asks why there is no accommodation and about changes on the same page.</p>
+    <p class="lede">Filled answers so summaries and conditionals match a real assessment. Temporary accommodation uses the same details questions as settled in this prototype, so it is not a separate row.</p>
     <h2>Routes</h2>
     <ol class="flow"><li class="flow__item">
       <span class="flow__from">Somewhere to live</span>
@@ -136,33 +135,38 @@
     </li><li class="flow__item">
       <span class="flow__from">Somewhere to live</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
-      <span class="flow__to">Why no accommodation, and changes</span>
-      <span class="flow__when">No. Both questions on one page</span>
+      <span class="flow__to">Details (no accommodation)</span>
+      <span class="flow__when">No</span>
     </li><li class="flow__item">
-      <span class="flow__from">Location is not suitable</span>
+      <span class="flow__from">Is it settled?</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
-      <span class="flow__to">Location concerns</span>
-      
+      <span class="flow__to">Details (location and suitability)</span>
+      <span class="flow__when">Yes or no</span>
     </li><li class="flow__item">
-      <span class="flow__from">Suitability concerns, or not suitable</span>
+      <span class="flow__from">Details</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
-      <span class="flow__to">Suitability concerns</span>
-      
+      <span class="flow__to">Concerns</span>
+      <span class="flow__when">Location no, or suitability concerns</span>
     </li><li class="flow__item">
-      <span class="flow__from">No concerns</span>
-      <span class="flow__arrow" aria-hidden="true">→</span>
-      <span class="flow__to">Changes</span>
-      <span class="flow__when">Location yes and suitability yes</span>
-    </li><li class="flow__item">
-      <span class="flow__from">Changes</span>
+      <span class="flow__from">Details</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
       <span class="flow__to">Summary</span>
+      <span class="flow__when">No concerns, or no accommodation</span>
+    </li><li class="flow__item">
+      <span class="flow__from">Concerns</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Summary</span>
+      
+    </li><li class="flow__item">
+      <span class="flow__from">Summary</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Practitioner analysis</span>
       
     </li></ol>
     <section class="journey">
       <header class="journey__header">
         <h2>Settled, with concerns</h2>
-        <p>Has somewhere to live, settled. Location is not suitable and there are suitability concerns, so both concern pages are shown.</p>
+        <p>Has somewhere to live, settled. Location is not suitable and there are suitability concerns, so the concerns page is shown.</p>
       </header>
       <ol class="journey__steps">
       <li class="card">
@@ -172,60 +176,46 @@
         <p class="card__file">01-settled-with-concerns__01__somewhere-to-live.png</p>
         <img src="images/accommodation/01-settled-with-concerns__01__somewhere-to-live.png" alt="Does Alex currently have somewhere to live?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 2</p>
         <h3 class="card__title">Is Alex's accommodation settled?</h3>
         <p class="card__note">Yes selected</p>
         <p class="card__file">01-settled-with-concerns__02__settled.png</p>
         <img src="images/accommodation/01-settled-with-concerns__02__settled.png" alt="Is Alex's accommodation settled?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 3</p>
-        <h3 class="card__title">Is the location of Alex's accommodation suitable?</h3>
-        <p class="card__note">No selected</p>
-        <p class="card__file">01-settled-with-concerns__03__location.png</p>
-        <img src="images/accommodation/01-settled-with-concerns__03__location.png" alt="Is the location of Alex's accommodation suitable?">
+        <h3 class="card__title">Location, suitability and changes</h3>
+        <p class="card__note">Location no · suitability yes, with concerns</p>
+        <p class="card__file">01-settled-with-concerns__03__details.png</p>
+        <img src="images/accommodation/01-settled-with-concerns__03__details.png" alt="Location, suitability and changes">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 4</p>
-        <h3 class="card__title">Concerns about the location</h3>
-        <p class="card__note">Shown because location is not suitable</p>
-        <p class="card__file">01-settled-with-concerns__04__location-concerns.png</p>
-        <img src="images/accommodation/01-settled-with-concerns__04__location-concerns.png" alt="Concerns about the location">
+        <h3 class="card__title">Location and suitability concerns</h3>
+        <p class="card__note">Only shown when location or suitability triggers concerns</p>
+        <p class="card__file">01-settled-with-concerns__04__concerns.png</p>
+        <img src="images/accommodation/01-settled-with-concerns__04__concerns.png" alt="Location and suitability concerns">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 5</p>
-        <h3 class="card__title">Is Alex's accommodation suitable?</h3>
-        <p class="card__note">Yes, with concerns</p>
-        <p class="card__file">01-settled-with-concerns__05__suitability.png</p>
-        <img src="images/accommodation/01-settled-with-concerns__05__suitability.png" alt="Is Alex's accommodation suitable?">
-      </li>
-<li class="card">
-        <p class="card__step">Step 6</p>
-        <h3 class="card__title">Concerns about suitability</h3>
-        <p class="card__note">Shown because there are suitability concerns</p>
-        <p class="card__file">01-settled-with-concerns__06__suitability-concerns.png</p>
-        <img src="images/accommodation/01-settled-with-concerns__06__suitability-concerns.png" alt="Concerns about suitability">
-      </li>
-<li class="card">
-        <p class="card__step">Step 7</p>
-        <h3 class="card__title">Does Alex want to make changes to their accommodation?</h3>
-        <p class="card__note">Last question before summary</p>
-        <p class="card__file">01-settled-with-concerns__07__changes.png</p>
-        <img src="images/accommodation/01-settled-with-concerns__07__changes.png" alt="Does Alex want to make changes to their accommodation?">
-      </li>
-<li class="card">
-        <p class="card__step">Step 8</p>
         <h3 class="card__title">Summary</h3>
         <p class="card__note">Answers tab</p>
-        <p class="card__file">01-settled-with-concerns__08__summary.png</p>
-        <img src="images/accommodation/01-settled-with-concerns__08__summary.png" alt="Summary">
+        <p class="card__file">01-settled-with-concerns__05__summary.png</p>
+        <img src="images/accommodation/01-settled-with-concerns__05__summary.png" alt="Summary">
+      </li>
+      <li class="card">
+        <p class="card__step">Step 6</p>
+        <h3 class="card__title">Practitioner analysis</h3>
+        <p class="card__note">Completed analysis</p>
+        <p class="card__file">01-settled-with-concerns__06__practitioner-analysis.png</p>
+        <img src="images/accommodation/01-settled-with-concerns__06__practitioner-analysis.png" alt="Practitioner analysis">
       </li></ol>
     </section>
 <section class="journey">
       <header class="journey__header">
         <h2>No accommodation</h2>
-        <p>Skips the settled and concerns pages. Why there is no accommodation and whether Alex wants to make changes are on the same page.</p>
+        <p>Skips the settled and concerns pages. Details shows homelessness reasons and changes only.</p>
       </header>
       <ol class="journey__steps">
       <li class="card">
@@ -235,14 +225,14 @@
         <p class="card__file">02-no-accommodation__01__somewhere-to-live.png</p>
         <img src="images/accommodation/02-no-accommodation__01__somewhere-to-live.png" alt="Does Alex currently have somewhere to live?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 2</p>
         <h3 class="card__title">Why no accommodation, and changes</h3>
-        <p class="card__note">Both questions on one page</p>
-        <p class="card__file">02-no-accommodation__02__no-accommodation.png</p>
-        <img src="images/accommodation/02-no-accommodation__02__no-accommodation.png" alt="Why no accommodation, and changes">
+        <p class="card__note">Settled page skipped</p>
+        <p class="card__file">02-no-accommodation__02__details.png</p>
+        <img src="images/accommodation/02-no-accommodation__02__details.png" alt="Why no accommodation, and changes">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 3</p>
         <h3 class="card__title">Summary</h3>
         <p class="card__note">Answers tab</p>
@@ -250,15 +240,50 @@
         <img src="images/accommodation/02-no-accommodation__03__summary.png" alt="Summary">
       </li></ol>
     </section>
+<section class="journey">
+      <header class="journey__header">
+        <h2>Settled, no concerns</h2>
+        <p>Has somewhere to live, settled. Location and suitability are both yes, so concerns is skipped.</p>
+      </header>
+      <ol class="journey__steps">
+      <li class="card">
+        <p class="card__step">Step 1</p>
+        <h3 class="card__title">Does Alex currently have somewhere to live?</h3>
+        <p class="card__note">Yes selected</p>
+        <p class="card__file">03-settled-no-concerns__01__somewhere-to-live.png</p>
+        <img src="images/accommodation/03-settled-no-concerns__01__somewhere-to-live.png" alt="Does Alex currently have somewhere to live?">
+      </li>
+      <li class="card">
+        <p class="card__step">Step 2</p>
+        <h3 class="card__title">Is Alex's accommodation settled?</h3>
+        <p class="card__note">Yes selected</p>
+        <p class="card__file">03-settled-no-concerns__02__settled.png</p>
+        <img src="images/accommodation/03-settled-no-concerns__02__settled.png" alt="Is Alex's accommodation settled?">
+      </li>
+      <li class="card">
+        <p class="card__step">Step 3</p>
+        <h3 class="card__title">Location, suitability and changes</h3>
+        <p class="card__note">Location yes · suitability yes · skips concerns</p>
+        <p class="card__file">03-settled-no-concerns__03__details.png</p>
+        <img src="images/accommodation/03-settled-no-concerns__03__details.png" alt="Location, suitability and changes">
+      </li>
+      <li class="card">
+        <p class="card__step">Step 4</p>
+        <h3 class="card__title">Summary</h3>
+        <p class="card__note">Answers tab</p>
+        <p class="card__file">03-settled-no-concerns__04__summary.png</p>
+        <img src="images/accommodation/03-settled-no-concerns__04__summary.png" alt="Summary">
+      </li></ol>
+    </section>
   </section>
 <section class="tab-panel" role="tabpanel" id="employment" aria-labelledby="tab-employment" hidden>
-    <p class="lede">Employed or self-employed goes straight to details, including employment history. Unemployed asks if Alex has been employed before. Never employed hides employment history. These journeys select no reading, writing or numeracy difficulties, so the difficulty page is skipped.</p>
+    <p class="lede">Employed goes straight to details. Unemployed and unavailable for work ask if Alex has been employed before. Never employed hides the employment history question.</p>
     <h2>Routes</h2>
     <ol class="flow"><li class="flow__item">
       <span class="flow__from">Employment status</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
       <span class="flow__to">Details</span>
-      <span class="flow__when">Employed, self-employed or retired</span>
+      <span class="flow__when">Employed or retired</span>
     </li><li class="flow__item">
       <span class="flow__from">Employment status</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
@@ -272,13 +297,13 @@
     </li><li class="flow__item">
       <span class="flow__from">Details</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
-      <span class="flow__to">How much difficulty?</span>
-      <span class="flow__when">Reading, writing or numeracy selected</span>
-    </li><li class="flow__item">
-      <span class="flow__from">Details</span>
-      <span class="flow__arrow" aria-hidden="true">→</span>
       <span class="flow__to">Summary</span>
-      <span class="flow__when">No difficulties</span>
+      
+    </li><li class="flow__item">
+      <span class="flow__from">Summary</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Practitioner analysis</span>
+      
     </li></ol>
     <section class="journey">
       <header class="journey__header">
@@ -293,19 +318,26 @@
         <p class="card__file">01-employed__01__status.png</p>
         <img src="images/employment/01-employed__01__status.png" alt="What is Alex's current employment status?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 2</p>
         <h3 class="card__title">History, commitments, qualifications, skills and changes</h3>
         <p class="card__note">Employment history is shown</p>
         <p class="card__file">01-employed__02__details.png</p>
         <img src="images/employment/01-employed__02__details.png" alt="History, commitments, qualifications, skills and changes">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 3</p>
         <h3 class="card__title">Summary</h3>
-        <p class="card__note">Answers tab. Difficulty page skipped</p>
+        <p class="card__note">Answers tab</p>
         <p class="card__file">01-employed__03__summary.png</p>
         <img src="images/employment/01-employed__03__summary.png" alt="Summary">
+      </li>
+      <li class="card">
+        <p class="card__step">Step 4</p>
+        <h3 class="card__title">Practitioner analysis</h3>
+        <p class="card__note">Completed analysis</p>
+        <p class="card__file">01-employed__04__practitioner-analysis.png</p>
+        <img src="images/employment/01-employed__04__practitioner-analysis.png" alt="Practitioner analysis">
       </li></ol>
     </section>
 <section class="journey">
@@ -321,21 +353,21 @@
         <p class="card__file">02-unemployed-never__01__status.png</p>
         <img src="images/employment/02-unemployed-never__01__status.png" alt="What is Alex's current employment status?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 2</p>
-        <h3 class="card__title">Has Alex ever had a job?</h3>
+        <h3 class="card__title">Has Alex been employed before?</h3>
         <p class="card__note">No selected</p>
         <p class="card__file">02-unemployed-never__02__job.png</p>
-        <img src="images/employment/02-unemployed-never__02__job.png" alt="Has Alex ever had a job?">
+        <img src="images/employment/02-unemployed-never__02__job.png" alt="Has Alex been employed before?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 3</p>
         <h3 class="card__title">Commitments, qualifications, skills and changes</h3>
         <p class="card__note">Employment history hidden</p>
         <p class="card__file">02-unemployed-never__03__details.png</p>
         <img src="images/employment/02-unemployed-never__03__details.png" alt="Commitments, qualifications, skills and changes">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 4</p>
         <h3 class="card__title">Summary</h3>
         <p class="card__note">Answers tab</p>
@@ -345,13 +377,13 @@
     </section>
   </section>
 <section class="tab-panel" role="tabpanel" id="finances" aria-labelledby="tab-finances" hidden>
-    <p class="lede">Income from family or friends opens the over-reliant page. Yes on that page skips the further assessment question and goes straight to money management. No or unknown still asks further assessment. Own debt adds a debt types page.</p>
+    <p class="lede">Income from family or friends opens the over-reliant page. Further assessment “yes” splits money management, debt and changes onto their own pages. Own debt adds a debt types page.</p>
     <h2>Routes</h2>
     <ol class="flow"><li class="flow__item">
       <span class="flow__from">Income</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
       <span class="flow__to">Over-reliant on family?</span>
-      <span class="flow__when">Income includes family or friends</span>
+      <span class="flow__when">Income includes family</span>
     </li><li class="flow__item">
       <span class="flow__from">Income</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
@@ -360,13 +392,8 @@
     </li><li class="flow__item">
       <span class="flow__from">Over-reliant on family?</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
-      <span class="flow__to">Money management</span>
-      <span class="flow__when">Yes</span>
-    </li><li class="flow__item">
-      <span class="flow__from">Over-reliant on family?</span>
-      <span class="flow__arrow" aria-hidden="true">→</span>
       <span class="flow__to">Further assessment?</span>
-      <span class="flow__when">No or unknown</span>
+      
     </li><li class="flow__item">
       <span class="flow__from">Further assessment?</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
@@ -378,70 +405,104 @@
       <span class="flow__to">Money management</span>
       <span class="flow__when">Yes</span>
     </li><li class="flow__item">
+      <span class="flow__from">Money management</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Debt</span>
+      
+    </li><li class="flow__item">
       <span class="flow__from">Debt</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
       <span class="flow__to">Debt types</span>
       <span class="flow__when">Own debt</span>
     </li><li class="flow__item">
-      <span class="flow__from">Debt types or no own debt</span>
+      <span class="flow__from">Debt</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
-      <span class="flow__to">Changes, then summary</span>
+      <span class="flow__to">Changes</span>
+      <span class="flow__when">No own debt</span>
+    </li><li class="flow__item">
+      <span class="flow__from">Debt types</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Changes</span>
+      
+    </li><li class="flow__item">
+      <span class="flow__from">Changes</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Summary</span>
+      
+    </li><li class="flow__item">
+      <span class="flow__from">Summary</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Practitioner analysis</span>
       
     </li></ol>
     <section class="journey">
       <header class="journey__header">
         <h2>Further assessment, with family income and own debt</h2>
-        <p>Family income shows the over-reliant page. Yes is selected, so the further assessment question is skipped. Money management, debt, debt types and changes follow.</p>
+        <p>Family income shows the over-reliant page. Further assessment yes then money management, debt, debt types and changes.</p>
       </header>
       <ol class="journey__steps">
       <li class="card">
         <p class="card__step">Step 1</p>
         <h3 class="card__title">Where does Alex currently get their money from?</h3>
-        <p class="card__note">Employment and family or friends</p>
+        <p class="card__note">Employment and family</p>
         <p class="card__file">01-full-follow-on__01__income.png</p>
         <img src="images/finances/01-full-follow-on__01__income.png" alt="Where does Alex currently get their money from?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 2</p>
-        <h3 class="card__title">Is Alex over-reliant on family or friends for money?</h3>
-        <p class="card__note">Yes selected. This skips the further assessment question</p>
+        <h3 class="card__title">Is Alex over-reliant on family or friends?</h3>
+        <p class="card__note">Only shown when income includes family</p>
         <p class="card__file">01-full-follow-on__02__overreliant.png</p>
-        <img src="images/finances/01-full-follow-on__02__overreliant.png" alt="Is Alex over-reliant on family or friends for money?">
+        <img src="images/finances/01-full-follow-on__02__overreliant.png" alt="Is Alex over-reliant on family or friends?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 3</p>
-        <h3 class="card__title">How good is Alex at managing their money?</h3>
-        <p class="card__note">Follow-on starts here</p>
-        <p class="card__file">01-full-follow-on__03__money-management.png</p>
-        <img src="images/finances/01-full-follow-on__03__money-management.png" alt="How good is Alex at managing their money?">
+        <h3 class="card__title">Does the situation need further assessment?</h3>
+        <p class="card__note">Yes selected</p>
+        <p class="card__file">01-full-follow-on__03__assessment.png</p>
+        <img src="images/finances/01-full-follow-on__03__assessment.png" alt="Does the situation need further assessment?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 4</p>
-        <h3 class="card__title">Is Alex affected by debt?</h3>
-        <p class="card__note">Own debt selected</p>
-        <p class="card__file">01-full-follow-on__04__debt.png</p>
-        <img src="images/finances/01-full-follow-on__04__debt.png" alt="Is Alex affected by debt?">
+        <h3 class="card__title">How well does Alex manage their money?</h3>
+        <p class="card__note">Follow-on starts here</p>
+        <p class="card__file">01-full-follow-on__04__further.png</p>
+        <img src="images/finances/01-full-follow-on__04__further.png" alt="How well does Alex manage their money?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 5</p>
-        <h3 class="card__title">What type of debt does Alex have?</h3>
-        <p class="card__note">Only shown for own debt</p>
-        <p class="card__file">01-full-follow-on__05__debt-types.png</p>
-        <img src="images/finances/01-full-follow-on__05__debt-types.png" alt="What type of debt does Alex have?">
+        <h3 class="card__title">Is Alex in debt?</h3>
+        <p class="card__note">Own debt selected</p>
+        <p class="card__file">01-full-follow-on__05__debt.png</p>
+        <img src="images/finances/01-full-follow-on__05__debt.png" alt="Is Alex in debt?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 6</p>
+        <h3 class="card__title">What type of debt?</h3>
+        <p class="card__note">Only shown for own debt</p>
+        <p class="card__file">01-full-follow-on__06__debt-types.png</p>
+        <img src="images/finances/01-full-follow-on__06__debt-types.png" alt="What type of debt?">
+      </li>
+      <li class="card">
+        <p class="card__step">Step 7</p>
         <h3 class="card__title">Does Alex want to make changes to their finances?</h3>
         <p class="card__note">Last follow-on page</p>
-        <p class="card__file">01-full-follow-on__06__changes.png</p>
-        <img src="images/finances/01-full-follow-on__06__changes.png" alt="Does Alex want to make changes to their finances?">
+        <p class="card__file">01-full-follow-on__07__changes.png</p>
+        <img src="images/finances/01-full-follow-on__07__changes.png" alt="Does Alex want to make changes to their finances?">
       </li>
-<li class="card">
-        <p class="card__step">Step 7</p>
+      <li class="card">
+        <p class="card__step">Step 8</p>
         <h3 class="card__title">Summary</h3>
-        <p class="card__note">Answers tab. Includes yes to over-reliant</p>
-        <p class="card__file">01-full-follow-on__07__summary.png</p>
-        <img src="images/finances/01-full-follow-on__07__summary.png" alt="Summary">
+        <p class="card__note">Answers tab</p>
+        <p class="card__file">01-full-follow-on__08__summary.png</p>
+        <img src="images/finances/01-full-follow-on__08__summary.png" alt="Summary">
+      </li>
+      <li class="card">
+        <p class="card__step">Step 9</p>
+        <h3 class="card__title">Practitioner analysis</h3>
+        <p class="card__note">Completed analysis</p>
+        <p class="card__file">01-full-follow-on__09__practitioner-analysis.png</p>
+        <img src="images/finances/01-full-follow-on__09__practitioner-analysis.png" alt="Practitioner analysis">
       </li></ol>
     </section>
 <section class="journey">
@@ -453,18 +514,18 @@
       <li class="card">
         <p class="card__step">Step 1</p>
         <h3 class="card__title">Where does Alex currently get their money from?</h3>
-        <p class="card__note">Employment only. Skips over-reliant</p>
+        <p class="card__note">Employment only · skips over-reliant</p>
         <p class="card__file">02-no-further__01__income.png</p>
         <img src="images/finances/02-no-further__01__income.png" alt="Where does Alex currently get their money from?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 2</p>
-        <h3 class="card__title">Is there anything about Alex's financial situation that may need further assessment?</h3>
-        <p class="card__note">No selected. Skips follow-on pages</p>
+        <h3 class="card__title">Does the situation need further assessment?</h3>
+        <p class="card__note">No selected · skips follow-on pages</p>
         <p class="card__file">02-no-further__02__assessment.png</p>
-        <img src="images/finances/02-no-further__02__assessment.png" alt="Is there anything about Alex's financial situation that may need further assessment?">
+        <img src="images/finances/02-no-further__02__assessment.png" alt="Does the situation need further assessment?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 3</p>
         <h3 class="card__title">Summary</h3>
         <p class="card__note">Answers tab</p>
@@ -474,7 +535,7 @@
     </section>
   </section>
 <section class="tab-panel" role="tabpanel" id="drugs" aria-labelledby="tab-drugs" hidden>
-    <p class="lede">No drug use goes to summary. Yes then asks which drugs, when they were last used, and background. The injected-when page appears only if an injectable drug was injected.</p>
+    <p class="lede">No drug use goes to summary. Yes then types, when last used, use before custody, optional injected-when, then background. Injected-when only appears if an injectable drug was injected.</p>
     <h2>Routes</h2>
     <ol class="flow"><li class="flow__item">
       <span class="flow__from">Ever used drugs?</span>
@@ -487,20 +548,40 @@
       <span class="flow__to">Which drugs?</span>
       <span class="flow__when">Yes</span>
     </li><li class="flow__item">
+      <span class="flow__from">Which drugs?</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">When last used</span>
+      
+    </li><li class="flow__item">
       <span class="flow__from">When last used</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Before custody</span>
+      
+    </li><li class="flow__item">
+      <span class="flow__from">Before custody</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">When injected</span>
+      <span class="flow__when">Injected an injectable drug</span>
+    </li><li class="flow__item">
+      <span class="flow__from">Before custody</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Background</span>
+      <span class="flow__when">Did not inject</span>
+    </li><li class="flow__item">
+      <span class="flow__from">When injected</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
       <span class="flow__to">Background</span>
       
     </li><li class="flow__item">
       <span class="flow__from">Background</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
-      <span class="flow__to">When injected</span>
-      <span class="flow__when">Injected an injectable drug</span>
-    </li><li class="flow__item">
-      <span class="flow__from">Background</span>
-      <span class="flow__arrow" aria-hidden="true">→</span>
       <span class="flow__to">Summary</span>
-      <span class="flow__when">Did not inject, or the drug is not injectable</span>
+      
+    </li><li class="flow__item">
+      <span class="flow__from">Summary</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Practitioner analysis</span>
+      
     </li></ol>
     <section class="journey">
       <header class="journey__header">
@@ -515,47 +596,54 @@
         <p class="card__file">01-injects__01__use.png</p>
         <img src="images/drugs/01-injects__01__use.png" alt="Has Alex ever used illegal drugs or misused medication?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 2</p>
         <h3 class="card__title">Which drugs has Alex used?</h3>
-        <p class="card__note">Heroin</p>
+        <p class="card__note">Heroin, cannabis and hallucinogens</p>
         <p class="card__file">01-injects__02__types.png</p>
         <img src="images/drugs/01-injects__02__types.png" alt="Which drugs has Alex used?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 3</p>
-        <h3 class="card__title">When did Alex use these drugs?</h3>
+        <h3 class="card__title">When did Alex last use each drug?</h3>
         <p class="card__note">Heroin in the last 6 months</p>
         <p class="card__file">01-injects__03__when.png</p>
-        <img src="images/drugs/01-injects__03__when.png" alt="When did Alex use these drugs?">
+        <img src="images/drugs/01-injects__03__when.png" alt="When did Alex last use each drug?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 4</p>
-        <h3 class="card__title">Drug use background</h3>
-        <p class="card__note">Frequency, and heroin selected as injected</p>
+        <h3 class="card__title">Drug use before custody</h3>
+        <p class="card__note">Frequency and injecting</p>
         <p class="card__file">01-injects__04__before.png</p>
-        <img src="images/drugs/01-injects__04__before.png" alt="Drug use background">
+        <img src="images/drugs/01-injects__04__before.png" alt="Drug use before custody">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 5</p>
         <h3 class="card__title">When has Alex injected this drug?</h3>
-        <p class="card__note">Only shown because heroin was injected</p>
+        <p class="card__note">Only shown if an injectable drug was injected</p>
         <p class="card__file">01-injects__05__injected.png</p>
         <img src="images/drugs/01-injects__05__injected.png" alt="When has Alex injected this drug?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 6</p>
         <h3 class="card__title">Treatment, why, how it affects them, and changes</h3>
-        <p class="card__note">After the injecting question</p>
+        <p class="card__note">After injecting questions</p>
         <p class="card__file">01-injects__06__background.png</p>
         <img src="images/drugs/01-injects__06__background.png" alt="Treatment, why, how it affects them, and changes">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 7</p>
         <h3 class="card__title">Summary</h3>
         <p class="card__note">Answers tab</p>
         <p class="card__file">01-injects__07__summary.png</p>
         <img src="images/drugs/01-injects__07__summary.png" alt="Summary">
+      </li>
+      <li class="card">
+        <p class="card__step">Step 8</p>
+        <h3 class="card__title">Practitioner analysis</h3>
+        <p class="card__note">Completed analysis</p>
+        <p class="card__file">01-injects__08__practitioner-analysis.png</p>
+        <img src="images/drugs/01-injects__08__practitioner-analysis.png" alt="Practitioner analysis">
       </li></ol>
     </section>
 <section class="journey">
@@ -571,35 +659,35 @@
         <p class="card__file">02-no-inject__01__use.png</p>
         <img src="images/drugs/02-no-inject__01__use.png" alt="Has Alex ever used illegal drugs or misused medication?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 2</p>
         <h3 class="card__title">Which drugs has Alex used?</h3>
         <p class="card__note">Cannabis only</p>
         <p class="card__file">02-no-inject__02__types.png</p>
         <img src="images/drugs/02-no-inject__02__types.png" alt="Which drugs has Alex used?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 3</p>
-        <h3 class="card__title">When did Alex use these drugs?</h3>
+        <h3 class="card__title">When did Alex last use each drug?</h3>
         <p class="card__note">Last 6 months</p>
         <p class="card__file">02-no-inject__03__when.png</p>
-        <img src="images/drugs/02-no-inject__03__when.png" alt="When did Alex use these drugs?">
+        <img src="images/drugs/02-no-inject__03__when.png" alt="When did Alex last use each drug?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 4</p>
-        <h3 class="card__title">Drug use background</h3>
+        <h3 class="card__title">Drug use before custody</h3>
         <p class="card__note">Injecting question hidden</p>
         <p class="card__file">02-no-inject__04__before.png</p>
-        <img src="images/drugs/02-no-inject__04__before.png" alt="Drug use background">
+        <img src="images/drugs/02-no-inject__04__before.png" alt="Drug use before custody">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 5</p>
         <h3 class="card__title">Treatment, why, how it affects them, and changes</h3>
         <p class="card__note">Injected-when skipped</p>
         <p class="card__file">02-no-inject__05__background.png</p>
         <img src="images/drugs/02-no-inject__05__background.png" alt="Treatment, why, how it affects them, and changes">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 6</p>
         <h3 class="card__title">Summary</h3>
         <p class="card__note">Answers tab</p>
@@ -620,7 +708,7 @@
         <p class="card__file">03-none__01__use.png</p>
         <img src="images/drugs/03-none__01__use.png" alt="Has Alex ever used illegal drugs or misused medication?">
       </li>
-<li class="card">
+      <li class="card">
         <p class="card__step">Step 2</p>
         <h3 class="card__title">Summary</h3>
         <p class="card__note">Answers tab</p>

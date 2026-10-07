@@ -250,14 +250,7 @@ const applyProgress = (session) => {
   }
 }
 
-const skipsFurtherAssessmentQuestion = (session) =>
-  needsOverreliant(session) && session.financeOverreliant === 'yes'
-
-const entersFollowOn = (session) =>
-  skipsFurtherAssessmentQuestion(session) || session.financeFurtherAssessment === 'yes'
-
-const skipsFurtherFinance = (session) =>
-  !skipsFurtherAssessmentQuestion(session) && session.financeFurtherAssessment === 'no'
+const skipsFurtherFinance = (session) => session.financeFurtherAssessment === 'no'
 
 const needsOwnDebtTypes = (session) => Array.isArray(session.financeDebt) && session.financeDebt.includes('own')
 
@@ -277,14 +270,11 @@ const followOnAnswered = (session) => {
 const questionsAnswered = (session) => {
   if (!(Array.isArray(session.financeIncome) && session.financeIncome.length)) return false
   if (needsOverreliant(session) && !session.financeOverreliant) return false
-  if (skipsFurtherAssessmentQuestion(session)) return followOnAnswered(session)
   if (!session.financeFurtherAssessment) return false
   if (skipsFurtherFinance(session)) return true
   if (!followOnAnswered(session)) return false
   return true
 }
-
-const analysisNotRequired = (session) => skipsFurtherFinance(session)
 
 const nextFollowOnPage = (session, fromSummaryFlow = false) => {
   const query = fromSummaryFlow ? '?from=summary' : ''
@@ -298,9 +288,6 @@ const nextFollowOnPage = (session, fromSummaryFlow = false) => {
 const continueHref = (session) => {
   if (!(Array.isArray(session.financeIncome) && session.financeIncome.length)) return 'finances.html'
   if (needsOverreliant(session) && !session.financeOverreliant) return 'finances-overreliant.html'
-  if (skipsFurtherAssessmentQuestion(session)) {
-    return followOnAnswered(session) ? 'finances.html' : nextFollowOnPage(session)
-  }
   if (!session.financeFurtherAssessment) return 'finances-assessment.html'
   if (session.financeFurtherAssessment === 'yes' && !followOnAnswered(session)) return nextFollowOnPage(session)
   return 'finances.html'
@@ -358,7 +345,7 @@ const financeRows = (session) => {
     ))
   }
 
-  if (session.financeFurtherAssessment && !skipsFurtherAssessmentQuestion(session)) {
+  if (session.financeFurtherAssessment) {
     const lines = [labelled(YES_NO_UNKNOWN, session.financeFurtherAssessment)]
     if (session.financeFurtherAssessment === 'no' && session.financeFurtherAssessmentDetails) {
       lines.push(session.financeFurtherAssessmentDetails)
@@ -408,7 +395,7 @@ const financeRows = (session) => {
       if (detail) lines.push(detail)
     })
     rows.push(summaryRow(
-      'What type of debt does Alex have?',
+      'What type of debt do they have?',
       lines,
       summaryChangeHref('finances-debt-types')
     ))
@@ -494,20 +481,7 @@ const renderSummary = (session) => {
 const renderAnalysisSummary = (session) => {
   const mount = document.querySelector('[data-fi-analysis-summary]')
   const form = document.getElementById('san-finances-analysis-form')
-  const notice = document.querySelector('[data-fi-analysis-not-required]')
-  const questions = document.querySelector('[data-fi-analysis-questions]')
   if (!mount || !form) return
-
-  if (analysisNotRequired(session)) {
-    setHidden(mount, true)
-    setHidden(notice, false)
-    setHidden(questions, true)
-    setHidden(form, !!session.financeComplete)
-    return
-  }
-
-  setHidden(notice, true)
-  setHidden(questions, false)
 
   if (!session.financeComplete) {
     setHidden(mount, true)
@@ -524,10 +498,6 @@ const renderAnalysisSummary = (session) => {
 }
 
 const showAnalysisForm = (focusId) => {
-  if (analysisNotRequired(getSanSession())) {
-    openAnalysisTab()
-    return
-  }
   const mount = document.querySelector('[data-fi-analysis-summary]')
   const form = document.getElementById('san-finances-analysis-form')
   setHidden(mount, true)
@@ -541,15 +511,6 @@ const showAnalysisForm = (focusId) => {
 const openAnalysisTab = () => {
   const tab = document.querySelector('.govuk-tabs__tab[href="#practitioner-analysis"]')
   if (tab instanceof HTMLElement) tab.click()
-}
-
-const showCompletedAnalysis = () => {
-  const hash = '#practitioner-analysis'
-  if (window.location.hash === hash) {
-    window.location.reload()
-    return
-  }
-  window.location.assign(`finances-summary.html${hash}`)
 }
 
 const emptyFollowOnAnswers = () => ({
@@ -879,12 +840,6 @@ const initFinances = () => {
       window.location.assign('finances.html')
       return
     }
-    if (skipsFurtherAssessmentQuestion(session)) {
-      window.location.assign(followOnAnswered(session)
-        ? 'finances-summary.html'
-        : (fromSummary() ? nextFollowOnPage(session, true) : 'finances-further'))
-      return
-    }
     if (!fromSummary() && needsOverreliant(session) && !session.financeOverreliant) {
       window.location.assign('finances-overreliant')
       return
@@ -893,17 +848,14 @@ const initFinances = () => {
     if (!fromSummary() && needsOverreliant(session)) ensureBackLink('finances-overreliant.html')
   }
   if (pageName === 'further') {
-    if (!entersFollowOn(session)) {
+    if (session.financeFurtherAssessment !== 'yes') {
       window.location.assign(fromSummary() ? 'finances-summary.html' : 'finances-assessment')
       return
     }
     restoreMoney(session)
-    if (!fromSummary() && skipsFurtherAssessmentQuestion(session)) {
-      ensureBackLink('finances-overreliant.html')
-    }
   }
   if (pageName === 'debt') {
-    if (!entersFollowOn(session)) {
+    if (session.financeFurtherAssessment !== 'yes') {
       window.location.assign(fromSummary() ? 'finances-summary.html' : 'finances-assessment')
       return
     }
@@ -914,7 +866,7 @@ const initFinances = () => {
     restoreDebt(session)
   }
   if (pageName === 'debt-types') {
-    if (!entersFollowOn(session)) {
+    if (session.financeFurtherAssessment !== 'yes') {
       window.location.assign(fromSummary() ? 'finances-summary.html' : 'finances-assessment')
       return
     }
@@ -925,7 +877,7 @@ const initFinances = () => {
     restoreDebtTypes(session)
   }
   if (pageName === 'changes') {
-    if (!entersFollowOn(session)) {
+    if (session.financeFurtherAssessment !== 'yes') {
       window.location.assign(fromSummary() ? 'finances-summary.html' : 'finances-assessment')
       return
     }
@@ -945,9 +897,7 @@ const initFinances = () => {
   if (pageName === 'summary') {
     restoreAnalysis(session)
     renderSummary(session)
-    document.querySelector('[data-fi-go-analysis]')?.addEventListener('click', () => {
-      openAnalysisTab()
-    })
+    document.querySelector('[data-fi-go-analysis]')?.addEventListener('click', openAnalysisTab)
     document.querySelector('[data-fi-analysis-summary]')?.addEventListener('click', (event) => {
       const link = event.target.closest('[data-fi-edit-analysis]')
       if (!link) return
@@ -982,14 +932,6 @@ const initFinances = () => {
     const next = { ...previous, ...nextAnswers }
     if (needsOverreliant(next) && (!fromSummary() || overreliantTriggerChanged(next, previous) || !next.financeOverreliant)) {
       window.location.assign(fromSummary() ? 'finances-overreliant?from=summary' : 'finances-overreliant')
-      return
-    }
-    if (skipsFurtherAssessmentQuestion(next)) {
-      if (!fromSummary() || !followOnAnswered(next)) {
-        window.location.assign(fromSummary() ? nextFollowOnPage(next, true) : 'finances-further')
-        return
-      }
-      window.location.assign('finances-summary.html')
       return
     }
     if (!fromSummary() || !next.financeFurtherAssessment) {
@@ -1113,21 +1055,6 @@ const initFinances = () => {
     }
     clearErrors()
     const previous = getSanSession()
-    if (answers.financeOverreliant === 'yes') {
-      setSanSession({
-        ...answers,
-        financeFurtherAssessment: '',
-        financeFurtherAssessmentDetails: '',
-        financeComplete: false
-      })
-      const next = getSanSession()
-      if (fromSummary() && followOnAnswered(next)) {
-        window.location.assign('finances-summary.html')
-        return
-      }
-      window.location.assign(fromSummary() ? nextFollowOnPage(next, true) : 'finances-further')
-      return
-    }
     setSanSession({ ...answers, financeComplete: false })
     if (!fromSummary() || !previous.financeFurtherAssessment) {
       window.location.assign(fromSummary() ? 'finances-assessment?from=summary' : 'finances-assessment')
@@ -1139,12 +1066,6 @@ const initFinances = () => {
   const analysisForm = document.getElementById('san-finances-analysis-form')
   analysisForm?.addEventListener('submit', (event) => {
     event.preventDefault()
-    if (analysisNotRequired(getSanSession())) {
-      clearErrors()
-      setSanSession({ financeComplete: true })
-      showCompletedAnalysis()
-      return
-    }
     revealCheckedConditionals()
     const answers = readAnalysisAnswers()
     const errors = validateAnalysis(answers)
@@ -1155,7 +1076,7 @@ const initFinances = () => {
     }
     clearErrors()
     setSanSession({ ...answers, financeComplete: true })
-    showCompletedAnalysis()
+    window.location.assign('finances-summary.html#practitioner-analysis')
   })
 }
 
