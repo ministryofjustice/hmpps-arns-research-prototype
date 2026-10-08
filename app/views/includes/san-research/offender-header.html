@@ -1,7 +1,7 @@
 <section aria-labelledby="person-heading" class="assessment-offender-header san-offender-header">
   <div class="san-offender-header__meta">
     <p class="govuk-body san-offender-header__identifiers">
-      CRN: W174793 | PNC: 1992/7318694Y | Date of birth: 29 May 1971
+      CRN: W174793 | PNC: {{ sanResearchPnc | default("1992/7318694Y") }} | Date of birth: 29 May 1971
     </p>
     <p class="san-offender-header__links">
       <a class="govuk-link" href="#" data-predictors-inactive-link>View previous versions</a>
