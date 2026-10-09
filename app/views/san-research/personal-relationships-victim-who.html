@@ -1,0 +1,54 @@
+{% extends "layouts/assessment-san-research.html" %}
+
+{% set pageName = "Personal relationships and community" %}
+{% set sanCaption = "Personal relationships and community" %}
+{% set sanSection = "relationships" %}
+{% set backLinkHref = "personal-relationships-victim.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san-research/content-header.html" %}
+
+<form id="san-relationships-victim-who-form" novalidate data-pc-page="victim-who">
+  <div class="govuk-form-group" data-san-error-group="relationships-victim-who">
+    <fieldset class="govuk-fieldset" id="relationships-victim-who" aria-describedby="relationships-victim-who-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">Who was Alex abused by?</h1>
+      </legend>
+      <div id="relationships-victim-who-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="victim-who-family" name="relationships_victim_who" type="checkbox" value="family" data-aria-controls="conditional-victim-who-family">
+          <label class="govuk-label govuk-checkboxes__label" for="victim-who-family">Family member</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-victim-who-family">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="victim-who-family-details">Give details</label>
+            <textarea class="govuk-textarea" id="victim-who-family-details" name="victim_who_family_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="victim-who-family-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="victim-who-partner" name="relationships_victim_who" type="checkbox" value="partner" data-aria-controls="conditional-victim-who-partner">
+          <label class="govuk-label govuk-checkboxes__label" for="victim-who-partner">Intimate partner</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-victim-who-partner">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="victim-who-partner-details">Give details</label>
+            <textarea class="govuk-textarea" id="victim-who-partner-details" name="victim_who_partner_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="victim-who-partner-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

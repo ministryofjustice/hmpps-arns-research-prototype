@@ -78,12 +78,12 @@ const DIFFICULTY_LABELS = {
   reading: 'Yes, with reading',
   writing: 'Yes, with writing',
   numeracy: 'Yes, with numeracy',
-  none: 'No difficulties'
+  none: 'No'
 }
 
 const LEVEL_LABELS = {
-  significant: 'Significant difficulties',
-  some: 'Some difficulties'
+  significant: 'Significant support needed',
+  some: 'Some support needed'
 }
 
 const DIFFICULTY_AREAS = ['reading', 'writing', 'numeracy']
@@ -118,10 +118,10 @@ const CHANGES_LABELS = {
 // EF2 (job sector), overall experience of employment and overall experience of education are hidden in this prototype.
 // EF4 and EF5 are replaced by EF6 (qualifications), which is followed by EF7 (skills).
 const ROUTE_QUESTIONS = {
-  employed: ['history', 'commitments', 'qualifications', 'skills', 'difficulties', 'changes'],
-  retired: ['history', 'commitments', 'qualifications', 'skills', 'difficulties', 'changes'],
-  'has-been-employed': ['history', 'commitments', 'qualifications', 'skills', 'difficulties', 'changes'],
-  'never-employed': ['commitments', 'qualifications', 'skills', 'difficulties', 'changes']
+  employed: ['history', 'commitments', 'qualifications', 'skills', 'difficulties'],
+  retired: ['history', 'commitments', 'qualifications', 'difficulties'],
+  'has-been-employed': ['history', 'commitments', 'qualifications', 'skills', 'difficulties'],
+  'never-employed': ['commitments', 'qualifications', 'skills', 'difficulties']
 }
 
 const employmentRoute = (session) => {
@@ -158,7 +158,7 @@ const difficultyHref = (options = {}) => {
 }
 
 const difficultyQuestion = (area) => {
-  return `How much difficulty does Alex have with ${DIFFICULTY_AREA_LABELS[area] || area}?`
+  return `How much support does Alex need with ${DIFFICULTY_AREA_LABELS[area] || area}?`
 }
 
 const isInHiddenConditional = (element) => {
@@ -321,11 +321,19 @@ const applyProgress = (session) => {
   if (thinkingLink && session.thinkingConsequences) {
     thinkingLink.setAttribute('href', sectionLinkHref('thinking', 'thinking-behaviours-summary.html'))
   }
+
+  document.querySelectorAll('[data-section-complete="offence"]').forEach((icon) => {
+    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', !!session.offenceComplete)
+  })
+  const offenceLink = document.querySelector('[data-san-section-link="offence"]')
+  if (offenceLink && session.offenceDescription) {
+    offenceLink.setAttribute('href', sectionLinkHref('offence', 'offence-analysis-summary.html'))
+  }
 }
 
 const detailsFormAnswered = (session) => {
   const route = employmentRoute(session)
-  if (!route || !session.employmentChanges) return false
+  if (!route) return false
   if (routeShows(route, 'history') && !session.employmentHistory) return false
   if (routeShows(route, 'commitments') && !(Array.isArray(session.commitments) && session.commitments.length)) return false
   if (routeShows(route, 'qualifications') && !session.qualifications) return false
@@ -337,11 +345,29 @@ const detailsFormAnswered = (session) => {
   return true
 }
 
-const detailsAnswered = (session) => detailsFormAnswered(session) && difficultyLevelsAnswered(session)
+const detailsAnswered = (session) => detailsFormAnswered(session) && difficultyLevelsAnswered(session) && !!session.employmentChanges
+
+const changesHref = (options = {}) => {
+  const params = new URLSearchParams()
+  if (options.fromSummary) params.set('from', 'summary')
+  const query = params.toString()
+  return `employment-changes${query ? `?${query}` : ''}`
+}
+
+const continueAfterDetails = (session) => {
+  const areas = selectedDifficultyAreas(session.difficulties)
+  if (areas.length && (!fromSummary() || !difficultyLevelsAnswered(session))) {
+    return difficultyHref({ fromSummary: fromSummary() })
+  }
+  if (fromSummary() && session.employmentChanges) return 'employment-summary'
+  return changesHref({ fromSummary: fromSummary() })
+}
 
 const continueDetailsHref = (session) => {
   if (needsJobPage(session) && !session.employedBefore) return 'employment-job'
-  if (detailsFormAnswered(session) && !difficultyLevelsAnswered(session)) return difficultyHref()
+  if (!detailsFormAnswered(session)) return 'employment-details'
+  if (!difficultyLevelsAnswered(session)) return difficultyHref()
+  if (!session.employmentChanges) return 'employment-changes'
   return 'employment-details'
 }
 
@@ -444,7 +470,7 @@ const employmentRows = (session) => {
 
   if (routeShows(route, 'difficulties') && Array.isArray(session.difficulties) && session.difficulties.length) {
     rows.push(summaryRow(
-      'Does Alex have difficulties with reading, writing or numeracy?',
+      'Does Alex need support with reading, writing or numeracy?',
       session.difficulties.map((value) => labelled(DIFFICULTY_LABELS, value)),
       summaryChangeHref('employment-details', 'difficulties')
     ))
@@ -487,7 +513,7 @@ const employmentRows = (session) => {
     rows.push(summaryRow(
       'Does Alex want to make changes to their employment and education?',
       lines,
-      summaryChangeHref('employment-details', 'changes'),
+      summaryChangeHref('employment-changes'),
       { secondaryFrom: 1 }
     ))
   }
@@ -717,15 +743,18 @@ const readDetailsAnswers = (route) => {
       : ''
   }
 
-  if (routeShows(route, 'changes')) {
-    answers.employmentChanges = checkedValue('employment_changes')
-    const withDetails = ['maintain', 'active', 'know-how', 'need-help', 'thinking', 'no']
-    answers.employmentChangesDetails = withDetails.includes(answers.employmentChanges)
-      ? fieldValue(`changes-${answers.employmentChanges}-details`)
+  return answers
+}
+
+const readChangesAnswers = () => {
+  const employmentChanges = checkedValue('employment_changes')
+  const withDetails = ['maintain', 'active', 'know-how', 'need-help', 'thinking', 'no']
+  return {
+    employmentChanges,
+    employmentChangesDetails: withDetails.includes(employmentChanges)
+      ? fieldValue(`changes-${employmentChanges}-details`)
       : ''
   }
-
-  return answers
 }
 
 const readAnalysisAnswers = () => {
@@ -800,7 +829,7 @@ const validateDetails = (answers, route) => {
     errors.push({
       group: 'difficulties',
       href: '#difficulties',
-      text: 'Select if Alex has difficulties with reading, writing or numeracy'
+      text: 'Select if Alex needs support with reading, writing or numeracy'
     })
   }
   if (routeShows(route, 'employment-experience') && !answers.employmentExperience) {
@@ -817,14 +846,16 @@ const validateDetails = (answers, route) => {
       text: "Select Alex's experience of education"
     })
   }
-  if (routeShows(route, 'changes') && !answers.employmentChanges) {
-    errors.push({
-      group: 'changes',
-      href: '#changes',
-      text: 'Select if Alex wants to make changes to their employment and education'
-    })
-  }
   return errors
+}
+
+const validateChanges = (answers) => {
+  if (answers.employmentChanges) return []
+  return [{
+    group: 'changes',
+    href: '#changes',
+    text: 'Select if Alex wants to make changes to their employment and education'
+  }]
 }
 
 const validateAnalysis = (answers) => {
@@ -892,6 +923,9 @@ const restoreDetails = (session) => {
   if (session.educationExperience && session.educationExperience !== 'unknown') {
     setField(`education-experience-${session.educationExperience}-details`, session.educationExperienceDetails)
   }
+}
+
+const restoreChanges = (session) => {
   selectRadio('employment_changes', session.employmentChanges)
   if (session.employmentChanges) setField(`changes-${session.employmentChanges}-details`, session.employmentChangesDetails)
 }
@@ -965,6 +999,25 @@ const initEmployment = () => {
     }
     applyDetailsRoute(route)
     restoreDetails(session)
+  }
+  if (pageName === 'changes') {
+    const route = employmentRoute(session)
+    if (!route) {
+      window.location.assign('employment')
+      return
+    }
+    if (!detailsFormAnswered(session)) {
+      window.location.assign('employment-details')
+      return
+    }
+    if (!fromSummary() && !difficultyLevelsAnswered(session)) {
+      window.location.assign(difficultyHref())
+      return
+    }
+    restoreChanges(session)
+    if (!fromSummary()) {
+      ensureBackLink(selectedDifficultyAreas(session.difficulties).length ? 'employment-difficulty.html' : 'employment-details.html')
+    }
   }
   if (pageName === 'difficulty') {
     const route = employmentRoute(session)
@@ -1067,12 +1120,22 @@ const initEmployment = () => {
     }
     clearErrors()
     setSanSession({ ...answers, employmentComplete: false })
-    const areas = selectedDifficultyAreas(answers.difficulties)
-    if (!areas.length || (fromSummary() && areas.every((value) => answers.difficultyLevels[value]))) {
-      window.location.assign('employment-summary')
+    window.location.assign(continueAfterDetails(getSanSession()))
+  })
+
+  const changesForm = document.getElementById('san-employment-changes-form')
+  changesForm?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    revealCheckedConditionals()
+    const answers = readChangesAnswers()
+    const errors = validateChanges(answers)
+    if (errors.length) {
+      showErrors(errors)
       return
     }
-    window.location.assign(difficultyHref({ fromSummary: fromSummary() }))
+    clearErrors()
+    setSanSession({ ...answers, employmentComplete: false })
+    window.location.assign('employment-summary')
   })
 
   const difficultyForm = document.getElementById('san-employment-difficulty-form')
@@ -1092,7 +1155,7 @@ const initEmployment = () => {
         errors.push({
           group: `difficulty-${area}`,
           href: `#difficulty-${area}-level`,
-          text: `Select how much difficulty Alex has with ${DIFFICULTY_AREA_LABELS[area] || area}`
+          text: `Select how much support Alex needs with ${DIFFICULTY_AREA_LABELS[area] || area}`
         })
       } else {
         levels[area] = level
@@ -1104,7 +1167,10 @@ const initEmployment = () => {
     }
     clearErrors()
     setSanSession({ difficultyLevels: levels, employmentComplete: false })
-    window.location.assign('employment-summary')
+    const next = getSanSession()
+    window.location.assign(fromSummary() && next.employmentChanges
+      ? 'employment-summary'
+      : changesHref({ fromSummary: fromSummary() }))
   })
 
   const analysisForm = document.getElementById('san-employment-analysis-form')

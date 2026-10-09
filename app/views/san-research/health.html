@@ -25,7 +25,8 @@
         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-physical-yes">
           <div class="govuk-form-group">
             <label class="govuk-label" for="physical-yes-details">Give details (optional)</label>
-            <textarea class="govuk-textarea" id="physical-yes-details" name="health_physical_details" rows="5" maxlength="2000"></textarea>
+            <div id="physical-yes-details-hint" class="govuk-hint">Include details of the condition and any prescribed medication or treatment.</div>
+            <textarea class="govuk-textarea" id="physical-yes-details" name="health_physical_details" rows="5" maxlength="2000" aria-describedby="physical-yes-details-hint"></textarea>
             <div class="govuk-hint san-character-count" data-san-character-count="physical-yes-details">You have 2,000 characters remaining</div>
           </div>
         </div>
@@ -42,29 +43,16 @@
   </div>
 
   <div class="govuk-form-group san-question" data-san-error-group="mental">
-    <fieldset class="govuk-fieldset" id="mental">
+    <fieldset class="govuk-fieldset" id="mental" aria-describedby="mental-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Does Alex have any diagnosed or documented mental health problems?</h2>
+        <h2 class="govuk-fieldset__heading">Does Alex have any mental health conditions?</h2>
       </legend>
+      <div id="mental-hint" class="govuk-hint">Include diagnosed and self-reported mental health conditions.</div>
       <div class="govuk-radios" data-module="govuk-radios">
-        {% set mentalOptions = [
-          { id: "severe", label: "Yes, ongoing - severe and documented over a prolonged period of time" },
-          { id: "ongoing", label: "Yes, ongoing - duration is not known or there is no link to offending" },
-          { id: "past", label: "Yes, in the past" }
-        ] %}
-        {% for option in mentalOptions %}
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="mental-{{ option.id }}" name="health_mental" type="radio" value="{{ option.id }}" data-aria-controls="conditional-mental-{{ option.id }}">
-          <label class="govuk-label govuk-radios__label" for="mental-{{ option.id }}">{{ option.label }}</label>
+          <input class="govuk-radios__input" id="mental-yes" name="health_mental" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="mental-yes">Yes</label>
         </div>
-        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-mental-{{ option.id }}">
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="mental-{{ option.id }}-details">Give details (optional)</label>
-            <textarea class="govuk-textarea" id="mental-{{ option.id }}-details" name="health_mental_{{ option.id }}_details" rows="5" maxlength="2000"></textarea>
-            <div class="govuk-hint san-character-count" data-san-character-count="mental-{{ option.id }}-details">You have 2,000 characters remaining</div>
-          </div>
-        </div>
-        {% endfor %}
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="mental-no" name="health_mental" type="radio" value="no">
           <label class="govuk-label govuk-radios__label" for="mental-no">No</label>

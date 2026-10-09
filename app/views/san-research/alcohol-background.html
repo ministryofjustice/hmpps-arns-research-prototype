@@ -3,7 +3,7 @@
 {% set pageName = "Alcohol use" %}
 {% set sanCaption = "Alcohol use" %}
 {% set sanSection = "alcohol" %}
-{% set backLinkHref = "alcohol-before.html" %}
+{% set backLinkHref = "alcohol.html" %}
 
 {% block content %}
 
@@ -13,6 +13,7 @@
 {% include "includes/san-research/content-header.html" %}
 
 <form id="san-alcohol-background-form" novalidate data-al-page="background">
+  {% set pastIssuesAsPageHeading = true %}
   {% include "includes/san-research/alcohol-background-questions.html" %}
 
   <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>

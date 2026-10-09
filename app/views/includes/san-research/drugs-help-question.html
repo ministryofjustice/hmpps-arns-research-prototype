@@ -1,0 +1,27 @@
+<div class="govuk-form-group" data-san-error-group="helped-reduce">
+  <fieldset class="govuk-fieldset" id="helped-reduce"{% if helpHint %} aria-describedby="helped-reduce-hint"{% endif %}>
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+      <h1 class="govuk-fieldset__heading">{{ helpQuestion }}</h1>
+    </legend>
+    {% if helpHint %}
+    <div id="helped-reduce-hint" class="govuk-hint">{{ helpHint }}</div>
+    {% endif %}
+    <div class="govuk-radios" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="helped-reduce-yes" name="helped_reduce" type="radio" value="yes" data-aria-controls="conditional-helped-reduce-yes">
+        <label class="govuk-label govuk-radios__label" for="helped-reduce-yes">Yes</label>
+      </div>
+      <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-helped-reduce-yes">
+        <div class="govuk-form-group" data-san-error-group="helped-reduce-yes-details">
+          <label class="govuk-label" for="helped-reduce-yes-details">Give details</label>
+          <textarea class="govuk-textarea" id="helped-reduce-yes-details" name="helped_reduce_yes_details" rows="5" maxlength="2000"></textarea>
+          <div class="govuk-hint san-character-count" data-san-character-count="helped-reduce-yes-details">You have 2,000 characters remaining</div>
+        </div>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="helped-reduce-no" name="helped_reduce" type="radio" value="no">
+        <label class="govuk-label govuk-radios__label" for="helped-reduce-no">No</label>
+      </div>
+    </div>
+  </fieldset>
+</div>

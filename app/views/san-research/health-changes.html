@@ -1,0 +1,65 @@
+{% extends "layouts/assessment-san-research.html" %}
+
+{% set pageName = "Health and wellbeing" %}
+{% set sanCaption = "Health and wellbeing" %}
+{% set sanSection = "health" %}
+{% set backLinkHref = "health-questions.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san-research/content-header.html" %}
+
+<form id="san-health-changes-form" novalidate data-hw-page="changes">
+  <div class="govuk-form-group" data-san-error-group="changes">
+    <fieldset class="govuk-fieldset" id="changes" aria-describedby="changes-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">Does Alex want to make changes to their health and wellbeing?</h1>
+      </legend>
+      <div id="changes-hint" class="govuk-hint">Alex must answer this question.</div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {% for option in [
+          { id: "maintain", label: "I have already made positive changes and want to maintain them" },
+          { id: "active", label: "I am actively making changes" },
+          { id: "know-how", label: "I want to make changes and know how to" },
+          { id: "need-help", label: "I want to make changes but need help" },
+          { id: "thinking", label: "I am thinking about making changes" },
+          { id: "no", label: "I do not want to make changes" }
+        ] %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="changes-{{ option.id }}" name="health_changes" type="radio" value="{{ option.id }}" data-aria-controls="conditional-changes-{{ option.id }}">
+          <label class="govuk-label govuk-radios__label" for="changes-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-changes-{{ option.id }}">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="changes-{{ option.id }}-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="changes-{{ option.id }}-details" name="changes_{{ option.id | replace('-', '_') }}_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="changes-{{ option.id }}-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        {% endfor %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="changes-no-answer" name="health_changes" type="radio" value="no-answer">
+          <label class="govuk-label govuk-radios__label" for="changes-no-answer">I do not want to answer</label>
+        </div>
+        <div class="govuk-radios__divider">or</div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="changes-not-present" name="health_changes" type="radio" value="not-present">
+          <label class="govuk-label govuk-radios__label" for="changes-not-present">Alex is not present</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="changes-not-applicable" name="health_changes" type="radio" value="not-applicable">
+          <label class="govuk-label govuk-radios__label" for="changes-not-applicable">Not applicable</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

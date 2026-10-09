@@ -18,15 +18,15 @@ const QUESTIONS = [
     sometimes: 'Sometimes shows stable behaviour but can show reckless or risk taking behaviours',
     no: 'No, shows reckless or risk taking behaviours'
   }],
-  ['thinkingActivities', 'activities', 'thinking_activities', 'Does Alex engage in activities that could link to offending?', 'Select if they engage in activities that could link to offending', {
-    prosocial: 'Engages in pro-social activities and understands the link to offending',
-    sometimes: 'Sometimes engages in activities linked to offending but recognises the link',
-    regularly: 'Regularly engages in activities which encourage offending and is not aware or does not care about the link to offending'
+  ['thinkingActivities', 'activities', 'thinking_activities', "How much do Alex's activities, relationships and lifestyle increase their likelihood of re-offending?", 'Select how much their activities, relationships and lifestyle increase their likelihood of re-offending', {
+    none: 'No significant increase',
+    sometimes: 'Some increase',
+    significant: 'Significant increase'
   }],
-  ['thinkingPeers', 'peers', 'thinking_peers', 'Is Alex resilient towards peer pressure or influence by criminal associates?', 'Select if they are resilient towards peer pressure or influence by criminal associates', {
-    yes: 'Yes, resilient towards peer pressure or influence by criminal associates',
-    past: 'Has been peer pressured or influenced by criminal associates in the past but recognises the link to their offending',
-    no: 'No, constantly peer pressured or influenced by criminal associates which is linked to their offending'
+  ['thinkingPeers', 'peers', 'thinking_peers', 'How much is Alex influenced by others in relation to their offending?', 'Select how much they are influenced by others in relation to their offending', {
+    none: 'No significant influence',
+    sometimes: 'Some influence',
+    significant: 'Significant influence'
   }],
   ['thinkingProblems', 'problems', 'thinking_problems', 'Is Alex able to solve problems in a positive way?', 'Select if they are able to solve problems in a positive way', {
     yes: 'Yes, is able to solve problems and identify appropriate solutions',
@@ -38,15 +38,15 @@ const QUESTIONS = [
     assumes: "Assumes all views are the same as theirs at first but does consider other people's views to an extent",
     no: "No, unable to understand other people's views and distinguish between their own feelings and those of others"
   }],
-  ['thinkingManipulative', 'manipulative', 'thinking_manipulative', 'Does Alex show manipulative behaviour or a predatory lifestyle?', 'Select if they show manipulative behaviour or a predatory lifestyle', {
-    honest: 'Generally gives an honest account of their lives and has no history of showing manipulative behaviour or a predatory lifestyle',
-    some: 'Some evidence that they show manipulative behaviour or act in a predatory way towards certain individuals',
-    pattern: 'Shows a pattern of manipulative behaviour or a predatory lifestyle'
+  ['thinkingManipulative', 'manipulative', 'thinking_manipulative', 'How much evidence is there that Alex manipulates or exploits other people for personal gain?', 'Select how much evidence there is that they manipulate or exploit other people for personal gain', {
+    none: 'No evidence',
+    some: 'Some evidence',
+    significant: 'Significant evidence'
   }],
-  ['thinkingTemper', 'temper', 'thinking_temper', 'Is Alex able to manage their temper?', 'Select if they are able to manage their temper', {
-    yes: 'Yes, is able to manage their temper well',
-    sometimes: 'Sometimes has outbreaks of uncontrolled anger',
-    no: 'No, easily loses their temper'
+  ['thinkingTemper', 'temper', 'thinking_temper', 'How well does Alex manage anger, frustration and conflict?', 'Select how well they manage anger, frustration and conflict', {
+    well: 'Manages these well',
+    sometimes: 'Sometimes has difficulty',
+    often: 'Often has difficulty'
   }],
   ['thinkingViolence', 'violence', 'thinking_violence', 'Does Alex use violence, aggressive or controlling behaviour to get their own way?', 'Select if they use violence, aggressive or controlling behaviour to get their own way', {
     no: 'Does not use violence, aggressive or controlling behaviour to get their own way',
@@ -63,15 +63,15 @@ const QUESTIONS = [
     negative: 'Has a negative attitude or does not fully engage but there are no safety concerns',
     no: 'No, has a negative attitude and there are safety concerns'
   }],
-  ['thinkingHostile', 'hostile', 'thinking_hostile', 'Does Alex have hostile orientation to others or to general rules?', 'Select if they have hostile orientation to others or to general rules', {
-    constructive: "They're able to have constructive conversations when they disagree with others and can forgive past wrongs",
-    some: 'Some evidence of suspicious, angry or vengeful thinking and behaviour',
-    evidence: 'There is evidence of suspicious, angry and vengeful thinking and behaviour'
+  ['thinkingHostile', 'hostile', 'thinking_hostile', 'How much evidence is there that Alex shows hostility towards other people, rules or authority?', 'Select how much evidence there is that they show hostility towards other people, rules or authority', {
+    none: 'No evidence',
+    some: 'Some evidence',
+    significant: 'Significant evidence'
   }],
-  ['thinkingSupervision', 'supervision', 'thinking_supervision', 'Does Alex accept supervision and their licence conditions?', 'Select if they accept supervision and their licence conditions', {
-    accepts: 'Accepts supervision and has responded well to supervision in the past',
-    unsure: 'Unsure about supervision and has put minimum effort into supervision in the past',
-    not: 'Not prepared to accept supervision and has failed to follow supervision in the past'
+  ['thinkingSupervision', 'supervision', 'thinking_supervision', 'How much evidence is there that Alex is willing to engage positively with supervision and their licence conditions?', 'Select how much evidence there is that they are willing to engage positively with supervision and their licence conditions', {
+    significant: 'Significant evidence',
+    some: 'Some evidence',
+    none: 'Little or no evidence'
   }],
   ['thinkingExcuse', 'excuse', 'thinking_excuse', 'Does Alex support or excuse criminal behaviour?', 'Select if they support or excuse criminal behaviour', {
     no: 'Does not support or excuse criminal behaviour',
@@ -79,6 +79,10 @@ const QUESTIONS = [
     supports: 'Supports or excuses criminal behaviour or their pattern of behaviour and other evidence indicates this is an issue'
   }]
 ]
+
+// Attitude towards criminal justice staff is hidden in this prototype.
+const HIDDEN_QUESTIONS = new Set(['thinkingAttitude'])
+const visibleQuestions = () => QUESTIONS.filter(([key]) => !HIDDEN_QUESTIONS.has(key))
 
 const CHANGES_LABELS = {
   maintain: 'I have already made positive changes and want to maintain them',
@@ -127,11 +131,11 @@ const EXAMPLE_COMPLETE = {
   thinkingConsequences: 'yes',
   thinkingStable: 'sometimes',
   thinkingActivities: 'sometimes',
-  thinkingPeers: 'past',
+  thinkingPeers: 'sometimes',
   thinkingPeersDetails: 'A Martini. Shaken, Not Stirred',
   thinkingProblems: 'limited',
   thinkingViews: 'assumes',
-  thinkingManipulative: 'honest',
+  thinkingManipulative: 'none',
   thinkingSexualConcerns: 'yes',
   thinkingPreoccupation: 'some',
   thinkingInterests: 'no',
@@ -141,7 +145,7 @@ const EXAMPLE_COMPLETE = {
   thinkingImpulse: 'sometimes',
   thinkingAttitude: 'negative',
   thinkingHostile: 'some',
-  thinkingSupervision: 'unsure',
+  thinkingSupervision: 'some',
   thinkingExcuse: 'sometimes',
   thinkingChanges: 'thinking',
   thinkingChangesDetails: 'A Martini. Shaken, Not Stirred',
@@ -257,9 +261,26 @@ const applyProgress = (session) => {
   applySectionProgress('alcohol', !!session.alcoholComplete, !!session.alcoholUse, 'alcohol-summary.html')
   applySectionProgress('health', !!session.healthComplete, !!session.healthPhysical, 'health-summary.html')
   applySectionProgress('relationships', !!session.relationshipsComplete, !!Array.isArray(session.relationshipsChildren) && session.relationshipsChildren.length > 0, 'personal-relationships-summary.html')
+  applySectionProgress('offence', !!session.offenceComplete, !!session.offenceDescription, 'offence-analysis-summary.html')
 }
 
-const questionsAnswered = (session) => QUESTIONS.every(([key]) => session[key]) && !!session.thinkingChanges
+const questionsFormAnswered = (session) => visibleQuestions().every(([key]) => session[key])
+
+const questionsAnswered = (session) => questionsFormAnswered(session) && !!session.thinkingChanges
+
+const continueThinkingHref = (session) => {
+  if (!questionsFormAnswered(session)) return 'thinking-behaviours.html'
+  if (!session.thinkingSexualConcerns) return 'thinking-behaviours-sexual.html'
+  if (session.thinkingSexualConcerns === 'yes' && !sexualHarmAnswered(session)) return 'thinking-behaviours-sexual-harm.html'
+  if (!session.thinkingChanges) return 'thinking-behaviours-changes.html'
+  return 'thinking-behaviours.html'
+}
+
+const changesBackHref = (session) => {
+  if (session.thinkingSexualConcerns === 'yes') return 'thinking-behaviours-sexual-harm.html'
+  if (session.thinkingSexualConcerns) return 'thinking-behaviours-sexual.html'
+  return 'thinking-behaviours.html'
+}
 
 const sexualHarmAnswered = (session) => {
   if (session.thinkingSexualConcerns === 'no') return true
@@ -301,8 +322,10 @@ const questionRows = (session, definitions, page) => definitions.map(([key, id, 
 const thinkingRows = (session) => {
   if (!session.thinkingConsequences) return ''
 
-  const beforeSexual = QUESTIONS.filter((item) => ['thinkingTemper', 'thinkingViolence', 'thinkingImpulse', 'thinkingAttitude', 'thinkingHostile', 'thinkingSupervision', 'thinkingExcuse'].indexOf(item[0]) === -1)
-  const afterSexual = QUESTIONS.filter((item) => ['thinkingTemper', 'thinkingViolence', 'thinkingImpulse', 'thinkingAttitude', 'thinkingHostile', 'thinkingSupervision', 'thinkingExcuse'].indexOf(item[0]) !== -1)
+  const shown = visibleQuestions()
+  const afterKeys = ['thinkingTemper', 'thinkingViolence', 'thinkingImpulse', 'thinkingHostile', 'thinkingSupervision', 'thinkingExcuse']
+  const beforeSexual = shown.filter((item) => afterKeys.indexOf(item[0]) === -1)
+  const afterSexual = shown.filter((item) => afterKeys.indexOf(item[0]) !== -1)
 
   const parts = [`<dl class="govuk-summary-list san-summary-list">${questionRows(session, beforeSexual, 'thinking-behaviours')}</dl>`]
 
@@ -327,7 +350,7 @@ const thinkingRows = (session) => {
     const changes = summaryRow(
       'Does Alex want to make changes to their thinking, behaviours and attitudes?',
       lines,
-      summaryChangeHref('thinking-behaviours', 'changes'),
+      summaryChangeHref('thinking-behaviours-changes'),
       { secondaryFrom: 1 }
     )
     parts.push(`<dl class="govuk-summary-list san-summary-list">${later}${changes}</dl>`)
@@ -404,9 +427,8 @@ const renderSummary = (session) => {
       <p class="govuk-body"><a class="govuk-link" href="thinking-behaviours.html">Answer thinking, behaviours and attitudes questions</a></p>`
   } else {
     let followOn = ''
-    if (!session.thinkingComplete && questionsAnswered(session) && !sexualHarmAnswered(session)) {
-      const href = session.thinkingSexualConcerns === 'yes' ? 'thinking-behaviours-sexual-harm.html' : 'thinking-behaviours-sexual.html'
-      followOn = `<p class="govuk-body"><a class="govuk-link" href="${href}">Continue</a></p>`
+    if (!session.thinkingComplete && (!questionsAnswered(session) || !sexualHarmAnswered(session))) {
+      followOn = `<p class="govuk-body"><a class="govuk-link" href="${continueThinkingHref(session)}">Continue</a></p>`
     }
     mount.innerHTML = `${html}${followOn}`
   }
@@ -438,15 +460,22 @@ const showAnalysisForm = (focusId) => {
 
 const readQuestionAnswers = () => {
   const answers = {}
-  QUESTIONS.forEach(([key, id, name]) => {
+  visibleQuestions().forEach(([key, id, name]) => {
     answers[key] = checkedValue(name)
     if (id === 'peers') answers.thinkingPeersDetails = fieldValue(`peers-${answers[key]}-details`)
   })
-  answers.thinkingChanges = checkedValue('thinking_changes')
-  answers.thinkingChangesDetails = ['not-present', 'not-applicable', ''].includes(answers.thinkingChanges)
-    ? ''
-    : fieldValue(`changes-${answers.thinkingChanges}-details`)
+  answers.thinkingAttitude = ''
   return answers
+}
+
+const readChangesAnswers = () => {
+  const thinkingChanges = checkedValue('thinking_changes')
+  return {
+    thinkingChanges,
+    thinkingChangesDetails: ['not-present', 'not-applicable', ''].includes(thinkingChanges)
+      ? ''
+      : fieldValue(`changes-${thinkingChanges}-details`)
+  }
 }
 
 const readHarmAnswers = () => {
@@ -468,16 +497,15 @@ const validateDefined = (answers, definitions) => definitions.reduce((errors, [k
   return errors
 }, [])
 
-const validateQuestions = (answers) => {
-  const errors = validateDefined(answers, QUESTIONS)
-  if (!answers.thinkingChanges) {
-    errors.push({
-      group: 'changes',
-      href: '#changes',
-      text: 'Select if they want to make changes to their thinking, behaviours and attitudes'
-    })
-  }
-  return errors
+const validateQuestions = (answers) => validateDefined(answers, visibleQuestions())
+
+const validateChanges = (answers) => {
+  if (answers.thinkingChanges) return []
+  return [{
+    group: 'changes',
+    href: '#changes',
+    text: 'Select if they want to make changes to their thinking, behaviours and attitudes'
+  }]
 }
 
 const validateSexual = (answers) => {
@@ -513,6 +541,9 @@ const restoreQuestions = (session) => {
     selectRadio(name, session[key])
     if (id === 'peers' && session.thinkingPeers) setField(`peers-${session.thinkingPeers}-details`, session.thinkingPeersDetails)
   })
+}
+
+const restoreChanges = (session) => {
   selectRadio('thinking_changes', session.thinkingChanges)
   if (session.thinkingChanges) setField(`changes-${session.thinkingChanges}-details`, session.thinkingChangesDetails)
 }
@@ -582,15 +613,27 @@ const initThinking = () => {
 
   const pageName = page.getAttribute('data-tb-page')
   if (pageName === 'questions') restoreQuestions(session)
+  if (pageName === 'changes') {
+    if (!questionsFormAnswered(session)) {
+      window.location.assign('thinking-behaviours.html')
+      return
+    }
+    if (!sexualHarmAnswered(session)) {
+      window.location.assign(continueThinkingHref(session))
+      return
+    }
+    if (!fromSummary()) ensureBackLink(changesBackHref(session))
+    restoreChanges(session)
+  }
   if (pageName === 'sexual') {
-    if (!questionsAnswered(session)) {
+    if (!questionsFormAnswered(session)) {
       window.location.assign('thinking-behaviours.html')
       return
     }
     selectRadio('thinking_sexual_concerns', session.thinkingSexualConcerns)
   }
   if (pageName === 'sexual-harm') {
-    if (!questionsAnswered(session)) {
+    if (!questionsFormAnswered(session)) {
       window.location.assign('thinking-behaviours.html')
       return
     }
@@ -633,7 +676,25 @@ const initThinking = () => {
     clearErrors()
     setSanSession({ ...answers, thinkingComplete: false })
     const next = getSanSession()
-    window.location.assign(fromSummary() && sexualHarmAnswered(next) ? 'thinking-behaviours-summary.html' : 'thinking-behaviours-sexual.html')
+    if (fromSummary() && questionsAnswered(next) && sexualHarmAnswered(next)) {
+      window.location.assign('thinking-behaviours-summary.html')
+      return
+    }
+    window.location.assign('thinking-behaviours-sexual.html')
+  })
+
+  document.getElementById('san-thinking-changes-form')?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    revealCheckedConditionals()
+    const answers = readChangesAnswers()
+    const errors = validateChanges(answers)
+    if (errors.length) {
+      showErrors(errors)
+      return
+    }
+    clearErrors()
+    setSanSession({ ...answers, thinkingComplete: false })
+    window.location.assign('thinking-behaviours-summary.html')
   })
 
   document.getElementById('san-thinking-sexual-form')?.addEventListener('submit', (event) => {
@@ -650,10 +711,10 @@ const initThinking = () => {
     setSanSession(updates)
     if (answers.thinkingSexualConcerns === 'yes') {
       const next = getSanSession()
-      window.location.assign(fromSummary() && sexualHarmAnswered(next) ? 'thinking-behaviours-summary.html' : 'thinking-behaviours-sexual-harm.html')
+      window.location.assign(fromSummary() && sexualHarmAnswered(next) && next.thinkingChanges ? 'thinking-behaviours-summary.html' : 'thinking-behaviours-sexual-harm.html')
       return
     }
-    window.location.assign('thinking-behaviours-summary.html')
+    window.location.assign(fromSummary() && getSanSession().thinkingChanges ? 'thinking-behaviours-summary.html' : 'thinking-behaviours-changes.html')
   })
 
   document.getElementById('san-thinking-sexual-harm-form')?.addEventListener('submit', (event) => {
@@ -666,7 +727,7 @@ const initThinking = () => {
     }
     clearErrors()
     setSanSession({ ...answers, thinkingComplete: false })
-    window.location.assign('thinking-behaviours-summary.html')
+    window.location.assign(fromSummary() && getSanSession().thinkingChanges ? 'thinking-behaviours-summary.html' : 'thinking-behaviours-changes.html')
   })
 
   document.getElementById('san-thinking-analysis-form')?.addEventListener('submit', (event) => {

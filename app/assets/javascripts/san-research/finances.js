@@ -39,7 +39,7 @@ const INCOME_LABELS = {
   undeclared: 'Undeclared (includes cash in hand)',
   'work-benefits': 'Work related benefits',
   other: 'Other',
-  none: 'No money'
+  none: 'No current source of money'
 }
 
 const needsOverreliant = (session) => Array.isArray(session.financeIncome) && session.financeIncome.includes('family')
@@ -248,6 +248,14 @@ const applyProgress = (session) => {
   if (thinkingLink && session.thinkingConsequences) {
     thinkingLink.setAttribute('href', sectionLinkHref('thinking', 'thinking-behaviours-summary.html'))
   }
+
+  document.querySelectorAll('[data-section-complete="offence"]').forEach((icon) => {
+    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', !!session.offenceComplete)
+  })
+  const offenceLink = document.querySelector('[data-san-section-link="offence"]')
+  if (offenceLink && session.offenceDescription) {
+    offenceLink.setAttribute('href', sectionLinkHref('offence', 'offence-analysis-summary.html'))
+  }
 }
 
 const skipsFurtherAssessmentQuestion = (session) =>
@@ -259,7 +267,9 @@ const entersFollowOn = (session) =>
 const skipsFurtherFinance = (session) =>
   !skipsFurtherAssessmentQuestion(session) && session.financeFurtherAssessment === 'no'
 
-const needsOwnDebtTypes = (session) => Array.isArray(session.financeDebt) && session.financeDebt.includes('own')
+const debtAnswered = (session) => Array.isArray(session.financeDebt) && session.financeDebt.length
+
+const needsOwnDebtTypes = (session) => debtAnswered(session) && session.financeDebt.includes('own')
 
 const ownDebtTypesAnswered = (session) => {
   const types = session.financeDebtTypes && session.financeDebtTypes.own
@@ -268,7 +278,7 @@ const ownDebtTypesAnswered = (session) => {
 
 const followOnAnswered = (session) => {
   if (!session.financeMoneyManagement) return false
-  if (!(Array.isArray(session.financeDebt) && session.financeDebt.length)) return false
+  if (!debtAnswered(session)) return false
   if (needsOwnDebtTypes(session) && !ownDebtTypesAnswered(session)) return false
   if (!session.financeChanges) return false
   return true
@@ -288,8 +298,7 @@ const analysisNotRequired = (session) => skipsFurtherFinance(session)
 
 const nextFollowOnPage = (session, fromSummaryFlow = false) => {
   const query = fromSummaryFlow ? '?from=summary' : ''
-  if (!session.financeMoneyManagement) return `finances-further${query}`
-  if (!(Array.isArray(session.financeDebt) && session.financeDebt.length)) return `finances-debt${query}`
+  if (!session.financeMoneyManagement || !debtAnswered(session)) return `finances-further${query}`
   if (needsOwnDebtTypes(session) && !ownDebtTypesAnswered(session)) return `finances-debt-types${query}`
   if (!session.financeChanges) return `finances-changes${query}`
   return 'finances-summary.html'
@@ -395,7 +404,7 @@ const financeRows = (session) => {
     rows.push(summaryRow(
       'Is Alex affected by debt?',
       lines,
-      summaryChangeHref('finances-debt'),
+      summaryChangeHref('finances-further', 'debt'),
       session.financeDebt.includes('unknown') ? { secondaryFrom: 1 } : {}
     ))
   }
@@ -898,6 +907,7 @@ const initFinances = () => {
       return
     }
     restoreMoney(session)
+    restoreDebt(session)
     if (!fromSummary() && skipsFurtherAssessmentQuestion(session)) {
       ensureBackLink('finances-overreliant.html')
     }
@@ -907,11 +917,9 @@ const initFinances = () => {
       window.location.assign(fromSummary() ? 'finances-summary.html' : 'finances-assessment')
       return
     }
-    if (!fromSummary() && !session.financeMoneyManagement) {
-      window.location.assign('finances-further')
-      return
-    }
-    restoreDebt(session)
+    const query = fromSummary() ? '?from=summary' : ''
+    window.location.replace(`finances-further${query}#debt`)
+    return
   }
   if (pageName === 'debt-types') {
     if (!entersFollowOn(session)) {
@@ -919,7 +927,7 @@ const initFinances = () => {
       return
     }
     if (!needsOwnDebtTypes(session)) {
-      window.location.assign(fromSummary() ? 'finances-summary.html' : 'finances-debt')
+      window.location.assign(fromSummary() ? 'finances-summary.html' : 'finances-further')
       return
     }
     restoreDebtTypes(session)
@@ -929,8 +937,8 @@ const initFinances = () => {
       window.location.assign(fromSummary() ? 'finances-summary.html' : 'finances-assessment')
       return
     }
-    if (!fromSummary() && !(Array.isArray(session.financeDebt) && session.financeDebt.length)) {
-      window.location.assign('finances-debt')
+    if (!fromSummary() && !debtAnswered(session)) {
+      window.location.assign('finances-further')
       return
     }
     if (!fromSummary() && needsOwnDebtTypes(session) && !ownDebtTypesAnswered(session)) {
@@ -938,7 +946,7 @@ const initFinances = () => {
       return
     }
     if (!fromSummary()) {
-      ensureBackLink(needsOwnDebtTypes(session) ? 'finances-debt-types.html' : 'finances-debt.html')
+      ensureBackLink(needsOwnDebtTypes(session) ? 'finances-debt-types.html' : 'finances-further.html')
     }
     restoreChanges(session)
   }
@@ -1024,8 +1032,9 @@ const initFinances = () => {
   furtherForm?.addEventListener('submit', (event) => {
     event.preventDefault()
     revealCheckedConditionals()
-    const answers = readMoneyAnswers()
-    const errors = validateMoney(answers)
+    const previous = getSanSession()
+    const answers = { ...readMoneyAnswers(), ...readDebtAnswers(previous) }
+    const errors = [...validateMoney(answers), ...validateDebt(answers)]
     if (errors.length) {
       showErrors(errors)
       return
@@ -1037,7 +1046,11 @@ const initFinances = () => {
       window.location.assign('finances-summary.html')
       return
     }
-    window.location.assign(fromSummary() ? nextFollowOnPage(next, true) : 'finances-debt')
+    if (fromSummary()) {
+      window.location.assign(nextFollowOnPage(next, true))
+      return
+    }
+    window.location.assign(needsOwnDebtTypes(next) ? 'finances-debt-types' : 'finances-changes')
   })
 
   const debtForm = document.getElementById('san-finances-debt-form')

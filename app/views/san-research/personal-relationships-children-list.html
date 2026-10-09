@@ -1,0 +1,22 @@
+{% extends "layouts/assessment-san-research.html" %}
+
+{% set pageName = "Personal relationships and community" %}
+{% set sanCaption = "Personal relationships and community" %}
+{% set sanSection = "relationships" %}
+{% set backLinkHref = "personal-relationships-children.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san-research/content-header.html" %}
+
+<div data-pc-page="children-list">
+  <h1 class="govuk-heading-l">What are the children's details?</h1>
+  <div data-pc-children-list></div>
+</div>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

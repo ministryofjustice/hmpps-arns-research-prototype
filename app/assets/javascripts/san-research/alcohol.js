@@ -8,36 +8,19 @@ import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllC
 const YES_NO = { yes: 'Yes', no: 'No' }
 
 const ALCOHOL_USE_LABELS = {
-  'yes-in-last-3-months': 'Yes, including the last 3 months',
-  'yes-not-in-last-3-months': 'Yes, but not in the last 3 months',
-  no: 'No'
+  significant: 'Yes, significant issues',
+  some: 'Yes, some issues',
+  none: 'No current issues',
+  never: 'They have never drunk alcohol'
 }
 
-const hasDrunkAlcohol = (session) => session.alcoholUse === 'yes-in-last-3-months' || session.alcoholUse === 'yes-not-in-last-3-months'
+const currentIssues = (session) => session.alcoholUse === 'significant' || session.alcoholUse === 'some'
 
-const recentDrinking = (session) => session.alcoholUse === 'yes-in-last-3-months'
+const noCurrentIssues = (session) => session.alcoholUse === 'none'
 
-const FREQUENCY_LABELS = {
-  monthly: 'Once a month or less',
-  '2to4monthly': '2 to 4 times a month',
-  '2to3weekly': '2 to 3 times a week',
-  more4weekly: 'More than 4 times a week'
-}
+const neverDrunk = (session) => session.alcoholUse === 'never'
 
-const UNITS_LABELS = {
-  '1to2': '1 to 2 units',
-  '3to4': '3 to 4 units',
-  '5to6': '5 to 6 units',
-  '7to9': '7 to 9 units',
-  '10plus': '10 or more units'
-}
-
-const BINGE_FREQUENCY_LABELS = {
-  'less-month': 'Less than once a month',
-  monthly: 'Monthly',
-  weekly: 'Weekly',
-  daily: 'Daily or almost daily'
-}
+const sameIssuePath = (left, right) => currentIssues({ alcoholUse: left }) && currentIssues({ alcoholUse: right })
 
 const EVIDENCE_LABELS = {
   none: 'No evidence of binge drinking or excessive alcohol use',
@@ -48,29 +31,6 @@ const EVIDENCE_LABELS = {
 const EVIDENCE_HINTS = {
   some: 'There is a pattern of alcohol use but has not caused any serious problems.',
   detrimental: 'There is a detrimental effect on other areas of their life and is often directly related to offending.'
-}
-
-const REASON_LABELS = {
-  cultural: 'Cultural or religious practice',
-  curiosity: 'Curiosity or experimentation',
-  enjoyment: 'Enjoyment',
-  stress: 'Manage stress or emotional issues',
-  occasions: 'On special occasions',
-  'peer-pressure': 'Peer pressure or social influence',
-  'self-medication': 'Self-medication or mood altering',
-  socially: 'Socially',
-  other: 'Other'
-}
-
-const IMPACT_LABELS = {
-  behavioural: 'Behavioural',
-  community: 'Community',
-  finances: 'Finances',
-  offending: 'Links to offending',
-  health: 'Physical or mental health',
-  relationships: 'Relationships',
-  other: 'Other',
-  none: 'No impact'
 }
 
 const CHANGES_LABELS = {
@@ -86,20 +46,10 @@ const CHANGES_LABELS = {
 }
 
 const EXAMPLE_COMPLETE = {
-  alcoholUse: 'yes-in-last-3-months',
-  alcoholFrequency: '2to3weekly',
-  alcoholUnits: '5to6',
-  alcoholBinge: 'yes',
-  alcoholBingeFrequency: 'weekly',
+  alcoholUse: 'significant',
   alcoholEvidence: 'some',
-  alcoholCustody: 'yes',
-  alcoholCustodyDetails: 'There are multiple reports from prison staff that Alex was drinking in their cell.',
   alcoholPastIssues: 'yes',
   alcoholPastIssuesDetails: "Alex's past alcohol consumption has led them to behave erratically.",
-  alcoholReasons: ['stress'],
-  alcoholReasonsDetails: '',
-  alcoholImpact: ['behavioural'],
-  alcoholImpactDetails: '',
   alcoholHelp: 'no',
   alcoholHelpDetails: '',
   alcoholChanges: 'thinking',
@@ -129,12 +79,6 @@ const checkedValue = (name) => {
   return selected ? selected.value : ''
 }
 
-const checkedValues = (name) => {
-  return Array.from(document.querySelectorAll(`input[type="checkbox"][name="${name}"]`))
-    .filter((input) => input.checked && !isInHiddenConditional(input))
-    .map((input) => input.value)
-}
-
 const fieldValue = (id) => {
   const field = document.getElementById(id)
   if (!(field instanceof HTMLTextAreaElement) || isInHiddenConditional(field)) return ''
@@ -145,13 +89,6 @@ const selectRadio = (name, value) => {
   if (!value) return
   const input = document.querySelector(`input[type="radio"][name="${CSS.escape(name)}"][value="${CSS.escape(value)}"]`)
   if (input instanceof HTMLInputElement) input.checked = true
-}
-
-const selectChecks = (name, values) => {
-  if (!Array.isArray(values)) return
-  document.querySelectorAll(`input[type="checkbox"][name="${CSS.escape(name)}"]`).forEach((input) => {
-    if (input instanceof HTMLInputElement) input.checked = values.includes(input.value)
-  })
 }
 
 const setField = (id, value) => {
@@ -229,33 +166,65 @@ const applyProgress = (session) => {
   applySectionProgress('relationships', !!session.relationshipsComplete, !!Array.isArray(session.relationshipsChildren) && session.relationshipsChildren.length > 0, 'personal-relationships-summary.html')
   applySectionProgress('health', !!session.healthComplete, !!session.healthPhysical, 'health-summary.html')
   applySectionProgress('thinking', !!session.thinkingComplete, !!session.thinkingConsequences, 'thinking-behaviours-summary.html')
+  applySectionProgress('offence', !!session.offenceComplete, !!session.offenceDescription, 'offence-analysis-summary.html')
 }
 
-const beforeAnswered = (session) => {
-  if (!hasDrunkAlcohol(session)) return false
-  if (recentDrinking(session)) {
-    if (!session.alcoholFrequency || !session.alcoholUnits || !session.alcoholBinge) return false
-    if (session.alcoholBinge === 'yes' && !session.alcoholBingeFrequency) return false
-  }
-  if (!session.alcoholEvidence) return false
-  return backgroundAnswered(session)
+const beforeFieldsAnswered = (session) => {
+  if (!currentIssues(session)) return false
+  return !!session.alcoholEvidence
 }
 
-const backgroundAnswered = (session) => {
-  if (!session.alcoholPastIssues) return false
-  if (session.alcoholPastIssues === 'yes' && !session.alcoholPastIssuesDetails) return false
-  if (!(Array.isArray(session.alcoholReasons) && session.alcoholReasons.length)) return false
-  if (!(Array.isArray(session.alcoholImpact) && session.alcoholImpact.length)) return false
+const helpAnswered = (session) => {
   if (!session.alcoholHelp) return false
   if (session.alcoholHelp === 'yes' && !session.alcoholHelpDetails) return false
+  return true
+}
+
+const needsHelp = (session) => currentIssues(session) || session.alcoholPastIssues === 'yes'
+
+const needsChanges = (session) => needsHelp(session)
+
+const helpQuestion = (session) => currentIssues(session)
+  ? 'Does anything help Alex to stop or reduce drinking alcohol?'
+  : 'Has anything helped Alex to stop or reduce drinking alcohol in the past?'
+
+const helpPage = (session) => currentIssues(session) ? 'alcohol-help.html' : 'alcohol-help-past.html'
+
+const pastIssuesAnswered = (session) => {
+  if (!session.alcoholPastIssues) return false
+  if (session.alcoholPastIssues === 'yes' && !session.alcoholPastIssuesDetails) return false
+  return true
+}
+
+const backgroundFormAnswered = (session) => pastIssuesAnswered(session)
+
+const beforeAnswered = (session) => beforeFieldsAnswered(session) && pastIssuesAnswered(session)
+
+const backgroundAnswered = (session) => {
+  if (!pastIssuesAnswered(session)) return false
+  if (!needsHelp(session)) return true
+  if (!helpAnswered(session)) return false
   return !!session.alcoholChanges
 }
 
 const questionsAnswered = (session) => {
-  if (session.alcoholUse === 'no') return true
-  if (!hasDrunkAlcohol(session)) return false
-  return beforeAnswered(session) && backgroundAnswered(session)
+  if (neverDrunk(session)) return true
+  if (currentIssues(session)) return beforeAnswered(session) && helpAnswered(session) && !!session.alcoholChanges
+  if (noCurrentIssues(session)) return backgroundAnswered(session)
+  return false
 }
+
+const continueAlcoholHref = (session) => {
+  if (currentIssues(session) && !beforeAnswered(session)) return 'alcohol-before.html'
+  if (noCurrentIssues(session) && !pastIssuesAnswered(session)) return 'alcohol-background.html'
+  if (needsHelp(session) && !helpAnswered(session)) return helpPage(session)
+  if (needsChanges(session) && !session.alcoholChanges) return 'alcohol-changes.html'
+  if (currentIssues(session)) return 'alcohol-before.html'
+  if (noCurrentIssues(session)) return 'alcohol-background.html'
+  return 'alcohol.html'
+}
+
+const analysisNotRequired = (session) => neverDrunk(session)
 
 const summaryChangeHref = (page, hash = '') => `${page}?from=summary${hash ? `#${hash}` : ''}`
 
@@ -281,43 +250,18 @@ const summaryRow = (question, lines, href, options = {}) => {
 }
 
 const alcoholRows = (session) => {
-  if (!session.alcoholUse) return ''
+  if (!session.alcoholUse || !ALCOHOL_USE_LABELS[session.alcoholUse]) return ''
 
   const parts = [`<dl class="govuk-summary-list san-summary-list">${summaryRow(
-    'Has Alex ever drunk alcohol?',
+    'Is there evidence that Alex has any current issues with alcohol?',
     [labelled(ALCOHOL_USE_LABELS, session.alcoholUse)],
     summaryChangeHref('alcohol')
   )}</dl>`]
 
-  if (hasDrunkAlcohol(session)) {
+  if (neverDrunk(session)) return parts.join('')
+
+  if (currentIssues(session)) {
     const beforeRows = []
-    if (recentDrinking(session)) {
-      if (session.alcoholFrequency) {
-        beforeRows.push(summaryRow(
-          'How often has Alex drunk alcohol in the last 3 months?',
-          [labelled(FREQUENCY_LABELS, session.alcoholFrequency)],
-          summaryChangeHref('alcohol-before', 'alcohol-frequency')
-        ))
-      }
-      if (session.alcoholUnits) {
-        beforeRows.push(summaryRow(
-          'How many units of alcohol does Alex have on a typical day of drinking?',
-          [labelled(UNITS_LABELS, session.alcoholUnits)],
-          summaryChangeHref('alcohol-before', 'alcohol-units')
-        ))
-      }
-      if (session.alcoholBinge) {
-        const bingeLines = [labelled(YES_NO, session.alcoholBinge)]
-        if (session.alcoholBinge === 'yes' && session.alcoholBingeFrequency) {
-          bingeLines.push(labelled(BINGE_FREQUENCY_LABELS, session.alcoholBingeFrequency))
-        }
-        beforeRows.push(summaryRow(
-          'Has Alex had 6 or more units within a single day of drinking in the last 3 months?',
-          bingeLines,
-          summaryChangeHref('alcohol-before', 'alcohol-binge')
-        ))
-      }
-    }
     if (session.alcoholEvidence) {
       const evidenceLines = [labelled(EVIDENCE_LABELS, session.alcoholEvidence)]
       if (EVIDENCE_HINTS[session.alcoholEvidence]) evidenceLines.push(EVIDENCE_HINTS[session.alcoholEvidence])
@@ -333,7 +277,7 @@ const alcoholRows = (session) => {
     }
   }
 
-  if (hasDrunkAlcohol(session) && session.alcoholCustody) {
+  if (currentIssues(session) && session.alcoholCustody) {
     const custodyLines = [labelled(YES_NO, session.alcoholCustody)]
     if (session.alcoholCustodyDetails) custodyLines.push(session.alcoholCustodyDetails)
     parts.push('<h3 class="govuk-heading-m">Alcohol use in custody</h3>')
@@ -345,8 +289,8 @@ const alcoholRows = (session) => {
     )}</dl>`)
   }
 
-  const followOnPage = 'alcohol-before'
-  if (hasDrunkAlcohol(session) && (backgroundAnswered(session) || session.alcoholPastIssues || session.alcoholChanges)) {
+  const followOnPage = currentIssues(session) ? 'alcohol-before' : 'alcohol-background'
+  if ((currentIssues(session) || noCurrentIssues(session)) && (backgroundAnswered(session) || session.alcoholPastIssues || session.alcoholChanges)) {
     const rows = []
     if (session.alcoholPastIssues) {
       const lines = [labelled(YES_NO, session.alcoholPastIssues)]
@@ -358,33 +302,13 @@ const alcoholRows = (session) => {
         { secondaryFrom: 1 }
       ))
     }
-    if (Array.isArray(session.alcoholReasons) && session.alcoholReasons.length) {
-      const lines = session.alcoholReasons.map((value) => labelled(REASON_LABELS, value))
-      if (session.alcoholReasonsDetails) lines.push(session.alcoholReasonsDetails)
-      rows.push(summaryRow(
-        'Why does Alex drink alcohol?',
-        lines,
-        summaryChangeHref(followOnPage, 'alcohol-reasons'),
-        { spaced: true }
-      ))
-    }
-    if (Array.isArray(session.alcoholImpact) && session.alcoholImpact.length) {
-      const lines = session.alcoholImpact.map((value) => labelled(IMPACT_LABELS, value))
-      if (session.alcoholImpactDetails) lines.push(session.alcoholImpactDetails)
-      rows.push(summaryRow(
-        "What's the impact of Alex drinking alcohol?",
-        lines,
-        summaryChangeHref(followOnPage, 'alcohol-impact'),
-        { spaced: true }
-      ))
-    }
     if (session.alcoholHelp) {
       const lines = [labelled(YES_NO, session.alcoholHelp)]
       if (session.alcoholHelpDetails) lines.push(session.alcoholHelpDetails)
       rows.push(summaryRow(
-        'Has anything helped Alex to stop or reduce drinking alcohol in the past?',
+        helpQuestion(session),
         lines,
-        summaryChangeHref(followOnPage, 'alcohol-help'),
+        summaryChangeHref(helpPage(session).replace('.html', ''), 'alcohol-help'),
         { secondaryFrom: 1 }
       ))
     }
@@ -394,7 +318,7 @@ const alcoholRows = (session) => {
       rows.push(summaryRow(
         'Does Alex want to make changes to their alcohol use?',
         lines,
-        summaryChangeHref(followOnPage, 'alcohol-changes'),
+        summaryChangeHref('alcohol-changes'),
         { secondaryFrom: 1 }
       ))
     }
@@ -444,7 +368,20 @@ const setHidden = (element, hidden) => {
 const renderAnalysisSummary = (session) => {
   const mount = document.querySelector('[data-al-analysis-summary]')
   const form = document.getElementById('san-alcohol-analysis-form')
+  const notice = document.querySelector('[data-al-analysis-not-required]')
+  const questions = document.querySelector('[data-al-analysis-questions]')
   if (!mount || !form) return
+
+  if (analysisNotRequired(session)) {
+    setHidden(mount, true)
+    setHidden(notice, false)
+    setHidden(questions, true)
+    setHidden(form, !!session.alcoholComplete)
+    return
+  }
+
+  setHidden(notice, true)
+  setHidden(questions, false)
 
   if (!session.alcoholComplete) {
     setHidden(mount, true)
@@ -473,8 +410,8 @@ const renderSummary = (session) => {
       <p class="govuk-body"><a class="govuk-link" href="alcohol.html">Answer alcohol use questions</a></p>`
   } else {
     let followOn = ''
-    if (!complete && hasDrunkAlcohol(session) && !questionsAnswered(session)) {
-      followOn = `<p class="govuk-body"><a class="govuk-link" href="alcohol-before.html">Continue</a></p>`
+    if (!complete && !neverDrunk(session) && session.alcoholUse && !questionsAnswered(session)) {
+      followOn = `<p class="govuk-body"><a class="govuk-link" href="${continueAlcoholHref(session)}">Continue</a></p>`
     }
     mount.innerHTML = `${html}${followOn}`
   }
@@ -493,7 +430,20 @@ const openAnalysisTab = () => {
   if (tab instanceof HTMLElement) tab.click()
 }
 
+const showCompletedAnalysis = () => {
+  const hash = '#practitioner-analysis'
+  if (window.location.hash === hash) {
+    window.location.reload()
+    return
+  }
+  window.location.assign(`alcohol-summary.html${hash}`)
+}
+
 const showAnalysisForm = (focusId) => {
+  if (analysisNotRequired(getSanSession())) {
+    openAnalysisTab()
+    return
+  }
   const mount = document.querySelector('[data-al-analysis-summary]')
   const form = document.getElementById('san-alcohol-analysis-form')
   setHidden(mount, true)
@@ -530,26 +480,13 @@ const emptyFollowOnAnswers = () => ({
   alcoholAnalysisReoffendingDetails: ''
 })
 
-const emptyRecentOnlyAnswers = () => ({
-  alcoholFrequency: '',
-  alcoholUnits: '',
-  alcoholBinge: '',
-  alcoholBingeFrequency: ''
-})
-
 const readUseAnswers = () => ({
   alcoholUse: checkedValue('alcohol_use')
 })
 
-const readBeforeAnswers = (session) => {
-  const recent = recentDrinking(session)
-  const alcoholBinge = recent ? checkedValue('alcohol_binge') : ''
+const readBeforeAnswers = () => {
   const alcoholCustody = checkedValue('alcohol_custody')
   return {
-    alcoholFrequency: recent ? checkedValue('alcohol_frequency') : '',
-    alcoholUnits: recent ? checkedValue('alcohol_units') : '',
-    alcoholBinge,
-    alcoholBingeFrequency: alcoholBinge === 'yes' ? checkedValue('alcohol_binge_frequency') : '',
     alcoholEvidence: checkedValue('alcohol_evidence'),
     alcoholCustody,
     alcoholCustodyDetails: alcoholCustody ? fieldValue(`alcohol-custody-${alcoholCustody}-details`) : ''
@@ -558,18 +495,23 @@ const readBeforeAnswers = (session) => {
 
 const readBackgroundAnswers = () => {
   const alcoholPastIssues = checkedValue('alcohol_past_issues')
-  const alcoholHelp = checkedValue('alcohol_help')
-  const alcoholChanges = checkedValue('alcohol_changes')
-  const alcoholImpact = checkedValues('alcohol_impact')
   return {
     alcoholPastIssues,
-    alcoholPastIssuesDetails: alcoholPastIssues === 'yes' ? fieldValue('alcohol-past-issues-yes-details') : '',
-    alcoholReasons: checkedValues('alcohol_reasons'),
-    alcoholReasonsDetails: fieldValue('alcohol-reasons-details'),
-    alcoholImpact,
-    alcoholImpactDetails: alcoholImpact.includes('other') ? fieldValue('alcohol-impact-other-details') : '',
+    alcoholPastIssuesDetails: alcoholPastIssues === 'yes' ? fieldValue('alcohol-past-issues-yes-details') : ''
+  }
+}
+
+const readHelpAnswers = () => {
+  const alcoholHelp = checkedValue('alcohol_help')
+  return {
     alcoholHelp,
-    alcoholHelpDetails: alcoholHelp === 'yes' ? fieldValue('alcohol-help-yes-details') : '',
+    alcoholHelpDetails: alcoholHelp === 'yes' ? fieldValue('alcohol-help-yes-details') : ''
+  }
+}
+
+const readChangesAnswers = () => {
+  const alcoholChanges = checkedValue('alcohol_changes')
+  return {
     alcoholChanges,
     alcoholChangesDetails: alcoholChanges ? fieldValue(`alcohol-changes-${alcoholChanges}-details`) : ''
   }
@@ -594,41 +536,12 @@ const validateUse = (answers) => {
   return [{
     group: 'alcohol-use',
     href: '#alcohol-use',
-    text: 'Select if Alex has ever drunk alcohol'
+    text: 'Select if there is evidence that Alex has any current issues with alcohol'
   }]
 }
 
-const validateBefore = (answers, session) => {
+const validateBefore = (answers) => {
   const errors = []
-  if (recentDrinking(session)) {
-    if (!answers.alcoholFrequency) {
-      errors.push({
-        group: 'alcohol-frequency',
-        href: '#alcohol-frequency',
-        text: 'Select how often Alex has drunk alcohol in the last 3 months'
-      })
-    }
-    if (!answers.alcoholUnits) {
-      errors.push({
-        group: 'alcohol-units',
-        href: '#alcohol-units',
-        text: 'Select how many units of alcohol Alex has on a typical day of drinking'
-      })
-    }
-    if (!answers.alcoholBinge) {
-      errors.push({
-        group: 'alcohol-binge',
-        href: '#alcohol-binge',
-        text: 'Select if Alex had 6 or more units within a single day of drinking'
-      })
-    } else if (answers.alcoholBinge === 'yes' && !answers.alcoholBingeFrequency) {
-      errors.push({
-        group: 'alcohol-binge-frequency',
-        href: '#alcohol-binge-frequency',
-        text: 'Select how often Alex had 6 or more units within a single day'
-      })
-    }
-  }
   if (!answers.alcoholEvidence) {
     errors.push({
       group: 'alcohol-evidence',
@@ -654,41 +567,36 @@ const validateBackground = (answers) => {
       text: 'Enter details about past issues with alcohol'
     })
   }
-  if (!answers.alcoholReasons.length) {
-    errors.push({
-      group: 'alcohol-reasons',
-      href: '#alcohol-reasons',
-      text: 'Select why they drink alcohol'
-    })
-  }
-  if (!answers.alcoholImpact.length) {
-    errors.push({
-      group: 'alcohol-impact',
-      href: '#alcohol-impact',
-      text: "Select the impact of them drinking alcohol, or select 'No impact'"
-    })
-  }
+  return errors
+}
+
+const validateHelp = (answers, presentTense) => {
   if (!answers.alcoholHelp) {
-    errors.push({
+    return [{
       group: 'alcohol-help',
       href: '#alcohol-help',
-      text: 'Select if anything has helped them to stop or reduce drinking alcohol in the past'
-    })
-  } else if (answers.alcoholHelp === 'yes' && !answers.alcoholHelpDetails) {
-    errors.push({
+      text: presentTense
+        ? 'Select if anything helps Alex to stop or reduce drinking alcohol'
+        : 'Select if anything has helped them to stop or reduce drinking alcohol in the past'
+    }]
+  }
+  if (answers.alcoholHelp === 'yes' && !answers.alcoholHelpDetails) {
+    return [{
       group: 'alcohol-help-yes-details',
       href: '#alcohol-help-yes-details',
-      text: 'Enter details about what helped'
-    })
+      text: presentTense ? 'Enter details about what helps' : 'Enter details about what helped'
+    }]
   }
-  if (!answers.alcoholChanges) {
-    errors.push({
-      group: 'alcohol-changes',
-      href: '#alcohol-changes',
-      text: 'Select if they want to make changes to their alcohol use'
-    })
-  }
-  return errors
+  return []
+}
+
+const validateChanges = (answers) => {
+  if (answers.alcoholChanges) return []
+  return [{
+    group: 'alcohol-changes',
+    href: '#alcohol-changes',
+    text: 'Select if they want to make changes to their alcohol use'
+  }]
 }
 
 const validateAnalysis = (answers) => {
@@ -710,14 +618,9 @@ const validateAnalysis = (answers) => {
   return errors
 }
 
-const applyBeforePage = (session) => {
-  const recentSection = document.querySelector('[data-al-recent-section]')
-  const showRecent = recentDrinking(session)
-  setHidden(recentSection, !showRecent)
+const applyBeforePage = () => {
   setHidden(document.querySelector('[data-al-recent-follow-on]'), false)
   setHidden(document.querySelector('[data-al-custody-section]'), true)
-  const evidenceGroup = document.querySelector('[data-al-evidence-group]')
-  if (evidenceGroup) evidenceGroup.classList.toggle('san-question', showRecent)
 }
 
 const restoreUse = (session) => {
@@ -725,10 +628,6 @@ const restoreUse = (session) => {
 }
 
 const restoreBefore = (session) => {
-  selectRadio('alcohol_frequency', session.alcoholFrequency)
-  selectRadio('alcohol_units', session.alcoholUnits)
-  selectRadio('alcohol_binge', session.alcoholBinge)
-  selectRadio('alcohol_binge_frequency', session.alcoholBingeFrequency)
   selectRadio('alcohol_evidence', session.alcoholEvidence)
   selectRadio('alcohol_custody', session.alcoholCustody)
   if (session.alcoholCustody) setField(`alcohol-custody-${session.alcoholCustody}-details`, session.alcoholCustodyDetails)
@@ -738,12 +637,14 @@ const restoreBefore = (session) => {
 const restoreBackground = (session) => {
   selectRadio('alcohol_past_issues', session.alcoholPastIssues)
   if (session.alcoholPastIssues === 'yes') setField('alcohol-past-issues-yes-details', session.alcoholPastIssuesDetails)
-  selectChecks('alcohol_reasons', session.alcoholReasons)
-  setField('alcohol-reasons-details', session.alcoholReasonsDetails)
-  selectChecks('alcohol_impact', session.alcoholImpact)
-  setField('alcohol-impact-other-details', session.alcoholImpactDetails)
+}
+
+const restoreHelp = (session) => {
   selectRadio('alcohol_help', session.alcoholHelp)
   if (session.alcoholHelp === 'yes') setField('alcohol-help-yes-details', session.alcoholHelpDetails)
+}
+
+const restoreChanges = (session) => {
   selectRadio('alcohol_changes', session.alcoholChanges)
   if (session.alcoholChanges) setField(`alcohol-changes-${session.alcoholChanges}-details`, session.alcoholChangesDetails)
 }
@@ -783,26 +684,6 @@ const seedExample = () => {
   window.history.replaceState({}, '', next)
 }
 
-const bindExclusiveImpact = () => {
-  const none = document.getElementById('alcohol-impact-none')
-  const others = document.querySelectorAll('input[name="alcohol_impact"]:not(#alcohol-impact-none)')
-  if (!none) return
-
-  none.addEventListener('change', () => {
-    if (!none.checked) return
-    others.forEach((input) => {
-      if (input instanceof HTMLInputElement) input.checked = false
-    })
-    revealCheckedConditionals()
-  })
-
-  others.forEach((input) => {
-    input.addEventListener('change', () => {
-      if (input instanceof HTMLInputElement && input.checked) none.checked = false
-    })
-  })
-}
-
 const initAlcohol = () => {
   const page = document.querySelector('[data-al-page]')
   if (!page) return
@@ -811,30 +692,77 @@ const initAlcohol = () => {
   const session = getSanSession()
   applyProgress(session)
 
-  if (fromSummary()) ensureBackLink('alcohol-summary.html')
-
   const pageName = page.getAttribute('data-al-page')
+  if (fromSummary()) ensureBackLink('alcohol-summary.html')
+  else if (pageName === 'background') ensureBackLink('alcohol.html')
+  else if (pageName === 'help' && noCurrentIssues(session)) ensureBackLink('alcohol-background.html')
+  else if (pageName === 'changes' && needsHelp(session)) ensureBackLink(helpPage(session))
+
   if (pageName === 'use') restoreUse(session)
   if (pageName === 'before') {
-    if (!hasDrunkAlcohol(session)) {
-      window.location.assign('alcohol.html')
+    if (!currentIssues(session)) {
+      if (noCurrentIssues(session)) window.location.assign('alcohol-background.html')
+      else if (neverDrunk(session)) window.location.assign('alcohol-summary.html')
+      else window.location.assign('alcohol.html')
       return
     }
-    applyBeforePage(session)
+    applyBeforePage()
     restoreBefore(session)
-    bindExclusiveImpact()
   }
   if (pageName === 'background') {
-    if (!hasDrunkAlcohol(session)) {
-      window.location.assign('alcohol.html')
+    if (!noCurrentIssues(session) && !currentIssues(session)) {
+      window.location.assign(neverDrunk(session) ? 'alcohol-summary.html' : 'alcohol.html')
       return
     }
-    if (!beforeAnswered(session)) {
-      window.location.assign('alcohol-before.html')
+    if (currentIssues(session)) {
+      window.location.assign(beforeAnswered(session) ? helpPage(session) : 'alcohol-before.html')
       return
     }
     restoreBackground(session)
-    bindExclusiveImpact()
+  }
+  if (pageName === 'help') {
+    if (!currentIssues(session) && !noCurrentIssues(session)) {
+      window.location.assign(neverDrunk(session) ? 'alcohol-summary.html' : 'alcohol.html')
+      return
+    }
+    if (currentIssues(session) && !beforeAnswered(session)) {
+      window.location.assign('alcohol-before.html')
+      return
+    }
+    if (noCurrentIssues(session) && !needsHelp(session)) {
+      window.location.assign(session.alcoholPastIssues === 'no' ? 'alcohol-summary.html' : 'alcohol-background.html')
+      return
+    }
+    const expectedHelp = helpPage(session)
+    const currentHelp = page.getAttribute('data-al-help-version') === 'present' ? 'alcohol-help.html' : 'alcohol-help-past.html'
+    if (currentHelp !== expectedHelp) {
+      window.location.assign(fromSummary() ? `${expectedHelp}?from=summary` : expectedHelp)
+      return
+    }
+    restoreHelp(session)
+  }
+  if (pageName === 'changes') {
+    if (!currentIssues(session) && !noCurrentIssues(session)) {
+      window.location.assign(neverDrunk(session) ? 'alcohol-summary.html' : 'alcohol.html')
+      return
+    }
+    if (currentIssues(session) && !beforeAnswered(session)) {
+      window.location.assign('alcohol-before.html')
+      return
+    }
+    if (noCurrentIssues(session) && !needsChanges(session)) {
+      window.location.assign(session.alcoholPastIssues === 'no' ? 'alcohol-summary.html' : 'alcohol-background.html')
+      return
+    }
+    if (noCurrentIssues(session) && !pastIssuesAnswered(session)) {
+      window.location.assign('alcohol-background.html')
+      return
+    }
+    if (needsHelp(session) && !helpAnswered(session)) {
+      window.location.assign(helpPage(session))
+      return
+    }
+    restoreChanges(session)
   }
   if (pageName === 'summary') {
     restoreAnalysis(session)
@@ -870,39 +798,43 @@ const initAlcohol = () => {
     clearErrors()
     const previous = getSanSession()
     const updates = { ...answers, alcoholComplete: false }
-    if (answers.alcoholUse !== previous.alcoholUse) {
-      if (answers.alcoholUse === 'no' || !hasDrunkAlcohol({ alcoholUse: previous.alcoholUse })) {
-        Object.assign(updates, emptyFollowOnAnswers())
-      } else if (answers.alcoholUse === 'yes-not-in-last-3-months') {
-        Object.assign(updates, emptyRecentOnlyAnswers())
-      }
+    if (answers.alcoholUse !== previous.alcoholUse && !sameIssuePath(answers.alcoholUse, previous.alcoholUse)) {
+      Object.assign(updates, emptyFollowOnAnswers())
     }
     setSanSession(updates)
-    if (answers.alcoholUse === 'no') {
+    if (neverDrunk(answers)) {
       window.location.assign('alcohol-summary.html')
       return
     }
     const next = getSanSession()
-    window.location.assign(fromSummary() && beforeAnswered(next) ? 'alcohol-summary.html' : 'alcohol-before.html')
+    if (fromSummary() && questionsAnswered(next)) {
+      window.location.assign('alcohol-summary.html')
+      return
+    }
+    window.location.assign(continueAlcoholHref(next))
   })
 
   const beforeForm = document.getElementById('san-alcohol-before-form')
   beforeForm?.addEventListener('submit', (event) => {
     event.preventDefault()
     revealCheckedConditionals()
-    const current = getSanSession()
     const answers = {
-      ...readBeforeAnswers(current),
+      ...readBeforeAnswers(),
       ...readBackgroundAnswers()
     }
-    const errors = validateBefore(answers, current)
+    const errors = validateBefore(answers)
     if (errors.length) {
       showErrors(errors)
       return
     }
     clearErrors()
     setSanSession({ ...answers, alcoholComplete: false })
-    window.location.assign('alcohol-summary.html')
+    const next = getSanSession()
+    if (fromSummary() && questionsAnswered(next)) {
+      window.location.assign('alcohol-summary.html')
+      return
+    }
+    window.location.assign(helpPage(next))
   })
 
   const backgroundForm = document.getElementById('san-alcohol-background-form')
@@ -916,6 +848,49 @@ const initAlcohol = () => {
       return
     }
     clearErrors()
+    if (answers.alcoholPastIssues === 'no') {
+      Object.assign(answers, {
+        alcoholHelp: '',
+        alcoholHelpDetails: '',
+        alcoholChanges: '',
+        alcoholChangesDetails: ''
+      })
+    }
+    setSanSession({ ...answers, alcoholComplete: false })
+    const next = getSanSession()
+    if (fromSummary() && questionsAnswered(next)) {
+      window.location.assign('alcohol-summary.html')
+      return
+    }
+    window.location.assign(needsHelp(next) ? helpPage(next) : 'alcohol-summary.html')
+  })
+
+  const helpForm = document.getElementById('san-alcohol-help-form')
+  helpForm?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    revealCheckedConditionals()
+    const answers = readHelpAnswers()
+    const errors = validateHelp(answers, currentIssues(getSanSession()))
+    if (errors.length) {
+      showErrors(errors)
+      return
+    }
+    clearErrors()
+    setSanSession({ ...answers, alcoholComplete: false })
+    window.location.assign(fromSummary() && getSanSession().alcoholChanges ? 'alcohol-summary.html' : 'alcohol-changes.html')
+  })
+
+  const changesForm = document.getElementById('san-alcohol-changes-form')
+  changesForm?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    revealCheckedConditionals()
+    const answers = readChangesAnswers()
+    const errors = validateChanges(answers)
+    if (errors.length) {
+      showErrors(errors)
+      return
+    }
+    clearErrors()
     setSanSession({ ...answers, alcoholComplete: false })
     window.location.assign('alcohol-summary.html')
   })
@@ -923,6 +898,12 @@ const initAlcohol = () => {
   const analysisForm = document.getElementById('san-alcohol-analysis-form')
   analysisForm?.addEventListener('submit', (event) => {
     event.preventDefault()
+    if (analysisNotRequired(getSanSession())) {
+      clearErrors()
+      setSanSession({ alcoholComplete: true })
+      showCompletedAnalysis()
+      return
+    }
     revealCheckedConditionals()
     const answers = readAnalysisAnswers()
     const errors = validateAnalysis(answers)
@@ -933,7 +914,7 @@ const initAlcohol = () => {
     }
     clearErrors()
     setSanSession({ ...answers, alcoholComplete: true })
-    window.location.assign('alcohol-summary.html#practitioner-analysis')
+    showCompletedAnalysis()
   })
 }
 

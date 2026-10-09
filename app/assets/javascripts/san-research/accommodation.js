@@ -113,13 +113,13 @@ const FUTURE_DETAILS_IDS = {
 const AP_CAS_SUBTYPES = ['approved-premises', 'cas2', 'cas3']
 
 // AC2 (living with), AC5 (past help) and AC6 (future accommodation) are hidden in this prototype.
-// Each remaining question is its own screen, except no accommodation, which asks why and about changes together.
+// Each remaining question is its own screen, including whether Alex wants to make changes.
 // A concern question follows when the answer needs it.
 const ROUTE_QUESTIONS = {
   settled: ['location', 'suitable', 'changes'],
   'temporary-short-term': ['location', 'suitable', 'changes'],
   'temporary-ap-cas': ['location', 'suitable', 'changes'],
-  none: ['no-accommodation']
+  none: ['no-accommodation', 'changes']
 }
 
 const accommodationRoute = (session) => {
@@ -189,7 +189,7 @@ const stepAnswered = (session, step) => {
   if (step === 'suitable') return !!session.accommodationSuitable
   if (step === 'changes') return !!session.changes
   if (step === 'no-accommodation') {
-    return Array.isArray(session.noAccommodationReasons) && session.noAccommodationReasons.length > 0 && !!session.changes
+    return Array.isArray(session.noAccommodationReasons) && session.noAccommodationReasons.length > 0
   }
   if (step === 'living-with') return Array.isArray(session.livingWith) && session.livingWith.length > 0
   if (step === 'future') {
@@ -287,32 +287,12 @@ const comesBefore = (route, target, current) => {
   return targetIndex !== -1 && currentIndex !== -1 && targetIndex < currentIndex
 }
 
-const setChangesHeading = (secondary) => {
-  const block = document.querySelector('[data-san-question="changes"]')
-  if (!block) return
-  const legend = block.querySelector('.govuk-fieldset__legend')
-  const heading = block.querySelector('.govuk-fieldset__heading')
-  if (!legend || !heading) return
-  const level = secondary ? 'h2' : 'h1'
-  legend.classList.toggle('govuk-fieldset__legend--l', !secondary)
-  legend.classList.toggle('govuk-fieldset__legend--m', secondary)
-  if (heading.tagName.toLowerCase() !== level) {
-    const next = document.createElement(level)
-    next.className = heading.className
-    next.textContent = heading.textContent
-    heading.replaceWith(next)
-  }
-  block.classList.toggle('govuk-!-margin-top-6', secondary)
-}
-
 const showQuestion = (name) => {
-  const paired = name === 'no-accommodation' ? ['changes'] : []
   document.querySelectorAll('[data-san-question]').forEach((block) => {
     const question = block.getAttribute('data-san-question')
-    const show = question === name || paired.includes(question)
+    const show = question === name
     setHidden(block, !show)
     block.classList.remove('san-question')
-    if (question === 'changes') setChangesHeading(paired.includes(question))
   })
 }
 
@@ -476,6 +456,14 @@ const applyProgress = (session) => {
   if (thinkingLink && session.thinkingConsequences) {
     thinkingLink.setAttribute('href', sectionLinkHref('thinking', 'thinking-behaviours-summary.html'))
   }
+
+  document.querySelectorAll('[data-section-complete="offence"]').forEach((icon) => {
+    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', !!session.offenceComplete)
+  })
+  const offenceLink = document.querySelector('[data-san-section-link="offence"]')
+  if (offenceLink && session.offenceDescription) {
+    offenceLink.setAttribute('href', sectionLinkHref('offence', 'offence-analysis-summary.html'))
+  }
 }
 
 const detailsAnswered = (session) => {
@@ -629,7 +617,7 @@ const accommodationRows = (session) => {
     rows.push(summaryRow(
       'Does Alex want to make changes to their accommodation?',
       lines,
-      summaryChangeHref('accommodation-details', route === 'none' ? 'no-accommodation' : 'changes'),
+      summaryChangeHref('accommodation-details', 'changes'),
       { secondaryFrom: 1 }
     ))
   }
@@ -810,8 +798,7 @@ const readStepAnswers = (step) => {
   if (step === 'no-accommodation') {
     return {
       noAccommodationReasons: checkedValues('no_accommodation_reasons'),
-      noAccommodationOtherDetails: fieldValue('no-accommodation-other-details'),
-      ...readChangesAnswers()
+      noAccommodationOtherDetails: fieldValue('no-accommodation-other-details')
     }
   }
   if (step === 'past-help') return { pastAccommodationHelp: fieldValue('past-accommodation-help') }
@@ -927,13 +914,13 @@ const validateStep = (answers, step) => {
       text: 'Select the future accommodation Alex has planned'
     })
   }
-  if ((step === 'changes' || step === 'no-accommodation') && !answers.changes) {
+  if (step === 'changes' && !answers.changes) {
     errors.push({
       group: 'changes',
       href: '#changes',
       text: 'Select if Alex wants to make changes to their accommodation'
     })
-  } else if ((step === 'changes' || step === 'no-accommodation') && answers.changes === 'not-present' && !answers.changesDetails) {
+  } else if (step === 'changes' && answers.changes === 'not-present' && !answers.changesDetails) {
     errors.push({
       group: 'changes',
       href: '#changes-not-present-details',

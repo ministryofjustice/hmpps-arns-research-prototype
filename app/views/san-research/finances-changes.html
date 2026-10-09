@@ -3,7 +3,7 @@
 {% set pageName = "Finances" %}
 {% set sanCaption = "Finances" %}
 {% set sanSection = "finances" %}
-{% set backLinkHref = "finances-debt.html" %}
+{% set backLinkHref = "finances-further.html" %}
 
 {% block content %}
 
@@ -18,7 +18,7 @@
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
         <h1 class="govuk-fieldset__heading">Does Alex want to make changes to their finances?</h1>
       </legend>
-      <div id="changes-hint" class="govuk-hint">This question must be directly answered by Alex.</div>
+      <div id="changes-hint" class="govuk-hint">Alex must answer this question.</div>
       <div class="govuk-radios" data-module="govuk-radios">
         {% set changeOptions = [
           { id: "maintain", label: "I have already made positive changes and want to maintain them" },

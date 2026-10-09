@@ -35,8 +35,7 @@
 <form id="san-drugs-before-form" novalidate data-du-page="before">
   <h1 class="govuk-heading-l">Drug use background</h1>
 
-  <div data-du-recent-section hidden>
-    <h2 class="govuk-heading-m">Used in the last 6 months</h2>
+  <div data-du-frequency-help hidden>
     <details class="govuk-details">
       <summary class="govuk-details__summary">
         <span class="govuk-details__summary-text">How to record frequency</span>
@@ -48,9 +47,13 @@
         <p class="govuk-body govuk-!-margin-bottom-0"><strong>Occasionally</strong>: uses less than once a month.</p>
       </div>
     </details>
+  </div>
 
+  <div data-du-recent-section hidden>
+    <h2 class="govuk-heading-m">Used in the last 6 months</h2>
+    <div data-du-recent-questions>
     {% for drug in drugOptions %}
-    <div class="govuk-form-group{% if not loop.first %} san-question{% endif %}" data-du-recent="{{ drug.id }}" data-san-error-group="frequency-{{ drug.id }}" hidden>
+    <div class="govuk-form-group{% if not loop.first %} san-question{% endif %}" data-du-frequency="{{ drug.id }}" data-san-error-group="frequency-{{ drug.id }}" hidden>
       <fieldset class="govuk-fieldset" id="frequency-{{ drug.id }}">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
           <h3 class="govuk-fieldset__heading">{{ drug.label }}</h3>
@@ -78,19 +81,15 @@
       </div>
     </div>
     {% endfor %}
+    </div>
     <div data-du-recent-extra></div>
   </div>
 
   <div class="san-question" data-du-older-section hidden>
-    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" data-du-older-break>
     <h2 class="govuk-heading-m">Not used in the last 6 months</h2>
-    <div data-du-older-list></div>
-    <div class="govuk-form-group govuk-!-padding-top-4">
-      <h3 class="govuk-heading-m">Give details about Alex's use of these drugs</h3>
-      <div class="govuk-hint">For example, how often they used these drugs, when they stopped using, and if their use was an issue.</div>
-      <textarea class="govuk-textarea" id="older-drug-details" name="older_drug_details" rows="5" maxlength="2000"></textarea>
-      <div class="govuk-hint san-character-count" data-san-character-count="older-drug-details">You have 2,000 characters remaining</div>
-    </div>
+    <div data-du-older-questions></div>
+    <div data-du-older-extra></div>
   </div>
 
   <div class="govuk-form-group san-question" data-du-inject-section data-san-error-group="injected">

@@ -13,22 +13,29 @@
 
 <form id="san-alcohol-use-form" novalidate data-al-page="use">
   <div class="govuk-form-group" data-san-error-group="alcohol-use">
-    <fieldset class="govuk-fieldset" id="alcohol-use">
+    <fieldset class="govuk-fieldset" id="alcohol-use" aria-describedby="alcohol-use-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-        <h1 class="govuk-fieldset__heading">Has Alex ever drunk alcohol?</h1>
+        <h1 class="govuk-fieldset__heading">Is there evidence that Alex has any current issues with alcohol?</h1>
       </legend>
+      <div id="alcohol-use-hint" class="govuk-hint">
+        Consider the frequency and amount of alcohol consumed, and whether alcohol is having a negative impact on health, relationships, finances, daily life or offending behaviour.
+      </div>
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="alcohol-use-yes-in-last-3-months" name="alcohol_use" type="radio" value="yes-in-last-3-months">
-          <label class="govuk-label govuk-radios__label" for="alcohol-use-yes-in-last-3-months">Yes, including the last 3 months</label>
+          <input class="govuk-radios__input" id="alcohol-use-significant" name="alcohol_use" type="radio" value="significant">
+          <label class="govuk-label govuk-radios__label" for="alcohol-use-significant">Yes, significant issues</label>
         </div>
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="alcohol-use-yes-not-in-last-3-months" name="alcohol_use" type="radio" value="yes-not-in-last-3-months">
-          <label class="govuk-label govuk-radios__label" for="alcohol-use-yes-not-in-last-3-months">Yes, but not in the last 3 months</label>
+          <input class="govuk-radios__input" id="alcohol-use-some" name="alcohol_use" type="radio" value="some">
+          <label class="govuk-label govuk-radios__label" for="alcohol-use-some">Yes, some issues</label>
         </div>
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="alcohol-use-no" name="alcohol_use" type="radio" value="no">
-          <label class="govuk-label govuk-radios__label" for="alcohol-use-no">No</label>
+          <input class="govuk-radios__input" id="alcohol-use-none" name="alcohol_use" type="radio" value="none">
+          <label class="govuk-label govuk-radios__label" for="alcohol-use-none">No current issues</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-use-never" name="alcohol_use" type="radio" value="never">
+          <label class="govuk-label govuk-radios__label" for="alcohol-use-never">They have never drunk alcohol</label>
         </div>
       </div>
     </fieldset>

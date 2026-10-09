@@ -5,7 +5,7 @@
 import { getSanSession, sectionLinkHref, setSanSession } from './session.js'
 import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, labelled, scrollToHash } from './form.js'
 
-const MENTAL_YES = ['severe', 'ongoing', 'past']
+const MENTAL_DESCRIBE = ['ongoing', 'past', 'undiagnosed']
 const CHANGE_DETAILS = ['maintain', 'active', 'know-how', 'need-help', 'thinking', 'no']
 
 const YES_NO = { yes: 'Yes', no: 'No' }
@@ -13,12 +13,12 @@ const YES_NO_UNKNOWN = { yes: 'Yes', no: 'No', unknown: 'Unknown' }
 
 const PHYSICAL_LABELS = YES_NO_UNKNOWN
 
-const MENTAL_LABELS = {
-  severe: 'Yes, ongoing - severe and documented over a prolonged period of time',
-  ongoing: 'Yes, ongoing - duration is not known or there is no link to offending',
-  past: 'Yes, in the past',
-  no: 'No',
-  unknown: 'Unknown'
+const MENTAL_LABELS = YES_NO_UNKNOWN
+
+const MENTAL_DESCRIBE_LABELS = {
+  ongoing: 'Ongoing, and diagnosed or documented',
+  past: 'In the past, and diagnosed or documented',
+  undiagnosed: 'Undiagnosed, self reported or waiting for a consultation'
 }
 
 const PSYCHIATRIC_LABELS = {
@@ -28,17 +28,16 @@ const PSYCHIATRIC_LABELS = {
   unknown: 'Unknown'
 }
 
+const LEARNING_YES = ['significant', 'somewhat']
+
 const LEARNING_LABELS = {
-  significant: 'Yes, their ability to learn is significantly impacted',
-  slight: 'Yes, their ability to learn is slightly impacted',
-  no: 'No, they do not have any conditions or disabilities that impact their ability to learn'
+  significant: 'Yes, significantly impacted',
+  somewhat: 'Yes, somewhat impacted',
+  no: 'No',
+  unknown: 'Unknown'
 }
 
-const LEARNING_SUMMARY_LABELS = {
-  significant: 'Yes, significant learning difficulties',
-  slight: 'Yes, some learning difficulties',
-  no: 'No difficulties'
-}
+const COPE_DETAILS = ['some', 'not']
 
 const COPE_LABELS = {
   well: 'Yes, able to cope well',
@@ -46,35 +45,19 @@ const COPE_LABELS = {
   not: 'Not able to cope'
 }
 
+const GAMBLING_DETAILS = ['own', 'someone']
+
+const GAMBLING_LABELS = {
+  own: 'Yes, their own gambling',
+  someone: "Yes, someone else's gambling",
+  no: 'No',
+  unknown: 'Unknown'
+}
+
 const ATTITUDE_LABELS = {
-  positive: 'Positive and reasonably happy',
-  some: 'There are some aspects they would like to change or do not like',
-  negative: 'Negative self-image and unhappy'
-}
-
-const ATTITUDE_SUMMARY_LABELS = {
-  positive: 'Positive and reasonably happy with themselves',
-  some: 'There are some aspects of themselves that they do not like or would like to change',
-  negative: 'Negative self-image and unhappy with themselves'
-}
-
-const FUTURE_LABELS = {
-  optimistic: 'Optimistic and has a positive outlook about their future',
-  'not-sure': 'Not sure and thinks their future could get better or worse',
-  'not-optimistic': 'Not optimistic and thinks their future will not get better or may get worse',
-  'no-answer': 'Alex does not want to answer',
-  'not-present': 'Alex is not present'
-}
-
-const HELPED_LABELS = {
-  accommodation: 'Accommodation',
-  employment: 'Employment',
-  faith: 'Faith or religion',
-  community: 'Feeling part of a community or giving back',
-  medication: 'Medication and treatment',
-  money: 'Money',
-  relationships: 'Relationships',
-  other: 'Other'
+  positive: 'Generally positive and realistic',
+  some: 'Some negative or unhealthy views of themselves',
+  negative: 'Negative or unrealistic'
 }
 
 const CHANGES_LABELS = {
@@ -90,16 +73,18 @@ const CHANGES_LABELS = {
 }
 
 const physicalYes = (session) => session.healthPhysical === 'yes'
-const mentalYes = (session) => MENTAL_YES.includes(session.healthMental)
+const mentalYes = (session) => session.healthMental === 'yes'
 const routeKey = (session) => {
   if (!session.healthPhysical || !session.healthMental) return ''
   return `${physicalYes(session) ? 'physical' : 'no-physical'}-${mentalYes(session) ? 'mental' : 'no-mental'}`
 }
 
+const HIDDEN_QUESTIONS = ['physical-medication', 'mental-medication', 'head-injury', 'neurodiverse', 'future', 'helped']
+
 const routeShows = (session, question) => {
   if (!routeKey(session)) return false
-  if (question === 'physical-medication') return physicalYes(session)
-  if (question === 'mental-medication' || question === 'psychiatric') return mentalYes(session)
+  if (HIDDEN_QUESTIONS.includes(question)) return false
+  if (question === 'mental-describe' || question === 'psychiatric') return mentalYes(session)
   return true
 }
 
@@ -220,17 +205,26 @@ const applyProgress = (session) => {
   applySectionProgress('alcohol', !!session.alcoholComplete, !!session.alcoholUse, 'alcohol-summary.html')
   applySectionProgress('relationships', !!session.relationshipsComplete, !!Array.isArray(session.relationshipsChildren) && session.relationshipsChildren.length > 0, 'personal-relationships-summary.html')
   applySectionProgress('thinking', !!session.thinkingComplete, !!session.thinkingConsequences, 'thinking-behaviours-summary.html')
+  applySectionProgress('offence', !!session.offenceComplete, !!session.offenceDescription, 'offence-analysis-summary.html')
 }
 
-const questionsAnswered = (session) => {
+const questionsFormAnswered = (session) => {
   if (!routeKey(session)) return false
-  if (mentalYes(session) && !session.healthPsychiatric) return false
-  if (!session.healthHeadInjury || !session.healthNeurodiverse || !session.healthCope || !session.healthAttitude) return false
-  if (!session.healthSelfHarm || !session.healthSuicide || !session.healthFuture || !session.healthChanges) return false
+  if (mentalYes(session) && (!session.healthMentalDescribe || !session.healthPsychiatric)) return false
+  if (!session.healthLearning || !session.healthCope || !session.healthAttitude) return false
+  if (!Array.isArray(session.healthGambling) || !session.healthGambling.length) return false
+  if (!session.healthSelfHarm || !session.healthSuicide) return false
   if (session.healthSelfHarm === 'yes' && !session.healthSelfHarmDetails) return false
   if (session.healthSuicide === 'yes' && !session.healthSuicideDetails) return false
-  if (Array.isArray(session.healthHelped) && session.healthHelped.includes('other') && !session.healthHelpedDetails) return false
   return true
+}
+
+const questionsAnswered = (session) => questionsFormAnswered(session) && !!session.healthChanges
+
+const continueQuestionsHref = (session) => {
+  if (!questionsFormAnswered(session)) return 'health-questions.html'
+  if (!session.healthChanges) return 'health-changes.html'
+  return 'health-questions.html'
 }
 
 const summaryChangeHref = (page, hash = '') => `${page}?from=summary${hash ? `#${hash}` : ''}`
@@ -269,62 +263,36 @@ const healthRows = (session) => {
     { secondaryFrom: 1 }
   ))
 
-  const mentalLines = [labelled(MENTAL_LABELS, session.healthMental)]
-  if (MENTAL_YES.includes(session.healthMental) && session.healthMentalDetails) mentalLines.push(session.healthMentalDetails)
   rows.push(summaryRow(
-    'Does Alex have any diagnosed or documented mental health problems?',
-    mentalLines,
-    summaryChangeHref('health'),
-    { secondaryFrom: 1 }
+    'Does Alex have any mental health conditions?',
+    [labelled(MENTAL_LABELS, session.healthMental)],
+    summaryChangeHref('health')
   ))
 
-  if (physicalYes(session)) {
-    rows.push(summaryRow(
-      'Give details if Alex is on prescribed medication or treatment for physical health conditions (optional)',
-      [session.healthPhysicalMedication || 'Not entered'],
-      summaryChangeHref('health-questions', 'physical-medication')
-    ))
-  }
-
   if (mentalYes(session)) {
+    const describeLines = [labelled(MENTAL_DESCRIBE_LABELS, session.healthMentalDescribe)]
+    if (session.healthMentalDetails) describeLines.push(session.healthMentalDetails)
     rows.push(summaryRow(
-      'Give details if Alex is on prescribed medication or treatment for mental health problems (optional)',
-      [session.healthMentalMedication || 'Not entered'],
-      summaryChangeHref('health-questions', 'mental-medication')
-    ))
-    if (session.healthPsychiatric) {
-      rows.push(summaryRow(
-        'Is Alex currently having psychiatric treatment?',
-        [labelled(PSYCHIATRIC_LABELS, session.healthPsychiatric)],
-        summaryChangeHref('health-questions', 'psychiatric')
-      ))
-    }
-  }
-
-  if (session.healthHeadInjury) {
-    rows.push(summaryRow(
-      'Has Alex had a head injury or any illness affecting the brain?',
-      [labelled(YES_NO_UNKNOWN, session.healthHeadInjury)],
-      summaryChangeHref('health-questions', 'head-injury')
-    ))
-  }
-
-  if (session.healthNeurodiverse) {
-    const lines = [labelled(YES_NO_UNKNOWN, session.healthNeurodiverse)]
-    if (session.healthNeurodiverse === 'yes' && session.healthNeurodiverseDetails) lines.push(session.healthNeurodiverseDetails)
-    rows.push(summaryRow(
-      'Does Alex have any neurodiverse conditions?',
-      lines,
-      summaryChangeHref('health-questions', 'neurodiverse'),
+      "How would you describe Alex's mental health conditions?",
+      describeLines,
+      summaryChangeHref('health-questions', 'mental-describe'),
       { secondaryFrom: 1 }
     ))
   }
 
+  if (mentalYes(session) && session.healthPsychiatric) {
+    rows.push(summaryRow(
+      'Is Alex currently having psychiatric treatment?',
+      [labelled(PSYCHIATRIC_LABELS, session.healthPsychiatric)],
+      summaryChangeHref('health-questions', 'psychiatric')
+    ))
+  }
+
   if (session.healthLearning) {
-    const lines = [labelled(LEARNING_SUMMARY_LABELS, session.healthLearning)]
+    const lines = [labelled(LEARNING_LABELS, session.healthLearning)]
     if (session.healthLearningDetails) lines.push(session.healthLearningDetails)
     rows.push(summaryRow(
-      'Does Alex have any learning difficulties? (optional)',
+      'Does Alex have any conditions that affect how they learn, understand or process information?',
       lines,
       summaryChangeHref('health-questions', 'learning'),
       { secondaryFrom: 1 }
@@ -332,17 +300,34 @@ const healthRows = (session) => {
   }
 
   if (session.healthCope) {
+    const lines = [labelled(COPE_LABELS, session.healthCope)]
+    if (session.healthCopeDetails) lines.push(session.healthCopeDetails)
     rows.push(summaryRow(
       'Is Alex able to cope with day-to-day life?',
-      [labelled(COPE_LABELS, session.healthCope)],
-      summaryChangeHref('health-questions', 'cope')
+      lines,
+      summaryChangeHref('health-questions', 'cope'),
+      { secondaryFrom: 1 }
+    ))
+  }
+
+  if (Array.isArray(session.healthGambling) && session.healthGambling.length) {
+    const lines = []
+    session.healthGambling.forEach((value) => {
+      lines.push(labelled(GAMBLING_LABELS, value))
+      const detail = session.healthGamblingDetails && session.healthGamblingDetails[value]
+      if (detail) lines.push(detail)
+    })
+    rows.push(summaryRow(
+      'Is Alex affected by gambling?',
+      lines,
+      summaryChangeHref('health-questions', 'gambling')
     ))
   }
 
   if (session.healthAttitude) {
     rows.push(summaryRow(
-      "What is Alex's attitude towards themselves?",
-      [labelled(ATTITUDE_SUMMARY_LABELS, session.healthAttitude)],
+      'How would you describe how Alex sees themselves?',
+      [labelled(ATTITUDE_LABELS, session.healthAttitude)],
       summaryChangeHref('health-questions', 'attitude')
     ))
   }
@@ -369,33 +354,13 @@ const healthRows = (session) => {
     ))
   }
 
-  if (session.healthFuture) {
-    rows.push(summaryRow(
-      'How optimistic is Alex about their future?',
-      [labelled(FUTURE_LABELS, session.healthFuture)],
-      summaryChangeHref('health-questions', 'future')
-    ))
-  }
-
-  if (Array.isArray(session.healthHelped) && session.healthHelped.length) {
-    const labels = session.healthHelped.map((value) => labelled(HELPED_LABELS, value)).filter(Boolean)
-    const lines = [...labels]
-    if (session.healthHelped.includes('other') && session.healthHelpedDetails) lines.push(session.healthHelpedDetails)
-    rows.push(summaryRow(
-      "What's helped Alex during periods of good health and wellbeing? (optional)",
-      lines,
-      summaryChangeHref('health-questions', 'helped'),
-      { secondaryFrom: labels.length }
-    ))
-  }
-
   if (session.healthChanges) {
     const lines = [labelled(CHANGES_LABELS, session.healthChanges)]
     if (session.healthChangesDetails) lines.push(session.healthChangesDetails)
     rows.push(summaryRow(
       'Does Alex want to make changes to their health and wellbeing?',
       lines,
-      summaryChangeHref('health-questions', 'changes'),
+      summaryChangeHref('health-changes'),
       { secondaryFrom: 1 }
     ))
   }
@@ -452,7 +417,7 @@ const renderSummary = (session) => {
   } else {
     let followOn = ''
     if (!complete && !questionsAnswered(session)) {
-      followOn = '<p class="govuk-body"><a class="govuk-link" href="health-questions.html">Continue</a></p>'
+      followOn = `<p class="govuk-body"><a class="govuk-link" href="${continueQuestionsHref(session)}">Continue</a></p>`
     }
     mount.innerHTML = `<dl class="govuk-summary-list san-summary-list">${rows.join('')}</dl>${followOn}`
   }
@@ -507,22 +472,21 @@ const readStartAnswers = () => {
   return {
     healthPhysical,
     healthPhysicalDetails: healthPhysical === 'yes' ? fieldValue('physical-yes-details') : '',
-    healthMental,
-    healthMentalDetails: MENTAL_YES.includes(healthMental) ? fieldValue(`mental-${healthMental}-details`) : ''
+    healthMental
   }
 }
 
 const readQuestionAnswers = (session) => {
   const answers = {
-    healthPhysicalMedication: '',
-    healthMentalMedication: '',
+    healthMentalDescribe: '',
+    healthMentalDetails: '',
     healthPsychiatric: '',
-    healthHeadInjury: checkedValue('head_injury'),
-    healthNeurodiverse: checkedValue('neurodiverse'),
-    healthNeurodiverseDetails: '',
     healthLearning: checkedValue('learning'),
     healthLearningDetails: '',
     healthCope: checkedValue('cope'),
+    healthCopeDetails: '',
+    healthGambling: checkedValues('gambling'),
+    healthGamblingDetails: {},
     healthAttitude: checkedValue('attitude'),
     healthSelfHarm: checkedValue('self_harm'),
     healthSelfHarmDetails: '',
@@ -530,27 +494,39 @@ const readQuestionAnswers = (session) => {
     healthSuicideDetails: '',
     healthFuture: checkedValue('future'),
     healthHelped: checkedValues('helped'),
-    healthHelpedDetails: '',
-    healthChanges: checkedValue('health_changes'),
-    healthChangesDetails: ''
+    healthHelpedDetails: ''
   }
 
-  if (physicalYes(session)) answers.healthPhysicalMedication = fieldValue('physical-medication')
   if (mentalYes(session)) {
-    answers.healthMentalMedication = fieldValue('mental-medication')
+    answers.healthMentalDescribe = checkedValue('health_mental_describe')
+    answers.healthMentalDetails = MENTAL_DESCRIBE.includes(answers.healthMentalDescribe)
+      ? fieldValue(`mental-describe-${answers.healthMentalDescribe}-details`)
+      : ''
     answers.healthPsychiatric = checkedValue('psychiatric')
   }
-  if (answers.healthNeurodiverse === 'yes') answers.healthNeurodiverseDetails = fieldValue('neurodiverse-yes-details')
-  if (answers.healthLearning === 'significant' || answers.healthLearning === 'slight') {
+  if (LEARNING_YES.includes(answers.healthLearning)) {
     answers.healthLearningDetails = fieldValue(`learning-${answers.healthLearning}-details`)
   }
+  if (COPE_DETAILS.includes(answers.healthCope)) {
+    answers.healthCopeDetails = fieldValue(`cope-${answers.healthCope}-details`)
+  }
+  answers.healthGambling.forEach((value) => {
+    if (!GAMBLING_DETAILS.includes(value)) return
+    const text = fieldValue(`gambling-${value}-details`)
+    if (text) answers.healthGamblingDetails[value] = text
+  })
   if (answers.healthSelfHarm === 'yes') answers.healthSelfHarmDetails = fieldValue('self-harm-yes-details')
   if (answers.healthSuicide === 'yes') answers.healthSuicideDetails = fieldValue('suicide-yes-details')
   if (answers.healthHelped.includes('other')) answers.healthHelpedDetails = fieldValue('helped-other-details')
-  if (CHANGE_DETAILS.includes(answers.healthChanges)) {
-    answers.healthChangesDetails = fieldValue(`changes-${answers.healthChanges}-details`)
-  }
   return answers
+}
+
+const readChangesAnswers = () => {
+  const healthChanges = checkedValue('health_changes')
+  return {
+    healthChanges,
+    healthChangesDetails: CHANGE_DETAILS.includes(healthChanges) ? fieldValue(`changes-${healthChanges}-details`) : ''
+  }
 }
 
 const readAnalysisAnswers = () => {
@@ -580,7 +556,7 @@ const validateStart = (answers) => {
     errors.push({
       group: 'mental',
       href: '#mental',
-      text: 'Select if Alex has any diagnosed or documented mental health problems'
+      text: 'Select if Alex has any mental health conditions'
     })
   }
   return errors
@@ -588,6 +564,13 @@ const validateStart = (answers) => {
 
 const validateQuestions = (answers, session) => {
   const errors = []
+  if (mentalYes(session) && !answers.healthMentalDescribe) {
+    errors.push({
+      group: 'mental-describe',
+      href: '#mental-describe',
+      text: "Select how you would describe Alex's mental health conditions"
+    })
+  }
   if (mentalYes(session) && !answers.healthPsychiatric) {
     errors.push({
       group: 'psychiatric',
@@ -595,18 +578,11 @@ const validateQuestions = (answers, session) => {
       text: 'Select if Alex is currently having psychiatric treatment'
     })
   }
-  if (!answers.healthHeadInjury) {
+  if (!answers.healthLearning) {
     errors.push({
-      group: 'head-injury',
-      href: '#head-injury',
-      text: 'Select if Alex has had a head injury or any illness affecting the brain'
-    })
-  }
-  if (!answers.healthNeurodiverse) {
-    errors.push({
-      group: 'neurodiverse',
-      href: '#neurodiverse',
-      text: 'Select if Alex has any neurodiverse conditions'
+      group: 'learning',
+      href: '#learning',
+      text: 'Select if Alex has any conditions that affect how they learn, understand or process information'
     })
   }
   if (!answers.healthCope) {
@@ -616,11 +592,18 @@ const validateQuestions = (answers, session) => {
       text: 'Select if Alex is able to cope with day-to-day life'
     })
   }
+  if (!answers.healthGambling.length) {
+    errors.push({
+      group: 'gambling',
+      href: '#gambling',
+      text: 'Select if Alex is affected by gambling'
+    })
+  }
   if (!answers.healthAttitude) {
     errors.push({
       group: 'attitude',
       href: '#attitude',
-      text: "Select Alex's attitude towards themselves"
+      text: 'Select how you would describe how Alex sees themselves'
     })
   }
   if (!answers.healthSelfHarm) {
@@ -649,28 +632,16 @@ const validateQuestions = (answers, session) => {
       text: 'Enter details about Alex attempting suicide or having suicidal thoughts'
     })
   }
-  if (!answers.healthFuture) {
-    errors.push({
-      group: 'future',
-      href: '#future',
-      text: 'Select how Alex feels about their future'
-    })
-  }
-  if (answers.healthHelped.includes('other') && !answers.healthHelpedDetails) {
-    errors.push({
-      group: 'helped',
-      href: '#helped-other-details',
-      text: 'Enter details about what else has helped Alex'
-    })
-  }
-  if (!answers.healthChanges) {
-    errors.push({
-      group: 'changes',
-      href: '#changes',
-      text: 'Select if Alex wants to make changes to their health and wellbeing'
-    })
-  }
   return errors
+}
+
+const validateChanges = (answers) => {
+  if (answers.healthChanges) return []
+  return [{
+    group: 'changes',
+    href: '#changes',
+    text: 'Select if Alex wants to make changes to their health and wellbeing'
+  }]
 }
 
 const validateAnalysis = (answers) => {
@@ -706,10 +677,13 @@ const restoreStart = (session) => {
   selectRadio('health_physical', session.healthPhysical)
   if (session.healthPhysical === 'yes') setField('physical-yes-details', session.healthPhysicalDetails)
   selectRadio('health_mental', session.healthMental)
-  if (MENTAL_YES.includes(session.healthMental)) setField(`mental-${session.healthMental}-details`, session.healthMentalDetails)
 }
 
 const restoreQuestions = (session) => {
+  if (MENTAL_DESCRIBE.includes(session.healthMentalDescribe)) {
+    selectRadio('health_mental_describe', session.healthMentalDescribe)
+    setField(`mental-describe-${session.healthMentalDescribe}-details`, session.healthMentalDetails)
+  }
   setField('physical-medication', session.healthPhysicalMedication)
   setField('mental-medication', session.healthMentalMedication)
   selectRadio('psychiatric', session.healthPsychiatric)
@@ -717,10 +691,19 @@ const restoreQuestions = (session) => {
   selectRadio('neurodiverse', session.healthNeurodiverse)
   if (session.healthNeurodiverse === 'yes') setField('neurodiverse-yes-details', session.healthNeurodiverseDetails)
   selectRadio('learning', session.healthLearning)
-  if (session.healthLearning === 'significant' || session.healthLearning === 'slight') {
+  if (LEARNING_YES.includes(session.healthLearning)) {
     setField(`learning-${session.healthLearning}-details`, session.healthLearningDetails)
   }
   selectRadio('cope', session.healthCope)
+  if (COPE_DETAILS.includes(session.healthCope)) {
+    setField(`cope-${session.healthCope}-details`, session.healthCopeDetails)
+  }
+  selectChecks('gambling', session.healthGambling)
+  if (session.healthGamblingDetails) {
+    Object.entries(session.healthGamblingDetails).forEach(([key, value]) => {
+      setField(`gambling-${key}-details`, value)
+    })
+  }
   selectRadio('attitude', session.healthAttitude)
   selectRadio('self_harm', session.healthSelfHarm)
   if (session.healthSelfHarm === 'yes') setField('self-harm-yes-details', session.healthSelfHarmDetails)
@@ -731,6 +714,9 @@ const restoreQuestions = (session) => {
   if (Array.isArray(session.healthHelped) && session.healthHelped.includes('other')) {
     setField('helped-other-details', session.healthHelpedDetails)
   }
+}
+
+const restoreChanges = (session) => {
   selectRadio('health_changes', session.healthChanges)
   if (CHANGE_DETAILS.includes(session.healthChanges)) {
     setField(`changes-${session.healthChanges}-details`, session.healthChangesDetails)
@@ -779,6 +765,17 @@ const initHealth = () => {
     applyQuestionRoute(session)
     restoreQuestions(session)
   }
+  if (pageName === 'changes') {
+    if (!routeKey(session)) {
+      window.location.assign('health')
+      return
+    }
+    if (!questionsFormAnswered(session)) {
+      window.location.assign('health-questions')
+      return
+    }
+    restoreChanges(session)
+  }
   if (pageName === 'summary') {
     restoreAnalysis(session)
     renderSummary(session)
@@ -815,6 +812,8 @@ const initHealth = () => {
     const updates = { ...answers, healthComplete: false }
     if (!physicalYes(answers)) updates.healthPhysicalMedication = ''
     if (!mentalYes(answers)) {
+      updates.healthMentalDescribe = ''
+      updates.healthMentalDetails = ''
       updates.healthMentalMedication = ''
       updates.healthPsychiatric = ''
     }
@@ -829,6 +828,20 @@ const initHealth = () => {
     const current = getSanSession()
     const answers = readQuestionAnswers(current)
     const errors = validateQuestions(answers, current)
+    if (errors.length) {
+      showErrors(errors)
+      return
+    }
+    clearErrors()
+    setSanSession({ ...answers, healthComplete: false })
+    window.location.assign(fromSummary() && getSanSession().healthChanges ? 'health-summary.html' : 'health-changes.html')
+  })
+
+  document.getElementById('san-health-changes-form')?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    revealCheckedConditionals()
+    const answers = readChangesAnswers()
+    const errors = validateChanges(answers)
     if (errors.length) {
       showErrors(errors)
       return

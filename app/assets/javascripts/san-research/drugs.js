@@ -93,28 +93,6 @@ const MOTIVATION_LABELS = {
   unknown: 'Unknown'
 }
 
-const WHY_LABELS = {
-  cultural: 'Cultural or religious practice',
-  curiosity: 'Curiosity or experimentation',
-  performance: 'Enhance performance',
-  escapism: 'Escapism or avoidance',
-  stress: 'Manage stress or emotional issues',
-  'peer-pressure': 'Peer pressure or social influence',
-  recreation: 'Recreation or pleasure',
-  'self-medication': 'Self-medication',
-  other: 'Other'
-}
-
-const AFFECT_LABELS = {
-  behaviour: 'Behaviour',
-  community: 'Community',
-  finances: 'Finances',
-  offending: 'Links to offending',
-  health: 'Physical or mental health',
-  relationships: 'Relationships',
-  other: 'Other'
-}
-
 const CHANGES_LABELS = {
   maintain: 'I have already made positive changes and want to maintain them',
   active: 'I am actively making changes',
@@ -150,7 +128,8 @@ const EXAMPLE_COMPLETE = {
   whyDetails: '',
   drugAffect: ['behaviour'],
   affectDetails: '',
-  helpedReduce: '',
+  helpedReduce: 'no',
+  helpedReduceDetails: '',
   drugChanges: 'active',
   drugChangesDetails: '',
   drugAnalysisMotivation: 'unknown',
@@ -325,6 +304,14 @@ const applyProgress = (session) => {
   if (thinkingLink && session.thinkingConsequences) {
     thinkingLink.setAttribute('href', sectionLinkHref('thinking', 'thinking-behaviours-summary.html'))
   }
+
+  document.querySelectorAll('[data-section-complete="offence"]').forEach((icon) => {
+    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', !!session.offenceComplete)
+  })
+  const offenceLink = document.querySelector('[data-san-section-link="offence"]')
+  if (offenceLink && session.offenceDescription) {
+    offenceLink.setAttribute('href', sectionLinkHref('offence', 'offence-analysis-summary.html'))
+  }
 }
 
 const selectedDrugs = (session) => (Array.isArray(session.drugTypes) ? session.drugTypes : [])
@@ -388,7 +375,7 @@ const injectedWhenComplete = (session) => injectedDrugIds(session).every((id) =>
 
 const beforeFieldsAnswered = (session) => {
   if (!typesAnswered(session)) return false
-  if (recentDrugs(session).some((id) => !(session.drugFrequency && session.drugFrequency[id]))) return false
+  if (assessedDrugs(session).some((id) => !(session.drugFrequency && session.drugFrequency[id]))) return false
   return Array.isArray(session.injectedDrugs) && session.injectedDrugs.length > 0
 }
 
@@ -397,7 +384,9 @@ const nextDrugQuestion = (session) => {
   if (!typesAnswered(session)) return 'drugs-when.html'
   if (!beforeFieldsAnswered(session)) return 'drugs-before.html'
   if (injectedWhenNeeded(session) && !injectedWhenComplete(session)) return 'drugs-injected.html'
-  return 'drugs-background.html'
+  if (!helpAnswered(session)) return helpPage(session)
+  if (!session.drugChanges) return 'drugs-changes.html'
+  return helpPage(session)
 }
 
 const beforeAnswered = (session) => {
@@ -406,11 +395,22 @@ const beforeAnswered = (session) => {
   return true
 }
 
+const hasRecentDrugUse = (session) => recentDrugs(session).length > 0
+
+const helpPage = (session) => hasRecentDrugUse(session) ? 'drugs-help.html' : 'drugs-help-past.html'
+
+const helpQuestion = (session) => hasRecentDrugUse(session)
+  ? 'Does anything help Alex to stop or reduce their drug use?'
+  : 'Has anything helped Alex to stop or reduce their drug use in the past?'
+
+const helpAnswered = (session) => {
+  if (!session.helpedReduce) return false
+  if (session.helpedReduce === 'yes' && !session.helpedReduceDetails) return false
+  return true
+}
+
 const backgroundAnswered = (session) => {
-  if (!session.treatment) return false
-  if (session.treatment === 'yes' && !session.treatmentDetails) return false
-  if (!(Array.isArray(session.whyDrugUse) && session.whyDrugUse.length)) return false
-  if (!(Array.isArray(session.drugAffect) && session.drugAffect.length)) return false
+  if (!helpAnswered(session)) return false
   if (!session.drugChanges) return false
   if (session.drugChanges === 'not-present' && !session.drugChangesDetails) return false
   return true
@@ -455,7 +455,7 @@ const drugCard = (session, id) => {
       summaryChangeHref('drugs-when', `last-used-${id}`)
   )]
 
-  if (lastUsed === 'last-six') {
+  if (lastUsed) {
     const frequency = session.drugFrequency && session.drugFrequency[id]
     const details = session.drugFrequencyDetails && session.drugFrequencyDetails[id]
     rows.push(summaryRow(
@@ -531,58 +531,28 @@ const drugRows = (session) => {
   if (older.length) {
     parts.push('<h3 class="govuk-heading-m">Not used in the last 6 months</h3>')
     parts.push(older.map((id) => drugCard(session, id)).join(''))
-    parts.push(`<dl class="govuk-summary-list san-summary-list">${summaryRow(
-      "Give details about Alex's use of these drugs",
-      [session.olderDrugDetails],
-      summaryChangeHref('drugs-before', 'older-drug-details'),
-      { blankIfEmpty: true }
-    )}</dl>`)
   }
 
-  if (session.treatment || (Array.isArray(session.whyDrugUse) && session.whyDrugUse.length) || session.drugChanges) {
+  if (session.helpedReduce || session.drugChanges) {
     parts.push('<h3 class="govuk-heading-m">More information</h3>')
     const rows = []
-    if (session.treatment) {
-      const lines = [labelled(YES_NO, session.treatment)]
-      if (session.treatmentDetails) lines.push(session.treatmentDetails)
+    if (session.helpedReduce) {
+      const lines = [labelled(YES_NO, session.helpedReduce)]
+      if (session.helpedReduceDetails) lines.push(session.helpedReduceDetails)
       rows.push(summaryRow(
-        'Is Alex receiving treatment for their drug use?',
+        helpQuestion(session),
         lines,
-        summaryChangeHref('drugs-background', 'treatment'),
+        summaryChangeHref(hasRecentDrugUse(session) ? 'drugs-help' : 'drugs-help-past', 'helped-reduce'),
         { secondaryFrom: 1 }
       ))
     }
-    if (Array.isArray(session.whyDrugUse) && session.whyDrugUse.length) {
-      const lines = session.whyDrugUse.map((value) => labelled(WHY_LABELS, value))
-      if (session.whyDetails) lines.push(session.whyDetails)
-      rows.push(summaryRow(
-        'Why does Alex use drugs?',
-        lines,
-        summaryChangeHref('drugs-background', 'why')
-      ))
-    }
-    if (Array.isArray(session.drugAffect) && session.drugAffect.length) {
-      const lines = session.drugAffect.map((value) => labelled(AFFECT_LABELS, value))
-      if (session.affectDetails) lines.push(session.affectDetails)
-      rows.push(summaryRow(
-        "How has Alex's drug use affected their life?",
-        lines,
-        summaryChangeHref('drugs-background', 'affect')
-      ))
-    }
-    rows.push(summaryRow(
-      'Has anything helped Alex stop or reduce their drug use? (optional)',
-      [session.helpedReduce],
-      summaryChangeHref('drugs-background', 'helped-reduce'),
-      { blankIfEmpty: true }
-    ))
     if (session.drugChanges) {
       const lines = [labelled(CHANGES_LABELS, session.drugChanges)]
       if (session.drugChangesDetails) lines.push(session.drugChangesDetails)
       rows.push(summaryRow(
         'Does Alex want to make changes to their drug use?',
         lines,
-        summaryChangeHref('drugs-background', 'changes'),
+        summaryChangeHref('drugs-changes'),
         { secondaryFrom: 1 }
       ))
     }
@@ -742,6 +712,7 @@ const emptyFollowOnAnswers = () => ({
   drugAffect: [],
   affectDetails: '',
   helpedReduce: '',
+  helpedReduceDetails: '',
   drugChanges: '',
   drugChangesDetails: '',
   drugAnalysisMotivation: '',
@@ -804,7 +775,7 @@ const readWhenAnswers = (session) => {
 const readBeforeAnswers = (session) => {
   const drugFrequency = {}
   const drugFrequencyDetails = {}
-  recentDrugs(session).forEach((id) => {
+  assessedDrugs(session).forEach((id) => {
     const frequency = checkedValue(`frequency_${id}`)
     if (frequency) drugFrequency[id] = frequency
     const details = fieldValue(`frequency-${id}-details`)
@@ -814,7 +785,6 @@ const readBeforeAnswers = (session) => {
   return {
     drugFrequency,
     drugFrequencyDetails,
-    olderDrugDetails: fieldValue('older-drug-details'),
     injectedDrugs: injectableAssessedDrugs(session).length
       ? checkedValues('injected_drugs').filter((id) => id === 'none' || isInjectableDrug(id))
       : ['none']
@@ -832,15 +802,27 @@ const readInjectedWhenAnswers = (session) => {
 
 const readBackgroundAnswers = () => {
   const treatment = checkedValue('receiving_treatment')
-  const drugChanges = checkedValue('drug_changes')
   return {
     treatment,
     treatmentDetails: treatment ? fieldValue(`treatment-${treatment}-details`) : '',
     whyDrugUse: checkedValues('why_drug_use'),
     whyDetails: fieldValue('why-details'),
     drugAffect: checkedValues('drug_affect'),
-    affectDetails: fieldValue('affect-details'),
-    helpedReduce: fieldValue('helped-reduce'),
+    affectDetails: fieldValue('affect-details')
+  }
+}
+
+const readHelpAnswers = () => {
+  const helpedReduce = checkedValue('helped_reduce')
+  return {
+    helpedReduce,
+    helpedReduceDetails: helpedReduce === 'yes' ? fieldValue('helped-reduce-yes-details') : ''
+  }
+}
+
+const readChangesAnswers = () => {
+  const drugChanges = checkedValue('drug_changes')
+  return {
     drugChanges,
     drugChangesDetails: drugChanges ? fieldValue(`changes-${drugChanges}-details`) : ''
   }
@@ -920,7 +902,7 @@ const validateWhen = (answers, session) => {
 
 const validateBefore = (answers, session) => {
   const errors = []
-  recentDrugs(session).forEach((id) => {
+  assessedDrugs(session).forEach((id) => {
     if (!answers.drugFrequency[id]) {
       errors.push({
         group: `frequency-${id}`,
@@ -953,35 +935,30 @@ const validateInjectedWhen = (answers, session) => {
   return errors
 }
 
-const validateBackground = (answers) => {
+const validateBackground = () => []
+
+const validateHelp = (answers, session) => {
   const errors = []
-  if (!answers.treatment) {
+  if (!answers.helpedReduce) {
     errors.push({
-      group: 'treatment',
-      href: '#treatment',
-      text: 'Select if Alex is receiving treatment for their drug use'
+      group: 'helped-reduce',
+      href: '#helped-reduce',
+      text: hasRecentDrugUse(session)
+        ? 'Select if anything helps Alex to stop or reduce their drug use'
+        : 'Select if anything has helped Alex to stop or reduce their drug use in the past'
     })
-  } else if (answers.treatment === 'yes' && !answers.treatmentDetails) {
+  } else if (answers.helpedReduce === 'yes' && !answers.helpedReduceDetails) {
     errors.push({
-      group: 'treatment-yes-details',
-      href: '#treatment-yes-details',
-      text: 'Enter details about treatment or support'
-    })
-  }
-  if (!answers.whyDrugUse.length) {
-    errors.push({
-      group: 'why',
-      href: '#why',
-      text: 'Select why Alex uses drugs'
+      group: 'helped-reduce-yes-details',
+      href: '#helped-reduce-yes-details',
+      text: 'Enter details'
     })
   }
-  if (!answers.drugAffect.length) {
-    errors.push({
-      group: 'affect',
-      href: '#affect',
-      text: "Select how Alex's drug use has affected their life"
-    })
-  }
+  return errors
+}
+
+const validateChanges = (answers) => {
+  const errors = []
   if (!answers.drugChanges) {
     errors.push({
       group: 'changes',
@@ -1031,7 +1008,7 @@ const extraFrequencyHtml = (session, id, withSpacing) => {
             <input class="govuk-radios__input" id="frequency-${escapeHtml(id)}-${escapeHtml(value)}" name="frequency_${escapeHtml(id)}" type="radio" value="${escapeHtml(value)}">
             <label class="govuk-label govuk-radios__label" for="frequency-${escapeHtml(id)}-${escapeHtml(value)}">${escapeHtml(text)}</label>
           </div>`).join('')
-  return `<div class="govuk-form-group${withSpacing ? ' san-question' : ''}" data-du-recent="${escapeHtml(id)}" data-du-recent-extra-item data-san-error-group="frequency-${escapeHtml(id)}">
+  return `<div class="govuk-form-group${withSpacing ? ' san-question' : ''}" data-du-frequency="${escapeHtml(id)}" data-du-frequency-extra-item data-san-error-group="frequency-${escapeHtml(id)}">
       <fieldset class="govuk-fieldset" id="frequency-${escapeHtml(id)}">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
           <h3 class="govuk-fieldset__heading">${label}</h3>
@@ -1082,17 +1059,37 @@ const injectedWhenHtml = (id, label) => {
     </div>`
 }
 
+const restyleFrequencyBlocks = (container) => {
+  if (!container) return
+  Array.from(container.querySelectorAll('[data-du-frequency]')).forEach((block, index) => {
+    block.classList.toggle('san-question', index > 0)
+  })
+}
+
 const applyBeforePage = (session) => {
   const recent = recentDrugs(session)
   const older = olderDrugs(session)
   const extraRecent = recent.filter((id) => id.startsWith('extra-'))
+  const extraOlder = older.filter((id) => id.startsWith('extra-'))
   const listedRecent = recent.filter((id) => !id.startsWith('extra-'))
+  const listedOlder = older.filter((id) => !id.startsWith('extra-'))
 
   const recentSection = document.querySelector('[data-du-recent-section]')
+  const olderSection = document.querySelector('[data-du-older-section]')
+  const recentQuestions = document.querySelector('[data-du-recent-questions]')
+  const olderQuestions = document.querySelector('[data-du-older-questions]')
   setHidden(recentSection, !recent.length)
+  setHidden(olderSection, !older.length)
+  setHidden(document.querySelector('[data-du-frequency-help]'), !recent.length && !older.length)
+  setHidden(document.querySelector('[data-du-older-break]'), !recent.length)
+
   DRUG_IDS.forEach((id) => {
-    document.querySelectorAll(`[data-du-recent="${id}"]`).forEach((block) => {
-      setHidden(block, !recent.includes(id))
+    document.querySelectorAll(`[data-du-frequency="${id}"]`).forEach((block) => {
+      const isRecent = recent.includes(id)
+      const isOlder = older.includes(id)
+      setHidden(block, !isRecent && !isOlder)
+      if (isRecent && recentQuestions) recentQuestions.appendChild(block)
+      else if (isOlder && olderQuestions) olderQuestions.appendChild(block)
     })
   })
 
@@ -1100,15 +1097,13 @@ const applyBeforePage = (session) => {
   if (recentExtra) {
     recentExtra.innerHTML = extraRecent.map((id, index) => extraFrequencyHtml(session, id, listedRecent.length > 0 || index > 0)).join('')
   }
-
-  const olderSection = document.querySelector('[data-du-older-section]')
-  setHidden(olderSection, !older.length)
-  const olderList = document.querySelector('[data-du-older-list]')
-  if (olderList) {
-    const labels = older.map((id) => drugLabel(session, id))
-    const items = labels.map((label) => `<li>${escapeHtml(label)}</li>`).join('')
-    olderList.innerHTML = `<p class="govuk-body">More than 6 months ago, Alex used:</p><ul class="govuk-list govuk-list--bullet">${items}</ul>`
+  const olderExtra = document.querySelector('[data-du-older-extra]')
+  if (olderExtra) {
+    olderExtra.innerHTML = extraOlder.map((id, index) => extraFrequencyHtml(session, id, listedOlder.length > 0 || index > 0)).join('')
   }
+
+  restyleFrequencyBlocks(recentQuestions)
+  restyleFrequencyBlocks(olderQuestions)
 
   const types = assessedDrugs(session)
   DRUG_IDS.forEach((id) => {
@@ -1295,7 +1290,6 @@ const restoreBefore = (session) => {
       setField(`frequency-${id}-details`, value)
     })
   }
-  setField('older-drug-details', session.olderDrugDetails)
   selectChecks('injected_drugs', session.injectedDrugs)
 }
 
@@ -1313,7 +1307,14 @@ const restoreBackground = (session) => {
   setField('why-details', session.whyDetails)
   selectChecks('drug_affect', session.drugAffect)
   setField('affect-details', session.affectDetails)
-  setField('helped-reduce', session.helpedReduce)
+}
+
+const restoreHelp = (session) => {
+  selectRadio('helped_reduce', session.helpedReduce)
+  if (session.helpedReduce === 'yes') setField('helped-reduce-yes-details', session.helpedReduceDetails)
+}
+
+const restoreChanges = (session) => {
   selectRadio('drug_changes', session.drugChanges)
   if (session.drugChanges) setField(`changes-${session.drugChanges}-details`, session.drugChangesDetails)
 }
@@ -1407,7 +1408,7 @@ const initDrugs = () => {
       return
     }
     if (!injectedWhenNeeded(session)) {
-      window.location.assign(fromSummary() ? 'drugs-summary.html' : 'drugs-background.html')
+      window.location.assign(fromSummary() ? 'drugs-summary.html' : helpPage(session))
       return
     }
     applyInjectedPage(session)
@@ -1422,10 +1423,44 @@ const initDrugs = () => {
       window.location.assign(nextDrugQuestion(session))
       return
     }
+    window.location.assign(fromSummary() ? 'drugs-summary.html' : helpPage(session))
+    return
+  }
+  if (pageName === 'help') {
+    if (session.drugUse !== 'yes') {
+      window.location.assign('drugs.html')
+      return
+    }
+    if (!beforeAnswered(session)) {
+      window.location.assign(nextDrugQuestion(session))
+      return
+    }
+    const expectedHelp = helpPage(session)
+    const currentHelp = page.getAttribute('data-du-help-version') === 'recent' ? 'drugs-help.html' : 'drugs-help-past.html'
+    if (currentHelp !== expectedHelp) {
+      window.location.assign(fromSummary() ? `${expectedHelp}?from=summary` : expectedHelp)
+      return
+    }
     if (!fromSummary()) {
       ensureBackLink(injectedWhenNeeded(session) ? 'drugs-injected.html' : 'drugs-before.html')
     }
-    restoreBackground(session)
+    restoreHelp(session)
+  }
+  if (pageName === 'changes') {
+    if (session.drugUse !== 'yes') {
+      window.location.assign('drugs.html')
+      return
+    }
+    if (!beforeAnswered(session)) {
+      window.location.assign(nextDrugQuestion(session))
+      return
+    }
+    if (!helpAnswered(session)) {
+      window.location.assign(helpPage(session))
+      return
+    }
+    if (!fromSummary()) ensureBackLink(helpPage(session))
+    restoreChanges(session)
   }
   if (pageName === 'summary') {
     restoreAnalysis(session)
@@ -1550,7 +1585,7 @@ const initDrugs = () => {
       window.location.assign('drugs-injected.html')
       return
     }
-    window.location.assign(fromSummary() ? 'drugs-summary.html' : 'drugs-background.html')
+    window.location.assign(fromSummary() ? 'drugs-summary.html' : helpPage(getSanSession()))
   })
 
   const injectedForm = document.getElementById('san-drugs-injected-form')
@@ -1565,15 +1600,31 @@ const initDrugs = () => {
     }
     clearErrors()
     setSanSession({ ...answers, drugComplete: false })
-    window.location.assign(fromSummary() ? 'drugs-summary.html' : 'drugs-background.html')
+    window.location.assign(fromSummary() ? 'drugs-summary.html' : helpPage(getSanSession()))
   })
 
-  const backgroundForm = document.getElementById('san-drugs-background-form')
-  backgroundForm?.addEventListener('submit', (event) => {
+  const helpForm = document.getElementById('san-drugs-help-form')
+  helpForm?.addEventListener('submit', (event) => {
     event.preventDefault()
     revealCheckedConditionals()
-    const answers = readBackgroundAnswers()
-    const errors = validateBackground(answers)
+    const current = getSanSession()
+    const answers = readHelpAnswers()
+    const errors = validateHelp(answers, current)
+    if (errors.length) {
+      showErrors(errors)
+      return
+    }
+    clearErrors()
+    setSanSession({ ...answers, drugComplete: false })
+    window.location.assign(fromSummary() && getSanSession().drugChanges ? 'drugs-summary.html' : 'drugs-changes.html')
+  })
+
+  const changesForm = document.getElementById('san-drugs-changes-form')
+  changesForm?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    revealCheckedConditionals()
+    const answers = readChangesAnswers()
+    const errors = validateChanges(answers)
     if (errors.length) {
       showErrors(errors)
       return

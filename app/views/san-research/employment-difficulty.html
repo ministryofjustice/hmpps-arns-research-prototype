@@ -22,16 +22,16 @@
   <div class="govuk-form-group" data-ee-difficulty="{{ area.id }}" data-san-error-group="difficulty-{{ area.id }}" hidden>
     <fieldset class="govuk-fieldset" id="difficulty-{{ area.id }}-level">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">How much difficulty does Alex have with {{ area.label }}?</h2>
+        <h2 class="govuk-fieldset__heading">How much support does Alex need with {{ area.label }}?</h2>
       </legend>
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="difficulty-{{ area.id }}-significant" name="difficulty_{{ area.id }}" type="radio" value="significant">
-          <label class="govuk-label govuk-radios__label" for="difficulty-{{ area.id }}-significant">Significant difficulties</label>
+          <label class="govuk-label govuk-radios__label" for="difficulty-{{ area.id }}-significant">Significant support needed</label>
         </div>
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="difficulty-{{ area.id }}-some" name="difficulty_{{ area.id }}" type="radio" value="some">
-          <label class="govuk-label govuk-radios__label" for="difficulty-{{ area.id }}-some">Some difficulties</label>
+          <label class="govuk-label govuk-radios__label" for="difficulty-{{ area.id }}-some">Some support needed</label>
         </div>
       </div>
     </fieldset>
