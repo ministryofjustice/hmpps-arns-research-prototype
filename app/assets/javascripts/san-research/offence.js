@@ -9,13 +9,12 @@ const ELEMENT_LABELS = {
   arson: 'Arson',
   'domestic-abuse': 'Domestic abuse',
   'excessive-violence': 'Excessive violence or sadistic violence',
-  hatred: 'Hatred of identifiable groups',
-  property: 'Physical damage to property',
   sexual: 'Sexual element',
+  stalking: 'Stalking',
   'victim-targeted': 'Victim targeted',
   violence: 'Violence, or threat of violence or coercion',
   weapon: 'Weapon',
-  none: 'None'
+  none: 'No, none of these elements'
 }
 
 const MOTIVATION_LABELS = {
@@ -23,7 +22,7 @@ const MOTIVATION_LABELS = {
   pressurised: 'Being pressurised or led into offending by others',
   emotional: 'Emotional state of Alex',
   financial: 'Financial motivation',
-  hatred: 'Hatred of identifiable groups',
+  prejudice: 'Prejudice or discrimination',
   power: 'Seeking or exerting power',
   sexual: 'Sexual motivation',
   thrill: 'Thrill seeking',
@@ -31,7 +30,7 @@ const MOTIVATION_LABELS = {
 }
 
 const COMMITTED_LABELS = {
-  people: 'One or more people',
+  people: 'Direct victim',
   other: 'Other'
 }
 
@@ -273,24 +272,45 @@ const summaryRowPlain = (question, lines) => {
 
 const yesNoLines = (value, details) => [labelled(YES_NO, value), details].filter(Boolean)
 
-const victimRows = (victim, withActions, index, from) => {
+const victimTitle = (index) => `${ORDINALS[index] || `Victim ${index + 1}`} victim`
+
+const victimChangeHref = (index, from, hash = '') => {
+  const href = `offence-analysis-victim?victim=${index}&amp;from=${from}`
+  return hash ? `${href}#${hash}` : href
+}
+
+const victimRows = (victim, index, from) => {
   const relationship = [labelled(RELATIONSHIP_LABELS, victim.relationship)]
   if (victim.relationship === 'other' && victim.relationshipDetails) relationship.push(victim.relationshipDetails)
-  const change = `offence-analysis-victim?victim=${index}&amp;from=${from}`
-  const action = withActions
-    ? `<dd class="govuk-summary-list__actions"><a class="govuk-link" href="${change}">Change</a><br><a class="govuk-link" href="#" data-oa-delete-victim="${index}">Delete</a></dd>`
-    : ''
-  const row = (question, lines, actions = '') => `<div class="govuk-summary-list__row">
+  const title = victimTitle(index)
+  const row = (question, lines, hash) => `<div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">${escapeHtml(question)}</dt>
     <dd class="govuk-summary-list__value">${lines.filter(Boolean).map((line) => escapeHtml(line)).join('<br>')}</dd>
-    ${actions}
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="${victimChangeHref(index, from, hash)}">Change<span class="govuk-visually-hidden"> ${escapeHtml(question)} for ${escapeHtml(title)}</span></a>
+    </dd>
   </div>`
   return [
-    row("What is Alex's relationship to the victim?", relationship, action),
-    row("What is the victim's approximate age?", [labelled(AGE_LABELS, victim.age)]),
-    row("What is the victim's sex?", [labelled(SEX_LABELS, victim.sex)]),
-    row("What is the victim's race or ethnicity?", [labelled(ETHNICITY_LABELS, victim.ethnicity)])
+    row("What is Alex's relationship to the victim?", relationship, 'victim-relationship'),
+    row("What is the victim's approximate age?", [labelled(AGE_LABELS, victim.age)], 'victim-age'),
+    row("What is the victim's sex?", [labelled(SEX_LABELS, victim.sex)], 'victim-sex'),
+    row("What is the victim's race or ethnicity?", [labelled(ETHNICITY_LABELS, victim.ethnicity)], 'victim-ethnicity')
   ].join('')
+}
+
+const victimCardHtml = (victim, index, from) => {
+  const title = victimTitle(index)
+  return `<div class="govuk-summary-card">
+    <div class="govuk-summary-card__title-wrapper">
+      <h2 class="govuk-summary-card__title">${escapeHtml(title)}</h2>
+      <ul class="govuk-summary-card__actions">
+        <li class="govuk-summary-card__action"><a class="govuk-link" href="#" data-oa-delete-victim="${index}">Remove victim details<span class="govuk-visually-hidden"> for ${escapeHtml(title)}</span></a></li>
+      </ul>
+    </div>
+    <div class="govuk-summary-card__content">
+      <dl class="govuk-summary-list">${victimRows(victim, index, from)}</dl>
+    </div>
+  </div>`
 }
 
 const renderSummary = (session) => {
@@ -304,6 +324,9 @@ const renderSummary = (session) => {
     const lines = session.offenceElements.map((value) => labelled(ELEMENT_LABELS, value))
     if (session.offenceElements.includes('victim-targeted') && session.offenceElementTargetedDetails) {
       lines.push(session.offenceElementTargetedDetails)
+    }
+    if (session.offenceElements.includes('weapon') && session.offenceElementWeaponDetails) {
+      lines.push(session.offenceElementWeaponDetails)
     }
     rows.push(summaryRow('Did the offence(s) have any of the following elements?', lines, summaryChangeHref('offence-analysis', 'offence-elements')))
   }
@@ -350,33 +373,9 @@ const renderSummary = (session) => {
   }
   if (session.offenceEscalation) {
     rows.push(summaryRow(
-      'Is there an escalation in seriousness from previous offending?',
+      "Are Alex's current offence(s) more serious than their previous offending?",
       [labelled(ESCALATION_LABELS, session.offenceEscalation), session.offenceEscalationDetails].filter(Boolean),
       summaryChangeHref('offence-analysis-impact', 'escalation')
-    ))
-  }
-  if (session.offencePerpetrator) {
-    const lines = [labelled(YES_NO, session.offencePerpetrator)]
-    if (session.offencePerpetrator === 'yes') {
-      lines.push(labelled(AGAINST_LABELS, session.offencePerpetratorWho))
-      if (session.offencePerpetratorDetails) lines.push(session.offencePerpetratorDetails)
-    }
-    rows.push(summaryRow(
-      'Is there evidence that Alex has ever been a perpetrator of domestic abuse?',
-      lines,
-      summaryChangeHref('offence-analysis-impact', 'perpetrator')
-    ))
-  }
-  if (session.offenceVictimDa) {
-    const lines = [labelled(YES_NO, session.offenceVictimDa)]
-    if (session.offenceVictimDa === 'yes') {
-      lines.push(labelled(AGAINST_LABELS, session.offenceVictimDaWho))
-      if (session.offenceVictimDaDetails) lines.push(session.offenceVictimDaDetails)
-    }
-    rows.push(summaryRow(
-      'Is there evidence that Alex has ever been a victim of domestic abuse?',
-      lines,
-      summaryChangeHref('offence-analysis-impact', 'victim-da')
     ))
   }
   if (session.offencePatterns) {
@@ -390,11 +389,7 @@ const renderSummary = (session) => {
     ))
   }
 
-  const people = victims(session).map((victim, index) => {
-    const title = `${ORDINALS[index] || `Victim ${index + 1}`} victim`
-    return `<h2 class="govuk-heading-m govuk-!-margin-top-6">${escapeHtml(title)}</h2>
-      <dl class="govuk-summary-list san-summary-list">${victimRows(victim, true, index, 'summary')}</dl>`
-  }).join('')
+  const people = victims(session).map((victim, index) => victimCardHtml(victim, index, 'summary')).join('')
 
   mount.innerHTML = `<dl class="govuk-summary-list san-summary-list">${rows.join('')}</dl>${people}`
 
@@ -415,30 +410,7 @@ const renderVictimDetails = (session) => {
     return
   }
 
-  const cards = list.length === 1
-    ? `<div class="san-content-header__row">
-        <h2 class="govuk-heading-m govuk-!-margin-bottom-0">First victim</h2>
-        <p class="govuk-body govuk-!-margin-bottom-0 govuk-!-text-align-right">
-          <a class="govuk-link" href="offence-analysis-victim?victim=0&amp;from=details">Change</a><br>
-          <a class="govuk-link" href="#" data-oa-delete-victim="0">Delete</a>
-        </p>
-      </div>
-      <dl class="govuk-summary-list san-summary-list">${victimRows(list[0], false, 0, 'details')}</dl>`
-    : list.map((victim, index) => {
-      const title = `${ORDINALS[index] || `Victim ${index + 1}`} victim`
-      return `<div class="govuk-summary-card">
-        <div class="govuk-summary-card__title-wrapper">
-          <h2 class="govuk-summary-card__title">${escapeHtml(title)}</h2>
-          <ul class="govuk-summary-card__actions">
-            <li class="govuk-summary-card__action"><a class="govuk-link" href="offence-analysis-victim?victim=${index}&amp;from=details">Change<span class="govuk-visually-hidden"> ${escapeHtml(title)}</span></a></li>
-            <li class="govuk-summary-card__action"><a class="govuk-link" href="#" data-oa-delete-victim="${index}">Delete<span class="govuk-visually-hidden"> ${escapeHtml(title)}</span></a></li>
-          </ul>
-        </div>
-        <div class="govuk-summary-card__content">
-          <dl class="govuk-summary-list san-summary-list">${victimRows(victim, false, index, 'details')}</dl>
-        </div>
-      </div>`
-    }).join('')
+  const cards = list.map((victim, index) => victimCardHtml(victim, index, 'details')).join('')
 
   mount.innerHTML = `${cards}
     <div class="govuk-button-group">
@@ -459,6 +431,7 @@ const readQuestions = () => ({
   offenceDescription: fieldValue('offence-description'),
   offenceElements: checkedValues('offence_elements'),
   offenceElementTargetedDetails: fieldValue('element-victim-targeted-details'),
+  offenceElementWeaponDetails: fieldValue('element-weapon-details'),
   offenceWhy: fieldValue('offence-why'),
   offenceMotivations: checkedValues('offence_motivations'),
   offenceMotivationOtherDetails: fieldValue('motivation-other-details'),
@@ -512,6 +485,7 @@ const readImpact = () => {
   const leader = checkedValue('leader')
   const recognise = checkedValue('recognise')
   const responsibility = checkedValue('responsibility')
+  const escalation = checkedValue('escalation')
   const linked = checkedValue('linked')
   const perpetrator = checkedValue('perpetrator')
   const perpetratorWho = checkedValue('perpetrator_who')
@@ -525,8 +499,8 @@ const readImpact = () => {
     offenceResponsibility: responsibility,
     offenceResponsibilityDetails: fieldValue(responsibility === 'yes' ? 'responsibility-yes-details' : 'responsibility-no-details'),
     offencePatterns: fieldValue('patterns'),
-    offenceEscalation: checkedValue('escalation'),
-    offenceEscalationDetails: fieldValue('escalation-yes-details'),
+    offenceEscalation: escalation,
+    offenceEscalationDetails: fieldValue(escalation === 'no' ? 'escalation-no-details' : 'escalation-yes-details'),
     offenceLinked: linked,
     offenceLinkedDetails: fieldValue('linked-yes-details'),
     offencePerpetrator: perpetrator,
@@ -547,24 +521,10 @@ const validateImpact = (answers) => {
   requireChoice(errors, 'recognise', '#recognise', answers.offenceRecognise, 'Select if Alex recognises the impact on the victims or wider community')
   requireChoice(errors, 'responsibility', '#responsibility', answers.offenceResponsibility, 'Select if Alex accepts responsibility for the current index offence(s)')
   requireText(errors, 'patterns', '#patterns', answers.offencePatterns, 'Enter the patterns of offending')
-  requireChoice(errors, 'escalation', '#escalation', answers.offenceEscalation, 'Select if there is an escalation in seriousness from previous offending')
+  requireChoice(errors, 'escalation', '#escalation', answers.offenceEscalation, "Select if Alex's current offence(s) are more serious than their previous offending")
   requireChoice(errors, 'linked', '#linked', answers.offenceLinked, 'Select if the offences are linked to risk of serious harm, risks to the individual or other risks')
   if (answers.offenceLinked === 'yes') {
     requireText(errors, 'linked', '#linked-yes-details', answers.offenceLinkedDetails, 'Enter details')
-  }
-  requireChoice(errors, 'perpetrator', '#perpetrator', answers.offencePerpetrator, 'Select if there is evidence Alex has ever been a perpetrator of domestic abuse')
-  if (answers.offencePerpetrator === 'yes') {
-    requireChoice(errors, 'perpetrator-who', '#perpetrator-who', answers.offencePerpetratorWho, 'Select who this was committed against')
-    if (answers.offencePerpetratorWho) {
-      requireText(errors, 'perpetrator-who', `#perpetrator-${answers.offencePerpetratorWho}-details`, answers.offencePerpetratorDetails, 'Enter details')
-    }
-  }
-  requireChoice(errors, 'victim-da', '#victim-da', answers.offenceVictimDa, 'Select if there is evidence Alex has ever been a victim of domestic abuse')
-  if (answers.offenceVictimDa === 'yes') {
-    requireChoice(errors, 'victim-da-who', '#victim-da-who', answers.offenceVictimDaWho, 'Select who this was committed by')
-    if (answers.offenceVictimDaWho) {
-      requireText(errors, 'victim-da-who', `#victim-da-${answers.offenceVictimDaWho}-details`, answers.offenceVictimDaDetails, 'Enter details')
-    }
   }
   return errors
 }
@@ -573,6 +533,7 @@ const restoreQuestions = (session) => {
   setField('offence-description', session.offenceDescription)
   selectChecks('offence_elements', session.offenceElements)
   setField('element-victim-targeted-details', session.offenceElementTargetedDetails)
+  setField('element-weapon-details', session.offenceElementWeaponDetails)
   setField('offence-why', session.offenceWhy)
   selectChecks('offence_motivations', session.offenceMotivations)
   setField('motivation-other-details', session.offenceMotivationOtherDetails)
@@ -604,7 +565,9 @@ const restoreImpact = (session) => {
   if (session.offenceResponsibility) setField(`responsibility-${session.offenceResponsibility}-details`, session.offenceResponsibilityDetails)
   setField('patterns', session.offencePatterns)
   selectRadio('escalation', session.offenceEscalation)
-  if (session.offenceEscalation === 'yes') setField('escalation-yes-details', session.offenceEscalationDetails)
+  if (session.offenceEscalation === 'yes' || session.offenceEscalation === 'no') {
+    setField(`escalation-${session.offenceEscalation}-details`, session.offenceEscalationDetails)
+  }
   selectRadio('linked', session.offenceLinked)
   if (session.offenceLinked === 'yes') setField('linked-yes-details', session.offenceLinkedDetails)
   selectRadio('perpetrator', session.offencePerpetrator)
@@ -625,7 +588,9 @@ const deleteVictim = (index) => {
   const next = victims(session).filter((_, itemIndex) => itemIndex !== index)
   setSanSession({ offenceVictims: next, offenceComplete: false })
   if (!next.length) {
-    window.location.assign('offence-analysis-victim.html')
+    window.location.assign(document.querySelector('[data-oa-summary]')
+      ? 'offence-analysis-victim.html?from=summary'
+      : 'offence-analysis-victim.html')
     return
   }
   if (document.querySelector('[data-oa-victim-details]')) renderVictimDetails(getSanSession())

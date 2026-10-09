@@ -1,0 +1,109 @@
+{% extends "layouts/assessment-san-research.html" %}
+
+{% set pageName = "Personal relationships and community" %}
+{% set sanCaption = "Personal relationships and community" %}
+{% set sanSection = "relationships" %}
+{% set backLinkHref = "personal-relationships-children.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san-research/content-header.html" %}
+
+<form id="san-relationships-child-details-form" novalidate data-pc-page="child-details">
+  <h1 class="govuk-heading-l">What are the children's details?</h1>
+
+  <div class="govuk-form-group" data-san-error-group="child-name">
+    <label class="govuk-label" for="child-name">Name</label>
+    <input class="govuk-input" id="child-name" name="child_name" type="text" spellcheck="false" autocomplete="off">
+  </div>
+
+  <div class="govuk-form-group" data-san-error-group="child-dob">
+    <fieldset class="govuk-fieldset" id="child-dob" role="group" aria-describedby="child-dob-hint">
+      <legend class="govuk-fieldset__legend">Date of birth</legend>
+      <div id="child-dob-hint" class="govuk-hint">For example, 31 3 2016</div>
+      <div class="govuk-date-input" id="child-dob-inputs">
+        <div class="govuk-date-input__item">
+          <div class="govuk-form-group">
+            <label class="govuk-label govuk-date-input__label" for="child-dob-day">Day</label>
+            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="child-dob-day" name="child_dob_day" type="text" inputmode="numeric">
+          </div>
+        </div>
+        <div class="govuk-date-input__item">
+          <div class="govuk-form-group">
+            <label class="govuk-label govuk-date-input__label" for="child-dob-month">Month</label>
+            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="child-dob-month" name="child_dob_month" type="text" inputmode="numeric">
+          </div>
+        </div>
+        <div class="govuk-date-input__item">
+          <div class="govuk-form-group">
+            <label class="govuk-label govuk-date-input__label" for="child-dob-year">Year</label>
+            <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="child-dob-year" name="child_dob_year" type="text" inputmode="numeric">
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-san-error-group="child-relationship">
+    <fieldset class="govuk-fieldset" id="child-relationship">
+      <legend class="govuk-fieldset__legend">What is Alex's relationship to this child?</legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {% set relationshipOptions = [
+          { id: "parent", label: "Parent" },
+          { id: "step-parent", label: "Step-parent" },
+          { id: "sibling", label: "Sibling" },
+          { id: "grandparent", label: "Grandparent" },
+          { id: "aunt-uncle", label: "Aunt or uncle" },
+          { id: "family-friend", label: "Family friend" }
+        ] %}
+        {% for option in relationshipOptions %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="child-relationship-{{ option.id }}" name="child_relationship" type="radio" value="{{ option.id }}">
+          <label class="govuk-label govuk-radios__label" for="child-relationship-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        {% endfor %}
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-san-error-group="child-lives-with">
+    <fieldset class="govuk-fieldset" id="child-lives-with">
+      <legend class="govuk-fieldset__legend">Do they live with Alex?</legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="child-lives-with-yes" name="child_lives_with" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="child-lives-with-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="child-lives-with-no" name="child_lives_with" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="child-lives-with-no">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-san-error-group="child-parental-responsibility">
+    <fieldset class="govuk-fieldset" id="child-parental-responsibility">
+      <legend class="govuk-fieldset__legend">Does Alex have parental responsibility?</legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="child-parental-responsibility-yes" name="child_parental_responsibility" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="child-parental-responsibility-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="child-parental-responsibility-no" name="child_parental_responsibility" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="child-parental-responsibility-no">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

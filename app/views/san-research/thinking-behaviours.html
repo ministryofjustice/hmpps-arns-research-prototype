@@ -1,7 +1,7 @@
 {% extends "layouts/assessment-san-research.html" %}
 
 {% set pageName = "Thinking, behaviours and attitudes" %}
-{% set sanCaption = "Thinking, behaviours and attitudes" %}
+{% set sanHeading = "Thinking, behaviours and attitudes" %}
 {% set sanSection = "thinking" %}
 
 {% block content %}
@@ -15,8 +15,6 @@
   {
     id: "consequences",
     name: "thinking_consequences",
-    level: "l",
-    heading: "h1",
     question: "Is Alex aware of the consequences of their actions?",
     hint: "This includes towards themselves and to others.",
     options: [
@@ -39,21 +37,21 @@
   {
     id: "activities",
     name: "thinking_activities",
-    question: "Does Alex engage in activities that could link to offending?",
+    question: "How much do Alex's activities, relationships and lifestyle increase their likelihood of re-offending?",
     options: [
-      { value: "prosocial", label: "Engages in pro-social activities and understands the link to offending" },
-      { value: "sometimes", label: "Sometimes engages in activities linked to offending but recognises the link" },
-      { value: "regularly", label: "Regularly engages in activities which encourage offending and is not aware or does not care about the link to offending" }
+      { value: "none", label: "No significant increase", hint: "Engages in positive activities and relationships and avoids situations that may create opportunities to offend." },
+      { value: "sometimes", label: "Some increase", hint: "Sometimes spends time in activities, situations or relationships linked to offending but recognises the risks." },
+      { value: "significant", label: "Significant increase", hint: "Regularly spending time in activities, situations or relationships that encourage offending and does not recognise, or chooses not to act on, the risks." }
     ]
   },
   {
     id: "peers",
     name: "thinking_peers",
-    question: "Is Alex resilient towards peer pressure or influence by criminal associates?",
+    question: "How much is Alex influenced by others in relation to their offending?",
     options: [
-      { value: "yes", label: "Yes, resilient towards peer pressure or influence by criminal associates", details: true },
-      { value: "past", label: "Has been peer pressured or influenced by criminal associates in the past but recognises the link to their offending", details: true },
-      { value: "no", label: "No, constantly peer pressured or influenced by criminal associates which is linked to their offending", details: true }
+      { value: "none", label: "No significant influence", hint: "Has not been influenced by others in relation to offending, or has taken clear steps to avoid negative influences.", details: true },
+      { value: "sometimes", label: "Some influence", hint: "Has been influenced by others in relation to offending but recognises the influence and is trying to reduce it.", details: true },
+      { value: "significant", label: "Significant influence", hint: "Is regularly influenced by others in relation to offending and remains vulnerable to peer pressure, manipulation or criminal associates.", details: true }
     ]
   },
   {
@@ -79,21 +77,21 @@
   {
     id: "manipulative",
     name: "thinking_manipulative",
-    question: "Does Alex show manipulative behaviour or a predatory lifestyle?",
+    question: "How much evidence is there that Alex manipulates or exploits other people for personal gain?",
     options: [
-      { value: "honest", label: "Generally gives an honest account of their lives and has no history of showing manipulative behaviour or a predatory lifestyle" },
-      { value: "some", label: "Some evidence that they show manipulative behaviour or act in a predatory way towards certain individuals" },
-      { value: "pattern", label: "Shows a pattern of manipulative behaviour or a predatory lifestyle" }
+      { value: "none", label: "No evidence", hint: "No evidence of manipulating, exploiting or taking advantage of others for personal gain." },
+      { value: "some", label: "Some evidence", hint: "Limited to certain situations or relationships." },
+      { value: "significant", label: "Significant evidence", hint: "Clear pattern of manipulating, exploiting or taking advantage of others for personal gain." }
     ]
   },
   {
     id: "temper",
     name: "thinking_temper",
-    question: "Is Alex able to manage their temper?",
+    question: "How well does Alex manage anger, frustration and conflict?",
     options: [
-      { value: "yes", label: "Yes, is able to manage their temper well" },
-      { value: "sometimes", label: "Sometimes has outbreaks of uncontrolled anger" },
-      { value: "no", label: "No, easily loses their temper", hint: "This may result in a loss of control or inability to stay calm until they have expressed their anger." }
+      { value: "well", label: "Manages these well", hint: "Recognises situations that make them angry or frustrated and deals with them effectively. Remains calm and does not lose control." },
+      { value: "sometimes", label: "Sometimes has difficulty", hint: "Occasionally loses control when angry or frustrated, or has difficulty dealing with conflict in some situations." },
+      { value: "often", label: "Often has difficulty", hint: "Regularly loses control when angry or frustrated and finds it difficult to remain calm or deal with conflict effectively." }
     ]
   },
   {
@@ -119,6 +117,7 @@
   {
     id: "attitude",
     name: "thinking_attitude",
+    hidden: true,
     question: "Does Alex have a positive attitude towards any criminal justice staff they have come into contact with?",
     options: [
       { value: "yes", label: "Yes, has a positive attitude" },
@@ -129,21 +128,21 @@
   {
     id: "hostile",
     name: "thinking_hostile",
-    question: "Does Alex have hostile orientation to others or to general rules?",
+    question: "How much evidence is there that Alex shows hostility towards other people, rules or authority?",
     options: [
-      { value: "constructive", label: "They're able to have constructive conversations when they disagree with others and can forgive past wrongs" },
-      { value: "some", label: "Some evidence of suspicious, angry or vengeful thinking and behaviour" },
-      { value: "evidence", label: "There is evidence of suspicious, angry and vengeful thinking and behaviour" }
+      { value: "none", label: "No evidence", hint: "Can consider other people's views, discuss disagreements constructively and move past previous conflicts." },
+      { value: "some", label: "Some evidence", hint: "Sometimes shows suspicious, angry or vengeful thinking, or struggles to accept other people's views." },
+      { value: "significant", label: "Significant evidence", hint: "Regularly shows suspicious, angry or vengeful thinking and behaviour, holds grudges, shows little regard for other people's views or wellbeing, or views other people, rules or authority with hostility." }
     ]
   },
   {
     id: "supervision",
     name: "thinking_supervision",
-    question: "Does Alex accept supervision and their licence conditions?",
+    question: "How much evidence is there that Alex is willing to engage positively with supervision and their licence conditions?",
     options: [
-      { value: "accepts", label: "Accepts supervision and has responded well to supervision in the past" },
-      { value: "unsure", label: "Unsure about supervision and has put minimum effort into supervision in the past" },
-      { value: "not", label: "Not prepared to accept supervision and has failed to follow supervision in the past" }
+      { value: "significant", label: "Significant evidence", hint: "Sees supervision positively and is willing to engage and cooperate." },
+      { value: "some", label: "Some evidence", hint: "Has mixed views about supervision or engages only to meet minimum requirements." },
+      { value: "none", label: "Little or no evidence", hint: "Is unlikely to engage positively with supervision or their licence conditions." }
     ]
   },
   {
@@ -160,14 +159,11 @@
 
 <form id="san-thinking-questions-form" novalidate data-tb-page="questions">
   {% for question in questions %}
+  {% if not question.hidden %}
   <div class="govuk-form-group{% if not loop.first %} san-question{% endif %}" data-san-error-group="{{ question.id }}">
     <fieldset class="govuk-fieldset" id="{{ question.id }}"{% if question.hint %} aria-describedby="{{ question.id }}-hint"{% endif %}>
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--{{ question.level | default('m') }}">
-        {% if question.heading == "h1" %}
-        <h1 class="govuk-fieldset__heading">{{ question.question }}</h1>
-        {% else %}
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
         <h2 class="govuk-fieldset__heading">{{ question.question }}</h2>
-        {% endif %}
       </legend>
       {% if question.hint %}
       <div id="{{ question.id }}-hint" class="govuk-hint">{{ question.hint }}</div>
@@ -185,7 +181,8 @@
         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ question.id }}-{{ option.value }}">
           <div class="govuk-form-group">
             <label class="govuk-label" for="{{ question.id }}-{{ option.value }}-details">Give details (optional)</label>
-            <textarea class="govuk-textarea" id="{{ question.id }}-{{ option.value }}-details" name="{{ question.id }}_{{ option.value }}_details" rows="5"></textarea>
+            <textarea class="govuk-textarea" id="{{ question.id }}-{{ option.value }}-details" name="{{ question.id }}_{{ option.value }}_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="{{ question.id }}-{{ option.value }}-details">You have 2,000 characters remaining</div>
           </div>
         </div>
         {% endif %}
@@ -193,49 +190,8 @@
       </div>
     </fieldset>
   </div>
+  {% endif %}
   {% endfor %}
-
-  <div class="govuk-form-group san-question" data-san-error-group="changes">
-    <fieldset class="govuk-fieldset" id="changes" aria-describedby="changes-hint">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Does Alex want to make changes to their thinking, behaviours and attitudes?</h2>
-      </legend>
-      <div id="changes-hint" class="govuk-hint">Alex must answer this question.</div>
-      <div class="govuk-radios" data-module="govuk-radios">
-        {% set changeOptions = [
-          { id: "maintain", label: "I have already made positive changes and want to maintain them" },
-          { id: "active", label: "I am actively making changes" },
-          { id: "know-how", label: "I want to make changes and know how to" },
-          { id: "need-help", label: "I want to make changes but need help" },
-          { id: "thinking", label: "I am thinking about making changes" },
-          { id: "no", label: "I do not want to make changes" },
-          { id: "no-answer", label: "I do not want to answer" }
-        ] %}
-        {% for option in changeOptions %}
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="changes-{{ option.id }}" name="thinking_changes" type="radio" value="{{ option.id }}" data-aria-controls="conditional-changes-{{ option.id }}">
-          <label class="govuk-label govuk-radios__label" for="changes-{{ option.id }}">{{ option.label }}</label>
-        </div>
-        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-changes-{{ option.id }}">
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="changes-{{ option.id }}-details">Give details (optional)</label>
-            <textarea class="govuk-textarea" id="changes-{{ option.id }}-details" name="changes_{{ option.id | replace('-', '_') }}_details" rows="5" maxlength="2000"></textarea>
-            <div class="govuk-hint san-character-count" data-san-character-count="changes-{{ option.id }}-details">You have 2,000 characters remaining</div>
-          </div>
-        </div>
-        {% endfor %}
-        <div class="govuk-radios__divider">or</div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="changes-not-present" name="thinking_changes" type="radio" value="not-present">
-          <label class="govuk-label govuk-radios__label" for="changes-not-present">Alex is not present</label>
-        </div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="changes-not-applicable" name="thinking_changes" type="radio" value="not-applicable">
-          <label class="govuk-label govuk-radios__label" for="changes-not-applicable">Not applicable</label>
-        </div>
-      </div>
-    </fieldset>
-  </div>
 
   <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
 </form>

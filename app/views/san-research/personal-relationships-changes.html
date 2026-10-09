@@ -1,0 +1,64 @@
+{% extends "layouts/assessment-san-research.html" %}
+
+{% set pageName = "Personal relationships and community" %}
+{% set sanCaption = "Personal relationships and community" %}
+{% set sanSection = "relationships" %}
+{% set backLinkHref = "personal-relationships-questions.html" %}
+
+{% macro radioOption(name, id, value, label, hint, withDetails, detailsHint) %}
+<div class="govuk-radios__item">
+  <input class="govuk-radios__input" id="{{ id }}" name="{{ name }}" type="radio" value="{{ value }}"{% if hint %} aria-describedby="{{ id }}-hint"{% endif %}{% if withDetails %} data-aria-controls="conditional-{{ id }}"{% endif %}>
+  <label class="govuk-label govuk-radios__label" for="{{ id }}">{{ label }}</label>
+  {% if hint %}
+  <div id="{{ id }}-hint" class="govuk-hint govuk-radios__hint">{{ hint }}</div>
+  {% endif %}
+</div>
+{% if withDetails %}
+<div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ id }}">
+  <div class="govuk-form-group">
+    <label class="govuk-label" for="{{ id }}-details">Give details (optional)</label>
+    {% if detailsHint %}
+    <div id="{{ id }}-details-hint" class="govuk-hint">{{ detailsHint }}</div>
+    {% endif %}
+    <textarea class="govuk-textarea" id="{{ id }}-details" name="{{ id | replace('-', '_') }}_details" rows="5" maxlength="2000"{% if detailsHint %} aria-describedby="{{ id }}-details-hint"{% endif %}></textarea>
+    <div class="govuk-hint san-character-count" data-san-character-count="{{ id }}-details">You have 2,000 characters remaining</div>
+  </div>
+</div>
+{% endif %}
+{% endmacro %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san-research/content-header.html" %}
+
+<form id="san-relationships-changes-form" novalidate data-pc-page="changes">
+  <div class="govuk-form-group" data-san-error-group="relationships-changes">
+    <fieldset class="govuk-fieldset" id="relationships-changes" aria-describedby="relationships-changes-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">Does Alex want to make changes to their personal relationships?</h1>
+      </legend>
+      <div id="relationships-changes-hint" class="govuk-hint">Alex must answer this question.</div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {{ radioOption("relationships_changes", "changes-maintain", "maintain", "I have already made positive changes and want to maintain them", "", true, "") | safe }}
+        {{ radioOption("relationships_changes", "changes-active", "active", "I am actively making changes", "", true, "") | safe }}
+        {{ radioOption("relationships_changes", "changes-know-how", "know-how", "I want to make changes and know how to", "", true, "") | safe }}
+        {{ radioOption("relationships_changes", "changes-need-help", "need-help", "I want to make changes but need help", "", true, "") | safe }}
+        {{ radioOption("relationships_changes", "changes-thinking", "thinking", "I am thinking about making changes", "", true, "") | safe }}
+        {{ radioOption("relationships_changes", "changes-no", "no", "I do not want to make changes", "", true, "") | safe }}
+        {{ radioOption("relationships_changes", "changes-no-answer", "no-answer", "I do not want to answer", "", false, "") | safe }}
+        <div class="govuk-radios__divider">or</div>
+        {{ radioOption("relationships_changes", "changes-not-present", "not-present", "Alex is not present", "", false, "") | safe }}
+        {{ radioOption("relationships_changes", "changes-not-applicable", "not-applicable", "Not applicable", "", false, "") | safe }}
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

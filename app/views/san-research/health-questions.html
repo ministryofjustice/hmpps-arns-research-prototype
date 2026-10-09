@@ -19,6 +19,35 @@
     <div class="govuk-hint san-character-count" data-san-character-count="physical-medication">You have 2,000 characters remaining</div>
   </div>
 
+  <div class="govuk-form-group" data-hw-question="mental-describe" data-san-error-group="mental-describe" hidden>
+    <fieldset class="govuk-fieldset" id="mental-describe">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">How would you describe Alex's mental health conditions?</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {% set mentalDescribeOptions = [
+          { id: "ongoing", label: "Ongoing, and diagnosed or documented" },
+          { id: "past", label: "In the past, and diagnosed or documented" },
+          { id: "undiagnosed", label: "Undiagnosed, self reported or waiting for a consultation" }
+        ] %}
+        {% for option in mentalDescribeOptions %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="mental-describe-{{ option.id }}" name="health_mental_describe" type="radio" value="{{ option.id }}" data-aria-controls="conditional-mental-describe-{{ option.id }}">
+          <label class="govuk-label govuk-radios__label" for="mental-describe-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-mental-describe-{{ option.id }}">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="mental-describe-{{ option.id }}-details">Give details (optional)</label>
+            <div id="mental-describe-{{ option.id }}-details-hint" class="govuk-hint">Include details of the condition, duration and any prescribed medication or treatment.</div>
+            <textarea class="govuk-textarea" id="mental-describe-{{ option.id }}-details" name="health_mental_{{ option.id }}_details" rows="5" maxlength="2000" aria-describedby="mental-describe-{{ option.id }}-details-hint"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="mental-describe-{{ option.id }}-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </fieldset>
+  </div>
+
   <div class="govuk-form-group" data-hw-question="mental-medication" hidden>
     <label class="govuk-label govuk-label--m" for="mental-medication">Give details if Alex is on prescribed medication or treatment for mental health problems (optional)</label>
     <textarea class="govuk-textarea" id="mental-medication" name="mental_medication" rows="5" maxlength="2000"></textarea>
@@ -108,13 +137,13 @@
   <div class="govuk-form-group" data-hw-question="learning" data-san-error-group="learning" hidden>
     <fieldset class="govuk-fieldset" id="learning" aria-describedby="learning-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Does Alex have any conditions or disabilities that impact their ability to learn? (optional)</h2>
+        <h2 class="govuk-fieldset__heading">Does Alex have any conditions that affect how they learn, understand or process information?</h2>
       </legend>
-      <div id="learning-hint" class="govuk-hint">This refers to both learning disabilities (reduced intellectual ability) and learning difficulties (such as dyslexia or ADHD).</div>
+      <div id="learning-hint" class="govuk-hint">This includes learning disabilities, learning difficulties, neurodivergent conditions (such as ADHD, autism or dyslexia), acquired brain injury and other illnesses affecting the brain.</div>
       <div class="govuk-radios" data-module="govuk-radios">
         {% for option in [
-          { id: "significant", label: "Yes, their ability to learn is significantly impacted" },
-          { id: "slight", label: "Yes, their ability to learn is slightly impacted" }
+          { id: "significant", label: "Yes, significantly impacted" },
+          { id: "somewhat", label: "Yes, somewhat impacted" }
         ] %}
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="learning-{{ option.id }}" name="learning" type="radio" value="{{ option.id }}" data-aria-controls="conditional-learning-{{ option.id }}">
@@ -123,14 +152,19 @@
         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-learning-{{ option.id }}">
           <div class="govuk-form-group">
             <label class="govuk-label" for="learning-{{ option.id }}-details">Give details (optional)</label>
-            <textarea class="govuk-textarea" id="learning-{{ option.id }}-details" name="learning_{{ option.id }}_details" rows="5" maxlength="2000"></textarea>
+            <div id="learning-{{ option.id }}-details-hint" class="govuk-hint">Include details of the condition and any prescribed medication or treatment.</div>
+            <textarea class="govuk-textarea" id="learning-{{ option.id }}-details" name="learning_{{ option.id }}_details" rows="5" maxlength="2000" aria-describedby="learning-{{ option.id }}-details-hint"></textarea>
             <div class="govuk-hint san-character-count" data-san-character-count="learning-{{ option.id }}-details">You have 2,000 characters remaining</div>
           </div>
         </div>
         {% endfor %}
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="learning-no" name="learning" type="radio" value="no">
-          <label class="govuk-label govuk-radios__label" for="learning-no">No, they do not have any conditions or disabilities that impact their ability to learn</label>
+          <label class="govuk-label govuk-radios__label" for="learning-no">No</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="learning-unknown" name="learning" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="learning-unknown">Unknown</label>
         </div>
       </div>
     </fieldset>
@@ -142,16 +176,63 @@
         <h2 class="govuk-fieldset__heading">Is Alex able to cope with day-to-day life?</h2>
       </legend>
       <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="cope-well" name="cope" type="radio" value="well">
+          <label class="govuk-label govuk-radios__label" for="cope-well">Yes, able to cope well</label>
+        </div>
         {% for option in [
-          { id: "well", label: "Yes, able to cope well" },
           { id: "some", label: "Has some difficulties coping" },
           { id: "not", label: "Not able to cope" }
         ] %}
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="cope-{{ option.id }}" name="cope" type="radio" value="{{ option.id }}">
+          <input class="govuk-radios__input" id="cope-{{ option.id }}" name="cope" type="radio" value="{{ option.id }}" data-aria-controls="conditional-cope-{{ option.id }}">
           <label class="govuk-label govuk-radios__label" for="cope-{{ option.id }}">{{ option.label }}</label>
         </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-cope-{{ option.id }}">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="cope-{{ option.id }}-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="cope-{{ option.id }}-details" name="cope_{{ option.id }}_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="cope-{{ option.id }}-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
         {% endfor %}
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-hw-question="gambling" data-san-error-group="gambling" hidden>
+    <fieldset class="govuk-fieldset" id="gambling" aria-describedby="gambling-impact-hint gambling-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Is Alex affected by gambling?</h2>
+      </legend>
+      <div id="gambling-impact-hint" class="govuk-hint">Consider any impact on their health, wellbeing, relationships, finances or day-to-day life.</div>
+      <div id="gambling-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        {% for option in [
+          { id: "own", label: "Yes, their own gambling" },
+          { id: "someone", label: "Yes, someone else's gambling" }
+        ] %}
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="gambling-{{ option.id }}" name="gambling" type="checkbox" value="{{ option.id }}" data-aria-controls="conditional-gambling-{{ option.id }}">
+          <label class="govuk-label govuk-checkboxes__label" for="gambling-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-gambling-{{ option.id }}">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="gambling-{{ option.id }}-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="gambling-{{ option.id }}-details" name="gambling_{{ option.id }}_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="gambling-{{ option.id }}-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        {% endfor %}
+        <div class="govuk-checkboxes__divider">or</div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="gambling-no" name="gambling" type="checkbox" value="no" data-behaviour="exclusive">
+          <label class="govuk-label govuk-checkboxes__label" for="gambling-no">No</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="gambling-unknown" name="gambling" type="checkbox" value="unknown" data-behaviour="exclusive">
+          <label class="govuk-label govuk-checkboxes__label" for="gambling-unknown">Unknown</label>
+        </div>
       </div>
     </fieldset>
   </div>
@@ -159,21 +240,23 @@
   <div class="govuk-form-group" data-hw-question="attitude" data-san-error-group="attitude" hidden>
     <fieldset class="govuk-fieldset" id="attitude">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">What is Alex's attitude towards themselves?</h2>
+        <h2 class="govuk-fieldset__heading">How would you describe how Alex sees themselves?</h2>
       </legend>
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="attitude-positive" name="attitude" type="radio" value="positive">
-          <label class="govuk-label govuk-radios__label" for="attitude-positive">Positive and reasonably happy</label>
+          <input class="govuk-radios__input" id="attitude-positive" name="attitude" type="radio" value="positive" aria-describedby="attitude-positive-hint">
+          <label class="govuk-label govuk-radios__label" for="attitude-positive">Generally positive and realistic</label>
+          <div id="attitude-positive-hint" class="govuk-hint govuk-radios__hint">Reasonably happy with themselves and their self-image is based on normal social values.</div>
         </div>
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="attitude-some" name="attitude" type="radio" value="some">
-          <label class="govuk-label govuk-radios__label" for="attitude-some">There are some aspects they would like to change or do not like</label>
+          <input class="govuk-radios__input" id="attitude-some" name="attitude" type="radio" value="some" aria-describedby="attitude-some-hint">
+          <label class="govuk-label govuk-radios__label" for="attitude-some">Some negative or unhealthy views of themselves</label>
+          <div id="attitude-some-hint" class="govuk-hint govuk-radios__hint">Dislikes or would like to change some parts of themselves or gets some self-worth from unhealthy or antisocial values.</div>
         </div>
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="attitude-negative" name="attitude" type="radio" value="negative" aria-describedby="attitude-negative-hint">
-          <label class="govuk-label govuk-radios__label" for="attitude-negative">Negative self-image and unhappy</label>
-          <div id="attitude-negative-hint" class="govuk-hint govuk-radios__hint">This includes if they have an overly positive or unrealistic self-image which in reality is not true.</div>
+          <label class="govuk-label govuk-radios__label" for="attitude-negative">Negative or unrealistic</label>
+          <div id="attitude-negative-hint" class="govuk-hint govuk-radios__hint">Has a very negative view of themselves, a view of themselves that is not based on reality or an inflated self-worth based on unhealthy or antisocial values.</div>
         </div>
       </div>
     </fieldset>
@@ -293,50 +376,6 @@
             <textarea class="govuk-textarea" id="helped-other-details" name="helped_other_details" rows="5" maxlength="2000"></textarea>
             <div class="govuk-hint san-character-count" data-san-character-count="helped-other-details">You have 2,000 characters remaining</div>
           </div>
-        </div>
-      </div>
-    </fieldset>
-  </div>
-
-  <div class="govuk-form-group" data-hw-question="changes" data-san-error-group="changes" hidden>
-    <fieldset class="govuk-fieldset" id="changes" aria-describedby="changes-hint">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Does Alex want to make changes to their health and wellbeing?</h2>
-      </legend>
-      <div id="changes-hint" class="govuk-hint">Alex must answer this question.</div>
-      <div class="govuk-radios" data-module="govuk-radios">
-        {% for option in [
-          { id: "maintain", label: "I have already made positive changes and want to maintain them" },
-          { id: "active", label: "I am actively making changes" },
-          { id: "know-how", label: "I want to make changes and know how to" },
-          { id: "need-help", label: "I want to make changes but need help" },
-          { id: "thinking", label: "I am thinking about making changes" },
-          { id: "no", label: "I do not want to make changes" }
-        ] %}
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="changes-{{ option.id }}" name="health_changes" type="radio" value="{{ option.id }}" data-aria-controls="conditional-changes-{{ option.id }}">
-          <label class="govuk-label govuk-radios__label" for="changes-{{ option.id }}">{{ option.label }}</label>
-        </div>
-        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-changes-{{ option.id }}">
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="changes-{{ option.id }}-details">Give details (optional)</label>
-            <textarea class="govuk-textarea" id="changes-{{ option.id }}-details" name="changes_{{ option.id | replace('-', '_') }}_details" rows="5" maxlength="2000"></textarea>
-            <div class="govuk-hint san-character-count" data-san-character-count="changes-{{ option.id }}-details">You have 2,000 characters remaining</div>
-          </div>
-        </div>
-        {% endfor %}
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="changes-no-answer" name="health_changes" type="radio" value="no-answer">
-          <label class="govuk-label govuk-radios__label" for="changes-no-answer">I do not want to answer</label>
-        </div>
-        <div class="govuk-radios__divider">or</div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="changes-not-present" name="health_changes" type="radio" value="not-present">
-          <label class="govuk-label govuk-radios__label" for="changes-not-present">Alex is not present</label>
-        </div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="changes-not-applicable" name="health_changes" type="radio" value="not-applicable">
-          <label class="govuk-label govuk-radios__label" for="changes-not-applicable">Not applicable</label>
         </div>
       </div>
     </fieldset>

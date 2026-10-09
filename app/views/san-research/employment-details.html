@@ -159,7 +159,7 @@
   <div class="govuk-form-group" data-ee-question="difficulties" data-san-error-group="difficulties" hidden>
     <fieldset class="govuk-fieldset" id="difficulties" aria-describedby="difficulties-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Does Alex have difficulties with reading, writing or numeracy?</h2>
+        <h2 class="govuk-fieldset__heading">Does Alex need support with reading, writing or numeracy?</h2>
       </legend>
       <div id="difficulties-hint" class="govuk-hint">Select all that apply.</div>
       <div class="govuk-checkboxes" data-module="govuk-checkboxes">
@@ -177,7 +177,7 @@
         <div class="govuk-checkboxes__divider">or</div>
         <div class="govuk-checkboxes__item">
           <input class="govuk-checkboxes__input" id="difficulty-none" name="difficulties" type="checkbox" value="none" data-behaviour="exclusive">
-          <label class="govuk-label govuk-checkboxes__label" for="difficulty-none">No difficulties</label>
+          <label class="govuk-label govuk-checkboxes__label" for="difficulty-none">No</label>
         </div>
       </div>
     </fieldset>
@@ -222,51 +222,6 @@
     </fieldset>
   </div>
   {% endfor %}
-
-  <div class="govuk-form-group" data-ee-question="changes" data-san-error-group="changes" hidden>
-    <fieldset class="govuk-fieldset" id="changes" aria-describedby="changes-hint">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Does Alex want to make changes to their employment and education?</h2>
-      </legend>
-      <div id="changes-hint" class="govuk-hint">Alex must answer this question.</div>
-      <div class="govuk-radios" data-module="govuk-radios">
-        {% set changeOptions = [
-          { id: "maintain", label: "I have already made positive changes and want to maintain them" },
-          { id: "active", label: "I am actively making changes" },
-          { id: "know-how", label: "I want to make changes and know how to" },
-          { id: "need-help", label: "I want to make changes but need help" },
-          { id: "thinking", label: "I am thinking about making changes" },
-          { id: "no", label: "I do not want to make changes" }
-        ] %}
-        {% for option in changeOptions %}
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="changes-{{ option.id }}" name="employment_changes" type="radio" value="{{ option.id }}" data-aria-controls="conditional-changes-{{ option.id }}">
-          <label class="govuk-label govuk-radios__label" for="changes-{{ option.id }}">{{ option.label }}</label>
-        </div>
-        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-changes-{{ option.id }}">
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="changes-{{ option.id }}-details">Give details (optional)</label>
-            <textarea class="govuk-textarea" id="changes-{{ option.id }}-details" name="changes_{{ option.id | replace('-', '_') }}_details" rows="5" maxlength="2000"></textarea>
-            <div class="govuk-hint san-character-count" data-san-character-count="changes-{{ option.id }}-details">You have 2,000 characters remaining</div>
-          </div>
-        </div>
-        {% endfor %}
-        <div class="govuk-radios__divider">or</div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="changes-no-answer" name="employment_changes" type="radio" value="no-answer">
-          <label class="govuk-label govuk-radios__label" for="changes-no-answer">I do not want to answer</label>
-        </div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="changes-not-present" name="employment_changes" type="radio" value="not-present">
-          <label class="govuk-label govuk-radios__label" for="changes-not-present">Alex is not present</label>
-        </div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="changes-not-applicable" name="employment_changes" type="radio" value="not-applicable">
-          <label class="govuk-label govuk-radios__label" for="changes-not-applicable">Not applicable</label>
-        </div>
-      </div>
-    </fieldset>
-  </div>
 
   <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
 </form>

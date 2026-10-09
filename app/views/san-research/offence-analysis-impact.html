@@ -6,7 +6,7 @@
 {% set sanSection = "offence" %}
 {% set backLinkHref = "offence-analysis-involved-parties.html" %}
 
-{% macro yesNoDetails(id, legend, legendSize, hint, yesOptional, noOptional) %}
+{% macro yesNoDetails(id, legend, legendSize, hint, yesOptional, noOptional, yesHint) %}
 <div class="govuk-form-group{% if id != 'leader' %} san-question{% endif %}" data-san-error-group="{{ id }}">
   <fieldset class="govuk-fieldset" id="{{ id }}"{% if hint %} aria-describedby="{{ id }}-hint"{% endif %}>
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--{{ legendSize }}">
@@ -17,8 +17,11 @@
     {% endif %}
     <div class="govuk-radios" data-module="govuk-radios">
       <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="{{ id }}-yes" name="{{ id }}" type="radio" value="yes" data-aria-controls="conditional-{{ id }}-yes">
+        <input class="govuk-radios__input" id="{{ id }}-yes" name="{{ id }}" type="radio" value="yes" data-aria-controls="conditional-{{ id }}-yes"{% if yesHint %} aria-describedby="{{ id }}-yes-hint"{% endif %}>
         <label class="govuk-label govuk-radios__label" for="{{ id }}-yes">Yes</label>
+        {% if yesHint %}
+        <div id="{{ id }}-yes-hint" class="govuk-hint govuk-radios__hint">{{ yesHint }}</div>
+        {% endif %}
       </div>
       <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ id }}-yes">
         <div class="govuk-form-group">
@@ -102,14 +105,16 @@
     "m",
     "",
     true,
-    true
+    true,
+    "Includes partial acceptance."
   ) }}
 
   <div class="govuk-form-group san-question" data-san-error-group="escalation">
-    <fieldset class="govuk-fieldset" id="escalation">
+    <fieldset class="govuk-fieldset" id="escalation" aria-describedby="escalation-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Is there an escalation in seriousness from previous offending?</h2>
+        <h2 class="govuk-fieldset__heading">Are Alex's current offence(s) more serious than their previous offending?</h2>
       </legend>
+      <div id="escalation-hint" class="govuk-hint">Consider convictions, recorded cautions, warnings, ancillaries and civil orders.</div>
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="escalation-yes" name="escalation" type="radio" value="yes" data-aria-controls="conditional-escalation-yes">
@@ -118,13 +123,21 @@
         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-escalation-yes">
           <div class="govuk-form-group">
             <label class="govuk-label" for="escalation-yes-details">Give details (optional)</label>
-            <textarea class="govuk-textarea" id="escalation-yes-details" name="escalation_yes_details" rows="5" maxlength="2000"></textarea>
+            <div id="escalation-yes-details-hint" class="govuk-hint">Consider impact and harm. Behaviour should be related to the index offence.</div>
+            <textarea class="govuk-textarea" id="escalation-yes-details" name="escalation_yes_details" rows="5" maxlength="2000" aria-describedby="escalation-yes-details-hint"></textarea>
             <div class="govuk-hint san-character-count" data-san-character-count="escalation-yes-details">You have 2,000 characters remaining</div>
           </div>
         </div>
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="escalation-no" name="escalation" type="radio" value="no">
+          <input class="govuk-radios__input" id="escalation-no" name="escalation" type="radio" value="no" data-aria-controls="conditional-escalation-no">
           <label class="govuk-label govuk-radios__label" for="escalation-no">No</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-escalation-no">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="escalation-no-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="escalation-no-details" name="escalation_no_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="escalation-no-details">You have 2,000 characters remaining</div>
+          </div>
         </div>
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="escalation-not-applicable" name="escalation" type="radio" value="not-applicable">
@@ -134,7 +147,7 @@
     </fieldset>
   </div>
 
-  <div class="govuk-form-group san-question" data-san-error-group="perpetrator">
+  <div class="govuk-form-group san-question" data-san-error-group="perpetrator" hidden>
     <fieldset class="govuk-fieldset" id="perpetrator">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
         <h2 class="govuk-fieldset__heading">Is there evidence that Alex has ever been a perpetrator of domestic abuse?</h2>
@@ -155,7 +168,7 @@
     </fieldset>
   </div>
 
-  <div class="govuk-form-group san-question" data-san-error-group="victim-da">
+  <div class="govuk-form-group san-question" data-san-error-group="victim-da" hidden>
     <fieldset class="govuk-fieldset" id="victim-da">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
         <h2 class="govuk-fieldset__heading">Is there evidence that Alex has ever been a victim of domestic abuse?</h2>

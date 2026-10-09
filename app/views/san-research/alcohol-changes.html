@@ -1,0 +1,73 @@
+{% extends "layouts/assessment-san-research.html" %}
+
+{% set pageName = "Alcohol use" %}
+{% set sanCaption = "Alcohol use" %}
+{% set sanSection = "alcohol" %}
+{% set backLinkHref = "alcohol-before.html" %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san-research/content-header.html" %}
+
+<form id="san-alcohol-changes-form" novalidate data-al-page="changes">
+  <div class="govuk-form-group" data-san-error-group="alcohol-changes">
+    <fieldset class="govuk-fieldset" id="alcohol-changes" aria-describedby="alcohol-changes-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">Does Alex want to make changes to their alcohol use?</h1>
+      </legend>
+      <div id="alcohol-changes-hint" class="govuk-hint">Alex must answer this question.</div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {% set changeOptions = [
+          { id: "maintain", label: "I have already made positive changes and want to maintain them" },
+          { id: "active", label: "I am actively making changes" },
+          { id: "know-how", label: "I want to make changes and know how to" },
+          { id: "need-help", label: "I want to make changes but need help" },
+          { id: "thinking", label: "I am thinking about making changes" },
+          { id: "no", label: "I do not want to make changes" }
+        ] %}
+        {% for option in changeOptions %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-changes-{{ option.id }}" name="alcohol_changes" type="radio" value="{{ option.id }}" data-aria-controls="conditional-alcohol-changes-{{ option.id }}">
+          <label class="govuk-label govuk-radios__label" for="alcohol-changes-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-alcohol-changes-{{ option.id }}">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="alcohol-changes-{{ option.id }}-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="alcohol-changes-{{ option.id }}-details" name="alcohol_changes_{{ option.id | replace('-', '_') }}_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="alcohol-changes-{{ option.id }}-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        {% endfor %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-changes-no-answer" name="alcohol_changes" type="radio" value="no-answer" data-aria-controls="conditional-alcohol-changes-no-answer">
+          <label class="govuk-label govuk-radios__label" for="alcohol-changes-no-answer">I do not want to answer</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-alcohol-changes-no-answer">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="alcohol-changes-no-answer-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="alcohol-changes-no-answer-details" name="alcohol_changes_no_answer_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="alcohol-changes-no-answer-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-radios__divider">or</div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-changes-not-present" name="alcohol_changes" type="radio" value="not-present">
+          <label class="govuk-label govuk-radios__label" for="alcohol-changes-not-present">Alex is not present</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-changes-not-applicable" name="alcohol_changes" type="radio" value="not-applicable">
+          <label class="govuk-label govuk-radios__label" for="alcohol-changes-not-applicable">Not applicable</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}

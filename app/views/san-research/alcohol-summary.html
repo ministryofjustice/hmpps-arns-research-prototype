@@ -29,7 +29,9 @@
 
   <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="practitioner-analysis">
     <div data-al-analysis-summary hidden></div>
+    <p class="govuk-body govuk-!-margin-bottom-7" data-al-analysis-not-required hidden>Practitioner analysis not required.</p>
     <form id="san-alcohol-analysis-form" novalidate data-al-page="summary">
+      <div data-al-analysis-questions>
       <div class="govuk-form-group" data-san-error-group="analysis-strengths">
         <fieldset class="govuk-fieldset" id="analysis-strengths" aria-describedby="analysis-strengths-hint">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Are there any strengths or protective factors related to Alex's alcohol use?</legend>
@@ -119,6 +121,7 @@
             </div>
           </div>
         </fieldset>
+      </div>
       </div>
 
       <button type="submit" class="govuk-button" data-module="govuk-button">Mark as complete</button>

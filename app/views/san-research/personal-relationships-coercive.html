@@ -1,0 +1,55 @@
+{% extends "layouts/assessment-san-research.html" %}
+
+{% set pageName = "Personal relationships and community" %}
+{% set sanCaption = "Personal relationships and community" %}
+{% set sanSection = "relationships" %}
+{% set backLinkHref = "personal-relationships-questions.html" %}
+
+{% macro radioOption(name, id, value, label, hint, withDetails, detailsHint, detailsLabel) %}
+<div class="govuk-radios__item">
+  <input class="govuk-radios__input" id="{{ id }}" name="{{ name }}" type="radio" value="{{ value }}"{% if hint %} aria-describedby="{{ id }}-hint"{% endif %}{% if withDetails %} data-aria-controls="conditional-{{ id }}"{% endif %}>
+  <label class="govuk-label govuk-radios__label" for="{{ id }}">{{ label }}</label>
+  {% if hint %}
+  <div id="{{ id }}-hint" class="govuk-hint govuk-radios__hint">{{ hint }}</div>
+  {% endif %}
+</div>
+{% if withDetails %}
+<div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ id }}">
+  <div class="govuk-form-group">
+    <label class="govuk-label" for="{{ id }}-details">{{ detailsLabel or "Give details (optional)" }}</label>
+    {% if detailsHint %}
+    <div id="{{ id }}-details-hint" class="govuk-hint">{{ detailsHint }}</div>
+    {% endif %}
+    <textarea class="govuk-textarea" id="{{ id }}-details" name="{{ id | replace('-', '_') }}_details" rows="5" maxlength="2000"{% if detailsHint %} aria-describedby="{{ id }}-details-hint"{% endif %}></textarea>
+    <div class="govuk-hint san-character-count" data-san-character-count="{{ id }}-details">You have 2,000 characters remaining</div>
+  </div>
+</div>
+{% endif %}
+{% endmacro %}
+
+{% block content %}
+
+{% include "includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "includes/san-research/content-header.html" %}
+
+<form id="san-relationships-coercive-form" novalidate data-pc-page="coercive">
+  <div class="govuk-form-group" data-san-error-group="relationships-coercive">
+    <fieldset class="govuk-fieldset" id="relationships-coercive">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">Is there evidence that Alex has used controlling or coercive behaviour?</h1>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {{ radioOption("relationships_coercive", "coercive-yes", "yes", "Yes", "", true, "Include what the behaviour was and who it was towards.", "Give details") | safe }}
+        {{ radioOption("relationships_coercive", "coercive-no", "no", "No", "", true, "", "Give details (optional)") | safe }}
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "includes/assessment-page-close.html" %}
+
+{% endblock %}
