@@ -372,7 +372,7 @@ const analysisRows = (session) => {
   const rows = []
   if (session.hwAnalysisStrengths) {
     rows.push(summaryRow(
-      'Strengths or protective factors',
+      "Are there any strengths or protective factors related to Alex's health and wellbeing?",
       [labelled(YES_NO, session.hwAnalysisStrengths), session.hwAnalysisStrengthsDetails],
       '#analysis-strengths',
       { secondaryFrom: 1 }
@@ -380,7 +380,7 @@ const analysisRows = (session) => {
   }
   if (session.hwAnalysisHarm) {
     rows.push(summaryRow(
-      'Linked to risk of serious harm',
+      "Is Alex's health and wellbeing linked to risk of serious harm?",
       [labelled(YES_NO, session.hwAnalysisHarm), session.hwAnalysisHarmDetails],
       '#analysis-harm',
       { secondaryFrom: 1 }
@@ -388,7 +388,7 @@ const analysisRows = (session) => {
   }
   if (session.hwAnalysisReoffending) {
     rows.push(summaryRow(
-      'Linked to risk of reoffending',
+      "Is Alex's health and wellbeing linked to risk of reoffending?",
       [labelled(YES_NO, session.hwAnalysisReoffending), session.hwAnalysisReoffendingDetails],
       '#analysis-reoffending',
       { secondaryFrom: 1 }

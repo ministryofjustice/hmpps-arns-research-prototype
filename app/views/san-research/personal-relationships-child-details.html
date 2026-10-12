@@ -16,92 +16,144 @@
   <h1 class="govuk-heading-l">What are the children's details?</h1>
 
   <div class="govuk-form-group" data-san-error-group="child-name">
-    <label class="govuk-label" for="child-name">Name</label>
-    <input class="govuk-input" id="child-name" name="child_name" type="text" spellcheck="false" autocomplete="off">
+    <label class="govuk-label govuk-label--s" for="child-name">Child's name</label>
+    <div id="child-name-hint" class="govuk-hint">Enter the full name or enter 'Non-disclosable'.</div>
+    <input class="govuk-input" id="child-name" name="child_name" type="text" spellcheck="false" autocomplete="off" aria-describedby="child-name-hint">
   </div>
 
-  <div class="govuk-form-group" data-san-error-group="child-dob">
-    <fieldset class="govuk-fieldset" id="child-dob" role="group" aria-describedby="child-dob-hint">
-      <legend class="govuk-fieldset__legend">Date of birth</legend>
-      <div id="child-dob-hint" class="govuk-hint">For example, 31 3 2016</div>
-      <div class="govuk-date-input" id="child-dob-inputs">
-        <div class="govuk-date-input__item">
-          <div class="govuk-form-group">
-            <label class="govuk-label govuk-date-input__label" for="child-dob-day">Day</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="child-dob-day" name="child_dob_day" type="text" inputmode="numeric">
-          </div>
+  <fieldset class="govuk-fieldset govuk-!-margin-top-6" aria-describedby="child-dob-hint">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Date of birth or age (optional)</legend>
+    <div id="child-dob-hint" class="govuk-hint">For example, 31 3 2016.</div>
+    <div class="govuk-date-input rosh-child-dob" id="child-dob">
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="child-dob-day">Day</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="child-dob-day" name="child_dob_day" type="text" inputmode="numeric">
         </div>
-        <div class="govuk-date-input__item">
-          <div class="govuk-form-group">
-            <label class="govuk-label govuk-date-input__label" for="child-dob-month">Month</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="child-dob-month" name="child_dob_month" type="text" inputmode="numeric">
-          </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="child-dob-month">Month</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="child-dob-month" name="child_dob_month" type="text" inputmode="numeric">
         </div>
-        <div class="govuk-date-input__item">
-          <div class="govuk-form-group">
-            <label class="govuk-label govuk-date-input__label" for="child-dob-year">Year</label>
-            <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="child-dob-year" name="child_dob_year" type="text" inputmode="numeric">
-          </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="child-dob-year">Year</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="child-dob-year" name="child_dob_year" type="text" inputmode="numeric">
+        </div>
+      </div>
+      <div class="govuk-date-input__item rosh-child-dob__or">
+        <div class="govuk-form-group">
+          <span class="govuk-label govuk-date-input__label" aria-hidden="true">&nbsp;</span>
+          <span class="rosh-child-dob__or-text">or</span>
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="child-age">Age</label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="child-age" name="child_age" type="text" inputmode="numeric">
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="govuk-form-group govuk-!-margin-top-6">
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Sex (optional)</legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="child-sex-male" name="child_sex" type="radio" value="male">
+          <label class="govuk-label govuk-radios__label" for="child-sex-male">Male</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="child-sex-female" name="child_sex" type="radio" value="female">
+          <label class="govuk-label govuk-radios__label" for="child-sex-female">Female</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="child-sex-intersex" name="child_sex" type="radio" value="intersex">
+          <label class="govuk-label govuk-radios__label" for="child-sex-intersex">Intersex</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="child-sex-unknown" name="child_sex" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="child-sex-unknown">Unknown</label>
         </div>
       </div>
     </fieldset>
   </div>
 
-  <div class="govuk-form-group" data-san-error-group="child-relationship">
+  <fieldset class="govuk-fieldset govuk-!-margin-top-6" id="child-address">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Address if disclosable (optional)</legend>
+    <div class="govuk-form-group">
+      <label class="govuk-label" for="child-address1">Address line 1</label>
+      <input class="govuk-input" id="child-address1" name="child_address1" type="text" autocomplete="address-line1">
+    </div>
+    <div class="govuk-form-group">
+      <label class="govuk-label" for="child-address2">Address line 2</label>
+      <input class="govuk-input" id="child-address2" name="child_address2" type="text" autocomplete="address-line2">
+    </div>
+    <div class="govuk-form-group">
+      <label class="govuk-label" for="child-town">Town or city</label>
+      <input class="govuk-input govuk-!-width-two-thirds" id="child-town" name="child_town" type="text" autocomplete="address-level2">
+    </div>
+    <div class="govuk-form-group">
+      <label class="govuk-label" for="child-county">County</label>
+      <input class="govuk-input govuk-!-width-two-thirds" id="child-county" name="child_county" type="text">
+    </div>
+    <div class="govuk-form-group">
+      <label class="govuk-label" for="child-postcode">Postcode</label>
+      <input class="govuk-input govuk-input--width-10" id="child-postcode" name="child_postcode" type="text" autocomplete="postal-code">
+    </div>
+  </fieldset>
+
+  <div class="govuk-form-group govuk-!-margin-top-6" data-san-error-group="child-relationship">
     <fieldset class="govuk-fieldset" id="child-relationship">
-      <legend class="govuk-fieldset__legend">What is Alex's relationship to this child?</legend>
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">What is Alex's relationship or connection to this child?</legend>
       <div class="govuk-radios" data-module="govuk-radios">
         {% set relationshipOptions = [
-          { id: "parent", label: "Parent" },
-          { id: "step-parent", label: "Step-parent" },
-          { id: "sibling", label: "Sibling" },
+          { id: "parent", label: "Parent or step-parent" },
+          { id: "carer", label: "Carer" },
           { id: "grandparent", label: "Grandparent" },
-          { id: "aunt-uncle", label: "Aunt or uncle" },
-          { id: "family-friend", label: "Family friend" }
+          { id: "sibling", label: "Sibling" },
+          { id: "other-family", label: "Other family member" },
+          { id: "friend", label: "Friend" },
+          { id: "other", label: "Other", conditional: true }
         ] %}
         {% for option in relationshipOptions %}
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="child-relationship-{{ option.id }}" name="child_relationship" type="radio" value="{{ option.id }}">
+          <input class="govuk-radios__input" id="child-relationship-{{ option.id }}" name="child_relationship" type="radio" value="{{ option.id }}"{% if option.conditional %} data-aria-controls="conditional-child-relationship-details"{% endif %}>
           <label class="govuk-label govuk-radios__label" for="child-relationship-{{ option.id }}">{{ option.label }}</label>
         </div>
+        {% if option.conditional %}
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-child-relationship-details">
+          <div class="govuk-form-group" data-san-error-group="child-relationship-details">
+            <label class="govuk-label" for="child-relationship-details">Give details</label>
+            <textarea class="govuk-textarea" id="child-relationship-details" name="child_relationship_details" rows="3"></textarea>
+          </div>
+        </div>
+        {% endif %}
         {% endfor %}
       </div>
     </fieldset>
   </div>
 
-  <div class="govuk-form-group" data-san-error-group="child-lives-with">
-    <fieldset class="govuk-fieldset" id="child-lives-with">
-      <legend class="govuk-fieldset__legend">Do they live with Alex?</legend>
+  <div class="govuk-form-group" data-san-error-group="child-contact">
+    <fieldset class="govuk-fieldset" id="child-contact">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Does Alex have contact or is seeking contact with this child?</legend>
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="child-lives-with-yes" name="child_lives_with" type="radio" value="yes">
-          <label class="govuk-label govuk-radios__label" for="child-lives-with-yes">Yes</label>
+          <input class="govuk-radios__input" id="child-contact-yes" name="child_contact" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="child-contact-yes">Yes</label>
         </div>
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="child-lives-with-no" name="child_lives_with" type="radio" value="no">
-          <label class="govuk-label govuk-radios__label" for="child-lives-with-no">No</label>
+          <input class="govuk-radios__input" id="child-contact-no" name="child_contact" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="child-contact-no">No</label>
         </div>
       </div>
     </fieldset>
   </div>
 
-  <div class="govuk-form-group" data-san-error-group="child-parental-responsibility">
-    <fieldset class="govuk-fieldset" id="child-parental-responsibility">
-      <legend class="govuk-fieldset__legend">Does Alex have parental responsibility?</legend>
-      <div class="govuk-radios" data-module="govuk-radios">
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="child-parental-responsibility-yes" name="child_parental_responsibility" type="radio" value="yes">
-          <label class="govuk-label govuk-radios__label" for="child-parental-responsibility-yes">Yes</label>
-        </div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="child-parental-responsibility-no" name="child_parental_responsibility" type="radio" value="no">
-          <label class="govuk-label govuk-radios__label" for="child-parental-responsibility-no">No</label>
-        </div>
-      </div>
-    </fieldset>
-  </div>
-
-  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+  <button type="submit" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Save and continue</button>
 </form>
 
 {% include "includes/assessment-page-close.html" %}

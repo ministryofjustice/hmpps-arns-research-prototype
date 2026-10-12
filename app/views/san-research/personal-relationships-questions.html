@@ -35,6 +35,49 @@
 {% include "includes/san-research/content-header.html" %}
 
 <form id="san-relationships-questions-form" novalidate data-pc-page="questions">
+  <div class="govuk-form-group" data-pc-question="family" data-san-error-group="relationships-family">
+    <fieldset class="govuk-fieldset" id="relationships-family" aria-describedby="relationships-family-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">What is Alex's current relationship like with their family?</h2>
+      </legend>
+      <div id="relationships-family-hint" class="govuk-hint">Consider any relationships that may act like family support.</div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {{ radioOption("relationships_family", "family-stable", "stable", "Stable, supportive, positive and rewarding relationship", "", true, "") | safe }}
+        {{ radioOption("relationships_family", "family-mixed", "mixed", "Both positive and negative relationship", "", true, "") | safe }}
+        {{ radioOption("relationships_family", "family-unstable", "unstable", "Unstable and unsupportive relationship", "This includes those who have little or no contact with their family.", true, "") | safe }}
+        {{ radioOption("relationships_family", "family-unknown", "unknown", "Unknown", "", false, "") | safe }}
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-pc-question="childhood" data-san-error-group="relationships-childhood">
+    <fieldset class="govuk-fieldset" id="relationships-childhood" aria-describedby="relationships-childhood-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">What was Alex's experience of their childhood?</h2>
+      </legend>
+      <div id="relationships-childhood-hint" class="govuk-hint">Childhood is the period up to and including 18 years old.</div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {{ radioOption("relationships_childhood", "childhood-stable", "stable", "Generally stable and supportive", "No significant concerns identified about care, safety or family relationships.", true, "Include relevant supportive and challenging experiences") | safe }}
+        {{ radioOption("relationships_childhood", "childhood-some-challenges", "some-challenges", "Some challenges or instability", "Less severe or temporary challenges, disruption or concerns.", true, "Include relevant supportive and challenging experiences") | safe }}
+        {{ radioOption("relationships_childhood", "childhood-significant", "significant", "Significant challenges or instability", "Serious or longer-term experiences such as prolonged separation from parents or carers, inconsistent care, neglect or abuse. A single serious experience may also be significant.", true, "Include relevant supportive and challenging experiences") | safe }}
+        {{ radioOption("relationships_childhood", "childhood-unknown", "unknown", "Unknown", "", false, "") | safe }}
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-pc-question="belonging" data-san-error-group="relationships-belonging">
+    <fieldset class="govuk-fieldset" id="relationships-belonging" aria-describedby="relationships-belonging-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Are there any people, groups or communities that give Alex a sense of belonging?</h2>
+      </legend>
+      <div id="relationships-belonging-hint" class="govuk-hint">This could include relationships with friends, neighbours, online communities, social groups or faith groups. Consider negative influences, as well as positive.</div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {{ radioOption("relationships_belonging", "belonging-yes", "yes", "Yes", "", true, "Include any positive influences, sources of support, or relationships that may present risks or vulnerabilities.", "Give details") | safe }}
+        {{ radioOption("relationships_belonging", "belonging-no", "no", "No", "", true, "", "Give details (optional)") | safe }}
+      </div>
+    </fieldset>
+  </div>
+
   <div class="govuk-form-group" data-pc-question="status" data-san-error-group="relationships-status">
     <fieldset class="govuk-fieldset" id="relationships-status">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
@@ -86,36 +129,6 @@
     </fieldset>
   </div>
 
-  <div class="govuk-form-group" data-pc-question="family" data-san-error-group="relationships-family">
-    <fieldset class="govuk-fieldset" id="relationships-family" aria-describedby="relationships-family-hint">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">What is Alex's current relationship like with their family?</h2>
-      </legend>
-      <div id="relationships-family-hint" class="govuk-hint">Consider any relationships that may act like family support.</div>
-      <div class="govuk-radios" data-module="govuk-radios">
-        {{ radioOption("relationships_family", "family-stable", "stable", "Stable, supportive, positive and rewarding relationship", "", true, "") | safe }}
-        {{ radioOption("relationships_family", "family-mixed", "mixed", "Both positive and negative relationship", "", true, "") | safe }}
-        {{ radioOption("relationships_family", "family-unstable", "unstable", "Unstable and unsupportive relationship", "This includes those who have little or no contact with their family.", true, "") | safe }}
-        {{ radioOption("relationships_family", "family-unknown", "unknown", "Unknown", "", false, "") | safe }}
-      </div>
-    </fieldset>
-  </div>
-
-  <div class="govuk-form-group" data-pc-question="childhood" data-san-error-group="relationships-childhood">
-    <fieldset class="govuk-fieldset" id="relationships-childhood" aria-describedby="relationships-childhood-hint">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">What was Alex's experience of their childhood?</h2>
-      </legend>
-      <div id="relationships-childhood-hint" class="govuk-hint">Childhood is the period up to and including 18 years old.</div>
-      <div class="govuk-radios" data-module="govuk-radios">
-        {{ radioOption("relationships_childhood", "childhood-stable", "stable", "Generally stable and supportive", "No significant concerns identified about care, safety or family relationships.", true, "Include relevant supportive and challenging experiences") | safe }}
-        {{ radioOption("relationships_childhood", "childhood-some-challenges", "some-challenges", "Some challenges or instability", "Less severe or temporary challenges, disruption or concerns.", true, "Include relevant supportive and challenging experiences") | safe }}
-        {{ radioOption("relationships_childhood", "childhood-significant", "significant", "Significant challenges or instability", "Serious or longer-term experiences such as prolonged separation from parents or carers, inconsistent care, neglect or abuse. A single serious experience may also be significant.", true, "Include relevant supportive and challenging experiences") | safe }}
-        {{ radioOption("relationships_childhood", "childhood-unknown", "unknown", "Unknown", "", false, "") | safe }}
-      </div>
-    </fieldset>
-  </div>
-
   <div class="govuk-form-group" data-pc-question="behaviour" data-san-error-group="relationships-behaviour">
     <fieldset class="govuk-fieldset" id="relationships-behaviour">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
@@ -124,19 +137,6 @@
       <div class="govuk-radios" data-module="govuk-radios">
         {{ radioOption("relationships_behaviour", "behaviour-yes", "yes", "Yes", "", false, "") | safe }}
         {{ radioOption("relationships_behaviour", "behaviour-no", "no", "No", "", false, "") | safe }}
-      </div>
-    </fieldset>
-  </div>
-
-  <div class="govuk-form-group" data-pc-question="belonging" data-san-error-group="relationships-belonging">
-    <fieldset class="govuk-fieldset" id="relationships-belonging" aria-describedby="relationships-belonging-hint">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Are there any people, groups or communities that give Alex a sense of belonging?</h2>
-      </legend>
-      <div id="relationships-belonging-hint" class="govuk-hint">This could include relationships with friends, neighbours, online communities, social groups or faith groups. Consider negative influences, as well as positive.</div>
-      <div class="govuk-radios" data-module="govuk-radios">
-        {{ radioOption("relationships_belonging", "belonging-yes", "yes", "Yes", "", true, "Include any positive influences, sources of support, or relationships that may present risks or vulnerabilities.", "Give details") | safe }}
-        {{ radioOption("relationships_belonging", "belonging-no", "no", "No", "", true, "", "Give details (optional)") | safe }}
       </div>
     </fieldset>
   </div>

@@ -11,12 +11,20 @@ const CHILD_LABELS = {
 }
 
 const CHILD_RELATIONSHIP_LABELS = {
-  parent: 'Parent',
-  'step-parent': 'Step-parent',
-  sibling: 'Sibling',
+  parent: 'Parent or step-parent',
+  carer: 'Carer',
   grandparent: 'Grandparent',
-  'aunt-uncle': 'Aunt or uncle',
-  'family-friend': 'Family friend'
+  sibling: 'Sibling',
+  'other-family': 'Other family member',
+  friend: 'Friend',
+  other: 'Other'
+}
+
+const CHILD_SEX_LABELS = {
+  male: 'Male',
+  female: 'Female',
+  intersex: 'Intersex',
+  unknown: 'Unknown'
 }
 
 const MONTH_NAMES = [
@@ -226,8 +234,21 @@ const formatChildDob = (child) => {
   const day = Number(child.dobDay)
   const monthIndex = Number(child.dobMonth) - 1
   const month = MONTH_NAMES[monthIndex]
-  if (!day || !month || !child.dobYear) return [child.dobDay, child.dobMonth, child.dobYear].filter(Boolean).join(' ')
-  return `${day} ${month} ${child.dobYear}`
+  if (day && month && child.dobYear) return `${day} ${month} ${child.dobYear}`
+  if (child.age) return child.age
+  return [child.dobDay, child.dobMonth, child.dobYear].filter(Boolean).join(' ')
+}
+
+const formatChildAddress = (child) => {
+  return [child.address1, child.address2, child.town, child.county, child.postcode].filter(Boolean).join(', ')
+}
+
+const childRelationshipText = (child) => {
+  const relationship = labelled(CHILD_RELATIONSHIP_LABELS, child.relationship)
+  if (child.relationship === 'other' && child.relationshipDetails) {
+    return `${relationship}: ${child.relationshipDetails}`
+  }
+  return relationship
 }
 
 const childPageParams = () => {
@@ -273,11 +294,7 @@ const victimAnswered = (session) => !!session.relationshipsVictim
 
 const needsVictimWho = (session) => session.relationshipsVictim === 'yes'
 
-const needsCoercive = () => true
-
 const coerciveComplete = (session) => !!session.relationshipsCoercive
-
-const needsStrangulation = () => true
 
 const strangulationComplete = (session) => !!session.relationshipsStrangulation
 
@@ -295,20 +312,10 @@ const questionsAnswered = (session) => (
   questionsFormAnswered(session) && perpetratorFollowUpComplete(session) && victimFlowComplete(session) && !!session.relationshipsChanges
 )
 
-const coerciveBackHref = (session) => (
-  needsAbuseWho(session) ? 'personal-relationships-abuse.html' : 'personal-relationships-questions.html'
-)
+const domesticAbuseHref = 'personal-relationships-domestic-abuse.html'
+const victimWhoHref = 'personal-relationships-victim-who.html'
 
-const victimBackHref = () => 'personal-relationships-strangulation.html'
-
-const changesBackHref = (session) => {
-  if (needsVictimWho(session)) return 'personal-relationships-victim-who.html'
-  if (victimAnswered(session)) return 'personal-relationships-victim.html'
-  if (needsStrangulation()) return 'personal-relationships-strangulation.html'
-  if (needsCoercive()) return 'personal-relationships-coercive.html'
-  if (needsAbuseWho(session)) return 'personal-relationships-abuse.html'
-  return 'personal-relationships-questions.html'
-}
+const changesBackHref = (session) => (needsVictimWho(session) ? victimWhoHref : domesticAbuseHref)
 
 const questionsBackHref = (session) => (
   hasChildren(session.relationshipsChildren) && childrenList(session).length
@@ -320,11 +327,8 @@ const nextIncompleteHref = (session) => {
   if (!hasAnswers(session.relationshipsChildren)) return 'personal-relationships-children.html'
   if (hasChildren(session.relationshipsChildren) && !childrenList(session).length) return 'personal-relationships-child-details.html'
   if (!questionsFormAnswered(session)) return 'personal-relationships-questions.html'
-  if (!abuseWhoComplete(session)) return 'personal-relationships-abuse.html'
-  if (!coerciveComplete(session)) return 'personal-relationships-coercive.html'
-  if (!strangulationComplete(session)) return 'personal-relationships-strangulation.html'
-  if (!victimAnswered(session)) return 'personal-relationships-victim.html'
-  if (!victimWhoComplete(session)) return 'personal-relationships-victim-who.html'
+  if (!perpetratorFollowUpComplete(session) || !victimAnswered(session)) return domesticAbuseHref
+  if (!victimWhoComplete(session)) return victimWhoHref
   if (!session.relationshipsChanges) return 'personal-relationships-changes.html'
   return 'personal-relationships-questions.html'
 }
@@ -367,6 +371,30 @@ const childrenQuestionRow = (session) => {
 const relationshipRows = (session) => {
   const rows = []
 
+  if (session.relationshipsFamily) {
+    rows.push(summaryRow(
+      "What is Alex's current relationship like with their family?",
+      answerLines(labelled(FAMILY_LABELS, session.relationshipsFamily), session.relationshipsFamilyDetails),
+      summaryChangeHref('personal-relationships-questions', 'relationships-family')
+    ))
+  }
+
+  if (session.relationshipsChildhood) {
+    rows.push(summaryRow(
+      "What was Alex's experience of their childhood?",
+      answerLines(labelled(CHILDHOOD_LABELS, session.relationshipsChildhood), session.relationshipsChildhoodDetails),
+      summaryChangeHref('personal-relationships-questions', 'relationships-childhood')
+    ))
+  }
+
+  if (session.relationshipsBelonging) {
+    rows.push(summaryRow(
+      'Are there any people, groups or communities that give Alex a sense of belonging?',
+      answerLines(labelled(YES_NO, session.relationshipsBelonging), session.relationshipsBelongingDetails),
+      summaryChangeHref('personal-relationships-questions', 'relationships-belonging')
+    ))
+  }
+
   if (session.relationshipsStatus) {
     rows.push(summaryRow(
       "How would you describe Alex's current relationship situation?",
@@ -391,22 +419,6 @@ const relationshipRows = (session) => {
     ))
   }
 
-  if (session.relationshipsFamily) {
-    rows.push(summaryRow(
-      "What is Alex's current relationship like with their family?",
-      answerLines(labelled(FAMILY_LABELS, session.relationshipsFamily), session.relationshipsFamilyDetails),
-      summaryChangeHref('personal-relationships-questions', 'relationships-family')
-    ))
-  }
-
-  if (session.relationshipsChildhood) {
-    rows.push(summaryRow(
-      "What was Alex's experience of their childhood?",
-      answerLines(labelled(CHILDHOOD_LABELS, session.relationshipsChildhood), session.relationshipsChildhoodDetails),
-      summaryChangeHref('personal-relationships-questions', 'relationships-childhood')
-    ))
-  }
-
   if (session.relationshipsBehaviour) {
     rows.push(summaryRow(
       'Is there evidence that Alex has ever been a perpetrator of domestic abuse?',
@@ -421,7 +433,7 @@ const relationshipRows = (session) => {
     rows.push(summaryRow(
       'Who did Alex abuse?',
       lines,
-      summaryChangeHref('personal-relationships-abuse')
+      summaryChangeHref('personal-relationships-domestic-abuse', 'relationships-abuse')
     ))
   }
 
@@ -429,7 +441,7 @@ const relationshipRows = (session) => {
     rows.push(summaryRow(
       'Is there evidence that Alex has used controlling or coercive behaviour?',
       answerLines(labelled(YES_NO, session.relationshipsCoercive), session.relationshipsCoerciveDetails),
-      summaryChangeHref('personal-relationships-coercive')
+      summaryChangeHref('personal-relationships-domestic-abuse', 'relationships-coercive')
     ))
   }
 
@@ -437,7 +449,7 @@ const relationshipRows = (session) => {
     rows.push(summaryRow(
       'Is there evidence that Alex has used strangulation or suffocation?',
       answerLines(labelled(YES_NO, session.relationshipsStrangulation), session.relationshipsStrangulationDetails),
-      summaryChangeHref('personal-relationships-strangulation')
+      summaryChangeHref('personal-relationships-domestic-abuse', 'relationships-strangulation')
     ))
   }
 
@@ -445,7 +457,7 @@ const relationshipRows = (session) => {
     rows.push(summaryRow(
       'Is there evidence that Alex has ever been a victim of domestic abuse?',
       answerLines(labelled(YES_NO, session.relationshipsVictim)),
-      summaryChangeHref('personal-relationships-victim')
+      summaryChangeHref('personal-relationships-domestic-abuse', 'relationships-victim')
     ))
   }
 
@@ -456,14 +468,6 @@ const relationshipRows = (session) => {
       'Who was Alex abused by?',
       lines,
       summaryChangeHref('personal-relationships-victim-who')
-    ))
-  }
-
-  if (session.relationshipsBelonging) {
-    rows.push(summaryRow(
-      'Are there any people, groups or communities that give Alex a sense of belonging?',
-      answerLines(labelled(YES_NO, session.relationshipsBelonging), session.relationshipsBelongingDetails),
-      summaryChangeHref('personal-relationships-questions', 'relationships-belonging')
     ))
   }
 
@@ -627,28 +631,42 @@ const readChildDetails = () => ({
   dobDay: fieldValue('child-dob-day'),
   dobMonth: fieldValue('child-dob-month'),
   dobYear: fieldValue('child-dob-year'),
+  age: fieldValue('child-age'),
+  sex: checkedValue('child_sex'),
+  address1: fieldValue('child-address1'),
+  address2: fieldValue('child-address2'),
+  town: fieldValue('child-town'),
+  county: fieldValue('child-county'),
+  postcode: fieldValue('child-postcode'),
   relationship: checkedValue('child_relationship'),
-  livesWith: checkedValue('child_lives_with'),
-  parentalResponsibility: checkedValue('child_parental_responsibility')
+  relationshipDetails: checkedValue('child_relationship') === 'other' ? fieldValue('child-relationship-details') : '',
+  contact: checkedValue('child_contact')
 })
 
 const validateChildDetails = (child) => {
   const errors = []
-  if (!child.name) errors.push({ group: 'child-name', href: '#child-name', text: "Enter the child's name" })
-  if (!child.dobDay || !child.dobMonth || !child.dobYear) {
-    errors.push({ group: 'child-dob', href: '#child-dob', text: "Enter the child's date of birth" })
+  if (!child.name) {
+    errors.push({ group: 'child-name', href: '#child-name', text: "Enter the child's name, or enter 'Non-disclosable'" })
   }
   if (!child.relationship) {
-    errors.push({ group: 'child-relationship', href: '#child-relationship', text: "Select Alex's relationship to this child" })
-  }
-  if (!child.livesWith) {
-    errors.push({ group: 'child-lives-with', href: '#child-lives-with', text: 'Select if they live with Alex' })
-  }
-  if (!child.parentalResponsibility) {
     errors.push({
-      group: 'child-parental-responsibility',
-      href: '#child-parental-responsibility',
-      text: 'Select if Alex has parental responsibility'
+      group: 'child-relationship',
+      href: '#child-relationship',
+      text: "Select Alex's relationship or connection to this child"
+    })
+  }
+  if (child.relationship === 'other' && !child.relationshipDetails) {
+    errors.push({
+      group: 'child-relationship-details',
+      href: '#child-relationship-details',
+      text: 'Give details of the relationship or connection'
+    })
+  }
+  if (!child.contact) {
+    errors.push({
+      group: 'child-contact',
+      href: '#child-contact',
+      text: 'Select yes if they have contact or are seeking contact with this child'
     })
   }
   return errors
@@ -660,9 +678,16 @@ const restoreChildDetails = (child) => {
   setField('child-dob-day', child.dobDay)
   setField('child-dob-month', child.dobMonth)
   setField('child-dob-year', child.dobYear)
+  setField('child-age', child.age)
+  selectRadio('child_sex', child.sex)
+  setField('child-address1', child.address1)
+  setField('child-address2', child.address2)
+  setField('child-town', child.town)
+  setField('child-county', child.county)
+  setField('child-postcode', child.postcode)
   selectRadio('child_relationship', child.relationship)
-  selectRadio('child_lives_with', child.livesWith)
-  selectRadio('child_parental_responsibility', child.parentalResponsibility)
+  setField('child-relationship-details', child.relationshipDetails)
+  selectRadio('child_contact', child.contact)
 }
 
 const childDetailsHref = (index, focus = '') => {
@@ -677,11 +702,12 @@ const childDetailsHref = (index, focus = '') => {
 const childCardRows = (child, index) => {
   const name = child.name || `Child ${index + 1}`
   const rows = [
-    ['Name', child.name, 'child-name'],
-    ['Date of birth', formatChildDob(child), 'child-dob'],
-    ['Relationship', labelled(CHILD_RELATIONSHIP_LABELS, child.relationship), 'child-relationship'],
-    ['Do they live with Alex?', labelled(YES_NO, child.livesWith), 'child-lives-with'],
-    ['Does Alex have parental responsibility?', labelled(YES_NO, child.parentalResponsibility), 'child-parental-responsibility']
+    ["Child's name", child.name, 'child-name'],
+    ['Date of birth or age (optional)', formatChildDob(child), 'child-dob'],
+    ['Sex (optional)', labelled(CHILD_SEX_LABELS, child.sex), 'child-sex-male'],
+    ['Address if disclosable (optional)', formatChildAddress(child), 'child-address'],
+    ["What is Alex's relationship or connection to this child?", childRelationshipText(child), 'child-relationship'],
+    ['Does Alex have contact or is seeking contact with this child?', labelled(YES_NO, child.contact), 'child-contact']
   ]
   return rows.map(([key, value, hash]) => `<div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">${escapeHtml(key)}</dt>
@@ -822,6 +848,17 @@ const readAnalysis = () => {
 
 const validateQuestions = (answers, showParenting) => {
   const errors = []
+  if (!answers.relationshipsFamily) {
+    errors.push({ group: 'relationships-family', href: '#relationships-family', text: "Select what Alex's current relationship with their family is like" })
+  }
+  if (!answers.relationshipsChildhood) {
+    errors.push({ group: 'relationships-childhood', href: '#relationships-childhood', text: "Select Alex's experience of their childhood" })
+  }
+  if (!answers.relationshipsBelonging) {
+    errors.push({ group: 'relationships-belonging', href: '#relationships-belonging', text: 'Select if there are any people, groups or communities that give Alex a sense of belonging' })
+  } else if (answers.relationshipsBelonging === 'yes' && !answers.relationshipsBelongingDetails) {
+    errors.push({ group: 'relationships-belonging', href: '#belonging-yes-details', text: 'Enter details about the people, groups or communities that give Alex a sense of belonging' })
+  }
   if (!answers.relationshipsStatus) {
     errors.push({ group: 'relationships-status', href: '#relationships-status', text: "Select how you would describe Alex's current relationship situation" })
   }
@@ -831,19 +868,8 @@ const validateQuestions = (answers, showParenting) => {
   if (showParenting && !answers.relationshipsParenting) {
     errors.push({ group: 'relationships-parenting', href: '#relationships-parenting', text: 'Select if Alex is able to manage their parenting responsibilities' })
   }
-  if (!answers.relationshipsFamily) {
-    errors.push({ group: 'relationships-family', href: '#relationships-family', text: "Select what Alex's current relationship with their family is like" })
-  }
-  if (!answers.relationshipsChildhood) {
-    errors.push({ group: 'relationships-childhood', href: '#relationships-childhood', text: "Select Alex's experience of their childhood" })
-  }
   if (!answers.relationshipsBehaviour) {
     errors.push({ group: 'relationships-behaviour', href: '#relationships-behaviour', text: 'Select if there is evidence that Alex has ever been a perpetrator of domestic abuse' })
-  }
-  if (!answers.relationshipsBelonging) {
-    errors.push({ group: 'relationships-belonging', href: '#relationships-belonging', text: 'Select if there are any people, groups or communities that give Alex a sense of belonging' })
-  } else if (answers.relationshipsBelonging === 'yes' && !answers.relationshipsBelongingDetails) {
-    errors.push({ group: 'relationships-belonging', href: '#belonging-yes-details', text: 'Enter details about the people, groups or communities that give Alex a sense of belonging' })
   }
   return errors
 }
@@ -870,12 +896,11 @@ const validateAnalysis = (answers) => {
   return errors
 }
 
-const applyParenting = (show) => {
-  const block = document.querySelector('[data-pc-question="parenting"]')
-  if (block) {
-    block.hidden = !show
-    block.classList.toggle('san-is-hidden', !show)
-  }
+const setQuestionHidden = (name, hidden) => {
+  setHidden(document.querySelector(`[data-pc-question="${name}"]`), hidden)
+}
+
+const spaceVisibleQuestions = () => {
   const visible = []
   document.querySelectorAll('[data-pc-question]').forEach((question) => {
     question.classList.remove('san-question')
@@ -883,6 +908,16 @@ const applyParenting = (show) => {
     if (!hidden) visible.push(question)
   })
   visible.slice(1).forEach((question) => question.classList.add('san-question'))
+}
+
+const applyParenting = (show) => {
+  setQuestionHidden('parenting', !show)
+  spaceVisibleQuestions()
+}
+
+const applyDomesticAbuseQuestions = (session) => {
+  setQuestionHidden('abuse', !needsAbuseWho(session))
+  spaceVisibleQuestions()
 }
 
 const restoreQuestions = (session) => {
@@ -1102,22 +1137,17 @@ const initSanRelationships = () => {
     restoreQuestions(session)
   }
 
-  if (pageName === 'abuse') {
-    if (!questionsFormAnswered(session) || !needsAbuseWho(session)) {
+  if (pageName === 'domestic-abuse') {
+    if (!questionsFormAnswered(session)) {
       window.location.assign(fromSummary() ? 'personal-relationships-summary.html' : nextIncompleteHref(session))
       return
     }
     if (!fromSummary()) ensureBackLink('personal-relationships-questions.html')
     restoreAbuseWho(session)
-  }
-
-  if (pageName === 'victim') {
-    if (!questionsFormAnswered(session) || !perpetratorFollowUpComplete(session)) {
-      window.location.assign(fromSummary() ? 'personal-relationships-summary.html' : nextIncompleteHref(session))
-      return
-    }
-    if (!fromSummary()) ensureBackLink(victimBackHref())
+    restoreCoercive(session)
+    restoreStrangulation(session)
     restoreVictim(session)
+    applyDomesticAbuseQuestions(session)
   }
 
   if (pageName === 'victim-who') {
@@ -1125,26 +1155,8 @@ const initSanRelationships = () => {
       window.location.assign(fromSummary() ? 'personal-relationships-summary.html' : nextIncompleteHref(session))
       return
     }
-    if (!fromSummary()) ensureBackLink('personal-relationships-victim.html')
+    if (!fromSummary()) ensureBackLink(domesticAbuseHref)
     restoreVictimWho(session)
-  }
-
-  if (pageName === 'coercive') {
-    if (!questionsFormAnswered(session) || !abuseWhoComplete(session)) {
-      window.location.assign(fromSummary() ? 'personal-relationships-summary.html' : nextIncompleteHref(session))
-      return
-    }
-    if (!fromSummary()) ensureBackLink(coerciveBackHref(session))
-    restoreCoercive(session)
-  }
-
-  if (pageName === 'strangulation') {
-    if (!questionsFormAnswered(session) || !abuseWhoComplete(session) || !coerciveComplete(session)) {
-      window.location.assign(fromSummary() ? 'personal-relationships-summary.html' : nextIncompleteHref(session))
-      return
-    }
-    if (!fromSummary()) ensureBackLink('personal-relationships-coercive.html')
-    restoreStrangulation(session)
   }
 
   if (pageName === 'changes') {
@@ -1320,85 +1332,55 @@ const initSanRelationships = () => {
     }
     setSanSession(updates)
     const saved = getSanSession()
-    let next = needsAbuseWho(saved) ? 'personal-relationships-abuse.html' : 'personal-relationships-coercive.html'
-    if (fromSummary() && saved.relationshipsChanges && perpetratorFollowUpComplete(saved) && victimFlowComplete(saved)) {
+    const followUpComplete = perpetratorFollowUpComplete(saved) && victimFlowComplete(saved)
+    let next = domesticAbuseHref
+    if (fromSummary() && saved.relationshipsChanges && followUpComplete) {
       next = 'personal-relationships-summary.html'
+    } else if (fromSummary()) {
+      next = `${domesticAbuseHref}?from=summary`
     }
     window.location.assign(next)
   })
 
-  document.getElementById('san-relationships-abuse-form')?.addEventListener('submit', (event) => {
+  document.getElementById('san-relationships-domestic-abuse-form')?.addEventListener('submit', (event) => {
     event.preventDefault()
     revealCheckedConditionals()
-    const answers = readAbuseWho()
-    const errors = validateAbuseWho(answers)
-    if (errors.length) {
-      showErrors(errors)
-      return
+    const session = getSanSession()
+    const showAbuse = needsAbuseWho(session)
+    const answers = {
+      ...readCoercive(),
+      ...readStrangulation(),
+      ...readVictim()
     }
-    clearErrors()
-    setSanSession({ ...answers, relationshipsComplete: false })
-    const saved = getSanSession()
-    window.location.assign(fromSummary() && saved.relationshipsChanges && perpetratorFollowUpComplete(saved) && victimFlowComplete(saved)
-      ? 'personal-relationships-summary.html'
-      : 'personal-relationships-coercive.html')
-  })
-
-  document.getElementById('san-relationships-victim-form')?.addEventListener('submit', (event) => {
-    event.preventDefault()
-    const answers = readVictim()
-    const errors = validateVictim(answers)
-    if (errors.length) {
-      showErrors(errors)
-      return
+    if (showAbuse) Object.assign(answers, readAbuseWho())
+    else {
+      answers.relationshipsAbuseWho = []
+      answers.relationshipsAbuseWhoDetails = {}
     }
-    clearErrors()
-    const updates = { ...answers, relationshipsComplete: false }
     if (answers.relationshipsVictim !== 'yes') {
-      updates.relationshipsVictimWho = []
-      updates.relationshipsVictimWhoDetails = {}
+      answers.relationshipsVictimWho = []
+      answers.relationshipsVictimWhoDetails = {}
     }
-    setSanSession(updates)
+    const errors = [
+      ...(showAbuse ? validateAbuseWho(answers) : []),
+      ...validateCoercive(answers),
+      ...validateStrangulation(answers),
+      ...validateVictim(answers)
+    ]
+    if (errors.length) {
+      showErrors(errors)
+      return
+    }
+    clearErrors()
+    setSanSession({ ...answers, relationshipsComplete: false })
     const saved = getSanSession()
-    let next = needsVictimWho(saved) ? 'personal-relationships-victim-who.html' : 'personal-relationships-changes.html'
-    if (fromSummary() && saved.relationshipsChanges && victimFlowComplete(saved)) {
+    let next = 'personal-relationships-changes.html'
+    if (needsVictimWho(saved) && !victimWhoComplete(saved)) {
+      next = fromSummary() ? `${victimWhoHref}?from=summary` : victimWhoHref
+    } else if (fromSummary() && saved.relationshipsChanges) {
       next = 'personal-relationships-summary.html'
     }
     window.location.assign(next)
-  })
-
-  document.getElementById('san-relationships-coercive-form')?.addEventListener('submit', (event) => {
-    event.preventDefault()
-    revealCheckedConditionals()
-    const answers = readCoercive()
-    const errors = validateCoercive(answers)
-    if (errors.length) {
-      showErrors(errors)
-      return
-    }
-    clearErrors()
-    setSanSession({ ...answers, relationshipsComplete: false })
-    const saved = getSanSession()
-    window.location.assign(fromSummary() && saved.relationshipsChanges && strangulationComplete(saved) && victimFlowComplete(saved)
-      ? 'personal-relationships-summary.html'
-      : 'personal-relationships-strangulation.html')
-  })
-
-  document.getElementById('san-relationships-strangulation-form')?.addEventListener('submit', (event) => {
-    event.preventDefault()
-    revealCheckedConditionals()
-    const answers = readStrangulation()
-    const errors = validateStrangulation(answers)
-    if (errors.length) {
-      showErrors(errors)
-      return
-    }
-    clearErrors()
-    setSanSession({ ...answers, relationshipsComplete: false })
-    const saved = getSanSession()
-    window.location.assign(fromSummary() && saved.relationshipsChanges && victimFlowComplete(saved)
-      ? 'personal-relationships-summary.html'
-      : 'personal-relationships-victim.html')
   })
 
   document.getElementById('san-relationships-victim-who-form')?.addEventListener('submit', (event) => {
