@@ -406,6 +406,7 @@ const helpQuestion = (session) => hasRecentDrugUse(session)
 const helpAnswered = (session) => {
   if (!session.helpedReduce) return false
   if (session.helpedReduce === 'yes' && !session.helpedReduceDetails) return false
+  if (!session.drugAnalysisMotivation) return false
   return true
 }
 
@@ -533,7 +534,7 @@ const drugRows = (session) => {
     parts.push(older.map((id) => drugCard(session, id)).join(''))
   }
 
-  if (session.helpedReduce || session.drugChanges) {
+  if (session.helpedReduce || session.drugAnalysisMotivation || session.drugChanges) {
     parts.push('<h3 class="govuk-heading-m">More information</h3>')
     const rows = []
     if (session.helpedReduce) {
@@ -544,6 +545,13 @@ const drugRows = (session) => {
         lines,
         summaryChangeHref(hasRecentDrugUse(session) ? 'drugs-help' : 'drugs-help-past', 'helped-reduce'),
         { secondaryFrom: 1 }
+      ))
+    }
+    if (session.drugAnalysisMotivation) {
+      rows.push(summaryRow(
+        'Does Alex seem motivated to stop or reduce their drug use?',
+        [labelled(MOTIVATION_LABELS, session.drugAnalysisMotivation)],
+        summaryChangeHref(hasRecentDrugUse(session) ? 'drugs-help' : 'drugs-help-past', 'analysis-motivation')
       ))
     }
     if (session.drugChanges) {
@@ -564,13 +572,6 @@ const drugRows = (session) => {
 
 const analysisRows = (session) => {
   const rows = []
-  if (session.drugAnalysisMotivation) {
-    rows.push(summaryRow(
-      "Does Alex seem motivated to stop or reduce their drug use?",
-      [labelled(MOTIVATION_LABELS, session.drugAnalysisMotivation)],
-      '#analysis-motivation'
-    ))
-  }
   if (session.drugAnalysisStrengths) {
     rows.push(summaryRow(
       "Are there any strengths or protective factors related to Alex's drug use?",
@@ -816,7 +817,8 @@ const readHelpAnswers = () => {
   const helpedReduce = checkedValue('helped_reduce')
   return {
     helpedReduce,
-    helpedReduceDetails: helpedReduce === 'yes' ? fieldValue('helped-reduce-yes-details') : ''
+    helpedReduceDetails: helpedReduce === 'yes' ? fieldValue('helped-reduce-yes-details') : '',
+    drugAnalysisMotivation: checkedValue('analysis_motivation')
   }
 }
 
@@ -829,12 +831,10 @@ const readChangesAnswers = () => {
 }
 
 const readAnalysisAnswers = () => {
-  const drugAnalysisMotivation = checkedValue('analysis_motivation')
   const drugAnalysisStrengths = checkedValue('analysis_strengths')
   const drugAnalysisHarm = checkedValue('analysis_harm')
   const drugAnalysisReoffending = checkedValue('analysis_reoffending')
   return {
-    drugAnalysisMotivation,
     drugAnalysisStrengths,
     drugAnalysisStrengthsDetails: drugAnalysisStrengths ? fieldValue(`analysis-strengths-${drugAnalysisStrengths}-details`) : '',
     drugAnalysisHarm,
@@ -954,6 +954,13 @@ const validateHelp = (answers, session) => {
       text: 'Enter details'
     })
   }
+  if (!answers.drugAnalysisMotivation) {
+    errors.push({
+      group: 'analysis-motivation',
+      href: '#analysis-motivation',
+      text: 'Select if Alex seems motivated to stop or reduce their drug use'
+    })
+  }
   return errors
 }
 
@@ -977,13 +984,6 @@ const validateChanges = (answers) => {
 
 const validateAnalysis = (answers) => {
   const errors = []
-  if (!answers.drugAnalysisMotivation) {
-    errors.push({
-      group: 'analysis-motivation',
-      href: '#analysis-motivation',
-      text: 'Select if Alex seems motivated to stop or reduce their drug use'
-    })
-  }
   const questions = [
     ['drugAnalysisStrengths', 'analysis-strengths', 'Select if there are strengths or protective factors related to drug use', 'Enter details about the strengths or protective factors'],
     ['drugAnalysisHarm', 'analysis-harm', "Select if Alex's drug use is linked to risk of serious harm", 'Enter details about the link to risk of serious harm'],
@@ -1312,6 +1312,7 @@ const restoreBackground = (session) => {
 const restoreHelp = (session) => {
   selectRadio('helped_reduce', session.helpedReduce)
   if (session.helpedReduce === 'yes') setField('helped-reduce-yes-details', session.helpedReduceDetails)
+  selectRadio('analysis_motivation', session.drugAnalysisMotivation)
 }
 
 const restoreChanges = (session) => {
@@ -1320,7 +1321,6 @@ const restoreChanges = (session) => {
 }
 
 const restoreAnalysis = (session) => {
-  selectRadio('analysis_motivation', session.drugAnalysisMotivation)
   selectRadio('analysis_strengths', session.drugAnalysisStrengths)
   if (session.drugAnalysisStrengths) setField(`analysis-strengths-${session.drugAnalysisStrengths}-details`, session.drugAnalysisStrengthsDetails)
   selectRadio('analysis_harm', session.drugAnalysisHarm)
