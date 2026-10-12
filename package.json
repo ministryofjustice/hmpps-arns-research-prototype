@@ -8,7 +8,8 @@
     "storyboard": "node scripts/capture-san-research-journeys.mjs"
   },
   "engines": {
-    "node": ">=24"
+    "node": ">=24",
+    "npm": ">=12.2.0"
   },
   "dependencies": {
     "@govuk-prototype-kit/common-templates": "3.0.0",
