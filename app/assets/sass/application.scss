@@ -4486,8 +4486,7 @@ body.assessment-page {
   form[data-hw-page],
   form[data-tb-page],
   form[data-pc-page],
-  form[data-oa-page],
-  [data-oa-victim-details] {
+  form[data-oa-page] {
     @media (min-width: $desktop) {
       max-width: 75cqw;
     }

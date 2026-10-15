@@ -3,7 +3,7 @@
 //
 
 import { getSanSession, replaceSanSession, sectionLinkHref, setSanSession } from './session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, labelled, scrollToHash } from './form.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, focusTargetField, labelled, scrollToHash } from './form.js'
 
 const EXAMPLE_COMPLETE = {
   employmentStatus: 'employed-or-self-employed',
@@ -401,7 +401,7 @@ const employmentRows = (session) => {
     rows.push(summaryRow(
       "What is Alex's current employment status?",
       [labelled(STATUS_LABELS, session.employmentStatus)],
-      summaryChangeHref('employment')
+      summaryChangeHref('employment', 'employment-status')
     ))
   }
 
@@ -409,7 +409,7 @@ const employmentRows = (session) => {
     rows.push(summaryRow(
       'Has Alex ever had a job?',
       [labelled(BEFORE_LABELS, session.employedBefore)],
-      summaryChangeHref('employment-job')
+      summaryChangeHref('employment-job', 'employed-before')
     ))
   }
 
@@ -513,7 +513,7 @@ const employmentRows = (session) => {
     rows.push(summaryRow(
       'Does Alex want to make changes to their employment and education?',
       lines,
-      summaryChangeHref('employment-changes'),
+      summaryChangeHref('employment-changes', 'changes'),
       { secondaryFrom: 1 }
     ))
   }
@@ -641,7 +641,10 @@ const showAnalysisForm = (focusId) => {
   openAnalysisTab()
   if (!focusId) return
   const target = document.getElementById(focusId)
-  if (target instanceof HTMLElement) target.scrollIntoView()
+  if (target instanceof HTMLElement) {
+    target.scrollIntoView()
+    focusTargetField(target, { preventScroll: true })
+  }
 }
 
 const openAnalysisTab = () => {

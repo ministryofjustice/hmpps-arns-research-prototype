@@ -3,7 +3,7 @@
 //
 
 import { getSanSession, replaceSanSession, sectionLinkHref, setSanSession } from './session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, labelled, scrollToHash } from './form.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, focusTargetField, labelled, scrollToHash } from './form.js'
 
 const YES_NO = { yes: 'Yes', no: 'No' }
 
@@ -190,6 +190,8 @@ const helpQuestion = (session) => currentIssues(session)
 
 const helpPage = (session) => currentIssues(session) ? 'alcohol-help.html' : 'alcohol-help-past.html'
 
+const presentTenseHelp = (session) => currentIssues(session)
+
 const pastIssuesAnswered = (session) => {
   if (!session.alcoholPastIssues) return false
   if (session.alcoholPastIssues === 'yes' && !session.alcoholPastIssuesDetails) return false
@@ -255,7 +257,7 @@ const alcoholRows = (session) => {
   const parts = [`<dl class="govuk-summary-list san-summary-list">${summaryRow(
     'Is there evidence that Alex has any current issues with alcohol?',
     [labelled(ALCOHOL_USE_LABELS, session.alcoholUse)],
-    summaryChangeHref('alcohol')
+    summaryChangeHref('alcohol', 'alcohol-use')
   )}</dl>`]
 
   if (neverDrunk(session)) return parts.join('')
@@ -318,7 +320,7 @@ const alcoholRows = (session) => {
       rows.push(summaryRow(
         'Does Alex want to make changes to their alcohol use?',
         lines,
-        summaryChangeHref('alcohol-changes'),
+        summaryChangeHref('alcohol-changes', 'alcohol-changes'),
         { secondaryFrom: 1 }
       ))
     }
@@ -451,7 +453,10 @@ const showAnalysisForm = (focusId) => {
   openAnalysisTab()
   if (!focusId) return
   const target = document.getElementById(focusId)
-  if (target instanceof HTMLElement) target.scrollIntoView()
+  if (target instanceof HTMLElement) {
+    target.scrollIntoView()
+    focusTargetField(target, { preventScroll: true })
+  }
 }
 
 const emptyFollowOnAnswers = () => ({
@@ -695,7 +700,7 @@ const initAlcohol = () => {
   const pageName = page.getAttribute('data-al-page')
   if (fromSummary()) ensureBackLink('alcohol-summary.html')
   else if (pageName === 'background') ensureBackLink('alcohol.html')
-  else if (pageName === 'help' && noCurrentIssues(session)) ensureBackLink('alcohol-background.html')
+  else if (pageName === 'help') ensureBackLink(currentIssues(session) ? 'alcohol-before.html' : 'alcohol-background.html')
   else if (pageName === 'changes' && needsHelp(session)) ensureBackLink(helpPage(session))
 
   if (pageName === 'use') restoreUse(session)
@@ -870,7 +875,7 @@ const initAlcohol = () => {
     event.preventDefault()
     revealCheckedConditionals()
     const answers = readHelpAnswers()
-    const errors = validateHelp(answers, currentIssues(getSanSession()))
+    const errors = validateHelp(answers, presentTenseHelp(getSanSession()))
     if (errors.length) {
       showErrors(errors)
       return

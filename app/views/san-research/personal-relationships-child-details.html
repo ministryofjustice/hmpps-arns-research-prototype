@@ -13,7 +13,8 @@
 {% include "includes/san-research/content-header.html" %}
 
 <form id="san-relationships-child-details-form" novalidate data-pc-page="child-details">
-  <h1 class="govuk-heading-l">What are the children's details?</h1>
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-2">What are the children's details?</h1>
+  <p class="govuk-hint govuk-!-margin-bottom-6">You can add multiple children.</p>
 
   <div class="govuk-form-group" data-san-error-group="child-name">
     <label class="govuk-label govuk-label--s" for="child-name">Child's name</label>
@@ -133,6 +134,38 @@
         </div>
         {% endif %}
         {% endfor %}
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group govuk-!-margin-top-6" data-san-error-group="child-lives-with">
+    <fieldset class="govuk-fieldset" id="child-lives-with">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Does Alex live with this child?</legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="child-lives-with-yes" name="child_lives_with" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="child-lives-with-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="child-lives-with-no" name="child_lives_with" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="child-lives-with-no">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group govuk-!-margin-top-6" data-san-error-group="child-parental-responsibility">
+    <fieldset class="govuk-fieldset" id="child-parental-responsibility">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Does Alex have parental responsibility for this child?</legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="child-parental-responsibility-yes" name="child_parental_responsibility" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="child-parental-responsibility-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="child-parental-responsibility-no" name="child_parental_responsibility" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="child-parental-responsibility-no">No</label>
+        </div>
       </div>
     </fieldset>
   </div>

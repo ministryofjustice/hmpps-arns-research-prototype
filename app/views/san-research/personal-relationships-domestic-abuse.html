@@ -80,36 +80,6 @@
     </fieldset>
   </div>
 
-  <div class="govuk-form-group" data-pc-question="strangulation" data-san-error-group="relationships-strangulation">
-    <fieldset class="govuk-fieldset" id="relationships-strangulation">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Is there evidence that Alex has used strangulation or suffocation?</h2>
-      </legend>
-      <div class="govuk-radios" data-module="govuk-radios">
-        {{ radioOption("relationships_strangulation", "strangulation-yes", "yes", "Yes", "", true, "", "Give details") | safe }}
-        {{ radioOption("relationships_strangulation", "strangulation-no", "no", "No", "", true, "", "Give details (optional)") | safe }}
-      </div>
-    </fieldset>
-  </div>
-
-  <div class="govuk-form-group" data-pc-question="victim" data-san-error-group="relationships-victim">
-    <fieldset class="govuk-fieldset" id="relationships-victim">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Is there evidence that Alex has ever been a victim of domestic abuse?</h2>
-      </legend>
-      <div class="govuk-radios" data-module="govuk-radios">
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="victim-yes" name="relationships_victim" type="radio" value="yes">
-          <label class="govuk-label govuk-radios__label" for="victim-yes">Yes</label>
-        </div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="victim-no" name="relationships_victim" type="radio" value="no">
-          <label class="govuk-label govuk-radios__label" for="victim-no">No</label>
-        </div>
-      </div>
-    </fieldset>
-  </div>
-
   <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
 </form>
 

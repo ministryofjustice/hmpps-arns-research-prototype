@@ -10,7 +10,14 @@
 {% include "includes/assessment-journey-page-open.html" %}
 
 <div data-san-error-summary hidden></div>
-{% include "includes/san-research/content-header.html" %}
+<div class="san-content-header">
+  <div class="san-content-header__row">
+    <p class="govuk-caption-l govuk-!-margin-bottom-0">Offence analysis<span class="govuk-visually-hidden">, <span data-san-status-text>Incomplete</span></span></p>
+    <strong class="govuk-tag govuk-tag--light-grey san-status-tag" data-san-status>Incomplete</strong>
+  </div>
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-2">What are the victim's details?</h1>
+  <p class="govuk-hint govuk-!-margin-bottom-0">You can add multiple victims.</p>
+</div>
 
 <form id="san-offence-victim-form" novalidate data-oa-page="victim">
   <div class="govuk-form-group" data-san-error-group="relationship">
@@ -46,6 +53,10 @@
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="relationship-family" name="victim_relationship" type="radio" value="family">
           <label class="govuk-label govuk-radios__label" for="relationship-family">Other family member</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="relationship-friend" name="victim_relationship" type="radio" value="friend">
+          <label class="govuk-label govuk-radios__label" for="relationship-friend">Alex's friend</label>
         </div>
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="relationship-other" name="victim_relationship" type="radio" value="other" data-aria-controls="conditional-relationship-other">

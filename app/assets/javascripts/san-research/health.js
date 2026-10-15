@@ -3,7 +3,7 @@
 //
 
 import { getSanSession, sectionLinkHref, setSanSession } from './session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, labelled, scrollToHash } from './form.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, focusTargetField, labelled, scrollToHash } from './form.js'
 
 const MENTAL_DESCRIBE = ['ongoing', 'past', 'undiagnosed']
 const CHANGE_DETAILS = ['maintain', 'active', 'know-how', 'need-help', 'thinking', 'no']
@@ -259,14 +259,14 @@ const healthRows = (session) => {
   rows.push(summaryRow(
     'Does Alex have any physical health conditions?',
     physicalLines,
-    summaryChangeHref('health'),
+    summaryChangeHref('health', 'physical'),
     { secondaryFrom: 1 }
   ))
 
   rows.push(summaryRow(
     'Does Alex have any mental health conditions?',
     [labelled(MENTAL_LABELS, session.healthMental)],
-    summaryChangeHref('health')
+    summaryChangeHref('health', 'mental')
   ))
 
   if (mentalYes(session)) {
@@ -360,7 +360,7 @@ const healthRows = (session) => {
     rows.push(summaryRow(
       'Does Alex want to make changes to their health and wellbeing?',
       lines,
-      summaryChangeHref('health-changes'),
+      summaryChangeHref('health-changes', 'changes'),
       { secondaryFrom: 1 }
     ))
   }
@@ -458,7 +458,10 @@ const showAnalysisForm = (focusId) => {
   openAnalysisTab()
   if (!focusId) return
   const target = document.getElementById(focusId)
-  if (target instanceof HTMLElement) target.scrollIntoView()
+  if (target instanceof HTMLElement) {
+    target.scrollIntoView()
+    focusTargetField(target, { preventScroll: true })
+  }
 }
 
 const openAnalysisTab = () => {

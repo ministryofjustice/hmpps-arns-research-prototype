@@ -3,7 +3,7 @@
 //
 
 import { getSanSession, replaceSanSession, sectionLinkHref, setSanSession } from './session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, labelled, scrollToHash } from './form.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, focusTargetField, labelled, scrollToHash } from './form.js'
 
 const EXAMPLE_COMPLETE = {
   hasSomewhereToLive: 'yes',
@@ -479,7 +479,16 @@ const detailsAnswered = (session) => {
 }
 
 // Extensionless paths keep query strings. The kit redirects *.html and drops the query.
-const summaryChangeHref = (page, step = '') => stepHref(page, step, { fromSummary: true })
+const summaryChangeHref = (page, step = '') => {
+  const href = stepHref(page, step, { fromSummary: true })
+  let target = step
+  if (page === 'accommodation') target = 'somewhere-to-live'
+  if (page === 'accommodation-settled') target = 'accommodation-settled'
+  if (page === 'accommodation-concerns' && step) {
+    target = step === 'suitable' ? 'suitability-concerns' : `${step}-concerns`
+  }
+  return target ? `${href}#${target}` : href
+}
 
 const summaryRow = (question, lines, href, options = {}) => {
   const value = lines.filter(Boolean).map((line, index) => {
@@ -715,7 +724,10 @@ const showAnalysisForm = (focusId) => {
   openAnalysisTab()
   if (!focusId) return
   const target = document.getElementById(focusId)
-  if (target instanceof HTMLElement) target.scrollIntoView()
+  if (target instanceof HTMLElement) {
+    target.scrollIntoView()
+    focusTargetField(target, { preventScroll: true })
+  }
 }
 
 const openAnalysisTab = () => {

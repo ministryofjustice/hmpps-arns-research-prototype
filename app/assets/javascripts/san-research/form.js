@@ -52,6 +52,22 @@ export const clearErrors = () => {
 
 export const labelled = (labels, value) => labels[value] || ''
 
+export const focusTargetField = (target, options = {}) => {
+  if (!(target instanceof HTMLElement) || target.closest('[hidden], .san-is-hidden')) return
+
+  let field = target
+  if (target instanceof HTMLInputElement && ['radio', 'checkbox'].includes(target.type) && target.name && target.form) {
+    field = Array.from(target.form.elements).find((element) => (
+      element instanceof HTMLInputElement &&
+      element.name === target.name &&
+      element.checked
+    )) || target
+  } else if (!target.matches('input, select, textarea')) {
+    field = target.querySelector('input:checked') || target.querySelector('select, textarea, input')
+  }
+  if (field instanceof HTMLElement) field.focus(options)
+}
+
 export const scrollToHash = () => {
   if (!window.location.hash) return
   let id = window.location.hash.slice(1)
@@ -70,4 +86,5 @@ export const scrollToHash = () => {
 
   const top = scrollTarget.getBoundingClientRect().top + window.scrollY - 16
   window.scrollTo({ top: Math.max(0, top) })
+  focusTargetField(target, { preventScroll: true })
 }
