@@ -42,6 +42,7 @@ const RELATIONSHIP_LABELS = {
   'ex-partner': "Alex's ex-partner",
   child: "Alex's child or step-child",
   family: 'Other family member',
+  friend: "Alex's friend",
   other: 'Other'
 }
 
@@ -203,7 +204,13 @@ const showErrors = (errors) => {
   if (summary instanceof HTMLElement) summary.focus()
 }
 
-const params = () => new URLSearchParams(window.location.search)
+// The kit redirects *.html addresses and drops the query string. Hash params survive that redirect.
+const params = () => {
+  const fromSearch = new URLSearchParams(window.location.search)
+  if ([...fromSearch.keys()].length) return fromSearch
+  const hash = window.location.hash.startsWith('#') ? window.location.hash.slice(1) : ''
+  return new URLSearchParams(hash)
+}
 const fromSummary = () => params().get('from') === 'summary'
 const victimIndex = () => {
   const value = params().get('victim')
@@ -279,17 +286,39 @@ const victimChangeHref = (index, from, hash = '') => {
   return hash ? `${href}#${hash}` : href
 }
 
-const victimRows = (victim, index, from) => {
+const victimFormHref = (index, from) => {
+  const search = new URLSearchParams()
+  if (Number.isInteger(index) && index >= 0) search.set('victim', String(index))
+  if (from) search.set('from', from)
+  const query = search.toString()
+  return query ? `offence-analysis-victim.html?${query}` : 'offence-analysis-victim.html'
+}
+
+const victimDeleteHref = (index, from) => {
+  const search = new URLSearchParams()
+  search.set('victim', String(index))
+  if (from) search.set('from', from)
+  return `offence-analysis-victim-delete.html#${search.toString()}`
+}
+
+const cancelVictimDeleteHref = () => (
+  fromSummary() ? 'offence-analysis-summary.html' : 'offence-analysis-victim-details.html'
+)
+
+const victimRows = (victim, index, from, withActions = true) => {
   const relationship = [labelled(RELATIONSHIP_LABELS, victim.relationship)]
   if (victim.relationship === 'other' && victim.relationshipDetails) relationship.push(victim.relationshipDetails)
   const title = victimTitle(index)
-  const row = (question, lines, hash) => `<div class="govuk-summary-list__row">
+  const row = (question, lines, hash) => {
+    const actions = withActions ? `<dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="${victimChangeHref(index, from, hash)}">Change<span class="govuk-visually-hidden"> ${escapeHtml(question)} for ${escapeHtml(title)}</span></a>
+    </dd>` : ''
+    return `<div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">${escapeHtml(question)}</dt>
     <dd class="govuk-summary-list__value">${lines.filter(Boolean).map((line) => escapeHtml(line)).join('<br>')}</dd>
-    <dd class="govuk-summary-list__actions">
-      <a class="govuk-link" href="${victimChangeHref(index, from, hash)}">Change<span class="govuk-visually-hidden"> ${escapeHtml(question)} for ${escapeHtml(title)}</span></a>
-    </dd>
+    ${actions}
   </div>`
+  }
   return [
     row("What is Alex's relationship to the victim?", relationship, 'victim-relationship'),
     row("What is the victim's approximate age?", [labelled(AGE_LABELS, victim.age)], 'victim-age'),
@@ -298,17 +327,18 @@ const victimRows = (victim, index, from) => {
   ].join('')
 }
 
-const victimCardHtml = (victim, index, from) => {
+const victimCardHtml = (victim, index, from, withActions = true) => {
   const title = victimTitle(index)
+  const actions = withActions ? `<ul class="govuk-summary-card__actions">
+        <li class="govuk-summary-card__action"><a class="govuk-link" href="${victimDeleteHref(index, from)}">Remove victim details<span class="govuk-visually-hidden"> for ${escapeHtml(title)}</span></a></li>
+      </ul>` : ''
   return `<div class="govuk-summary-card">
     <div class="govuk-summary-card__title-wrapper">
       <h2 class="govuk-summary-card__title">${escapeHtml(title)}</h2>
-      <ul class="govuk-summary-card__actions">
-        <li class="govuk-summary-card__action"><a class="govuk-link" href="#" data-oa-delete-victim="${index}">Remove victim details<span class="govuk-visually-hidden"> for ${escapeHtml(title)}</span></a></li>
-      </ul>
+      ${actions}
     </div>
     <div class="govuk-summary-card__content">
-      <dl class="govuk-summary-list">${victimRows(victim, index, from)}</dl>
+      <dl class="govuk-summary-list">${victimRows(victim, index, from, withActions)}</dl>
     </div>
   </div>`
 }
@@ -318,7 +348,7 @@ const renderSummary = (session) => {
   if (!mount) return
   const rows = []
   if (session.offenceDescription) {
-    rows.push(summaryRow('Enter a brief description of the offence(s)', [session.offenceDescription], summaryChangeHref('offence-analysis', 'description')))
+    rows.push(summaryRow('Enter a brief description of the offence(s)', [session.offenceDescription], summaryChangeHref('offence-analysis', 'offence-description')))
   }
   if (Array.isArray(session.offenceElements) && session.offenceElements.length) {
     const lines = session.offenceElements.map((value) => labelled(ELEMENT_LABELS, value))
@@ -330,13 +360,13 @@ const renderSummary = (session) => {
     }
     rows.push(summaryRow('Did the offence(s) have any of the following elements?', lines, summaryChangeHref('offence-analysis', 'offence-elements')))
   }
-  if (session.offenceWhy) {
-    rows.push(summaryRow('Why did the offence happen?', [session.offenceWhy], summaryChangeHref('offence-analysis', 'why')))
-  }
   if (Array.isArray(session.offenceMotivations) && session.offenceMotivations.length) {
     const lines = session.offenceMotivations.map((value) => labelled(MOTIVATION_LABELS, value))
     if (session.offenceMotivations.includes('other') && session.offenceMotivationOtherDetails) lines.push(session.offenceMotivationOtherDetails)
     rows.push(summaryRow('What was Alex trying to gain from the offence?', lines, summaryChangeHref('offence-analysis', 'offence-motivations')))
+  }
+  if (session.offenceWhy) {
+    rows.push(summaryRow('Why did the offence happen?', [session.offenceWhy], summaryChangeHref('offence-analysis', 'offence-why')))
   }
   if (Array.isArray(session.offenceCommittedAgainst) && session.offenceCommittedAgainst.length) {
     const lines = session.offenceCommittedAgainst.map((value) => labelled(COMMITTED_LABELS, value))
@@ -347,7 +377,7 @@ const renderSummary = (session) => {
     rows.push(summaryRow(
       'How many other people were involved with the offence?',
       [labelled(INVOLVED_LABELS, session.offenceInvolved)],
-      summaryChangeHref('offence-analysis-involved-parties')
+      summaryChangeHref('offence-analysis-involved-parties', 'offence-involved')
     ))
   }
   if (session.offenceLeader) {
@@ -404,9 +434,15 @@ const renderSummary = (session) => {
 const renderVictimDetails = (session) => {
   const mount = document.querySelector('[data-oa-victim-details]')
   if (!mount) return
+  if (!includesPeople(session)) {
+    window.location.assign('offence-analysis.html')
+    return
+  }
+
   const list = victims(session)
   if (!list.length) {
-    window.location.assign('offence-analysis-victim.html')
+    mount.innerHTML = `<p class="govuk-body">Add victim's details to continue.</p>
+      <a class="govuk-button govuk-button--secondary" href="${victimFormHref(-1, 'details')}" data-module="govuk-button">Add a victim</a>`
     return
   }
 
@@ -415,7 +451,7 @@ const renderVictimDetails = (session) => {
   mount.innerHTML = `${cards}
     <div class="govuk-button-group">
       <a class="govuk-button" href="offence-analysis-involved-parties.html" data-module="govuk-button">Save and continue</a>
-      <a class="govuk-button govuk-button--secondary" href="offence-analysis-victim.html?from=details" data-module="govuk-button">Add another victim</a>
+      <a class="govuk-button govuk-button--secondary" href="${victimFormHref(-1, 'details')}" data-module="govuk-button">Add another victim</a>
     </div>`
 }
 
@@ -432,9 +468,9 @@ const readQuestions = () => ({
   offenceElements: checkedValues('offence_elements'),
   offenceElementTargetedDetails: fieldValue('element-victim-targeted-details'),
   offenceElementWeaponDetails: fieldValue('element-weapon-details'),
-  offenceWhy: fieldValue('offence-why'),
   offenceMotivations: checkedValues('offence_motivations'),
   offenceMotivationOtherDetails: fieldValue('motivation-other-details'),
+  offenceWhy: fieldValue('offence-why'),
   offenceCommittedAgainst: checkedValues('offence_committed_against'),
   offenceCommittedOtherDetails: fieldValue('committed-other-details')
 })
@@ -448,13 +484,13 @@ const validateQuestions = (answers) => {
   if (answers.offenceElements.includes('victim-targeted')) {
     requireText(errors, 'elements', '#element-victim-targeted-details', answers.offenceElementTargetedDetails, 'Enter details about how the victim was targeted')
   }
-  requireText(errors, 'why', '#offence-why', answers.offenceWhy, 'Enter why the current index offence(s) happened')
   if (!answers.offenceMotivations.length) {
     errors.push({ group: 'motivations', href: '#offence-motivations', text: 'Select the motivations for the current index offence(s)' })
   }
   if (answers.offenceMotivations.includes('other')) {
     requireText(errors, 'motivations', '#motivation-other-details', answers.offenceMotivationOtherDetails, 'Enter details of the other motivation')
   }
+  requireText(errors, 'why', '#offence-why', answers.offenceWhy, 'Enter why the current index offence(s) happened')
   if (!answers.offenceCommittedAgainst.length) {
     errors.push({ group: 'committed-against', href: '#offence-committed-against', text: 'Select who the offence was committed against' })
   }
@@ -534,9 +570,9 @@ const restoreQuestions = (session) => {
   selectChecks('offence_elements', session.offenceElements)
   setField('element-victim-targeted-details', session.offenceElementTargetedDetails)
   setField('element-weapon-details', session.offenceElementWeaponDetails)
-  setField('offence-why', session.offenceWhy)
   selectChecks('offence_motivations', session.offenceMotivations)
   setField('motivation-other-details', session.offenceMotivationOtherDetails)
+  setField('offence-why', session.offenceWhy)
   selectChecks('offence_committed_against', session.offenceCommittedAgainst)
   setField('committed-other-details', session.offenceCommittedOtherDetails)
 }
@@ -583,28 +619,6 @@ const ensureBackLink = (href) => {
   if (back) back.setAttribute('href', href)
 }
 
-const deleteVictim = (index) => {
-  const session = getSanSession()
-  const next = victims(session).filter((_, itemIndex) => itemIndex !== index)
-  setSanSession({ offenceVictims: next, offenceComplete: false })
-  if (!next.length) {
-    window.location.assign(document.querySelector('[data-oa-summary]')
-      ? 'offence-analysis-victim.html?from=summary'
-      : 'offence-analysis-victim.html')
-    return
-  }
-  if (document.querySelector('[data-oa-victim-details]')) renderVictimDetails(getSanSession())
-  if (document.querySelector('[data-oa-summary]')) renderSummary(getSanSession())
-  applyProgress(getSanSession())
-}
-
-const onClick = (event) => {
-  const link = event.target.closest('[data-oa-delete-victim]')
-  if (!link) return
-  event.preventDefault()
-  deleteVictim(Number(link.getAttribute('data-oa-delete-victim')))
-}
-
 const questionsContinue = (answers) => {
   if (fromSummary() && !(answers.offenceCommittedAgainst.includes('people') && !victims(getSanSession()).length)) {
     return 'offence-analysis-summary.html'
@@ -644,6 +658,29 @@ const initOffence = () => {
     if (fromSummary()) ensureBackLink('offence-analysis-summary.html')
     else if (params().get('from') === 'details' || victims(session).length) ensureBackLink('offence-analysis-victim-details.html')
   }
+  if (pageName === 'victim-delete') {
+    if (!includesPeople(session)) {
+      window.location.assign('offence-analysis.html')
+      return
+    }
+    const index = victimIndex()
+    const victim = victims(session)[index]
+    if (!victim) {
+      window.location.assign(cancelVictimDeleteHref())
+      return
+    }
+    const cancelHref = cancelVictimDeleteHref()
+    ensureBackLink(cancelHref)
+    document.querySelector('[data-oa-victim-delete-update]')?.setAttribute('href', victimFormHref(index, fromSummary() ? 'summary' : 'details'))
+    document.querySelector('[data-oa-victim-delete-cancel]')?.setAttribute('href', cancelHref)
+    const card = document.querySelector('[data-oa-victim-delete-card]')
+    if (card) card.innerHTML = victimCardHtml(victim, index, fromSummary() ? 'summary' : 'details', false)
+    document.querySelector('[data-oa-victim-delete-confirm]')?.addEventListener('click', () => {
+      const latest = victims(getSanSession()).filter((_, itemIndex) => itemIndex !== index)
+      setSanSession({ offenceVictims: latest, offenceComplete: false })
+      window.location.assign(latest.length ? cancelHref : 'offence-analysis-victim-details.html')
+    })
+  }
   if (pageName === 'involved') {
     restoreInvolved(session)
     if (fromSummary()) ensureBackLink('offence-analysis-summary.html')
@@ -661,8 +698,6 @@ const initOffence = () => {
     if (event.target instanceof HTMLTextAreaElement) updateCharacterCount(event.target)
   })
   document.addEventListener('change', revealCheckedConditionals)
-  document.addEventListener('click', onClick)
-
   document.getElementById('san-offence-questions-form')?.addEventListener('submit', (event) => {
     event.preventDefault()
     revealCheckedConditionals()

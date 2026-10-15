@@ -3,7 +3,7 @@
 //
 
 import { getSanSession, sectionLinkHref, setSanSession } from './session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, labelled, scrollToHash } from './form.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, focusTargetField, labelled, scrollToHash } from './form.js'
 
 const CHILD_LABELS = {
   yes: 'Yes',
@@ -48,6 +48,14 @@ const STATUS_LABELS = {
   concerns: 'Has some difficulties but remains supportive',
   unhappy: 'Difficult or unhealthy'
 }
+
+const PARTNER_LABELS = {
+  together: 'In a relationship, living together',
+  apart: 'In a relationship, not living together',
+  none: 'Not in a relationship'
+}
+
+const inRelationship = (partner) => partner === 'together' || partner === 'apart'
 
 const HISTORY_LABELS = {
   stable: 'Stable, supportive, positive and rewarding relationships',
@@ -265,24 +273,26 @@ const childIndexFromQuery = () => {
   return Number.isInteger(value) && value >= 0 ? value : -1
 }
 
+const fromSummary = () => childPageParams().get('from') === 'summary'
+
 const focusChildField = (id) => {
   const target = document.getElementById(id)
   if (!(target instanceof HTMLElement)) return
-  const field = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement
-    ? target
-    : target.querySelector('input:checked, input, textarea')
-  const focusTarget = field instanceof HTMLElement ? field : target
-  focusTarget.scrollIntoView({ block: 'center' })
-  if (typeof focusTarget.focus === 'function') focusTarget.focus({ preventScroll: true })
+  target.scrollIntoView({ block: 'center' })
+  focusTargetField(target, { preventScroll: true })
 }
 
-const questionsFormAnswered = (session) => {
+const questionsCoreAnswered = (session) => {
   if (!childrenFlowComplete(session)) return false
-  if (!session.relationshipsStatus || !session.relationshipsHistory) return false
+  if (!session.relationshipsHistory || !session.relationshipsPartner) return false
   if (hasChildren(session.relationshipsChildren) && !session.relationshipsParenting) return false
-  if (!session.relationshipsFamily || !session.relationshipsChildhood || !session.relationshipsBehaviour || !session.relationshipsBelonging) return false
+  if (!session.relationshipsFamily || !session.relationshipsChildhood || !session.relationshipsChildhoodBehaviour || !session.relationshipsBehaviour || !session.relationshipsBelonging) return false
   return true
 }
+
+const relationshipDescriptionComplete = (session) => !inRelationship(session.relationshipsPartner) || !!session.relationshipsStatus
+
+const questionsFormAnswered = (session) => questionsCoreAnswered(session) && relationshipDescriptionComplete(session)
 
 const needsAbuseWho = (session) => session.relationshipsBehaviour === 'yes'
 
@@ -296,7 +306,11 @@ const needsVictimWho = (session) => session.relationshipsVictim === 'yes'
 
 const coerciveComplete = (session) => !!session.relationshipsCoercive
 
-const strangulationComplete = (session) => !!session.relationshipsStrangulation
+const needsStrangulation = (session) => (
+  Array.isArray(session.relationshipsAbuseWho) && session.relationshipsAbuseWho.includes('partner')
+)
+
+const strangulationComplete = (session) => !needsStrangulation(session) || !!session.relationshipsStrangulation
 
 const victimWhoComplete = (session) => (
   !needsVictimWho(session) || (Array.isArray(session.relationshipsVictimWho) && session.relationshipsVictimWho.length > 0)
@@ -313,9 +327,30 @@ const questionsAnswered = (session) => (
 )
 
 const domesticAbuseHref = 'personal-relationships-domestic-abuse.html'
+const strangulationHref = 'personal-relationships-strangulation.html'
+const victimHref = 'personal-relationships-victim.html'
 const victimWhoHref = 'personal-relationships-victim-who.html'
+const currentRelationshipHref = 'personal-relationships-current.html'
 
-const changesBackHref = (session) => (needsVictimWho(session) ? victimWhoHref : domesticAbuseHref)
+const withFromSummary = (href) => (fromSummary() ? `${href.split('?')[0]}?from=summary` : href)
+
+const clearedStrangulation = () => ({
+  relationshipsStrangulation: '',
+  relationshipsStrangulationDetails: ''
+})
+
+const changesBackHref = (session) => (needsVictimWho(session) ? victimWhoHref : victimHref)
+
+const victimBackHref = (session) => (needsStrangulation(session) ? strangulationHref : domesticAbuseHref)
+
+const nextAfterDomesticAbuse = (session) => {
+  if (needsStrangulation(session) && !strangulationComplete(session)) return withFromSummary(strangulationHref)
+  if (fromSummary() && strangulationComplete(session) && victimFlowComplete(session) && session.relationshipsChanges) {
+    return 'personal-relationships-summary.html'
+  }
+  if (needsStrangulation(session)) return withFromSummary(strangulationHref)
+  return withFromSummary(victimHref)
+}
 
 const questionsBackHref = (session) => (
   hasChildren(session.relationshipsChildren) && childrenList(session).length
@@ -326,8 +361,11 @@ const questionsBackHref = (session) => (
 const nextIncompleteHref = (session) => {
   if (!hasAnswers(session.relationshipsChildren)) return 'personal-relationships-children.html'
   if (hasChildren(session.relationshipsChildren) && !childrenList(session).length) return 'personal-relationships-child-details.html'
-  if (!questionsFormAnswered(session)) return 'personal-relationships-questions.html'
-  if (!perpetratorFollowUpComplete(session) || !victimAnswered(session)) return domesticAbuseHref
+  if (!questionsCoreAnswered(session)) return 'personal-relationships-questions.html'
+  if (!relationshipDescriptionComplete(session)) return 'personal-relationships-questions.html'
+  if (!abuseWhoComplete(session) || !coerciveComplete(session)) return domesticAbuseHref
+  if (!strangulationComplete(session)) return strangulationHref
+  if (!victimAnswered(session)) return victimHref
   if (!victimWhoComplete(session)) return victimWhoHref
   if (!session.relationshipsChanges) return 'personal-relationships-changes.html'
   return 'personal-relationships-questions.html'
@@ -364,12 +402,20 @@ const childrenQuestionRow = (session) => {
   return summaryRow(
     "Are there any children in Alex's life?",
     [{ text: labelled(CHILD_LABELS, session.relationshipsChildren[0]) }],
-    summaryChangeHref('personal-relationships-children')
+    summaryChangeHref('personal-relationships-children', 'relationships-children')
   )
 }
 
 const relationshipRows = (session) => {
   const rows = []
+
+  if (hasChildren(session.relationshipsChildren) && session.relationshipsParenting) {
+    rows.push(summaryRow(
+      'Is Alex able to manage their parenting responsibilities?',
+      answerLines(labelled(PARENTING_LABELS, session.relationshipsParenting), session.relationshipsParentingDetails),
+      summaryChangeHref('personal-relationships-questions', 'relationships-parenting')
+    ))
+  }
 
   if (session.relationshipsFamily) {
     rows.push(summaryRow(
@@ -387,6 +433,14 @@ const relationshipRows = (session) => {
     ))
   }
 
+  if (session.relationshipsChildhoodBehaviour) {
+    rows.push(summaryRow(
+      'Is there evidence Alex had any childhood behavioural issues or challenges?',
+      answerLines(labelled(YES_NO, session.relationshipsChildhoodBehaviour), session.relationshipsChildhoodBehaviourDetails),
+      summaryChangeHref('personal-relationships-questions', 'relationships-childhood-behaviour')
+    ))
+  }
+
   if (session.relationshipsBelonging) {
     rows.push(summaryRow(
       'Are there any people, groups or communities that give Alex a sense of belonging?',
@@ -395,9 +449,17 @@ const relationshipRows = (session) => {
     ))
   }
 
-  if (session.relationshipsStatus) {
+  if (session.relationshipsPartner) {
     rows.push(summaryRow(
-      "How would you describe Alex's current relationship situation?",
+      'Does Alex currently have a partner?',
+      answerLines(labelled(PARTNER_LABELS, session.relationshipsPartner)),
+      summaryChangeHref('personal-relationships-questions', 'relationships-partner')
+    ))
+  }
+
+  if (inRelationship(session.relationshipsPartner) && session.relationshipsStatus) {
+    rows.push(summaryRow(
+      "How would you describe Alex's current relationship?",
       answerLines(labelled(STATUS_LABELS, session.relationshipsStatus), session.relationshipsStatusDetails),
       summaryChangeHref('personal-relationships-questions', 'relationships-status')
     ))
@@ -408,14 +470,6 @@ const relationshipRows = (session) => {
       "How would you describe Alex's history of intimate relationships?",
       answerLines(labelled(HISTORY_LABELS, session.relationshipsHistory), session.relationshipsHistoryDetails),
       summaryChangeHref('personal-relationships-questions', 'relationships-history')
-    ))
-  }
-
-  if (hasChildren(session.relationshipsChildren) && session.relationshipsParenting) {
-    rows.push(summaryRow(
-      'Is Alex able to manage their parenting responsibilities?',
-      answerLines(labelled(PARENTING_LABELS, session.relationshipsParenting), session.relationshipsParentingDetails),
-      summaryChangeHref('personal-relationships-questions', 'relationships-parenting')
     ))
   }
 
@@ -445,11 +499,11 @@ const relationshipRows = (session) => {
     ))
   }
 
-  if (session.relationshipsStrangulation) {
+  if (needsStrangulation(session) && session.relationshipsStrangulation) {
     rows.push(summaryRow(
       'Is there evidence that Alex has used strangulation or suffocation?',
       answerLines(labelled(YES_NO, session.relationshipsStrangulation), session.relationshipsStrangulationDetails),
-      summaryChangeHref('personal-relationships-domestic-abuse', 'relationships-strangulation')
+      summaryChangeHref('personal-relationships-strangulation', 'relationships-strangulation')
     ))
   }
 
@@ -457,7 +511,7 @@ const relationshipRows = (session) => {
     rows.push(summaryRow(
       'Is there evidence that Alex has ever been a victim of domestic abuse?',
       answerLines(labelled(YES_NO, session.relationshipsVictim)),
-      summaryChangeHref('personal-relationships-domestic-abuse', 'relationships-victim')
+      summaryChangeHref('personal-relationships-victim', 'relationships-victim')
     ))
   }
 
@@ -467,7 +521,7 @@ const relationshipRows = (session) => {
     rows.push(summaryRow(
       'Who was Alex abused by?',
       lines,
-      summaryChangeHref('personal-relationships-victim-who')
+      summaryChangeHref('personal-relationships-victim-who', 'relationships-victim-who')
     ))
   }
 
@@ -475,7 +529,7 @@ const relationshipRows = (session) => {
     rows.push(summaryRow(
       'Does Alex want to make changes to their personal relationships?',
       answerLines(labelled(CHANGES_LABELS, session.relationshipsChanges), session.relationshipsChangesDetails),
-      summaryChangeHref('personal-relationships-changes')
+      summaryChangeHref('personal-relationships-changes', 'relationships-changes')
     ))
   }
 
@@ -572,7 +626,10 @@ const showAnalysisForm = (focusId) => {
   openAnalysisTab()
   if (!focusId) return
   const target = document.getElementById(focusId)
-  if (target instanceof HTMLElement) target.scrollIntoView()
+  if (target instanceof HTMLElement) {
+    target.scrollIntoView()
+    focusTargetField(target, { preventScroll: true })
+  }
 }
 
 const openAnalysisTab = () => {
@@ -596,6 +653,8 @@ const emptyAnswers = () => ({
   relationshipsFamilyDetails: '',
   relationshipsChildhood: '',
   relationshipsChildhoodDetails: '',
+  relationshipsChildhoodBehaviour: '',
+  relationshipsChildhoodBehaviourDetails: '',
   relationshipsBehaviour: '',
   relationshipsAbuseWho: [],
   relationshipsAbuseWhoDetails: {},
@@ -608,6 +667,7 @@ const emptyAnswers = () => ({
   relationshipsVictimWhoDetails: {},
   relationshipsBelonging: '',
   relationshipsBelongingDetails: '',
+  relationshipsPartner: '',
   relationshipsChanges: '',
   relationshipsChangesDetails: ''
 })
@@ -638,6 +698,8 @@ const readChildDetails = () => ({
   town: fieldValue('child-town'),
   county: fieldValue('child-county'),
   postcode: fieldValue('child-postcode'),
+  livesWith: checkedValue('child_lives_with'),
+  parentalResponsibility: checkedValue('child_parental_responsibility'),
   relationship: checkedValue('child_relationship'),
   relationshipDetails: checkedValue('child_relationship') === 'other' ? fieldValue('child-relationship-details') : '',
   contact: checkedValue('child_contact')
@@ -654,6 +716,12 @@ const validateChildDetails = (child) => {
       href: '#child-relationship',
       text: "Select Alex's relationship or connection to this child"
     })
+  }
+  if (!child.livesWith) {
+    errors.push({ group: 'child-lives-with', href: '#child-lives-with', text: 'Select yes if Alex lives with this child' })
+  }
+  if (!child.parentalResponsibility) {
+    errors.push({ group: 'child-parental-responsibility', href: '#child-parental-responsibility', text: 'Select yes if Alex has parental responsibility for this child' })
   }
   if (child.relationship === 'other' && !child.relationshipDetails) {
     errors.push({
@@ -685,6 +753,8 @@ const restoreChildDetails = (child) => {
   setField('child-town', child.town)
   setField('child-county', child.county)
   setField('child-postcode', child.postcode)
+  selectRadio('child_lives_with', child.livesWith)
+  selectRadio('child_parental_responsibility', child.parentalResponsibility)
   selectRadio('child_relationship', child.relationship)
   setField('child-relationship-details', child.relationshipDetails)
   selectRadio('child_contact', child.contact)
@@ -699,7 +769,7 @@ const childDetailsHref = (index, focus = '') => {
   return query ? `personal-relationships-child-details.html#${query}` : 'personal-relationships-child-details.html'
 }
 
-const childCardRows = (child, index) => {
+const childCardRows = (child, index, withActions = true) => {
   const name = child.name || `Child ${index + 1}`
   const rows = [
     ["Child's name", child.name, 'child-name'],
@@ -707,19 +777,35 @@ const childCardRows = (child, index) => {
     ['Sex (optional)', labelled(CHILD_SEX_LABELS, child.sex), 'child-sex-male'],
     ['Address if disclosable (optional)', formatChildAddress(child), 'child-address'],
     ["What is Alex's relationship or connection to this child?", childRelationshipText(child), 'child-relationship'],
+    ['Does Alex live with this child?', labelled(YES_NO, child.livesWith), 'child-lives-with'],
+    ['Does Alex have parental responsibility for this child?', labelled(YES_NO, child.parentalResponsibility), 'child-parental-responsibility'],
     ['Does Alex have contact or is seeking contact with this child?', labelled(YES_NO, child.contact), 'child-contact']
   ]
-  return rows.map(([key, value, hash]) => `<div class="govuk-summary-list__row">
+  return rows.map(([key, value, hash]) => {
+    const actions = withActions ? `<dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="${childDetailsHref(index, hash)}">Change<span class="govuk-visually-hidden"> ${escapeHtml(key.toLowerCase())} for ${escapeHtml(name)}</span></a>
+    </dd>` : ''
+    return `<div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">${escapeHtml(key)}</dt>
     <dd class="govuk-summary-list__value">${escapeHtml(value || 'Not provided')}</dd>
-    <dd class="govuk-summary-list__actions">
-      <a class="govuk-link" href="${childDetailsHref(index, hash)}">Change<span class="govuk-visually-hidden"> ${escapeHtml(key.toLowerCase())} for ${escapeHtml(name)}</span></a>
-    </dd>
-  </div>`).join('')
+    ${actions}
+  </div>`
+  }).join('')
 }
 
 const childrenListHref = () => (
   fromSummary() ? 'personal-relationships-children-list.html?from=summary' : 'personal-relationships-children-list.html'
+)
+
+const childDeleteHref = (index) => {
+  const params = new URLSearchParams()
+  params.set('child', String(index))
+  if (fromSummary() || document.querySelector('[data-san-summary]')) params.set('from', 'summary')
+  return `personal-relationships-child-delete.html#${params.toString()}`
+}
+
+const cancelChildDeleteHref = () => (
+  fromSummary() ? 'personal-relationships-summary.html' : 'personal-relationships-children-list.html'
 )
 
 const childrenCardsHtml = (session) => {
@@ -731,7 +817,7 @@ const childrenCardsHtml = (session) => {
       <div class="govuk-summary-card__title-wrapper">
         <h2 class="govuk-summary-card__title">${escapeHtml(title)}</h2>
         <ul class="govuk-summary-card__actions">
-          <li class="govuk-summary-card__action"><a class="govuk-link" href="#" data-pc-remove-child="${index}">Remove child details<span class="govuk-visually-hidden"> for ${escapeHtml(name)}</span></a></li>
+          <li class="govuk-summary-card__action"><a class="govuk-link" href="${childDeleteHref(index)}">Remove child details<span class="govuk-visually-hidden"> for ${escapeHtml(name)}</span></a></li>
         </ul>
       </div>
       <div class="govuk-summary-card__content">
@@ -747,30 +833,28 @@ const renderChildrenList = (session) => {
 
   const list = childrenList(session)
   if (!list.length) {
-    mount.innerHTML = `<p class="govuk-body">No children have been added yet.</p>
+    mount.innerHTML = `<p class="govuk-body">Add children's details to continue.</p>
       <a class="govuk-button govuk-button--secondary" href="${childDetailsHref()}" data-module="govuk-button">Add a child</a>`
     return
   }
 
   mount.innerHTML = `${childrenCardsHtml(session)}
-    <p class="govuk-body">
+    <div class="govuk-button-group">
+      <button type="button" class="govuk-button" data-module="govuk-button" data-pc-children-continue>Save and continue</button>
       <a class="govuk-button govuk-button--secondary" href="${childDetailsHref()}" data-module="govuk-button">Add another child</a>
-    </p>
-    <button type="button" class="govuk-button" data-module="govuk-button" data-pc-children-continue>Save and continue</button>`
+    </div>`
 }
 
 const detailsFor = (prefix, value) => (value ? fieldValue(`${prefix}-${value}-details`) : '')
 
 const readQuestions = (showParenting) => {
-  const relationshipsStatus = checkedValue('relationships_status')
   const relationshipsHistory = checkedValue('relationships_history')
   const relationshipsParenting = showParenting ? checkedValue('relationships_parenting') : ''
   const relationshipsFamily = checkedValue('relationships_family')
   const relationshipsChildhood = checkedValue('relationships_childhood')
+  const relationshipsChildhoodBehaviour = checkedValue('relationships_childhood_behaviour')
   const relationshipsBehaviour = checkedValue('relationships_behaviour')
   return {
-    relationshipsStatus,
-    relationshipsStatusDetails: detailsFor('status', relationshipsStatus),
     relationshipsHistory,
     relationshipsHistoryDetails: detailsFor('history', relationshipsHistory),
     relationshipsResolve: fieldValue('relationships-resolve'),
@@ -780,9 +864,22 @@ const readQuestions = (showParenting) => {
     relationshipsFamilyDetails: detailsFor('family', relationshipsFamily),
     relationshipsChildhood,
     relationshipsChildhoodDetails: detailsFor('childhood', relationshipsChildhood),
+    relationshipsChildhoodBehaviour,
+    relationshipsChildhoodBehaviourDetails: detailsFor('childhood-behaviour', relationshipsChildhoodBehaviour),
     relationshipsBehaviour,
     relationshipsBelonging: checkedValue('relationships_belonging'),
-    relationshipsBelongingDetails: detailsFor('belonging', checkedValue('relationships_belonging'))
+    relationshipsBelongingDetails: detailsFor('belonging', checkedValue('relationships_belonging')),
+    relationshipsPartner: checkedValue('relationships_partner'),
+    relationshipsStatus: checkedValue('relationships_status'),
+    relationshipsStatusDetails: detailsFor('status', checkedValue('relationships_status'))
+  }
+}
+
+const readCurrentRelationship = () => {
+  const relationshipsStatus = checkedValue('relationships_status')
+  return {
+    relationshipsStatus,
+    relationshipsStatusDetails: detailsFor('status', relationshipsStatus)
   }
 }
 
@@ -848,25 +945,32 @@ const readAnalysis = () => {
 
 const validateQuestions = (answers, showParenting) => {
   const errors = []
+  if (showParenting && !answers.relationshipsParenting) {
+    errors.push({ group: 'relationships-parenting', href: '#relationships-parenting', text: 'Select if Alex is able to manage their parenting responsibilities' })
+  }
   if (!answers.relationshipsFamily) {
     errors.push({ group: 'relationships-family', href: '#relationships-family', text: "Select what Alex's current relationship with their family is like" })
   }
   if (!answers.relationshipsChildhood) {
     errors.push({ group: 'relationships-childhood', href: '#relationships-childhood', text: "Select Alex's experience of their childhood" })
   }
+  if (!answers.relationshipsChildhoodBehaviour) {
+    errors.push({ group: 'relationships-childhood-behaviour', href: '#relationships-childhood-behaviour', text: 'Select if there is evidence Alex had any childhood behavioural issues or challenges' })
+  } else if (answers.relationshipsChildhoodBehaviour === 'yes' && !answers.relationshipsChildhoodBehaviourDetails) {
+    errors.push({ group: 'relationships-childhood-behaviour', href: '#childhood-behaviour-yes-details', text: 'Enter details about the childhood behavioural issues or challenges' })
+  }
   if (!answers.relationshipsBelonging) {
     errors.push({ group: 'relationships-belonging', href: '#relationships-belonging', text: 'Select if there are any people, groups or communities that give Alex a sense of belonging' })
   } else if (answers.relationshipsBelonging === 'yes' && !answers.relationshipsBelongingDetails) {
     errors.push({ group: 'relationships-belonging', href: '#belonging-yes-details', text: 'Enter details about the people, groups or communities that give Alex a sense of belonging' })
   }
-  if (!answers.relationshipsStatus) {
-    errors.push({ group: 'relationships-status', href: '#relationships-status', text: "Select how you would describe Alex's current relationship situation" })
+  if (!answers.relationshipsPartner) {
+    errors.push({ group: 'relationships-partner', href: '#relationships-partner', text: 'Select if Alex currently has a partner' })
+  } else if (inRelationship(answers.relationshipsPartner) && !answers.relationshipsStatus) {
+    errors.push({ group: 'relationships-status', href: '#relationships-status', text: "Select how you would describe Alex's current relationship" })
   }
   if (!answers.relationshipsHistory) {
     errors.push({ group: 'relationships-history', href: '#relationships-history', text: "Select how you would describe Alex's history of intimate relationships" })
-  }
-  if (showParenting && !answers.relationshipsParenting) {
-    errors.push({ group: 'relationships-parenting', href: '#relationships-parenting', text: 'Select if Alex is able to manage their parenting responsibilities' })
   }
   if (!answers.relationshipsBehaviour) {
     errors.push({ group: 'relationships-behaviour', href: '#relationships-behaviour', text: 'Select if there is evidence that Alex has ever been a perpetrator of domestic abuse' })
@@ -920,9 +1024,12 @@ const applyDomesticAbuseQuestions = (session) => {
   spaceVisibleQuestions()
 }
 
-const restoreQuestions = (session) => {
+const restoreCurrentRelationship = (session) => {
   selectRadio('relationships_status', session.relationshipsStatus)
   if (session.relationshipsStatus) setField(`status-${session.relationshipsStatus}-details`, session.relationshipsStatusDetails)
+}
+
+const restoreQuestions = (session) => {
   selectRadio('relationships_history', session.relationshipsHistory)
   if (session.relationshipsHistory) setField(`history-${session.relationshipsHistory}-details`, session.relationshipsHistoryDetails)
   setField('relationships-resolve', session.relationshipsResolve)
@@ -932,9 +1039,14 @@ const restoreQuestions = (session) => {
   if (session.relationshipsFamily) setField(`family-${session.relationshipsFamily}-details`, session.relationshipsFamilyDetails)
   selectRadio('relationships_childhood', session.relationshipsChildhood)
   if (session.relationshipsChildhood) setField(`childhood-${session.relationshipsChildhood}-details`, session.relationshipsChildhoodDetails)
+  selectRadio('relationships_childhood_behaviour', session.relationshipsChildhoodBehaviour)
+  if (session.relationshipsChildhoodBehaviour) setField(`childhood-behaviour-${session.relationshipsChildhoodBehaviour}-details`, session.relationshipsChildhoodBehaviourDetails)
   selectRadio('relationships_behaviour', session.relationshipsBehaviour)
   selectRadio('relationships_belonging', session.relationshipsBelonging)
   if (session.relationshipsBelonging) setField(`belonging-${session.relationshipsBelonging}-details`, session.relationshipsBelongingDetails)
+  selectRadio('relationships_partner', session.relationshipsPartner)
+  selectRadio('relationships_status', session.relationshipsStatus)
+  if (session.relationshipsStatus) setField(`status-${session.relationshipsStatus}-details`, session.relationshipsStatusDetails)
 }
 
 const restoreAbuseWho = (session) => {
@@ -1066,8 +1178,6 @@ const restoreAnalysis = (session) => {
   if (session.relationshipsAnalysisReoffending) setField(`analysis-reoffending-${session.relationshipsAnalysisReoffending}-details`, session.relationshipsAnalysisReoffendingDetails)
 }
 
-const fromSummary = () => childPageParams().get('from') === 'summary'
-
 const ensureBackLink = (href) => {
   let back = document.querySelector('.assessment-layout__back-link')
   const column = document.querySelector('.govuk-grid-column-two-thirds-from-desktop')
@@ -1115,11 +1225,39 @@ const initSanRelationships = () => {
       window.location.assign('personal-relationships-children.html')
       return
     }
-    if (!childrenList(session).length) {
-      window.location.assign('personal-relationships-child-details.html')
+    renderChildrenList(session)
+  }
+
+  if (pageName === 'child-delete') {
+    if (!hasChildren(session.relationshipsChildren)) {
+      window.location.assign('personal-relationships-children.html')
       return
     }
-    renderChildrenList(session)
+    const index = childIndexFromQuery()
+    const child = childrenList(session)[index]
+    if (!child) {
+      window.location.assign(cancelChildDeleteHref())
+      return
+    }
+    ensureBackLink(cancelChildDeleteHref())
+    document.querySelector('[data-pc-child-delete-update]')?.setAttribute('href', childDetailsHref(index))
+    document.querySelector('[data-pc-child-delete-cancel]')?.setAttribute('href', cancelChildDeleteHref())
+    const card = document.querySelector('[data-pc-child-delete-card]')
+    if (card) {
+      card.innerHTML = `<div class="govuk-summary-card">
+        <div class="govuk-summary-card__title-wrapper">
+          <h2 class="govuk-summary-card__title">${escapeHtml(`Child ${index + 1}`)}</h2>
+        </div>
+        <div class="govuk-summary-card__content">
+          <dl class="govuk-summary-list">${childCardRows(child, index, false)}</dl>
+        </div>
+      </div>`
+    }
+    document.querySelector('[data-pc-child-delete-confirm]')?.addEventListener('click', () => {
+      const latest = childrenList(getSanSession()).filter((_, childIndex) => childIndex !== index)
+      setSanSession({ relationshipsChildrenList: latest, relationshipsComplete: false })
+      window.location.assign(latest.length ? cancelChildDeleteHref() : 'personal-relationships-children-list.html')
+    })
   }
 
   if (pageName === 'people') {
@@ -1137,17 +1275,44 @@ const initSanRelationships = () => {
     restoreQuestions(session)
   }
 
+  if (pageName === 'current') {
+    if (!questionsCoreAnswered(session) || !inRelationship(session.relationshipsPartner)) {
+      window.location.assign(fromSummary() ? 'personal-relationships-summary.html' : nextIncompleteHref(session))
+      return
+    }
+    if (!fromSummary()) ensureBackLink('personal-relationships-questions.html')
+    restoreCurrentRelationship(session)
+  }
+
   if (pageName === 'domestic-abuse') {
     if (!questionsFormAnswered(session)) {
       window.location.assign(fromSummary() ? 'personal-relationships-summary.html' : nextIncompleteHref(session))
       return
     }
-    if (!fromSummary()) ensureBackLink('personal-relationships-questions.html')
+    if (!fromSummary()) {
+      ensureBackLink('personal-relationships-questions.html')
+    }
     restoreAbuseWho(session)
     restoreCoercive(session)
-    restoreStrangulation(session)
-    restoreVictim(session)
     applyDomesticAbuseQuestions(session)
+  }
+
+  if (pageName === 'strangulation') {
+    if (!questionsFormAnswered(session) || !abuseWhoComplete(session) || !coerciveComplete(session) || !needsStrangulation(session)) {
+      window.location.assign(fromSummary() ? 'personal-relationships-summary.html' : nextIncompleteHref(session))
+      return
+    }
+    if (!fromSummary()) ensureBackLink(domesticAbuseHref)
+    restoreStrangulation(session)
+  }
+
+  if (pageName === 'victim') {
+    if (!questionsFormAnswered(session) || !perpetratorFollowUpComplete(session)) {
+      window.location.assign(fromSummary() ? 'personal-relationships-summary.html' : nextIncompleteHref(session))
+      return
+    }
+    if (!fromSummary()) ensureBackLink(victimBackHref(session))
+    restoreVictim(session)
   }
 
   if (pageName === 'victim-who') {
@@ -1155,7 +1320,7 @@ const initSanRelationships = () => {
       window.location.assign(fromSummary() ? 'personal-relationships-summary.html' : nextIncompleteHref(session))
       return
     }
-    if (!fromSummary()) ensureBackLink(domesticAbuseHref)
+    if (!fromSummary()) ensureBackLink(victimHref)
     restoreVictimWho(session)
   }
 
@@ -1255,23 +1420,7 @@ const initSanRelationships = () => {
     window.location.assign(childrenListHref())
   })
 
-  document.querySelector('[data-pc-children-list], [data-san-summary]')?.addEventListener('click', (event) => {
-    const remove = event.target.closest('[data-pc-remove-child]')
-    if (remove) {
-      event.preventDefault()
-      const index = Number(remove.getAttribute('data-pc-remove-child'))
-      const list = childrenList(getSanSession()).filter((_, childIndex) => childIndex !== index)
-      setSanSession({ relationshipsChildrenList: list, relationshipsComplete: false })
-      if (!list.length) {
-        window.location.assign(document.querySelector('[data-san-summary]')
-          ? 'personal-relationships-child-details.html?from=summary'
-          : 'personal-relationships-child-details.html')
-        return
-      }
-      if (document.querySelector('[data-pc-children-list]')) renderChildrenList(getSanSession())
-      if (document.querySelector('[data-san-summary]')) renderSummary(getSanSession())
-      return
-    }
+  document.querySelector('[data-pc-children-list]')?.addEventListener('click', (event) => {
     const continueButton = event.target.closest('[data-pc-children-continue]')
     if (!continueButton) return
     event.preventDefault()
@@ -1329,8 +1478,40 @@ const initSanRelationships = () => {
     if (answers.relationshipsBehaviour !== 'yes') {
       updates.relationshipsAbuseWho = []
       updates.relationshipsAbuseWhoDetails = {}
+      Object.assign(updates, clearedStrangulation())
+    }
+    if (!inRelationship(answers.relationshipsPartner)) {
+      updates.relationshipsStatus = ''
+      updates.relationshipsStatusDetails = ''
     }
     setSanSession(updates)
+    const saved = getSanSession()
+    const followUpComplete = perpetratorFollowUpComplete(saved) && victimFlowComplete(saved)
+    let next = domesticAbuseHref
+    if (fromSummary() && saved.relationshipsChanges && followUpComplete) {
+      next = 'personal-relationships-summary.html'
+    } else if (fromSummary()) {
+      next = `${domesticAbuseHref}?from=summary`
+    } else {
+      next = domesticAbuseHref
+    }
+    window.location.assign(next)
+  })
+
+  document.getElementById('san-relationships-current-form')?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    revealCheckedConditionals()
+    const answers = readCurrentRelationship()
+    if (!answers.relationshipsStatus) {
+      showErrors([{
+        group: 'relationships-status',
+        href: '#relationships-status',
+        text: "Select how you would describe Alex's current relationship"
+      }])
+      return
+    }
+    clearErrors()
+    setSanSession({ ...answers, relationshipsComplete: false })
     const saved = getSanSession()
     const followUpComplete = perpetratorFollowUpComplete(saved) && victimFlowComplete(saved)
     let next = domesticAbuseHref
@@ -1347,25 +1528,16 @@ const initSanRelationships = () => {
     revealCheckedConditionals()
     const session = getSanSession()
     const showAbuse = needsAbuseWho(session)
-    const answers = {
-      ...readCoercive(),
-      ...readStrangulation(),
-      ...readVictim()
-    }
+    const answers = { ...readCoercive() }
     if (showAbuse) Object.assign(answers, readAbuseWho())
     else {
       answers.relationshipsAbuseWho = []
       answers.relationshipsAbuseWhoDetails = {}
     }
-    if (answers.relationshipsVictim !== 'yes') {
-      answers.relationshipsVictimWho = []
-      answers.relationshipsVictimWhoDetails = {}
-    }
+    if (!needsStrangulation({ ...session, ...answers })) Object.assign(answers, clearedStrangulation())
     const errors = [
       ...(showAbuse ? validateAbuseWho(answers) : []),
-      ...validateCoercive(answers),
-      ...validateStrangulation(answers),
-      ...validateVictim(answers)
+      ...validateCoercive(answers)
     ]
     if (errors.length) {
       showErrors(errors)
@@ -1373,10 +1545,44 @@ const initSanRelationships = () => {
     }
     clearErrors()
     setSanSession({ ...answers, relationshipsComplete: false })
+    window.location.assign(nextAfterDomesticAbuse(getSanSession()))
+  })
+
+  document.getElementById('san-relationships-strangulation-form')?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    revealCheckedConditionals()
+    const answers = readStrangulation()
+    const errors = validateStrangulation(answers)
+    if (errors.length) {
+      showErrors(errors)
+      return
+    }
+    clearErrors()
+    setSanSession({ ...answers, relationshipsComplete: false })
+    const saved = getSanSession()
+    window.location.assign(fromSummary() && victimFlowComplete(saved) && saved.relationshipsChanges
+      ? 'personal-relationships-summary.html'
+      : withFromSummary(victimHref))
+  })
+
+  document.getElementById('san-relationships-victim-form')?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    const answers = readVictim()
+    const errors = validateVictim(answers)
+    if (errors.length) {
+      showErrors(errors)
+      return
+    }
+    if (answers.relationshipsVictim !== 'yes') {
+      answers.relationshipsVictimWho = []
+      answers.relationshipsVictimWhoDetails = {}
+    }
+    clearErrors()
+    setSanSession({ ...answers, relationshipsComplete: false })
     const saved = getSanSession()
     let next = 'personal-relationships-changes.html'
     if (needsVictimWho(saved) && !victimWhoComplete(saved)) {
-      next = fromSummary() ? `${victimWhoHref}?from=summary` : victimWhoHref
+      next = withFromSummary(victimWhoHref)
     } else if (fromSummary() && saved.relationshipsChanges) {
       next = 'personal-relationships-summary.html'
     }

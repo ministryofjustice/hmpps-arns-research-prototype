@@ -413,7 +413,7 @@
     </section>
   </section>
 <section class="tab-panel" role="tabpanel" id="finances" aria-labelledby="tab-finances" hidden>
-    <p class="lede">Income from family or friends opens the over-reliant page. Yes on that page skips the further assessment question. Money management and debt are on the same page. Own debt adds a debt types page. Changes is its own page. Income can be no current source of money.</p>
+    <p class="lede">Income from family or friends opens the over-reliant page. The further assessment question is always shown after income, or after over-reliance. Money management and debt are on the same page. Own debt adds a debt types page. Changes is its own page. Income can be no current source of money.</p>
     <h2>Routes</h2>
     <ol class="flow"><li class="flow__item">
       <span class="flow__from">Income</span>
@@ -428,13 +428,8 @@
     </li><li class="flow__item">
       <span class="flow__from">Over-reliant on family?</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
-      <span class="flow__to">Money management and debt</span>
-      <span class="flow__when">Yes</span>
-    </li><li class="flow__item">
-      <span class="flow__from">Over-reliant on family?</span>
-      <span class="flow__arrow" aria-hidden="true">→</span>
       <span class="flow__to">Further assessment?</span>
-      <span class="flow__when">No or unknown</span>
+      
     </li><li class="flow__item">
       <span class="flow__from">Further assessment?</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
@@ -459,7 +454,7 @@
     <section class="journey">
       <header class="journey__header">
         <h2>Further assessment, with family income and own debt</h2>
-        <p>Family income shows the over-reliant page. Yes is selected, so the further assessment question is skipped. Money management and debt are on the same page. Debt types and changes follow.</p>
+        <p>Family income shows the over-reliant page. Yes is selected, then the further assessment question is shown. Yes continues to money management and debt on the same page. Debt types and changes follow.</p>
       </header>
       <ol class="journey__steps">
       <li class="card">
@@ -472,37 +467,44 @@
 <li class="card">
         <p class="card__step">Step 2</p>
         <h3 class="card__title">Is Alex over-reliant on family or friends for money?</h3>
-        <p class="card__note">Yes selected. This skips the further assessment question</p>
+        <p class="card__note">Yes selected. Further assessment is still shown next</p>
         <p class="card__file">01-full-follow-on__02__overreliant.png</p>
         <img src="images/finances/01-full-follow-on__02__overreliant.png" alt="Is Alex over-reliant on family or friends for money?">
       </li>
 <li class="card">
         <p class="card__step">Step 3</p>
-        <h3 class="card__title">Money management and debt</h3>
-        <p class="card__note">Both questions on one page. Own debt selected</p>
-        <p class="card__file">01-full-follow-on__03__money-and-debt.png</p>
-        <img src="images/finances/01-full-follow-on__03__money-and-debt.png" alt="Money management and debt">
+        <h3 class="card__title">Is there anything about Alex's financial situation that may need further assessment?</h3>
+        <p class="card__note">Always shown, including after yes to over-reliance</p>
+        <p class="card__file">01-full-follow-on__03__assessment.png</p>
+        <img src="images/finances/01-full-follow-on__03__assessment.png" alt="Is there anything about Alex's financial situation that may need further assessment?">
       </li>
 <li class="card">
         <p class="card__step">Step 4</p>
-        <h3 class="card__title">What type of debt does Alex have?</h3>
-        <p class="card__note">Only shown for own debt</p>
-        <p class="card__file">01-full-follow-on__04__debt-types.png</p>
-        <img src="images/finances/01-full-follow-on__04__debt-types.png" alt="What type of debt does Alex have?">
+        <h3 class="card__title">Money management and debt</h3>
+        <p class="card__note">Both questions on one page. Own debt selected</p>
+        <p class="card__file">01-full-follow-on__04__money-and-debt.png</p>
+        <img src="images/finances/01-full-follow-on__04__money-and-debt.png" alt="Money management and debt">
       </li>
 <li class="card">
         <p class="card__step">Step 5</p>
-        <h3 class="card__title">Does Alex want to make changes to their finances?</h3>
-        <p class="card__note">Last follow-on page</p>
-        <p class="card__file">01-full-follow-on__05__changes.png</p>
-        <img src="images/finances/01-full-follow-on__05__changes.png" alt="Does Alex want to make changes to their finances?">
+        <h3 class="card__title">What type of debt does Alex have?</h3>
+        <p class="card__note">Only shown for own debt</p>
+        <p class="card__file">01-full-follow-on__05__debt-types.png</p>
+        <img src="images/finances/01-full-follow-on__05__debt-types.png" alt="What type of debt does Alex have?">
       </li>
 <li class="card">
         <p class="card__step">Step 6</p>
+        <h3 class="card__title">Does Alex want to make changes to their finances?</h3>
+        <p class="card__note">Last follow-on page</p>
+        <p class="card__file">01-full-follow-on__06__changes.png</p>
+        <img src="images/finances/01-full-follow-on__06__changes.png" alt="Does Alex want to make changes to their finances?">
+      </li>
+<li class="card">
+        <p class="card__step">Step 7</p>
         <h3 class="card__title">Summary</h3>
         <p class="card__note">Answers tab. Includes yes to over-reliant</p>
-        <p class="card__file">01-full-follow-on__06__summary.png</p>
-        <img src="images/finances/01-full-follow-on__06__summary.png" alt="Summary">
+        <p class="card__file">01-full-follow-on__07__summary.png</p>
+        <img src="images/finances/01-full-follow-on__07__summary.png" alt="Summary">
       </li></ol>
     </section>
 <section class="journey">
@@ -576,7 +578,7 @@
     <section class="journey">
       <header class="journey__header">
         <h2>Uses drugs and injects</h2>
-        <p>Heroin used in the last 6 months is injectable, so the injected-when page is shown.</p>
+        <p>Three drugs were used in the last 6 months and three more than 6 months ago. Heroin was injected, so the injected-when page is shown.</p>
       </header>
       <ol class="journey__steps">
       <li class="card">
@@ -589,21 +591,21 @@
 <li class="card">
         <p class="card__step">Step 2</p>
         <h3 class="card__title">Which drugs has Alex used?</h3>
-        <p class="card__note">Heroin</p>
+        <p class="card__note">Six drugs selected</p>
         <p class="card__file">01-injects__02__types.png</p>
         <img src="images/drugs/01-injects__02__types.png" alt="Which drugs has Alex used?">
       </li>
 <li class="card">
         <p class="card__step">Step 3</p>
         <h3 class="card__title">When did Alex use these drugs?</h3>
-        <p class="card__note">Heroin in the last 6 months</p>
+        <p class="card__note">Three in the last 6 months and three more than 6 months ago</p>
         <p class="card__file">01-injects__03__when.png</p>
         <img src="images/drugs/01-injects__03__when.png" alt="When did Alex use these drugs?">
       </li>
 <li class="card">
         <p class="card__step">Step 4</p>
         <h3 class="card__title">Drug use background</h3>
-        <p class="card__note">Frequency, and heroin selected as injected</p>
+        <p class="card__note">Frequency for all six drugs, and heroin selected as injected</p>
         <p class="card__file">01-injects__04__before.png</p>
         <img src="images/drugs/01-injects__04__before.png" alt="Drug use background">
       </li>
@@ -910,7 +912,7 @@
     </section>
   </section>
 <section class="tab-panel" role="tabpanel" id="relationships" aria-labelledby="tab-relationships" hidden>
-    <p class="lede">Children come first. Yes opens a details page, then cards, and another child can be added. Questions follow, then domestic abuse: perpetrator, who they abused if yes, controlling or coercive behaviour, strangulation or suffocation, then victim and who abused them if yes. Changes asks about personal relationships only.</p>
+    <p class="lede">Children come first. Yes opens a details page, then cards, and another child can be added. Family, childhood, belonging, partner and current relationship questions follow on one page. The current relationship question is shown only when Alex has a partner. Intimate relationship history and whether they have been a perpetrator stay on that page. The next page asks who they abused if yes, then controlling or coercive behaviour. Strangulation or suffocation is only asked if an intimate partner was abused, on its own page. Being a victim of domestic abuse is the next page. Yes to being a victim opens who abused them. Changes asks about personal relationships only.</p>
     <h2>Routes</h2>
     <ol class="flow"><li class="flow__item">
       <span class="flow__from">Any children?</span>
@@ -918,24 +920,34 @@
       <span class="flow__to">Child details, then cards</span>
       <span class="flow__when">Yes</span>
     </li><li class="flow__item">
+      <span class="flow__from">Child card</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Delete confirmation</span>
+      <span class="flow__when">Remove child details</span>
+    </li><li class="flow__item">
       <span class="flow__from">Any children?</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
       <span class="flow__to">Relationship questions</span>
       <span class="flow__when">No</span>
     </li><li class="flow__item">
+      <span class="flow__from">Currently have a partner?</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Current relationship on the same page</span>
+      <span class="flow__when">In a relationship</span>
+    </li><li class="flow__item">
       <span class="flow__from">Perpetrator of domestic abuse</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
-      <span class="flow__to">Who did they abuse?</span>
+      <span class="flow__to">Who did they abuse? on that page</span>
       <span class="flow__when">Yes</span>
     </li><li class="flow__item">
-      <span class="flow__from">Who, or not a perpetrator</span>
-      <span class="flow__arrow" aria-hidden="true">→</span>
-      <span class="flow__to">Controlling or coercive behaviour</span>
-      
-    </li><li class="flow__item">
-      <span class="flow__from">Controlling or coercive behaviour</span>
+      <span class="flow__from">Who did they abuse includes intimate partner</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
       <span class="flow__to">Strangulation or suffocation</span>
+      <span class="flow__when">Intimate partner</span>
+    </li><li class="flow__item">
+      <span class="flow__from">Strangulation, or no intimate partner</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Victim of domestic abuse</span>
       
     </li><li class="flow__item">
       <span class="flow__from">Victim of domestic abuse</span>
@@ -943,15 +955,15 @@
       <span class="flow__to">Who abused them?</span>
       <span class="flow__when">Yes</span>
     </li><li class="flow__item">
-      <span class="flow__from">Victim question</span>
+      <span class="flow__from">Victim no, or who abused them</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
       <span class="flow__to">Changes, then summary</span>
-      <span class="flow__when">No</span>
+      
     </li></ol>
     <section class="journey">
       <header class="journey__header">
         <h2>Children, perpetrator and victim</h2>
-        <p>Yes to children, then a child card. Perpetrator yes asks who they abused. Victim yes asks who abused them. Coercive behaviour and strangulation sit between those questions.</p>
+        <p>Yes to children, then a child card. Perpetrator yes shows who they abused. Intimate partner opens strangulation on its own page, then whether they have been a victim. Victim yes opens who abused them.</p>
       </header>
       <ol class="journey__steps">
       <li class="card">
@@ -977,36 +989,36 @@
       </li>
 <li class="card">
         <p class="card__step">Step 4</p>
-        <h3 class="card__title">Relationship questions</h3>
-        <p class="card__note">Perpetrator of domestic abuse: yes</p>
-        <p class="card__file">01-children-and-abuse__04__questions.png</p>
-        <img src="images/relationships/01-children-and-abuse__04__questions.png" alt="Relationship questions">
+        <h3 class="card__title">Confirm you want to delete this child's details</h3>
+        <p class="card__note">Deletion confirmation, with options to update, cancel or confirm</p>
+        <p class="card__file">01-children-and-abuse__04__child-delete.png</p>
+        <img src="images/relationships/01-children-and-abuse__04__child-delete.png" alt="Confirm you want to delete this child's details">
       </li>
 <li class="card">
         <p class="card__step">Step 5</p>
-        <h3 class="card__title">Who did Alex abuse?</h3>
-        <p class="card__note">Shown because they have been a perpetrator</p>
-        <p class="card__file">01-children-and-abuse__05__abuse.png</p>
-        <img src="images/relationships/01-children-and-abuse__05__abuse.png" alt="Who did Alex abuse?">
+        <h3 class="card__title">Relationship questions</h3>
+        <p class="card__note">In a relationship, living together. Perpetrator of domestic abuse: yes</p>
+        <p class="card__file">01-children-and-abuse__05__questions.png</p>
+        <img src="images/relationships/01-children-and-abuse__05__questions.png" alt="Relationship questions">
       </li>
 <li class="card">
         <p class="card__step">Step 6</p>
-        <h3 class="card__title">Is there evidence that Alex has used controlling or coercive behaviour?</h3>
-        <p class="card__note">No</p>
-        <p class="card__file">01-children-and-abuse__06__coercive.png</p>
-        <img src="images/relationships/01-children-and-abuse__06__coercive.png" alt="Is there evidence that Alex has used controlling or coercive behaviour?">
+        <h3 class="card__title">Domestic abuse questions</h3>
+        <p class="card__note">Who they abused is shown. Intimate partner continues to strangulation</p>
+        <p class="card__file">01-children-and-abuse__06__domestic-abuse.png</p>
+        <img src="images/relationships/01-children-and-abuse__06__domestic-abuse.png" alt="Domestic abuse questions">
       </li>
 <li class="card">
         <p class="card__step">Step 7</p>
         <h3 class="card__title">Is there evidence that Alex has used strangulation or suffocation?</h3>
-        <p class="card__note">Follows the coercive behaviour question</p>
+        <p class="card__note">Shown because the victim of abuse is an intimate partner</p>
         <p class="card__file">01-children-and-abuse__07__strangulation.png</p>
         <img src="images/relationships/01-children-and-abuse__07__strangulation.png" alt="Is there evidence that Alex has used strangulation or suffocation?">
       </li>
 <li class="card">
         <p class="card__step">Step 8</p>
         <h3 class="card__title">Is there evidence that Alex has ever been a victim of domestic abuse?</h3>
-        <p class="card__note">Yes</p>
+        <p class="card__note">After strangulation. Yes opens who abused them</p>
         <p class="card__file">01-children-and-abuse__08__victim.png</p>
         <img src="images/relationships/01-children-and-abuse__08__victim.png" alt="Is there evidence that Alex has ever been a victim of domestic abuse?">
       </li>
@@ -1035,7 +1047,7 @@
 <section class="journey">
       <header class="journey__header">
         <h2>No children, not a perpetrator or victim</h2>
-        <p>Skips child details and both “who” questions. Controlling or coercive behaviour and strangulation are still asked.</p>
+        <p>Skips child details. On the domestic abuse page, who they abused stays hidden. Strangulation is skipped. No to being a victim skips who abused them.</p>
       </header>
       <ol class="journey__steps">
       <li class="card">
@@ -1048,44 +1060,37 @@
 <li class="card">
         <p class="card__step">Step 2</p>
         <h3 class="card__title">Relationship questions</h3>
-        <p class="card__note">Perpetrator of domestic abuse: no</p>
+        <p class="card__note">Not in a relationship. Perpetrator of domestic abuse: no</p>
         <p class="card__file">02-no-children__02__questions.png</p>
         <img src="images/relationships/02-no-children__02__questions.png" alt="Relationship questions">
       </li>
 <li class="card">
         <p class="card__step">Step 3</p>
-        <h3 class="card__title">Is there evidence that Alex has used controlling or coercive behaviour?</h3>
-        <p class="card__note">Still asked when they are not a perpetrator</p>
-        <p class="card__file">02-no-children__03__coercive.png</p>
-        <img src="images/relationships/02-no-children__03__coercive.png" alt="Is there evidence that Alex has used controlling or coercive behaviour?">
+        <h3 class="card__title">Domestic abuse questions</h3>
+        <p class="card__note">Current relationship is skipped. Who they abused stays hidden. Strangulation is skipped</p>
+        <p class="card__file">02-no-children__03__domestic-abuse.png</p>
+        <img src="images/relationships/02-no-children__03__domestic-abuse.png" alt="Domestic abuse questions">
       </li>
 <li class="card">
         <p class="card__step">Step 4</p>
-        <h3 class="card__title">Is there evidence that Alex has used strangulation or suffocation?</h3>
-        <p class="card__note">No</p>
-        <p class="card__file">02-no-children__04__strangulation.png</p>
-        <img src="images/relationships/02-no-children__04__strangulation.png" alt="Is there evidence that Alex has used strangulation or suffocation?">
+        <h3 class="card__title">Is there evidence that Alex has ever been a victim of domestic abuse?</h3>
+        <p class="card__note">After coercive behaviour. No skips who abused them</p>
+        <p class="card__file">02-no-children__04__victim.png</p>
+        <img src="images/relationships/02-no-children__04__victim.png" alt="Is there evidence that Alex has ever been a victim of domestic abuse?">
       </li>
 <li class="card">
         <p class="card__step">Step 5</p>
-        <h3 class="card__title">Is there evidence that Alex has ever been a victim of domestic abuse?</h3>
-        <p class="card__note">No. Skips who abused them</p>
-        <p class="card__file">02-no-children__05__victim.png</p>
-        <img src="images/relationships/02-no-children__05__victim.png" alt="Is there evidence that Alex has ever been a victim of domestic abuse?">
+        <h3 class="card__title">Does Alex want to make changes to their personal relationships?</h3>
+        <p class="card__note">Own page</p>
+        <p class="card__file">02-no-children__05__changes.png</p>
+        <img src="images/relationships/02-no-children__05__changes.png" alt="Does Alex want to make changes to their personal relationships?">
       </li>
 <li class="card">
         <p class="card__step">Step 6</p>
-        <h3 class="card__title">Does Alex want to make changes to their personal relationships?</h3>
-        <p class="card__note">Own page</p>
-        <p class="card__file">02-no-children__06__changes.png</p>
-        <img src="images/relationships/02-no-children__06__changes.png" alt="Does Alex want to make changes to their personal relationships?">
-      </li>
-<li class="card">
-        <p class="card__step">Step 7</p>
         <h3 class="card__title">Summary</h3>
         <p class="card__note">Answers tab</p>
-        <p class="card__file">02-no-children__07__summary.png</p>
-        <img src="images/relationships/02-no-children__07__summary.png" alt="Summary">
+        <p class="card__file">02-no-children__06__summary.png</p>
+        <img src="images/relationships/02-no-children__06__summary.png" alt="Summary">
       </li></ol>
     </section>
   </section>
@@ -1148,6 +1153,48 @@
         <img src="images/thinking/01-no-sexual-harm__04__summary.png" alt="Summary">
       </li></ol>
     </section>
+<section class="journey">
+      <header class="journey__header">
+        <h2>Risk of sexual harm</h2>
+        <p>Answers the thinking questions, selects yes to risk of sexual harm, then completes the sexual harm questions before changes.</p>
+      </header>
+      <ol class="journey__steps">
+      <li class="card">
+        <p class="card__step">Step 1</p>
+        <h3 class="card__title">Thinking, behaviours and attitudes</h3>
+        <p class="card__note">Reworded evidence and management questions</p>
+        <p class="card__file">02-risk-sexual-harm__01__questions.png</p>
+        <img src="images/thinking/02-risk-sexual-harm__01__questions.png" alt="Thinking, behaviours and attitudes">
+      </li>
+<li class="card">
+        <p class="card__step">Step 2</p>
+        <h3 class="card__title">Are there any concerns that Alex poses a risk of sexual harm to others?</h3>
+        <p class="card__note">Yes. Opens the sexual harm questions</p>
+        <p class="card__file">02-risk-sexual-harm__02__sexual.png</p>
+        <img src="images/thinking/02-risk-sexual-harm__02__sexual.png" alt="Are there any concerns that Alex poses a risk of sexual harm to others?">
+      </li>
+<li class="card">
+        <p class="card__step">Step 3</p>
+        <h3 class="card__title">Risk of sexual harm</h3>
+        <p class="card__note">Sexual preoccupation, offence-related interests and emotional intimacy</p>
+        <p class="card__file">02-risk-sexual-harm__03__sexual-harm.png</p>
+        <img src="images/thinking/02-risk-sexual-harm__03__sexual-harm.png" alt="Risk of sexual harm">
+      </li>
+<li class="card">
+        <p class="card__step">Step 4</p>
+        <h3 class="card__title">Does Alex want to make changes to their thinking, behaviours and attitudes?</h3>
+        <p class="card__note">After the sexual harm questions</p>
+        <p class="card__file">02-risk-sexual-harm__04__changes.png</p>
+        <img src="images/thinking/02-risk-sexual-harm__04__changes.png" alt="Does Alex want to make changes to their thinking, behaviours and attitudes?">
+      </li>
+<li class="card">
+        <p class="card__step">Step 5</p>
+        <h3 class="card__title">Summary</h3>
+        <p class="card__note">Answers tab, including risk of sexual harm</p>
+        <p class="card__file">02-risk-sexual-harm__05__summary.png</p>
+        <img src="images/thinking/02-risk-sexual-harm__05__summary.png" alt="Summary">
+      </li></ol>
+    </section>
   </section>
 <section class="tab-panel" role="tabpanel" id="offence" aria-labelledby="tab-offence" hidden>
     <p class="lede">A direct victim opens the victim questions, then a card that matches the children cards. Other victims skip that and go to how many people were involved. Impact questions follow, including whether the current offences are more serious than previous offending.</p>
@@ -1162,6 +1209,11 @@
       <span class="flow__arrow" aria-hidden="true">→</span>
       <span class="flow__to">Victim card</span>
       
+    </li><li class="flow__item">
+      <span class="flow__from">Victim card</span>
+      <span class="flow__arrow" aria-hidden="true">→</span>
+      <span class="flow__to">Delete confirmation</span>
+      <span class="flow__when">Remove victim details</span>
     </li><li class="flow__item">
       <span class="flow__from">Victim card, or no direct victim</span>
       <span class="flow__arrow" aria-hidden="true">→</span>
@@ -1202,24 +1254,31 @@
       </li>
 <li class="card">
         <p class="card__step">Step 4</p>
-        <h3 class="card__title">How many other people were involved with committing the current index offence(s)?</h3>
-        <p class="card__note">After the victim card</p>
-        <p class="card__file">01-direct-victim__04__involved.png</p>
-        <img src="images/offence/01-direct-victim__04__involved.png" alt="How many other people were involved with committing the current index offence(s)?">
+        <h3 class="card__title">Confirm you want to delete this victim's details</h3>
+        <p class="card__note">Deletion confirmation, with options to update, cancel or confirm</p>
+        <p class="card__file">01-direct-victim__04__victim-delete.png</p>
+        <img src="images/offence/01-direct-victim__04__victim-delete.png" alt="Confirm you want to delete this victim's details">
       </li>
 <li class="card">
         <p class="card__step">Step 5</p>
-        <h3 class="card__title">Impact questions</h3>
-        <p class="card__note">Includes whether current offences are more serious, and partial acceptance</p>
-        <p class="card__file">01-direct-victim__05__impact.png</p>
-        <img src="images/offence/01-direct-victim__05__impact.png" alt="Impact questions">
+        <h3 class="card__title">How many other people were involved with committing the current index offence(s)?</h3>
+        <p class="card__note">After the victim card</p>
+        <p class="card__file">01-direct-victim__05__involved.png</p>
+        <img src="images/offence/01-direct-victim__05__involved.png" alt="How many other people were involved with committing the current index offence(s)?">
       </li>
 <li class="card">
         <p class="card__step">Step 6</p>
+        <h3 class="card__title">Impact questions</h3>
+        <p class="card__note">Includes whether current offences are more serious, and partial acceptance</p>
+        <p class="card__file">01-direct-victim__06__impact.png</p>
+        <img src="images/offence/01-direct-victim__06__impact.png" alt="Impact questions">
+      </li>
+<li class="card">
+        <p class="card__step">Step 7</p>
         <h3 class="card__title">Summary</h3>
         <p class="card__note">Answers tab, including the victim card</p>
-        <p class="card__file">01-direct-victim__06__summary.png</p>
-        <img src="images/offence/01-direct-victim__06__summary.png" alt="Summary">
+        <p class="card__file">01-direct-victim__07__summary.png</p>
+        <img src="images/offence/01-direct-victim__07__summary.png" alt="Summary">
       </li></ol>
     </section>
 <section class="journey">

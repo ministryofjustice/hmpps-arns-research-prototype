@@ -3,7 +3,7 @@
 //
 
 import { getSanSession, replaceSanSession, sectionLinkHref, setSanSession } from './session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, labelled, scrollToHash } from './form.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, focusTargetField, labelled, scrollToHash } from './form.js'
 
 const EXAMPLE_COMPLETE = {
   financeIncome: ['employment', 'family'],
@@ -258,14 +258,9 @@ const applyProgress = (session) => {
   }
 }
 
-const skipsFurtherAssessmentQuestion = (session) =>
-  needsOverreliant(session) && session.financeOverreliant === 'yes'
+const entersFollowOn = (session) => session.financeFurtherAssessment === 'yes'
 
-const entersFollowOn = (session) =>
-  skipsFurtherAssessmentQuestion(session) || session.financeFurtherAssessment === 'yes'
-
-const skipsFurtherFinance = (session) =>
-  !skipsFurtherAssessmentQuestion(session) && session.financeFurtherAssessment === 'no'
+const skipsFurtherFinance = (session) => session.financeFurtherAssessment === 'no'
 
 const debtAnswered = (session) => Array.isArray(session.financeDebt) && session.financeDebt.length
 
@@ -287,7 +282,6 @@ const followOnAnswered = (session) => {
 const questionsAnswered = (session) => {
   if (!(Array.isArray(session.financeIncome) && session.financeIncome.length)) return false
   if (needsOverreliant(session) && !session.financeOverreliant) return false
-  if (skipsFurtherAssessmentQuestion(session)) return followOnAnswered(session)
   if (!session.financeFurtherAssessment) return false
   if (skipsFurtherFinance(session)) return true
   if (!followOnAnswered(session)) return false
@@ -307,9 +301,6 @@ const nextFollowOnPage = (session, fromSummaryFlow = false) => {
 const continueHref = (session) => {
   if (!(Array.isArray(session.financeIncome) && session.financeIncome.length)) return 'finances.html'
   if (needsOverreliant(session) && !session.financeOverreliant) return 'finances-overreliant.html'
-  if (skipsFurtherAssessmentQuestion(session)) {
-    return followOnAnswered(session) ? 'finances.html' : nextFollowOnPage(session)
-  }
   if (!session.financeFurtherAssessment) return 'finances-assessment.html'
   if (session.financeFurtherAssessment === 'yes' && !followOnAnswered(session)) return nextFollowOnPage(session)
   return 'finances.html'
@@ -362,12 +353,12 @@ const financeRows = (session) => {
     rows.push(summaryRow(
       'Is Alex over-reliant on family or friends for money?',
       overreliantLines,
-      summaryChangeHref('finances-overreliant'),
+      summaryChangeHref('finances-overreliant', 'overreliant'),
       { secondaryFrom: 1 }
     ))
   }
 
-  if (session.financeFurtherAssessment && !skipsFurtherAssessmentQuestion(session)) {
+  if (session.financeFurtherAssessment) {
     const lines = [labelled(YES_NO_UNKNOWN, session.financeFurtherAssessment)]
     if (session.financeFurtherAssessment === 'no' && session.financeFurtherAssessmentDetails) {
       lines.push(session.financeFurtherAssessmentDetails)
@@ -375,7 +366,7 @@ const financeRows = (session) => {
     rows.push(summaryRow(
       "Is there anything about Alex's financial situation that may need further assessment?",
       lines,
-      summaryChangeHref('finances-assessment'),
+      summaryChangeHref('finances-assessment', 'further-assessment'),
       { secondaryFrom: 1 }
     ))
   }
@@ -419,7 +410,7 @@ const financeRows = (session) => {
     rows.push(summaryRow(
       'What type of debt does Alex have?',
       lines,
-      summaryChangeHref('finances-debt-types')
+      summaryChangeHref('finances-debt-types', 'debt-types')
     ))
   }
 
@@ -429,7 +420,7 @@ const financeRows = (session) => {
     rows.push(summaryRow(
       'Does Alex want to make changes to their finances?',
       lines,
-      summaryChangeHref('finances-changes'),
+      summaryChangeHref('finances-changes', 'changes'),
       { secondaryFrom: 1 }
     ))
   }
@@ -544,7 +535,10 @@ const showAnalysisForm = (focusId) => {
   openAnalysisTab()
   if (!focusId) return
   const target = document.getElementById(focusId)
-  if (target instanceof HTMLElement) target.scrollIntoView()
+  if (target instanceof HTMLElement) {
+    target.scrollIntoView()
+    focusTargetField(target, { preventScroll: true })
+  }
 }
 
 const openAnalysisTab = () => {
@@ -888,12 +882,6 @@ const initFinances = () => {
       window.location.assign('finances.html')
       return
     }
-    if (skipsFurtherAssessmentQuestion(session)) {
-      window.location.assign(followOnAnswered(session)
-        ? 'finances-summary.html'
-        : (fromSummary() ? nextFollowOnPage(session, true) : 'finances-further'))
-      return
-    }
     if (!fromSummary() && needsOverreliant(session) && !session.financeOverreliant) {
       window.location.assign('finances-overreliant')
       return
@@ -908,9 +896,6 @@ const initFinances = () => {
     }
     restoreMoney(session)
     restoreDebt(session)
-    if (!fromSummary() && skipsFurtherAssessmentQuestion(session)) {
-      ensureBackLink('finances-overreliant.html')
-    }
   }
   if (pageName === 'debt') {
     if (!entersFollowOn(session)) {
@@ -990,14 +975,6 @@ const initFinances = () => {
     const next = { ...previous, ...nextAnswers }
     if (needsOverreliant(next) && (!fromSummary() || overreliantTriggerChanged(next, previous) || !next.financeOverreliant)) {
       window.location.assign(fromSummary() ? 'finances-overreliant?from=summary' : 'finances-overreliant')
-      return
-    }
-    if (skipsFurtherAssessmentQuestion(next)) {
-      if (!fromSummary() || !followOnAnswered(next)) {
-        window.location.assign(fromSummary() ? nextFollowOnPage(next, true) : 'finances-further')
-        return
-      }
-      window.location.assign('finances-summary.html')
       return
     }
     if (!fromSummary() || !next.financeFurtherAssessment) {
@@ -1126,21 +1103,6 @@ const initFinances = () => {
     }
     clearErrors()
     const previous = getSanSession()
-    if (answers.financeOverreliant === 'yes') {
-      setSanSession({
-        ...answers,
-        financeFurtherAssessment: '',
-        financeFurtherAssessmentDetails: '',
-        financeComplete: false
-      })
-      const next = getSanSession()
-      if (fromSummary() && followOnAnswered(next)) {
-        window.location.assign('finances-summary.html')
-        return
-      }
-      window.location.assign(fromSummary() ? nextFollowOnPage(next, true) : 'finances-further')
-      return
-    }
     setSanSession({ ...answers, financeComplete: false })
     if (!fromSummary() || !previous.financeFurtherAssessment) {
       window.location.assign(fromSummary() ? 'finances-assessment?from=summary' : 'finances-assessment')

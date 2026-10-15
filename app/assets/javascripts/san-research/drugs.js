@@ -3,7 +3,7 @@
 //
 
 import { getSanSession, replaceSanSession, sectionLinkHref, setSanSession } from './session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, labelled, scrollToHash } from './form.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, focusTargetField, labelled, scrollToHash } from './form.js'
 
 const DRUG_LABELS = {
   amphetamines: 'Amphetamines (including speed, methamphetamine)',
@@ -465,9 +465,9 @@ const drugCard = (session, id) => {
       summaryChangeHref('drugs-before', `frequency-${id}`)
     ))
     rows.push(summaryRow(
-      `Give details about their use of ${sentenceDrugLabel(drugLabel(session, id))} (optional)`,
+      `Give details about Alex's use of ${sentenceDrugLabel(drugLabel(session, id))} (optional)`,
       [details],
-      summaryChangeHref('drugs-before', `frequency-${id}`),
+      summaryChangeHref('drugs-before', `frequency-${id}-use`),
       { blankIfEmpty: true }
     ))
   }
@@ -494,7 +494,7 @@ const drugCard = (session, id) => {
       <h3 class="govuk-summary-card__title">${escapeHtml(drugLabel(session, id))}</h3>
       <ul class="govuk-summary-card__actions">
         <li class="govuk-summary-card__action">
-          <a class="govuk-link" href="${id.startsWith('extra-') ? summaryChangeHref('drugs-when', `last-used-${id}`) : summaryChangeHref('drugs-types')}">Change<span class="govuk-visually-hidden"> (${escapeHtml(drugLabel(session, id))})</span></a>
+          <a class="govuk-link" href="${id.startsWith('extra-') ? summaryChangeHref('drugs-when', `last-used-${id}`) : summaryChangeHref('drugs-types', 'drug-types')}">Change<span class="govuk-visually-hidden"> (${escapeHtml(drugLabel(session, id))})</span></a>
         </li>
       </ul>
     </div>
@@ -509,7 +509,7 @@ const drugRows = (session) => {
     return `<dl class="govuk-summary-list san-summary-list">${summaryRow(
       'Has Alex ever used illegal drugs or misused medication?',
       ['No'],
-      summaryChangeHref('drugs')
+      summaryChangeHref('drugs', 'drug-use')
     )}</dl>`
   }
 
@@ -518,7 +518,7 @@ const drugRows = (session) => {
   const parts = [`<dl class="govuk-summary-list san-summary-list">${summaryRow(
     'Has Alex ever used illegal drugs or misused medication?',
     ['Yes'],
-    summaryChangeHref('drugs')
+    summaryChangeHref('drugs', 'drug-use')
   )}</dl>`]
 
   const recent = recentDrugs(session)
@@ -560,7 +560,7 @@ const drugRows = (session) => {
       rows.push(summaryRow(
         'Does Alex want to make changes to their drug use?',
         lines,
-        summaryChangeHref('drugs-changes'),
+        summaryChangeHref('drugs-changes', 'changes'),
         { secondaryFrom: 1 }
       ))
     }
@@ -677,7 +677,10 @@ const showAnalysisForm = (focusId) => {
   openAnalysisTab()
   if (!focusId) return
   const target = document.getElementById(focusId)
-  if (target instanceof HTMLElement) target.scrollIntoView()
+  if (target instanceof HTMLElement) {
+    target.scrollIntoView()
+    focusTargetField(target, { preventScroll: true })
+  }
 }
 
 const openAnalysisTab = () => {
@@ -1018,10 +1021,10 @@ const extraFrequencyHtml = (session, id, withSpacing) => {
           ${options}
         </div>
       </fieldset>
-      <div class="govuk-form-group govuk-!-margin-top-4">
-        <label class="govuk-label" for="frequency-${escapeHtml(id)}-details">Give details about their use of ${sentenceDrugLabel(label)} (optional)</label>
-        <div class="govuk-hint">Consider why they started using, their history, and any triggers.</div>
-        <textarea class="govuk-textarea" id="frequency-${escapeHtml(id)}-details" name="frequency_${escapeHtml(id)}_details" rows="5" maxlength="2000"></textarea>
+      <div class="govuk-form-group san-question" id="frequency-${escapeHtml(id)}-use">
+        <label class="govuk-label govuk-!-font-weight-bold" for="frequency-${escapeHtml(id)}-details">Give details about Alex's use of ${sentenceDrugLabel(label)} (optional)</label>
+        <div id="frequency-${escapeHtml(id)}-details-hint" class="govuk-hint">Consider why they started using, their history, and any triggers.</div>
+        <textarea class="govuk-textarea" id="frequency-${escapeHtml(id)}-details" name="frequency_${escapeHtml(id)}_details" rows="5" maxlength="2000" aria-describedby="frequency-${escapeHtml(id)}-details-hint"></textarea>
         <div class="govuk-hint san-character-count" data-san-character-count="frequency-${escapeHtml(id)}-details">You have 2,000 characters remaining</div>
       </div>
     </div>`
@@ -1228,12 +1231,15 @@ const applyWhenPage = (session) => {
   })
 
   const extraSection = document.querySelector('[data-du-extra-drugs]')
+  const addButton = document.querySelector('[data-du-add-drug]')
   if (focusOne && !String(focusId).startsWith('extra-')) {
     setHidden(extraSection, true)
+    setHidden(addButton, true)
     return
   }
 
   setHidden(extraSection, false)
+  setHidden(addButton, false)
   const extras = extrasForWhenPage(session)
   renderExtraDrugList(focusOne ? extras.filter((drug) => drug.id === focusId) : extras, { onlyOther })
 }

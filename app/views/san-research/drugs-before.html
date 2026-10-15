@@ -73,10 +73,10 @@
           {% endfor %}
         </div>
       </fieldset>
-      <div class="govuk-form-group govuk-!-margin-top-4">
-        <label class="govuk-label" for="frequency-{{ drug.id }}-details">Give details about their use of {{ drug.label[0] | lower }}{{ drug.label.slice(1) }} (optional)</label>
-        <div class="govuk-hint">Consider why they started using, their history, and any triggers.</div>
-        <textarea class="govuk-textarea" id="frequency-{{ drug.id }}-details" name="frequency_{{ drug.id }}_details" rows="5" maxlength="2000"></textarea>
+      <div class="govuk-form-group san-question" id="frequency-{{ drug.id }}-use">
+        <label class="govuk-label govuk-!-font-weight-bold" for="frequency-{{ drug.id }}-details">Give details about Alex's use of {{ drug.label[0] | lower }}{{ drug.label.slice(1) }} (optional)</label>
+        <div id="frequency-{{ drug.id }}-details-hint" class="govuk-hint">Consider why they started using, their history, and any triggers.</div>
+        <textarea class="govuk-textarea" id="frequency-{{ drug.id }}-details" name="frequency_{{ drug.id }}_details" rows="5" maxlength="2000" aria-describedby="frequency-{{ drug.id }}-details-hint"></textarea>
         <div class="govuk-hint san-character-count" data-san-character-count="frequency-{{ drug.id }}-details">You have 2,000 characters remaining</div>
       </div>
     </div>

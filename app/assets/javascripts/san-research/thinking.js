@@ -3,7 +3,7 @@
 //
 
 import { getSanSession, replaceSanSession, sectionLinkHref, setSanSession } from './session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, labelled, scrollToHash } from './form.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, focusTargetField, labelled, scrollToHash } from './form.js'
 
 const YES_NO = { yes: 'Yes', no: 'No' }
 
@@ -322,12 +322,7 @@ const questionRows = (session, definitions, page) => definitions.map(([key, id, 
 const thinkingRows = (session) => {
   if (!session.thinkingConsequences) return ''
 
-  const shown = visibleQuestions()
-  const afterKeys = ['thinkingTemper', 'thinkingViolence', 'thinkingImpulse', 'thinkingHostile', 'thinkingSupervision', 'thinkingExcuse']
-  const beforeSexual = shown.filter((item) => afterKeys.indexOf(item[0]) === -1)
-  const afterSexual = shown.filter((item) => afterKeys.indexOf(item[0]) !== -1)
-
-  const parts = [`<dl class="govuk-summary-list san-summary-list">${questionRows(session, beforeSexual, 'thinking-behaviours')}</dl>`]
+  const parts = [`<dl class="govuk-summary-list san-summary-list">${questionRows(session, visibleQuestions(), 'thinking-behaviours')}</dl>`]
 
   if (session.thinkingSexualConcerns) {
     const sexualRows = [
@@ -343,19 +338,16 @@ const thinkingRows = (session) => {
     parts.push(`<dl class="govuk-summary-list san-summary-list">${sexualRows.join('')}</dl>`)
   }
 
-  const later = questionRows(session, afterSexual, 'thinking-behaviours')
   if (session.thinkingChanges) {
     const lines = [labelled(CHANGES_LABELS, session.thinkingChanges)]
     if (session.thinkingChangesDetails) lines.push(session.thinkingChangesDetails)
     const changes = summaryRow(
       'Does Alex want to make changes to their thinking, behaviours and attitudes?',
       lines,
-      summaryChangeHref('thinking-behaviours-changes'),
+      summaryChangeHref('thinking-behaviours-changes', 'changes'),
       { secondaryFrom: 1 }
     )
-    parts.push(`<dl class="govuk-summary-list san-summary-list">${later}${changes}</dl>`)
-  } else if (later) {
-    parts.push(`<dl class="govuk-summary-list san-summary-list">${later}</dl>`)
+    parts.push(`<dl class="govuk-summary-list san-summary-list">${changes}</dl>`)
   }
 
   return parts.join('')
@@ -455,7 +447,10 @@ const showAnalysisForm = (focusId) => {
   openAnalysisTab()
   if (!focusId) return
   const target = document.getElementById(focusId)
-  if (target instanceof HTMLElement) target.scrollIntoView()
+  if (target instanceof HTMLElement) {
+    target.scrollIntoView()
+    focusTargetField(target, { preventScroll: true })
+  }
 }
 
 const readQuestionAnswers = () => {
