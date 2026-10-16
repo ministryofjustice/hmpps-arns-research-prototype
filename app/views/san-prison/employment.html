@@ -1,0 +1,46 @@
+{% extends "san-prison/layout.html" %}
+
+{% set pageName = "Employment and education" %}
+{% set sanCaption = "Employment and education" %}
+{% set sanSection = "employment" %}
+
+{% block content %}
+
+{% include "san-prison/includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "san-prison/includes/content-header.html" %}
+
+<form id="san-employment-status-form" novalidate data-ee-page="status">
+  <div class="govuk-form-group" data-san-error-group="employment-status">
+    <fieldset class="govuk-fieldset" id="employment-status">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">What is Alex's current employment status?</h1>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="employment-employed-or-self-employed" name="employment_status" type="radio" value="employed-or-self-employed">
+          <label class="govuk-label govuk-radios__label" for="employment-employed-or-self-employed">Employed or self-employed</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="employment-retired" name="employment_status" type="radio" value="retired">
+          <label class="govuk-label govuk-radios__label" for="employment-retired">Retired</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="employment-unavailable" name="employment_status" type="radio" value="unavailable">
+          <label class="govuk-label govuk-radios__label" for="employment-unavailable">Currently unavailable for work</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="employment-unemployed" name="employment_status" type="radio" value="unemployed">
+          <label class="govuk-label govuk-radios__label" for="employment-unemployed">Unemployed</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "san-prison/includes/assessment-page-close.html" %}
+
+{% endblock %}

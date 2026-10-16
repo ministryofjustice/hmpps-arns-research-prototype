@@ -1,0 +1,27 @@
+{#
+  SAN Prison research journey pages.
+  This layout and its SAN-specific includes are kept separate from the community journey.
+#}
+
+{% extends "layouts/assessment.html" %}
+
+{% set showReturnToOasysButton = true %}
+{% set hideSideNav = false %}
+{% set hideJourneyServiceHeader = true %}
+{% set contentColumnPageHeader = true %}
+{% set stickySideNav = false %}
+{% set predictorsSectionCaption = false %}
+{% set usePdsHeader = true %}
+{% set usePdsFooter = true %}
+{% set hideServiceNavigation = true %}
+{% set phaseBannerBelowHeader = true %}
+{% set pdsHeaderInclude = "san-prison/includes/pds-header.njk" %}
+{% set pdsFooterInclude = "san-prison/includes/footer.njk" %}
+{% set offenderHeaderInclude = "san-prison/includes/offender-header.html" %}
+{% set sideNavigationInclude = "san-prison/includes/side-navigation.html" %}
+
+{% block pageTitle %}{{ pageName | default("Strengths and needs") }} - Strengths and needs{% endblock %}
+
+{% block headerEnd %}
+  {% include "san-prison/includes/phase-banner.html" %}
+{% endblock %}

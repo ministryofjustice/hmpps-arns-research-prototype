@@ -1,0 +1,116 @@
+{# Prototype 1 (Community) SAN side nav. JS updates ticks and resume hrefs via data-san-section-link. #}
+{% set currentSection = sanSection | default("accommodation") %}
+{% set navIsolated = sanIsolated | default(false) %}
+{% set isolatedHref = (sanPrisonBase | default("/san-prison")) + "/drugs-pa#practitioner-analysis" %}
+<nav class="moj-side-navigation assessment-side-navigation assessment-section-navigation san-side-navigation" aria-label="Strengths and needs">
+  <ul class="moj-side-navigation__list">
+    <li class="moj-side-navigation__item{% if currentSection == "accommodation" %} moj-side-navigation__item--active{% endif %}">
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="accommodation.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="accommodation"{% endif %}{% if currentSection == "accommodation" %} aria-current="location"{% endif %}>
+        <span class="assessment-section-navigation__label">Accommodation</span>
+        <span class="govuk-visually-hidden" data-san-section-status="accommodation">, Incomplete</span>
+        <span class="assessment-section-navigation__complete-icon" data-section-complete="accommodation" aria-hidden="true">
+          <svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="12" fill="#1d70b8"/>
+            <path fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M7 12.5 10 15.5 17 8.5"/>
+          </svg>
+        </span>
+      </a>
+    </li>
+    <li class="moj-side-navigation__item{% if currentSection == "employment" %} moj-side-navigation__item--active{% endif %}">
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="employment.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="employment"{% endif %}{% if currentSection == "employment" %} aria-current="location"{% endif %}>
+        <span class="assessment-section-navigation__label">Employment and education</span>
+        <span class="govuk-visually-hidden" data-san-section-status="employment">, Incomplete</span>
+        <span class="assessment-section-navigation__complete-icon" data-section-complete="employment" aria-hidden="true">
+          <svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="12" fill="#1d70b8"/>
+            <path fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M7 12.5 10 15.5 17 8.5"/>
+          </svg>
+        </span>
+      </a>
+    </li>
+    <li class="moj-side-navigation__item{% if currentSection == "finances" %} moj-side-navigation__item--active{% endif %}">
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="finances.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="finances"{% endif %}{% if currentSection == "finances" %} aria-current="location"{% endif %}>
+        <span class="assessment-section-navigation__label">Finances</span>
+        <span class="govuk-visually-hidden" data-san-section-status="finances">, Incomplete</span>
+        <span class="assessment-section-navigation__complete-icon" data-section-complete="finances" aria-hidden="true">
+          <svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="12" fill="#1d70b8"/>
+            <path fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M7 12.5 10 15.5 17 8.5"/>
+          </svg>
+        </span>
+      </a>
+    </li>
+    <li class="moj-side-navigation__item{% if currentSection == "drugs" %} moj-side-navigation__item--active{% endif %}">
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="drugs.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="drugs"{% endif %}{% if currentSection == "drugs" %} aria-current="location"{% endif %}>
+        <span class="assessment-section-navigation__label">Drug use</span>
+        <span class="govuk-visually-hidden" data-san-section-status="drugs">, Incomplete</span>
+        <span class="assessment-section-navigation__complete-icon" data-section-complete="drugs" aria-hidden="true">
+          <svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="12" fill="#1d70b8"/>
+            <path fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M7 12.5 10 15.5 17 8.5"/>
+          </svg>
+        </span>
+      </a>
+    </li>
+    <li class="moj-side-navigation__item{% if currentSection == "alcohol" %} moj-side-navigation__item--active{% endif %}">
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="alcohol.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="alcohol"{% endif %}{% if currentSection == "alcohol" %} aria-current="location"{% endif %}>
+        <span class="assessment-section-navigation__label">Alcohol use</span>
+        <span class="govuk-visually-hidden" data-san-section-status="alcohol">, Incomplete</span>
+        <span class="assessment-section-navigation__complete-icon" data-section-complete="alcohol" aria-hidden="true">
+          <svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="12" fill="#1d70b8"/>
+            <path fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M7 12.5 10 15.5 17 8.5"/>
+          </svg>
+        </span>
+      </a>
+    </li>
+    <li class="moj-side-navigation__item{% if currentSection == "health" %} moj-side-navigation__item--active{% endif %}">
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="health.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="health"{% endif %}{% if currentSection == "health" %} aria-current="location"{% endif %}>
+        <span class="assessment-section-navigation__label">Health and wellbeing</span>
+        <span class="govuk-visually-hidden" data-san-section-status="health">, Incomplete</span>
+        <span class="assessment-section-navigation__complete-icon" data-section-complete="health" aria-hidden="true">
+          <svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="12" fill="#1d70b8"/>
+            <path fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M7 12.5 10 15.5 17 8.5"/>
+          </svg>
+        </span>
+      </a>
+    </li>
+    <li class="moj-side-navigation__item{% if currentSection == "relationships" %} moj-side-navigation__item--active{% endif %}">
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="personal-relationships-children.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="relationships"{% endif %}{% if currentSection == "relationships" %} aria-current="location"{% endif %}>
+        <span class="assessment-section-navigation__label">Personal relationships and community</span>
+        <span class="govuk-visually-hidden" data-san-section-status="relationships">, Incomplete</span>
+        <span class="assessment-section-navigation__complete-icon" data-section-complete="relationships" aria-hidden="true">
+          <svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="12" fill="#1d70b8"/>
+            <path fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M7 12.5 10 15.5 17 8.5"/>
+          </svg>
+        </span>
+      </a>
+    </li>
+    <li class="moj-side-navigation__item{% if currentSection == "thinking" %} moj-side-navigation__item--active{% endif %}">
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="thinking-behaviours.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="thinking"{% endif %}{% if currentSection == "thinking" %} aria-current="location"{% endif %}>
+        <span class="assessment-section-navigation__label">Thinking, behaviours and attitudes</span>
+        <span class="govuk-visually-hidden" data-san-section-status="thinking">, Incomplete</span>
+        <span class="assessment-section-navigation__complete-icon" data-section-complete="thinking" aria-hidden="true">
+          <svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="12" fill="#1d70b8"/>
+            <path fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M7 12.5 10 15.5 17 8.5"/>
+          </svg>
+        </span>
+      </a>
+    </li>
+    <li class="moj-side-navigation__item{% if currentSection == "offence" %} moj-side-navigation__item--active{% endif %}">
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="offence-analysis.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="offence"{% endif %}{% if currentSection == "offence" %} aria-current="location"{% endif %}>
+        <span class="assessment-section-navigation__label">Offence analysis</span>
+        <span class="govuk-visually-hidden" data-san-section-status="offence">, Incomplete</span>
+        <span class="assessment-section-navigation__complete-icon" data-section-complete="offence" aria-hidden="true">
+          <svg class="assessment-section-navigation__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="12" fill="#1d70b8"/>
+            <path fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M7 12.5 10 15.5 17 8.5"/>
+          </svg>
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>

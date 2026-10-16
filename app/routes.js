@@ -115,7 +115,7 @@ const getFirstSanctionAgeLocals = (query = {}) => {
 router.use((req, res, next) => {
   if (req.path.startsWith('/san-prison')) {
     res.locals.sanVariant = 'prison'
-    res.locals.sanResearchBase = '/san-prison'
+    res.locals.sanPrisonBase = '/san-prison'
   } else if (req.path.startsWith('/san-research')) {
     res.locals.sanVariant = 'community'
     res.locals.sanResearchBase = '/san-research'
@@ -142,7 +142,12 @@ router.get('/san-prison/:page', (req, res, next) => {
     return
   }
 
-  res.render(`san-research/${view}`, (error, html) => {
+  if (view === 'accommodation-settled') {
+    res.redirect('/san-prison/accommodation')
+    return
+  }
+
+  res.render(`san-prison/${view}`, (error, html) => {
     if (error) {
       next()
       return

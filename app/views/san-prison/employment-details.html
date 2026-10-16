@@ -1,0 +1,231 @@
+{% extends "san-prison/layout.html" %}
+
+{% set pageName = "Employment and education" %}
+{% set sanHeading = "Employment and education" %}
+{% set sanSection = "employment" %}
+{% set backLinkHref = "employment.html" %}
+
+{% block content %}
+
+{% include "san-prison/includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "san-prison/includes/content-header.html" %}
+
+<form id="san-employment-details-form" novalidate data-ee-page="details">
+  <div class="govuk-form-group" data-ee-question="job-sector" hidden>
+    <label class="govuk-label govuk-label--m" for="job-sector">What job sector does Alex work in? (optional)</label>
+    <textarea class="govuk-textarea" id="job-sector" name="job_sector" rows="5" maxlength="2000"></textarea>
+    <div class="govuk-hint san-character-count" data-san-character-count="job-sector">You have 2,000 characters remaining</div>
+  </div>
+
+  <div class="govuk-form-group" data-ee-question="history" data-san-error-group="history" hidden>
+    <fieldset class="govuk-fieldset" id="history" aria-describedby="history-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">What is Alex's employment history?</h2>
+      </legend>
+      <div id="history-hint" class="govuk-hint">Include their current employment.</div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {% set historyOptions = [
+          { id: "continuous", label: "Continuous employment history", hint: "They may have had a break in employment due to things like redundancy, illness or caring for a family member." },
+          { id: "changes-often", label: "Generally in employment but changes jobs often" },
+          { id: "unstable", label: "Unstable employment history with regular periods of unemployment" }
+        ] %}
+        {% for option in historyOptions %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="history-{{ option.id }}" name="employment_history" type="radio" value="{{ option.id }}"{% if option.hint %} aria-describedby="history-{{ option.id }}-hint"{% endif %} data-aria-controls="conditional-history-{{ option.id }}">
+          <label class="govuk-label govuk-radios__label" for="history-{{ option.id }}">{{ option.label }}</label>
+          {% if option.hint %}
+          <div id="history-{{ option.id }}-hint" class="govuk-hint govuk-radios__hint">{{ option.hint }}</div>
+          {% endif %}
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-history-{{ option.id }}">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="history-{{ option.id }}-details">Give details (optional)</label>
+            <div class="govuk-hint">Include what type of work they've done before.</div>
+            <textarea class="govuk-textarea" id="history-{{ option.id }}-details" name="history_{{ option.id | replace('-', '_') }}_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="history-{{ option.id }}-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        {% endfor %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="history-unknown" name="employment_history" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="history-unknown">Unknown</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-ee-question="commitments" data-san-error-group="commitments" hidden>
+    <fieldset class="govuk-fieldset" id="commitments" aria-describedby="commitments-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Does Alex have any additional day-to-day commitments?</h2>
+      </legend>
+      <div id="commitments-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        {% set commitmentOptions = [
+          { id: "caring", label: "Caring responsibilities", details: true },
+          { id: "child", label: "Child responsibilities", details: true },
+          { id: "studying", label: "Studying", details: false },
+          { id: "volunteering", label: "Volunteering", details: true },
+          { id: "other", label: "Other", details: true },
+          { id: "unknown", label: "Unknown", details: false }
+        ] %}
+        {% for option in commitmentOptions %}
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="commitment-{{ option.id }}" name="commitments" type="checkbox" value="{{ option.id }}"{% if option.details %} data-aria-controls="conditional-commitment-{{ option.id }}"{% endif %}>
+          <label class="govuk-label govuk-checkboxes__label" for="commitment-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        {% if option.details %}
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-commitment-{{ option.id }}">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="commitment-{{ option.id }}-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="commitment-{{ option.id }}-details" name="commitment_{{ option.id }}_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="commitment-{{ option.id }}-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        <div class="govuk-checkboxes__divider">or</div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="commitment-none" name="commitments" type="checkbox" value="none" data-behaviour="exclusive">
+          <label class="govuk-label govuk-checkboxes__label" for="commitment-none">None</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-ee-question="qualifications" data-san-error-group="qualifications" hidden>
+    <fieldset class="govuk-fieldset" id="qualifications" aria-describedby="qualifications-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Does Alex have any completed academic, professional or vocational qualifications?</h2>
+      </legend>
+      <div id="qualifications-hint" class="govuk-hint">For example, GCSEs, A levels, degrees, apprenticeships, trade qualifications, driving qualifications or professional certifications.</div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="qualifications-yes" name="qualifications" type="radio" value="yes" data-aria-controls="conditional-qualifications-yes">
+          <label class="govuk-label govuk-radios__label" for="qualifications-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-qualifications-yes">
+          <div class="govuk-form-group" data-san-error-group="qualifications-details">
+            <label class="govuk-label" for="qualifications-yes-details">Give details</label>
+            <div id="qualifications-yes-details-hint" class="govuk-hint">Include the qualifications, subjects and grades, if known.</div>
+            <textarea class="govuk-textarea" id="qualifications-yes-details" name="qualifications_yes_details" rows="5" maxlength="400" aria-describedby="qualifications-yes-details-hint"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="qualifications-yes-details">You have 400 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="qualifications-no" name="qualifications" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="qualifications-no">No</label>
+        </div>
+        <div class="govuk-radios__divider">or</div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="qualifications-unknown" name="qualifications" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="qualifications-unknown">Unknown</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-ee-question="skills" data-san-error-group="skills" hidden>
+    <fieldset class="govuk-fieldset" id="skills">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">How would you describe Alex's skills for work?</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {% set skillOptions = [
+          { id: "strong", label: "Strong work-related skills", hint: "Has completed training, work experience or transferable skills that could help them get or keep a job." },
+          { id: "some", label: "Some work-related skills", hint: "Has limited work experience, partially completed training or skills that are not directly transferable." },
+          { id: "no", label: "No work-related skills", hint: "Has no skills or experience that could help them get a job." }
+        ] %}
+        {% for option in skillOptions %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="skills-{{ option.id }}" name="skills" type="radio" value="{{ option.id }}" aria-describedby="skills-{{ option.id }}-hint" data-aria-controls="conditional-skills-{{ option.id }}">
+          <label class="govuk-label govuk-radios__label" for="skills-{{ option.id }}">{{ option.label }}</label>
+          <div id="skills-{{ option.id }}-hint" class="govuk-hint govuk-radios__hint">{{ option.hint }}</div>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-skills-{{ option.id }}">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="skills-{{ option.id }}-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="skills-{{ option.id }}-details" name="skills_{{ option.id }}_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="skills-{{ option.id }}-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="govuk-form-group" data-ee-question="difficulties" data-san-error-group="difficulties" hidden>
+    <fieldset class="govuk-fieldset" id="difficulties" aria-describedby="difficulties-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Does Alex need support with reading, writing or numeracy?</h2>
+      </legend>
+      <div id="difficulties-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        {% set difficultyOptions = [
+          { id: "reading", label: "Yes, with reading" },
+          { id: "writing", label: "Yes, with writing" },
+          { id: "numeracy", label: "Yes, with numeracy" }
+        ] %}
+        {% for option in difficultyOptions %}
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="difficulty-{{ option.id }}" name="difficulties" type="checkbox" value="{{ option.id }}">
+          <label class="govuk-label govuk-checkboxes__label" for="difficulty-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        {% endfor %}
+        <div class="govuk-checkboxes__divider">or</div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="difficulty-none" name="difficulties" type="checkbox" value="none" data-behaviour="exclusive">
+          <label class="govuk-label govuk-checkboxes__label" for="difficulty-none">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  {% set experienceQuestions = [
+    { id: "employment-experience", question: "employment-experience", name: "employment_experience", heading: "What is Alex's overall experience of employment?" },
+    { id: "education-experience", question: "education-experience", name: "education_experience", heading: "What is Alex's experience of education?" }
+  ] %}
+  {% for experience in experienceQuestions %}
+  <div class="govuk-form-group" data-ee-question="{{ experience.question }}" data-san-error-group="{{ experience.id }}" hidden>
+    <fieldset class="govuk-fieldset" id="{{ experience.id }}">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">{{ experience.heading }}</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {% set experienceOptions = [
+          { id: "positive", label: "Positive" },
+          { id: "mostly-positive", label: "Mostly positive" },
+          { id: "mixed", label: "Positive and negative" },
+          { id: "mostly-negative", label: "Mostly negative" },
+          { id: "negative", label: "Negative" }
+        ] %}
+        {% for option in experienceOptions %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="{{ experience.id }}-{{ option.id }}" name="{{ experience.name }}" type="radio" value="{{ option.id }}" data-aria-controls="conditional-{{ experience.id }}-{{ option.id }}">
+          <label class="govuk-label govuk-radios__label" for="{{ experience.id }}-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-{{ experience.id }}-{{ option.id }}">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="{{ experience.id }}-{{ option.id }}-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="{{ experience.id }}-{{ option.id }}-details" name="{{ experience.name }}_{{ option.id | replace('-', '_') }}_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="{{ experience.id }}-{{ option.id }}-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        {% endfor %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="{{ experience.id }}-unknown" name="{{ experience.name }}" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="{{ experience.id }}-unknown">Unknown</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+  {% endfor %}
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "san-prison/includes/assessment-page-close.html" %}
+
+{% endblock %}
