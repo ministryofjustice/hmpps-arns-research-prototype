@@ -1,9 +1,8 @@
 //
 // Thinking, behaviours and attitudes — Prototype 1 (Community) Strengths and needs.
 //
-// Pages: thinking-behaviours.html (one question per screen) → thinking-behaviours-sexual.html
-// → thinking-behaviours-sexual-harm.html if there are sexual concerns
-// → thinking-behaviours-changes.html → summary.
+// Pages: thinking-behaviours.html → thinking-behaviours-changes.html
+// → thinking-behaviours-sexual.html → thinking-behaviours-sexual-harm.html if there are sexual concerns → summary.
 // Hidden in this prototype: attitude towards criminal justice staff.
 //
 
@@ -162,7 +161,8 @@ const questionsFormAnswered = (session) => visibleQuestions().every(([key]) => s
 const questionsAnswered = (session) => questionsFormAnswered(session) && !!session.thinkingChanges
 
 const continueThinkingHref = (session) => {
-  if (!questionsAnswered(session)) return 'thinking-behaviours.html'
+  if (!questionsFormAnswered(session)) return 'thinking-behaviours.html'
+  if (!session.thinkingChanges) return 'thinking-behaviours-changes.html'
   if (!session.thinkingSexualConcerns) return 'thinking-behaviours-sexual.html'
   if (session.thinkingSexualConcerns === 'yes' && !sexualHarmAnswered(session)) return 'thinking-behaviours-sexual-harm.html'
   return 'thinking-behaviours-summary.html'
@@ -209,6 +209,18 @@ const thinkingRows = (session) => {
 
   const parts = [`<dl class="govuk-summary-list san-summary-list">${questionRows(session, visibleQuestions(), 'thinking-behaviours')}</dl>`]
 
+  if (session.thinkingChanges) {
+    const lines = [labelled(CHANGES_LABELS, session.thinkingChanges)]
+    if (session.thinkingChangesDetails) lines.push(session.thinkingChangesDetails)
+    const changes = summaryRow(
+      'Does Alex want to make changes to their thinking, behaviours and attitudes?',
+      lines,
+      summaryChangeHref('thinking-behaviours-changes', 'changes'),
+      { secondaryFrom: 1 }
+    )
+    parts.push(`<dl class="govuk-summary-list san-summary-list">${changes}</dl>`)
+  }
+
   if (session.thinkingSexualConcerns) {
     const sexualRows = [
       summaryRow(
@@ -221,18 +233,6 @@ const thinkingRows = (session) => {
       sexualRows.push(questionRows(session, HARM_QUESTIONS, 'thinking-behaviours-sexual-harm'))
     }
     parts.push(`<dl class="govuk-summary-list san-summary-list">${sexualRows.join('')}</dl>`)
-  }
-
-  if (session.thinkingChanges) {
-    const lines = [labelled(CHANGES_LABELS, session.thinkingChanges)]
-    if (session.thinkingChangesDetails) lines.push(session.thinkingChangesDetails)
-    const changes = summaryRow(
-      'Does Alex want to make changes to their thinking, behaviours and attitudes?',
-      lines,
-      summaryChangeHref('thinking-behaviours', 'changes'),
-      { secondaryFrom: 1 }
-    )
-    parts.push(`<dl class="govuk-summary-list san-summary-list">${changes}</dl>`)
   }
 
   return parts.join('')
@@ -417,7 +417,6 @@ const restoreQuestions = (session) => {
     selectRadio(name, session[key])
     if (id === 'peers' && session.thinkingPeers) setField(`peers-${session.thinkingPeers}-details`, session.thinkingPeersDetails)
   })
-  restoreChanges(session)
 }
 
 const restoreChanges = (session) => {
@@ -490,20 +489,22 @@ const initThinking = () => {
   const pageName = page.getAttribute('data-tb-page')
   if (pageName === 'questions') restoreQuestions(session)
   if (pageName === 'changes') {
-    const query = fromSummary() ? '?from=summary' : ''
-    window.location.assign(`thinking-behaviours.html${query}#changes`)
-    return
+    if (!questionsFormAnswered(session)) {
+      window.location.assign('thinking-behaviours.html')
+      return
+    }
+    restoreChanges(session)
   }
   if (pageName === 'sexual') {
     if (!questionsAnswered(session)) {
-      window.location.assign('thinking-behaviours.html')
+      window.location.assign(continueThinkingHref(session))
       return
     }
     selectRadio('thinking_sexual_concerns', session.thinkingSexualConcerns)
   }
   if (pageName === 'sexual-harm') {
     if (!questionsAnswered(session)) {
-      window.location.assign('thinking-behaviours.html')
+      window.location.assign(continueThinkingHref(session))
       return
     }
     if (session.thinkingSexualConcerns !== 'yes') {
@@ -536,8 +537,8 @@ const initThinking = () => {
   document.getElementById('san-thinking-questions-form')?.addEventListener('submit', (event) => {
     event.preventDefault()
     revealCheckedConditionals()
-    const answers = { ...readQuestionAnswers(), ...readChangesAnswers() }
-    const errors = [...validateQuestions(answers), ...validateChanges(answers)]
+    const answers = readQuestionAnswers()
+    const errors = validateQuestions(answers)
     if (errors.length) {
       showErrors(errors)
       return
@@ -549,7 +550,7 @@ const initThinking = () => {
       window.location.assign('thinking-behaviours-summary.html')
       return
     }
-    window.location.assign('thinking-behaviours-sexual.html')
+    window.location.assign('thinking-behaviours-changes.html')
   })
 
   document.getElementById('san-thinking-changes-form')?.addEventListener('submit', (event) => {
@@ -563,7 +564,10 @@ const initThinking = () => {
     }
     clearErrors()
     setSanSession({ ...answers, thinkingComplete: false })
-    window.location.assign('thinking-behaviours-summary.html')
+    const next = getSanSession()
+    window.location.assign(fromSummary() && sexualHarmAnswered(next)
+      ? 'thinking-behaviours-summary.html'
+      : 'thinking-behaviours-sexual.html')
   })
 
   document.getElementById('san-thinking-sexual-form')?.addEventListener('submit', (event) => {
