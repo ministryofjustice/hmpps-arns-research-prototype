@@ -22,7 +22,7 @@ export const getSanVariant = (pathname = window.location.pathname) => (
 )
 
 export const isSanResearchJourney = (pathname = window.location.pathname) => (
-  pathname.startsWith(SAN_VARIANT_PATHS.community) || pathname.startsWith(SAN_VARIANT_PATHS.prison)
+  pathname.startsWith(SAN_VARIANT_PATHS.community)
 )
 
 const sessionKeyFor = (variant = getSanVariant()) => (

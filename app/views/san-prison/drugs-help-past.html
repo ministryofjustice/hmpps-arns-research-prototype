@@ -1,0 +1,25 @@
+{% extends "san-prison/layout.html" %}
+
+{% set pageName = "Drug use" %}
+{% set sanCaption = "Drug use" %}
+{% set sanSection = "drugs" %}
+{% set backLinkHref = "drugs-before.html" %}
+{% set helpQuestion = "Has anything helped Alex to stop or reduce their drug use in the past?" %}
+{% set helpHint = "Note any treatment or lifestyle changes that have helped them." %}
+
+{% block content %}
+
+{% include "san-prison/includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "san-prison/includes/content-header.html" %}
+
+<form id="san-drugs-help-form" novalidate data-du-page="help" data-du-help-version="past">
+  {% include "san-prison/includes/drugs-help-question.html" %}
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "san-prison/includes/assessment-page-close.html" %}
+
+{% endblock %}

@@ -1,0 +1,11 @@
+{# Caption or heading plus Complete/Incomplete tag. JS writes [data-san-status]. #}
+<div class="san-content-header{% if sanHeading %} san-content-header--heading{% else %} san-content-header--caption{% endif %}">
+  <div class="san-content-header__row">
+    {% if sanHeading %}
+    <h1 class="{{ sanHeadingClass | default('govuk-heading-l') }} govuk-!-margin-bottom-0">{{ sanHeading }}<span class="govuk-visually-hidden">, <span data-san-status-text>Incomplete</span></span></h1>
+    {% elif sanCaption %}
+    <p class="govuk-caption-l govuk-!-margin-bottom-0">{{ sanCaption }}<span class="govuk-visually-hidden">, <span data-san-status-text>Incomplete</span></span></p>
+    {% endif %}
+    <strong class="govuk-tag govuk-tag--light-grey san-status-tag" data-san-status aria-hidden="true">Incomplete</strong>
+  </div>
+</div>

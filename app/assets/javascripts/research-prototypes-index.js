@@ -8,6 +8,7 @@ import { resetPredictorsSessionForFreshStart as resetRoshSession } from './03/pr
 import { resetPredictorsSessionForFreshStart as resetDevSession } from './dev/predictors-assessment-session.js'
 import { resetSanSessionForFreshStart } from './san/session.js'
 import { resetSanSessionForFreshStart as resetSanResearchSession } from './san-research/session.js'
+import { resetSanSessionForFreshStart as resetSanPrisonSession } from './san-prison/session.js'
 
 const PROTOTYPE_BASE_PATHS = {
   '01': '/01',
@@ -25,7 +26,7 @@ const clearSessionForPrototypeVersion = (version) => {
   if (version === 'dev') return resetDevSession()
   if (version === 'san') return resetSanSessionForFreshStart()
   if (version === 'san-research') return resetSanResearchSession('community')
-  if (version === 'san-prison') return resetSanResearchSession('prison')
+  if (version === 'san-prison') return resetSanPrisonSession('prison')
   return clearPrototypeDataForTiering()
 }
 

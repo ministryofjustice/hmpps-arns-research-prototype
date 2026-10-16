@@ -1,0 +1,42 @@
+{% extends "san-prison/layout.html" %}
+
+{% set pageName = "Personal relationships and community" %}
+{% set sanCaption = "Personal relationships and community" %}
+{% set sanSection = "relationships" %}
+
+{% block content %}
+
+{% include "san-prison/includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "san-prison/includes/content-header.html" %}
+
+<form id="san-relationships-children-form" novalidate data-pc-page="children">
+  <div class="govuk-form-group" data-san-error-group="relationships-children">
+    <fieldset class="govuk-fieldset" id="relationships-children" aria-describedby="relationships-children-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">Are there any children in Alex's life?</h1>
+      </legend>
+      <div id="relationships-children-hint" class="govuk-hint">
+        <p class="govuk-hint">Include any children (under 18 years) they have regular contact with.</p>
+        <p class="govuk-hint govuk-!-margin-bottom-0">Also include any children they have parental responsibility for, but do not have regular contact with.</p>
+      </div>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="children-yes" name="relationships_children" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="children-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="children-no" name="relationships_children" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="children-no">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "san-prison/includes/assessment-page-close.html" %}
+
+{% endblock %}

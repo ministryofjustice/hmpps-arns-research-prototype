@@ -1,0 +1,24 @@
+{% extends "san-prison/layout.html" %}
+
+{% set pageName = "Alcohol use" %}
+{% set sanCaption = "Alcohol use" %}
+{% set sanSection = "alcohol" %}
+{% set backLinkHref = "alcohol.html" %}
+
+{% block content %}
+
+{% include "san-prison/includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "san-prison/includes/content-header.html" %}
+
+<form id="san-alcohol-background-form" novalidate data-al-page="background">
+  {% set pastIssuesAsPageHeading = true %}
+  {% include "san-prison/includes/alcohol-background-questions.html" %}
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "san-prison/includes/assessment-page-close.html" %}
+
+{% endblock %}

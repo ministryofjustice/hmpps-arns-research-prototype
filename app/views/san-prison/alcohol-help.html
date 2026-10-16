@@ -1,0 +1,25 @@
+{% extends "san-prison/layout.html" %}
+
+{% set pageName = "Alcohol use" %}
+{% set sanCaption = "Alcohol use" %}
+{% set sanSection = "alcohol" %}
+{% set backLinkHref = "alcohol-before.html" %}
+{% set helpQuestion = "Does anything help Alex to stop or reduce drinking alcohol?" %}
+{% set helpHint = "Consider strategies, treatment, people or support networks that may help." %}
+
+{% block content %}
+
+{% include "san-prison/includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "san-prison/includes/content-header.html" %}
+
+<form id="san-alcohol-help-form" novalidate data-al-page="help" data-al-help-version="present">
+  {% include "san-prison/includes/alcohol-help-question.html" %}
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "san-prison/includes/assessment-page-close.html" %}
+
+{% endblock %}

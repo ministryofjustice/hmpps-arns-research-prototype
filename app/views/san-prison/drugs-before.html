@@ -1,0 +1,125 @@
+{% extends "san-prison/layout.html" %}
+
+{% set pageName = "Drug use" %}
+{% set sanCaption = "Drug use" %}
+{% set sanSection = "drugs" %}
+{% set backLinkHref = "drugs-when.html" %}
+
+{% block content %}
+
+{% include "san-prison/includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "san-prison/includes/content-header.html" %}
+
+{% set drugOptions = [
+  { id: "amphetamines", label: "Amphetamines (including speed, methamphetamine)" },
+  { id: "benzodiazepines", label: "Benzodiazepines (including diazepam, temazepam)" },
+  { id: "cannabis", label: "Cannabis" },
+  { id: "cocaine", label: "Cocaine" },
+  { id: "crack-cocaine", label: "Crack cocaine" },
+  { id: "ecstasy", label: "Ecstasy (MDMA)" },
+  { id: "hallucinogens", label: "Hallucinogens" },
+  { id: "heroin", label: "Heroin" },
+  { id: "ketamine", label: "Ketamine" },
+  { id: "mephedrone", label: "Mephedrone (M, M-CAT, meow-meow)" },
+  { id: "methadone", label: "Methadone (not prescribed)" },
+  { id: "other-opiates", label: "Other opiates" },
+  { id: "prescribed-drugs", label: "Prescribed or over the counter drugs, such as paracetamol" },
+  { id: "solvents", label: "Solvents (including gases and glues)" },
+  { id: "steroids", label: "Steroids" },
+  { id: "synthetic-cannabinoids", label: "Synthetic cannabinoids (spice)" },
+  { id: "other", label: "Other" }
+] %}
+
+<form id="san-drugs-before-form" novalidate data-du-page="before">
+  <h1 class="govuk-heading-l">Drug use background</h1>
+
+  <div data-du-frequency-help hidden>
+    <details class="govuk-details">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">How to record frequency</span>
+      </summary>
+      <div class="govuk-details__text">
+        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Daily</strong>: uses every day or most days.</p>
+        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Weekly</strong>: uses once or more a week but not daily (for example, every Friday and Saturday night).</p>
+        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Monthly</strong>: uses once or more a month but not every week.</p>
+        <p class="govuk-body govuk-!-margin-bottom-0"><strong>Occasionally</strong>: uses less than once a month.</p>
+      </div>
+    </details>
+  </div>
+
+  <div data-du-recent-section hidden>
+    <h2 class="govuk-heading-m">Used in the last 6 months</h2>
+    <div data-du-recent-questions>
+    {% for drug in drugOptions %}
+    <div class="govuk-form-group{% if not loop.first %} san-question{% endif %}" data-du-frequency="{{ drug.id }}" data-san-error-group="frequency-{{ drug.id }}" hidden>
+      <fieldset class="govuk-fieldset" id="frequency-{{ drug.id }}">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          <h3 class="govuk-fieldset__heading">{{ drug.label }}</h3>
+        </legend>
+        <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-2">How often was Alex using this drug?</p>
+        <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+          {% for option in [
+            { id: "daily", label: "Daily" },
+            { id: "weekly", label: "Weekly" },
+            { id: "monthly", label: "Monthly" },
+            { id: "occasionally", label: "Occasionally" }
+          ] %}
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="frequency-{{ drug.id }}-{{ option.id }}" name="frequency_{{ drug.id }}" type="radio" value="{{ option.id }}">
+            <label class="govuk-label govuk-radios__label" for="frequency-{{ drug.id }}-{{ option.id }}">{{ option.label }}</label>
+          </div>
+          {% endfor %}
+        </div>
+      </fieldset>
+      <div class="govuk-form-group san-question" id="frequency-{{ drug.id }}-use">
+        <label class="govuk-label govuk-!-font-weight-bold" for="frequency-{{ drug.id }}-details">Give details about Alex's use of {{ drug.label[0] | lower }}{{ drug.label.slice(1) }} (optional)</label>
+        <div id="frequency-{{ drug.id }}-details-hint" class="govuk-hint">Consider why they started using, their history, and any triggers.</div>
+        <textarea class="govuk-textarea" id="frequency-{{ drug.id }}-details" name="frequency_{{ drug.id }}_details" rows="5" maxlength="2000" aria-describedby="frequency-{{ drug.id }}-details-hint"></textarea>
+        <div class="govuk-hint san-character-count" data-san-character-count="frequency-{{ drug.id }}-details">You have 2,000 characters remaining</div>
+      </div>
+    </div>
+    {% endfor %}
+    </div>
+    <div data-du-recent-extra></div>
+  </div>
+
+  <div class="san-question" data-du-older-section hidden>
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" data-du-older-break>
+    <h2 class="govuk-heading-m">Not used in the last 6 months</h2>
+    <div data-du-older-questions></div>
+    <div data-du-older-extra></div>
+  </div>
+
+  <div class="govuk-form-group san-question" data-du-inject-section data-san-error-group="injected">
+    <fieldset class="govuk-fieldset" id="injected" aria-describedby="injected-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Which drugs has Alex injected?</h2>
+      </legend>
+      <div id="injected-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        {% for drug in drugOptions %}
+        {% if drug.id not in ["cannabis", "ecstasy", "hallucinogens", "solvents", "synthetic-cannabinoids"] %}
+        <div class="govuk-checkboxes__item" data-du-inject="{{ drug.id }}" hidden>
+          <input class="govuk-checkboxes__input" id="injected-{{ drug.id }}" name="injected_drugs" type="checkbox" value="{{ drug.id }}">
+          <label class="govuk-label govuk-checkboxes__label" for="injected-{{ drug.id }}">{{ drug.label }}</label>
+        </div>
+        {% endif %}
+        {% endfor %}
+        <div data-du-inject-extra></div>
+        <div class="govuk-checkboxes__divider">or</div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="injected-none" name="injected_drugs" type="checkbox" value="none" data-behaviour="exclusive">
+          <label class="govuk-label govuk-checkboxes__label" for="injected-none">None</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "san-prison/includes/assessment-page-close.html" %}
+
+{% endblock %}

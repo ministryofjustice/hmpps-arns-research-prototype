@@ -1,0 +1,22 @@
+{% extends "san-prison/layout.html" %}
+
+{% set pageName = "Personal relationships and community" %}
+{% set sanCaption = "Personal relationships and community" %}
+{% set sanSection = "relationships" %}
+{% set backLinkHref = "personal-relationships-children.html" %}
+
+{% block content %}
+
+{% include "san-prison/includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "san-prison/includes/content-header.html" %}
+
+<div data-pc-page="children-list">
+  <h1 class="govuk-heading-l" data-pc-children-heading>You have added 1 child</h1>
+  <div data-pc-children-list></div>
+</div>
+
+{% include "san-prison/includes/assessment-page-close.html" %}
+
+{% endblock %}
