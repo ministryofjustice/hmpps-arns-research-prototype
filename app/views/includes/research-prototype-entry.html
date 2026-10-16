@@ -39,15 +39,20 @@
   <div class="assessment-research-prototypes__title-row">
     <ul class="govuk-list{% if not hideTitleBullets %} govuk-list--bullet{% endif %} assessment-research-prototypes__title-links{% if hideTitleBullets %} assessment-research-prototypes__title-links--plain{% endif %}{% if linksInactive %} assessment-research-prototypes__title-links--inactive{% endif %}"{% if linksInactive %} inert{% endif %}>
       <li class="assessment-research-prototypes__title-link-item{% if titleRegularWeight %} assessment-research-prototypes__title-link-item--regular{% endif %}">
-        {% if itemHeading or nestedHeading %}
-          <h3 class="govuk-heading-m {% if titleSectionHint %}govuk-!-margin-bottom-0{% else %}govuk-!-margin-bottom-2{% endif %}">
-            <a href="{{ href }}" class="govuk-link"{% if clearSessionOnStart %} data-clear-session-on-start{% if prototypeVersion %} data-prototype-version="{{ prototypeVersion }}"{% endif %}{% endif %}>{{ title }}</a>{% if titleHint %} <span class="govuk-hint">{{ titleHint }}</span>{% endif %}
-          </h3>
-        {% else %}
-          <h2 class="govuk-heading-m {% if titleSectionHint %}govuk-!-margin-bottom-0{% else %}govuk-!-margin-bottom-2{% endif %}">
-            <a href="{{ href }}" class="govuk-link"{% if clearSessionOnStart %} data-clear-session-on-start{% if prototypeVersion %} data-prototype-version="{{ prototypeVersion }}"{% endif %}{% endif %}>{{ title }}</a>{% if titleHint %} <span class="govuk-hint">{{ titleHint }}</span>{% endif %}
-          </h2>
-        {% endif %}
+        <div class="assessment-research-prototypes__title-link-heading">
+          {% if itemHeading or nestedHeading %}
+            <h3 class="govuk-heading-m {% if titleSectionHint %}govuk-!-margin-bottom-0{% else %}govuk-!-margin-bottom-2{% endif %}">
+              <a href="{{ href }}" class="govuk-link"{% if clearSessionOnStart %} data-clear-session-on-start{% if prototypeVersion %} data-prototype-version="{{ prototypeVersion }}"{% endif %}{% endif %}>{{ title }}</a>{% if titleHint %} <span class="govuk-hint">{{ titleHint }}</span>{% endif %}
+            </h3>
+          {% else %}
+            <h2 class="govuk-heading-m {% if titleSectionHint %}govuk-!-margin-bottom-0{% else %}govuk-!-margin-bottom-2{% endif %}">
+              <a href="{{ href }}" class="govuk-link"{% if clearSessionOnStart %} data-clear-session-on-start{% if prototypeVersion %} data-prototype-version="{{ prototypeVersion }}"{% endif %}{% endif %}>{{ title }}</a>{% if titleHint %} <span class="govuk-hint">{{ titleHint }}</span>{% endif %}
+            </h2>
+          {% endif %}
+          {% if titleLinkTag %}
+            <strong class="govuk-tag govuk-tag--yellow assessment-research-prototypes__link-tag">{{ titleLinkTag }}</strong>
+          {% endif %}
+        </div>
         {% if titleSectionHint %}
           {{ keyChangesDetails(titleSectionHint) }}
         {% endif %}
@@ -78,15 +83,20 @@
       {% endif %}
       {% if tertiaryTitle and tertiaryHref %}
         <li class="assessment-research-prototypes__title-link-item">
-          {% if itemHeading or nestedHeading %}
-            <h3 class="govuk-heading-m {% if tertiaryTitleSectionHint %}govuk-!-margin-bottom-0{% else %}govuk-!-margin-bottom-2{% endif %}">
-              <a href="{{ tertiaryHref }}" class="govuk-link"{% if tertiaryClearSessionOnStart %} data-clear-session-on-start{% if tertiaryPrototypeVersion %} data-prototype-version="{{ tertiaryPrototypeVersion }}"{% endif %}{% endif %}>{{ tertiaryTitle }}</a>{% if tertiaryTitleHint %} <span class="govuk-hint">{{ tertiaryTitleHint }}</span>{% endif %}
-            </h3>
-          {% else %}
-            <h2 class="govuk-heading-m {% if tertiaryTitleSectionHint %}govuk-!-margin-bottom-0{% else %}govuk-!-margin-bottom-2{% endif %}">
-              <a href="{{ tertiaryHref }}" class="govuk-link"{% if tertiaryClearSessionOnStart %} data-clear-session-on-start{% if tertiaryPrototypeVersion %} data-prototype-version="{{ tertiaryPrototypeVersion }}"{% endif %}{% endif %}>{{ tertiaryTitle }}</a>{% if tertiaryTitleHint %} <span class="govuk-hint">{{ tertiaryTitleHint }}</span>{% endif %}
-            </h2>
-          {% endif %}
+          <div class="assessment-research-prototypes__title-link-heading">
+            {% if itemHeading or nestedHeading %}
+              <h3 class="govuk-heading-m {% if tertiaryTitleSectionHint %}govuk-!-margin-bottom-0{% else %}govuk-!-margin-bottom-2{% endif %}">
+                <a href="{{ tertiaryHref }}" class="govuk-link"{% if tertiaryClearSessionOnStart %} data-clear-session-on-start{% if tertiaryPrototypeVersion %} data-prototype-version="{{ tertiaryPrototypeVersion }}"{% endif %}{% endif %}>{{ tertiaryTitle }}</a>{% if tertiaryTitleHint %} <span class="govuk-hint">{{ tertiaryTitleHint }}</span>{% endif %}
+              </h3>
+            {% else %}
+              <h2 class="govuk-heading-m {% if tertiaryTitleSectionHint %}govuk-!-margin-bottom-0{% else %}govuk-!-margin-bottom-2{% endif %}">
+                <a href="{{ tertiaryHref }}" class="govuk-link"{% if tertiaryClearSessionOnStart %} data-clear-session-on-start{% if tertiaryPrototypeVersion %} data-prototype-version="{{ tertiaryPrototypeVersion }}"{% endif %}{% endif %}>{{ tertiaryTitle }}</a>{% if tertiaryTitleHint %} <span class="govuk-hint">{{ tertiaryTitleHint }}</span>{% endif %}
+              </h2>
+            {% endif %}
+            {% if tertiaryTitleLinkTag %}
+              <strong class="govuk-tag govuk-tag--yellow assessment-research-prototypes__link-tag">{{ tertiaryTitleLinkTag }}</strong>
+            {% endif %}
+          </div>
           {% if tertiaryTitleSectionHint %}
             {{ keyChangesDetails(tertiaryTitleSectionHint) }}
           {% endif %}
@@ -94,15 +104,20 @@
       {% endif %}
       {% if quaternaryTitle and quaternaryHref %}
         <li class="assessment-research-prototypes__title-link-item">
-          {% if itemHeading or nestedHeading %}
-            <h3 class="govuk-heading-m {% if quaternaryTitleSectionHint %}govuk-!-margin-bottom-0{% else %}govuk-!-margin-bottom-2{% endif %}">
-              <a href="{{ quaternaryHref }}" class="govuk-link"{% if quaternaryClearSessionOnStart %} data-clear-session-on-start{% if quaternaryPrototypeVersion %} data-prototype-version="{{ quaternaryPrototypeVersion }}"{% endif %}{% endif %}>{{ quaternaryTitle }}</a>{% if quaternaryTitleHint %} <span class="govuk-hint">{{ quaternaryTitleHint }}</span>{% endif %}
-            </h3>
-          {% else %}
-            <h2 class="govuk-heading-m {% if quaternaryTitleSectionHint %}govuk-!-margin-bottom-0{% else %}govuk-!-margin-bottom-2{% endif %}">
-              <a href="{{ quaternaryHref }}" class="govuk-link"{% if quaternaryClearSessionOnStart %} data-clear-session-on-start{% if quaternaryPrototypeVersion %} data-prototype-version="{{ quaternaryPrototypeVersion }}"{% endif %}{% endif %}>{{ quaternaryTitle }}</a>{% if quaternaryTitleHint %} <span class="govuk-hint">{{ quaternaryTitleHint }}</span>{% endif %}
-            </h2>
-          {% endif %}
+          <div class="assessment-research-prototypes__title-link-heading">
+            {% if itemHeading or nestedHeading %}
+              <h3 class="govuk-heading-m {% if quaternaryTitleSectionHint %}govuk-!-margin-bottom-0{% else %}govuk-!-margin-bottom-2{% endif %}">
+                <a href="{{ quaternaryHref }}" class="govuk-link"{% if quaternaryClearSessionOnStart %} data-clear-session-on-start{% if quaternaryPrototypeVersion %} data-prototype-version="{{ quaternaryPrototypeVersion }}"{% endif %}{% endif %}>{{ quaternaryTitle }}</a>{% if quaternaryTitleHint %} <span class="govuk-hint">{{ quaternaryTitleHint }}</span>{% endif %}
+              </h3>
+            {% else %}
+              <h2 class="govuk-heading-m {% if quaternaryTitleSectionHint %}govuk-!-margin-bottom-0{% else %}govuk-!-margin-bottom-2{% endif %}">
+                <a href="{{ quaternaryHref }}" class="govuk-link"{% if quaternaryClearSessionOnStart %} data-clear-session-on-start{% if quaternaryPrototypeVersion %} data-prototype-version="{{ quaternaryPrototypeVersion }}"{% endif %}{% endif %}>{{ quaternaryTitle }}</a>{% if quaternaryTitleHint %} <span class="govuk-hint">{{ quaternaryTitleHint }}</span>{% endif %}
+              </h2>
+            {% endif %}
+            {% if quaternaryTitleLinkTag %}
+              <strong class="govuk-tag govuk-tag--yellow assessment-research-prototypes__link-tag">{{ quaternaryTitleLinkTag }}</strong>
+            {% endif %}
+          </div>
           {% if quaternaryTitleSectionHint %}
             {{ keyChangesDetails(quaternaryTitleSectionHint) }}
           {% endif %}
@@ -110,15 +125,20 @@
       {% endif %}
       {% if quinaryTitle and quinaryHref %}
         <li class="assessment-research-prototypes__title-link-item{% if quinaryInactive %} assessment-research-prototypes__title-link-item--inactive{% endif %}">
-          {% if itemHeading or nestedHeading %}
-            <h3 class="govuk-heading-m {% if quinaryTitleSectionHint %}govuk-!-margin-bottom-0{% else %}govuk-!-margin-bottom-2{% endif %}">
-              <a href="{{ quinaryHref }}" class="govuk-link"{% if quinaryInactive %} aria-disabled="true" tabindex="-1"{% endif %}{% if quinaryClearSessionOnStart %} data-clear-session-on-start{% if quinaryPrototypeVersion %} data-prototype-version="{{ quinaryPrototypeVersion }}"{% endif %}{% endif %}>{{ quinaryTitle }}</a>{% if quinaryTitleHint %} <span class="govuk-hint">{{ quinaryTitleHint }}</span>{% endif %}
-            </h3>
-          {% else %}
-            <h2 class="govuk-heading-m {% if quinaryTitleSectionHint %}govuk-!-margin-bottom-0{% else %}govuk-!-margin-bottom-2{% endif %}">
-              <a href="{{ quinaryHref }}" class="govuk-link"{% if quinaryInactive %} aria-disabled="true" tabindex="-1"{% endif %}{% if quinaryClearSessionOnStart %} data-clear-session-on-start{% if quinaryPrototypeVersion %} data-prototype-version="{{ quinaryPrototypeVersion }}"{% endif %}{% endif %}>{{ quinaryTitle }}</a>{% if quinaryTitleHint %} <span class="govuk-hint">{{ quinaryTitleHint }}</span>{% endif %}
-            </h2>
-          {% endif %}
+          <div class="assessment-research-prototypes__title-link-heading">
+            {% if itemHeading or nestedHeading %}
+              <h3 class="govuk-heading-m {% if quinaryTitleSectionHint %}govuk-!-margin-bottom-0{% else %}govuk-!-margin-bottom-2{% endif %}">
+                <a href="{{ quinaryHref }}" class="govuk-link"{% if quinaryInactive %} aria-disabled="true" tabindex="-1"{% endif %}{% if quinaryClearSessionOnStart %} data-clear-session-on-start{% if quinaryPrototypeVersion %} data-prototype-version="{{ quinaryPrototypeVersion }}"{% endif %}{% endif %}>{{ quinaryTitle }}</a>{% if quinaryTitleHint %} <span class="govuk-hint">{{ quinaryTitleHint }}</span>{% endif %}
+              </h3>
+            {% else %}
+              <h2 class="govuk-heading-m {% if quinaryTitleSectionHint %}govuk-!-margin-bottom-0{% else %}govuk-!-margin-bottom-2{% endif %}">
+                <a href="{{ quinaryHref }}" class="govuk-link"{% if quinaryInactive %} aria-disabled="true" tabindex="-1"{% endif %}{% if quinaryClearSessionOnStart %} data-clear-session-on-start{% if quinaryPrototypeVersion %} data-prototype-version="{{ quinaryPrototypeVersion }}"{% endif %}{% endif %}>{{ quinaryTitle }}</a>{% if quinaryTitleHint %} <span class="govuk-hint">{{ quinaryTitleHint }}</span>{% endif %}
+              </h2>
+            {% endif %}
+            {% if quinaryTitleLinkTag %}
+              <strong class="govuk-tag govuk-tag--yellow assessment-research-prototypes__link-tag">{{ quinaryTitleLinkTag }}</strong>
+            {% endif %}
+          </div>
           {% if quinaryTitleSectionHint %}
             {{ keyChangesDetails(quinaryTitleSectionHint) }}
           {% endif %}

@@ -1,4 +1,4 @@
-// Topic subnavs inside UX documentation tabs on /dev/ux-handover.html
+// Topic subnavs inside a tab panel. Used on /dev/ux-handover.html and /san.
 
 function initTopicSubnav (subnav) {
   const panelRoot = subnav.closest('.govuk-tabs__panel')
@@ -24,6 +24,7 @@ function initTopicSubnav (subnav) {
       const isActive = panel.getAttribute('data-topic-panel') === topicId
       panel.hidden = !isActive
       panel.classList.toggle('ux-docs-topic-block--hidden', !isActive)
+      panel.classList.toggle('assessment-home-topic--hidden', !isActive)
     })
   }
 
@@ -72,5 +73,5 @@ function initTopicSubnav (subnav) {
 }
 
 export function initUxHandoverTopicSubnav () {
-  document.querySelectorAll('[data-ux-docs-topic-subnav]').forEach(initTopicSubnav)
+  document.querySelectorAll('[data-ux-docs-topic-subnav], [data-topic-subnav]').forEach(initTopicSubnav)
 }

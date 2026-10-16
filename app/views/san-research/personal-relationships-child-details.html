@@ -156,15 +156,26 @@
 
   <div class="govuk-form-group govuk-!-margin-top-6" data-san-error-group="child-parental-responsibility">
     <fieldset class="govuk-fieldset" id="child-parental-responsibility">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Does Alex have parental responsibility for this child?</legend>
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Does Alex have any parental responsibility for this child?</legend>
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="child-parental-responsibility-yes" name="child_parental_responsibility" type="radio" value="yes">
+          <input class="govuk-radios__input" id="child-parental-responsibility-yes" name="child_parental_responsibility" type="radio" value="yes" data-aria-controls="conditional-child-parental-responsibility-yes">
           <label class="govuk-label govuk-radios__label" for="child-parental-responsibility-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-child-parental-responsibility-yes">
+          <div class="govuk-form-group" data-san-error-group="child-parental-responsibility-details">
+            <label class="govuk-label" for="child-parental-responsibility-details">Give details</label>
+            <textarea class="govuk-textarea" id="child-parental-responsibility-details" name="child_parental_responsibility_details" rows="3" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="child-parental-responsibility-details">You have 2,000 characters remaining</div>
+          </div>
         </div>
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="child-parental-responsibility-no" name="child_parental_responsibility" type="radio" value="no">
           <label class="govuk-label govuk-radios__label" for="child-parental-responsibility-no">No</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="child-parental-responsibility-unknown" name="child_parental_responsibility" type="radio" value="unknown">
+          <label class="govuk-label govuk-radios__label" for="child-parental-responsibility-unknown">Unknown</label>
         </div>
       </div>
     </fieldset>

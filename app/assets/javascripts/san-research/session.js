@@ -1,13 +1,37 @@
 //
-// Session storage for the Strengths and needs research prototype.
-// Kept separate from the private beta reference session.
+// Session storage for SAN research journeys (Community and Prison).
+// Community uses `sanResearchAssessment`; Prison uses `sanPrisonAssessment`.
+// Neither collides with the `/san` private beta reference (`sanAssessment`).
+//
+// Typical fields: answers for the current section, `*Complete` flags, and
+// `sectionScreens` (last page in each section for the side nav).
 //
 
-const SAN_SESSION_KEY = 'sanResearchAssessment'
+export const SAN_SESSION_KEYS = {
+  community: 'sanResearchAssessment',
+  prison: 'sanPrisonAssessment'
+}
+
+export const SAN_VARIANT_PATHS = {
+  community: '/san-research/',
+  prison: '/san-prison/'
+}
+
+export const getSanVariant = (pathname = window.location.pathname) => (
+  pathname.startsWith(SAN_VARIANT_PATHS.prison) ? 'prison' : 'community'
+)
+
+export const isSanResearchJourney = (pathname = window.location.pathname) => (
+  pathname.startsWith(SAN_VARIANT_PATHS.community) || pathname.startsWith(SAN_VARIANT_PATHS.prison)
+)
+
+const sessionKeyFor = (variant = getSanVariant()) => (
+  SAN_SESSION_KEYS[variant] || SAN_SESSION_KEYS.community
+)
 
 export const getSanSession = () => {
   try {
-    const stored = sessionStorage.getItem(SAN_SESSION_KEY)
+    const stored = sessionStorage.getItem(sessionKeyFor())
     return stored ? JSON.parse(stored) : {}
   } catch (error) {
     return {}
@@ -16,15 +40,15 @@ export const getSanSession = () => {
 
 export const setSanSession = (updates) => {
   const current = getSanSession()
-  sessionStorage.setItem(SAN_SESSION_KEY, JSON.stringify({ ...current, ...updates }))
+  sessionStorage.setItem(sessionKeyFor(), JSON.stringify({ ...current, ...updates }))
 }
 
 export const replaceSanSession = (session) => {
-  sessionStorage.setItem(SAN_SESSION_KEY, JSON.stringify(session))
+  sessionStorage.setItem(sessionKeyFor(), JSON.stringify(session))
 }
 
-export const clearSanSession = () => {
-  sessionStorage.removeItem(SAN_SESSION_KEY)
+export const clearSanSession = (variant = getSanVariant()) => {
+  sessionStorage.removeItem(sessionKeyFor(variant))
 }
 
 export const sectionLinkHref = (section, fallback) => {
@@ -40,17 +64,23 @@ export const rememberSectionScreen = (section, screen) => {
   setSanSession({ sectionScreens: { ...current, [section]: screen } })
 }
 
-export const resetSanSessionForFreshStart = async () => {
-  clearSanSession()
+export const resetSanSessionForFreshStart = async (variant = 'community') => {
+  const resolved = variant === 'prison' ? 'prison' : 'community'
+  const key = sessionKeyFor(resolved)
+  const pathPrefix = SAN_VARIANT_PATHS[resolved]
+
+  clearSanSession(resolved)
 
   const keysToRemove = []
   for (let i = 0; i < sessionStorage.length; i += 1) {
-    const key = sessionStorage.key(i)
-    if (key && (key.includes('/san-research/') || key === SAN_SESSION_KEY)) {
-      keysToRemove.push(key)
+    const storageKey = sessionStorage.key(i)
+    if (storageKey && (storageKey.includes(pathPrefix) || storageKey === key)) {
+      keysToRemove.push(storageKey)
     }
   }
-  keysToRemove.forEach((key) => sessionStorage.removeItem(key))
+  keysToRemove.forEach((storageKey) => sessionStorage.removeItem(storageKey))
+
+  if (resolved !== 'community') return
 
   try {
     await fetch('/manage-prototype/clear-data', {

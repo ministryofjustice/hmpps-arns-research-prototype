@@ -1,10 +1,17 @@
 //
-// Employment and education section of the Strengths and needs prototype
+// Employment and education — Prototype 1 (Community) Strengths and needs.
+//
+// Pages: employment.html → employment-job.html (if unavailable or unemployed)
+// then employment-details.html?step=… then employment-changes.html → summary.
+// Hidden in this prototype: EF2 job sector, overall experience of employment/education.
+// EF4 and EF5 are replaced by EF6 qualifications, then EF7 skills.
 //
 
-import { getSanSession, replaceSanSession, sectionLinkHref, setSanSession } from './session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, focusTargetField, labelled, scrollToHash } from './form.js'
+import { getSanSession, isSanResearchJourney, replaceSanSession, setSanSession } from './session.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, showErrors, focusTargetField, labelled, scrollToHash, CHANGES_LABELS, YES_NO_UNKNOWN, revealSoon, checkedValue, checkedValues, fieldValue, selectRadio, selectChecks, setField, setHidden, fromSummary, summaryChangeHref } from './form.js'
+import { applySanProgress } from './progress.js'
 
+// Pre-filled session for ?example=complete.
 const EXAMPLE_COMPLETE = {
   employmentStatus: 'employed-or-self-employed',
   employmentSubtype: '',
@@ -66,8 +73,6 @@ const COMMITMENT_LABELS = {
   none: 'None'
 }
 
-const YES_NO_UNKNOWN = { yes: 'Yes', no: 'No', unknown: 'Unknown' }
-
 const SKILLS_LABELS = {
   strong: 'Strong work-related skills',
   some: 'Some work-related skills',
@@ -101,18 +106,6 @@ const EXPERIENCE_LABELS = {
   'mostly-negative': 'Mostly negative',
   negative: 'Negative',
   unknown: 'Unknown'
-}
-
-const CHANGES_LABELS = {
-  maintain: 'I have already made positive changes and want to maintain them',
-  active: 'I am actively making changes',
-  'know-how': 'I want to make changes and know how to',
-  'need-help': 'I want to make changes but need help',
-  thinking: 'I am thinking about making changes',
-  no: 'I do not want to make changes',
-  'no-answer': 'I do not want to answer',
-  'not-present': 'Alex is not present',
-  'not-applicable': 'Not applicable'
 }
 
 // EF2 (job sector), overall experience of employment and overall experience of education are hidden in this prototype.
@@ -161,176 +154,10 @@ const difficultyQuestion = (area) => {
   return `How much support does Alex need with ${DIFFICULTY_AREA_LABELS[area] || area}?`
 }
 
-const isInHiddenConditional = (element) => {
-  return !!element.closest('.govuk-radios__conditional--hidden, .govuk-checkboxes__conditional--hidden, .san-is-hidden, [hidden]')
-}
+// Side nav ticks and resume links for every SAN section.
+const applyProgress = (session) => applySanProgress(session, { current: 'employment' })
 
-const revealSoon = () => {
-  revealCheckedConditionals()
-  window.setTimeout(revealCheckedConditionals, 50)
-  window.setTimeout(revealCheckedConditionals, 300)
-}
-
-const checkedValue = (name) => {
-  const selected = Array.from(document.querySelectorAll(`input[type="radio"][name="${name}"]`))
-    .find((input) => input.checked && !isInHiddenConditional(input))
-  return selected ? selected.value : ''
-}
-
-const checkedValues = (name) => {
-  return Array.from(document.querySelectorAll(`input[type="checkbox"][name="${name}"]`))
-    .filter((input) => input.checked && !isInHiddenConditional(input))
-    .map((input) => input.value)
-}
-
-const fieldValue = (id) => {
-  const field = document.getElementById(id)
-  if (!(field instanceof HTMLTextAreaElement) || isInHiddenConditional(field)) return ''
-  return field.value.trim()
-}
-
-const selectRadio = (name, value) => {
-  if (!value) return
-  const input = document.querySelector(`input[type="radio"][name="${CSS.escape(name)}"][value="${CSS.escape(value)}"]`)
-  if (input instanceof HTMLInputElement) input.checked = true
-}
-
-const selectChecks = (name, values) => {
-  if (!Array.isArray(values)) return
-  document.querySelectorAll(`input[type="checkbox"][name="${CSS.escape(name)}"]`).forEach((input) => {
-    if (input instanceof HTMLInputElement) input.checked = values.includes(input.value)
-  })
-}
-
-const setField = (id, value) => {
-  const field = document.getElementById(id)
-  if (field instanceof HTMLTextAreaElement) field.value = value || ''
-}
-
-const showErrors = (errors) => {
-  clearErrors()
-  if (!errors.length) return
-
-  errors.forEach((error) => {
-    const group = document.querySelector(`[data-san-error-group="${error.group}"]`)
-    if (!group) return
-    group.classList.add('govuk-form-group--error')
-    const message = document.createElement('p')
-    message.className = 'govuk-error-message'
-    message.innerHTML = `<span class="govuk-visually-hidden">Error:</span> ${escapeHtml(error.text)}`
-    const fieldset = group.querySelector(':scope > fieldset, :scope > .govuk-fieldset')
-    const controls = fieldset ? fieldset.querySelector('.govuk-radios, .govuk-checkboxes, .govuk-hint') : null
-    if (fieldset && controls) fieldset.insertBefore(message, controls)
-    else if (fieldset) fieldset.prepend(message)
-    else group.prepend(message)
-  })
-
-  const mount = document.querySelector('[data-san-error-summary]')
-  if (!mount) return
-  const items = errors.map((error) => `<li><a href="${escapeHtml(error.href)}">${escapeHtml(error.text)}</a></li>`).join('')
-  mount.hidden = false
-  mount.innerHTML = `<div class="govuk-error-summary" data-module="govuk-error-summary" tabindex="-1">
-    <div role="alert">
-      <h2 class="govuk-error-summary__title">There is a problem</h2>
-      <div class="govuk-error-summary__body">
-        <ul class="govuk-list govuk-error-summary__list">${items}</ul>
-      </div>
-    </div>
-  </div>`
-  const summary = mount.querySelector('.govuk-error-summary')
-  if (summary instanceof HTMLElement) summary.focus()
-}
-
-const applyProgress = (session) => {
-  const complete = !!session.employmentComplete
-  const label = complete ? 'Complete' : 'Incomplete'
-
-  document.querySelectorAll('[data-san-status]').forEach((tag) => {
-    tag.textContent = label
-    tag.classList.toggle('govuk-tag--light-blue', complete)
-    tag.classList.toggle('govuk-tag--light-grey', !complete)
-  })
-
-  document.querySelectorAll('[data-san-status-text]').forEach((node) => {
-    node.textContent = label
-  })
-
-  document.querySelectorAll('[data-section-complete="employment"]').forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', complete)
-  })
-
-  const link = document.querySelector('[data-san-section-link="employment"]')
-  if (link && session.employmentStatus) {
-    link.setAttribute('href', sectionLinkHref('employment', 'employment-summary.html'))
-  }
-
-  const accommodationComplete = !!session.accommodationComplete
-  document.querySelectorAll('[data-section-complete="accommodation"]').forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', accommodationComplete)
-  })
-  const accommodationLink = document.querySelector('[data-san-section-link="accommodation"]')
-  if (accommodationLink && session.accommodationType) {
-    accommodationLink.setAttribute('href', sectionLinkHref('accommodation', 'accommodation-summary.html'))
-  }
-
-  const financesComplete = !!session.financeComplete
-  document.querySelectorAll('[data-section-complete="finances"]').forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', financesComplete)
-  })
-  const financesLink = document.querySelector('[data-san-section-link="finances"]')
-  if (financesLink && Array.isArray(session.financeIncome) && session.financeIncome.length) {
-    financesLink.setAttribute('href', sectionLinkHref('finances', 'finances-summary.html'))
-  }
-
-  document.querySelectorAll('[data-section-complete="drugs"]').forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', !!session.drugComplete)
-  })
-  const drugsLink = document.querySelector('[data-san-section-link="drugs"]')
-  if (drugsLink && session.drugUse) {
-    drugsLink.setAttribute('href', sectionLinkHref('drugs', 'drugs-summary.html'))
-  }
-
-  document.querySelectorAll('[data-section-complete="alcohol"]').forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', !!session.alcoholComplete)
-  })
-  const alcoholLink = document.querySelector('[data-san-section-link="alcohol"]')
-  if (alcoholLink && session.alcoholUse) {
-    alcoholLink.setAttribute('href', sectionLinkHref('alcohol', 'alcohol-summary.html'))
-  }
-
-  document.querySelectorAll('[data-section-complete="health"]').forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', !!session.healthComplete)
-  })
-  const healthLink = document.querySelector('[data-san-section-link="health"]')
-  if (healthLink && session.healthPhysical) {
-    healthLink.setAttribute('href', sectionLinkHref('health', 'health-summary.html'))
-  }
-
-  document.querySelectorAll('[data-section-complete="relationships"]').forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', !!session.relationshipsComplete)
-  })
-  const relationshipsLink = document.querySelector('[data-san-section-link="relationships"]')
-  if (relationshipsLink && Array.isArray(session.relationshipsChildren) && session.relationshipsChildren.length > 0) {
-    relationshipsLink.setAttribute('href', sectionLinkHref('relationships', 'personal-relationships-summary.html'))
-  }
-
-  document.querySelectorAll('[data-section-complete="thinking"]').forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', !!session.thinkingComplete)
-  })
-  const thinkingLink = document.querySelector('[data-san-section-link="thinking"]')
-  if (thinkingLink && session.thinkingConsequences) {
-    thinkingLink.setAttribute('href', sectionLinkHref('thinking', 'thinking-behaviours-summary.html'))
-  }
-
-  document.querySelectorAll('[data-section-complete="offence"]').forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', !!session.offenceComplete)
-  })
-  const offenceLink = document.querySelector('[data-san-section-link="offence"]')
-  if (offenceLink && session.offenceDescription) {
-    offenceLink.setAttribute('href', sectionLinkHref('offence', 'offence-analysis-summary.html'))
-  }
-}
-
+// Journey completeness and next-page hrefs.
 const detailsFormAnswered = (session) => {
   const route = employmentRoute(session)
   if (!route) return false
@@ -371,7 +198,6 @@ const continueDetailsHref = (session) => {
   return 'employment-details'
 }
 
-const summaryChangeHref = (page, hash = '') => `${page}?from=summary${hash ? `#${hash}` : ''}`
 
 const summaryRow = (question, lines, href, options = {}) => {
   const value = lines.filter(Boolean).map((line, index) => {
@@ -580,12 +406,7 @@ const showSelectedDifficulties = (areas) => {
   })
 }
 
-const setHidden = (element, hidden) => {
-  if (!element) return
-  element.hidden = hidden
-  element.classList.toggle('san-is-hidden', hidden)
-}
-
+// Check-your-answers for the questions tab and analysis tab.
 const renderSummary = (session) => {
   const mount = document.querySelector('[data-ee-summary]')
   if (!mount) return
@@ -652,6 +473,7 @@ const openAnalysisTab = () => {
   if (tab instanceof HTMLElement) tab.click()
 }
 
+// Read and validate the current page.
 const readStatusAnswers = () => {
   const employmentStatus = checkedValue('employment_status')
   return {
@@ -942,8 +764,6 @@ const restoreAnalysis = (session) => {
   if (session.eeAnalysisReoffending) setField(`analysis-reoffending-${session.eeAnalysisReoffending}-details`, session.eeAnalysisReoffendingDetails)
 }
 
-const fromSummary = () => new URLSearchParams(window.location.search).get('from') === 'summary'
-
 const ensureBackLink = (href) => {
   let back = document.querySelector('.assessment-layout__back-link')
   const column = document.querySelector('.govuk-grid-column-two-thirds-from-desktop')
@@ -968,6 +788,7 @@ const seedExample = () => {
   window.history.replaceState({}, '', next)
 }
 
+// Wire up whichever employment page is currently loaded.
 const initEmployment = () => {
   const page = document.querySelector('[data-ee-page]')
   if (!page) return
@@ -1194,6 +1015,6 @@ const initEmployment = () => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  if (!window.location.pathname.startsWith("/san-research/")) return
+  if (!isSanResearchJourney()) return
   initEmployment()
 })

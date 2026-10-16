@@ -1,10 +1,18 @@
 //
-// Drug use section of the Strengths and needs prototype
+// Drug use — Prototype 1 (Community) Strengths and needs.
+//
+// Pages: drugs.html
+//   no use → summary (analysis not required)
+//   yes    → types → when (if used in last 6 months) → before → injected (injectable drugs)
+//         → help / help-past → changes → summary
+// Extra named drugs can be added when "Other" is selected.
 //
 
-import { getSanSession, replaceSanSession, sectionLinkHref, setSanSession } from './session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, focusTargetField, labelled, scrollToHash } from './form.js'
+import { getSanSession, isSanResearchJourney, replaceSanSession, setSanSession } from './session.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, showErrors, focusTargetField, labelled, scrollToHash, CHANGES_LABELS, YES_NO, revealSoon, checkedValue, checkedValues, fieldValue, selectRadio, selectChecks, setField, setHidden, fromSummary, summaryChangeHref } from './form.js'
+import { applySanProgress } from './progress.js'
 
+// Display labels. Extra named drugs are stored in session.extraDrugs.
 const DRUG_LABELS = {
   amphetamines: 'Amphetamines (including speed, methamphetamine)',
   benzodiazepines: 'Benzodiazepines (including diazepam, temazepam)',
@@ -84,8 +92,6 @@ const INJECTED_WHEN_LABELS = {
   'more-than-six': 'More than 6 months ago'
 }
 
-const YES_NO = { yes: 'Yes', no: 'No' }
-
 const MOTIVATION_LABELS = {
   'does-not-show': 'Does not show motivation to stop or reduce',
   some: 'Shows some motivation to stop or reduce',
@@ -93,18 +99,7 @@ const MOTIVATION_LABELS = {
   unknown: 'Unknown'
 }
 
-const CHANGES_LABELS = {
-  maintain: 'I have already made positive changes and want to maintain them',
-  active: 'I am actively making changes',
-  'know-how': 'I want to make changes and know how to',
-  'need-help': 'I want to make changes but need help',
-  thinking: 'I am thinking about making changes',
-  no: 'I do not want to make changes',
-  'no-answer': 'I do not want to answer',
-  'not-present': 'Alex is not present',
-  'not-applicable': 'Not applicable'
-}
-
+// Pre-filled session for ?example=complete.
 const EXAMPLE_COMPLETE = {
   drugUse: 'yes',
   drugTypes: ['heroin', 'cannabis', 'hallucinogens'],
@@ -142,178 +137,10 @@ const EXAMPLE_COMPLETE = {
   drugComplete: true
 }
 
-const isInHiddenConditional = (element) => {
-  return !!element.closest('.govuk-radios__conditional--hidden, .govuk-checkboxes__conditional--hidden, .san-is-hidden, [hidden]')
-}
+// Side nav ticks and resume links for every SAN section.
+const applyProgress = (session) => applySanProgress(session, { current: 'drugs' })
 
-const revealSoon = () => {
-  revealCheckedConditionals()
-  window.setTimeout(revealCheckedConditionals, 50)
-  window.setTimeout(revealCheckedConditionals, 300)
-}
-
-const checkedValue = (name) => {
-  const selected = Array.from(document.querySelectorAll(`input[type="radio"][name="${name}"]`))
-    .find((input) => input.checked && !isInHiddenConditional(input))
-  return selected ? selected.value : ''
-}
-
-const checkedValues = (name) => {
-  return Array.from(document.querySelectorAll(`input[type="checkbox"][name="${name}"]`))
-    .filter((input) => input.checked && !isInHiddenConditional(input))
-    .map((input) => input.value)
-}
-
-const fieldValue = (id) => {
-  const field = document.getElementById(id)
-  if (!(field instanceof HTMLTextAreaElement) || isInHiddenConditional(field)) return ''
-  return field.value.trim()
-}
-
-const selectRadio = (name, value) => {
-  if (!value) return
-  const input = document.querySelector(`input[type="radio"][name="${CSS.escape(name)}"][value="${CSS.escape(value)}"]`)
-  if (input instanceof HTMLInputElement) input.checked = true
-}
-
-const selectChecks = (name, values) => {
-  if (!Array.isArray(values)) return
-  document.querySelectorAll(`input[type="checkbox"][name="${CSS.escape(name)}"]`).forEach((input) => {
-    if (input instanceof HTMLInputElement) input.checked = values.includes(input.value)
-  })
-}
-
-const setField = (id, value) => {
-  const field = document.getElementById(id)
-  if (field instanceof HTMLTextAreaElement) field.value = value || ''
-}
-
-const showErrors = (errors) => {
-  clearErrors()
-  if (!errors.length) return
-
-  errors.forEach((error) => {
-    const group = document.querySelector(`[data-san-error-group="${error.group}"]`)
-    if (!group) return
-    group.classList.add('govuk-form-group--error')
-    const message = document.createElement('p')
-    message.className = 'govuk-error-message'
-    message.innerHTML = `<span class="govuk-visually-hidden">Error:</span> ${escapeHtml(error.text)}`
-    const fieldset = group.querySelector(':scope > fieldset, :scope > .govuk-fieldset')
-    const controls = fieldset ? fieldset.querySelector('.govuk-radios, .govuk-checkboxes, .govuk-hint, p') : null
-    if (fieldset && controls) fieldset.insertBefore(message, controls)
-    else if (fieldset) fieldset.prepend(message)
-    else {
-      const control = group.querySelector('input, textarea, select')
-      if (control) group.insertBefore(message, control)
-      else group.prepend(message)
-    }
-  })
-
-  const mount = document.querySelector('[data-san-error-summary]')
-  if (!mount) return
-  const items = errors.map((error) => `<li><a href="${escapeHtml(error.href)}">${escapeHtml(error.text)}</a></li>`).join('')
-  mount.hidden = false
-  mount.innerHTML = `<div class="govuk-error-summary" data-module="govuk-error-summary" tabindex="-1">
-    <div role="alert">
-      <h2 class="govuk-error-summary__title">There is a problem</h2>
-      <div class="govuk-error-summary__body">
-        <ul class="govuk-list govuk-error-summary__list">${items}</ul>
-      </div>
-    </div>
-  </div>`
-  const summary = mount.querySelector('.govuk-error-summary')
-  if (summary instanceof HTMLElement) summary.focus()
-}
-
-const applyProgress = (session) => {
-  const complete = !!session.drugComplete
-  const label = complete ? 'Complete' : 'Incomplete'
-
-  document.querySelectorAll('[data-san-status]').forEach((tag) => {
-    tag.textContent = label
-    tag.classList.toggle('govuk-tag--light-blue', complete)
-    tag.classList.toggle('govuk-tag--light-grey', !complete)
-  })
-
-  document.querySelectorAll('[data-san-status-text]').forEach((node) => {
-    node.textContent = label
-  })
-
-  document.querySelectorAll('[data-section-complete="drugs"]').forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', complete)
-  })
-
-  const link = document.querySelector('[data-san-section-link="drugs"]')
-  if (link && session.drugUse) {
-    link.setAttribute('href', sectionLinkHref('drugs', 'drugs-summary.html'))
-  }
-
-  document.querySelectorAll('[data-section-complete="accommodation"]').forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', !!session.accommodationComplete)
-  })
-  const accommodationLink = document.querySelector('[data-san-section-link="accommodation"]')
-  if (accommodationLink && session.accommodationType) {
-    accommodationLink.setAttribute('href', sectionLinkHref('accommodation', 'accommodation-summary.html'))
-  }
-
-  document.querySelectorAll('[data-section-complete="employment"]').forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', !!session.employmentComplete)
-  })
-  const employmentLink = document.querySelector('[data-san-section-link="employment"]')
-  if (employmentLink && session.employmentStatus) {
-    employmentLink.setAttribute('href', sectionLinkHref('employment', 'employment-summary.html'))
-  }
-
-  document.querySelectorAll('[data-section-complete="finances"]').forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', !!session.financeComplete)
-  })
-  const financesLink = document.querySelector('[data-san-section-link="finances"]')
-  if (financesLink && Array.isArray(session.financeIncome) && session.financeIncome.length) {
-    financesLink.setAttribute('href', sectionLinkHref('finances', 'finances-summary.html'))
-  }
-
-  document.querySelectorAll('[data-section-complete="alcohol"]').forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', !!session.alcoholComplete)
-  })
-  const alcoholLink = document.querySelector('[data-san-section-link="alcohol"]')
-  if (alcoholLink && session.alcoholUse) {
-    alcoholLink.setAttribute('href', sectionLinkHref('alcohol', 'alcohol-summary.html'))
-  }
-
-  document.querySelectorAll('[data-section-complete="health"]').forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', !!session.healthComplete)
-  })
-  const healthLink = document.querySelector('[data-san-section-link="health"]')
-  if (healthLink && session.healthPhysical) {
-    healthLink.setAttribute('href', sectionLinkHref('health', 'health-summary.html'))
-  }
-
-  document.querySelectorAll('[data-section-complete="relationships"]').forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', !!session.relationshipsComplete)
-  })
-  const relationshipsLink = document.querySelector('[data-san-section-link="relationships"]')
-  if (relationshipsLink && Array.isArray(session.relationshipsChildren) && session.relationshipsChildren.length > 0) {
-    relationshipsLink.setAttribute('href', sectionLinkHref('relationships', 'personal-relationships-summary.html'))
-  }
-
-  document.querySelectorAll('[data-section-complete="thinking"]').forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', !!session.thinkingComplete)
-  })
-  const thinkingLink = document.querySelector('[data-san-section-link="thinking"]')
-  if (thinkingLink && session.thinkingConsequences) {
-    thinkingLink.setAttribute('href', sectionLinkHref('thinking', 'thinking-behaviours-summary.html'))
-  }
-
-  document.querySelectorAll('[data-section-complete="offence"]').forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', !!session.offenceComplete)
-  })
-  const offenceLink = document.querySelector('[data-san-section-link="offence"]')
-  if (offenceLink && session.offenceDescription) {
-    offenceLink.setAttribute('href', sectionLinkHref('offence', 'offence-analysis-summary.html'))
-  }
-}
-
+// Completeness helpers for types, last used, injecting, help and changes.
 const selectedDrugs = (session) => (Array.isArray(session.drugTypes) ? session.drugTypes : [])
 
 const lastUsedFor = (session, id) => {
@@ -425,7 +252,6 @@ const questionsAnswered = (session) => {
 
 const analysisNotRequired = (session) => session.drugUse === 'no'
 
-const summaryChangeHref = (page, hash = '') => `${page}?from=summary${hash ? `#${hash}` : ''}`
 
 const summaryRow = (question, lines, href, options = {}) => {
   const value = lines.filter((line) => line != null && line !== '').map((line, index) => {
@@ -599,12 +425,7 @@ const analysisRows = (session) => {
   return rows
 }
 
-const setHidden = (element, hidden) => {
-  if (!element) return
-  element.hidden = hidden
-  element.classList.toggle('san-is-hidden', hidden)
-}
-
+// Check-your-answers for the questions tab and analysis tab.
 const renderSummary = (session) => {
   const mount = document.querySelector('[data-du-summary]')
   if (!mount) return
@@ -728,6 +549,7 @@ const emptyFollowOnAnswers = () => ({
   drugAnalysisReoffendingDetails: ''
 })
 
+// Read and validate the current page.
 const readUseAnswers = () => ({
   drugUse: checkedValue('drug_use')
 })
@@ -1335,8 +1157,6 @@ const restoreAnalysis = (session) => {
   if (session.drugAnalysisReoffending) setField(`analysis-reoffending-${session.drugAnalysisReoffending}-details`, session.drugAnalysisReoffendingDetails)
 }
 
-const fromSummary = () => new URLSearchParams(window.location.search).get('from') === 'summary'
-
 const ensureBackLink = (href) => {
   let back = document.querySelector('.assessment-layout__back-link')
   const column = document.querySelector('.govuk-grid-column-two-thirds-from-desktop')
@@ -1361,6 +1181,7 @@ const seedExample = () => {
   window.history.replaceState({}, '', next)
 }
 
+// Wire up whichever drug use page is currently loaded.
 const initDrugs = () => {
   const page = document.querySelector('[data-du-page]')
   if (!page) return
@@ -1664,6 +1485,6 @@ const initDrugs = () => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  if (!window.location.pathname.startsWith("/san-research/")) return
+  if (!isSanResearchJourney()) return
   initDrugs()
 })

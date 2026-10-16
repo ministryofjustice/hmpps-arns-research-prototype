@@ -623,6 +623,16 @@ $desktop: 48.0625em;
   }
 }
 
+.assessment-home-subnav {
+  margin-top: 5px;
+  margin-bottom: 30px;
+}
+
+.assessment-home-topic[hidden],
+.assessment-home-topic--hidden {
+  display: none;
+}
+
 .govuk-frontend-supported .assessment-research-prototypes-accordion {
   .govuk-accordion__section-heading-text .govuk-accordion__section-heading-text-focus {
     display: flex;
@@ -634,6 +644,221 @@ $desktop: 48.0625em;
 
   .assessment-research-prototypes__accordion-heading-tags {
     margin-left: auto;
+  }
+}
+
+.assessment-research-changelog {
+  margin-top: 30px;
+
+  [hidden] {
+    display: none !important;
+  }
+
+  &__toolbar {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px 20px;
+    margin-bottom: 15px;
+  }
+
+  &__heading {
+    flex: 1 1 16em;
+  }
+
+  &__toolbar-actions {
+    flex: 0 0 auto;
+  }
+
+  &__details-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__details-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px 20px;
+    margin-bottom: 20px;
+  }
+
+  &__details-toggle-icon {
+    flex: 0 0 auto;
+    width: 12px;
+    height: 12px;
+  }
+
+  &__details-toggle[aria-expanded="true"] &__details-toggle-icon {
+    transform: rotate(180deg);
+  }
+
+  &__title {
+    margin-bottom: 0;
+  }
+
+  &__hint {
+    margin-top: 5px;
+    margin-bottom: 0;
+  }
+
+  &__controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  &__control {
+    margin: 0;
+    padding: 4px 8px;
+    border: 2px solid #b1b4b6;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #0b0c0c;
+    background: #ffffff;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #f3f2f1;
+    }
+
+    &:focus {
+      outline: 3px solid transparent;
+      box-shadow: inset 0 0 0 2px #0b0c0c;
+      background-color: #fd0;
+      color: #0b0c0c;
+    }
+
+    &[aria-pressed="true"] {
+      border-color: #0b0c0c;
+      background-color: #f3f2f1;
+    }
+  }
+
+  &__control--cd[aria-pressed="true"] {
+    background-color: #f3f2f1;
+  }
+
+  &__control--ixd[aria-pressed="true"] {
+    background-color: #d2e2f1;
+  }
+
+  &__control--a11y[aria-pressed="true"] {
+    background-color: #fff7bf;
+  }
+
+  &__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 0;
+    min-width: 0;
+    flex: 1 1 20em;
+  }
+
+  &__tab {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 9em;
+    margin: 0;
+    padding: 10px 15px;
+    border: 2px solid #b1b4b6;
+    font-family: inherit;
+    color: #0b0c0c;
+    background: #ffffff;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #f3f2f1;
+    }
+
+    &:focus {
+      outline: 3px solid transparent;
+      box-shadow: inset 0 0 0 2px #0b0c0c;
+      background-color: #fd0;
+      color: #0b0c0c;
+    }
+
+    &[aria-selected="true"] {
+      border-color: #1d70b8;
+      background-color: #d2e2f1;
+    }
+  }
+
+  &__tab-label {
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  &__tab-count {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.3;
+    color: #505a5f;
+  }
+
+  &__tab[aria-selected="true"] &__tab-count,
+  &__tab:focus &__tab-count {
+    color: #0b0c0c;
+  }
+
+  &__table {
+    margin-bottom: 0;
+  }
+
+  &__panel .govuk-heading-s:first-child {
+    margin-top: 0;
+  }
+
+  &__section-col {
+    width: 22%;
+  }
+
+  &__type-col {
+    width: 110px;
+  }
+
+  &__section-name.is-continued {
+    color: transparent;
+  }
+
+  &__tags {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  &__tag {
+    display: inline-block;
+    padding: 2px 5px 1px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.3px;
+    vertical-align: 1px;
+    color: #0b0c0c;
+    background-color: #f3f2f1;
+  }
+
+  &__tag--ixd {
+    background-color: #d2e2f1;
+  }
+
+  &__tag--a11y {
+    background-color: #fff7bf;
+  }
+
+  &__empty {
+    margin-bottom: 0;
   }
 }
 
@@ -706,6 +931,99 @@ $desktop: 48.0625em;
     padding-left: 20px;
     list-style-position: outside;
     list-style-type: disc;
+  }
+
+  &--in-accordion &__title-links {
+    flex: 1;
+  }
+
+  &__start-card {
+    margin-bottom: 20px;
+    padding: 24px;
+    background: govuk-colour("light-grey");
+    border-left: 5px solid govuk-colour("blue");
+  }
+
+  &__start-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  &__start-link {
+    margin-bottom: 0;
+    font-size: 1.1875rem;
+  }
+
+  &__start-card .assessment-research-changelog,
+  &__start-card-meta {
+    margin-top: 20px;
+  }
+
+  &__start-card-header .assessment-research-prototypes__title-tag--prototype {
+    white-space: normal;
+  }
+
+  &__start-card .assessment-research-changelog__toolbar {
+    margin-bottom: 0;
+  }
+
+  &__start-card .assessment-research-changelog__details:not([hidden]),
+  &__start-card [data-changelog-details]:not([hidden]) {
+    margin-top: 20px;
+  }
+
+  &--in-accordion &__title-links--plain {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-width: 38rem;
+  }
+
+  &--in-accordion &__title-link-item + &__title-link-item {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  &--in-accordion &__title-link-item,
+  &--in-accordion &__title-link-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  &--in-accordion &__title-link-item .govuk-heading-m {
+    margin: 0;
+    font-size: 1.1875rem;
+    font-weight: 400;
+    line-height: 1.3157894737;
+  }
+
+  &--in-accordion &__link-tag {
+    flex: 0 0 auto;
+    max-width: none;
+    white-space: nowrap;
+  }
+
+  &__title-link-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+  }
+
+  &__link-tag {
+    flex: 0 0 auto;
+  }
+
+  // The heading utility margin sits inside the tag row and does not collapse,
+  // so tagged sections were 10px further from the next rule than untagged ones.
+  &--in-accordion &__title-link-item .govuk-heading-m {
+    margin-bottom: 0 !important;
   }
 
   &__title-links--plain {
@@ -856,6 +1174,12 @@ $desktop: 48.0625em;
     white-space: nowrap;
     background-color: #d2e2f1;
     color: #0b0c0c;
+  }
+
+  &__title-tag--prototype {
+    font-weight: 700;
+    color: $govuk-secondary-text-colour;
+    background-color: govuk-colour("white");
   }
 
   &__hint-row {
@@ -4568,6 +4892,19 @@ body.assessment-page {
 
   .govuk-summary-card {
     margin-bottom: 20px;
+  }
+}
+
+.san-add-to-list {
+  table-layout: auto;
+
+  .govuk-summary-list__key {
+    width: 100%;
+  }
+
+  .govuk-summary-list__actions {
+    width: auto;
+    white-space: nowrap;
   }
 }
 

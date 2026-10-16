@@ -1,9 +1,10 @@
 //
-// Remember the last screen in each Strengths and needs section
-// so side navigation returns there.
+// Remember the last screen in each Prototype 1 (Community) SAN section so the
+// side nav returns there. Disabled links stay inert even if another script
+// writes an href.
 //
 
-import { rememberSectionScreen, sectionLinkHref } from './session.js'
+import { isSanResearchJourney, rememberSectionScreen, sectionLinkHref } from './session.js'
 
 const activeSection = () => {
   const link = document.querySelector('[data-san-section-link][aria-current="location"]')
@@ -47,7 +48,7 @@ const lockDisabledNavLinks = () => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  if (!window.location.pathname.startsWith("/san-research/")) return
+  if (!isSanResearchJourney()) return
   if (!document.querySelector('[data-san-section-link]')) return
   lockDisabledNavLinks()
   rememberCurrentScreen()

@@ -7,7 +7,7 @@
 {% set sanHeading = "Drug use" %}
 {% set sanSection = "drugs" %}
 {% set sanIsolated = true %}
-{% set sanHeaderTitleLink = "/san-research/drugs-pa" %}
+{% set sanHeaderTitleLink = (sanResearchBase | default("/san-research")) + "/drugs-pa" %}
 
 {% block content %}
 

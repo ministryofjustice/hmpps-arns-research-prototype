@@ -113,6 +113,13 @@ const getFirstSanctionAgeLocals = (query = {}) => {
 }
 
 router.use((req, res, next) => {
+  if (req.path.startsWith('/san-prison')) {
+    res.locals.sanVariant = 'prison'
+    res.locals.sanResearchBase = '/san-prison'
+  } else if (req.path.startsWith('/san-research')) {
+    res.locals.sanVariant = 'community'
+    res.locals.sanResearchBase = '/san-research'
+  }
   res.locals.offenceBrowseCategories = offenceBrowseCategories
   if (req.path.startsWith('/02') || req.path.startsWith('/03') || req.path.startsWith('/dev')) {
     res.locals.predictorsSectionCaption = 'Reoffending predictors'
@@ -126,6 +133,22 @@ router.use((req, res, next) => {
     Object.assign(res.locals, getFirstSanctionAgeLocals(req.query))
   }
   next()
+})
+
+router.get('/san-prison/:page', (req, res, next) => {
+  const view = String(req.params.page || '').replace(/\.html$/, '')
+  if (!/^[a-z0-9-]+$/i.test(view)) {
+    next()
+    return
+  }
+
+  res.render(`san-research/${view}`, (error, html) => {
+    if (error) {
+      next()
+      return
+    }
+    res.send(html)
+  })
 })
 
 router.get('/api/offences', (req, res) => {

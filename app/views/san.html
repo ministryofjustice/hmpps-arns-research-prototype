@@ -1,6 +1,6 @@
 {% extends "layouts/assessment.html" %}
 
-{% from "govuk/components/accordion/macro.njk" import govukAccordion %}
+{% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
 
 {% set showArnsServiceNavigation = true %}
 {% set arnsServiceNavCurrent = "san" %}
@@ -17,154 +17,136 @@
 <div class="assessment-home-header assessment-home-header--with-back-link">
   <span class="govuk-caption-xl">Prototypes</span>
   <h1 class="govuk-heading-xl assessment-home-title">Strengths and needs (SAN)</h1>
-  <p class="govuk-hint assessment-home-hint">Prototype for the community Strengths and needs assessment.</p>
+  <p class="govuk-hint assessment-home-hint">Prototypes for the community and prison Strengths and needs assessments.</p>
 </div>
+
+{% macro sanSectionSubnav(prefix) %}
+{{ mojSubNavigation({
+  label: "Prototype types",
+  classes: "assessment-home-subnav",
+  attributes: { "data-topic-subnav": true },
+  items: [
+    { text: "Research", href: "#" ~ prefix ~ "-research", active: true, attributes: { "data-topic": prefix ~ "-research" } },
+    { text: "Reference", href: "#" ~ prefix ~ "-reference", attributes: { "data-topic": prefix ~ "-reference" } }
+  ]
+}) }}
+{% endmacro %}
 
 <div class="govuk-tabs assessment-home-tabs" data-module="govuk-tabs">
   <h2 class="govuk-tabs__title">Contents</h2>
   <ul class="govuk-tabs__list">
     <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-      <a class="govuk-tabs__tab" href="#research-prototypes">Research</a>
+      <a class="govuk-tabs__tab" href="#community">Community</a>
     </li>
     <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="#reference-prototypes">Reference</a>
-    </li>
-    <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="#experiment-prototypes">Experiments</a>
+      <a class="govuk-tabs__tab" href="#prison">Prison</a>
     </li>
   </ul>
 
-  {% macro sanPrivateBetaEntry(entryHint, showDetails, entryHeading, linksInactive, titleTag, basePath, inAccordion, hideLinkSeparators) %}
-<ul class="govuk-list assessment-research-prototypes{% if inAccordion %} assessment-research-prototypes--in-accordion{% endif %}{% if hideLinkSeparators %} assessment-research-prototypes--no-link-separators{% endif %}">
-  {% set prototypeBase = basePath | default("/san") %}
-  {% set entryVersion = "san-research" if prototypeBase == "/san-research" else "san" %}
-  {% set skipToEndHref = null %}
-  {% set href = prototypeBase ~ "/accommodation.html" %}
-  {% set itemHeading = null if inAccordion else entryHeading %}
-  {% set nestedHeading = true if inAccordion else null %}
-  {% set title = "Accommodation" %}
-  {% set prototypeVersion = entryVersion %}
-  {% set secondaryHref = prototypeBase ~ "/employment.html" %}
-  {% set secondaryTitle = "Employment and education" %}
-  {% set secondaryInactive = null %}
-  {% set secondaryClearSessionOnStart = true %}
-  {% set secondaryPrototypeVersion = entryVersion %}
-  {% set tertiaryHref = prototypeBase ~ "/finances.html" %}
-  {% set tertiaryTitle = "Finances" %}
-  {% set tertiaryClearSessionOnStart = true %}
-  {% set tertiaryPrototypeVersion = entryVersion %}
-  {% set quaternaryHref = prototypeBase ~ "/drugs.html" %}
-  {% set quaternaryTitle = "Drug use" %}
-  {% set quaternaryClearSessionOnStart = true %}
-  {% set quaternaryPrototypeVersion = entryVersion %}
-  {% set quinaryHref = prototypeBase ~ "/alcohol.html" %}
-  {% set quinaryTitle = "Alcohol use" %}
-  {% set quinaryInactive = null %}
-  {% set quinaryClearSessionOnStart = true %}
-  {% set quinaryPrototypeVersion = entryVersion %}
-  {% set senaryHref = prototypeBase ~ "/health.html" %}
-  {% set senaryTitle = "Health and wellbeing" %}
-  {% set senaryInactive = null %}
-  {% set senaryClearSessionOnStart = true %}
-  {% set senaryPrototypeVersion = entryVersion %}
-  {% set septenaryHref = prototypeBase ~ "/personal-relationships-children.html" %}
-  {% set septenaryTitle = "Personal relationships and community" %}
-  {% set septenaryInactive = null %}
-  {% set septenaryClearSessionOnStart = true %}
-  {% set septenaryPrototypeVersion = entryVersion %}
-  {% set octonaryHref = prototypeBase ~ "/thinking-behaviours.html" %}
-  {% set octonaryTitle = "Thinking, behaviours and attitudes" %}
-  {% set octonaryInactive = null %}
-  {% set octonaryClearSessionOnStart = true %}
-  {% set octonaryPrototypeVersion = entryVersion %}
-  {% set nonaryHref = prototypeBase ~ "/offence-analysis.html" %}
-  {% set nonaryTitle = "Offence analysis" %}
-  {% set nonaryInactive = null %}
-  {% set nonaryClearSessionOnStart = true %}
-  {% set nonaryPrototypeVersion = entryVersion %}
-  {% set titleTagText = null if inAccordion else titleTag %}
-  {% set titleTagColour = null %}
-  {% set secondaryTitleTagText = null %}
-  {% set secondaryTitleTagColour = null %}
-  {% set hint = null if inAccordion else entryHint %}
-  {% set hintHtml = null %}
-  {% set titleHint = null %}
-  {% set titleSectionHint = "<li><span class=\"assessment-research-prototypes__change-tag\" title=\"First pass\">FP</span> 2 new questions replace accommodation type, each on its own page</li><li><span class=\"assessment-research-prototypes__change-tag\" title=\"First pass\">FP</span> Living with, past help and future accommodation are hidden</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 1\">I1</span> Location and suitability are each on their own page, with concerns on the next page when needed</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 1\">I1</span> Changes to accommodation is on its own page, except when Alex has no accommodation</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 1\">I1</span> Concern examples sit under the options as hints</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Suitability hint covers safety, who they are living with and appropriate amenities</li>" if prototypeBase == "/san-research" else null %}
-  {% set secondaryTitleHint = null %}
-  {% set secondaryTitleSectionHint = "<li><span class=\"assessment-research-prototypes__change-tag\" title=\"First pass\">FP</span> Employment status options updated, with ‘Has Alex ever had a job?’ on a separate page</li><li><span class=\"assessment-research-prototypes__change-tag\" title=\"First pass\">FP</span> Academic and vocational qualifications merged into one question</li><li><span class=\"assessment-research-prototypes__change-tag\" title=\"First pass\">FP</span> Skills question asks how you would describe their skills for work</li><li><span class=\"assessment-research-prototypes__change-tag\" title=\"First pass\">FP</span> Job sector, employment experience and education experience are hidden</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 1\">I1</span> Reading, writing or numeracy support is chosen first, then how much support is needed on the next page</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 1\">I1</span> Skills for work is hidden when employment status is Retired</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Follow-up asks how much support is needed, with significant or some support needed</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Changes to employment and education is on its own page, with the hint ‘Alex must answer this question’</li>" if prototypeBase == "/san-research" else null %}
-  {% set tertiaryTitleHint = null %}
-  {% set tertiaryTitleSectionHint = "<li><span class=\"assessment-research-prototypes__change-tag\" title=\"First pass\">FP</span> Family and friends over-reliance is on a separate page</li><li><span class=\"assessment-research-prototypes__change-tag\" title=\"First pass\">FP</span> Further assessment question added; yes continues to later finance questions</li><li><span class=\"assessment-research-prototypes__change-tag\" title=\"First pass\">FP</span> Debt split: own or someone else's, then ‘What type of debt does Alex have?’ on a separate page</li><li><span class=\"assessment-research-prototypes__change-tag\" title=\"First pass\">FP</span> Unable to manage money includes a hint about being stopped from managing money</li><li><span class=\"assessment-research-prototypes__change-tag\" title=\"First pass\">FP</span> Gambling and bank account questions are hidden</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 1\">I1</span> Practitioner analysis is not required when further assessment is no</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Money management and whether they are affected by debt are on the same page</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Income option is ‘No current source of money’</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Changes to finances is on its own page, with the hint ‘Alex must answer this question’</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 3\">I3</span> Further assessment is always shown, including after yes to over-reliance on family or friends</li>" if prototypeBase == "/san-research" else null %}
-  {% set quaternaryTitleHint = null %}
-  {% set quaternaryTitleSectionHint = "<li><span class=\"assessment-research-prototypes__change-tag\" title=\"First pass\">FP</span> Question asks about illegal drugs or misused medication</li><li><span class=\"assessment-research-prototypes__change-tag\" title=\"First pass\">FP</span> Choosing drugs and when they were used are on separate pages, with add another drug</li><li><span class=\"assessment-research-prototypes__change-tag\" title=\"First pass\">FP</span> Drugs used and not used in the last 6 months each have the same frequency questions</li><li><span class=\"assessment-research-prototypes__change-tag\" title=\"First pass\">FP</span> Inject question only lists injectable drugs, with timing on a separate page</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 1\">I1</span> Drug list is alphabetical, with Other last</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 1\">I1</span> Question asks which drugs Alex has used</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 1\">I1</span> Prescribed drugs includes over the counter drugs, with a hint</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 1\">I1</span> Timing options say the last 6 months, not before custody</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 1\">I1</span> Selecting only Other asks what other drugs Alex used, and hides add another and remove</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 1\">I1</span> Practitioner analysis is not required if Alex has never used drugs</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Drugs not used in the last 6 months are listed in the same way as drugs used in the last 6 months</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> The summary of drugs used more than 6 months ago is hidden</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Treatment, why they use drugs, and how drug use has affected their life are hidden</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> What helps them stop or reduce drug use is on its own page: present tense for the last 6 months, past tense for earlier use</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Yes reveals give details; No does not</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Changes to drug use is on its own page, with the hint ‘Alex must answer this question’</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 3\">I3</span> Give details about Alex's use of each drug is its own question, optional, with a hint about history and triggers</li>" if prototypeBase == "/san-research" else null %}
-  {% set quinaryTitleSectionHint = "<li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> First question asks about current issues with alcohol, replacing ‘Has Alex ever drunk alcohol?’</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Current issues continue to binge or excessive use; no current issues asks about past issues; never drunk goes to the summary with no practitioner analysis</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Frequency, units, why they drink and the impact of drinking are removed</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> The help question follows current issues. Current issues Yes uses the present tense, whether or not there are past issues. No current issues and past issues Yes uses the past tense. No current issues and no past issues goes to the summary</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Changes to alcohol use is on its own page, with the hint ‘Alex must answer this question’</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 3\">I3</span> Help hint is ‘may help’ for current issues and ‘may have helped’ for past issues</li>" if prototypeBase == "/san-research" else null %}
-  {% set senaryTitleSectionHint = "<li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Physical health Yes asks for the condition and any prescribed medication or treatment</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Mental health is split into whether they have conditions, then how you would describe them</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Learning question covers conditions that affect how they learn, understand or process information, and how much they are impacted</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Some difficulties coping, and not able to cope, reveal a details box</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Gambling is asked after day-to-day coping</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Question asks how you would describe how they see themselves</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Medication, head injury, neurodiversity, feelings about the future, and what helped during good health are hidden</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Changes to health and wellbeing is on its own page, with the hint ‘Alex must answer this question’</li>" if prototypeBase == "/san-research" else null %}
-  {% set septenaryTitleSectionHint = "<li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Current relationship, intimate relationship history and sense of belonging are reworded</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Childhood experience options are generally stable and supportive, some challenges, significant challenges, or unknown</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Domestic abuse starts with perpetrator: yes asks who they abused, then controlling or coercive behaviour</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Yes to being a victim of domestic abuse asks who abused them</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Strangulation or suffocation is its own page, and only if the victim of abuse is an intimate partner. Being a victim of domestic abuse is the next page</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Resolving challenges in intimate relationships, and important people, are hidden</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Yes to children asks for each child’s details, shown as cards</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Changes question asks about personal relationships only, on its own page, with the hint ‘Alex must answer this question’</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 3\">I3</span> Does Alex currently have a partner? sits under sense of belonging. In a relationship continues to how you would describe their current relationship; not in a relationship skips that question</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 3\">I3</span> Sense of belonging hint covers positive and negative influences, including friends, neighbours, communities, faith groups, extremist groups and gangs</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 3\">I3</span> Childhood behavioural issues or challenges is asked after childhood experience</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 3\">I3</span> Parenting responsibilities is asked above family relationship, only when there are children in Alex's life</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 3\">I3</span> Child details use the caption, the heading ‘What are the children's details?’ and the hint ‘You can add multiple children.’</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 3\">I3</span> Child details also ask whether Alex lives with this child, and whether Alex has parental responsibility for this child</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 3\">I3</span> Removing a child asks for confirmation. The only child returns to ‘Add children's details to continue’ and Add a child</li>" if prototypeBase == "/san-research" else null %}
-  {% set octonaryTitleSectionHint = "<li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Supervision, hostility, anger, manipulation, peer influence and lifestyle questions ask how much evidence there is, or how well they manage it</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Positive attitude towards criminal justice staff is hidden</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Wanting to make changes is the last question, on its own page, with the hint ‘Alex must answer this question’</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 3\">I3</span> Changes to thinking, behaviours and attitudes is its own page at the end: thinking questions, risk of sexual harm, sexual harm follow-ups when Yes, then the changes question, then the summary. No skips the follow-ups and goes to the changes question, then the summary. The summary shows that question last</li>" if prototypeBase == "/san-research" else null %}
-  {% set nonaryTitleSectionHint = "<li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Perpetrator and victim of domestic abuse questions are hidden</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Question asks if current offences are more serious than previous offending</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Yes to accepting responsibility includes the hint ‘Includes partial acceptance.’</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Victims use the same card pattern as children</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Who the offence was committed against is direct victim or other, with details for other</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 2\">I2</span> Offence elements and motivations match the reference options, with details where needed</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 3\">I3</span> Motivations is asked before why the current index offence(s) happened</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 3\">I3</span> Victim details use the caption Offence analysis, the heading ‘What are the victim's details?’ and the hint ‘You can add multiple victims.’</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 3\">I3</span> Who is the victim? includes Alex's friend, after Other family member</li><li><span class=\"assessment-research-prototypes__change-tag assessment-research-prototypes__change-tag--iteration\" title=\"Iteration 3\">I3</span> Removing a victim asks for confirmation. The only victim returns to ‘Add victim's details to continue’ and Add a victim</li>" if prototypeBase == "/san-research" else null %}
-  {% set titleRegularWeight = null %}
-  {% set hideTitleBullets = true if inAccordion else null %}
-  {% set clearSessionOnStart = true %}
-  {% set detailsHtml %}{% if showDetails %}<details class="govuk-details govuk-!-margin-top-4 govuk-!-margin-bottom-0" data-module="govuk-details">
-      <summary class="govuk-details__summary">
-        <span class="govuk-details__summary-text">View SAN in Assess and plan (AAP)</span>
-      </summary>
-      <div class="govuk-details__text">
-        <p class="govuk-body">Steps to open the SAN private beta:</p>
-        <ol class="govuk-list govuk-list--number govuk-!-margin-bottom-0">
-          <li><a class="govuk-link" href="https://arns-assessment-platform-test.hmpps.service.justice.gov.uk/training-session-launcher/browse?scenario=default" rel="noreferrer noopener" target="_blank">Go to Assess and plan (AAP)</a></li>
-          <li>Select scenario: SP Private Beta</li>
-          <li>Press ‘Start session’</li>
-          <li>Target service: Strengths and Needs (SAN)</li>
-          <li>Press ‘Generate link’</li>
-        </ol>
-      </div>
-    </details>{% endif %}{% endset %}
-  {% include "includes/research-prototype-entry.html" %}
-</ul>
-  {% endmacro %}
+  <div class="govuk-tabs__panel" id="community">
+    {{ sanSectionSubnav("community") }}
 
-  {% set sanResearchAccordionContent %}
-    {{ sanPrivateBetaEntry("This prototype shows the new iterations that are proposed for User Research.", false, "SAN research", false, "Sep-Oct 2026", "/san-research", true) | safe }}
-  {% endset %}
-  {% set sanResearchHeadingHtml -%}
-Prototype 1<span class="assessment-research-prototypes__title-tags assessment-research-prototypes__accordion-heading-tags"><strong class="govuk-tag assessment-research-prototypes__title-tag">Sep-Oct 2026</strong></span>
-  {%- endset %}
-
-  <div class="govuk-tabs__panel" id="research-prototypes">
-    {{ govukAccordion({
-      id: "san-research-prototypes-accordion",
-      classes: "assessment-research-prototypes-accordion",
-      items: [
-        {
-          heading: {
-            html: sanResearchHeadingHtml
-          },
-          summary: {
-            text: "This prototype shows content and interaction changes proposed for user research."
-          },
-          content: {
-            html: sanResearchAccordionContent
-          }
-        }
-      ]
-    }) }}
-  </div>
-
-  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="reference-prototypes">
-    {{ sanPrivateBetaEntry("'As-is' replica (for reference only)", true, "SAN private beta reference", false, "Late Sep 2026", "/san", false, true) | safe }}
-  </div>
-
-  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="experiment-prototypes">
-    <ul class="govuk-list assessment-research-prototypes">
-      <li class="assessment-research-prototypes__item">
-        <div class="assessment-research-prototypes__prototype-header">
-          <div class="assessment-research-prototypes__prototype-header-text">
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-2 assessment-research-prototypes__item-heading">SAN design experiments</h2>
-            <p class="govuk-hint govuk-!-margin-top-0 govuk-!-margin-bottom-2">These are smaller experiments to test ideas and changes.</p>
+    <div class="assessment-home-topic" id="community-research" data-topic-panel="community-research">
+      {# /san-research — community SAN research. JS lives in app/assets/javascripts/san-research/. #}
+      <div class="assessment-research-prototypes__start-card">
+        <div class="assessment-research-prototypes__start-card-header">
+            <strong class="govuk-tag assessment-research-prototypes__title-tag assessment-research-prototypes__title-tag--prototype">Prototype 1</strong>
+          <div class="assessment-research-prototypes__title-tags">
+            <strong class="govuk-tag govuk-tag--yellow">UR R2</strong>
+            <strong class="govuk-tag assessment-research-prototypes__title-tag">Sep-Oct 2026</strong>
           </div>
         </div>
-      </li>
-    </ul>
+        <a href="/san-research/accommodation.html" class="govuk-button govuk-button--start assessment-research-prototypes__start-link" data-clear-session-on-start data-prototype-version="san-research">
+          <span>Start SAN Community</span>
+          <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+          </svg>
+        </a>
+        {% include "includes/san-research/key-changes.html" %}
+      </div>
+    </div>
+
+    <div class="assessment-home-topic" id="community-reference" data-topic-panel="community-reference" hidden>
+      <div class="assessment-research-prototypes__start-card">
+        <div class="assessment-research-prototypes__start-card-header">
+          <strong class="govuk-tag assessment-research-prototypes__title-tag assessment-research-prototypes__title-tag--prototype">SAN private beta reference</strong>
+          <div class="assessment-research-prototypes__title-tags">
+            <strong class="govuk-tag assessment-research-prototypes__title-tag">Late Sep 2026</strong>
+          </div>
+        </div>
+        <a href="/san/accommodation.html" class="govuk-button govuk-button--start assessment-research-prototypes__start-link" data-clear-session-on-start data-prototype-version="san">
+          <span>Start SAN Private beta</span>
+          <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+          </svg>
+        </a>
+        <div class="assessment-research-prototypes__start-card-meta">
+          <p class="govuk-hint govuk-!-margin-bottom-2">'As-is' replica (for reference only)</p>
+          <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">View SAN in Assess and plan (AAP)</span>
+            </summary>
+            <div class="govuk-details__text">
+              <p class="govuk-body">Steps to open the SAN private beta:</p>
+              <ol class="govuk-list govuk-list--number govuk-!-margin-bottom-0">
+                <li><a class="govuk-link" href="https://arns-assessment-platform-test.hmpps.service.justice.gov.uk/training-session-launcher/browse?scenario=default" rel="noreferrer noopener" target="_blank">Go to Assess and plan (AAP)</a></li>
+                <li>Select scenario: SP Private Beta</li>
+                <li>Press ‘Start session’</li>
+                <li>Target service: Strengths and Needs (SAN)</li>
+                <li>Press ‘Generate link’</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+
+    <div class="assessment-home-topic" id="community-experiments" data-topic-panel="community-experiments" hidden>
+      <ul class="govuk-list assessment-research-prototypes">
+        <li class="assessment-research-prototypes__item">
+          <div class="assessment-research-prototypes__prototype-header">
+            <div class="assessment-research-prototypes__prototype-header-text">
+              <h2 class="govuk-heading-m govuk-!-margin-bottom-2 assessment-research-prototypes__item-heading">SAN design experiments</h2>
+              <p class="govuk-hint govuk-!-margin-top-0 govuk-!-margin-bottom-2">These are smaller experiments to test ideas and changes.</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="prison">
+    {{ sanSectionSubnav("prison") }}
+
+    <div class="assessment-home-topic" id="prison-research" data-topic-panel="prison-research">
+      {# /san-prison — prison SAN research. Shares /san-research views and scripts; session and changelog are separate. #}
+      <div class="assessment-research-prototypes__start-card">
+        <div class="assessment-research-prototypes__start-card-header">
+            <strong class="govuk-tag assessment-research-prototypes__title-tag assessment-research-prototypes__title-tag--prototype">Prototype 1</strong>
+          <div class="assessment-research-prototypes__title-tags">
+            <strong class="govuk-tag govuk-tag--pink">UR R3</strong>
+            <strong class="govuk-tag assessment-research-prototypes__title-tag">Oct 2026</strong>
+          </div>
+        </div>
+        <a href="/san-prison/accommodation.html" class="govuk-button govuk-button--start assessment-research-prototypes__start-link" data-clear-session-on-start data-prototype-version="san-prison">
+          <span>Start SAN Prison</span>
+          <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+          </svg>
+        </a>
+        <div class="assessment-research-prototypes__start-card-meta">
+          <p class="govuk-hint govuk-!-margin-bottom-0">This version is a copy of the SAN Community prototype 1</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="assessment-home-topic" id="prison-reference" data-topic-panel="prison-reference" hidden>
+      <p class="govuk-body">There is no prison SAN reference prototype yet.</p>
+    </div>
+
+    <div class="assessment-home-topic" id="prison-experiments" data-topic-panel="prison-experiments" hidden>
+      <p class="govuk-body">There are no prison SAN experiments yet.</p>
+    </div>
   </div>
 </div>
 

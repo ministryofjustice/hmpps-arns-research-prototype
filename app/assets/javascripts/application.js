@@ -66,7 +66,7 @@ import './san/relationships.js'
 import './san/health.js'
 import './san/thinking.js'
 import './san/offence.js'
-import './san-research/section-screens.js'
+import './san-research/section-screens.js' // Prototype 1 (Community) SAN research
 import './san-research/accommodation.js'
 import './san-research/employment.js'
 import './san-research/finances.js'
