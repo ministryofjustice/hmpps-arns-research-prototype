@@ -3,7 +3,7 @@
 //
 // Pages: accommodation.html → one question per screen on accommodation-details.html?step=…
 // Location / suitability answers that raise concerns open accommodation-concerns.html.
-// Past-help and future-accommodation questions are hidden in this prototype.
+// Release plans determine whether suitability questions are relevant.
 //
 
 import { getSanSession, isSanPrisonJourney, replaceSanSession, setSanSession } from './session.js'
@@ -13,8 +13,11 @@ import { applySanProgress } from './progress.js'
 // Pre-filled session for ?example=complete.
 const EXAMPLE_COMPLETE = {
   accommodationType: 'settled',
-  accommodationSubtype: 'friends-family',
+  accommodationSubtype: '',
   accommodationSubtypeDetails: '',
+  returnToAccommodation: 'no',
+  releasePlans: 'yes',
+  releasePlansDetails: 'Plans to live with friends after release.',
   livingWith: ['friends'],
   livingPartnerDetails: '',
   livingOtherDetails: '',
@@ -127,31 +130,25 @@ const FUTURE_DETAILS_IDS = {
   other: 'future-other-details'
 }
 
-const AP_CAS_SUBTYPES = ['approved-premises', 'cas2', 'cas3']
-
-// Each question is its own screen. A concern question follows when the answer needs it.
-const ROUTE_QUESTIONS = {
-  settled: ['living-with', 'location', 'suitable', 'changes'],
-  'temporary-short-term': ['living-with', 'location', 'suitable', 'changes'],
-  'temporary-ap-cas': ['location', 'suitable', 'changes'],
-  none: ['no-accommodation', 'changes']
-}
-
+// Each question is its own screen. Build the route from the current release plans.
 const accommodationRoute = (session) => {
-  if (session.accommodationType === 'settled') return 'settled'
-  if (session.accommodationType === 'none') return 'none'
-  if (session.accommodationType === 'temporary') {
-    // Unknown temporary accommodation follows short-term and immigration.
-    return AP_CAS_SUBTYPES.includes(session.accommodationSubtype)
-      ? 'temporary-ap-cas'
-      : 'temporary-short-term'
+  if (session.accommodationType === 'none') return ['no-accommodation', 'changes']
+  if (!['settled', 'temporary'].includes(session.accommodationType)) return null
+  const steps = session.accommodationType === 'temporary' ? ['temporary-type'] : []
+  const asksReturn = session.accommodationType === 'settled'
+    || ['immigration', 'short-term'].includes(session.accommodationSubtype)
+  if (asksReturn) steps.push('return')
+  if (!asksReturn || session.returnToAccommodation !== 'yes') {
+    steps.push('release-plans')
+    if (session.releasePlans === 'no') return [...steps, 'changes']
+    steps.push('living-with')
   }
-  return ''
+  return [...steps, 'location', 'suitable', 'changes']
 }
 
-const routeShows = (route, question) => (ROUTE_QUESTIONS[route] || []).includes(question)
+const routeShows = (route, question) => detailSteps(route).includes(question)
 
-const detailSteps = (route) => ROUTE_QUESTIONS[route] || []
+const detailSteps = (route) => route || []
 
 const firstDetailStep = (route) => detailSteps(route)[0] || ''
 
@@ -200,6 +197,9 @@ const stepHref = (page, step, options = {}) => {
 const pageFile = (page) => (page === 'concerns' ? 'accommodation-concerns' : 'accommodation-details')
 
 const stepAnswered = (session, step) => {
+  if (step === 'temporary-type') return !!session.accommodationSubtype
+  if (step === 'return') return !!session.returnToAccommodation
+  if (step === 'release-plans') return !!session.releasePlans && (session.releasePlans !== 'yes' || !!session.releasePlansDetails)
   if (step === 'location') return !!session.locationSuitable
   if (step === 'suitable') return !!session.accommodationSuitable
   if (step === 'changes') return !!session.changes
@@ -315,14 +315,7 @@ const applyProgress = (session) => applySanProgress(session, { current: 'accommo
 // Whether the questions tab can show the analysis CTA.
 const detailsAnswered = (session) => {
   const route = accommodationRoute(session)
-  if (!route || !session.changes) return false
-  if (routeShows(route, 'living-with') && !(Array.isArray(session.livingWith) && session.livingWith.length)) return false
-  if (routeShows(route, 'location') && !session.locationSuitable) return false
-  if (routeShows(route, 'suitable') && !session.accommodationSuitable) return false
-  if (routeShows(route, 'no-accommodation') && !(Array.isArray(session.noAccommodationReasons) && session.noAccommodationReasons.length)) return false
-  if (routeShows(route, 'future') && !session.futurePlanned) return false
-  if (routeShows(route, 'future') && session.futurePlanned === 'yes' && !session.futureType) return false
-  return true
+  return !!route && route.every((step) => stepAnswered(session, step))
 }
 
 // Extensionless paths keep query strings. The kit redirects *.html and drops the query.
@@ -375,14 +368,36 @@ const accommodationRows = (session) => {
   const rows = []
   if (session.accommodationType) {
     const lines = [labelled(TYPE_LABELS, session.accommodationType)]
-    if (session.accommodationSubtype) lines.push(labelled(SUBTYPE_LABELS, session.accommodationSubtype))
-    if (session.accommodationSubtypeDetails) lines.push(session.accommodationSubtypeDetails)
-    const endDate = session.accommodationType === 'temporary' ? accommodationEndDate(session) : ''
-    if (endDate) lines.push(`Expected end date: ${endDate}`)
     rows.push(summaryRow(
       'What type of accommodation does Alex currently have?',
       lines,
       summaryChangeHref('accommodation'),
+      { secondaryFrom: 1 }
+    ))
+  }
+
+  if (session.accommodationType === 'temporary' && session.accommodationSubtype) {
+    const endDate = accommodationEndDate(session)
+    rows.push(summaryRow(
+      'What type of temporary accommodation does Alex have?',
+      [labelled(SUBTYPE_LABELS, session.accommodationSubtype), endDate ? `Expected end date: ${endDate}` : ''],
+      summaryChangeHref('accommodation-details', 'temporary-type'),
+      { secondaryFrom: 1 }
+    ))
+  }
+  if (routeShows(route, 'return') && session.returnToAccommodation) {
+    rows.push(summaryRow(
+      'Does Alex plan to return to this accommodation when they are released?',
+      [labelled(YES_NO, session.returnToAccommodation), session.returnToAccommodation === 'unknown' ? session.returnUnknownDetails : ''],
+      summaryChangeHref('accommodation-details', 'return'),
+      { secondaryFrom: 1 }
+    ))
+  }
+  if (routeShows(route, 'release-plans') && session.releasePlans) {
+    rows.push(summaryRow(
+      'Does Alex have any current plans for accommodation when they are released?',
+      [labelled(YES_NO, session.releasePlans), session.releasePlans === 'yes' ? session.releasePlansDetails : ''],
+      summaryChangeHref('accommodation-details', 'release-plans'),
       { secondaryFrom: 1 }
     ))
   }
@@ -415,7 +430,7 @@ const accommodationRows = (session) => {
     if (session.livingWith.includes('partner') && session.livingPartnerDetails) details.push(session.livingPartnerDetails)
     if (session.livingWith.includes('other') && session.livingOtherDetails) details.push(session.livingOtherDetails)
     rows.push(summaryRow(
-      'Who is Alex living with?',
+      'Who is Alex planning on living with?',
       [...labels, ...details],
       summaryChangeHref('accommodation-details', 'living-with'),
       { secondaryFrom: labels.length }
@@ -593,30 +608,15 @@ const clearedTypeDetails = () => ({
   immigrationEndYear: ''
 })
 
-const subtypeField = (type) => {
-  if (type === 'settled') return { name: 'settled_type', detailsId: 'settled-unknown-details' }
-  if (type === 'temporary') return { name: 'temporary_type', detailsId: 'temporary-unknown-details' }
-  if (type === 'none') return { name: 'none_type', detailsId: 'none-unknown-details' }
-  return null
-}
-
 const endDateId = (subtype, part) => `temporary-${subtype}-end-date-${part}`
 
-const readTypeAnswers = () => {
-  const accommodationType = checkedValue('accommodation_type')
-  const subtype = subtypeField(accommodationType)
-  const accommodationSubtype = subtype ? checkedValue(subtype.name) : ''
-  const temporary = accommodationType === 'temporary' && accommodationSubtype
+const readTemporaryAnswers = () => {
+  const accommodationSubtype = checkedValue('temporary_type')
   return {
-    accommodationType,
     accommodationSubtype,
-    accommodationSubtypeDetails: subtype ? fieldValue(subtype.detailsId) : '',
-    temporaryEndDay: temporary ? fieldValue(endDateId(accommodationSubtype, 'day')) : '',
-    temporaryEndMonth: temporary ? fieldValue(endDateId(accommodationSubtype, 'month')) : '',
-    temporaryEndYear: temporary ? fieldValue(endDateId(accommodationSubtype, 'year')) : '',
-    immigrationEndDay: '',
-    immigrationEndMonth: '',
-    immigrationEndYear: ''
+    temporaryEndDay: fieldValue(endDateId(accommodationSubtype, 'day')),
+    temporaryEndMonth: fieldValue(endDateId(accommodationSubtype, 'month')),
+    temporaryEndYear: fieldValue(endDateId(accommodationSubtype, 'year'))
   }
 }
 
@@ -628,17 +628,15 @@ const validateType = (answers) => {
       href: '#accommodation-type',
       text: 'Select the type of accommodation Alex currently has'
     })
-  } else if (!answers.accommodationSubtype) {
-    errors.push({
-      group: 'accommodation-type',
-      href: `#${answers.accommodationType}-type`,
-      text: 'Select the type of accommodation'
-    })
   }
   return errors
 }
 
 const emptyDetailAnswers = () => ({
+  returnToAccommodation: '',
+  returnUnknownDetails: '',
+  releasePlans: '',
+  releasePlansDetails: '',
   livingWith: [],
   livingPartnerDetails: '',
   livingOtherDetails: '',
@@ -667,11 +665,21 @@ const readChangesAnswers = () => {
 }
 
 const readStepAnswers = (step) => {
+  if (step === 'temporary-type') return readTemporaryAnswers()
+  if (step === 'return') {
+    const returnToAccommodation = checkedValue('return_to_accommodation')
+    return { returnToAccommodation, returnUnknownDetails: returnToAccommodation === 'unknown' ? fieldValue('return-unknown-details') : '' }
+  }
+  if (step === 'release-plans') {
+    const releasePlans = checkedValue('release_plans')
+    return { releasePlans, releasePlansDetails: releasePlans === 'yes' ? fieldValue('release-plans-details') : '' }
+  }
   if (step === 'living-with') {
+    const livingWith = checkedValue('living_with')
     return {
-      livingWith: checkedValues('living_with'),
-      livingPartnerDetails: fieldValue('living-partner-details'),
-      livingOtherDetails: fieldValue('living-other-details')
+      livingWith: livingWith ? [livingWith] : [],
+      livingPartnerDetails: livingWith === 'partner' ? fieldValue('living-partner-details') : '',
+      livingOtherDetails: livingWith === 'other' ? fieldValue('living-other-details') : ''
     }
   }
   if (step === 'location') return { locationSuitable: checkedValue('location_suitable') }
@@ -693,8 +701,21 @@ const readStepAnswers = (step) => {
   return {}
 }
 
-const patchForStep = (step, answers) => {
+const patchForStep = (step, answers, previous) => {
   const patch = { ...answers, accommodationComplete: false }
+  const branchField = { 'temporary-type': 'accommodationSubtype', return: 'returnToAccommodation', 'release-plans': 'releasePlans' }[step]
+  if (branchField && previous[branchField] !== answers[branchField]) {
+    const cleared = emptyDetailAnswers()
+    if (step !== 'temporary-type') {
+      delete cleared.returnToAccommodation
+      delete cleared.returnUnknownDetails
+    }
+    if (step === 'release-plans') {
+      delete cleared.releasePlans
+      delete cleared.releasePlansDetails
+    }
+    Object.assign(patch, cleared, answers)
+  }
   if (step === 'location' && answers.locationSuitable !== 'no') {
     patch.locationReasons = []
     patch.locationOtherDetails = ''
@@ -740,8 +761,19 @@ const readAnalysisAnswers = () => {
 
 const validateStep = (answers, step) => {
   const errors = []
+  if (step === 'temporary-type' && !answers.accommodationSubtype) {
+    errors.push({ group: step, href: '#temporary-type', text: 'Select the type of temporary accommodation Alex has' })
+  }
+  if (step === 'return' && !answers.returnToAccommodation) {
+    errors.push({ group: step, href: '#return', text: 'Select if Alex plans to return to this accommodation when they are released' })
+  }
+  if (step === 'release-plans' && !answers.releasePlans) {
+    errors.push({ group: step, href: '#release-plans', text: 'Select if Alex has any current plans for accommodation when they are released' })
+  } else if (step === 'release-plans' && answers.releasePlans === 'yes' && !answers.releasePlansDetails) {
+    errors.push({ group: step, href: '#release-plans-details', text: "Enter details about Alex's plans for accommodation when they are released" })
+  }
   if (step === 'living-with' && !(answers.livingWith || []).length) {
-    errors.push({ group: 'living-with', href: '#living-with', text: 'Select who Alex is living with' })
+    errors.push({ group: 'living-with', href: '#living-with', text: 'Select who Alex is planning on living with' })
   }
   if (step === 'location' && !answers.locationSuitable) {
     errors.push({
@@ -821,10 +853,10 @@ const restoreConcerns = (session) => {
 
 const restoreType = (session) => {
   selectRadio('accommodation_type', session.accommodationType)
-  const subtype = subtypeField(session.accommodationType)
-  if (!subtype) return
-  selectRadio(subtype.name, session.accommodationSubtype)
-  if (session.accommodationSubtype === 'unknown') setField(subtype.detailsId, session.accommodationSubtypeDetails)
+}
+
+const restoreTemporary = (session) => {
+  selectRadio('temporary_type', session.accommodationSubtype)
   if (session.accommodationType === 'temporary' && session.accommodationSubtype) {
     setField(endDateId(session.accommodationSubtype, 'day'), session.temporaryEndDay)
     setField(endDateId(session.accommodationSubtype, 'month'), session.temporaryEndMonth)
@@ -833,7 +865,12 @@ const restoreType = (session) => {
 }
 
 const restoreDetails = (session) => {
-  selectChecks('living_with', session.livingWith)
+  restoreTemporary(session)
+  selectRadio('return_to_accommodation', session.returnToAccommodation)
+  setField('return-unknown-details', session.returnUnknownDetails)
+  selectRadio('release_plans', session.releasePlans)
+  setField('release-plans-details', session.releasePlansDetails)
+  selectRadio('living_with', session.livingWith?.[0])
   setField('living-partner-details', session.livingPartnerDetails)
   setField('living-other-details', session.livingOtherDetails)
   selectRadio('location_suitable', session.locationSuitable)
@@ -917,7 +954,7 @@ const initSanAccommodation = () => {
       return
     }
     const form = document.getElementById('san-accommodation-details-form')
-    if (form) form.setAttribute('data-san-route', route)
+    if (form) form.setAttribute('data-san-route', route.join(' '))
     if (!fromSummary()) ensureBackLink(backHrefForDetail(session, route, step))
     showQuestion(step)
     restoreDetails(session)
@@ -973,7 +1010,7 @@ const initSanAccommodation = () => {
   typeForm?.addEventListener('submit', (event) => {
     event.preventDefault()
     revealCheckedConditionals()
-    const answers = readTypeAnswers()
+    const answers = { accommodationType: checkedValue('accommodation_type') }
     const errors = validateType(answers)
     if (errors.length) {
       showErrors(errors)
@@ -981,12 +1018,13 @@ const initSanAccommodation = () => {
     }
     clearErrors()
     const previous = getSanSession()
-    const previousRoute = accommodationRoute(previous)
-    const updates = { ...clearedTypeDetails(), ...answers, accommodationComplete: false }
-    const nextRoute = accommodationRoute(updates)
-    if (nextRoute !== accommodationRoute(previous)) Object.assign(updates, emptyDetailAnswers())
+    const changed = previous.accommodationType !== answers.accommodationType
+    const updates = { ...answers, accommodationComplete: false }
+    if (changed) Object.assign(updates, clearedTypeDetails(), emptyDetailAnswers())
+    const next = { ...previous, ...updates }
+    const nextRoute = accommodationRoute(next)
     setSanSession(updates)
-    window.location.assign(fromSummary() && nextRoute === accommodationRoute(previous)
+    window.location.assign(fromSummary() && !changed && detailsAnswered(next)
       ? 'accommodation-summary'
       : stepHref('accommodation-details', firstDetailStep(nextRoute)))
   })
@@ -996,7 +1034,6 @@ const initSanAccommodation = () => {
     event.preventDefault()
     revealCheckedConditionals()
     const previous = getSanSession()
-    const route = accommodationRoute(previous)
     const step = stepParam()
     const answers = readStepAnswers(step)
     const errors = validateStep(answers, step)
@@ -1005,9 +1042,10 @@ const initSanAccommodation = () => {
       return
     }
     clearErrors()
-    const patch = patchForStep(step, answers)
+    const patch = patchForStep(step, answers, previous)
     setSanSession(patch)
-    continueAfterDetail(previous, { ...previous, ...patch }, route, step)
+    const next = { ...previous, ...patch }
+    continueAfterDetail(previous, next, accommodationRoute(next), step)
   })
 
   const concernsForm = document.getElementById('san-accommodation-concerns-form')
