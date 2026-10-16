@@ -1,16 +1,22 @@
 //
-// Alcohol use section of the Strengths and needs prototype
+// Alcohol use — Prototype 1 (Community) Strengths and needs.
+//
+// Pages: alcohol.html
+//   never drunk       → summary (practitioner analysis not required)
+//   current issues    → alcohol-before → alcohol-help → alcohol-changes → summary
+//   no current issues → alcohol-background
+//                       → alcohol-help-past only if past issues = yes
+//                       → alcohol-changes → summary
 //
 
-import { getSanSession, replaceSanSession, sectionLinkHref, setSanSession } from './session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, focusTargetField, labelled, scrollToHash } from './form.js'
-
-const YES_NO = { yes: 'Yes', no: 'No' }
+import { getSanSession, isSanResearchJourney, replaceSanSession, setSanSession } from './session.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, showErrors, focusTargetField, labelled, scrollToHash, CHANGES_LABELS, YES_NO, revealSoon, checkedValue, fieldValue, selectRadio, setField, setHidden, fromSummary, summaryChangeHref } from './form.js'
+import { applySanProgress } from './progress.js'
 
 const ALCOHOL_USE_LABELS = {
   significant: 'Yes, significant issues',
   some: 'Yes, some issues',
-  none: 'No current issues',
+  none: 'No issues',
   never: 'They have never drunk alcohol'
 }
 
@@ -33,18 +39,6 @@ const EVIDENCE_HINTS = {
   detrimental: 'There is a detrimental effect on other areas of their life and is often directly related to offending.'
 }
 
-const CHANGES_LABELS = {
-  maintain: 'I have already made positive changes and want to maintain them',
-  active: 'I am actively making changes',
-  'know-how': 'I want to make changes and know how to',
-  'need-help': 'I want to make changes but need help',
-  thinking: 'I am thinking about making changes',
-  no: 'I do not want to make changes',
-  'no-answer': 'I do not want to answer',
-  'not-present': 'Alex is not present',
-  'not-applicable': 'Not applicable'
-}
-
 const EXAMPLE_COMPLETE = {
   alcoholUse: 'significant',
   alcoholEvidence: 'some',
@@ -63,112 +57,10 @@ const EXAMPLE_COMPLETE = {
   alcoholComplete: true
 }
 
-const isInHiddenConditional = (element) => {
-  return !!element.closest('.govuk-radios__conditional--hidden, .govuk-checkboxes__conditional--hidden, .san-is-hidden, [hidden]')
-}
+// Side nav ticks and resume links for every SAN section.
+const applyProgress = (session) => applySanProgress(session, { current: 'alcohol' })
 
-const revealSoon = () => {
-  revealCheckedConditionals()
-  window.setTimeout(revealCheckedConditionals, 50)
-  window.setTimeout(revealCheckedConditionals, 300)
-}
-
-const checkedValue = (name) => {
-  const selected = Array.from(document.querySelectorAll(`input[type="radio"][name="${name}"]`))
-    .find((input) => input.checked && !isInHiddenConditional(input))
-  return selected ? selected.value : ''
-}
-
-const fieldValue = (id) => {
-  const field = document.getElementById(id)
-  if (!(field instanceof HTMLTextAreaElement) || isInHiddenConditional(field)) return ''
-  return field.value.trim()
-}
-
-const selectRadio = (name, value) => {
-  if (!value) return
-  const input = document.querySelector(`input[type="radio"][name="${CSS.escape(name)}"][value="${CSS.escape(value)}"]`)
-  if (input instanceof HTMLInputElement) input.checked = true
-}
-
-const setField = (id, value) => {
-  const field = document.getElementById(id)
-  if (field instanceof HTMLTextAreaElement) field.value = value || ''
-}
-
-const showErrors = (errors) => {
-  clearErrors()
-  if (!errors.length) return
-
-  errors.forEach((error) => {
-    const group = document.querySelector(`[data-san-error-group="${error.group}"]`)
-    if (!group) return
-    group.classList.add('govuk-form-group--error')
-    const message = document.createElement('p')
-    message.className = 'govuk-error-message'
-    message.innerHTML = `<span class="govuk-visually-hidden">Error:</span> ${escapeHtml(error.text)}`
-    const fieldset = group.querySelector(':scope > fieldset, :scope > .govuk-fieldset')
-    const legend = fieldset ? fieldset.querySelector(':scope > legend') : null
-    if (legend) legend.after(message)
-    else if (fieldset) fieldset.prepend(message)
-    else group.prepend(message)
-  })
-
-  const mount = document.querySelector('[data-san-error-summary]')
-  if (!mount) return
-  const items = errors.map((error) => `<li><a href="${escapeHtml(error.href)}">${escapeHtml(error.text)}</a></li>`).join('')
-  mount.hidden = false
-  mount.innerHTML = `<div class="govuk-error-summary" data-module="govuk-error-summary" tabindex="-1">
-    <div role="alert">
-      <h2 class="govuk-error-summary__title">There is a problem</h2>
-      <div class="govuk-error-summary__body">
-        <ul class="govuk-list govuk-error-summary__list">${items}</ul>
-      </div>
-    </div>
-  </div>`
-  const summary = mount.querySelector('.govuk-error-summary')
-  if (summary instanceof HTMLElement) summary.focus()
-}
-
-const applySectionProgress = (key, complete, started, href) => {
-  document.querySelectorAll(`[data-section-complete="${key}"]`).forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', complete)
-  })
-  const link = document.querySelector(`[data-san-section-link="${key}"]`)
-  const next = sectionLinkHref(key, started ? href : '')
-  if (link && next) link.setAttribute('href', next)
-}
-
-const applyProgress = (session) => {
-  const complete = !!session.alcoholComplete
-  const label = complete ? 'Complete' : 'Incomplete'
-
-  document.querySelectorAll('[data-san-status]').forEach((tag) => {
-    tag.textContent = label
-    tag.classList.toggle('govuk-tag--light-blue', complete)
-    tag.classList.toggle('govuk-tag--light-grey', !complete)
-  })
-
-  document.querySelectorAll('[data-san-status-text]').forEach((node) => {
-    node.textContent = label
-  })
-
-  applySectionProgress('alcohol', complete, !!session.alcoholUse, 'alcohol-summary.html')
-  applySectionProgress('accommodation', !!session.accommodationComplete, !!session.accommodationType, 'accommodation-summary.html')
-  applySectionProgress('employment', !!session.employmentComplete, !!session.employmentStatus, 'employment-summary.html')
-  applySectionProgress(
-    'finances',
-    !!session.financeComplete,
-    Array.isArray(session.financeIncome) && session.financeIncome.length,
-    'finances-summary.html'
-  )
-  applySectionProgress('drugs', !!session.drugComplete, !!session.drugUse, 'drugs-summary.html')
-  applySectionProgress('relationships', !!session.relationshipsComplete, !!Array.isArray(session.relationshipsChildren) && session.relationshipsChildren.length > 0, 'personal-relationships-summary.html')
-  applySectionProgress('health', !!session.healthComplete, !!session.healthPhysical, 'health-summary.html')
-  applySectionProgress('thinking', !!session.thinkingComplete, !!session.thinkingConsequences, 'thinking-behaviours-summary.html')
-  applySectionProgress('offence', !!session.offenceComplete, !!session.offenceDescription, 'offence-analysis-summary.html')
-}
-
+// Journey completeness and next-page hrefs.
 const beforeFieldsAnswered = (session) => {
   if (!currentIssues(session)) return false
   return !!session.alcoholEvidence
@@ -228,7 +120,6 @@ const continueAlcoholHref = (session) => {
 
 const analysisNotRequired = (session) => neverDrunk(session)
 
-const summaryChangeHref = (page, hash = '') => `${page}?from=summary${hash ? `#${hash}` : ''}`
 
 const summaryRow = (question, lines, href, options = {}) => {
   const value = lines.filter((line) => line != null && line !== '').map((line, index) => {
@@ -251,11 +142,12 @@ const summaryRow = (question, lines, href, options = {}) => {
   </div>`
 }
 
+// Check-your-answers rows for the questions tab.
 const alcoholRows = (session) => {
   if (!session.alcoholUse || !ALCOHOL_USE_LABELS[session.alcoholUse]) return ''
 
   const parts = [`<dl class="govuk-summary-list san-summary-list">${summaryRow(
-    'Is there evidence that Alex has any current issues with alcohol?',
+    'Is there evidence that Alex has had any issues with alcohol in the last 6 months?',
     [labelled(ALCOHOL_USE_LABELS, session.alcoholUse)],
     summaryChangeHref('alcohol', 'alcohol-use')
   )}</dl>`]
@@ -361,12 +253,7 @@ const analysisRows = (session) => {
   return rows
 }
 
-const setHidden = (element, hidden) => {
-  if (!element) return
-  element.hidden = hidden
-  element.classList.toggle('san-is-hidden', hidden)
-}
-
+// Practitioner analysis on the summary, or the empty-state notice.
 const renderAnalysisSummary = (session) => {
   const mount = document.querySelector('[data-al-analysis-summary]')
   const form = document.getElementById('san-alcohol-analysis-form')
@@ -485,6 +372,7 @@ const emptyFollowOnAnswers = () => ({
   alcoholAnalysisReoffendingDetails: ''
 })
 
+// Read and validate the current page.
 const readUseAnswers = () => ({
   alcoholUse: checkedValue('alcohol_use')
 })
@@ -541,7 +429,7 @@ const validateUse = (answers) => {
   return [{
     group: 'alcohol-use',
     href: '#alcohol-use',
-    text: 'Select if there is evidence that Alex has any current issues with alcohol'
+    text: 'Select if there is evidence that Alex has had any issues with alcohol in the last 6 months'
   }]
 }
 
@@ -663,8 +551,6 @@ const restoreAnalysis = (session) => {
   if (session.alcoholAnalysisReoffending) setField(`analysis-reoffending-${session.alcoholAnalysisReoffending}-details`, session.alcoholAnalysisReoffendingDetails)
 }
 
-const fromSummary = () => new URLSearchParams(window.location.search).get('from') === 'summary'
-
 const ensureBackLink = (href) => {
   let back = document.querySelector('.assessment-layout__back-link')
   const column = document.querySelector('.govuk-grid-column-two-thirds-from-desktop')
@@ -689,6 +575,7 @@ const seedExample = () => {
   window.history.replaceState({}, '', next)
 }
 
+// Wire up whichever alcohol page is currently loaded.
 const initAlcohol = () => {
   const page = document.querySelector('[data-al-page]')
   if (!page) return
@@ -924,6 +811,6 @@ const initAlcohol = () => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  if (!window.location.pathname.startsWith("/san-research/")) return
+  if (!isSanResearchJourney()) return
   initAlcohol()
 })

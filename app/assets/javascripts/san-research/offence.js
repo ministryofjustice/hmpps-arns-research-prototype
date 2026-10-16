@@ -1,10 +1,17 @@
 //
-// Offence analysis section of the Strengths and needs prototype
+// Offence analysis — Prototype 1 (Community) Strengths and needs.
+//
+// Pages: offence-analysis.html → victim card / details / delete if committed against people
+// → offence-analysis-impact.html → offence-analysis-involved-parties.html → summary.
+// Victim index is passed in the query string or hash (`victim=0`). The kit drops
+// query strings on *.html redirects, so hash params are a fallback.
 //
 
-import { getSanSession, sectionLinkHref, setSanSession } from './session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, labelled, scrollToHash } from './form.js'
+import { getSanSession, isSanResearchJourney, setSanSession } from './session.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, showErrors, labelled, scrollToHash, YES_NO, revealSoon, checkedValue, checkedValues, fieldValue, selectRadio, selectChecks, setField, summaryChangeHref } from './form.js'
+import { applySanProgress } from './progress.js'
 
+// Display labels for offence elements, motivations and victim details.
 const ELEMENT_LABELS = {
   arson: 'Arson',
   'domestic-abuse': 'Domestic abuse',
@@ -101,8 +108,6 @@ const INVOLVED_LABELS = {
   'more-than-15': 'More than 15'
 }
 
-const YES_NO = { yes: 'Yes', no: 'No' }
-
 const ESCALATION_LABELS = {
   yes: 'Yes',
   no: 'No',
@@ -122,89 +127,8 @@ const AGAINST_LABELS = {
 
 const ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth']
 
-const isInHiddenConditional = (element) => {
-  return !!element.closest('.govuk-radios__conditional--hidden, .govuk-checkboxes__conditional--hidden, .san-is-hidden, [hidden]')
-}
-
-const revealSoon = () => {
-  revealCheckedConditionals()
-  window.setTimeout(revealCheckedConditionals, 50)
-  window.setTimeout(revealCheckedConditionals, 300)
-}
-
-const checkedValue = (name) => {
-  const selected = Array.from(document.querySelectorAll(`input[type="radio"][name="${name}"]`))
-    .find((input) => input.checked && !isInHiddenConditional(input))
-  return selected ? selected.value : ''
-}
-
-const checkedValues = (name) => {
-  return Array.from(document.querySelectorAll(`input[type="checkbox"][name="${name}"]`))
-    .filter((input) => input.checked && !isInHiddenConditional(input))
-    .map((input) => input.value)
-}
-
-const fieldValue = (id) => {
-  const field = document.getElementById(id)
-  if (!(field instanceof HTMLTextAreaElement) && !(field instanceof HTMLInputElement) && !(field instanceof HTMLSelectElement)) return ''
-  if (isInHiddenConditional(field)) return ''
-  return field.value.trim()
-}
-
-const selectRadio = (name, value) => {
-  if (!value) return
-  const input = document.querySelector(`input[type="radio"][name="${name}"][value="${value}"]`)
-  if (input instanceof HTMLInputElement) input.checked = true
-}
-
-const selectChecks = (name, values) => {
-  document.querySelectorAll(`input[type="checkbox"][name="${name}"]`).forEach((input) => {
-    if (input instanceof HTMLInputElement) input.checked = (values || []).includes(input.value)
-  })
-}
-
-const setField = (id, value) => {
-  const field = document.getElementById(id)
-  if (field instanceof HTMLTextAreaElement || field instanceof HTMLInputElement || field instanceof HTMLSelectElement) {
-    field.value = value || ''
-  }
-}
-
-const showErrors = (errors) => {
-  clearErrors()
-  if (!errors.length) return
-
-  errors.forEach((error) => {
-    const group = document.querySelector(`[data-san-error-group="${error.group}"]`)
-    if (!group) return
-    group.classList.add('govuk-form-group--error')
-    const message = document.createElement('p')
-    message.className = 'govuk-error-message'
-    message.innerHTML = `<span class="govuk-visually-hidden">Error:</span> ${escapeHtml(error.text)}`
-    const fieldset = group.querySelector(':scope > fieldset, :scope > .govuk-fieldset')
-    const controls = fieldset ? fieldset.querySelector('.govuk-radios, .govuk-checkboxes, .govuk-hint, .govuk-select, .govuk-textarea') : null
-    if (fieldset && controls) fieldset.insertBefore(message, controls)
-    else if (fieldset) fieldset.prepend(message)
-    else group.prepend(message)
-  })
-
-  const mount = document.querySelector('[data-san-error-summary]')
-  if (!mount) return
-  const items = errors.map((error) => `<li><a href="${escapeHtml(error.href)}">${escapeHtml(error.text)}</a></li>`).join('')
-  mount.hidden = false
-  mount.innerHTML = `<div class="govuk-error-summary" data-module="govuk-error-summary" tabindex="-1">
-    <div role="alert">
-      <h2 class="govuk-error-summary__title">There is a problem</h2>
-      <div class="govuk-error-summary__body">
-        <ul class="govuk-list govuk-error-summary__list">${items}</ul>
-      </div>
-    </div>
-  </div>`
-  const summary = mount.querySelector('.govuk-error-summary')
-  if (summary instanceof HTMLElement) summary.focus()
-}
-
 // The kit redirects *.html addresses and drops the query string. Hash params survive that redirect.
+// Query string first; hash is a fallback because the kit drops ? on *.html redirects.
 const params = () => {
   const fromSearch = new URLSearchParams(window.location.search)
   if ([...fromSearch.keys()].length) return fromSearch
@@ -223,39 +147,10 @@ const victims = (session) => (Array.isArray(session.offenceVictims) ? session.of
 
 const includesPeople = (session) => Array.isArray(session.offenceCommittedAgainst) && session.offenceCommittedAgainst.includes('people')
 
-const summaryChangeHref = (page, hash = '') => `${page}?from=summary${hash ? `#${hash}` : ''}`
-
-const sectionLink = (key, complete, started, href) => {
-  document.querySelectorAll(`[data-section-complete="${key}"]`).forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', complete)
-  })
-  const link = document.querySelector(`[data-san-section-link="${key}"]`)
-  const next = sectionLinkHref(key, started ? href : '')
-  if (link && next) link.setAttribute('href', next)
-}
-
+// Side nav ticks. Status tags only update on offence pages.
 const applyProgress = (session) => {
-  const complete = !!session.offenceComplete
-  const label = complete ? 'Complete' : 'Incomplete'
-  document.querySelectorAll('[data-san-status]').forEach((tag) => {
-    if (!document.querySelector('[data-oa-page], [data-oa-summary], [data-oa-victim-details]')) return
-    tag.textContent = label
-    tag.classList.toggle('govuk-tag--light-blue', complete)
-    tag.classList.toggle('govuk-tag--light-grey', !complete)
-  })
-  document.querySelectorAll('[data-san-status-text]').forEach((node) => {
-    node.textContent = label
-  })
-
-  sectionLink('offence', complete, !!session.offenceDescription, 'offence-analysis-summary.html')
-  sectionLink('accommodation', !!session.accommodationComplete, !!session.accommodationType, 'accommodation-summary.html')
-  sectionLink('employment', !!session.employmentComplete, !!session.employmentStatus, 'employment-summary.html')
-  sectionLink('finances', !!session.financeComplete, Array.isArray(session.financeIncome) && session.financeIncome.length, 'finances-summary.html')
-  sectionLink('drugs', !!session.drugComplete, !!session.drugUse, 'drugs-summary.html')
-  sectionLink('alcohol', !!session.alcoholComplete, !!session.alcoholUse, 'alcohol-summary.html')
-  sectionLink('health', !!session.healthComplete, !!session.healthPhysical, 'health-summary.html')
-  sectionLink('relationships', !!session.relationshipsComplete, !!Array.isArray(session.relationshipsChildren) && session.relationshipsChildren.length > 0, 'personal-relationships-summary.html')
-  sectionLink('thinking', !!session.thinkingComplete, !!session.thinkingConsequences, 'thinking-behaviours-summary.html')
+  const onOffencePage = document.querySelector('[data-oa-page], [data-oa-summary], [data-oa-victim-details]')
+  applySanProgress(session, { current: 'offence', updateStatus: !!onOffencePage })
 }
 
 const summaryRow = (question, lines, href) => {
@@ -343,6 +238,7 @@ const victimCardHtml = (victim, index, from, withActions = true) => {
   </div>`
 }
 
+// Check-your-answers for the questions tab.
 const renderSummary = (session) => {
   const mount = document.querySelector('[data-oa-summary]')
   if (!mount) return
@@ -431,6 +327,33 @@ const renderSummary = (session) => {
   }
 }
 
+const victimsAddedHeading = (count) => (
+  count === 1 ? 'You have added 1 victim' : `You have added ${count} victims`
+)
+
+const victimListLabel = (victim, index) => {
+  const relationship = labelled(RELATIONSHIP_LABELS, victim.relationship)
+  if (victim.relationship === 'other' && victim.relationshipDetails) return `${relationship}: ${victim.relationshipDetails}`
+  return relationship || victimTitle(index)
+}
+
+const victimNameListHtml = (session, from) => victims(session).map((victim, index) => {
+  const label = victimListLabel(victim, index)
+  return `<div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">${escapeHtml(label)}</dt>
+    <dd class="govuk-summary-list__actions">
+      <ul class="govuk-summary-list__actions-list">
+        <li class="govuk-summary-list__actions-list-item">
+          <a class="govuk-link" href="${victimFormHref(index, from)}">Change<span class="govuk-visually-hidden"> ${escapeHtml(label)}</span></a>
+        </li>
+        <li class="govuk-summary-list__actions-list-item">
+          <a class="govuk-link" href="${victimDeleteHref(index, from)}">Remove<span class="govuk-visually-hidden"> ${escapeHtml(label)}</span></a>
+        </li>
+      </ul>
+    </dd>
+  </div>`
+}).join('')
+
 const renderVictimDetails = (session) => {
   const mount = document.querySelector('[data-oa-victim-details]')
   if (!mount) return
@@ -440,19 +363,38 @@ const renderVictimDetails = (session) => {
   }
 
   const list = victims(session)
+  const heading = document.querySelector('[data-oa-victims-heading]')
+  const hint = document.querySelector('[data-oa-victims-hint]')
+  const from = fromSummary() ? 'summary' : 'details'
   if (!list.length) {
+    if (heading) heading.textContent = "What are the victim's details?"
+    if (hint) hint.hidden = false
     mount.innerHTML = `<p class="govuk-body">Add victim's details to continue.</p>
-      <a class="govuk-button govuk-button--secondary" href="${victimFormHref(-1, 'details')}" data-module="govuk-button">Add a victim</a>`
+      <a class="govuk-button govuk-button--secondary" href="${victimFormHref(-1, from)}" data-module="govuk-button">Add a victim</a>`
     return
   }
 
-  const cards = list.map((victim, index) => victimCardHtml(victim, index, 'details')).join('')
-
-  mount.innerHTML = `${cards}
-    <div class="govuk-button-group">
-      <a class="govuk-button" href="offence-analysis-involved-parties.html" data-module="govuk-button">Save and continue</a>
-      <a class="govuk-button govuk-button--secondary" href="${victimFormHref(-1, 'details')}" data-module="govuk-button">Add another victim</a>
-    </div>`
+  if (heading) heading.textContent = victimsAddedHeading(list.length)
+  if (hint) hint.hidden = true
+  mount.innerHTML = `<dl class="govuk-summary-list san-add-to-list">${victimNameListHtml(session, from)}</dl>
+    <div class="govuk-form-group govuk-!-margin-top-8" data-san-error-group="add-another-victim">
+      <fieldset class="govuk-fieldset" id="add-another-victim">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          <h2 class="govuk-fieldset__heading">Do you need to add another victim?</h2>
+        </legend>
+        <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="add-another-victim-yes" name="add_another_victim" type="radio" value="yes">
+            <label class="govuk-label govuk-radios__label" for="add-another-victim-yes">Yes</label>
+          </div>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="add-another-victim-no" name="add_another_victim" type="radio" value="no">
+            <label class="govuk-label govuk-radios__label" for="add-another-victim-no">No</label>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <button type="button" class="govuk-button" data-module="govuk-button" data-oa-victims-continue>Save and continue</button>`
 }
 
 const requireText = (errors, group, href, value, text) => {
@@ -463,6 +405,7 @@ const requireChoice = (errors, group, href, value, text) => {
   if (!value) errors.push({ group, href, text })
 }
 
+// Read and validate the current page.
 const readQuestions = () => ({
   offenceDescription: fieldValue('offence-description'),
   offenceElements: checkedValues('offence_elements'),
@@ -629,6 +572,7 @@ const questionsContinue = (answers) => {
   return 'offence-analysis-involved-parties.html'
 }
 
+// Wire up whichever offence analysis page is currently loaded.
 const initOffence = () => {
   applyProgress(getSanSession())
   const page = document.querySelector('[data-oa-page]')
@@ -637,7 +581,29 @@ const initOffence = () => {
   if (!page && !details && !summary) return
 
   const session = getSanSession()
-  if (details) renderVictimDetails(session)
+  if (details) {
+    renderVictimDetails(session)
+    details.addEventListener('click', (event) => {
+      const continueButton = event.target.closest('[data-oa-victims-continue]')
+      if (!continueButton) return
+      event.preventDefault()
+      const addAnother = checkedValue('add_another_victim')
+      if (!addAnother) {
+        showErrors([{
+          group: 'add-another-victim',
+          href: '#add-another-victim',
+          text: 'Select yes if you need to add another victim'
+        }])
+        return
+      }
+      clearErrors()
+      if (addAnother === 'yes') {
+        window.location.assign(victimFormHref(-1, fromSummary() ? 'summary' : 'details'))
+        return
+      }
+      window.location.assign(fromSummary() ? 'offence-analysis-summary.html' : 'offence-analysis-involved-parties.html')
+    })
+  }
   if (summary) {
     renderSummary(session)
     document.querySelector('[data-oa-mark-complete]')?.addEventListener('click', () => {
@@ -671,6 +637,13 @@ const initOffence = () => {
     }
     const cancelHref = cancelVictimDeleteHref()
     ensureBackLink(cancelHref)
+    const victimName = victimListLabel(victim, index)
+    const deleteHeading = document.querySelector('[data-oa-page="victim-delete"] h1')
+    if (deleteHeading) deleteHeading.textContent = `Confirm you want to delete ${victimName}'s details`
+    const confirmDelete = document.querySelector('[data-oa-victim-delete-confirm]')
+    if (confirmDelete) {
+      confirmDelete.innerHTML = `Confirm<span class="govuk-visually-hidden"> you want to delete ${escapeHtml(victimName)}'s details</span>`
+    }
     document.querySelector('[data-oa-victim-delete-update]')?.setAttribute('href', victimFormHref(index, fromSummary() ? 'summary' : 'details'))
     document.querySelector('[data-oa-victim-delete-cancel]')?.setAttribute('href', cancelHref)
     const card = document.querySelector('[data-oa-victim-delete-card]')
@@ -763,6 +736,6 @@ const initOffence = () => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  if (!window.location.pathname.startsWith("/san-research/")) return
+  if (!isSanResearchJourney()) return
   initOffence()
 })

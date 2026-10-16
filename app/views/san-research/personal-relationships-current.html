@@ -1,7 +1,7 @@
 {% extends "layouts/assessment-san-research.html" %}
 
 {% set pageName = "Personal relationships and community" %}
-{% set sanHeading = "Personal relationships and community" %}
+{% set sanCaption = "Personal relationships and community" %}
 {% set sanSection = "relationships" %}
 {% set backLinkHref = "personal-relationships-questions.html" %}
 
@@ -37,13 +37,13 @@
 <form id="san-relationships-current-form" novalidate data-pc-page="current">
   <div class="govuk-form-group" data-pc-question="status" data-san-error-group="relationships-status">
     <fieldset class="govuk-fieldset" id="relationships-status">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">How would you describe Alex's current relationship?</h2>
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">How would you describe Alex's current relationship situation?</h1>
       </legend>
       <div class="govuk-radios" data-module="govuk-radios">
-        {{ radioOption("relationships_status", "status-happy", "happy", "Positive and supportive", "Their current relationship is positive and supportive.", true, "") | safe }}
-        {{ radioOption("relationships_status", "status-concerns", "concerns", "Has some difficulties but remains supportive", "There are some difficulties or concerns, but there remains some support or stability.", true, "") | safe }}
-        {{ radioOption("relationships_status", "status-unhappy", "unhappy", "Difficult or unhealthy", "Their current relationship is causing significant difficulties, is unhealthy or linked to offending.", true, "") | safe }}
+        {{ radioOption("relationships_status", "status-happy", "happy", "Positive and supportive", "Their current relationship is positive and supportive, or they are content being single.", true, "") | safe }}
+        {{ radioOption("relationships_status", "status-concerns", "concerns", "Has some difficulties but remains supportive", "There are some difficulties or concerns, but there remains some support, stability or contentment with the current situation.", true, "") | safe }}
+        {{ radioOption("relationships_status", "status-unhappy", "unhappy", "Difficult or unhealthy", "Their current relationship is causing significant difficulties, is unhealthy, linked to offending, or they are preoccupied with being single.", true, "") | safe }}
       </div>
     </fieldset>
   </div>

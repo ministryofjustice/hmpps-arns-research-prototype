@@ -1,12 +1,17 @@
 //
-// Thinking, behaviours and attitudes section of the Strengths and needs prototype
+// Thinking, behaviours and attitudes — Prototype 1 (Community) Strengths and needs.
+//
+// Pages: thinking-behaviours.html (one question per screen) → thinking-behaviours-sexual.html
+// → thinking-behaviours-sexual-harm.html if there are sexual concerns
+// → thinking-behaviours-changes.html → summary.
+// Hidden in this prototype: attitude towards criminal justice staff.
 //
 
-import { getSanSession, replaceSanSession, sectionLinkHref, setSanSession } from './session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, focusTargetField, labelled, scrollToHash } from './form.js'
+import { getSanSession, isSanResearchJourney, replaceSanSession, setSanSession } from './session.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, showErrors, focusTargetField, labelled, scrollToHash, CHANGES_LABELS, YES_NO, revealSoon, checkedValue, fieldValue, selectRadio, setField, setHidden, fromSummary, summaryChangeHref } from './form.js'
+import { applySanProgress } from './progress.js'
 
-const YES_NO = { yes: 'Yes', no: 'No' }
-
+// Each row: [sessionKey, stepId, inputName, question, missingError, labels].
 const QUESTIONS = [
   ['thinkingConsequences', 'consequences', 'thinking_consequences', 'Is Alex aware of the consequences of their actions?', 'Select if they are aware of the consequences of their actions', {
     yes: 'Yes, is aware of the consequences of their actions',
@@ -84,23 +89,11 @@ const QUESTIONS = [
 const HIDDEN_QUESTIONS = new Set(['thinkingAttitude'])
 const visibleQuestions = () => QUESTIONS.filter(([key]) => !HIDDEN_QUESTIONS.has(key))
 
-const CHANGES_LABELS = {
-  maintain: 'I have already made positive changes and want to maintain them',
-  active: 'I am actively making changes',
-  'know-how': 'I want to make changes and know how to',
-  'need-help': 'I want to make changes but need help',
-  thinking: 'I am thinking about making changes',
-  no: 'I do not want to make changes',
-  'no-answer': 'I do not want to answer',
-  'not-present': 'Alex is not present',
-  'not-applicable': 'Not applicable'
-}
-
 const HARM_QUESTIONS = [
   ['thinkingPreoccupation', 'preoccupation', 'thinking_preoccupation', 'Is there evidence Alex shows sexual preoccupation?', 'Select if there is evidence they show sexual preoccupation', {
-    yes: 'Yes, the amount of time they spend engaging in sexual activity or thinking about sex is unhealthy and is impacting their day-to-day life',
-    some: 'Shows some evidence of improving their day-to-day life but still spends a significant amount of time preoccupied with sex',
-    no: 'No, the amount of time they spend engaging in sexual activity or thinking about sex is healthy and is balanced alongside all other important areas of their life',
+    none: 'No evidence',
+    some: 'Some evidence',
+    significant: 'Significant evidence',
     unknown: 'Unknown'
   }],
   ['thinkingInterests', 'interests', 'thinking_interests', 'Is there evidence Alex has offence-related sexual interests?', 'Select if there is evidence they have offence-related sexual interests', {
@@ -119,7 +112,9 @@ const HARM_QUESTIONS = [
 
 const HARM_HINTS = {
   thinkingPreoccupation: {
-    no: 'This includes behaviours like masturbating regularly, having casual sex or using pornography to meet their needs in a healthy way.'
+    none: 'Sexual thoughts or behaviours do not appear to affect their daily functioning.',
+    some: 'Sexual thoughts or behaviours take up a significant amount of time, but there is evidence of other interests or attempts to reduce the behaviour.',
+    significant: 'Sexual thoughts or behaviours take up a significant amount of time and have a substantial impact on their daily functioning.'
   },
   thinkingInterests: {
     yes: 'They are strongly aroused by illegal harmful sexual acts with little or no interest in consensual sex.',
@@ -158,128 +153,19 @@ const EXAMPLE_COMPLETE = {
   thinkingComplete: true
 }
 
-const isInHiddenConditional = (element) => {
-  return !!element.closest('.govuk-radios__conditional--hidden, .govuk-checkboxes__conditional--hidden, .san-is-hidden, [hidden]')
-}
+// Side nav ticks and resume links for every SAN section.
+const applyProgress = (session) => applySanProgress(session, { current: 'thinking' })
 
-const revealSoon = () => {
-  revealCheckedConditionals()
-  window.setTimeout(revealCheckedConditionals, 50)
-  window.setTimeout(revealCheckedConditionals, 300)
-}
-
-const checkedValue = (name) => {
-  const selected = Array.from(document.querySelectorAll(`input[type="radio"][name="${name}"]`))
-    .find((input) => input.checked && !isInHiddenConditional(input))
-  return selected ? selected.value : ''
-}
-
-const fieldValue = (id) => {
-  const field = document.getElementById(id)
-  if (!(field instanceof HTMLTextAreaElement) || isInHiddenConditional(field)) return ''
-  return field.value.trim()
-}
-
-const selectRadio = (name, value) => {
-  if (!value) return
-  const input = document.querySelector(`input[type="radio"][name="${CSS.escape(name)}"][value="${CSS.escape(value)}"]`)
-  if (input instanceof HTMLInputElement) input.checked = true
-}
-
-const setField = (id, value) => {
-  const field = document.getElementById(id)
-  if (field instanceof HTMLTextAreaElement) field.value = value || ''
-}
-
-const showErrors = (errors) => {
-  clearErrors()
-  if (!errors.length) return
-
-  errors.forEach((error) => {
-    const group = document.querySelector(`[data-san-error-group="${error.group}"]`)
-    if (!group) return
-    group.classList.add('govuk-form-group--error')
-    const message = document.createElement('p')
-    message.className = 'govuk-error-message'
-    message.innerHTML = `<span class="govuk-visually-hidden">Error:</span> ${escapeHtml(error.text)}`
-    const fieldset = group.querySelector(':scope > fieldset, :scope > .govuk-fieldset')
-    const legend = fieldset ? fieldset.querySelector(':scope > legend') : null
-    if (legend) legend.after(message)
-    else if (fieldset) fieldset.prepend(message)
-    else group.prepend(message)
-  })
-
-  const mount = document.querySelector('[data-san-error-summary]')
-  if (!mount) return
-  const items = errors.map((error) => `<li><a href="${escapeHtml(error.href)}">${escapeHtml(error.text)}</a></li>`).join('')
-  mount.hidden = false
-  mount.innerHTML = `<div class="govuk-error-summary" data-module="govuk-error-summary" tabindex="-1">
-    <div role="alert">
-      <h2 class="govuk-error-summary__title">There is a problem</h2>
-      <div class="govuk-error-summary__body">
-        <ul class="govuk-list govuk-error-summary__list">${items}</ul>
-      </div>
-    </div>
-  </div>`
-  const summary = mount.querySelector('.govuk-error-summary')
-  if (summary instanceof HTMLElement) summary.focus()
-}
-
-const applySectionProgress = (key, complete, started, href) => {
-  document.querySelectorAll(`[data-section-complete="${key}"]`).forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', complete)
-  })
-  const link = document.querySelector(`[data-san-section-link="${key}"]`)
-  const next = sectionLinkHref(key, started ? href : '')
-  if (link && next) link.setAttribute('href', next)
-}
-
-const applyProgress = (session) => {
-  const complete = !!session.thinkingComplete
-  const label = complete ? 'Complete' : 'Incomplete'
-
-  document.querySelectorAll('[data-san-status]').forEach((tag) => {
-    tag.textContent = label
-    tag.classList.toggle('govuk-tag--light-blue', complete)
-    tag.classList.toggle('govuk-tag--light-grey', !complete)
-  })
-
-  document.querySelectorAll('[data-san-status-text]').forEach((node) => {
-    node.textContent = label
-  })
-
-  applySectionProgress('thinking', complete, !!session.thinkingConsequences, 'thinking-behaviours-summary.html')
-  applySectionProgress('accommodation', !!session.accommodationComplete, !!session.accommodationType, 'accommodation-summary.html')
-  applySectionProgress('employment', !!session.employmentComplete, !!session.employmentStatus, 'employment-summary.html')
-  applySectionProgress(
-    'finances',
-    !!session.financeComplete,
-    Array.isArray(session.financeIncome) && session.financeIncome.length,
-    'finances-summary.html'
-  )
-  applySectionProgress('drugs', !!session.drugComplete, !!session.drugUse, 'drugs-summary.html')
-  applySectionProgress('alcohol', !!session.alcoholComplete, !!session.alcoholUse, 'alcohol-summary.html')
-  applySectionProgress('health', !!session.healthComplete, !!session.healthPhysical, 'health-summary.html')
-  applySectionProgress('relationships', !!session.relationshipsComplete, !!Array.isArray(session.relationshipsChildren) && session.relationshipsChildren.length > 0, 'personal-relationships-summary.html')
-  applySectionProgress('offence', !!session.offenceComplete, !!session.offenceDescription, 'offence-analysis-summary.html')
-}
-
+// Journey completeness and next-page hrefs.
 const questionsFormAnswered = (session) => visibleQuestions().every(([key]) => session[key])
 
 const questionsAnswered = (session) => questionsFormAnswered(session) && !!session.thinkingChanges
 
 const continueThinkingHref = (session) => {
-  if (!questionsFormAnswered(session)) return 'thinking-behaviours.html'
+  if (!questionsAnswered(session)) return 'thinking-behaviours.html'
   if (!session.thinkingSexualConcerns) return 'thinking-behaviours-sexual.html'
   if (session.thinkingSexualConcerns === 'yes' && !sexualHarmAnswered(session)) return 'thinking-behaviours-sexual-harm.html'
-  if (!session.thinkingChanges) return 'thinking-behaviours-changes.html'
-  return 'thinking-behaviours.html'
-}
-
-const changesBackHref = (session) => {
-  if (session.thinkingSexualConcerns === 'yes') return 'thinking-behaviours-sexual-harm.html'
-  if (session.thinkingSexualConcerns) return 'thinking-behaviours-sexual.html'
-  return 'thinking-behaviours.html'
+  return 'thinking-behaviours-summary.html'
 }
 
 const sexualHarmAnswered = (session) => {
@@ -288,7 +174,6 @@ const sexualHarmAnswered = (session) => {
   return HARM_QUESTIONS.every(([key]) => session[key])
 }
 
-const summaryChangeHref = (page, hash = '') => `${page}?from=summary${hash ? `#${hash}` : ''}`
 
 const summaryRow = (question, lines, href, options = {}) => {
   const value = lines.filter((line) => line != null && line !== '').map((line, index) => {
@@ -344,7 +229,7 @@ const thinkingRows = (session) => {
     const changes = summaryRow(
       'Does Alex want to make changes to their thinking, behaviours and attitudes?',
       lines,
-      summaryChangeHref('thinking-behaviours-changes', 'changes'),
+      summaryChangeHref('thinking-behaviours', 'changes'),
       { secondaryFrom: 1 }
     )
     parts.push(`<dl class="govuk-summary-list san-summary-list">${changes}</dl>`)
@@ -382,12 +267,6 @@ const analysisRows = (session) => {
   return rows
 }
 
-const setHidden = (element, hidden) => {
-  if (!element) return
-  element.hidden = hidden
-  element.classList.toggle('san-is-hidden', hidden)
-}
-
 const renderAnalysisSummary = (session) => {
   const mount = document.querySelector('[data-tb-analysis-summary]')
   const form = document.getElementById('san-thinking-analysis-form')
@@ -407,6 +286,7 @@ const renderAnalysisSummary = (session) => {
   setHidden(form, true)
 }
 
+// Check-your-answers for the questions tab and analysis tab.
 const renderSummary = (session) => {
   const mount = document.querySelector('[data-tb-summary]')
   if (!mount) return
@@ -453,6 +333,7 @@ const showAnalysisForm = (focusId) => {
   }
 }
 
+// Read and validate the current page.
 const readQuestionAnswers = () => {
   const answers = {}
   visibleQuestions().forEach(([key, id, name]) => {
@@ -536,6 +417,7 @@ const restoreQuestions = (session) => {
     selectRadio(name, session[key])
     if (id === 'peers' && session.thinkingPeers) setField(`peers-${session.thinkingPeers}-details`, session.thinkingPeersDetails)
   })
+  restoreChanges(session)
 }
 
 const restoreChanges = (session) => {
@@ -570,8 +452,6 @@ const readAnalysisAnswers = () => {
   }
 }
 
-const fromSummary = () => new URLSearchParams(window.location.search).get('from') === 'summary'
-
 const ensureBackLink = (href) => {
   let back = document.querySelector('.assessment-layout__back-link')
   const column = document.querySelector('.govuk-grid-column-two-thirds-from-desktop')
@@ -596,6 +476,7 @@ const seedExample = () => {
   window.history.replaceState({}, '', next)
 }
 
+// Wire up whichever thinking page is currently loaded.
 const initThinking = () => {
   const page = document.querySelector('[data-tb-page]')
   if (!page) return
@@ -609,26 +490,19 @@ const initThinking = () => {
   const pageName = page.getAttribute('data-tb-page')
   if (pageName === 'questions') restoreQuestions(session)
   if (pageName === 'changes') {
-    if (!questionsFormAnswered(session)) {
-      window.location.assign('thinking-behaviours.html')
-      return
-    }
-    if (!sexualHarmAnswered(session)) {
-      window.location.assign(continueThinkingHref(session))
-      return
-    }
-    if (!fromSummary()) ensureBackLink(changesBackHref(session))
-    restoreChanges(session)
+    const query = fromSummary() ? '?from=summary' : ''
+    window.location.assign(`thinking-behaviours.html${query}#changes`)
+    return
   }
   if (pageName === 'sexual') {
-    if (!questionsFormAnswered(session)) {
+    if (!questionsAnswered(session)) {
       window.location.assign('thinking-behaviours.html')
       return
     }
     selectRadio('thinking_sexual_concerns', session.thinkingSexualConcerns)
   }
   if (pageName === 'sexual-harm') {
-    if (!questionsFormAnswered(session)) {
+    if (!questionsAnswered(session)) {
       window.location.assign('thinking-behaviours.html')
       return
     }
@@ -662,8 +536,8 @@ const initThinking = () => {
   document.getElementById('san-thinking-questions-form')?.addEventListener('submit', (event) => {
     event.preventDefault()
     revealCheckedConditionals()
-    const answers = readQuestionAnswers()
-    const errors = validateQuestions(answers)
+    const answers = { ...readQuestionAnswers(), ...readChangesAnswers() }
+    const errors = [...validateQuestions(answers), ...validateChanges(answers)]
     if (errors.length) {
       showErrors(errors)
       return
@@ -671,7 +545,7 @@ const initThinking = () => {
     clearErrors()
     setSanSession({ ...answers, thinkingComplete: false })
     const next = getSanSession()
-    if (fromSummary() && questionsAnswered(next) && sexualHarmAnswered(next)) {
+    if (fromSummary() && sexualHarmAnswered(next)) {
       window.location.assign('thinking-behaviours-summary.html')
       return
     }
@@ -706,10 +580,10 @@ const initThinking = () => {
     setSanSession(updates)
     if (answers.thinkingSexualConcerns === 'yes') {
       const next = getSanSession()
-      window.location.assign(fromSummary() && sexualHarmAnswered(next) && next.thinkingChanges ? 'thinking-behaviours-summary.html' : 'thinking-behaviours-sexual-harm.html')
+      window.location.assign(fromSummary() && sexualHarmAnswered(next) ? 'thinking-behaviours-summary.html' : 'thinking-behaviours-sexual-harm.html')
       return
     }
-    window.location.assign(fromSummary() && getSanSession().thinkingChanges ? 'thinking-behaviours-summary.html' : 'thinking-behaviours-changes.html')
+    window.location.assign('thinking-behaviours-summary.html')
   })
 
   document.getElementById('san-thinking-sexual-harm-form')?.addEventListener('submit', (event) => {
@@ -722,7 +596,7 @@ const initThinking = () => {
     }
     clearErrors()
     setSanSession({ ...answers, thinkingComplete: false })
-    window.location.assign(fromSummary() && getSanSession().thinkingChanges ? 'thinking-behaviours-summary.html' : 'thinking-behaviours-changes.html')
+    window.location.assign('thinking-behaviours-summary.html')
   })
 
   document.getElementById('san-thinking-analysis-form')?.addEventListener('submit', (event) => {
@@ -742,6 +616,6 @@ const initThinking = () => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  if (!window.location.pathname.startsWith("/san-research/")) return
+  if (!isSanResearchJourney()) return
   initThinking()
 })

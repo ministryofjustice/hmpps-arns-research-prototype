@@ -75,6 +75,26 @@
     </fieldset>
   </div>
 
+  <div class="govuk-form-group" data-hw-question="psychiatric-waiting" data-san-error-group="psychiatric-waiting" hidden>
+    <fieldset class="govuk-fieldset" id="psychiatric-waiting">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">Is Alex currently having, or waiting for, psychiatric treatment?</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        {% for option in [
+          { id: "yes", label: "Yes" },
+          { id: "no", label: "No" },
+          { id: "unknown", label: "Unknown" }
+        ] %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="psychiatric-waiting-{{ option.id }}" name="psychiatric_waiting" type="radio" value="{{ option.id }}">
+          <label class="govuk-label govuk-radios__label" for="psychiatric-waiting-{{ option.id }}">{{ option.label }}</label>
+        </div>
+        {% endfor %}
+      </div>
+    </fieldset>
+  </div>
+
   <div class="govuk-form-group" data-hw-question="head-injury" data-san-error-group="head-injury" hidden>
     <fieldset class="govuk-fieldset" id="head-injury" aria-describedby="head-injury-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
@@ -176,18 +196,17 @@
         <h2 class="govuk-fieldset__heading">Is Alex able to cope with day-to-day life?</h2>
       </legend>
       <div class="govuk-radios" data-module="govuk-radios">
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="cope-well" name="cope" type="radio" value="well">
-          <label class="govuk-label govuk-radios__label" for="cope-well">Yes, able to cope well</label>
-        </div>
         {% for option in [
-          { id: "some", label: "Has some difficulties coping" },
-          { id: "not", label: "Not able to cope" }
+          { id: "well", label: "Yes, able to cope well", hint: "Day-to-day life is not significantly affected by stress, worries or emotional difficulties." },
+          { id: "some", label: "Has some difficulties coping", hint: "Stress, worries or emotional difficulties sometimes affect day-to-day life.", details: true },
+          { id: "not", label: "Not able to cope", hint: "Stress, worries or emotional difficulties significantly affect day-to-day life and everyday tasks.", details: true }
         ] %}
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="cope-{{ option.id }}" name="cope" type="radio" value="{{ option.id }}" data-aria-controls="conditional-cope-{{ option.id }}">
+          <input class="govuk-radios__input" id="cope-{{ option.id }}" name="cope" type="radio" value="{{ option.id }}" aria-describedby="cope-{{ option.id }}-hint"{% if option.details %} data-aria-controls="conditional-cope-{{ option.id }}"{% endif %}>
           <label class="govuk-label govuk-radios__label" for="cope-{{ option.id }}">{{ option.label }}</label>
+          <div id="cope-{{ option.id }}-hint" class="govuk-hint govuk-radios__hint">{{ option.hint }}</div>
         </div>
+        {% if option.details %}
         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-cope-{{ option.id }}">
           <div class="govuk-form-group">
             <label class="govuk-label" for="cope-{{ option.id }}-details">Give details (optional)</label>
@@ -195,6 +214,7 @@
             <div class="govuk-hint san-character-count" data-san-character-count="cope-{{ option.id }}-details">You have 2,000 characters remaining</div>
           </div>
         </div>
+        {% endif %}
         {% endfor %}
       </div>
     </fieldset>

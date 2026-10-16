@@ -1,0 +1,272 @@
+{% set changelogIterations = [
+  {
+    id: "iteration-3",
+    label: "Iteration 3",
+    sections: [
+      {
+        name: "Accommodation",
+        changes: [
+          { type: "CD", level: "small", text: "Practitioner analysis strengths hint also says ‘Also consider any future plans for accommodation.’" }
+        ]
+      },
+      {
+        name: "Employment and education",
+        changes: [
+          { type: "CD", level: "small", text: "Strengths or protective factors hint also says ‘Also consider any relevant soft skills.’" }
+        ]
+      },
+      {
+        name: "Finances",
+        changes: [
+          { type: "IxD", level: "medium", text: "Further assessment is always shown, including after yes to over-reliance on family or friends" }
+        ]
+      },
+      {
+        name: "Drug use",
+        changes: [
+          { type: "IxD", level: "medium", text: "Give details about Alex's use of each drug is its own question, optional, with a hint about history and triggers" }
+        ]
+      },
+      {
+        name: "Alcohol use",
+        changes: [
+          { type: "CD", level: "small", text: "Help hint is ‘may help’ for issues in the last 6 months and ‘may have helped’ for past issues" }
+        ]
+      },
+      {
+        name: "Health and wellbeing",
+        changes: [
+          { type: "CD", level: "medium", text: "‘Is Alex currently having psychiatric treatment?’ is hidden. The question is ‘Is Alex currently having, or waiting for, psychiatric treatment?’, with Yes, No or Unknown" }
+        ]
+      },
+      {
+        name: "Personal relationships and community",
+        changes: [
+          { type: "IxD", level: "medium", text: "Does Alex currently have a partner? sits under sense of belonging. In a relationship or not, the next question is how you would describe their current relationship situation. Hints cover a supportive relationship or being content single, some difficulties, and a difficult or unhealthy relationship or preoccupation with being single" },
+          { type: "CD", level: "small", text: "Sense of belonging hint covers positive and negative influences, including friends, neighbours, communities, faith groups, extremist groups and gangs" },
+          { type: "IxD", level: "medium", text: "Childhood behavioural issues or challenges is asked after childhood experience" },
+          { type: "IxD", level: "medium", text: "Parenting responsibilities is asked above family relationship, only when there are children in Alex's life" },
+          { type: "CD", level: "small", text: "Child details use the caption, the heading ‘What are the children's details?’ and the hint ‘You can add multiple children.’" },
+          { type: "IxD", level: "medium", text: "Child details also ask whether Alex lives with this child, and whether Alex has any parental responsibility for this child" },
+          { type: "IxD", level: "medium", text: "Removing a child asks for confirmation. The only child returns to ‘Add children's details to continue’ and Add a child" },
+          { type: "IxD", level: "large", a11y: true, text: "The children list uses the add to a list pattern. Only the child’s name is shown, with change and remove, then ‘Do you need to add another child?’. The summary still shows the full child cards" },
+          { type: "IxD", level: "medium", text: "Yes to parental responsibility reveals give details. Unknown is also an option" }
+        ]
+      },
+      {
+        name: "Thinking, behaviours and attitudes",
+        changes: [
+          { type: "IxD", level: "large", text: "Risk of sexual harm follows the thinking questions. Yes opens the sexual harm questions, then the summary. No goes to the summary. The summary shows wanting to make changes last" },
+          { type: "CD", level: "small", text: "Sexual preoccupation asks how much evidence there is: no evidence, some evidence, significant evidence, or unknown, with a hint explaining sexual preoccupation" },
+          { type: "CD", level: "small", text: "Emotional intimacy hint explains looking to children to meet emotional needs that would usually be met through relationships with other adults" }
+        ]
+      },
+      {
+        name: "Offence analysis",
+        changes: [
+          { type: "IxD", level: "medium", text: "Motivations is asked before why the current index offence(s) happened" },
+          { type: "CD", level: "small", text: "Victim details use the caption Offence analysis, the heading ‘What are the victim's details?’ and the hint ‘You can add multiple victims.’" },
+          { type: "CD", level: "small", text: "Who is the victim? includes Alex's friend, after Other family member" },
+          { type: "IxD", level: "medium", text: "Removing a victim asks for confirmation. The only victim returns to ‘Add victim's details to continue’ and Add a victim" },
+          { type: "IxD", level: "large", a11y: true, text: "The victim list uses the add to a list pattern. Only who the victim is is shown, with change and remove, then ‘Do you need to add another victim?’. The summary still shows the full victim cards" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "iteration-2",
+    label: "Iteration 2",
+    sections: [
+      {
+        name: "Accommodation",
+        changes: [
+          { type: "CD", level: "small", text: "Suitability hint covers safety, who they are living with and appropriate amenities" }
+        ]
+      },
+      {
+        name: "Employment and education",
+        changes: [
+          { type: "CD", level: "small", text: "Follow-up asks how much support is needed, with significant or some support needed" },
+          { type: "IxD", level: "medium", text: "Changes to employment and education is on its own page, with the hint ‘Alex must answer this question’" }
+        ]
+      },
+      {
+        name: "Finances",
+        changes: [
+          { type: "IxD", level: "medium", text: "Money management and whether they are affected by debt are on the same page" },
+          { type: "CD", level: "small", text: "Income option is ‘No current source of money’" },
+          { type: "IxD", level: "medium", text: "Changes to finances is on its own page, with the hint ‘Alex must answer this question’" }
+        ]
+      },
+      {
+        name: "Drug use",
+        changes: [
+          { type: "IxD", level: "medium", text: "Drugs not used in the last 6 months are listed in the same way as drugs used in the last 6 months" },
+          { type: "IxD", level: "medium", text: "The summary of drugs used more than 6 months ago is hidden" },
+          { type: "IxD", level: "medium", text: "Treatment, why they use drugs, and how drug use has affected their life are hidden" },
+          { type: "IxD", level: "medium", text: "What helps them stop or reduce drug use is on its own page: present tense for the last 6 months, past tense for earlier use" },
+          { type: "IxD", level: "medium", text: "Yes reveals give details; No does not" },
+          { type: "IxD", level: "medium", text: "Changes to drug use is on its own page, with the hint ‘Alex must answer this question’" }
+        ]
+      },
+      {
+        name: "Alcohol use",
+        changes: [
+          { type: "CD", level: "small", text: "First question asks about issues with alcohol in the last 6 months, replacing ‘Has Alex ever drunk alcohol?’" },
+          { type: "IxD", level: "large", text: "Issues in the last 6 months continue to binge or excessive use; no issues asks about past issues; never drunk goes to the summary with no practitioner analysis" },
+          { type: "IxD", level: "medium", text: "Frequency, units, why they drink and the impact of drinking are removed" },
+          { type: "IxD", level: "large", text: "The help question follows issues in the last 6 months. Significant or some issues uses the present tense, whether or not there are past issues. No issues and past issues Yes uses the past tense. No issues and no past issues goes to the summary" },
+          { type: "IxD", level: "medium", text: "Changes to alcohol use is on its own page, with the hint ‘Alex must answer this question’" }
+        ]
+      },
+      {
+        name: "Health and wellbeing",
+        changes: [
+          { type: "IxD", level: "medium", text: "Physical health Yes asks for the condition and any prescribed medication or treatment" },
+          { type: "IxD", level: "large", a11y: true, text: "Mental health is split into whether they have conditions, then how you would describe them" },
+          { type: "CD", level: "small", text: "Learning question covers conditions that affect how they learn, understand or process information, and how much they are impacted" },
+          { type: "IxD", level: "medium", text: "Some difficulties coping, and not able to cope, reveal a details box. Each answer has a hint about how stress, worries or emotional difficulties affect day-to-day life" },
+          { type: "IxD", level: "medium", text: "Gambling is asked after day-to-day coping" },
+          { type: "CD", level: "small", text: "Question asks how you would describe how they see themselves" },
+          { type: "IxD", level: "medium", text: "Medication, head injury, neurodiversity, feelings about the future, and what helped during good health are hidden" },
+          { type: "IxD", level: "medium", text: "Changes to health and wellbeing is on its own page, with the hint ‘Alex must answer this question’" }
+        ]
+      },
+      {
+        name: "Personal relationships and community",
+        changes: [
+          { type: "CD", level: "small", text: "Current relationship, intimate relationship history and sense of belonging are reworded" },
+          { type: "CD", level: "small", text: "Childhood experience options are generally stable and supportive, some challenges, significant challenges, or unknown" },
+          { type: "IxD", level: "large", a11y: true, text: "Perpetrator of domestic abuse is its own page. Yes asks who they abused, then controlling or coercive behaviour" },
+          { type: "IxD", level: "large", a11y: true, text: "Yes to being a victim of domestic abuse asks who abused them" },
+          { type: "IxD", level: "large", a11y: true, text: "Strangulation or suffocation is its own page, and only if the victim of abuse is an intimate partner. Being a victim of domestic abuse is the next page" },
+          { type: "IxD", level: "medium", text: "Resolving challenges in intimate relationships, and important people, are hidden" },
+          { type: "IxD", level: "large", a11y: true, text: "Yes to children asks for each child’s details. The summary shows them as cards" },
+          { type: "IxD", level: "medium", text: "Changes question asks about personal relationships only, on its own page, with the hint ‘Alex must answer this question’" }
+        ]
+      },
+      {
+        name: "Thinking, behaviours and attitudes",
+        changes: [
+          { type: "IxD", level: "medium", text: "Supervision, hostility, anger, manipulation, peer influence and lifestyle questions ask how much evidence there is, or how well they manage it" },
+          { type: "IxD", level: "medium", text: "Positive attitude towards criminal justice staff is hidden" },
+          { type: "IxD", level: "medium", text: "Wanting to make changes is the last question on the first page, with the hint ‘Alex must answer this question’" }
+        ]
+      },
+      {
+        name: "Offence analysis",
+        changes: [
+          { type: "IxD", level: "medium", text: "Perpetrator and victim of domestic abuse questions are hidden" },
+          { type: "CD", level: "small", text: "Question asks if current offences are more serious than previous offending" },
+          { type: "CD", level: "small", text: "Yes to accepting responsibility includes the hint ‘Includes partial acceptance.’" },
+          { type: "IxD", level: "medium", text: "The summary shows victims as cards, like children" },
+          { type: "IxD", level: "medium", text: "Who the offence was committed against is direct victim or other, with details for other" },
+          { type: "CD", level: "medium", text: "Offence elements and motivations match the reference options, with details where needed" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "iteration-1",
+    label: "Iteration 1",
+    sections: [
+      {
+        name: "Accommodation",
+        changes: [
+          { type: "IxD", level: "large", a11y: true, text: "Location and suitability are each on their own page, with concerns on the next page when needed" },
+          { type: "IxD", level: "medium", text: "Changes to accommodation is on its own page, except when Alex has no accommodation" },
+          { type: "CD", level: "large", a11y: true, text: "Concern examples sit under the options as hints" }
+        ]
+      },
+      {
+        name: "Employment and education",
+        changes: [
+          { type: "IxD", level: "large", a11y: true, text: "Reading, writing or numeracy support is chosen first, then how much support is needed on the next page" },
+          { type: "IxD", level: "medium", text: "Skills for work is hidden when employment status is Retired" }
+        ]
+      },
+      {
+        name: "Finances",
+        changes: [
+          { type: "IxD", level: "medium", text: "Practitioner analysis is not required when further assessment is no" }
+        ]
+      },
+      {
+        name: "Drug use",
+        changes: [
+          { type: "CD", level: "small", text: "Drug list is alphabetical, with Other last" },
+          { type: "CD", level: "small", text: "Question asks which drugs Alex has used" },
+          { type: "CD", level: "small", text: "Prescribed drugs includes over the counter drugs, with a hint" },
+          { type: "CD", level: "small", text: "Timing options say the last 6 months, not before custody" },
+          { type: "IxD", level: "large", a11y: true, text: "Selecting only Other asks what other drugs Alex used, and hides add another and remove" },
+          { type: "IxD", level: "medium", text: "Practitioner analysis is not required if Alex has never used drugs" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "first-pass",
+    label: "First pass",
+    sections: [
+      {
+        name: "Accommodation",
+        changes: [
+          { type: "IxD", level: "large", a11y: true, text: "2 new questions replace accommodation type, each on its own page" },
+          { type: "IxD", level: "medium", text: "Living with, past help and future accommodation are hidden" }
+        ]
+      },
+      {
+        name: "Employment and education",
+        changes: [
+          { type: "IxD", level: "large", a11y: true, text: "Employment status options updated, with ‘Has Alex ever had a job?’ on a separate page" },
+          { type: "IxD", level: "medium", text: "Academic and vocational qualifications merged into one question" },
+          { type: "CD", level: "small", text: "Skills question asks how you would describe their skills for work" },
+          { type: "IxD", level: "medium", text: "Job sector, employment experience and education experience are hidden" }
+        ]
+      },
+      {
+        name: "Finances",
+        changes: [
+          { type: "IxD", level: "large", a11y: true, text: "Family and friends over-reliance is on a separate page" },
+          { type: "IxD", level: "large", text: "Further assessment question added; yes continues to later finance questions" },
+          { type: "IxD", level: "large", a11y: true, text: "Debt split: own or someone else's, then ‘What type of debt does Alex have?’ on a separate page" },
+          { type: "CD", level: "small", text: "Unable to manage money includes a hint about being stopped from managing money" },
+          { type: "IxD", level: "medium", text: "Gambling and bank account questions are hidden" }
+        ]
+      },
+      {
+        name: "Drug use",
+        changes: [
+          { type: "CD", level: "small", text: "Question asks about illegal drugs or misused medication" },
+          { type: "IxD", level: "large", a11y: true, text: "Choosing drugs and when they were used are on separate pages, with add another drug" },
+          { type: "IxD", level: "medium", text: "Drugs used and not used in the last 6 months each have the same frequency questions" },
+          { type: "IxD", level: "large", a11y: true, text: "Inject question only lists injectable drugs, with timing on a separate page" }
+        ]
+      }
+    ]
+  }
+] %}
+{% set changelogId = "community-changelog" %}
+{% set changelogHint = "Listing the changes to the ‘SAN private beta’ reference to build the SAN Community prototype." %}
+{% set changelogSummary %}
+      <h4 class="govuk-heading-s">Key changes and impact</h4>
+      <ul class="govuk-list govuk-list--bullet">
+        <li><strong>Nested questions are split onto separate pages.</strong> Accommodation, employment, debt, drugs, mental health and domestic abuse no longer use nested radios. The journey is easier to complete and meets GOV.UK accessibility guidance.</li>
+        <li><strong>Alcohol and drug use are shorter.</strong> Frequency, units, why they use, and impact questions are removed. Practitioners spend less time on detail that community SAN does not need.</li>
+        <li><strong>Help and wanting to make changes sit on their own pages.</strong> People only see the questions that match their answers, and the person being assessed must answer the changes question.</li>
+        <li><strong>Domestic abuse is asked on separate pages.</strong> Perpetrator, victim, who was involved, and strangulation or suffocation are no longer nested. The order is clearer and safer.</li>
+        <li><strong>Children and victims use the add-to-a-list pattern.</strong> Only the name or who they are is shown, with change and remove, then add another. The summary still shows the full cards.</li>
+        <li><strong>Risk of sexual harm comes after the thinking questions.</strong> Yes opens those questions; no goes to the summary. People who do not need them never see them.</li>
+        <li><strong>Practitioner analysis is skipped when there is nothing to analyse.</strong> Never used drugs, never drunk alcohol, and no further finance assessment skip analysis.</li>
+      </ul>
+      <h4 class="govuk-heading-s">Insights</h4>
+      <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+        <li>The biggest accessibility gain is splitting nested radios, not adding new questions.</li>
+        <li>Community SAN is shorter than the private beta: history, why, and impact questions were cut first.</li>
+        <li>Add-to-a-list is now the shared pattern for people, used for both children and victims.</li>
+        <li>Timing language is ‘the last 6 months’, not ‘before custody’.</li>
+        <li>Changes questions are consistent: their own page, with the hint ‘Alex must answer this question’.</li>
+        <li>Iteration 3 is mostly polish on relationships, children, victims and sexual harm, after the bigger Iteration 2 cuts.</li>
+      </ul>
+{% endset %}
+{% include "includes/san-research/changelog-ui.html" %}

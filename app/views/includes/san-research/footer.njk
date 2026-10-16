@@ -4,7 +4,7 @@
   meta: {
     items: [] if sanIsolated else [
       {
-        href: "/san-research/accessibility.html",
+        href: (sanResearchBase | default("/san-research")) + "/accessibility.html",
         text: "Accessibility statement"
       }
     ],

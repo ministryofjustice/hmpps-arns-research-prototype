@@ -1,15 +1,19 @@
 //
-// Health and wellbeing section of the Strengths and needs prototype
+// Health and wellbeing — Prototype 1 (Community) Strengths and needs.
+//
+// Pages: health.html (physical + mental) → health-questions.html (one question per screen)
+// → health-changes.html → summary.
+// Hidden in this prototype: medication, psychiatric treatment, head injury,
+// neurodiversity, future health, and what has helped.
 //
 
-import { getSanSession, sectionLinkHref, setSanSession } from './session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, focusTargetField, labelled, scrollToHash } from './form.js'
+import { getSanSession, isSanResearchJourney, setSanSession } from './session.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, showErrors, focusTargetField, labelled, scrollToHash, CHANGES_LABELS, YES_NO, YES_NO_UNKNOWN, revealSoon, checkedValue, checkedValues, fieldValue, selectRadio, selectChecks, setField, setHidden, fromSummary, summaryChangeHref } from './form.js'
+import { applySanProgress } from './progress.js'
 
+// Display labels and which follow-on questions are shown.
 const MENTAL_DESCRIBE = ['ongoing', 'past', 'undiagnosed']
 const CHANGE_DETAILS = ['maintain', 'active', 'know-how', 'need-help', 'thinking', 'no']
-
-const YES_NO = { yes: 'Yes', no: 'No' }
-const YES_NO_UNKNOWN = { yes: 'Yes', no: 'No', unknown: 'Unknown' }
 
 const PHYSICAL_LABELS = YES_NO_UNKNOWN
 
@@ -21,12 +25,7 @@ const MENTAL_DESCRIBE_LABELS = {
   undiagnosed: 'Undiagnosed, self reported or waiting for a consultation'
 }
 
-const PSYCHIATRIC_LABELS = {
-  yes: 'Yes',
-  pending: 'Pending treatment',
-  no: 'No',
-  unknown: 'Unknown'
-}
+const PSYCHIATRIC_LABELS = YES_NO_UNKNOWN
 
 const LEARNING_YES = ['significant', 'somewhat']
 
@@ -60,18 +59,6 @@ const ATTITUDE_LABELS = {
   negative: 'Negative or unrealistic'
 }
 
-const CHANGES_LABELS = {
-  maintain: 'I have already made positive changes and want to maintain them',
-  active: 'I am actively making changes',
-  'know-how': 'I want to make changes and know how to',
-  'need-help': 'I want to make changes but need help',
-  thinking: 'I am thinking about making changes',
-  no: 'I do not want to make changes',
-  'no-answer': 'I do not want to answer',
-  'not-present': 'Alex is not present',
-  'not-applicable': 'Not applicable'
-}
-
 const physicalYes = (session) => session.healthPhysical === 'yes'
 const mentalYes = (session) => session.healthMental === 'yes'
 const routeKey = (session) => {
@@ -79,135 +66,19 @@ const routeKey = (session) => {
   return `${physicalYes(session) ? 'physical' : 'no-physical'}-${mentalYes(session) ? 'mental' : 'no-mental'}`
 }
 
-const HIDDEN_QUESTIONS = ['physical-medication', 'mental-medication', 'head-injury', 'neurodiverse', 'future', 'helped']
+const HIDDEN_QUESTIONS = ['physical-medication', 'mental-medication', 'psychiatric', 'head-injury', 'neurodiverse', 'future', 'helped']
 
 const routeShows = (session, question) => {
   if (!routeKey(session)) return false
   if (HIDDEN_QUESTIONS.includes(question)) return false
-  if (question === 'mental-describe' || question === 'psychiatric') return mentalYes(session)
+  if (question === 'mental-describe' || question === 'psychiatric-waiting') return mentalYes(session)
   return true
 }
 
-const revealSoon = () => {
-  revealCheckedConditionals()
-  window.setTimeout(revealCheckedConditionals, 0)
-}
+// Side nav ticks and resume links for every SAN section.
+const applyProgress = (session) => applySanProgress(session, { current: 'health' })
 
-const checkedValue = (name) => {
-  const selected = Array.from(document.querySelectorAll(`input[type="radio"][name="${name}"]`))
-    .find((input) => input instanceof HTMLInputElement && input.checked && !isInHiddenConditional(input))
-  return selected instanceof HTMLInputElement ? selected.value : ''
-}
-
-const checkedValues = (name) => Array.from(document.querySelectorAll(`input[type="checkbox"][name="${name}"]`))
-  .filter((input) => input instanceof HTMLInputElement && input.checked && !isInHiddenConditional(input))
-  .map((input) => input.value)
-
-const isInHiddenConditional = (element) => {
-  const conditional = element.closest('.govuk-radios__conditional, .govuk-checkboxes__conditional')
-  return Boolean(conditional && (conditional.hidden || conditional.classList.contains('govuk-radios__conditional--hidden') || conditional.classList.contains('govuk-checkboxes__conditional--hidden')))
-}
-
-const fieldValue = (id) => {
-  const field = document.getElementById(id)
-  if (!(field instanceof HTMLTextAreaElement) || isInHiddenConditional(field)) return ''
-  return field.value.trim()
-}
-
-const selectRadio = (name, value) => {
-  if (!value) return
-  const input = document.querySelector(`input[type="radio"][name="${CSS.escape(name)}"][value="${CSS.escape(value)}"]`)
-  if (input instanceof HTMLInputElement) input.checked = true
-}
-
-const selectChecks = (name, values) => {
-  const selected = new Set(Array.isArray(values) ? values : [])
-  document.querySelectorAll(`input[type="checkbox"][name="${CSS.escape(name)}"]`).forEach((input) => {
-    if (input instanceof HTMLInputElement) input.checked = selected.has(input.value)
-  })
-}
-
-const setField = (id, value) => {
-  const field = document.getElementById(id)
-  if (field instanceof HTMLTextAreaElement || field instanceof HTMLInputElement) field.value = value || ''
-}
-
-const showErrors = (errors) => {
-  clearErrors()
-  if (!errors.length) return
-
-  errors.forEach((error) => {
-    const group = document.querySelector(`[data-san-error-group="${error.group}"]`)
-    if (!group) return
-    group.classList.add('govuk-form-group--error')
-    const message = document.createElement('p')
-    message.className = 'govuk-error-message'
-    message.innerHTML = `<span class="govuk-visually-hidden">Error:</span> ${escapeHtml(error.text)}`
-    const fieldset = group.querySelector(':scope > fieldset, :scope > .govuk-fieldset')
-    const controls = fieldset ? fieldset.querySelector('.govuk-radios, .govuk-checkboxes, .govuk-hint') : null
-    if (fieldset && controls) fieldset.insertBefore(message, controls)
-    else if (fieldset) fieldset.prepend(message)
-    else {
-      const label = group.querySelector(':scope > label, :scope > .govuk-label')
-      if (label) label.after(message)
-      else group.prepend(message)
-    }
-  })
-
-  const mount = document.querySelector('[data-san-error-summary]')
-  if (!mount) return
-  const items = errors.map((error) => `<li><a href="${escapeHtml(error.href)}">${escapeHtml(error.text)}</a></li>`).join('')
-  mount.hidden = false
-  mount.innerHTML = `<div class="govuk-error-summary" data-module="govuk-error-summary" tabindex="-1">
-    <div role="alert">
-      <h2 class="govuk-error-summary__title">There is a problem</h2>
-      <div class="govuk-error-summary__body">
-        <ul class="govuk-list govuk-error-summary__list">${items}</ul>
-      </div>
-    </div>
-  </div>`
-  const summary = mount.querySelector('.govuk-error-summary')
-  if (summary instanceof HTMLElement) summary.focus()
-}
-
-const applySectionProgress = (key, complete, started, href) => {
-  document.querySelectorAll(`[data-section-complete="${key}"]`).forEach((icon) => {
-    icon.classList.toggle('assessment-section-navigation__complete-icon--visible', complete)
-  })
-  const link = document.querySelector(`[data-san-section-link="${key}"]`)
-  const next = sectionLinkHref(key, started ? href : '')
-  if (link && next) link.setAttribute('href', next)
-}
-
-const applyProgress = (session) => {
-  const complete = !!session.healthComplete
-  const label = complete ? 'Complete' : 'Incomplete'
-
-  document.querySelectorAll('[data-san-status]').forEach((tag) => {
-    tag.textContent = label
-    tag.classList.toggle('govuk-tag--light-blue', complete)
-    tag.classList.toggle('govuk-tag--light-grey', !complete)
-  })
-  document.querySelectorAll('[data-san-status-text]').forEach((node) => {
-    node.textContent = label
-  })
-
-  applySectionProgress('health', complete, !!session.healthPhysical, 'health-summary.html')
-  applySectionProgress('accommodation', !!session.accommodationComplete, !!session.accommodationType, 'accommodation-summary.html')
-  applySectionProgress('employment', !!session.employmentComplete, !!session.employmentStatus, 'employment-summary.html')
-  applySectionProgress(
-    'finances',
-    !!session.financeComplete,
-    Array.isArray(session.financeIncome) && session.financeIncome.length,
-    'finances-summary.html'
-  )
-  applySectionProgress('drugs', !!session.drugComplete, !!session.drugUse, 'drugs-summary.html')
-  applySectionProgress('alcohol', !!session.alcoholComplete, !!session.alcoholUse, 'alcohol-summary.html')
-  applySectionProgress('relationships', !!session.relationshipsComplete, !!Array.isArray(session.relationshipsChildren) && session.relationshipsChildren.length > 0, 'personal-relationships-summary.html')
-  applySectionProgress('thinking', !!session.thinkingComplete, !!session.thinkingConsequences, 'thinking-behaviours-summary.html')
-  applySectionProgress('offence', !!session.offenceComplete, !!session.offenceDescription, 'offence-analysis-summary.html')
-}
-
+// Journey completeness for the health-questions screens.
 const questionsFormAnswered = (session) => {
   if (!routeKey(session)) return false
   if (mentalYes(session) && (!session.healthMentalDescribe || !session.healthPsychiatric)) return false
@@ -227,7 +98,6 @@ const continueQuestionsHref = (session) => {
   return 'health-questions.html'
 }
 
-const summaryChangeHref = (page, hash = '') => `${page}?from=summary${hash ? `#${hash}` : ''}`
 
 const summaryRow = (question, lines, href, options = {}) => {
   const value = lines.filter((line) => line != null && line !== '').map((line, index) => {
@@ -282,9 +152,9 @@ const healthRows = (session) => {
 
   if (mentalYes(session) && session.healthPsychiatric) {
     rows.push(summaryRow(
-      'Is Alex currently having psychiatric treatment?',
+      'Is Alex currently having, or waiting for, psychiatric treatment?',
       [labelled(PSYCHIATRIC_LABELS, session.healthPsychiatric)],
-      summaryChangeHref('health-questions', 'psychiatric')
+      summaryChangeHref('health-questions', 'psychiatric-waiting')
     ))
   }
 
@@ -397,12 +267,7 @@ const analysisRows = (session) => {
   return rows
 }
 
-const setHidden = (element, hidden) => {
-  if (!element) return
-  element.hidden = hidden
-  element.classList.toggle('san-is-hidden', hidden)
-}
-
+// Check-your-answers for the questions tab and analysis tab.
 const renderSummary = (session) => {
   const mount = document.querySelector('[data-hw-summary]')
   if (!mount) return
@@ -469,6 +334,7 @@ const openAnalysisTab = () => {
   if (tab instanceof HTMLElement) tab.click()
 }
 
+// Read and validate the current page.
 const readStartAnswers = () => {
   const healthPhysical = checkedValue('health_physical')
   const healthMental = checkedValue('health_mental')
@@ -505,7 +371,7 @@ const readQuestionAnswers = (session) => {
     answers.healthMentalDetails = MENTAL_DESCRIBE.includes(answers.healthMentalDescribe)
       ? fieldValue(`mental-describe-${answers.healthMentalDescribe}-details`)
       : ''
-    answers.healthPsychiatric = checkedValue('psychiatric')
+    answers.healthPsychiatric = checkedValue('psychiatric_waiting')
   }
   if (LEARNING_YES.includes(answers.healthLearning)) {
     answers.healthLearningDetails = fieldValue(`learning-${answers.healthLearning}-details`)
@@ -576,9 +442,9 @@ const validateQuestions = (answers, session) => {
   }
   if (mentalYes(session) && !answers.healthPsychiatric) {
     errors.push({
-      group: 'psychiatric',
-      href: '#psychiatric',
-      text: 'Select if Alex is currently having psychiatric treatment'
+      group: 'psychiatric-waiting',
+      href: '#psychiatric-waiting',
+      text: 'Select if Alex is currently having, or waiting for, psychiatric treatment'
     })
   }
   if (!answers.healthLearning) {
@@ -689,7 +555,7 @@ const restoreQuestions = (session) => {
   }
   setField('physical-medication', session.healthPhysicalMedication)
   setField('mental-medication', session.healthMentalMedication)
-  selectRadio('psychiatric', session.healthPsychiatric)
+  selectRadio('psychiatric_waiting', session.healthPsychiatric)
   selectRadio('head_injury', session.healthHeadInjury)
   selectRadio('neurodiverse', session.healthNeurodiverse)
   if (session.healthNeurodiverse === 'yes') setField('neurodiverse-yes-details', session.healthNeurodiverseDetails)
@@ -735,8 +601,6 @@ const restoreAnalysis = (session) => {
   if (session.hwAnalysisReoffending) setField(`analysis-reoffending-${session.hwAnalysisReoffending}-details`, session.hwAnalysisReoffendingDetails)
 }
 
-const fromSummary = () => new URLSearchParams(window.location.search).get('from') === 'summary'
-
 const ensureBackLink = (href) => {
   let back = document.querySelector('.assessment-layout__back-link')
   const column = document.querySelector('.govuk-grid-column-two-thirds-from-desktop')
@@ -750,6 +614,7 @@ const ensureBackLink = (href) => {
   back.setAttribute('href', href)
 }
 
+// Wire up whichever health page is currently loaded.
 const initHealth = () => {
   const page = document.querySelector('[data-hw-page]')
   if (!page) return
@@ -871,6 +736,6 @@ const initHealth = () => {
 }
 
 window.GOVUKPrototypeKit.documentReady(() => {
-  if (!window.location.pathname.startsWith("/san-research/")) return
+  if (!isSanResearchJourney()) return
   initHealth()
 })

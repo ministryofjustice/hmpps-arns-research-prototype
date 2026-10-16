@@ -12,7 +12,7 @@
 <div class="san-content-header san-content-header--sexual">
   <div class="san-content-header__row">
     <p class="san-sexual-kicker govuk-!-margin-bottom-0">Thinking, behaviours and attitudes<span class="govuk-visually-hidden">, <span data-san-status-text>Incomplete</span></span></p>
-    <strong class="govuk-tag govuk-tag--light-grey san-status-tag" data-san-status>Incomplete</strong>
+    <strong class="govuk-tag govuk-tag--light-grey san-status-tag" data-san-status aria-hidden="true">Incomplete</strong>
   </div>
 </div>
 
@@ -21,10 +21,11 @@
     id: "preoccupation",
     name: "thinking_preoccupation",
     question: "Is there evidence Alex shows sexual preoccupation?",
+    hint: "Sexual preoccupation is when sexual thoughts or behaviours take up a significant amount of time and affect day-to-day life, relationships, responsibilities or other important activities.",
     options: [
-      { value: "yes", label: "Yes, the amount of time they spend engaging in sexual activity or thinking about sex is unhealthy and is impacting their day-to-day life" },
-      { value: "some", label: "Shows some evidence of improving their day-to-day life but still spends a significant amount of time preoccupied with sex" },
-      { value: "no", label: "No, the amount of time they spend engaging in sexual activity or thinking about sex is healthy and is balanced alongside all other important areas of their life", hint: "This includes behaviours like masturbating regularly, having casual sex or using pornography to meet their needs in a healthy way." },
+      { value: "none", label: "No evidence", hint: "Sexual thoughts or behaviours do not appear to affect their daily functioning." },
+      { value: "some", label: "Some evidence", hint: "Sexual thoughts or behaviours take up a significant amount of time, but there is evidence of other interests or attempts to reduce the behaviour." },
+      { value: "significant", label: "Significant evidence", hint: "Sexual thoughts or behaviours take up a significant amount of time and have a substantial impact on their daily functioning." },
       { value: "unknown", label: "Unknown" }
     ]
   },
@@ -43,6 +44,7 @@
     id: "intimacy",
     name: "thinking_intimacy",
     question: "Is there evidence Alex finds it easier to seek emotional intimacy with children over adults?",
+    hint: "This means looking to children to meet emotional needs that would usually be met through relationships with other adults.",
     options: [
       { value: "yes", label: "Yes, they find it easier to seek emotional intimacy with children and have significant difficulty forming intimate relationships with adults" },
       { value: "some", label: "Shows some evidence of having or wanting stable adult relationships but finds it easier to seek emotional intimacy with children over adults" },
@@ -56,7 +58,7 @@
   <h1 class="govuk-heading-l">Risk of sexual harm</h1>
   {% for question in questions %}
   <div class="govuk-form-group{% if not loop.first %} san-question{% endif %}" data-san-error-group="{{ question.id }}">
-    <fieldset class="govuk-fieldset" id="{{ question.id }}">
+    <fieldset class="govuk-fieldset" id="{{ question.id }}"{% if question.hint %} aria-describedby="{{ question.id }}-hint"{% endif %}>
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--{{ question.level | default('m') }}">
         {% if question.heading == "h1" %}
         <h1 class="govuk-fieldset__heading">{{ question.question }}</h1>
@@ -64,6 +66,9 @@
         <h2 class="govuk-fieldset__heading">{{ question.question }}</h2>
         {% endif %}
       </legend>
+      {% if question.hint %}
+      <div id="{{ question.id }}-hint" class="govuk-hint">{{ question.hint }}</div>
+      {% endif %}
       <div class="govuk-radios" data-module="govuk-radios">
         {% for option in question.options %}
         <div class="govuk-radios__item">

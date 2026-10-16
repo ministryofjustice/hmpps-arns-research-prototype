@@ -122,12 +122,12 @@
   <div class="govuk-form-group" data-pc-question="status" data-san-error-group="relationships-status">
     <fieldset class="govuk-fieldset" id="relationships-status">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">How would you describe Alex's current relationship?</h2>
+        <h2 class="govuk-fieldset__heading">How would you describe Alex's current relationship situation?</h2>
       </legend>
       <div class="govuk-radios" data-module="govuk-radios">
-        {{ radioOption("relationships_status", "status-happy", "happy", "Positive and supportive", "Their current relationship is positive and supportive.", true, "") | safe }}
-        {{ radioOption("relationships_status", "status-concerns", "concerns", "Has some difficulties but remains supportive", "There are some difficulties or concerns, but there remains some support or stability.", true, "") | safe }}
-        {{ radioOption("relationships_status", "status-unhappy", "unhappy", "Difficult or unhealthy", "Their current relationship is causing significant difficulties, is unhealthy or linked to offending.", true, "") | safe }}
+        {{ radioOption("relationships_status", "status-happy", "happy", "Positive and supportive", "Their current relationship is positive and supportive, or they are content being single.", true, "") | safe }}
+        {{ radioOption("relationships_status", "status-concerns", "concerns", "Has some difficulties but remains supportive", "There are some difficulties or concerns, but there remains some support, stability or contentment with the current situation.", true, "") | safe }}
+        {{ radioOption("relationships_status", "status-unhappy", "unhappy", "Difficult or unhealthy", "Their current relationship is causing significant difficulties, is unhealthy, linked to offending, or they are preoccupied with being single.", true, "") | safe }}
       </div>
     </fieldset>
   </div>
@@ -153,20 +153,6 @@
     <div id="relationships-resolve-hint" class="govuk-hint">Consider how resilient they are, and how they work with their partner to resolve issues when they arise. An intimate relationship is one that involves physical and/or emotional closeness.</div>
     <textarea class="govuk-textarea" id="relationships-resolve" name="relationships_resolve" rows="5" maxlength="2000" aria-describedby="relationships-resolve-hint"></textarea>
     <div class="govuk-hint san-character-count" data-san-character-count="relationships-resolve">You have 2,000 characters remaining</div>
-  </div>
-
-  <hr class="govuk-section-break govuk-section-break--visible assessment-layout__question-divider">
-
-  <div class="govuk-form-group" data-pc-question="behaviour" data-san-error-group="relationships-behaviour">
-    <fieldset class="govuk-fieldset" id="relationships-behaviour">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Is there evidence that Alex has ever been a perpetrator of domestic abuse?</h2>
-      </legend>
-      <div class="govuk-radios" data-module="govuk-radios">
-        {{ radioOption("relationships_behaviour", "behaviour-yes", "yes", "Yes", "", false, "") | safe }}
-        {{ radioOption("relationships_behaviour", "behaviour-no", "no", "No", "", false, "") | safe }}
-      </div>
-    </fieldset>
   </div>
 
   <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
