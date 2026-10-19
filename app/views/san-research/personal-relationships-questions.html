@@ -139,11 +139,9 @@
       </legend>
       <div id="relationships-history-hint" class="govuk-hint">An intimate relationship is one that involves physical and/or emotional closeness.</div>
       <div class="govuk-radios" data-module="govuk-radios">
-        {{ radioOption("relationships_history", "history-stable", "stable", "Stable, supportive, positive and rewarding relationships", "", true, "Consider patterns and quality of any significant relationships.") | safe }}
+        {{ radioOption("relationships_history", "history-stable", "stable", "Stable, supportive and rewarding", "This includes having no history of intimate relationships, but they appear capable of starting and maintaining a healthy one.", true, "Consider patterns and quality of any significant relationships.") | safe }}
         {{ radioOption("relationships_history", "history-mixed", "mixed", "Both healthy and unhealthy relationships", "", true, "Consider patterns and quality of any significant relationships.") | safe }}
-        {{ radioOption("relationships_history", "history-unstable", "unstable", "Unstable, unsupportive and destructive relationships", "", true, "Consider patterns and quality of any significant relationships.") | safe }}
-        {{ radioOption("relationships_history", "history-capable", "capable", "No history of relationships, but they appear capable of starting and maintaining a healthy one", "", true, "") | safe }}
-        {{ radioOption("relationships_history", "history-concerns", "concerns", "No history of relationships and there are concerns about their ability to start or maintain healthy relationships", "", true, "") | safe }}
+        {{ radioOption("relationships_history", "history-unstable", "unstable", "Unstable, unsupportive and destructive", "Includes having no history of relationships and there are concerns about their ability to start or maintain one.", true, "Consider patterns and quality of any significant relationships.") | safe }}
       </div>
     </fieldset>
   </div>
