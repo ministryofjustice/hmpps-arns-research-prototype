@@ -197,9 +197,9 @@
       </legend>
       <div class="govuk-radios" data-module="govuk-radios">
         {% for option in [
-          { id: "well", label: "Yes, able to cope well", hint: "Day-to-day life is not significantly affected by stress, worries or emotional difficulties." },
-          { id: "some", label: "Has some difficulties coping", hint: "Stress, worries or emotional difficulties sometimes affect day-to-day life.", details: true },
-          { id: "not", label: "Not able to cope", hint: "Stress, worries or emotional difficulties significantly affect day-to-day life and everyday tasks.", details: true }
+          { id: "well", label: "Yes, able to cope well", hint: "Their day-to-day life is not significantly affected by stress, worries or emotional difficulties." },
+          { id: "some", label: "Sometimes unable to cope", hint: "Their day-to-day is sometimes affected by Stress, worries or emotional difficulties.", details: true },
+          { id: "not", label: "Not able to cope", hint: "Their day-to-day life is significantly affected by stress, worries or emotional difficulties..", details: true }
         ] %}
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="cope-{{ option.id }}" name="cope" type="radio" value="{{ option.id }}" aria-describedby="cope-{{ option.id }}-hint"{% if option.details %} data-aria-controls="conditional-cope-{{ option.id }}"{% endif %}>

@@ -132,7 +132,11 @@ const FUTURE_DETAILS_IDS = {
 
 // Each question is its own screen. Build the route from the current release plans.
 const accommodationRoute = (session) => {
-  if (session.accommodationType === 'none') return ['no-accommodation', 'changes']
+  if (session.accommodationType === 'none') {
+    const steps = ['no-accommodation', 'release-plans']
+    if (session.releasePlans === 'no') return [...steps, 'changes']
+    return [...steps, 'living-with', 'location', 'suitable', 'changes']
+  }
   if (!['settled', 'temporary'].includes(session.accommodationType)) return null
   const steps = session.accommodationType === 'temporary' ? ['temporary-type'] : []
   const asksReturn = session.accommodationType === 'settled'
@@ -369,7 +373,7 @@ const accommodationRows = (session) => {
   if (session.accommodationType) {
     const lines = [labelled(TYPE_LABELS, session.accommodationType)]
     rows.push(summaryRow(
-      'What type of accommodation does Alex currently have?',
+      'What type of accommodation did Alex have before custody?',
       lines,
       summaryChangeHref('accommodation'),
       { secondaryFrom: 1 }
@@ -713,6 +717,10 @@ const patchForStep = (step, answers, previous) => {
     if (step === 'release-plans') {
       delete cleared.releasePlans
       delete cleared.releasePlansDetails
+      if (previous.accommodationType === 'none') {
+        delete cleared.noAccommodationReasons
+        delete cleared.noAccommodationOtherDetails
+      }
     }
     Object.assign(patch, cleared, answers)
   }

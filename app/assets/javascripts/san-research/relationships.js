@@ -372,7 +372,7 @@ const relationshipRows = (session) => {
     const details = session.relationshipsAbuseWhoDetails || {}
     const lines = session.relationshipsAbuseWho.flatMap((id) => answerLines(labelled(ABUSE_WHO_LABELS, id), details[id]))
     rows.push(summaryRow(
-      'Who did Alex abuse?',
+      'Who did Alex commit domestic abuse against?',
       lines,
       summaryChangeHref('personal-relationships-domestic-abuse', 'relationships-abuse')
     ))
@@ -406,7 +406,7 @@ const relationshipRows = (session) => {
     const details = session.relationshipsVictimWhoDetails || {}
     const lines = session.relationshipsVictimWho.flatMap((id) => answerLines(labelled(ABUSE_WHO_LABELS, id), details[id]))
     rows.push(summaryRow(
-      'Who was Alex abused by?',
+      'Who committed the abuse against Alex?',
       lines,
       summaryChangeHref('personal-relationships-victim-who', 'relationships-victim-who')
     ))

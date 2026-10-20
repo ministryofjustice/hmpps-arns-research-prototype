@@ -26,12 +26,18 @@
       </legend>
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="difficulty-{{ area.id }}-significant" name="difficulty_{{ area.id }}" type="radio" value="significant">
+          <input class="govuk-radios__input" id="difficulty-{{ area.id }}-significant" name="difficulty_{{ area.id }}" type="radio" value="significant" aria-describedby="difficulty-{{ area.id }}-significant-hint">
           <label class="govuk-label govuk-radios__label" for="difficulty-{{ area.id }}-significant">Significant support needed</label>
+          <div id="difficulty-{{ area.id }}-significant-hint" class="govuk-hint govuk-radios__hint">Has a substantial impact on day-to-day life and they are likely to need regular support.</div>
         </div>
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="difficulty-{{ area.id }}-some" name="difficulty_{{ area.id }}" type="radio" value="some">
+          <input class="govuk-radios__input" id="difficulty-{{ area.id }}-some" name="difficulty_{{ area.id }}" type="radio" value="some" aria-describedby="difficulty-{{ area.id }}-some-hint">
           <label class="govuk-label govuk-radios__label" for="difficulty-{{ area.id }}-some">Some support needed</label>
+          <div id="difficulty-{{ area.id }}-some-hint" class="govuk-hint govuk-radios__hint">
+            {% if area.id == "reading" %}Can usually manage day-to-day reading but may need support with some written information.
+            {% elif area.id == "writing" %}Can usually manage day-to-day writing but may need support with spelling, grammar or completing longer writing tasks.
+            {% else %}Can usually manage day-to-day numeracy but may need support with calculations, numbers or money-related tasks.{% endif %}
+          </div>
         </div>
       </div>
     </fieldset>
