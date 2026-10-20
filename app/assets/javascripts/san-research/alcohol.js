@@ -29,9 +29,9 @@ const neverDrunk = (session) => session.alcoholUse === 'never'
 const sameIssuePath = (left, right) => currentIssues({ alcoholUse: left }) && currentIssues({ alcoholUse: right })
 
 const EVIDENCE_LABELS = {
-  none: 'No evidence of binge drinking or excessive alcohol use',
-  some: 'Some evidence of binge drinking or excessive alcohol use',
-  detrimental: 'Evidence of binge drinking or excessive alcohol use'
+  none: 'No evidence',
+  some: 'Yes, some evidence',
+  detrimental: 'Yes, significant evidence'
 }
 
 const EVIDENCE_HINTS = {
