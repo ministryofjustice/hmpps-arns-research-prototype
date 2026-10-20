@@ -83,7 +83,7 @@
 <form id="san-offence-impact-form" novalidate data-oa-page="impact">
   {{ yesNoDetails(
     "leader",
-    "Was Alex the leader of the current index offence(s)?",
+    "Was Alex the leader of the current index offences?",
     "m",
     "",
     false,
@@ -101,7 +101,7 @@
 
   {{ yesNoDetails(
     "responsibility",
-    "Does Alex accept responsibility for the current index offence(s)?",
+    "Does Alex accept responsibility for the current index offences?",
     "m",
     "",
     true,
@@ -112,7 +112,7 @@
   <div class="govuk-form-group san-question" data-san-error-group="escalation">
     <fieldset class="govuk-fieldset" id="escalation" aria-describedby="escalation-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Are Alex's current offence(s) more serious than their previous offending?</h2>
+        <h2 class="govuk-fieldset__heading">Is there an escalation in seriousness from Alex's previous offending?</h2>
       </legend>
       <div id="escalation-hint" class="govuk-hint">Consider convictions, recorded cautions, warnings, ancillaries and civil orders.</div>
       <div class="govuk-radios" data-module="govuk-radios">
@@ -123,7 +123,7 @@
         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-escalation-yes">
           <div class="govuk-form-group">
             <label class="govuk-label" for="escalation-yes-details">Give details (optional)</label>
-            <div id="escalation-yes-details-hint" class="govuk-hint">Consider impact and harm. Behaviour should be related to the index offence.</div>
+            <div id="escalation-yes-details-hint" class="govuk-hint">Consider impact and harm, Behaviour should be related to the index offence. Consider what behaviour has indicated an escalation in seriousness.</div>
             <textarea class="govuk-textarea" id="escalation-yes-details" name="escalation_yes_details" rows="5" maxlength="2000" aria-describedby="escalation-yes-details-hint"></textarea>
             <div class="govuk-hint san-character-count" data-san-character-count="escalation-yes-details">You have 2,000 characters remaining</div>
           </div>
@@ -193,7 +193,7 @@
     <h2 class="govuk-label-wrapper">
       <label class="govuk-label govuk-label--m" for="patterns">What are the patterns of offending?</label>
     </h2>
-    <div id="patterns-hint" class="govuk-hint">Analyse whether the current index offence(s) is (or are) part of a wider pattern of offending and identify any established or emerging themes. You do not need to list all previous convictions.</div>
+    <div id="patterns-hint" class="govuk-hint">Analyse whether the current index offences are part of a wider pattern of offending and identify any established or emerging themes. You do not need to list all previous convictions.</div>
     <textarea class="govuk-textarea" id="patterns" name="patterns" rows="5" maxlength="2000" aria-describedby="patterns-hint"></textarea>
     <div class="govuk-hint san-character-count" data-san-character-count="patterns">You have 2,000 characters remaining</div>
   </div>
