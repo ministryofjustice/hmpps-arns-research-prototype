@@ -409,7 +409,7 @@ const accommodationRows = (session) => {
       const reasons = Array.isArray(session.locationReasons) ? session.locationReasons : []
       const lines = reasonLines(LOCATION_REASON_LABELS, reasons, session.locationOtherDetails)
       rows.push(summaryRow(
-        "What are your concerns about the location of Alex's accommodation? (optional)",
+        "Why is the location of Alex's accommodation not suitable? (optional)",
         lines.length ? lines : ['Not provided'],
         summaryChangeHref('accommodation-concerns', 'location'),
         lines.length ? { secondaryFrom: reasons.length } : {}

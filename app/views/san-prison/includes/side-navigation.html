@@ -2,6 +2,7 @@
 {% set currentSection = sanSection | default("accommodation") %}
 {% set navIsolated = sanIsolated | default(false) %}
 {% set isolatedHref = (sanPrisonBase | default("/san-prison")) + "/drugs-pa#practitioner-analysis" %}
+{% set inactiveSections = ["employment", "finances", "health", "relationships", "thinking", "offence"] %}
 <nav class="moj-side-navigation assessment-side-navigation assessment-section-navigation san-side-navigation" aria-label="Strengths and needs">
   <ul class="moj-side-navigation__list">
     <li class="moj-side-navigation__item{% if currentSection == "accommodation" %} moj-side-navigation__item--active{% endif %}">
@@ -17,7 +18,7 @@
       </a>
     </li>
     <li class="moj-side-navigation__item{% if currentSection == "employment" %} moj-side-navigation__item--active{% endif %}">
-      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="employment.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="employment"{% endif %}{% if currentSection == "employment" %} aria-current="location"{% endif %}>
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="employment.html"{% endif %} class="assessment-section-navigation__link{% if not navIsolated and 'employment' in inactiveSections %} san-side-navigation__link--disabled{% endif %}"{% if not navIsolated %} data-san-section-link="employment"{% if 'employment' in inactiveSections %} data-san-nav-disabled aria-disabled="true"{% endif %}{% endif %}{% if currentSection == "employment" %} aria-current="location"{% endif %}>
         <span class="assessment-section-navigation__label">Employment and education</span>
         <span class="govuk-visually-hidden" data-san-section-status="employment">, Incomplete</span>
         <span class="assessment-section-navigation__complete-icon" data-section-complete="employment" aria-hidden="true">
@@ -29,7 +30,7 @@
       </a>
     </li>
     <li class="moj-side-navigation__item{% if currentSection == "finances" %} moj-side-navigation__item--active{% endif %}">
-      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="finances.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="finances"{% endif %}{% if currentSection == "finances" %} aria-current="location"{% endif %}>
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="finances.html"{% endif %} class="assessment-section-navigation__link{% if not navIsolated and 'finances' in inactiveSections %} san-side-navigation__link--disabled{% endif %}"{% if not navIsolated %} data-san-section-link="finances"{% if 'finances' in inactiveSections %} data-san-nav-disabled aria-disabled="true"{% endif %}{% endif %}{% if currentSection == "finances" %} aria-current="location"{% endif %}>
         <span class="assessment-section-navigation__label">Finances</span>
         <span class="govuk-visually-hidden" data-san-section-status="finances">, Incomplete</span>
         <span class="assessment-section-navigation__complete-icon" data-section-complete="finances" aria-hidden="true">
@@ -65,7 +66,7 @@
       </a>
     </li>
     <li class="moj-side-navigation__item{% if currentSection == "health" %} moj-side-navigation__item--active{% endif %}">
-      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="health.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="health"{% endif %}{% if currentSection == "health" %} aria-current="location"{% endif %}>
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="health.html"{% endif %} class="assessment-section-navigation__link{% if not navIsolated and 'health' in inactiveSections %} san-side-navigation__link--disabled{% endif %}"{% if not navIsolated %} data-san-section-link="health"{% if 'health' in inactiveSections %} data-san-nav-disabled aria-disabled="true"{% endif %}{% endif %}{% if currentSection == "health" %} aria-current="location"{% endif %}>
         <span class="assessment-section-navigation__label">Health and wellbeing</span>
         <span class="govuk-visually-hidden" data-san-section-status="health">, Incomplete</span>
         <span class="assessment-section-navigation__complete-icon" data-section-complete="health" aria-hidden="true">
@@ -77,7 +78,7 @@
       </a>
     </li>
     <li class="moj-side-navigation__item{% if currentSection == "relationships" %} moj-side-navigation__item--active{% endif %}">
-      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="personal-relationships-children.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="relationships"{% endif %}{% if currentSection == "relationships" %} aria-current="location"{% endif %}>
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="personal-relationships-children.html"{% endif %} class="assessment-section-navigation__link{% if not navIsolated and 'relationships' in inactiveSections %} san-side-navigation__link--disabled{% endif %}"{% if not navIsolated %} data-san-section-link="relationships"{% if 'relationships' in inactiveSections %} data-san-nav-disabled aria-disabled="true"{% endif %}{% endif %}{% if currentSection == "relationships" %} aria-current="location"{% endif %}>
         <span class="assessment-section-navigation__label">Personal relationships and community</span>
         <span class="govuk-visually-hidden" data-san-section-status="relationships">, Incomplete</span>
         <span class="assessment-section-navigation__complete-icon" data-section-complete="relationships" aria-hidden="true">
@@ -89,7 +90,7 @@
       </a>
     </li>
     <li class="moj-side-navigation__item{% if currentSection == "thinking" %} moj-side-navigation__item--active{% endif %}">
-      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="thinking-behaviours.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="thinking"{% endif %}{% if currentSection == "thinking" %} aria-current="location"{% endif %}>
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="thinking-behaviours.html"{% endif %} class="assessment-section-navigation__link{% if not navIsolated and 'thinking' in inactiveSections %} san-side-navigation__link--disabled{% endif %}"{% if not navIsolated %} data-san-section-link="thinking"{% if 'thinking' in inactiveSections %} data-san-nav-disabled aria-disabled="true"{% endif %}{% endif %}{% if currentSection == "thinking" %} aria-current="location"{% endif %}>
         <span class="assessment-section-navigation__label">Thinking, behaviours and attitudes</span>
         <span class="govuk-visually-hidden" data-san-section-status="thinking">, Incomplete</span>
         <span class="assessment-section-navigation__complete-icon" data-section-complete="thinking" aria-hidden="true">
@@ -101,7 +102,7 @@
       </a>
     </li>
     <li class="moj-side-navigation__item{% if currentSection == "offence" %} moj-side-navigation__item--active{% endif %}">
-      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="offence-analysis.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="offence"{% endif %}{% if currentSection == "offence" %} aria-current="location"{% endif %}>
+      <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="offence-analysis.html"{% endif %} class="assessment-section-navigation__link{% if not navIsolated and 'offence' in inactiveSections %} san-side-navigation__link--disabled{% endif %}"{% if not navIsolated %} data-san-section-link="offence"{% if 'offence' in inactiveSections %} data-san-nav-disabled aria-disabled="true"{% endif %}{% endif %}{% if currentSection == "offence" %} aria-current="location"{% endif %}>
         <span class="assessment-section-navigation__label">Offence analysis</span>
         <span class="govuk-visually-hidden" data-san-section-status="offence">, Incomplete</span>
         <span class="assessment-section-navigation__complete-icon" data-section-complete="offence" aria-hidden="true">

@@ -26,8 +26,9 @@
       </legend>
       <div class="govuk-radios" data-module="govuk-radios">
         {% set mentalDescribeOptions = [
-          { id: "ongoing", label: "Ongoing, and diagnosed or documented" },
-          { id: "past", label: "In the past, and diagnosed or documented" },
+          { id: "ongoing-significant-impact", label: "Ongoing and diagnosed, with documented evidence of significant impact" },
+          { id: "ongoing-no-significant-impact", label: "Ongoing and diagnosed, without documented evidence of significant impact" },
+          { id: "past", label: "In the past and diagnosed or documented" },
           { id: "undiagnosed", label: "Undiagnosed, self reported or waiting for a consultation" }
         ] %}
         {% for option in mentalDescribeOptions %}

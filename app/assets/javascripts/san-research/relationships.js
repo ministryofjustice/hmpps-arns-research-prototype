@@ -57,9 +57,9 @@ const STATUS_LABELS = {
 }
 
 const PARTNER_LABELS = {
-  together: 'In a relationship, living together',
-  apart: 'In a relationship, not living together',
-  none: 'Not in a relationship'
+  together: 'Yes, living together',
+  apart: 'Yes, not living together',
+  none: 'No'
 }
 
 const inRelationship = (partner) => partner === 'together' || partner === 'apart'
@@ -190,7 +190,9 @@ const victimAnswered = (session) => !!session.relationshipsVictim
 
 const needsVictimWho = (session) => session.relationshipsVictim === 'yes'
 
-const coerciveComplete = (session) => !!session.relationshipsCoercive
+const needsCoercive = (session) => session.relationshipsBehaviour === 'yes'
+
+const coerciveComplete = (session) => !needsCoercive(session) || !!session.relationshipsCoercive
 
 const needsStrangulation = (session) => (
   Array.isArray(session.relationshipsAbuseWho) && session.relationshipsAbuseWho.includes('partner')
@@ -228,7 +230,10 @@ const clearedStrangulation = () => ({
 
 const changesBackHref = (session) => (needsVictimWho(session) ? victimWhoHref : victimHref)
 
-const victimBackHref = (session) => (needsStrangulation(session) ? strangulationHref : domesticAbuseHref)
+const victimBackHref = (session) => {
+  if (session.relationshipsBehaviour !== 'yes') return perpetratorHref
+  return needsStrangulation(session) ? strangulationHref : domesticAbuseHref
+}
 
 const nextAfterDomesticAbuse = (session) => {
   if (needsStrangulation(session) && !strangulationComplete(session)) return withFromSummary(strangulationHref)
@@ -378,7 +383,7 @@ const relationshipRows = (session) => {
     ))
   }
 
-  if (session.relationshipsCoercive) {
+  if (needsCoercive(session) && session.relationshipsCoercive) {
     rows.push(summaryRow(
       'Is there evidence that Alex has used controlling or coercive behaviour?',
       answerLines(labelled(YES_NO, session.relationshipsCoercive), session.relationshipsCoerciveDetails),
@@ -946,6 +951,7 @@ const applyParenting = (show) => {
 
 const applyDomesticAbuseQuestions = (session) => {
   setQuestionHidden('abuse', !needsAbuseWho(session))
+  setQuestionHidden('coercive', !needsCoercive(session))
   spaceVisibleQuestions()
 }
 
@@ -1230,6 +1236,10 @@ const initSanRelationships = () => {
       window.location.assign(fromSummary() ? 'personal-relationships-summary.html' : nextIncompleteHref(session))
       return
     }
+    if (!needsCoercive(session)) {
+      window.location.assign(withFromSummary(victimHref))
+      return
+    }
     if (!fromSummary()) {
       ensureBackLink(perpetratorHref)
     }
@@ -1483,15 +1493,17 @@ const initSanRelationships = () => {
     if (relationshipsBehaviour !== 'yes') {
       updates.relationshipsAbuseWho = []
       updates.relationshipsAbuseWhoDetails = {}
+      updates.relationshipsCoercive = ''
+      updates.relationshipsCoerciveDetails = ''
       Object.assign(updates, clearedStrangulation())
     }
     setSanSession(updates)
     const saved = getSanSession()
     const followUpComplete = perpetratorFollowUpComplete(saved) && victimFlowComplete(saved)
-    let next = domesticAbuseHref
-    if (fromSummary() && saved.relationshipsChanges && followUpComplete) {
+    let next = relationshipsBehaviour === 'no' ? withFromSummary(victimHref) : domesticAbuseHref
+    if (relationshipsBehaviour === 'yes' && fromSummary() && saved.relationshipsChanges && followUpComplete) {
       next = 'personal-relationships-summary.html'
-    } else if (fromSummary()) {
+    } else if (relationshipsBehaviour === 'yes' && fromSummary()) {
       next = `${domesticAbuseHref}?from=summary`
     }
     window.location.assign(next)

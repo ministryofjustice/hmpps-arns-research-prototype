@@ -228,13 +228,12 @@ const helpPage = (session) => hasRecentDrugUse(session) ? 'drugs-help.html' : 'd
 
 const helpQuestion = (session) => hasRecentDrugUse(session)
   ? 'Does anything help Alex to stop or reduce their drug use?'
-  : 'Has anything helped Alex to stop or reduce their drug use in the past?'
+  : 'Did anything help Alex to stop or reduce their drug use?'
 
 const helpAnswered = (session) => {
   if (!session.helpedReduce) return false
   if (session.helpedReduce === 'yes' && !session.helpedReduceDetails) return false
-  if (!session.drugAnalysisMotivation) return false
-  return true
+  return !hasRecentDrugUse(session) || !!session.drugAnalysisMotivation
 }
 
 const backgroundAnswered = (session) => {
@@ -277,7 +276,7 @@ const summaryRow = (question, lines, href, options = {}) => {
 const drugCard = (session, id) => {
   const lastUsed = lastUsedFor(session, id)
   const rows = [summaryRow(
-    'Last used',
+    'When did Alex last use these drugs?',
     [labelled(LAST_USED_LABELS, lastUsed)],
       summaryChangeHref('drugs-when', `last-used-${id}`)
   )]
@@ -356,11 +355,11 @@ const drugRows = (session) => {
   }
 
   if (older.length) {
-    parts.push('<h3 class="govuk-heading-m">Not used in the last 6 months</h3>')
+    parts.push('<h3 class="govuk-heading-m">Used more than 6 months ago</h3>')
     parts.push(older.map((id) => drugCard(session, id)).join(''))
   }
 
-  if (session.helpedReduce || session.drugAnalysisMotivation || session.drugChanges) {
+  if (session.helpedReduce || (hasRecentDrugUse(session) && session.drugAnalysisMotivation) || session.drugChanges) {
     parts.push('<h3 class="govuk-heading-m">More information</h3>')
     const rows = []
     if (session.helpedReduce) {
@@ -373,7 +372,7 @@ const drugRows = (session) => {
         { secondaryFrom: 1 }
       ))
     }
-    if (session.drugAnalysisMotivation) {
+    if (hasRecentDrugUse(session) && session.drugAnalysisMotivation) {
       rows.push(summaryRow(
         'Does Alex seem motivated to stop or reduce their drug use?',
         [labelled(MOTIVATION_LABELS, session.drugAnalysisMotivation)],
@@ -770,7 +769,7 @@ const validateHelp = (answers, session) => {
       href: '#helped-reduce',
       text: hasRecentDrugUse(session)
         ? 'Select if anything helps Alex to stop or reduce their drug use'
-        : 'Select if anything has helped Alex to stop or reduce their drug use in the past'
+        : 'Select if anything helped Alex to stop or reduce their drug use'
     })
   } else if (answers.helpedReduce === 'yes' && !answers.helpedReduceDetails) {
     errors.push({
@@ -779,7 +778,7 @@ const validateHelp = (answers, session) => {
       text: 'Enter details'
     })
   }
-  if (!answers.drugAnalysisMotivation) {
+  if (hasRecentDrugUse(session) && !answers.drugAnalysisMotivation) {
     errors.push({
       group: 'analysis-motivation',
       href: '#analysis-motivation',
@@ -1039,7 +1038,7 @@ const applyWhenPage = (session) => {
   if (pageHeading) {
     pageHeading.textContent = onlyOther
       ? 'What other drugs did Alex use?'
-      : 'When did Alex use these drugs?'
+      : 'When did Alex last use these drugs?'
   }
 
   const selected = selectedDrugs(session)

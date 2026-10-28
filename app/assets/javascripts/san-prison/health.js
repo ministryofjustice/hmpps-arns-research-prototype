@@ -12,7 +12,7 @@ import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllC
 import { applySanProgress } from './progress.js'
 
 // Display labels and which follow-on questions are shown.
-const MENTAL_DESCRIBE = ['ongoing', 'past', 'undiagnosed']
+const MENTAL_DESCRIBE = ['ongoing-significant-impact', 'ongoing-no-significant-impact', 'past', 'undiagnosed']
 const CHANGE_DETAILS = ['maintain', 'active', 'know-how', 'need-help', 'thinking', 'no']
 
 const PHYSICAL_LABELS = YES_NO_UNKNOWN
@@ -20,8 +20,9 @@ const PHYSICAL_LABELS = YES_NO_UNKNOWN
 const MENTAL_LABELS = YES_NO_UNKNOWN
 
 const MENTAL_DESCRIBE_LABELS = {
-  ongoing: 'Ongoing, and diagnosed or documented',
-  past: 'In the past, and diagnosed or documented',
+  'ongoing-significant-impact': 'Ongoing and diagnosed, with documented evidence of significant impact',
+  'ongoing-no-significant-impact': 'Ongoing and diagnosed, without documented evidence of significant impact',
+  past: 'In the past and diagnosed or documented',
   undiagnosed: 'Undiagnosed, self reported or waiting for a consultation'
 }
 

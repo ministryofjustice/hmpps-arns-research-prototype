@@ -12,69 +12,6 @@
 {% include "san-prison/includes/content-header.html" %}
 
 <form id="san-accommodation-details-form" novalidate data-san-page="details">
-  <div class="govuk-form-group" data-san-question="temporary-type" data-san-error-group="temporary-type" hidden>
-    <fieldset class="govuk-fieldset" id="temporary-type">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-        <h1 class="govuk-fieldset__heading">What type of temporary accommodation does Alex have?</h1>
-      </legend>
-      <div class="govuk-radios" data-module="govuk-radios">
-        {% for value, label in {
-          "approved-premises": "Approved premises",
-          cas2: "Community Accommodation Service Tier 2 (CAS2)",
-          cas3: "Community Accommodation Service Tier 3 (CAS3)",
-          immigration: "Immigration accommodation",
-          "short-term": "Short term accommodation",
-          unknown: "Unknown"
-        } %}
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="temporary-{{ value }}" name="temporary_type" type="radio" value="{{ value }}"{% if value != "unknown" %} data-aria-controls="conditional-temporary-{{ value }}"{% endif %}{% if value == "immigration" or value == "short-term" %} aria-describedby="temporary-{{ value }}-hint"{% endif %}>
-          <label class="govuk-label govuk-radios__label" for="temporary-{{ value }}">{{ label }}</label>
-          {% if value == "immigration" %}
-          <div id="temporary-immigration-hint" class="govuk-hint govuk-radios__hint">
-            <p class="govuk-hint govuk-!-margin-bottom-1">This includes:</p>
-            <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
-              <li>Schedule 10 - Home Office provides accommodation under the Immigration Act 2016</li>
-              <li>Section 4 - Home Office provides accommodation for those on immigration bail, prior to the Immigration Act 2016</li>
-            </ul>
-          </div>
-          {% elif value == "short-term" %}
-          <div id="temporary-short-term-hint" class="govuk-hint govuk-radios__hint">Includes living with friends or family</div>
-          {% endif %}
-        </div>
-        {% if value != "unknown" %}
-        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-temporary-{{ value }}">
-          {% set endDateId = "temporary-" + value + "-end-date" %}
-          {% include "san-prison/includes/expected-end-date.html" %}
-        </div>
-        {% endif %}
-        {% endfor %}
-      </div>
-    </fieldset>
-  </div>
-
-  <div class="govuk-form-group" data-san-question="return" data-san-error-group="return" hidden>
-    <fieldset class="govuk-fieldset" id="return">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-        <h1 class="govuk-fieldset__heading">Does Alex plan to return to this accommodation when they are released?</h1>
-      </legend>
-      <div class="govuk-radios" data-module="govuk-radios">
-        {% for value, label in { yes: "Yes", no: "No", unknown: "Unknown" } %}
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="return-{{ value }}" name="return_to_accommodation" type="radio" value="{{ value }}"{% if value == "unknown" %} data-aria-controls="conditional-return-unknown"{% endif %}>
-          <label class="govuk-label govuk-radios__label" for="return-{{ value }}">{{ label }}</label>
-        </div>
-        {% endfor %}
-        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-return-unknown">
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="return-unknown-details">Give details (optional)</label>
-            <textarea class="govuk-textarea" id="return-unknown-details" name="return_unknown_details" rows="4" maxlength="2000"></textarea>
-            <div class="govuk-hint san-character-count" data-san-character-count="return-unknown-details">You have 2,000 characters remaining</div>
-          </div>
-        </div>
-      </div>
-    </fieldset>
-  </div>
-
   <div class="govuk-form-group" data-san-question="release-plans" data-san-error-group="release-plans" hidden>
     <fieldset class="govuk-fieldset" id="release-plans">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -158,20 +95,21 @@
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
         <h1 class="govuk-fieldset__heading">Who is Alex planning on living with?</h1>
       </legend>
-      <div class="govuk-radios" data-module="govuk-radios">
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="living-friends" name="living_with" type="radio" value="friends">
-          <label class="govuk-label govuk-radios__label" for="living-friends">Friends</label>
+      <div class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="living-family" name="living_with" type="checkbox" value="family">
+          <label class="govuk-label govuk-checkboxes__label" for="living-family">Family</label>
         </div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="living-family" name="living_with" type="radio" value="family">
-          <label class="govuk-label govuk-radios__label" for="living-family">Family</label>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="living-friends" name="living_with" type="checkbox" value="friends">
+          <label class="govuk-label govuk-checkboxes__label" for="living-friends">Friend</label>
         </div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="living-partner" name="living_with" type="radio" value="partner" data-aria-controls="conditional-living-partner">
-          <label class="govuk-label govuk-radios__label" for="living-partner">Partner</label>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="living-partner" name="living_with" type="checkbox" value="partner" data-aria-controls="conditional-living-partner">
+          <label class="govuk-label govuk-checkboxes__label" for="living-partner">Partner</label>
         </div>
-        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-living-partner">
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-living-partner">
           <div class="govuk-form-group">
             <label class="govuk-label" for="living-partner-details">Give details (optional)</label>
             <div class="govuk-hint" id="living-partner-hint">For example name, age and gender</div>
@@ -179,29 +117,30 @@
             <div class="govuk-hint san-character-count" data-san-character-count="living-partner-details">You have 2,000 characters remaining</div>
           </div>
         </div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="living-under-18" name="living_with" type="radio" value="under-18">
-          <label class="govuk-label govuk-radios__label" for="living-under-18">Person under 18 years old</label>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="living-under-18" name="living_with" type="checkbox" value="under-18" aria-describedby="living-under-18-hint">
+          <label class="govuk-label govuk-checkboxes__label" for="living-under-18">Person under 18 years old</label>
+          <div class="govuk-hint govuk-checkboxes__hint" id="living-under-18-hint">You will be able provide more details in the Personal relationships and community section.</div>
         </div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="living-other" name="living_with" type="radio" value="other" data-aria-controls="conditional-living-other">
-          <label class="govuk-label govuk-radios__label" for="living-other">Other</label>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="living-other" name="living_with" type="checkbox" value="other" data-aria-controls="conditional-living-other">
+          <label class="govuk-label govuk-checkboxes__label" for="living-other">Other</label>
         </div>
-        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-living-other">
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-living-other">
           <div class="govuk-form-group">
             <label class="govuk-label" for="living-other-details">Give details (optional)</label>
             <textarea class="govuk-textarea" id="living-other-details" name="living_other_details" rows="4" maxlength="2000"></textarea>
             <div class="govuk-hint san-character-count" data-san-character-count="living-other-details">You have 2,000 characters remaining</div>
           </div>
         </div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="living-unknown" name="living_with" type="radio" value="unknown">
-          <label class="govuk-label govuk-radios__label" for="living-unknown">Unknown</label>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="living-unknown" name="living_with" type="checkbox" value="unknown">
+          <label class="govuk-label govuk-checkboxes__label" for="living-unknown">Unknown</label>
         </div>
-        <div class="govuk-radios__divider">or</div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="living-alone" name="living_with" type="radio" value="alone">
-          <label class="govuk-label govuk-radios__label" for="living-alone">Alone</label>
+        <div class="govuk-checkboxes__divider">or</div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="living-alone" name="living_with" type="checkbox" value="alone">
+          <label class="govuk-label govuk-checkboxes__label" for="living-alone">Alone</label>
         </div>
       </div>
     </fieldset>
@@ -210,7 +149,7 @@
   <div class="govuk-form-group" data-san-question="location" data-san-error-group="location" hidden>
     <fieldset class="govuk-fieldset" id="location">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-        <h1 class="govuk-fieldset__heading">Is the location of Alex's accommodation suitable?</h1>
+        <h1 class="govuk-fieldset__heading">Is the location of Alex's proposed accommodation suitable?</h1>
       </legend>
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
@@ -221,6 +160,17 @@
           <input class="govuk-radios__input" id="location-no" name="location_suitable" type="radio" value="no">
           <label class="govuk-label govuk-radios__label" for="location-no">No</label>
         </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="location-unknown" name="location_suitable" type="radio" value="unknown" data-aria-controls="conditional-location-unknown">
+          <label class="govuk-label govuk-radios__label" for="location-unknown">Unknown</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-location-unknown">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="location-unknown-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="location-unknown-details" name="location_unknown_details" rows="4" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="location-unknown-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
       </div>
     </fieldset>
   </div>
@@ -228,7 +178,7 @@
   <div class="govuk-form-group" data-san-question="suitable" data-san-error-group="suitable" hidden>
     <fieldset class="govuk-fieldset" id="suitable" aria-describedby="suitable-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-        <h1 class="govuk-fieldset__heading">Is Alex's accommodation suitable?</h1>
+        <h1 class="govuk-fieldset__heading">Is Alex's proposed accommodation suitable?</h1>
       </legend>
       <div id="suitable-hint" class="govuk-hint">This includes things like safety, who they are living with and having appropriate amenities.</div>
       <div class="govuk-radios" data-module="govuk-radios">
@@ -243,6 +193,17 @@
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="suitable-no" name="accommodation_suitable" type="radio" value="no">
           <label class="govuk-label govuk-radios__label" for="suitable-no">No</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="suitable-unknown" name="accommodation_suitable" type="radio" value="unknown" data-aria-controls="conditional-suitable-unknown">
+          <label class="govuk-label govuk-radios__label" for="suitable-unknown">Unknown</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-suitable-unknown">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="suitable-unknown-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="suitable-unknown-details" name="suitable_unknown_details" rows="4" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="suitable-unknown-details">You have 2,000 characters remaining</div>
+          </div>
         </div>
       </div>
     </fieldset>
