@@ -33,7 +33,7 @@
 ] %}
 
 <form id="san-drugs-when-form" novalidate data-du-page="when">
-  <h1 class="govuk-heading-l" data-du-when-heading>When did Alex use these drugs?</h1>
+  <h1 class="govuk-heading-l" data-du-when-heading>When did Alex last use these drugs?</h1>
 
   {% for drug in drugOptions %}
   <div class="govuk-form-group" data-du-when="{{ drug.id }}" data-san-error-group="last-used-{{ drug.id }}" hidden>

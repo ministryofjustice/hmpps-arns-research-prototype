@@ -160,7 +160,7 @@ const alcoholRows = (session) => {
       const evidenceLines = [labelled(EVIDENCE_LABELS, session.alcoholEvidence)]
       if (EVIDENCE_HINTS[session.alcoholEvidence]) evidenceLines.push(EVIDENCE_HINTS[session.alcoholEvidence])
       beforeRows.push(summaryRow(
-        'Has Alex shown evidence of binge drinking or excessive alcohol use in the last 6 months?',
+        'Did Alex show evidence of binge drinking or excessive alcohol use in the 6 months before custody?',
         evidenceLines,
         summaryChangeHref('alcohol-before', 'alcohol-evidence'),
         { secondaryFrom: 1 }

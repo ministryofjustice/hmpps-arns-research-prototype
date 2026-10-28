@@ -1,1 +1,38 @@
-{# Prison-only change tracking. Include this from the Prison start card when there are prison-specific changes to list. Community stays in includes/san-research/key-changes.html. #}
+{% set changelogIterations = [
+  {
+    id: "prison-differences",
+    label: "Key differences from SAN Community",
+    sections: [
+      {
+        name: "Accommodation",
+        changes: [
+          { type: "CD", level: "medium", text: "The question changes from ‘Does Alex currently have somewhere to live?’ to ‘Did Alex have somewhere to live before custody?’" },
+          { type: "IxD", level: "large", a11y: true, text: "Two new release-planning pages have been added." }
+        ]
+      },
+      {
+        name: "Drug use",
+        changes: [
+          { type: "IxD", level: "medium", text: "A new gate question asks ‘Is there evidence Alex has been using drugs in custody?’" }
+        ]
+      },
+      {
+        name: "Alcohol use",
+        changes: [
+          { type: "CD", level: "medium", text: "The question changes from ‘Has Alex shown evidence of binge drinking or excessive alcohol use in the last 6 months?’ to ‘Did Alex show evidence of binge drinking or excessive alcohol use in the 6 months before custody?’" }
+        ]
+      }
+    ]
+  }
+] %}
+{% set changelogId = "prison-changelog" %}
+{% set changelogHint = "Key differences between the SAN Prison and SAN Community prototypes." %}
+{% set changelogSummary %}
+  <h4 class="govuk-heading-s">Key differences from SAN Community</h4>
+  <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+    <li><strong>Accommodation:</strong> The opening question asks whether Alex had somewhere to live before custody, and two release-planning pages have been added.</li>
+    <li><strong>Drug use:</strong> A new gate question asks whether there is evidence Alex has been using drugs in custody.</li>
+    <li><strong>Alcohol use:</strong> The binge or excessive alcohol use question asks about the 6 months before custody.</li>
+  </ul>
+{% endset %}
+{% include "san-prison/includes/changelog-ui.html" %}

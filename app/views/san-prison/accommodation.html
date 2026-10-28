@@ -9,22 +9,25 @@
 <div data-san-error-summary hidden></div>
 {% include "san-prison/includes/content-header.html" %}
 
-<form id="san-accommodation-type-form" novalidate data-san-page="type">
-  <div class="govuk-form-group" data-san-error-group="accommodation-type">
-    <fieldset class="govuk-fieldset" id="accommodation-type">
+<form id="san-accommodation-somewhere-form" novalidate data-san-page="somewhere">
+  <div class="govuk-form-group" data-san-error-group="somewhere-to-live">
+    <fieldset class="govuk-fieldset" id="somewhere-to-live">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-        <h1 class="govuk-fieldset__heading">What type of accommodation did Alex have before custody?</h1>
+        <h1 class="govuk-fieldset__heading">Did Alex have somewhere to live before custody?</h1>
       </legend>
       <div class="govuk-radios" data-module="govuk-radios">
-        {% for value, label in { "settled": "Settled", "temporary": "Temporary", "none": "No accommodation" } %}
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="accommodation-{{ value }}" name="accommodation_type" type="radio" value="{{ value }}">
-          <label class="govuk-label govuk-radios__label" for="accommodation-{{ value }}">{{ label }}</label>
+          <input class="govuk-radios__input" id="somewhere-to-live-yes" name="somewhere_to_live" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="somewhere-to-live-yes">Yes</label>
         </div>
-        {% endfor %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="somewhere-to-live-no" name="somewhere_to_live" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="somewhere-to-live-no">No</label>
+        </div>
       </div>
     </fieldset>
   </div>
+
   <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
 </form>
 

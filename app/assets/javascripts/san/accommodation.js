@@ -13,9 +13,11 @@ const EXAMPLE_COMPLETE = {
   livingPartnerDetails: '',
   livingOtherDetails: '',
   locationSuitable: 'no',
+  locationUnknownDetails: '',
   locationReasons: ['victimised'],
   locationOtherDetails: '',
   accommodationSuitable: 'yes-concerns',
+  suitabilityUnknownDetails: '',
   suitabilityReasons: ['exploited'],
   suitabilityOtherDetails: '',
   changes: 'active',
@@ -87,7 +89,8 @@ const SUITABILITY_REASON_LABELS = {
 const SUITABLE_LABELS = {
   yes: 'Yes',
   'yes-concerns': 'Yes, with concerns',
-  no: 'No'
+  no: 'No',
+  unknown: 'Unknown'
 }
 
 const CHANGES_LABELS = {
@@ -428,6 +431,7 @@ const accommodationRows = (session) => {
     if (session.locationSuitable === 'no') {
       lines.push(...reasonLines(LOCATION_REASON_LABELS, session.locationReasons, session.locationOtherDetails))
     }
+    if (session.locationSuitable === 'unknown' && session.locationUnknownDetails) lines.push(session.locationUnknownDetails)
     rows.push(summaryRow(
       "Is the location of Alex's accommodation suitable?",
       lines,
@@ -438,9 +442,10 @@ const accommodationRows = (session) => {
 
   if (routeShows(route, 'suitable') && session.accommodationSuitable) {
     const lines = [labelled(SUITABLE_LABELS, session.accommodationSuitable)]
-    if (session.accommodationSuitable !== 'yes') {
+    if (session.accommodationSuitable === 'yes-concerns' || session.accommodationSuitable === 'no') {
       lines.push(...reasonLines(SUITABILITY_REASON_LABELS, session.suitabilityReasons, session.suitabilityOtherDetails))
     }
+    if (session.accommodationSuitable === 'unknown' && session.suitabilityUnknownDetails) lines.push(session.suitabilityUnknownDetails)
     rows.push(summaryRow(
       "Is Alex's accommodation suitable?",
       lines,
@@ -613,9 +618,11 @@ const emptyDetailAnswers = () => ({
   livingPartnerDetails: '',
   livingOtherDetails: '',
   locationSuitable: '',
+  locationUnknownDetails: '',
   locationReasons: [],
   locationOtherDetails: '',
   accommodationSuitable: '',
+  suitabilityUnknownDetails: '',
   suitabilityReasons: [],
   suitabilityOtherDetails: '',
   noAccommodationReasons: [],
@@ -641,6 +648,7 @@ const readDetailsAnswers = (route) => {
     answers.locationSuitable = checkedValue('location_suitable')
     answers.locationReasons = answers.locationSuitable === 'no' ? checkedValues('location_reasons') : []
     answers.locationOtherDetails = answers.locationSuitable === 'no' ? fieldValue('location-other-details') : ''
+    answers.locationUnknownDetails = answers.locationSuitable === 'unknown' ? fieldValue('location-unknown-details') : ''
   }
 
   if (routeShows(route, 'suitable')) {
@@ -656,6 +664,7 @@ const readDetailsAnswers = (route) => {
       : answers.accommodationSuitable === 'no'
         ? fieldValue('unsuitable-other-details')
         : ''
+    answers.suitabilityUnknownDetails = answers.accommodationSuitable === 'unknown' ? fieldValue('suitable-unknown-details') : ''
   }
 
   if (routeShows(route, 'no-accommodation')) {
@@ -824,7 +833,9 @@ const restoreDetails = (session) => {
   selectRadio('location_suitable', session.locationSuitable)
   selectChecks('location_reasons', session.locationReasons)
   setField('location-other-details', session.locationOtherDetails)
+  setField('location-unknown-details', session.locationUnknownDetails)
   selectRadio('accommodation_suitable', session.accommodationSuitable)
+  if (session.accommodationSuitable === 'unknown') setField('suitable-unknown-details', session.suitabilityUnknownDetails)
   if (session.accommodationSuitable === 'yes-concerns') {
     selectChecks('suitability_reasons_concerns', session.suitabilityReasons)
     setField('concerns-other-details', session.suitabilityOtherDetails)
