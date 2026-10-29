@@ -105,12 +105,12 @@ const FUTURE_DETAILS_IDS = {
 // Each question is its own screen. Build the route from the current release plans.
 const accommodationRoute = (session) => {
   if (!['yes', 'no'].includes(session.hasSomewhereToLive)) return null
-  if (session.hasSomewhereToLive === 'no' || session.accommodationSettled === 'no') {
+  if (session.hasSomewhereToLive === 'no') {
     const steps = ['no-accommodation', 'release-plans']
     if (session.releasePlans === 'no') return [...steps, 'changes']
     return [...steps, 'living-with', 'location', 'suitable', 'changes']
   }
-  if (session.accommodationSettled !== 'yes') return null
+  if (!['yes', 'no'].includes(session.accommodationSettled)) return null
   const steps = ['release-plans']
   if (session.releasePlans === 'no') return [...steps, 'changes']
   steps.push('living-with')
@@ -348,7 +348,7 @@ const accommodationRows = (session) => {
 
   if (session.hasSomewhereToLive === 'yes' && session.accommodationSettled) {
     rows.push(summaryRow(
-      "Is Alex's accommodation settled?",
+      "Was Alex's accommodation settled?",
       [labelled(YES_NO, session.accommodationSettled)],
       summaryChangeHref('accommodation-settled')
     ))
@@ -369,7 +369,7 @@ const accommodationRows = (session) => {
       lines.push(session.noAccommodationOtherDetails)
     }
     rows.push(summaryRow(
-      'Why does Alex have no accommodation?',
+      'Why did Alex have no accommodation?',
       lines,
       summaryChangeHref('accommodation-details', 'no-accommodation'),
       { secondaryFrom: labels.length }
