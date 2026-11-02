@@ -33,7 +33,7 @@
 ] %}
 
 <form id="san-drugs-injected-form" novalidate data-du-page="injected">
-  <h1 class="govuk-heading-l">When has Alex injected drugs?</h1>
+  <h1 class="govuk-heading-l" data-du-injected-heading>When has Alex injected drugs?</h1>
 
   {% for drug in drugOptions %}
   {% if drug.id not in ["cannabis", "ecstasy", "hallucinogens", "solvents", "synthetic-cannabinoids"] %}
@@ -46,11 +46,11 @@
       <div class="govuk-checkboxes" data-module="govuk-checkboxes">
         <div class="govuk-checkboxes__item">
           <input class="govuk-checkboxes__input" id="injected-when-{{ drug.id }}-last-six" name="injected_when_{{ drug.id }}" type="checkbox" value="last-six">
-          <label class="govuk-label govuk-checkboxes__label" for="injected-when-{{ drug.id }}-last-six">In the last 6 months</label>
+          <label class="govuk-label govuk-checkboxes__label" for="injected-when-{{ drug.id }}-last-six" data-du-injected-time-label="last-six">In the last 6 months</label>
         </div>
         <div class="govuk-checkboxes__item">
           <input class="govuk-checkboxes__input" id="injected-when-{{ drug.id }}-more-than-six" name="injected_when_{{ drug.id }}" type="checkbox" value="more-than-six">
-          <label class="govuk-label govuk-checkboxes__label" for="injected-when-{{ drug.id }}-more-than-six">More than 6 months ago</label>
+          <label class="govuk-label govuk-checkboxes__label" for="injected-when-{{ drug.id }}-more-than-six" data-du-injected-time-label="more-than-six">More than 6 months ago</label>
         </div>
       </div>
     </fieldset>

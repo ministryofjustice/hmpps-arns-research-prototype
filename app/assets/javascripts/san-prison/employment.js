@@ -70,7 +70,7 @@ const COMMITMENT_LABELS = {
   volunteering: 'Volunteering',
   other: 'Other',
   unknown: 'Unknown',
-  none: 'None'
+  none: 'No additional day-to-day commitments'
 }
 
 const SKILLS_LABELS = {

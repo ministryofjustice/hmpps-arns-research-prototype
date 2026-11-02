@@ -23,15 +23,15 @@ const QUESTIONS = [
     sometimes: 'Sometimes shows stable behaviour but can show reckless or risk taking behaviours',
     no: 'No, shows reckless or risk taking behaviours'
   }],
-  ['thinkingActivities', 'activities', 'thinking_activities', "How much do Alex's activities, relationships and lifestyle increase their likelihood of re-offending?", 'Select how much their activities, relationships and lifestyle increase their likelihood of re-offending', {
-    none: 'No significant increase',
-    sometimes: 'Some increase',
-    significant: 'Significant increase'
+  ['thinkingActivities', 'activities', 'thinking_activities', 'Does Peter engage in activities that could link to offending?', 'Select if Peter engages in activities that could link to offending', {
+    none: 'No, does not engage in these activities',
+    sometimes: 'Yes, sometimes',
+    significant: 'Yes, regularly'
   }],
-  ['thinkingPeers', 'peers', 'thinking_peers', 'How much is Alex influenced by others in relation to their offending?', 'Select how much they are influenced by others in relation to their offending', {
-    none: 'No significant influence',
-    sometimes: 'Some influence',
-    significant: 'Significant influence'
+  ['thinkingPeers', 'peers', 'thinking_peers', 'Is Alex influenced by others in relation to their offending?', 'Select if they are influenced by others in relation to their offending', {
+    none: 'No, not influenced by others',
+    sometimes: 'Yes, sometimes',
+    significant: 'Yes, regularly'
   }],
   ['thinkingProblems', 'problems', 'thinking_problems', 'Is Alex able to solve problems in a positive way?', 'Select if they are able to solve problems in a positive way', {
     yes: 'Yes, is able to solve problems and identify appropriate solutions',
@@ -43,15 +43,15 @@ const QUESTIONS = [
     assumes: "Assumes all views are the same as theirs at first but does consider other people's views to an extent",
     no: "No, unable to understand other people's views and distinguish between their own feelings and those of others"
   }],
-  ['thinkingManipulative', 'manipulative', 'thinking_manipulative', 'How much evidence is there that Alex manipulates or exploits other people for personal gain?', 'Select how much evidence there is that they manipulate or exploit other people for personal gain', {
-    none: 'No evidence',
-    some: 'Some evidence',
-    significant: 'Significant evidence'
+  ['thinkingManipulative', 'manipulative', 'thinking_manipulative', 'Are there any indications that Alex manipulates or exploits other people for personal gain?', 'Select if there are any indications that they manipulate or exploit other people for personal gain', {
+    none: 'No indications',
+    some: 'Some indications',
+    significant: 'Significant indications'
   }],
   ['thinkingTemper', 'temper', 'thinking_temper', 'How well does Alex manage anger, frustration and conflict?', 'Select how well they manage anger, frustration and conflict', {
-    well: 'Manages these well',
-    sometimes: 'Sometimes has difficulty',
-    often: 'Often has difficulty'
+    well: 'Yes, manages these well',
+    sometimes: 'Yes, sometimes able to manage these',
+    often: 'No, is not able to manage these'
   }],
   ['thinkingViolence', 'violence', 'thinking_violence', 'Does Alex use violence, aggressive or controlling behaviour to get their own way?', 'Select if they use violence, aggressive or controlling behaviour to get their own way', {
     no: 'Does not use violence, aggressive or controlling behaviour to get their own way',
@@ -68,15 +68,15 @@ const QUESTIONS = [
     negative: 'Has a negative attitude or does not fully engage but there are no safety concerns',
     no: 'No, has a negative attitude and there are safety concerns'
   }],
-  ['thinkingHostile', 'hostile', 'thinking_hostile', 'How much evidence is there that Alex shows hostility towards other people, rules or authority?', 'Select how much evidence there is that they show hostility towards other people, rules or authority', {
-    none: 'No evidence',
-    some: 'Some evidence',
-    significant: 'Significant evidence'
+  ['thinkingHostile', 'hostile', 'thinking_hostile', 'Does Alex show hostility towards other people, rules or authority?', 'Select if Alex shows hostility towards other people, rules or authority', {
+    none: 'No, does not show hostility',
+    some: 'Yes, sometimes',
+    significant: 'Yes, regularly'
   }],
-  ['thinkingSupervision', 'supervision', 'thinking_supervision', 'How much evidence is there that Alex is willing to engage positively with supervision and their licence conditions?', 'Select how much evidence there is that they are willing to engage positively with supervision and their licence conditions', {
-    significant: 'Significant evidence',
-    some: 'Some evidence',
-    none: 'Little or no evidence'
+  ['thinkingSupervision', 'supervision', 'thinking_supervision', 'Are there indications Alex is willing to engage positively with their sentence?', 'Select if there are indications Alex is willing to engage positively with their sentence', {
+    significant: 'Yes',
+    some: 'Some indications',
+    none: 'No indications'
   }],
   ['thinkingExcuse', 'excuse', 'thinking_excuse', 'Does Alex support or excuse criminal behaviour?', 'Select if they support or excuse criminal behaviour', {
     no: 'Does not support or excuse criminal behaviour',
@@ -111,6 +111,11 @@ const HARM_QUESTIONS = [
 ]
 
 const HARM_HINTS = {
+  thinkingSupervision: {
+    significant: 'Willing to engage positively and cooperate.',
+    some: 'Has mixed views about their sentence or engages only to meet minimum requirements.',
+    none: 'Is unlikely to engage positively with their sentence.'
+  },
   thinkingPreoccupation: {
     none: 'Sexual thoughts or behaviours do not appear to affect their daily functioning.',
     some: 'Sexual thoughts or behaviours take up a significant amount of time, but there is evidence of other interests or attempts to reduce the behaviour.',

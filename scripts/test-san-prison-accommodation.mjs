@@ -65,6 +65,32 @@ test('settled return Yes skips plans and living-with; suitability concerns still
   assert.equal(await page.locator('[data-san-go-analysis]').isVisible(), true)
 }))
 
+test('location and accommodation suitability allow unknown with optional details', async () => journey(async (page) => {
+  await advance(page, 'accommodation-settled', 'return')
+  await advance(page, 'return-yes', 'location')
+  await select(page, 'location-unknown')
+  assert.equal(await page.locator('#location-unknown-details').isVisible(), true)
+  await page.locator('#location-unknown-details').fill('The address is still being confirmed.')
+  await submit(page)
+  await question(page, 'suitable')
+  await select(page, 'suitable-unknown')
+  assert.equal(await page.locator('#suitable-unknown-details').isVisible(), true)
+  await page.locator('#suitable-unknown-details').fill('A suitability assessment is pending.')
+  await submit(page)
+  await question(page, 'changes')
+  await summary(page)
+
+  const summaryText = await page.locator('[data-san-summary]').innerText()
+  assert.match(summaryText, /Is the location of Alex's accommodation suitable\?[\s\S]*Unknown[\s\S]*The address is still being confirmed/)
+  assert.match(summaryText, /Is Alex's accommodation suitable\?[\s\S]*Unknown[\s\S]*A suitability assessment is pending/)
+
+  const locationRow = page.locator('.govuk-summary-list__row').filter({ hasText: "Is the location of Alex's accommodation suitable?" })
+  await locationRow.getByRole('link', { name: /^Change/ }).click()
+  await question(page, 'location')
+  assert.equal(await page.locator('#location-unknown').isChecked(), true)
+  assert.equal(await page.locator('#location-unknown-details').inputValue(), 'The address is still being confirmed.')
+}))
+
 for (const answer of ['no', 'unknown']) {
   test(`settled return ${answer} asks plans; no plans skips suitability`, async () => journey(async (page) => {
     await advance(page, 'accommodation-settled', 'return')

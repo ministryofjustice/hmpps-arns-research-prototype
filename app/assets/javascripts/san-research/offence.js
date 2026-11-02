@@ -33,7 +33,8 @@ const MOTIVATION_LABELS = {
   power: 'Seeking or exerting power',
   sexual: 'Sexual motivation',
   thrill: 'Thrill seeking',
-  other: 'Other'
+  other: 'Other',
+  none: 'None'
 }
 
 const COMMITTED_LABELS = {
@@ -244,7 +245,7 @@ const renderSummary = (session) => {
   if (!mount) return
   const rows = []
   if (session.offenceDescription) {
-    rows.push(summaryRow('Enter a brief description of the offence(s)', [session.offenceDescription], summaryChangeHref('offence-analysis', 'offence-description')))
+    rows.push(summaryRow('Enter a brief description of the offences', [session.offenceDescription], summaryChangeHref('offence-analysis', 'offence-description')))
   }
   if (Array.isArray(session.offenceElements) && session.offenceElements.length) {
     const lines = session.offenceElements.map((value) => labelled(ELEMENT_LABELS, value))
@@ -254,7 +255,7 @@ const renderSummary = (session) => {
     if (session.offenceElements.includes('weapon') && session.offenceElementWeaponDetails) {
       lines.push(session.offenceElementWeaponDetails)
     }
-    rows.push(summaryRow('Did the offence(s) have any of the following elements?', lines, summaryChangeHref('offence-analysis', 'offence-elements')))
+    rows.push(summaryRow('Did the offences have any of the following elements?', lines, summaryChangeHref('offence-analysis', 'offence-elements')))
   }
   if (Array.isArray(session.offenceMotivations) && session.offenceMotivations.length) {
     const lines = session.offenceMotivations.map((value) => labelled(MOTIVATION_LABELS, value))
@@ -267,7 +268,7 @@ const renderSummary = (session) => {
   if (Array.isArray(session.offenceCommittedAgainst) && session.offenceCommittedAgainst.length) {
     const lines = session.offenceCommittedAgainst.map((value) => labelled(COMMITTED_LABELS, value))
     if (session.offenceCommittedAgainst.includes('other') && session.offenceCommittedOtherDetails) lines.push(session.offenceCommittedOtherDetails)
-    rows.push(summaryRow('Enter all victim details', lines, summaryChangeHref('offence-analysis', 'offence-committed-against')))
+    rows.push(summaryRow('Who were the offences committed against?', lines, summaryChangeHref('offence-analysis', 'offence-committed-against')))
   }
   if (session.offenceInvolved) {
     rows.push(summaryRow(
@@ -278,7 +279,7 @@ const renderSummary = (session) => {
   }
   if (session.offenceLeader) {
     rows.push(summaryRow(
-      'Was Alex the leader of the current index offence(s)?',
+      'Was Alex the leader of the current index offences?',
       yesNoLines(session.offenceLeader, session.offenceLeaderDetails),
       summaryChangeHref('offence-analysis-impact', 'leader')
     ))
@@ -292,14 +293,14 @@ const renderSummary = (session) => {
   }
   if (session.offenceResponsibility) {
     rows.push(summaryRow(
-      'Does Alex accept responsibility for the current index offence(s)?',
+      'Does Alex accept responsibility for the current index offences?',
       yesNoLines(session.offenceResponsibility, session.offenceResponsibilityDetails),
       summaryChangeHref('offence-analysis-impact', 'responsibility')
     ))
   }
   if (session.offenceEscalation) {
     rows.push(summaryRow(
-      "Are Alex's current offence(s) more serious than their previous offending?",
+      "Is there an escalation in seriousness from Alex's previous offending?",
       [labelled(ESCALATION_LABELS, session.offenceEscalation), session.offenceEscalationDetails].filter(Boolean),
       summaryChangeHref('offence-analysis-impact', 'escalation')
     ))
@@ -420,20 +421,20 @@ const readQuestions = () => ({
 
 const validateQuestions = (answers) => {
   const errors = []
-  requireText(errors, 'description', '#offence-description', answers.offenceDescription, 'Enter a description of the current index offence(s)')
+  requireText(errors, 'description', '#offence-description', answers.offenceDescription, 'Enter a description of the current index offences')
   if (!answers.offenceElements.length) {
-    errors.push({ group: 'elements', href: '#offence-elements', text: 'Select if the current index offence(s) had any of these elements' })
+    errors.push({ group: 'elements', href: '#offence-elements', text: 'Select if the current index offences had any of these elements' })
   }
   if (answers.offenceElements.includes('victim-targeted')) {
     requireText(errors, 'elements', '#element-victim-targeted-details', answers.offenceElementTargetedDetails, 'Enter details about how the victim was targeted')
   }
   if (!answers.offenceMotivations.length) {
-    errors.push({ group: 'motivations', href: '#offence-motivations', text: 'Select the motivations for the current index offence(s)' })
+    errors.push({ group: 'motivations', href: '#offence-motivations', text: 'Select the motivations for the current index offences' })
   }
   if (answers.offenceMotivations.includes('other')) {
     requireText(errors, 'motivations', '#motivation-other-details', answers.offenceMotivationOtherDetails, 'Enter details of the other motivation')
   }
-  requireText(errors, 'why', '#offence-why', answers.offenceWhy, 'Enter why the current index offence(s) happened')
+  requireText(errors, 'why', '#offence-why', answers.offenceWhy, 'Enter why the current index offences happened')
   if (!answers.offenceCommittedAgainst.length) {
     errors.push({ group: 'committed-against', href: '#offence-committed-against', text: 'Select who the offence was committed against' })
   }
@@ -493,14 +494,14 @@ const readImpact = () => {
 
 const validateImpact = (answers) => {
   const errors = []
-  requireChoice(errors, 'leader', '#leader', answers.offenceLeader, 'Select if Alex was the leader of the current index offence(s)')
+  requireChoice(errors, 'leader', '#leader', answers.offenceLeader, 'Select if Alex was the leader of the current index offences')
   if (answers.offenceLeader === 'yes') {
     requireText(errors, 'leader', '#leader-yes-details', answers.offenceLeaderDetails, 'Enter details')
   }
   requireChoice(errors, 'recognise', '#recognise', answers.offenceRecognise, 'Select if Alex recognises the impact on the victims or wider community')
-  requireChoice(errors, 'responsibility', '#responsibility', answers.offenceResponsibility, 'Select if Alex accepts responsibility for the current index offence(s)')
+  requireChoice(errors, 'responsibility', '#responsibility', answers.offenceResponsibility, 'Select if Alex accepts responsibility for the current index offences')
   requireText(errors, 'patterns', '#patterns', answers.offencePatterns, 'Enter the patterns of offending')
-  requireChoice(errors, 'escalation', '#escalation', answers.offenceEscalation, "Select if Alex's current offence(s) are more serious than their previous offending")
+  requireChoice(errors, 'escalation', '#escalation', answers.offenceEscalation, "Select if there is an escalation in seriousness from Alex's previous offending")
   requireChoice(errors, 'linked', '#linked', answers.offenceLinked, 'Select if the offences are linked to risk of serious harm, risks to the individual or other risks')
   if (answers.offenceLinked === 'yes') {
     requireText(errors, 'linked', '#linked-yes-details', answers.offenceLinkedDetails, 'Enter details')
@@ -712,7 +713,7 @@ const initOffence = () => {
     event.preventDefault()
     const offenceInvolved = checkedValue('offence_involved')
     if (!offenceInvolved) {
-      showErrors([{ group: 'involved', href: '#offence-involved', text: 'Select how many other people were involved with committing the current index offence(s)' }])
+      showErrors([{ group: 'involved', href: '#offence-involved', text: 'Select how many other people were involved with committing the current index offences' }])
       return
     }
     clearErrors()

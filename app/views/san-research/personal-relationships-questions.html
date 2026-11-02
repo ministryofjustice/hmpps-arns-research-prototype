@@ -112,9 +112,9 @@
         <h2 class="govuk-fieldset__heading">Does Alex currently have a partner?</h2>
       </legend>
       <div class="govuk-radios" data-module="govuk-radios">
-        {{ radioOption("relationships_partner", "partner-together", "together", "In a relationship, living together", "", false, "") | safe }}
-        {{ radioOption("relationships_partner", "partner-apart", "apart", "In a relationship, not living together", "", false, "") | safe }}
-        {{ radioOption("relationships_partner", "partner-none", "none", "Not in a relationship", "", false, "") | safe }}
+        {{ radioOption("relationships_partner", "partner-together", "together", "Yes, living together", "", false, "") | safe }}
+        {{ radioOption("relationships_partner", "partner-apart", "apart", "Yes, not living together", "", false, "") | safe }}
+        {{ radioOption("relationships_partner", "partner-none", "none", "No", "", false, "") | safe }}
       </div>
     </fieldset>
   </div>
@@ -137,20 +137,18 @@
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
         <h2 class="govuk-fieldset__heading">How would you describe Alex's history of intimate relationships?</h2>
       </legend>
-      <div id="relationships-history-hint" class="govuk-hint">An intimate relationship is one that involves physical and/or emotional closeness.</div>
+      <div id="relationships-history-hint" class="govuk-hint">An intimate relationship is one that involves physical or emotional closeness.</div>
       <div class="govuk-radios" data-module="govuk-radios">
-        {{ radioOption("relationships_history", "history-stable", "stable", "Stable, supportive, positive and rewarding relationships", "", true, "Consider patterns and quality of any significant relationships.") | safe }}
+        {{ radioOption("relationships_history", "history-stable", "stable", "Stable, supportive and rewarding", "This includes having no history of intimate relationships, but they appear capable of starting and maintaining a healthy one.", true, "Consider patterns and quality of any significant relationships.") | safe }}
         {{ radioOption("relationships_history", "history-mixed", "mixed", "Both healthy and unhealthy relationships", "", true, "Consider patterns and quality of any significant relationships.") | safe }}
-        {{ radioOption("relationships_history", "history-unstable", "unstable", "Unstable, unsupportive and destructive relationships", "", true, "Consider patterns and quality of any significant relationships.") | safe }}
-        {{ radioOption("relationships_history", "history-capable", "capable", "No history of relationships, but they appear capable of starting and maintaining a healthy one", "", true, "") | safe }}
-        {{ radioOption("relationships_history", "history-concerns", "concerns", "No history of relationships and there are concerns about their ability to start or maintain healthy relationships", "", true, "") | safe }}
+        {{ radioOption("relationships_history", "history-unstable", "unstable", "Unstable, unsupportive and destructive", "Includes having no history of relationships and there are concerns about their ability to start or maintain one.", true, "Consider patterns and quality of any significant relationships.") | safe }}
       </div>
     </fieldset>
   </div>
 
   <div class="govuk-form-group san-is-hidden" data-pc-question="resolve" data-san-error-group="relationships-resolve" hidden>
     <label class="govuk-label govuk-label--m" for="relationships-resolve">Is Alex able to resolve any challenges in their intimate relationships?</label>
-    <div id="relationships-resolve-hint" class="govuk-hint">Consider how resilient they are, and how they work with their partner to resolve issues when they arise. An intimate relationship is one that involves physical and/or emotional closeness.</div>
+    <div id="relationships-resolve-hint" class="govuk-hint">Consider how resilient they are, and how they work with their partner to resolve issues when they arise. An intimate relationship is one that involves physical or emotional closeness.</div>
     <textarea class="govuk-textarea" id="relationships-resolve" name="relationships_resolve" rows="5" maxlength="2000" aria-describedby="relationships-resolve-hint"></textarea>
     <div class="govuk-hint san-character-count" data-san-character-count="relationships-resolve">You have 2,000 characters remaining</div>
   </div>

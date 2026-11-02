@@ -10,7 +10,7 @@ const SECTIONS = [
   {
     key: 'accommodation',
     completeKey: 'accommodationComplete',
-    started: (session) => !!session.accommodationType,
+    started: (session) => !!session.hasSomewhereToLive,
     href: 'accommodation-summary.html'
   },
   {

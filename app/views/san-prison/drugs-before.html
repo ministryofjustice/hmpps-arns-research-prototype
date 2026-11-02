@@ -50,7 +50,7 @@
   </div>
 
   <div data-du-recent-section hidden>
-    <h2 class="govuk-heading-m">Used in the last 6 months</h2>
+    <h2 class="govuk-heading-m" data-du-recent-heading>Used in the last 6 months</h2>
     <div data-du-recent-questions>
     {% for drug in drugOptions %}
     <div class="govuk-form-group{% if not loop.first %} san-question{% endif %}" data-du-frequency="{{ drug.id }}" data-san-error-group="frequency-{{ drug.id }}" hidden>
@@ -58,7 +58,7 @@
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
           <h3 class="govuk-fieldset__heading">{{ drug.label }}</h3>
         </legend>
-        <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-2">How often was Alex using this drug?</p>
+        <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-2" data-du-frequency-heading>How often was Alex using this drug?</p>
         <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
           {% for option in [
             { id: "daily", label: "Daily" },
@@ -87,7 +87,7 @@
 
   <div class="san-question" data-du-older-section hidden>
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" data-du-older-break>
-    <h2 class="govuk-heading-m">Not used in the last 6 months</h2>
+    <h2 class="govuk-heading-m" data-du-older-heading>Not used in the last 6 months</h2>
     <div data-du-older-questions></div>
     <div data-du-older-extra></div>
   </div>
@@ -95,7 +95,7 @@
   <div class="govuk-form-group san-question" data-du-inject-section data-san-error-group="injected">
     <fieldset class="govuk-fieldset" id="injected" aria-describedby="injected-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Which drugs has Alex injected?</h2>
+        <h2 class="govuk-fieldset__heading" data-du-injected-drugs-heading>Which drugs has Alex injected?</h2>
       </legend>
       <div id="injected-hint" class="govuk-hint">Select all that apply.</div>
       <div class="govuk-checkboxes" data-module="govuk-checkboxes">

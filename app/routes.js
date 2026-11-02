@@ -142,11 +142,6 @@ router.get('/san-prison/:page', (req, res, next) => {
     return
   }
 
-  if (view === 'accommodation-settled') {
-    res.redirect('/san-prison/accommodation')
-    return
-  }
-
   res.render(`san-prison/${view}`, (error, html) => {
     if (error) {
       next()
