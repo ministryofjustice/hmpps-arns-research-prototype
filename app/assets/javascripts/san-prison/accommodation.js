@@ -14,8 +14,6 @@ import { applySanProgress } from './progress.js'
 const EXAMPLE_COMPLETE = {
   hasSomewhereToLive: 'yes',
   accommodationSettled: 'yes',
-  releasePlans: 'yes',
-  releasePlansDetails: 'Plans to live with friends after release.',
   livingWith: ['friends'],
   livingPartnerDetails: '',
   livingOtherDetails: '',
@@ -102,19 +100,12 @@ const FUTURE_DETAILS_IDS = {
   other: 'future-other-details'
 }
 
-// Each question is its own screen. Build the route from the current release plans.
+// Each question is its own screen. The route depends on accommodation availability and settlement.
 const accommodationRoute = (session) => {
   if (!['yes', 'no'].includes(session.hasSomewhereToLive)) return null
-  if (session.hasSomewhereToLive === 'no') {
-    const steps = ['no-accommodation', 'release-plans']
-    if (session.releasePlans === 'no') return [...steps, 'changes']
-    return [...steps, 'living-with', 'location', 'suitable', 'changes']
-  }
+  if (session.hasSomewhereToLive === 'no') return ['no-accommodation', 'changes']
   if (!['yes', 'no'].includes(session.accommodationSettled)) return null
-  const steps = ['release-plans']
-  if (session.releasePlans === 'no') return [...steps, 'changes']
-  steps.push('living-with')
-  return [...steps, 'location', 'suitable', 'changes']
+  return ['living-with', 'location', 'suitable', 'changes']
 }
 
 const routeShows = (route, question) => detailSteps(route).includes(question)
@@ -131,7 +122,7 @@ const CONCERN_BLOCK = {
 const needsLocationConcerns = (session, route) => routeShows(route, 'location') && session.locationSuitable === 'no'
 
 const needsSuitabilityConcerns = (session, route) => {
-  return routeShows(route, 'suitable') && ['yes', 'yes-concerns', 'no'].includes(session.accommodationSuitable)
+  return routeShows(route, 'suitable') && ['yes-concerns', 'no'].includes(session.accommodationSuitable)
 }
 
 const followOnConcern = (session, route, step) => {
@@ -149,7 +140,7 @@ const concernSeen = (session, step) => {
 const concernTriggerChanged = (previous, next, step) => {
   if (step === 'location') return (previous.locationSuitable === 'no') !== (next.locationSuitable === 'no')
   if (step === 'suitable') {
-    const needs = (value) => ['yes', 'yes-concerns', 'no'].includes(value)
+    const needs = (value) => ['yes-concerns', 'no'].includes(value)
     return needs(previous.accommodationSuitable) !== needs(next.accommodationSuitable)
   }
   return false
@@ -168,7 +159,6 @@ const stepHref = (page, step, options = {}) => {
 const pageFile = (page) => (page === 'concerns' ? 'accommodation-concerns' : 'accommodation-details')
 
 const stepAnswered = (session, step) => {
-  if (step === 'release-plans') return !!session.releasePlans && (session.releasePlans !== 'yes' || !!session.releasePlansDetails)
   if (step === 'location') return !!session.locationSuitable
   if (step === 'suitable') return !!session.accommodationSuitable
   if (step === 'changes') return !!session.changes
@@ -340,28 +330,18 @@ const accommodationRows = (session) => {
   const rows = []
   if (session.hasSomewhereToLive) {
     rows.push(summaryRow(
-      'Did Alex have somewhere to live before custody?',
+      'Does Alex have somewhere to live after custody?',
       [labelled(YES_NO, session.hasSomewhereToLive)],
       summaryChangeHref('accommodation')
     ))
   }
-
   if (session.hasSomewhereToLive === 'yes' && session.accommodationSettled) {
     rows.push(summaryRow(
-      "Was Alex's accommodation settled?",
+      "Is Alex's accommodation after custody settled?",
       [labelled(YES_NO, session.accommodationSettled)],
       summaryChangeHref('accommodation-settled')
     ))
   }
-  if (routeShows(route, 'release-plans') && session.releasePlans) {
-    rows.push(summaryRow(
-      'Does Alex have any current plans for accommodation when they are released?',
-      [labelled(YES_NO, session.releasePlans), session.releasePlans === 'yes' ? session.releasePlansDetails : ''],
-      summaryChangeHref('accommodation-details', 'release-plans'),
-      { secondaryFrom: 1 }
-    ))
-  }
-
   if (routeShows(route, 'no-accommodation') && Array.isArray(session.noAccommodationReasons) && session.noAccommodationReasons.length) {
     const labels = session.noAccommodationReasons.map((value) => labelled(NO_ACCOMMODATION_REASON_LABELS, value)).filter(Boolean)
     const lines = [...labels]
@@ -369,7 +349,7 @@ const accommodationRows = (session) => {
       lines.push(session.noAccommodationOtherDetails)
     }
     rows.push(summaryRow(
-      'Why did Alex have no accommodation?',
+      'Why will Alex have no accommodation?',
       lines,
       summaryChangeHref('accommodation-details', 'no-accommodation'),
       { secondaryFrom: labels.length }
@@ -421,7 +401,7 @@ const accommodationRows = (session) => {
       [labelled(SUITABLE_LABELS, session.accommodationSuitable)],
       summaryChangeHref('accommodation-details', 'suitable')
     ))
-    if (['yes', 'yes-concerns', 'no'].includes(session.accommodationSuitable)) {
+    if (['yes-concerns', 'no'].includes(session.accommodationSuitable)) {
       const reasons = Array.isArray(session.suitabilityReasons) ? session.suitabilityReasons : []
       const lines = reasonLines(SUITABILITY_REASON_LABELS, reasons, session.suitabilityOtherDetails)
       rows.push(summaryRow(
@@ -453,7 +433,7 @@ const accommodationRows = (session) => {
     const lines = [labelled(CHANGES_LABELS, session.changes)]
     if (session.changesDetails) lines.push(session.changesDetails)
     rows.push(summaryRow(
-      'Does Alex want to make changes to their accommodation?',
+      'Does Alex want to make changes to their living arrangements when they are released?',
       lines,
       summaryChangeHref('accommodation-details', 'changes'),
       { secondaryFrom: 1 }
@@ -560,8 +540,6 @@ const openAnalysisTab = () => {
 }
 
 const emptyDetailAnswers = () => ({
-  releasePlans: '',
-  releasePlansDetails: '',
   livingWith: [],
   livingPartnerDetails: '',
   livingOtherDetails: '',
@@ -590,10 +568,6 @@ const readChangesAnswers = () => {
 }
 
 const readStepAnswers = (step) => {
-  if (step === 'release-plans') {
-    const releasePlans = checkedValue('release_plans')
-    return { releasePlans, releasePlansDetails: releasePlans === 'yes' ? fieldValue('release-plans-details') : '' }
-  }
   if (step === 'living-with') {
     const livingWith = checkedValues('living_with')
     return {
@@ -621,27 +595,14 @@ const readStepAnswers = (step) => {
   return {}
 }
 
-const patchForStep = (step, answers, previous) => {
+const patchForStep = (step, answers) => {
   const patch = { ...answers, accommodationComplete: false }
-  const branchField = { 'release-plans': 'releasePlans' }[step]
-  if (branchField && previous[branchField] !== answers[branchField]) {
-    const cleared = emptyDetailAnswers()
-    if (step === 'release-plans') {
-      delete cleared.releasePlans
-      delete cleared.releasePlansDetails
-      if (previous.hasSomewhereToLive === 'no' || previous.accommodationSettled === 'no') {
-        delete cleared.noAccommodationReasons
-        delete cleared.noAccommodationOtherDetails
-      }
-    }
-    Object.assign(patch, cleared, answers)
-  }
   if (step === 'location' && answers.locationSuitable !== 'no') {
     patch.locationReasons = []
     patch.locationOtherDetails = ''
     patch.locationConcernsSeen = false
   }
-  if (step === 'suitable' && !['yes', 'yes-concerns', 'no'].includes(answers.accommodationSuitable)) {
+  if (step === 'suitable' && !['yes-concerns', 'no'].includes(answers.accommodationSuitable)) {
     patch.suitabilityReasons = []
     patch.suitabilityOtherDetails = ''
     patch.suitabilityConcernsSeen = false
@@ -681,11 +642,6 @@ const readAnalysisAnswers = () => {
 
 const validateStep = (answers, step) => {
   const errors = []
-  if (step === 'release-plans' && !answers.releasePlans) {
-    errors.push({ group: step, href: '#release-plans', text: 'Select if Alex has any current plans for accommodation when they are released' })
-  } else if (step === 'release-plans' && answers.releasePlans === 'yes' && !answers.releasePlansDetails) {
-    errors.push({ group: step, href: '#release-plans-details', text: "Enter details about Alex's plans for accommodation when they are released" })
-  }
   if (step === 'living-with' && !(answers.livingWith || []).length) {
     errors.push({ group: 'living-with', href: '#living-with', text: 'Select who Alex is planning on living with' })
   }
@@ -707,7 +663,7 @@ const validateStep = (answers, step) => {
     errors.push({
       group: 'no-accommodation',
       href: '#no-accommodation',
-      text: 'Select why Alex has no accommodation'
+      text: 'Select why Alex will have no accommodation'
     })
   }
   if (step === 'future' && !answers.futurePlanned) {
@@ -727,7 +683,7 @@ const validateStep = (answers, step) => {
     errors.push({
       group: 'changes',
       href: '#changes',
-      text: 'Select if Alex wants to make changes to their accommodation'
+      text: 'Select if Alex wants to make changes to their living arrangements when they are released'
     })
   } else if (step === 'changes' && answers.changes === 'not-present' && !answers.changesDetails) {
     errors.push({
@@ -766,8 +722,6 @@ const restoreConcerns = (session) => {
 }
 
 const restoreDetails = (session) => {
-  selectRadio('release_plans', session.releasePlans)
-  setField('release-plans-details', session.releasePlansDetails)
   selectChecks('living_with', session.livingWith)
   setField('living-partner-details', session.livingPartnerDetails)
   setField('living-other-details', session.livingOtherDetails)
@@ -923,7 +877,7 @@ const initSanAccommodation = () => {
       showErrors([{
         group: 'somewhere-to-live',
         href: '#somewhere-to-live',
-        text: 'Select if Alex had somewhere to live before custody'
+        text: 'Select if Alex has somewhere to live after custody'
       }])
       return
     }
@@ -955,7 +909,7 @@ const initSanAccommodation = () => {
       showErrors([{
         group: 'accommodation-settled',
         href: '#accommodation-settled',
-        text: "Select if Alex's accommodation is settled"
+        text: "Select if Alex's accommodation after custody is settled"
       }])
       return
     }
@@ -985,7 +939,7 @@ const initSanAccommodation = () => {
       return
     }
     clearErrors()
-    const patch = patchForStep(step, answers, previous)
+    const patch = patchForStep(step, answers)
     setSanSession(patch)
     const next = { ...previous, ...patch }
     continueAfterDetail(previous, next, accommodationRoute(next), step)
