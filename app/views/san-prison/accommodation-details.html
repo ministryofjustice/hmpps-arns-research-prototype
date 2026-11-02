@@ -12,35 +12,10 @@
 {% include "san-prison/includes/content-header.html" %}
 
 <form id="san-accommodation-details-form" novalidate data-san-page="details">
-  <div class="govuk-form-group" data-san-question="release-plans" data-san-error-group="release-plans" hidden>
-    <fieldset class="govuk-fieldset" id="release-plans">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-        <h1 class="govuk-fieldset__heading">Does Alex have any current plans for accommodation when they are released?</h1>
-      </legend>
-      <div class="govuk-radios" data-module="govuk-radios">
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="release-plans-yes" name="release_plans" type="radio" value="yes" data-aria-controls="conditional-release-plans-yes">
-          <label class="govuk-label govuk-radios__label" for="release-plans-yes">Yes</label>
-        </div>
-        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-release-plans-yes">
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="release-plans-details">Give details</label>
-            <textarea class="govuk-textarea" id="release-plans-details" name="release_plans_details" rows="4" maxlength="2000" required></textarea>
-            <div class="govuk-hint san-character-count" data-san-character-count="release-plans-details">You have 2,000 characters remaining</div>
-          </div>
-        </div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="release-plans-no" name="release_plans" type="radio" value="no">
-          <label class="govuk-label govuk-radios__label" for="release-plans-no">No</label>
-        </div>
-      </div>
-    </fieldset>
-  </div>
-
   <div class="govuk-form-group" data-san-question="no-accommodation" data-san-error-group="no-accommodation" hidden>
     <fieldset class="govuk-fieldset" id="no-accommodation" aria-describedby="no-accommodation-hint no-accommodation-select-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-        <h1 class="govuk-fieldset__heading">Why did Alex have no accommodation?</h1>
+        <h1 class="govuk-fieldset__heading">Why will Alex have no accommodation?</h1>
       </legend>
       <div id="no-accommodation-hint" class="govuk-hint">Consider current and past homelessness issues.</div>
       <div id="no-accommodation-select-hint" class="govuk-hint">Select all that apply.</div>
@@ -299,7 +274,7 @@
   <div class="govuk-form-group" data-san-question="changes" data-san-error-group="changes" hidden>
     <fieldset class="govuk-fieldset" id="changes" aria-describedby="changes-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-        <h1 class="govuk-fieldset__heading">Does Alex want to make changes to their accommodation?</h1>
+        <h1 class="govuk-fieldset__heading">Does Alex want to make changes to their living arrangements when they are released?</h1>
       </legend>
       <div id="changes-hint" class="govuk-hint">Alex must answer this question.</div>
       <div class="govuk-radios" data-module="govuk-radios">
