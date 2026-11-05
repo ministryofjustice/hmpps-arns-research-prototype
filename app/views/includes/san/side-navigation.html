@@ -1,5 +1,5 @@
 {% set currentSection = sanSection | default("accommodation") %}
-<nav class="moj-side-navigation assessment-side-navigation assessment-section-navigation san-side-navigation" aria-label="Strengths and needs">
+<nav class="moj-side-navigation assessment-side-navigation assessment-section-navigation san-side-navigation" aria-label="Strengths and Needs">
   <ul class="moj-side-navigation__list">
     <li class="moj-side-navigation__item{% if currentSection == "accommodation" %} moj-side-navigation__item--active{% endif %}">
       <a href="accommodation.html" class="assessment-section-navigation__link" data-san-section-link="accommodation"{% if currentSection == "accommodation" %} aria-current="location"{% endif %}>

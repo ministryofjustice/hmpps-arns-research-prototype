@@ -302,7 +302,7 @@ export const setDocumentTitle = () => {
   const clone = heading.cloneNode(true)
   clone.querySelectorAll('.govuk-visually-hidden').forEach((node) => node.remove())
   const text = (clone.textContent || '').replace(/\s+/g, ' ').trim()
-  if (text) document.title = `${text} - Strengths and needs`
+  if (text) document.title = `${text} - Strengths and Needs`
 }
 
 const syncSectionStatus = () => {

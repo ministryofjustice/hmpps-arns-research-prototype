@@ -7,7 +7,7 @@
 {% set assessmentNavSections = [
   { id: "home", label: "Home" },
   { id: "section-1", label: "Tiering", showComplete: true },
-  { id: "strengths-and-needs", label: "Strengths and needs" },
+  { id: "strengths-and-needs", label: "Strengths and Needs" },
   { id: "rosh", label: "Risk of serious harm" },
   { id: "risk-management-plan", label: "Risk management plan" },
   { id: "sentence-plan", label: "Sentence plan" }
@@ -35,7 +35,7 @@
         attributes: { "data-section": "section-1", "data-predictors-inactive-link": true }
       },
       {
-        text: "Strengths and needs",
+        text: "Strengths and Needs",
         href: "#",
         attributes: { "data-section": "strengths-and-needs" }
       },
@@ -74,7 +74,7 @@
         attributes: { "data-section": "section-1", "data-tiering-inactive-link": true }
       },
       {
-        text: "Strengths and needs",
+        text: "Strengths and Needs",
         href: "#",
         attributes: { "data-section": "strengths-and-needs" }
       },
@@ -117,7 +117,7 @@
               <a class="moj-primary-navigation__link" href="#"{% if activeSection == "section-1" %} aria-current="page"{% endif %} data-section="section-1" data-predictors-inactive-link>{{ sectionNavHtml | trim | safe }}</a>
             </li>
             <li class="moj-primary-navigation__item">
-              <a class="moj-primary-navigation__link" href="#" data-section="strengths-and-needs" data-predictors-inactive-link>Strengths and needs</a>
+              <a class="moj-primary-navigation__link" href="#" data-section="strengths-and-needs" data-predictors-inactive-link>Strengths and Needs</a>
             </li>
             <li class="moj-primary-navigation__item">
               <a class="moj-primary-navigation__link" href="#"{% if activeSection == "rosh" %} aria-current="page"{% endif %} data-section="rosh" data-predictors-inactive-link>Risk</a>
@@ -136,7 +136,7 @@
               <a class="moj-primary-navigation__link" href="#"{% if activeSection == "section-1" %} aria-current="page"{% endif %} data-section="section-1">{{ sectionNavHtml | trim | safe }}</a>
             </li>
             <li class="moj-primary-navigation__item">
-              <a class="moj-primary-navigation__link" href="#" data-section="strengths-and-needs">Strengths and needs</a>
+              <a class="moj-primary-navigation__link" href="#" data-section="strengths-and-needs">Strengths and Needs</a>
             </li>
             <li class="moj-primary-navigation__item">
               <a class="moj-primary-navigation__link" href="#"{% if activeSection == "rosh" %} aria-current="page"{% endif %} data-section="rosh">Risk of serious harm</a>

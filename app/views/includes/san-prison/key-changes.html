@@ -6,14 +6,18 @@
       {
         name: "Accommodation",
         changes: [
-          { type: "CD", level: "medium", text: "The opening question asks whether Alex has somewhere to live after custody, followed by whether the accommodation will be settled." },
-          { type: "IxD", level: "large", a11y: true, text: "If Alex has somewhere to live, both settlement answers continue to who they plan to live with. If not, the journey asks why and then about changes to their living arrangements." }
+          { type: "CD", level: "medium", text: "The headings now use the past tense: ‘Did Alex have somewhere to live before custody?’, ‘Was Alex's accommodation settled?’ and ‘Why did Alex have no accommodation?’" },
+          { type: "IxD", level: "large", a11y: true, text: "Added a new screen: ‘Does Alex have any current plans for accommodation when they are released?’ with Yes, No and Unknown radio options. Unknown reveals a text field." },
+          { type: "IxD", level: "large", text: "Both Yes and No answers to ‘Was Alex's accommodation settled?’ lead to the new release plans screen. Answers to ‘Why did Alex have no accommodation?’ also lead to this screen." },
+          { type: "IxD", level: "large", text: "On the release plans screen, Yes leads to ‘Who is Alex planning on living with?’. No and Unknown lead to ‘Does Alex want to make changes to their living arrangements when they are released?’" },
+          { type: "CD", level: "medium", text: "The accommodation summary reflects the past-tense headings and includes the release plans response and any details entered for Unknown." }
         ]
       },
       {
         name: "Drug use",
         changes: [
-          { type: "IxD", level: "medium", text: "A new gate question asks ‘Is there evidence Alex has been using drugs in custody?’" }
+          { type: "IxD", level: "medium", text: "A new gate question asks ‘Is there evidence Alex has been using drugs in custody?’" },
+          { type: "CD", level: "small", text: "Added the hint ‘Consider use from before and during custody.’ below both ‘Which drugs has Alex used?’ and ‘Which drugs did Alex use before custody?’" }
         ]
       },
       {
@@ -30,8 +34,12 @@
 {% set changelogSummary %}
   <h4 class="govuk-heading-s">Key differences from SAN Community</h4>
   <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
-    <li><strong>Accommodation:</strong> The opening question asks whether Alex has somewhere to live after custody. The follow-up asks whether the accommodation will be settled; if Alex has no accommodation, the journey asks why and then about changes to their living arrangements.</li>
-    <li><strong>Drug use:</strong> A new gate question asks whether there is evidence Alex has been using drugs in custody.</li>
+    <li>
+      <p class="govuk-body govuk-!-margin-bottom-2"><strong>Accommodation:</strong> The opening questions now ask about accommodation before custody and use past-tense headings.</p>
+      <p class="govuk-body govuk-!-margin-bottom-2">Both settled accommodation answers and the no-accommodation reasons lead to a new question about plans for accommodation on release. Yes continues to who Alex plans to live with. No and Unknown continue to changes to living arrangements on release. Unknown reveals a text field.</p>
+      <p class="govuk-body">The accommodation summary uses the updated headings and includes the release plans response and any Unknown details.</p>
+    </li>
+    <li><strong>Drug use:</strong> A new gate question asks whether there is evidence Alex has been using drugs in custody. Added the hint ‘Consider use from before and during custody.’ below both ‘Which drugs has Alex used?’ and ‘Which drugs did Alex use before custody?’.</li>
     <li><strong>Alcohol use:</strong> The binge or excessive alcohol use question asks about the 6 months before custody.</li>
   </ul>
 {% endset %}

@@ -3,7 +3,7 @@
 {% set navIsolated = sanIsolated | default(false) %}
 {% set isolatedHref = (sanPrisonBase | default("/san-prison")) + "/drugs-pa#practitioner-analysis" %}
 {% set inactiveSections = ["employment", "finances", "health", "relationships", "thinking", "offence"] %}
-<nav class="moj-side-navigation assessment-side-navigation assessment-section-navigation san-side-navigation" aria-label="Strengths and needs">
+<nav class="moj-side-navigation assessment-side-navigation assessment-section-navigation san-side-navigation" aria-label="Strengths and Needs">
   <ul class="moj-side-navigation__list">
     <li class="moj-side-navigation__item{% if currentSection == "accommodation" %} moj-side-navigation__item--active{% endif %}">
       <a {% if navIsolated %}href="{{ isolatedHref }}"{% else %}href="accommodation.html"{% endif %} class="assessment-section-navigation__link"{% if not navIsolated %} data-san-section-link="accommodation"{% endif %}{% if currentSection == "accommodation" %} aria-current="location"{% endif %}>

@@ -34,10 +34,11 @@
 
 <form id="san-drugs-types-form" novalidate data-du-page="types">
   <div class="govuk-form-group" data-san-error-group="drug-types">
-    <fieldset class="govuk-fieldset" id="drug-types" aria-describedby="drug-types-hint">
+    <fieldset class="govuk-fieldset" id="drug-types" aria-describedby="drug-types-custody-hint drug-types-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
         <h1 class="govuk-fieldset__heading" data-du-types-heading>Which drugs has Alex used?</h1>
       </legend>
+      <div id="drug-types-custody-hint" class="govuk-hint">Consider use from before and during custody.</div>
       <div id="drug-types-hint" class="govuk-hint">Select all that apply.</div>
       <div class="govuk-checkboxes" data-module="govuk-checkboxes">
         {% for drug in drugOptions %}
