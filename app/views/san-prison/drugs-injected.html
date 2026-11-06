@@ -1,7 +1,7 @@
 {% extends "san-prison/layout.html" %}
 
 {% set pageName = "Drug use" %}
-{% set sanCaption = "Drug use" %}
+{% set sanHeading = "Drug use" %}
 {% set sanSection = "drugs" %}
 {% set backLinkHref = "drugs-before.html" %}
 
@@ -33,7 +33,7 @@
 ] %}
 
 <form id="san-drugs-injected-form" novalidate data-du-page="injected">
-  <h1 class="govuk-heading-l" data-du-injected-heading>When has Alex injected drugs?</h1>
+  <h2 class="govuk-heading-m" data-du-injected-heading>When has Alex injected drugs?</h2>
 
   {% for drug in drugOptions %}
   {% if drug.id not in ["cannabis", "ecstasy", "hallucinogens", "solvents", "synthetic-cannabinoids"] %}

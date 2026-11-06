@@ -1,0 +1,20 @@
+{% extends "layouts/assessment.html" %}
+
+{% set showArnsServiceNavigation = true %}
+{% set hideServiceHeader = true %}
+
+{% block pageTitle %}Accessibility statement - Strengths and Needs{% endblock %}
+
+{% block headerEnd %}
+  {% include "san-training/prison/includes/phase-banner.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Accessibility statement</h1>
+    <p class="govuk-body">This is a research prototype of the Strengths and Needs service. It is not a live service.</p>
+    <p class="govuk-body"><a class="govuk-link" href="/san-training/prison/accommodation" data-san-back>Back to Strengths and Needs</a></p>
+  </div>
+</div>
+{% endblock %}

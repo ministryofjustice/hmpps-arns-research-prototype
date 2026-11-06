@@ -1,6 +1,7 @@
 {% extends "san-prison/layout.html" %}
 
 {% set pageName = "Thinking, behaviours and attitudes" %}
+{% set sanHeading = "Thinking, behaviours and attitudes" %}
 {% set sanSection = "thinking" %}
 {% set backLinkHref = "thinking-behaviours-sexual.html" %}
 
@@ -9,12 +10,7 @@
 {% include "san-prison/includes/assessment-journey-page-open.html" %}
 
 <div data-san-error-summary hidden></div>
-<div class="san-content-header san-content-header--sexual">
-  <div class="san-content-header__row">
-    <p class="san-sexual-kicker govuk-!-margin-bottom-0">Thinking, behaviours and attitudes<span class="govuk-visually-hidden">, <span data-san-status-text>Incomplete</span></span></p>
-    <strong class="govuk-tag govuk-tag--light-grey san-status-tag" data-san-status aria-hidden="true">Incomplete</strong>
-  </div>
-</div>
+{% include "san-prison/includes/content-header.html" %}
 
 {% set questions = [
   {
@@ -55,7 +51,7 @@
 ] %}
 
 <form id="san-thinking-sexual-harm-form" novalidate data-tb-page="sexual-harm">
-  <h1 class="govuk-heading-l">Risk of sexual harm</h1>
+  <h2 class="govuk-heading-m">Risk of sexual harm</h2>
   {% for question in questions %}
   <div class="govuk-form-group{% if not loop.first %} san-question{% endif %}" data-san-error-group="{{ question.id }}">
     <fieldset class="govuk-fieldset" id="{{ question.id }}"{% if question.hint %} aria-describedby="{{ question.id }}-hint"{% endif %}>

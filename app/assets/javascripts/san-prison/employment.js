@@ -386,6 +386,16 @@ const setHeadingLevel = (heading, level) => {
 }
 
 const showSelectedDifficulties = (areas) => {
+  const only = areas.length === 1
+  const header = document.querySelector('.san-content-header')
+  const title = setHeadingLevel(header?.querySelector('.san-content-header__row > :first-child'), only ? 'p' : 'h1')
+  if (title) {
+    title.classList.toggle('govuk-caption-l', only)
+    title.classList.toggle('govuk-heading-l', !only)
+  }
+  header?.classList.toggle('san-content-header--caption', only)
+  header?.classList.toggle('san-content-header--heading', !only)
+
   let shown = 0
   document.querySelectorAll('[data-ee-difficulty]').forEach((block) => {
     const show = areas.includes(block.getAttribute('data-ee-difficulty'))
@@ -394,7 +404,6 @@ const showSelectedDifficulties = (areas) => {
     if (!show) return
     const first = shown === 0
     shown += 1
-    const only = areas.length === 1
     block.classList.toggle('san-question', !first)
     const legend = block.querySelector('.govuk-fieldset__legend')
     if (legend) {
@@ -402,7 +411,7 @@ const showSelectedDifficulties = (areas) => {
       legend.classList.toggle('govuk-fieldset__legend--m', !only)
     }
     const heading = block.querySelector('.govuk-fieldset__heading')
-    setHeadingLevel(heading, first ? 'h1' : 'h2')
+    setHeadingLevel(heading, only ? 'h1' : 'h2')
   })
 }
 
@@ -1010,7 +1019,10 @@ const initEmployment = () => {
     }
     clearErrors()
     setSanSession({ ...answers, employmentComplete: true })
-    window.location.assign('employment-summary.html#practitioner-analysis')
+    const completedSession = getSanSession()
+    applyProgress(completedSession)
+    renderSummary(completedSession)
+    openAnalysisTab()
   })
 }
 

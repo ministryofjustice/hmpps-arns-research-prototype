@@ -1,0 +1,29 @@
+  {% set pastIssuesHeadingLevel = pastIssuesAsPageHeading | default(false) %}
+  <div class="govuk-form-group" data-san-error-group="alcohol-past-issues">
+    <fieldset class="govuk-fieldset" id="alcohol-past-issues">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--{% if pastIssuesHeadingLevel %}l{% else %}m{% endif %}">
+        {% if pastIssuesHeadingLevel %}
+        <h1 class="govuk-fieldset__heading">Does Alex have any past issues with alcohol?</h1>
+        {% else %}
+        <h2 class="govuk-fieldset__heading">Does Alex have any past issues with alcohol?</h2>
+        {% endif %}
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-past-issues-yes" name="alcohol_past_issues" type="radio" value="yes" data-aria-controls="conditional-alcohol-past-issues-yes">
+          <label class="govuk-label govuk-radios__label" for="alcohol-past-issues-yes">Yes</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-alcohol-past-issues-yes">
+          <div class="govuk-form-group" data-san-error-group="alcohol-past-issues-yes-details">
+            <label class="govuk-label" for="alcohol-past-issues-yes-details">Give details</label>
+            <textarea class="govuk-textarea" id="alcohol-past-issues-yes-details" name="alcohol_past_issues_yes_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="alcohol-past-issues-yes-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="alcohol-past-issues-no" name="alcohol_past_issues" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="alcohol-past-issues-no">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>

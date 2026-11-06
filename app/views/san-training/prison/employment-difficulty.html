@@ -1,0 +1,52 @@
+{% extends "san-training/prison/layout.html" %}
+
+{% set pageName = "Employment and education" %}
+{% set sanCaption = "Employment and education" %}
+{% set sanSection = "employment" %}
+{% set backLinkHref = "employment-details.html" %}
+
+{% block content %}
+
+{% include "san-training/prison/includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "san-training/prison/includes/content-header.html" %}
+
+<form id="san-employment-difficulty-form" novalidate data-ee-page="difficulty">
+  {% set difficultyAreas = [
+    { id: "reading", label: "reading" },
+    { id: "writing", label: "writing" },
+    { id: "numeracy", label: "numeracy" }
+  ] %}
+  {% for area in difficultyAreas %}
+  <div class="govuk-form-group" data-ee-difficulty="{{ area.id }}" data-san-error-group="difficulty-{{ area.id }}" hidden>
+    <fieldset class="govuk-fieldset" id="difficulty-{{ area.id }}-level">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h2 class="govuk-fieldset__heading">How much support does Alex need with {{ area.label }}?</h2>
+      </legend>
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="difficulty-{{ area.id }}-significant" name="difficulty_{{ area.id }}" type="radio" value="significant" aria-describedby="difficulty-{{ area.id }}-significant-hint">
+          <label class="govuk-label govuk-radios__label" for="difficulty-{{ area.id }}-significant">Significant support needed</label>
+          <div id="difficulty-{{ area.id }}-significant-hint" class="govuk-hint govuk-radios__hint">Has a substantial impact on day-to-day life and they are likely to need regular support.</div>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="difficulty-{{ area.id }}-some" name="difficulty_{{ area.id }}" type="radio" value="some" aria-describedby="difficulty-{{ area.id }}-some-hint">
+          <label class="govuk-label govuk-radios__label" for="difficulty-{{ area.id }}-some">Some support needed</label>
+          <div id="difficulty-{{ area.id }}-some-hint" class="govuk-hint govuk-radios__hint">
+            {% if area.id == "reading" %}Can usually manage day-to-day reading but may need support with some written information.
+            {% elif area.id == "writing" %}Can usually manage day-to-day writing but may need support with spelling, grammar or completing longer writing tasks.
+            {% else %}Can usually manage day-to-day numeracy but may need support with calculations, numbers or money-related tasks.{% endif %}
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+  {% endfor %}
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "san-training/prison/includes/assessment-page-close.html" %}
+
+{% endblock %}

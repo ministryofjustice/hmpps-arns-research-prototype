@@ -1,0 +1,75 @@
+{% macro changeTags(change) %}
+<span class="assessment-research-changelog__tags">
+  <strong class="assessment-research-changelog__tag assessment-research-changelog__tag--{{ change.type | lower }}">{{ change.type }}</strong>
+  {% if change.a11y %}
+    <strong class="assessment-research-changelog__tag assessment-research-changelog__tag--a11y">A11y</strong>
+  {% endif %}
+</span>
+{% endmacro %}
+<div class="assessment-research-changelog" data-changelog>
+  <div class="assessment-research-changelog__toolbar">
+    <div class="assessment-research-changelog__heading">
+      <h3 class="govuk-heading-s assessment-research-changelog__title">Key changes</h3>
+      <p class="govuk-hint assessment-research-changelog__hint">{{ changelogHint }}</p>
+    </div>
+    <div class="assessment-research-changelog__toolbar-actions">
+      <button type="button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0 assessment-research-changelog__details-toggle" data-changelog-details-toggle aria-expanded="false" aria-controls="{{ changelogId }}-details">
+        <svg class="assessment-research-changelog__details-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M10 13.5 2.4 5.9l1.4-1.4L10 10.7l6.2-6.2 1.4 1.4z"></path>
+        </svg>
+        <span data-changelog-details-label>Show details</span>
+      </button>
+    </div>
+  </div>
+  <div id="{{ changelogId }}-details" data-changelog-details hidden>
+  <div class="assessment-research-changelog__details-bar">
+    <div class="assessment-research-changelog__tabs" role="tablist" aria-label="Iterations">
+      <button type="button" class="assessment-research-changelog__tab" role="tab" id="{{ changelogId }}-tab-summary" aria-controls="{{ changelogId }}-panel-summary" aria-selected="true" tabindex="0" data-iteration-tab="summary" data-summary-tab>
+        <span class="assessment-research-changelog__tab-label">Summary</span>
+        <span class="assessment-research-changelog__tab-count">Overview</span>
+      </button>
+      {% for iteration in changelogIterations %}
+        <button type="button" class="assessment-research-changelog__tab" role="tab" id="{{ changelogId }}-tab-{{ iteration.id }}" aria-controls="{{ changelogId }}-panel-{{ iteration.id }}" aria-selected="false" tabindex="-1" data-iteration-tab="{{ iteration.id }}">
+          <span class="assessment-research-changelog__tab-label">{{ iteration.label }}</span>
+          <span class="assessment-research-changelog__tab-count"><span data-count-for="{{ iteration.id }}">0</span> <span data-count-word-for="{{ iteration.id }}">changes</span></span>
+        </button>
+      {% endfor %}
+    </div>
+    <div class="assessment-research-changelog__controls" role="group" aria-label="Filter changes" data-changelog-filters>
+      <button type="button" class="assessment-research-changelog__control" aria-pressed="true" data-changelog-filter="all">All</button>
+      <button type="button" class="assessment-research-changelog__control assessment-research-changelog__control--cd" aria-pressed="false" data-changelog-filter="CD">CD</button>
+      <button type="button" class="assessment-research-changelog__control assessment-research-changelog__control--ixd" aria-pressed="false" data-changelog-filter="IxD">IxD</button>
+      <button type="button" class="assessment-research-changelog__control assessment-research-changelog__control--a11y" aria-pressed="false" data-changelog-filter="A11y">A11y</button>
+    </div>
+  </div>
+  <p class="govuk-body assessment-research-changelog__empty" data-changelog-empty hidden>No changes match this filter.</p>
+    <div class="assessment-research-changelog__panel" id="{{ changelogId }}-panel-summary" role="tabpanel" aria-labelledby="{{ changelogId }}-tab-summary" data-changelog-panel="summary">
+      {{ changelogSummary | safe }}
+    </div>
+    {% for iteration in changelogIterations %}
+        <div class="assessment-research-changelog__panel" id="{{ changelogId }}-panel-{{ iteration.id }}" role="tabpanel" aria-labelledby="{{ changelogId }}-tab-{{ iteration.id }}" data-iteration-panel="{{ iteration.id }}" data-changelog-panel="{{ iteration.id }}" hidden>
+        <table class="govuk-table assessment-research-changelog__table">
+          <caption class="govuk-visually-hidden">{{ iteration.label }}</caption>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header assessment-research-changelog__section-col">Section</th>
+              <th scope="col" class="govuk-table__header">Change</th>
+              <th scope="col" class="govuk-table__header assessment-research-changelog__type-col">Type</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            {% for section in iteration.sections %}
+              {% for change in section.changes %}
+                <tr class="govuk-table__row" data-change data-change-type="{{ change.type }}" data-level="{{ change.level }}" data-section="{{ section.name }}" data-iteration="{{ iteration.id }}"{% if change.a11y %} data-a11y="true"{% endif %}>
+                  <th scope="row" class="govuk-table__header assessment-research-changelog__section-name" data-section-label>{{ section.name }}</th>
+                  <td class="govuk-table__cell">{{ change.text }}</td>
+                  <td class="govuk-table__cell">{{ changeTags(change) }}</td>
+                </tr>
+              {% endfor %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endfor %}
+  </div>
+</div>

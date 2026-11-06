@@ -187,7 +187,7 @@ const victimFormHref = (index, from) => {
   if (Number.isInteger(index) && index >= 0) search.set('victim', String(index))
   if (from) search.set('from', from)
   const query = search.toString()
-  return query ? `offence-analysis-victim.html?${query}` : 'offence-analysis-victim.html'
+  return query ? `offence-analysis-victim?${query}` : 'offence-analysis-victim'
 }
 
 const victimDeleteHref = (index, from) => {

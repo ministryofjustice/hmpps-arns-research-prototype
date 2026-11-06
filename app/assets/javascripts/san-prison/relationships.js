@@ -1618,7 +1618,10 @@ const initSanRelationships = () => {
     }
     clearErrors()
     setSanSession({ ...answers, relationshipsComplete: true })
-    window.location.assign('personal-relationships-summary.html#practitioner-analysis')
+    const completedSession = getSanSession()
+    applyProgress(completedSession)
+    renderSummary(completedSession)
+    openAnalysisTab()
   })
 }
 

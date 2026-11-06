@@ -1,0 +1,88 @@
+{% extends "san-training/prison/layout.html" %}
+
+{% set pageName = "Thinking, behaviours and attitudes" %}
+{% set sanHeading = "Thinking, behaviours and attitudes" %}
+{% set sanSection = "thinking" %}
+{% set backLinkHref = "thinking-behaviours-sexual.html" %}
+
+{% block content %}
+
+{% include "san-training/prison/includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "san-training/prison/includes/content-header.html" %}
+
+{% set questions = [
+  {
+    id: "preoccupation",
+    name: "thinking_preoccupation",
+    question: "Is there evidence Alex shows sexual preoccupation?",
+    hint: "Sexual preoccupation is when sexual thoughts or behaviours take up a significant amount of time and affect day-to-day life, relationships, responsibilities or other important activities.",
+    options: [
+      { value: "none", label: "No evidence", hint: "Sexual thoughts or behaviours do not appear to affect their daily functioning." },
+      { value: "some", label: "Some evidence", hint: "Sexual thoughts or behaviours take up a significant amount of time, but there is evidence of other interests or attempts to reduce the behaviour." },
+      { value: "significant", label: "Significant evidence", hint: "Sexual thoughts or behaviours take up a significant amount of time and have a substantial impact on their daily functioning." },
+      { value: "unknown", label: "Unknown" }
+    ]
+  },
+  {
+    id: "interests",
+    name: "thinking_interests",
+    question: "Is there evidence Alex has offence-related sexual interests?",
+    options: [
+      { value: "no", label: "No evidence", hint: "Healthy sexual interests. While offending may have involved illegal sexual activity, their usual way of meeting sexual needs is legal and consensual." },
+      { value: "some", label: "Yes, some evidence", hint: "Some evidence of healthy, consensual sexual activity, but also recurring interest in or behaviour involving illegal or harmful sexual activity." },
+      { value: "yes", label: "Yes, significant evidence", hint: "A persistent preference for illegal or harmful sexual activity, with little or no evidence of healthy, consensual sexual interests." },
+      { value: "unknown", label: "Unknown" }
+    ]
+  },
+  {
+    id: "intimacy",
+    name: "thinking_intimacy",
+    question: "Is there evidence Alex finds it easier to seek emotional intimacy with children over adults?",
+    hint: "This means looking to children to meet emotional needs that would usually be met through relationships with other adults.",
+    options: [
+      { value: "no", label: "No evidence", hint: "They have or have had an intimate relationship with an adult that they value or have the skills, ability and desire to form stable relationships." },
+      { value: "some", label: "Yes, some evidence", hint: "Shows some evidence of having or wanting stable adult relationships but finds it easier to seek emotional intimacy with children over adults." },
+      { value: "yes", label: "Yes, significant evidence", hint: "They find it easier to seek emotional intimacy with children and have significant difficulty forming intimate relationships with adults." },
+      { value: "unknown", label: "Unknown" }
+    ]
+  }
+] %}
+
+<form id="san-thinking-sexual-harm-form" novalidate data-tb-page="sexual-harm">
+  <h2 class="govuk-heading-m">Risk of sexual harm</h2>
+  {% for question in questions %}
+  <div class="govuk-form-group{% if not loop.first %} san-question{% endif %}" data-san-error-group="{{ question.id }}">
+    <fieldset class="govuk-fieldset" id="{{ question.id }}"{% if question.hint %} aria-describedby="{{ question.id }}-hint"{% endif %}>
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--{{ question.level | default('m') }}">
+        {% if question.heading == "h1" %}
+        <h1 class="govuk-fieldset__heading">{{ question.question }}</h1>
+        {% else %}
+        <h2 class="govuk-fieldset__heading">{{ question.question }}</h2>
+        {% endif %}
+      </legend>
+      {% if question.hint %}
+      <div id="{{ question.id }}-hint" class="govuk-hint">{{ question.hint }}</div>
+      {% endif %}
+      <div class="govuk-radios" data-module="govuk-radios">
+        {% for option in question.options %}
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="{{ question.id }}-{{ option.value }}" name="{{ question.name }}" type="radio" value="{{ option.value }}"{% if option.hint %} aria-describedby="{{ question.id }}-{{ option.value }}-hint"{% endif %}>
+          <label class="govuk-label govuk-radios__label" for="{{ question.id }}-{{ option.value }}">{{ option.label }}</label>
+          {% if option.hint %}
+          <div id="{{ question.id }}-{{ option.value }}-hint" class="govuk-hint govuk-radios__hint">{{ option.hint }}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </fieldset>
+  </div>
+  {% endfor %}
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "san-training/prison/includes/assessment-page-close.html" %}
+
+{% endblock %}
