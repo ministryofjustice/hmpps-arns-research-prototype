@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SAN training storyboards</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #0b0c0c; background: #f3f2f1; font-family: "GDS Transport", Arial, sans-serif; letter-spacing: 0; }
+    header { background: white; border-top: 10px solid #1d70b8; border-bottom: 1px solid #b1b4b6; padding: 28px max(20px, calc((100% - 1320px) / 2)); }
+    h1 { font-size: 32px; margin: 20px 0 0; }
+    h2 { font-size: 22px; margin: 0; overflow-wrap: anywhere; }
+    nav { display: flex; flex-wrap: wrap; gap: 12px 24px; }
+    a { color: #1d70b8; text-underline-offset: 3px; }
+    a:focus { color: #0b0c0c; background: #ffdd00; outline: 3px solid #ffdd00; }
+    main { max-width: 1360px; margin: auto; padding: 28px 20px; }
+    .screens { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 24px; }
+    article { background: white; border: 1px solid #b1b4b6; min-width: 0; }
+    article h2, article p { padding: 18px; margin: 0; }
+    article > a { display: block; }
+    img { display: block; width: 100%; height: auto; border-top: 1px solid #b1b4b6; }
+    .preview { aspect-ratio: 4 / 3; object-fit: cover; object-position: top; }
+    .links { margin-top: 28px; line-height: 1.6; }
+    @media print { article { break-inside: avoid; } }
+  </style>
+</head>
+<body>
+    <header><nav><a href="http://localhost:3000/san#community-training">Community training</a><a href="http://localhost:3000/san#prison-training">Prison training</a></nav><h1>SAN training storyboards</h1></header>
+    <main><div class="screens">
+      <article><h2><a href="community/overview.html">SAN Community</a></h2><p>Section overview</p><a href="community/overview.html"><img class="preview" src="community/images/overview/accommodation.png" alt="Community training accommodation question"></a></article>
+      <article><h2><a href="prison/index.html">SAN Prison</a></h2><p>Section overview</p><a href="prison/index.html"><img class="preview" src="prison/images/overview/accommodation.png" alt="Prison training accommodation question"></a></article>
+    </div><nav class="links"><a href="community/index.html">Community journey snapshots</a><a href="community/accommodation/index.html">Community accommodation snapshots</a></nav></main></body>
+</html>

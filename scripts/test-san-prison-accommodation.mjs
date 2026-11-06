@@ -40,6 +40,94 @@ const summary = async (page) => {
   await page.locator('[data-san-summary] .govuk-summary-list').waitFor()
 }
 
+const practitionerAnalysis = async (page) => {
+  await page.getByRole('radio', { name: 'No', exact: true }).check()
+  await submit(page)
+  await question(page, 'no-accommodation')
+  await advance(page, 'no-accommodation-financial', 'release-plans')
+  await advance(page, 'release-plans-no', 'changes')
+  await summary(page)
+  await page.locator('[data-san-go-analysis]').click()
+}
+
+const accommodationCompletion = async (page, complete) => {
+  assert.equal(await page.locator('[data-san-status]').innerText(), complete ? 'Complete' : 'Incomplete')
+  assert.equal(await page.locator('[data-san-status]').evaluate((tag) => tag.classList.contains('govuk-tag--light-blue')), complete)
+  assert.equal(await page.locator('[data-section-complete="accommodation"]').isVisible(), complete)
+  assert.equal(await page.locator('[data-san-analysis-summary]').isVisible(), complete)
+  assert.equal(await page.locator('#san-accommodation-analysis-form').isVisible(), !complete)
+  assert.equal(await page.evaluate(() => !!JSON.parse(sessionStorage.getItem('sanPrisonAssessment')).accommodationComplete), complete)
+}
+
+for (const missing of ['strengths', 'harm', 'reoffending']) {
+  test(`PA completion requires ${missing} and updates immediately when all three answers are No`, async () => journey(async (page) => {
+    await practitionerAnalysis(page)
+    const markComplete = page.getByRole('button', { name: 'Mark as complete', exact: true })
+    for (const answer of ['strengths', 'harm', 'reoffending'].filter((answer) => answer !== missing)) {
+      await select(page, `analysis-${answer}-no`)
+    }
+    await markComplete.click()
+    await accommodationCompletion(page, false)
+    assert.equal(await page.locator(`.govuk-error-summary a[href="#analysis-${missing}"]`).count(), 1)
+
+    await select(page, `analysis-${missing}-no`)
+    await markComplete.click()
+    await page.locator('[data-san-analysis-summary]:not([hidden])').waitFor()
+    await accommodationCompletion(page, true)
+    assert.equal(await page.locator('[data-san-analysis-summary] .govuk-summary-list__row').count(), 3)
+    assert.equal(await page.locator('[data-san-go-analysis]').isVisible(), false)
+    await page.reload()
+    await accommodationCompletion(page, true)
+  }))
+}
+
+test('PA completion rejects an empty form and requires details for each Yes answer', async () => journey(async (page) => {
+  await practitionerAnalysis(page)
+  const markComplete = page.getByRole('button', { name: 'Mark as complete', exact: true })
+  await markComplete.click()
+  await accommodationCompletion(page, false)
+  assert.equal(await page.locator('.govuk-error-summary__list a').count(), 3)
+
+  for (const answer of ['strengths', 'harm', 'reoffending']) {
+    await select(page, `analysis-${answer}-yes`)
+  }
+  for (const answer of ['strengths', 'harm', 'reoffending']) {
+    await markComplete.click()
+    await accommodationCompletion(page, false)
+    assert.equal(await page.locator(`.govuk-error-summary a[href="#analysis-${answer}-yes-details"]`).count(), 1)
+    await page.locator(`#analysis-${answer}-yes-details`).fill(`Details for ${answer}.`)
+  }
+  await markComplete.click()
+  await page.locator('[data-san-analysis-summary]:not([hidden])').waitFor()
+  await accommodationCompletion(page, true)
+  for (const answer of ['strengths', 'harm', 'reoffending']) {
+    assert.match(await page.locator('[data-san-analysis-summary]').innerText(), new RegExp(`Details for ${answer}\\.`))
+  }
+}))
+
+test('side navigation enables all Prison sections and navigates between them', async () => journey(async (page) => {
+  const sections = [
+    ['employment', 'employment'],
+    ['finances', 'finances'],
+    ['drugs', 'drugs'],
+    ['alcohol', 'alcohol'],
+    ['health', 'health'],
+    ['relationships', 'personal-relationships-children'],
+    ['thinking', 'thinking-behaviours'],
+    ['offence', 'offence-analysis'],
+    ['accommodation', 'accommodation']
+  ]
+
+  for (const [section, destination] of sections) {
+    const navigation = page.getByRole('navigation', { name: 'Strengths and Needs', exact: true })
+    assert.equal(await navigation.locator('[data-san-section-link][href]').count(), sections.length)
+    assert.equal(await navigation.locator('[data-san-nav-disabled], [aria-disabled="true"], .san-side-navigation__link--disabled').count(), 0)
+    await navigation.locator(`[data-san-section-link="${section}"]`).click()
+    await page.waitForURL((url) => url.pathname.replace(/\.html$/, '') === `/san-prison/${destination}`)
+    assert.equal(await navigation.locator(`[data-san-section-link="${section}"]`).getAttribute('aria-current'), 'location')
+  }
+}))
+
 test('first screen has only three choices and validates an empty answer', async () => journey(async (page) => {
   assert.equal(await page.locator('#san-accommodation-type-form input').count(), 3)
   assert.equal(await page.locator('#san-accommodation-type-form [data-aria-controls]').count(), 0)

@@ -9,6 +9,7 @@ import { resetPredictorsSessionForFreshStart as resetDevSession } from './dev/pr
 import { resetSanSessionForFreshStart } from './san/session.js'
 import { resetSanSessionForFreshStart as resetSanResearchSession } from './san-research/session.js'
 import { resetSanSessionForFreshStart as resetSanPrisonSession } from './san-prison/session.js'
+import { resetSanSessionForFreshStart as resetSanTrainingSession } from './san-training/session.js'
 
 const PROTOTYPE_BASE_PATHS = {
   '01': '/01',
@@ -17,7 +18,9 @@ const PROTOTYPE_BASE_PATHS = {
   dev: '/dev',
   san: '/san',
   'san-research': '/san-research',
-  'san-prison': '/san-prison'
+  'san-prison': '/san-prison',
+  'san-training-community': '/san-training/community',
+  'san-training-prison': '/san-training/prison'
 }
 
 const clearSessionForPrototypeVersion = (version) => {
@@ -27,6 +30,8 @@ const clearSessionForPrototypeVersion = (version) => {
   if (version === 'san') return resetSanSessionForFreshStart()
   if (version === 'san-research') return resetSanResearchSession('community')
   if (version === 'san-prison') return resetSanPrisonSession('prison')
+  if (version === 'san-training-community') return resetSanTrainingSession('community')
+  if (version === 'san-training-prison') return resetSanTrainingSession('prison')
   return clearPrototypeDataForTiering()
 }
 
@@ -34,7 +39,7 @@ const resolvePrototypeHref = (version, href) => {
   const basePath = PROTOTYPE_BASE_PATHS[version]
   if (!basePath || !href) return href
 
-  const pagePath = href.replace(/^\/(01|02|03|dev|san-prison|san-research|san)\//, '')
+  const pagePath = href.replace(/^\/(san-training\/(?:community|prison)|01|02|03|dev|san-prison|san-research|san)\//, '')
   return `${basePath}/${pagePath}`
 }
 

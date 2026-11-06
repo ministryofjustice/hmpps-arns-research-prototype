@@ -42,6 +42,31 @@ The `/san-prison/` journey stores its answers separately from the other prototyp
 With the prototype running and Playwright available (as for the storyboard scripts),
 run `node --test scripts/test-san-prison-accommodation.mjs` to check this journey.
 
+## SAN training copies
+
+Training is a separate snapshot of the current Community and Prison prototypes:
+
+- Community entry: `/san#community-training`
+- Prison entry: `/san#prison-training`
+- Pages and local includes: `app/views/san-training/community/` and `app/views/san-training/prison/`
+- Section scripts: `app/assets/javascripts/san-training/community/` and `app/assets/javascripts/san-training/prison/`
+- Answers use `sanTrainingCommunityAssessment` and `sanTrainingPrisonAssessment` in session storage.
+
+Each Training Start button clears only its own training answers and drafts. It does
+not call the shared server-side clear-data endpoint. The original `/san/`,
+`/san-research/` and `/san-prison/` journeys keep their own code and storage.
+Shared GOV.UK/MOJ components and application styling remain common foundations.
+Make training changes inside the training folders, not the research folders.
+
+Open `storyboards/san-training/index.html` for the training storyboards. Community's
+existing detailed snapshots and images are copied into this folder. Both variants
+also have fresh section-overview captures. Regenerate those overview captures with
+`node scripts/capture-san-training.mjs`; this writes only inside `storyboards/san-training/`.
+
+With the prototype running and Playwright installed, run
+`node --test scripts/test-san-training.mjs` for training, deep-link and isolation checks.
+Both scripts accept `BASE_URL` (default `http://localhost:3000`).
+
 ## Deploy
 
 Hosted on MoJ Cloud Platform. Pushes to `main` trigger the CD workflow in `.github/workflows/cd-main.yaml`.

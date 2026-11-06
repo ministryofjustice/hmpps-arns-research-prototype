@@ -1,0 +1,27 @@
+<div class="govuk-form-group" data-san-error-group="alcohol-help">
+  <fieldset class="govuk-fieldset" id="alcohol-help"{% if helpHint %} aria-describedby="alcohol-help-hint"{% endif %}>
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+      <h1 class="govuk-fieldset__heading">{{ helpQuestion }}</h1>
+    </legend>
+    {% if helpHint %}
+    <div id="alcohol-help-hint" class="govuk-hint">{{ helpHint }}</div>
+    {% endif %}
+    <div class="govuk-radios" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="alcohol-help-yes" name="alcohol_help" type="radio" value="yes" data-aria-controls="conditional-alcohol-help-yes">
+        <label class="govuk-label govuk-radios__label" for="alcohol-help-yes">Yes</label>
+      </div>
+      <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-alcohol-help-yes">
+        <div class="govuk-form-group" data-san-error-group="alcohol-help-yes-details">
+          <label class="govuk-label" for="alcohol-help-yes-details">Give details</label>
+          <textarea class="govuk-textarea" id="alcohol-help-yes-details" name="alcohol_help_yes_details" rows="5" maxlength="2000"></textarea>
+          <div class="govuk-hint san-character-count" data-san-character-count="alcohol-help-yes-details">You have 2,000 characters remaining</div>
+        </div>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="alcohol-help-no" name="alcohol_help" type="radio" value="no">
+        <label class="govuk-label govuk-radios__label" for="alcohol-help-no">No</label>
+      </div>
+    </div>
+  </fieldset>
+</div>

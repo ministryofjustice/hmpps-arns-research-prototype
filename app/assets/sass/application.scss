@@ -944,6 +944,10 @@ $desktop: 48.0625em;
     border-left: 5px solid govuk-colour("blue");
   }
 
+  &__start-card--training {
+    background: #d2e2f1;
+  }
+
   &__start-card-header {
     display: flex;
     align-items: center;

@@ -1,0 +1,13 @@
+{% from "govuk/components/footer/macro.njk" import govukFooter %}
+
+{{ govukFooter({
+  meta: {
+    items: [] if sanIsolated else [
+      {
+        href: (sanResearchBase | default("/san-training/community")) + "/accessibility.html",
+        text: "Accessibility statement"
+      }
+    ],
+    visuallyHiddenTitle: "Support links"
+  }
+}) }}

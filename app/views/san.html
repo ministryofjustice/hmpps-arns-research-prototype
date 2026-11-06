@@ -21,15 +21,39 @@
 </div>
 
 {% macro sanSectionSubnav(prefix) %}
+{% set items = [
+  { text: "Research", href: "#" ~ prefix ~ "-research", active: true, attributes: { "data-topic": prefix ~ "-research" } }
+] %}
+{% if prefix == "community" %}
+  {% set items = items.concat([
+    { text: "Reference", href: "#" ~ prefix ~ "-reference", attributes: { "data-topic": prefix ~ "-reference" } }
+  ]) %}
+{% endif %}
 {{ mojSubNavigation({
   label: "Prototype types",
   classes: "assessment-home-subnav",
-  attributes: { "data-topic-subnav": true },
-  items: [
-    { text: "Research", href: "#" ~ prefix ~ "-research", active: true, attributes: { "data-topic": prefix ~ "-research" } },
-    { text: "Reference", href: "#" ~ prefix ~ "-reference", attributes: { "data-topic": prefix ~ "-reference" } }
-  ]
+  attributes: { "data-topic-subnav": true, "data-topic-deep-links": true },
+  items: items.concat([
+    { text: "Training", href: "#" ~ prefix ~ "-training", attributes: { "data-topic": prefix ~ "-training" } }
+  ])
 }) }}
+{% endmacro %}
+
+{% macro sanTrainingCard(variant, label) %}
+<div class="assessment-research-prototypes__start-card assessment-research-prototypes__start-card--training">
+  <div class="assessment-research-prototypes__start-card-header">
+    <strong class="govuk-tag assessment-research-prototypes__title-tag assessment-research-prototypes__title-tag--prototype">Prototype for training</strong>
+    <div class="assessment-research-prototypes__title-tags">
+      <strong class="govuk-tag govuk-tag--blue">Nov 2026</strong>
+    </div>
+  </div>
+  <a href="/san-training/{{ variant }}/accommodation" class="govuk-button govuk-button--start assessment-research-prototypes__start-link" data-clear-session-on-start data-prototype-version="san-training-{{ variant }}">
+    <span>Start SAN {{ label }}</span>
+    <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+    </svg>
+  </a>
+</div>
 {% endmacro %}
 
 <div class="govuk-tabs assessment-home-tabs" data-module="govuk-tabs">
@@ -52,7 +76,6 @@
         <div class="assessment-research-prototypes__start-card-header">
             <strong class="govuk-tag assessment-research-prototypes__title-tag assessment-research-prototypes__title-tag--prototype">Prototype 1</strong>
           <div class="assessment-research-prototypes__title-tags">
-            <strong class="govuk-tag govuk-tag--yellow">UR R2</strong>
             <strong class="govuk-tag assessment-research-prototypes__title-tag">Sep-Oct 2026</strong>
           </div>
         </div>
@@ -101,6 +124,10 @@
       </div>
     </div>
 
+    <div class="assessment-home-topic" id="community-training" data-topic-panel="community-training" hidden>
+      {{ sanTrainingCard("community", "Community") }}
+    </div>
+
     <div class="assessment-home-topic" id="community-experiments" data-topic-panel="community-experiments" hidden>
       <ul class="govuk-list assessment-research-prototypes">
         <li class="assessment-research-prototypes__item">
@@ -124,7 +151,6 @@
         <div class="assessment-research-prototypes__start-card-header">
             <strong class="govuk-tag assessment-research-prototypes__title-tag assessment-research-prototypes__title-tag--prototype">Prototype 1</strong>
           <div class="assessment-research-prototypes__title-tags">
-            <strong class="govuk-tag govuk-tag--pink">UR R3</strong>
             <strong class="govuk-tag assessment-research-prototypes__title-tag">Oct-Nov 2026</strong>
           </div>
         </div>
@@ -138,8 +164,8 @@
       </div>
     </div>
 
-    <div class="assessment-home-topic" id="prison-reference" data-topic-panel="prison-reference" hidden>
-      <p class="govuk-body">There is no prison SAN reference prototype yet.</p>
+    <div class="assessment-home-topic" id="prison-training" data-topic-panel="prison-training" hidden>
+      {{ sanTrainingCard("prison", "Prison") }}
     </div>
 
     <div class="assessment-home-topic" id="prison-experiments" data-topic-panel="prison-experiments" hidden>

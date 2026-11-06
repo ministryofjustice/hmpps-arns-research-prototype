@@ -7,6 +7,7 @@ function initTopicSubnav (subnav) {
   const links = Array.from(subnav.querySelectorAll('.moj-sub-navigation__link[data-topic]'))
   const panels = Array.from(panelRoot.querySelectorAll('[data-topic-panel]'))
   if (!links.length || !panels.length) return
+  const deepLinks = subnav.hasAttribute('data-topic-deep-links')
 
   const showTopic = (topicId) => {
     if (!topicId) return
@@ -34,12 +35,41 @@ function initTopicSubnav (subnav) {
 
   showTopic(initiallyActive)
 
+  const showTopicFromHash = () => {
+    const topicId = window.location.hash.slice(1)
+    if (!links.some((link) => link.getAttribute('data-topic') === topicId)) return
+
+    showTopic(topicId)
+    const tabsRoot = panelRoot.closest('[data-module="govuk-tabs"]')
+    const parentTab = tabsRoot?.querySelector(`.govuk-tabs__tab[href="#${panelRoot.id}"]`)
+    if (parentTab?.getAttribute('role') === 'tab') {
+      tabsRoot.querySelectorAll('.govuk-tabs__tab').forEach((tab) => {
+        const selected = tab === parentTab
+        tab.setAttribute('aria-selected', String(selected))
+        tab.setAttribute('tabindex', selected ? '0' : '-1')
+        tab.parentElement.classList.toggle('govuk-tabs__list-item--selected', selected)
+        document.getElementById(tab.hash.slice(1))?.classList.toggle('govuk-tabs__panel--hidden', !selected)
+      })
+    } else {
+      panelRoot.scrollIntoView({ block: 'start' })
+    }
+  }
+
+  if (deepLinks) {
+    showTopicFromHash()
+    window.addEventListener('hashchange', showTopicFromHash)
+    window.addEventListener('resize', () => window.requestAnimationFrame(showTopicFromHash))
+  }
+
   subnav.addEventListener('click', (event) => {
     const link = event.target.closest('.moj-sub-navigation__link[data-topic]')
     if (!link || !subnav.contains(link)) return
 
     event.preventDefault()
     showTopic(link.getAttribute('data-topic'))
+    if (deepLinks && window.location.hash !== link.hash) {
+      window.history.pushState(null, '', link.hash)
+    }
   })
 
   // Optional: click a stats topic / churn / impact card to open that inventory section

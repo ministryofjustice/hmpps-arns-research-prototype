@@ -292,7 +292,7 @@ const summaryRow = (question, lines, href, options = {}) => {
 const drugCard = (session, id) => {
   const lastUsed = lastUsedFor(session, id)
   const rows = [summaryRow(
-    'When did Alex last use these drugs?',
+    'Last used',
     [labelled(lastUsedLabels(session), lastUsed)],
       summaryChangeHref('drugs-when', `last-used-${id}`)
   )]
@@ -316,14 +316,14 @@ const drugCard = (session, id) => {
   if (isInjectableDrug(id)) {
     const injected = injectedDrugIds(session).includes(id)
     rows.push(summaryRow(
-      beforeCustodyJourney(session) ? 'Did Alex inject this drug before custody?' : 'Injected',
+      'Injected',
       [injected ? 'Yes' : 'No'],
       summaryChangeHref('drugs-before', 'injected')
     ))
     if (injected) {
       const when = session.injectedWhen && session.injectedWhen[id]
       rows.push(summaryRow(
-        beforeCustodyJourney(session) ? 'When did Alex inject this drug?' : 'When has Alex injected this drug?',
+        'When',
         Array.isArray(when) ? when.map((value) => labelled(injectedWhenLabels(session), value)) : [],
         summaryChangeHref('drugs-injected', `injected-when-${id}`)
       ))
@@ -383,12 +383,12 @@ const drugRows = (session) => {
   const older = olderDrugs(session)
 
   if (recent.length) {
-    parts.push(`<h3 class="govuk-heading-m">${beforeCustodyJourney(session) ? 'Used in the 6 months before custody' : 'Used in the last 6 months'}</h3>`)
+    parts.push('<h3 class="govuk-heading-m">Used in the 6 months before custody</h3>')
     parts.push(recent.map((id) => drugCard(session, id)).join(''))
   }
 
   if (older.length) {
-    parts.push(`<h3 class="govuk-heading-m">${beforeCustodyJourney(session) ? 'Not used in the 6 months before custody' : 'Not used in the last 6 months'}</h3>`)
+    parts.push('<h3 class="govuk-heading-m">Not used in the 6 months before custody</h3>')
     parts.push(older.map((id) => drugCard(session, id)).join(''))
   }
 
@@ -954,10 +954,6 @@ const applyBeforePage = (session) => {
   setHidden(olderSection, !older.length)
   setHidden(document.querySelector('[data-du-frequency-help]'), !recent.length && !older.length)
   setHidden(document.querySelector('[data-du-older-break]'), !recent.length)
-  const recentHeading = document.querySelector('[data-du-recent-heading]')
-  const olderHeading = document.querySelector('[data-du-older-heading]')
-  if (recentHeading) recentHeading.textContent = beforeCustodyJourney(session) ? 'Used in the 6 months before custody' : 'Used in the last 6 months'
-  if (olderHeading) olderHeading.textContent = beforeCustodyJourney(session) ? 'Not used in the 6 months before custody' : 'Not used in the last 6 months'
 
   DRUG_IDS.forEach((id) => {
     const heading = frequencyHeading(session, id)

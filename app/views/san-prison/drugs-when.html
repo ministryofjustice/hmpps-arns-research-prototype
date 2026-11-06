@@ -1,7 +1,7 @@
 {% extends "san-prison/layout.html" %}
 
 {% set pageName = "Drug use" %}
-{% set sanCaption = "Drug use" %}
+{% set sanHeading = "Drug use" %}
 {% set sanSection = "drugs" %}
 {% set backLinkHref = "drugs-types.html" %}
 
@@ -33,7 +33,7 @@
 ] %}
 
 <form id="san-drugs-when-form" novalidate data-du-page="when">
-  <h1 class="govuk-heading-l" data-du-when-heading>When did Alex last use these drugs?</h1>
+  <h2 class="govuk-heading-m" data-du-when-heading>When did Alex last use these drugs?</h2>
 
   {% for drug in drugOptions %}
   <div class="govuk-form-group" data-du-when="{{ drug.id }}" data-san-error-group="last-used-{{ drug.id }}" hidden>

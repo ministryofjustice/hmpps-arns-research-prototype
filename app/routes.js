@@ -135,6 +135,26 @@ router.use((req, res, next) => {
   next()
 })
 
+router.get('/san-training/:variant/:page', (req, res, next) => {
+  const variant = req.params.variant
+  const view = String(req.params.page || '').replace(/\.html$/, '')
+  if (!['community', 'prison'].includes(variant) || !/^[a-z0-9-]+$/i.test(view)) {
+    next()
+    return
+  }
+
+  res.locals.sanVariant = variant
+  res.locals.sanResearchBase = '/san-training/community'
+  res.locals.sanPrisonBase = '/san-training/prison'
+  res.render(`san-training/${variant}/${view}`, (error, html) => {
+    if (error) {
+      next()
+      return
+    }
+    res.send(html)
+  })
+})
+
 router.get('/san-prison/:page', (req, res, next) => {
   const view = String(req.params.page || '').replace(/\.html$/, '')
   if (!/^[a-z0-9-]+$/i.test(view)) {

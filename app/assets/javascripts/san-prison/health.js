@@ -732,7 +732,10 @@ const initHealth = () => {
     }
     clearErrors()
     setSanSession({ ...answers, healthComplete: true })
-    window.location.assign('health-summary.html#practitioner-analysis')
+    const completedSession = getSanSession()
+    applyProgress(completedSession)
+    renderSummary(completedSession)
+    openAnalysisTab()
   })
 }
 

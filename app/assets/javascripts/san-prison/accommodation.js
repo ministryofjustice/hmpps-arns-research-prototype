@@ -1008,7 +1008,10 @@ const initSanAccommodation = () => {
     }
     clearErrors()
     setSanSession({ ...answers, accommodationComplete: true })
-    window.location.assign('accommodation-summary.html#practitioner-analysis')
+    const completedSession = getSanSession()
+    applyProgress(completedSession)
+    renderSummary(completedSession)
+    openAnalysisTab()
   })
 }
 
