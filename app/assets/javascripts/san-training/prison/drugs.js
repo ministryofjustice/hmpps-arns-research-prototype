@@ -764,7 +764,7 @@ const validateWhen = (answers, session) => {
     errors.push({
       group: 'extra-drugs',
       href: '#san-drugs-when-form',
-      text: 'Add another drug'
+      text: 'Enter the other drug name'
     })
   }
   return errors
@@ -1043,23 +1043,21 @@ const readExtraDrugsFromForm = () => {
   })
 }
 
-const extraDrugItemHtml = (drug, index, hideRemove = false, session = {}) => {
+const extraDrugItemHtml = (drug, session = {}) => {
   const id = escapeHtml(drug.id)
   const name = escapeHtml(drug.name || '')
   const lastSix = drug.lastUsed === 'last-six' ? ' checked' : ''
   const moreThan = drug.lastUsed === 'more-than-six' ? ' checked' : ''
-  const removeButton = hideRemove
-    ? ''
-    : '<button type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button" data-du-remove-drug>Remove drug</button>'
   return `<div class="san-extra-drugs__item" data-du-extra-item data-extra-id="${id}">
-    <h3 class="govuk-heading-m">Drug ${index + 1}</h3>
     <div class="govuk-form-group" data-san-error-group="extra-name-${id}">
       <label class="govuk-label" for="extra-name-${id}">Drug name</label>
       <input class="govuk-input" id="extra-name-${id}" name="extra_name_${id}" type="text" value="${name}" autocomplete="off" spellcheck="false">
     </div>
     <div class="govuk-form-group" data-san-error-group="last-used-${id}">
       <fieldset class="govuk-fieldset" id="last-used-${id}">
-        <legend class="govuk-visually-hidden">When did Alex use this drug?</legend>
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          <h3 class="govuk-fieldset__heading">When was this drug last used?</h3>
+        </legend>
         <div class="govuk-radios" data-module="govuk-radios">
           <div class="govuk-radios__item">
             <input class="govuk-radios__input" id="last-used-${id}-last-six" name="last_used_${id}" type="radio" value="last-six"${lastSix}>
@@ -1072,18 +1070,15 @@ const extraDrugItemHtml = (drug, index, hideRemove = false, session = {}) => {
         </div>
       </fieldset>
     </div>
-    ${removeButton}
-    <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-6">
   </div>`
 }
 
-const renderExtraDrugList = (extras, { onlyOther = false, session = {} } = {}) => {
+const renderExtraDrugList = (extras, { session = {} } = {}) => {
   const heading = document.querySelector('[data-du-extra-heading]')
   const list = document.querySelector('[data-du-extra-list]')
   if (!list) return
-  const hideRemove = onlyOther && extras.length < 2
-  list.innerHTML = extras.map((drug, index) => extraDrugItemHtml(drug, index, hideRemove, session)).join('')
-  setHidden(heading, onlyOther || extras.length === 0)
+  list.innerHTML = extras.map((drug) => extraDrugItemHtml(drug, session)).join('')
+  setHidden(heading, extras.length === 0)
 }
 
 const extrasForWhenPage = (session) => {
@@ -1119,48 +1114,20 @@ const applyWhenPage = (session) => {
   })
 
   const extraSection = document.querySelector('[data-du-extra-drugs]')
-  const addButton = document.querySelector('[data-du-add-drug]')
   if (focusOne && !String(focusId).startsWith('extra-')) {
     setHidden(extraSection, true)
-    setHidden(addButton, true)
     return
   }
 
-  setHidden(extraSection, false)
-  setHidden(addButton, false)
   const extras = extrasForWhenPage(session)
-  renderExtraDrugList(focusOne ? extras.filter((drug) => drug.id === focusId) : extras, { onlyOther, session })
+  setHidden(extraSection, extras.length === 0)
+  renderExtraDrugList(focusOne ? extras.filter((drug) => drug.id === focusId) : extras, { session })
 }
 
 const restoreWhen = (session) => {
   if (!session.drugLastUsed) return
   Object.entries(session.drugLastUsed).forEach(([id, value]) => {
     selectRadio(`last_used_${id}`, value)
-  })
-}
-
-const bindExtraDrugControls = (form, session) => {
-  form.addEventListener('click', (event) => {
-    const add = event.target.closest('[data-du-add-drug]')
-    if (add) {
-      event.preventDefault()
-      const extras = readExtraDrugsFromForm()
-      extras.push(emptyExtraDrug())
-      renderExtraDrugList(extras, { onlyOther: onlyOtherSelected(session), session })
-      const names = form.querySelectorAll('[data-du-extra-item] input[type="text"]')
-      const last = names[names.length - 1]
-      if (last instanceof HTMLInputElement) last.focus()
-      return
-    }
-    const remove = event.target.closest('[data-du-remove-drug]')
-    if (!remove) return
-    event.preventDefault()
-    const item = remove.closest('[data-du-extra-item]')
-    const removeId = item ? item.getAttribute('data-extra-id') : ''
-    const extras = readExtraDrugsFromForm().filter((drug) => drug.id !== removeId)
-    renderExtraDrugList(extras, { onlyOther: onlyOtherSelected(session), session })
-    const addButton = form.querySelector('[data-du-add-drug]')
-    if (addButton instanceof HTMLElement) addButton.focus()
   })
 }
 
@@ -1459,13 +1426,12 @@ const initDrugs = () => {
       const value = previous.drugLastUsed && previous.drugLastUsed[id]
       if (value) drugLastUsed[id] = value
     })
-    setSanSession({ ...answers, drugLastUsed, drugComplete: false })
+    setSanSession({ ...answers, drugLastUsed, extraDrugs: answers.drugTypes.includes('other') ? extraDrugs(previous) : [], drugComplete: false })
     const next = getSanSession()
     window.location.assign(fromSummary() && beforeAnswered(next) ? 'drugs-summary.html' : 'drugs-when.html')
   })
 
   const whenForm = document.getElementById('san-drugs-when-form')
-  if (whenForm) bindExtraDrugControls(whenForm, session)
   whenForm?.addEventListener('submit', (event) => {
     event.preventDefault()
     const current = getSanSession()
