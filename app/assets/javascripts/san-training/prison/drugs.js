@@ -1432,6 +1432,14 @@ const initDrugs = () => {
   })
 
   const whenForm = document.getElementById('san-drugs-when-form')
+  whenForm?.querySelector('[data-du-add-drug]')?.addEventListener('click', () => {
+    const list = whenForm.querySelector('[data-du-extra-list]')
+    const drug = emptyExtraDrug()
+    list.insertAdjacentHTML('beforeend', extraDrugItemHtml(drug, getSanSession()))
+    setHidden(whenForm.querySelector('[data-du-extra-drugs]'), false)
+    setHidden(whenForm.querySelector('[data-du-extra-heading]'), false)
+    list.querySelector(`#extra-name-${drug.id}`).focus()
+  })
   whenForm?.addEventListener('submit', (event) => {
     event.preventDefault()
     const current = getSanSession()
@@ -1453,6 +1461,7 @@ const initDrugs = () => {
       : []
     setSanSession({
       ...answers,
+      drugTypes: answers.extraDrugs.length ? [...new Set([...selectedDrugs(current), 'other'])] : selectedDrugs(current),
       drugFrequency: pruneExtraKeyed(previous.drugFrequency, extraIds),
       drugFrequencyDetails: pruneExtraKeyed(previous.drugFrequencyDetails, extraIds),
       injectedWhen: pruneExtraKeyed(previous.injectedWhen, extraIds),

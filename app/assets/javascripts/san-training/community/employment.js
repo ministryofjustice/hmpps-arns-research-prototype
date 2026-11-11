@@ -1010,7 +1010,10 @@ const initEmployment = () => {
     }
     clearErrors()
     setSanSession({ ...answers, employmentComplete: true })
-    window.location.assign('employment-summary.html#practitioner-analysis')
+    const completedSession = getSanSession()
+    applyProgress(completedSession)
+    renderSummary(completedSession)
+    openAnalysisTab()
   })
 }
 

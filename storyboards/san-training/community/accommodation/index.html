@@ -1,10 +1,6 @@
 <!DOCTYPE html>
-<html lang="en-GB">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SAN Community training - Accommodation</title>
-  <style>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Community training accommodation</title><style>
     :root {
       color-scheme: light;
       --ink: #0b0c0c;
@@ -12,6 +8,7 @@
       --line: #b1b4b6;
       --paper: #f3f2f1;
       --card: #ffffff;
+      --link: #1d70b8;
     }
     * { box-sizing: border-box; }
     body {
@@ -25,7 +22,31 @@
     h2 { font-size: 22px; margin: 0 0 8px; }
     h3 { font-size: 16px; margin: 0 0 8px; }
     p { margin: 0 0 8px; }
+    code { font-family: ui-monospace, monospace; }
     .lede { color: var(--muted); max-width: 72ch; margin-bottom: 24px; }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      margin: 0 0 24px;
+      padding: 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .tabs__tab {
+      display: inline-block;
+      padding: 10px 16px;
+      color: var(--link);
+      text-decoration: none;
+      border: 1px solid transparent;
+      margin-bottom: -1px;
+    }
+    .tabs__tab[aria-selected="true"] {
+      background: var(--card);
+      color: var(--ink);
+      border-color: var(--line);
+      border-bottom-color: var(--card);
+      font-weight: 700;
+    }
     .flow {
       list-style: none;
       margin: 0 0 32px;
@@ -83,169 +104,168 @@
       margin: 0 0 28px;
       padding: 12px 16px;
       background: var(--card);
-      border-left: 4px solid #1d70b8;
+      border-left: 4px solid var(--link);
       max-width: 80ch;
     }
     @media print {
       body { padding: 0; background: #fff; }
+      .tabs, .howto { display: none; }
+      .tab-panel[hidden] { display: block !important; }
       .journey__steps { overflow: visible; flex-wrap: wrap; }
       .card { break-inside: avoid; }
     }
-  </style>
-</head>
-<body>
-  <p><a href="../../index.html">Training storyboards</a></p>
-  <h1>SAN Community training - Accommodation</h1>
-  <p class="lede">Filled answers so summaries and conditionals match a real assessment. Temporary accommodation uses the same details questions as settled in this prototype, so it is not a separate row.</p>
-  <p class="howto">Open this file in a browser. For Miro, drag the <code>images</code> folder onto a board — filenames sort in journey order. Print to PDF if you want a single file to share.</p>
-  <h2>Routes</h2>
-  <ol class="flow"><li class="flow__item">
-      <span class="flow__from">Somewhere to live</span>
-      <span class="flow__arrow" aria-hidden="true">→</span>
-      <span class="flow__to">Is it settled?</span>
-      <span class="flow__when">Yes</span>
-    </li><li class="flow__item">
-      <span class="flow__from">Somewhere to live</span>
-      <span class="flow__arrow" aria-hidden="true">→</span>
-      <span class="flow__to">Details (no accommodation)</span>
-      <span class="flow__when">No</span>
-    </li><li class="flow__item">
-      <span class="flow__from">Is it settled?</span>
-      <span class="flow__arrow" aria-hidden="true">→</span>
-      <span class="flow__to">Details (location and suitability)</span>
-      <span class="flow__when">Yes or no</span>
-    </li><li class="flow__item">
-      <span class="flow__from">Details</span>
-      <span class="flow__arrow" aria-hidden="true">→</span>
-      <span class="flow__to">Concerns</span>
-      <span class="flow__when">Location no, or suitability concerns</span>
-    </li><li class="flow__item">
-      <span class="flow__from">Details</span>
-      <span class="flow__arrow" aria-hidden="true">→</span>
-      <span class="flow__to">Summary</span>
-      <span class="flow__when">No concerns, or no accommodation</span>
-    </li><li class="flow__item">
-      <span class="flow__from">Concerns</span>
-      <span class="flow__arrow" aria-hidden="true">→</span>
-      <span class="flow__to">Summary</span>
-      
-    </li><li class="flow__item">
-      <span class="flow__from">Summary</span>
-      <span class="flow__arrow" aria-hidden="true">→</span>
-      <span class="flow__to">Practitioner analysis</span>
-      
-    </li></ol>
-  <section class="journey">
-      <header class="journey__header">
-        <h2>Settled, with concerns</h2>
-        <p>Has somewhere to live, settled. Location is not suitable and there are suitability concerns, so the concerns page is shown.</p>
-      </header>
-      <ol class="journey__steps">
-      <li class="card">
-        <p class="card__step">Step 1</p>
-        <h3 class="card__title">Does Alex currently have somewhere to live?</h3>
-        <p class="card__note">Yes selected</p>
-        <p class="card__file">01-settled-with-concerns__01__somewhere-to-live.png</p>
-        <img src="images/01-settled-with-concerns__01__somewhere-to-live.png" alt="Does Alex currently have somewhere to live?">
-      </li>
-      <li class="card">
-        <p class="card__step">Step 2</p>
-        <h3 class="card__title">Is Alex's accommodation settled?</h3>
-        <p class="card__note">Yes selected</p>
-        <p class="card__file">01-settled-with-concerns__02__settled.png</p>
-        <img src="images/01-settled-with-concerns__02__settled.png" alt="Is Alex's accommodation settled?">
-      </li>
-      <li class="card">
-        <p class="card__step">Step 3</p>
-        <h3 class="card__title">Location, suitability and changes</h3>
-        <p class="card__note">Location no · suitability yes, with concerns</p>
-        <p class="card__file">01-settled-with-concerns__03__details.png</p>
-        <img src="images/01-settled-with-concerns__03__details.png" alt="Location, suitability and changes">
-      </li>
-      <li class="card">
-        <p class="card__step">Step 4</p>
-        <h3 class="card__title">Location and suitability concerns</h3>
-        <p class="card__note">Only shown when location or suitability triggers concerns</p>
-        <p class="card__file">01-settled-with-concerns__04__concerns.png</p>
-        <img src="images/01-settled-with-concerns__04__concerns.png" alt="Location and suitability concerns">
-      </li>
-      <li class="card">
-        <p class="card__step">Step 5</p>
-        <h3 class="card__title">Summary</h3>
-        <p class="card__note">Answers tab</p>
-        <p class="card__file">01-settled-with-concerns__05__summary.png</p>
-        <img src="images/01-settled-with-concerns__05__summary.png" alt="Summary">
-      </li>
-      <li class="card">
-        <p class="card__step">Step 6</p>
-        <h3 class="card__title">Practitioner analysis</h3>
-        <p class="card__note">Completed analysis</p>
-        <p class="card__file">01-settled-with-concerns__06__practitioner-analysis.png</p>
-        <img src="images/01-settled-with-concerns__06__practitioner-analysis.png" alt="Practitioner analysis">
-      </li></ol>
-    </section>
-<section class="journey">
-      <header class="journey__header">
-        <h2>No accommodation</h2>
-        <p>Skips the settled and concerns pages. Details shows homelessness reasons and changes only.</p>
-      </header>
-      <ol class="journey__steps">
-      <li class="card">
-        <p class="card__step">Step 1</p>
-        <h3 class="card__title">Does Alex currently have somewhere to live?</h3>
-        <p class="card__note">No selected</p>
-        <p class="card__file">02-no-accommodation__01__somewhere-to-live.png</p>
-        <img src="images/02-no-accommodation__01__somewhere-to-live.png" alt="Does Alex currently have somewhere to live?">
-      </li>
-      <li class="card">
-        <p class="card__step">Step 2</p>
-        <h3 class="card__title">Why no accommodation, and changes</h3>
-        <p class="card__note">Settled page skipped</p>
-        <p class="card__file">02-no-accommodation__02__details.png</p>
-        <img src="images/02-no-accommodation__02__details.png" alt="Why no accommodation, and changes">
-      </li>
-      <li class="card">
-        <p class="card__step">Step 3</p>
-        <h3 class="card__title">Summary</h3>
-        <p class="card__note">Answers tab</p>
-        <p class="card__file">02-no-accommodation__03__summary.png</p>
-        <img src="images/02-no-accommodation__03__summary.png" alt="Summary">
-      </li></ol>
-    </section>
-<section class="journey">
-      <header class="journey__header">
-        <h2>Settled, no concerns</h2>
-        <p>Has somewhere to live, settled. Location and suitability are both yes, so concerns is skipped.</p>
-      </header>
-      <ol class="journey__steps">
-      <li class="card">
-        <p class="card__step">Step 1</p>
-        <h3 class="card__title">Does Alex currently have somewhere to live?</h3>
-        <p class="card__note">Yes selected</p>
-        <p class="card__file">03-settled-no-concerns__01__somewhere-to-live.png</p>
-        <img src="images/03-settled-no-concerns__01__somewhere-to-live.png" alt="Does Alex currently have somewhere to live?">
-      </li>
-      <li class="card">
-        <p class="card__step">Step 2</p>
-        <h3 class="card__title">Is Alex's accommodation settled?</h3>
-        <p class="card__note">Yes selected</p>
-        <p class="card__file">03-settled-no-concerns__02__settled.png</p>
-        <img src="images/03-settled-no-concerns__02__settled.png" alt="Is Alex's accommodation settled?">
-      </li>
-      <li class="card">
-        <p class="card__step">Step 3</p>
-        <h3 class="card__title">Location, suitability and changes</h3>
-        <p class="card__note">Location yes · suitability yes · skips concerns</p>
-        <p class="card__file">03-settled-no-concerns__03__details.png</p>
-        <img src="images/03-settled-no-concerns__03__details.png" alt="Location, suitability and changes">
-      </li>
-      <li class="card">
-        <p class="card__step">Step 4</p>
-        <h3 class="card__title">Summary</h3>
-        <p class="card__note">Answers tab</p>
-        <p class="card__file">03-settled-no-concerns__04__summary.png</p>
-        <img src="images/03-settled-no-concerns__04__summary.png" alt="Summary">
-      </li></ol>
-    </section>
-</body>
-</html>
+
+nav.links { display: flex; flex-wrap: wrap; gap: 24px; margin-bottom: 24px; }
+.card a { color: var(--link); }
+</style></head><body><p><a href="../index.html#accommodation">All Community training journeys</a></p><h1>Community training accommodation</h1><nav class="tabs" role="tablist" aria-label="SAN training sections"><a class="tabs__tab" role="tab" href="#accommodation" id="tab-accommodation" aria-selected="true" aria-controls="accommodation">Accommodation</a></nav><section class="tab-panel" role="tabpanel" id="accommodation" aria-labelledby="tab-accommodation">
+<h2>Accommodation</h2>
+<section class="journey"><header class="journey__header"><h2>Settled, with concerns</h2>
+<p>Captured from the community training prototype in journey order.</p></header>
+<ol class="journey__steps"><li class="card">
+<p class="card__step">Step 1</p><h3 class="card__title">Does Alex currently have somewhere to live?</h3>
+
+<p class="card__file">01-settled-with-concerns__01__accommodation.png</p>
+<p><a href="http://localhost:3000/san-training/community/accommodation">Open training screen</a> | <a href="../images/accommodation/01-settled-with-concerns__01__accommodation.png" download>Download PNG</a></p>
+<a href="../images/accommodation/01-settled-with-concerns__01__accommodation.png"><img src="../images/accommodation/01-settled-with-concerns__01__accommodation.png" alt="Does Alex currently have somewhere to live?"></a>
+</li>
+<li class="card">
+<p class="card__step">Step 2</p><h3 class="card__title">Is Alex&#39;s accommodation settled?</h3>
+
+<p class="card__file">01-settled-with-concerns__02__accommodation-settled.png</p>
+<p><a href="http://localhost:3000/san-training/community/accommodation-settled">Open training screen</a> | <a href="../images/accommodation/01-settled-with-concerns__02__accommodation-settled.png" download>Download PNG</a></p>
+<a href="../images/accommodation/01-settled-with-concerns__02__accommodation-settled.png"><img src="../images/accommodation/01-settled-with-concerns__02__accommodation-settled.png" alt="Is Alex&#39;s accommodation settled?"></a>
+</li>
+<li class="card">
+<p class="card__step">Step 3</p><h3 class="card__title">Is the location of Alex&#39;s accommodation suitable?</h3>
+
+<p class="card__file">01-settled-with-concerns__03__accommodation-details-location.png</p>
+<p><a href="http://localhost:3000/san-training/community/accommodation-details?step=location">Open training screen</a> | <a href="../images/accommodation/01-settled-with-concerns__03__accommodation-details-location.png" download>Download PNG</a></p>
+<a href="../images/accommodation/01-settled-with-concerns__03__accommodation-details-location.png"><img src="../images/accommodation/01-settled-with-concerns__03__accommodation-details-location.png" alt="Is the location of Alex&#39;s accommodation suitable?"></a>
+</li>
+<li class="card">
+<p class="card__step">Step 4</p><h3 class="card__title">Why is the location of Alex&#39;s accommodation not suitable? (optional)</h3>
+
+<p class="card__file">01-settled-with-concerns__04__accommodation-concerns-location.png</p>
+<p><a href="http://localhost:3000/san-training/community/accommodation-concerns?step=location">Open training screen</a> | <a href="../images/accommodation/01-settled-with-concerns__04__accommodation-concerns-location.png" download>Download PNG</a></p>
+<a href="../images/accommodation/01-settled-with-concerns__04__accommodation-concerns-location.png"><img src="../images/accommodation/01-settled-with-concerns__04__accommodation-concerns-location.png" alt="Why is the location of Alex&#39;s accommodation not suitable? (optional)"></a>
+</li>
+<li class="card">
+<p class="card__step">Step 5</p><h3 class="card__title">Is Alex&#39;s accommodation suitable?</h3>
+
+<p class="card__file">01-settled-with-concerns__05__accommodation-details-suitable.png</p>
+<p><a href="http://localhost:3000/san-training/community/accommodation-details?step=suitable">Open training screen</a> | <a href="../images/accommodation/01-settled-with-concerns__05__accommodation-details-suitable.png" download>Download PNG</a></p>
+<a href="../images/accommodation/01-settled-with-concerns__05__accommodation-details-suitable.png"><img src="../images/accommodation/01-settled-with-concerns__05__accommodation-details-suitable.png" alt="Is Alex&#39;s accommodation suitable?"></a>
+</li>
+<li class="card">
+<p class="card__step">Step 6</p><h3 class="card__title">What are your concerns about the suitability of Alex&#39;s accommodation? (optional)</h3>
+
+<p class="card__file">01-settled-with-concerns__06__accommodation-concerns-suitable.png</p>
+<p><a href="http://localhost:3000/san-training/community/accommodation-concerns?step=suitable">Open training screen</a> | <a href="../images/accommodation/01-settled-with-concerns__06__accommodation-concerns-suitable.png" download>Download PNG</a></p>
+<a href="../images/accommodation/01-settled-with-concerns__06__accommodation-concerns-suitable.png"><img src="../images/accommodation/01-settled-with-concerns__06__accommodation-concerns-suitable.png" alt="What are your concerns about the suitability of Alex&#39;s accommodation? (optional)"></a>
+</li>
+<li class="card">
+<p class="card__step">Step 7</p><h3 class="card__title">Does Alex want to make changes to their accommodation?</h3>
+
+<p class="card__file">01-settled-with-concerns__07__accommodation-details-changes.png</p>
+<p><a href="http://localhost:3000/san-training/community/accommodation-details?step=changes">Open training screen</a> | <a href="../images/accommodation/01-settled-with-concerns__07__accommodation-details-changes.png" download>Download PNG</a></p>
+<a href="../images/accommodation/01-settled-with-concerns__07__accommodation-details-changes.png"><img src="../images/accommodation/01-settled-with-concerns__07__accommodation-details-changes.png" alt="Does Alex want to make changes to their accommodation?"></a>
+</li>
+<li class="card">
+<p class="card__step">Step 8</p><h3 class="card__title">Accommodation - Summary</h3>
+
+<p class="card__file">01-settled-with-concerns__08__accommodation-summary-summary.png</p>
+<p><a href="http://localhost:3000/san-training/community/accommodation-summary.html">Open training screen</a> | <a href="../images/accommodation/01-settled-with-concerns__08__accommodation-summary-summary.png" download>Download PNG</a></p>
+<a href="../images/accommodation/01-settled-with-concerns__08__accommodation-summary-summary.png"><img src="../images/accommodation/01-settled-with-concerns__08__accommodation-summary-summary.png" alt="Accommodation - Summary"></a>
+</li>
+<li class="card">
+<p class="card__step">Step 9</p><h3 class="card__title">Accommodation - Practitioner analysis</h3>
+<p class="card__note">Practitioner analysis: answer the three questions.</p>
+<p class="card__file">01-settled-with-concerns__09__accommodation-summary-analysis.png</p>
+<p><a href="http://localhost:3000/san-training/community/accommodation-summary.html#practitioner-analysis">Open training screen</a> | <a href="../images/accommodation/01-settled-with-concerns__09__accommodation-summary-analysis.png" download>Download PNG</a></p>
+<a href="../images/accommodation/01-settled-with-concerns__09__accommodation-summary-analysis.png"><img src="../images/accommodation/01-settled-with-concerns__09__accommodation-summary-analysis.png" alt="Accommodation - Practitioner analysis"></a>
+</li>
+<li class="card">
+<p class="card__step">Step 10</p><h3 class="card__title">Accommodation - Practitioner analysis</h3>
+<p class="card__note">All three questions answered No. Select Mark as complete.</p>
+<p class="card__file">01-settled-with-concerns__10__accommodation-summary-analysis-answered.png</p>
+<p><a href="http://localhost:3000/san-training/community/accommodation-summary.html#practitioner-analysis">Open training screen</a> | <a href="../images/accommodation/01-settled-with-concerns__10__accommodation-summary-analysis-answered.png" download>Download PNG</a></p>
+<a href="../images/accommodation/01-settled-with-concerns__10__accommodation-summary-analysis-answered.png"><img src="../images/accommodation/01-settled-with-concerns__10__accommodation-summary-analysis-answered.png" alt="Accommodation - Practitioner analysis"></a>
+</li>
+<li class="card">
+<p class="card__step">Step 11</p><h3 class="card__title">Accommodation - Practitioner analysis - Complete</h3>
+<p class="card__note">Marked as complete. The blue tick confirms completion, which persists after refresh.</p>
+<p class="card__file">01-settled-with-concerns__11__accommodation-summary-complete.png</p>
+<p><a href="http://localhost:3000/san-training/community/accommodation-summary.html#practitioner-analysis">Open training screen</a> | <a href="../images/accommodation/01-settled-with-concerns__11__accommodation-summary-complete.png" download>Download PNG</a></p>
+<a href="../images/accommodation/01-settled-with-concerns__11__accommodation-summary-complete.png"><img src="../images/accommodation/01-settled-with-concerns__11__accommodation-summary-complete.png" alt="Accommodation - Practitioner analysis - Complete"></a>
+</li></ol></section>
+<section class="journey"><header class="journey__header"><h2>No accommodation</h2>
+<p>Captured from the community training prototype in journey order.</p></header>
+<ol class="journey__steps"><li class="card">
+<p class="card__step">Step 1</p><h3 class="card__title">Does Alex currently have somewhere to live?</h3>
+
+<p class="card__file">02-no-accommodation__01__accommodation.png</p>
+<p><a href="http://localhost:3000/san-training/community/accommodation">Open training screen</a> | <a href="../images/accommodation/02-no-accommodation__01__accommodation.png" download>Download PNG</a></p>
+<a href="../images/accommodation/02-no-accommodation__01__accommodation.png"><img src="../images/accommodation/02-no-accommodation__01__accommodation.png" alt="Does Alex currently have somewhere to live?"></a>
+</li>
+<li class="card">
+<p class="card__step">Step 2</p><h3 class="card__title">Why does Alex have no accommodation?</h3>
+
+<p class="card__file">02-no-accommodation__02__accommodation-details-no-accommodation.png</p>
+<p><a href="http://localhost:3000/san-training/community/accommodation-details?step=no-accommodation">Open training screen</a> | <a href="../images/accommodation/02-no-accommodation__02__accommodation-details-no-accommodation.png" download>Download PNG</a></p>
+<a href="../images/accommodation/02-no-accommodation__02__accommodation-details-no-accommodation.png"><img src="../images/accommodation/02-no-accommodation__02__accommodation-details-no-accommodation.png" alt="Why does Alex have no accommodation?"></a>
+</li>
+<li class="card">
+<p class="card__step">Step 3</p><h3 class="card__title">Does Alex want to make changes to their accommodation?</h3>
+
+<p class="card__file">02-no-accommodation__03__accommodation-details-changes.png</p>
+<p><a href="http://localhost:3000/san-training/community/accommodation-details?step=changes">Open training screen</a> | <a href="../images/accommodation/02-no-accommodation__03__accommodation-details-changes.png" download>Download PNG</a></p>
+<a href="../images/accommodation/02-no-accommodation__03__accommodation-details-changes.png"><img src="../images/accommodation/02-no-accommodation__03__accommodation-details-changes.png" alt="Does Alex want to make changes to their accommodation?"></a>
+</li>
+<li class="card">
+<p class="card__step">Step 4</p><h3 class="card__title">Accommodation - Summary</h3>
+
+<p class="card__file">02-no-accommodation__04__accommodation-summary-summary.png</p>
+<p><a href="http://localhost:3000/san-training/community/accommodation-summary.html">Open training screen</a> | <a href="../images/accommodation/02-no-accommodation__04__accommodation-summary-summary.png" download>Download PNG</a></p>
+<a href="../images/accommodation/02-no-accommodation__04__accommodation-summary-summary.png"><img src="../images/accommodation/02-no-accommodation__04__accommodation-summary-summary.png" alt="Accommodation - Summary"></a>
+</li>
+<li class="card">
+<p class="card__step">Step 5</p><h3 class="card__title">Accommodation - Practitioner analysis</h3>
+<p class="card__note">Practitioner analysis: answer the three questions.</p>
+<p class="card__file">02-no-accommodation__05__accommodation-summary-analysis.png</p>
+<p><a href="http://localhost:3000/san-training/community/accommodation-summary.html#practitioner-analysis">Open training screen</a> | <a href="../images/accommodation/02-no-accommodation__05__accommodation-summary-analysis.png" download>Download PNG</a></p>
+<a href="../images/accommodation/02-no-accommodation__05__accommodation-summary-analysis.png"><img src="../images/accommodation/02-no-accommodation__05__accommodation-summary-analysis.png" alt="Accommodation - Practitioner analysis"></a>
+</li>
+<li class="card">
+<p class="card__step">Step 6</p><h3 class="card__title">Accommodation - Practitioner analysis</h3>
+<p class="card__note">All three questions answered No. Select Mark as complete.</p>
+<p class="card__file">02-no-accommodation__06__accommodation-summary-analysis-answered.png</p>
+<p><a href="http://localhost:3000/san-training/community/accommodation-summary.html#practitioner-analysis">Open training screen</a> | <a href="../images/accommodation/02-no-accommodation__06__accommodation-summary-analysis-answered.png" download>Download PNG</a></p>
+<a href="../images/accommodation/02-no-accommodation__06__accommodation-summary-analysis-answered.png"><img src="../images/accommodation/02-no-accommodation__06__accommodation-summary-analysis-answered.png" alt="Accommodation - Practitioner analysis"></a>
+</li>
+<li class="card">
+<p class="card__step">Step 7</p><h3 class="card__title">Accommodation - Practitioner analysis - Complete</h3>
+<p class="card__note">Marked as complete. The blue tick confirms completion, which persists after refresh.</p>
+<p class="card__file">02-no-accommodation__07__accommodation-summary-complete.png</p>
+<p><a href="http://localhost:3000/san-training/community/accommodation-summary.html#practitioner-analysis">Open training screen</a> | <a href="../images/accommodation/02-no-accommodation__07__accommodation-summary-complete.png" download>Download PNG</a></p>
+<a href="../images/accommodation/02-no-accommodation__07__accommodation-summary-complete.png"><img src="../images/accommodation/02-no-accommodation__07__accommodation-summary-complete.png" alt="Accommodation - Practitioner analysis - Complete"></a>
+</li></ol></section></section><script>
+    const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'))
+    const tabs = Array.from(document.querySelectorAll('[role="tab"]'))
+    const show = (id) => {
+      const next = panels.some((panel) => panel.id === id) ? id : panels[0].id
+      panels.forEach((panel) => { panel.hidden = panel.id !== next })
+      tabs.forEach((tab) => {
+        const selected = tab.getAttribute('href') === '#' + next
+        tab.setAttribute('aria-selected', selected ? 'true' : 'false')
+      })
+    }
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', (event) => {
+        event.preventDefault()
+        const id = tab.getAttribute('href').slice(1)
+        show(id)
+        history.replaceState({}, '', '#' + id)
+      })
+    })
+    show(location.hash.slice(1))
+  </script></body></html>
