@@ -62,6 +62,84 @@ for (const journey of accessibilityJourneys) {
 }
 
 for (const variant of variants) {
+  for (const custody of variant.name === 'prison' ? ['yes', 'no'] : ['yes']) {
+    test(`${variant.name}/${custody}: Other drug validates, saves and restores a single entry`, async () => withPage(async page => {
+      for (const key of sessionKeys.filter(key => key !== variant.key)) await seedSession(page, key, { sentinel: key })
+      await seedSession(page, variant.key, { drugUse: 'yes', drugsInCustody: custody })
+      await page.goto(`${baseUrl}/san-training/${variant.name}/drugs-types`)
+      await page.locator('input[name="drug_types"][value="heroin"]').check()
+      await page.locator('input[name="drug_types"][value="other"]').check()
+      await page.getByRole('button', { name: 'Save and continue', exact: true }).click()
+      await page.waitForURL(/drugs-when(?:\.html)?$/)
+      const extra = page.locator('[data-du-extra-item]')
+      await extra.waitFor({ state: 'visible' })
+      assert.equal(await extra.count(), 1)
+      assert.equal(await page.locator('[data-du-add-drug], [data-du-remove-drug]').count(), 0)
+      await page.getByRole('heading', { name: 'Add \u2018other\u2019 drug', exact: true }).waitFor()
+      await extra.getByRole('heading', { name: 'When was this drug last used?', exact: true }).waitFor()
+      assert.equal(await extra.getByRole('heading', { name: /^Drug \d/ }).count(), 0)
+      assert.equal(await extra.locator('hr').count(), 0)
+      assert.deepEqual(await extra.locator('.govuk-radios__label').allTextContents(), await page.locator('[data-du-when="heroin"] .govuk-radios__label').allTextContents())
+      await page.locator('#last-used-heroin-last-six').check()
+      await page.getByRole('button', { name: 'Save and continue', exact: true }).click()
+      assert.equal(await page.locator('.govuk-error-summary__list a').count(), 2)
+      await page.getByLabel('Drug name', { exact: true }).fill('Example substance')
+      await extra.locator('input[value="last-six"]').check()
+      await page.getByRole('button', { name: 'Save and continue', exact: true }).click()
+      await page.waitForURL(/drugs-before(?:\.html)?$/)
+      const saved = await savedSession(page, variant.key)
+      assert.deepEqual(saved.extraDrugs, [{ id: 'extra-1', name: 'Example substance', lastUsed: 'last-six' }])
+      await page.goto(`${baseUrl}/san-training/${variant.name}/drugs-when`)
+      assert.equal(await page.getByLabel('Drug name', { exact: true }).inputValue(), 'Example substance')
+      assert.equal(await extra.locator('input[value="last-six"]').isChecked(), true)
+      for (const key of sessionKeys.filter(key => key !== variant.key)) assert.deepEqual(await savedSession(page, key), { sentinel: key })
+    }))
+  }
+
+  test(`${variant.name}: Other drug is available alone and removed by deselecting Other`, async () => withPage(async page => {
+    await seedSession(page, variant.key, { drugUse: 'yes', drugsInCustody: 'no', drugTypes: ['other'] })
+    await page.goto(`${baseUrl}/san-training/${variant.name}/drugs-when`)
+    await page.getByRole('heading', { name: 'Add \u2018other\u2019 drug', exact: true }).waitFor()
+    assert.equal(await page.locator('[data-du-extra-item]').count(), 1)
+    await page.getByLabel('Drug name', { exact: true }).fill('Example substance')
+    await page.locator('[data-du-extra-item] input[value="more-than-six"]').check()
+    await page.getByRole('button', { name: 'Save and continue', exact: true }).click()
+    await page.waitForURL(/drugs-before(?:\.html)?$/)
+    await page.goto(`${baseUrl}/san-training/${variant.name}/drugs-types`)
+    await page.locator('input[name="drug_types"][value="other"]:checked').waitFor()
+    await page.locator('input[name="drug_types"][value="other"]').uncheck()
+    await page.locator('input[name="drug_types"][value="heroin"]').check()
+    await page.getByRole('button', { name: 'Save and continue', exact: true }).click()
+    await page.waitForURL(/drugs-when(?:\.html)?$/)
+    assert.equal(await page.locator('[data-du-extra-drugs]').isVisible(), false)
+    assert.equal(await page.locator('[data-du-extra-item], [data-du-add-drug], [data-du-remove-drug]').count(), 0)
+    assert.deepEqual((await savedSession(page, variant.key)).extraDrugs, [])
+    await page.locator('#last-used-heroin-last-six').check()
+    await page.getByRole('button', { name: 'Save and continue', exact: true }).click()
+    await page.waitForURL(/drugs-before(?:\.html)?$/)
+  }))
+
+  test(`${variant.name}: Other drug summary edits preserve previously saved entries`, async () => withPage(async page => {
+    const extras = [
+      { id: 'extra-1', name: 'First substance', lastUsed: 'last-six' },
+      { id: 'extra-2', name: 'Second substance', lastUsed: 'more-than-six' }
+    ]
+    await seedSession(page, variant.key, {
+      drugUse: 'yes', drugsInCustody: 'yes', drugTypes: ['heroin', 'other'],
+      drugLastUsed: { heroin: 'last-six' }, extraDrugs: extras,
+      drugFrequency: { heroin: 'occasionally', 'extra-1': 'occasionally', 'extra-2': 'occasionally' }, injectedDrugs: ['none']
+    })
+    await page.goto(`${baseUrl}/san-training/${variant.name}/drugs-summary`)
+    await page.locator('a[href*="drugs-when"][href*="extra-1"]').first().click()
+    await page.waitForURL(/drugs-when/)
+    await page.getByLabel('Drug name', { exact: true }).fill('Updated substance')
+    assert.equal(await page.locator('[data-du-extra-item]').count(), 1)
+    assert.equal(await page.locator('[data-du-add-drug], [data-du-remove-drug]').count(), 0)
+    await page.getByRole('button', { name: 'Save and continue', exact: true }).click()
+    await page.waitForURL(/drugs-summary(?:\.html)?$/)
+    assert.deepEqual((await savedSession(page, variant.key)).extraDrugs, [{ ...extras[0], name: 'Updated substance' }, extras[1]])
+  }))
+
   for (const width of [1280, 390]) {
     test(`${variant.name}/${width}: shareable Training tab, refresh and isolated Start`, async () => withPage(async page => {
       const clearRequests = []
