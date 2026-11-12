@@ -1,48 +1,120 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SAN Prison training storyboard</title>
-  <style>
+<!DOCTYPE html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prison training sections</title><style>
+    :root {
+      color-scheme: light;
+      --ink: #0b0c0c;
+      --muted: #505a5f;
+      --line: #b1b4b6;
+      --paper: #f3f2f1;
+      --card: #ffffff;
+      --link: #1d70b8;
+    }
     * { box-sizing: border-box; }
-    body { margin: 0; color: #0b0c0c; background: #f3f2f1; font-family: "GDS Transport", Arial, sans-serif; letter-spacing: 0; }
-    header { background: white; border-top: 10px solid #1d70b8; border-bottom: 1px solid #b1b4b6; padding: 28px max(20px, calc((100% - 1320px) / 2)); }
-    h1 { font-size: 32px; margin: 20px 0 0; }
-    h2 { font-size: 22px; margin: 0; overflow-wrap: anywhere; }
-    nav { display: flex; flex-wrap: wrap; gap: 12px 24px; }
-    a { color: #1d70b8; text-underline-offset: 3px; }
-    a:focus { color: #0b0c0c; background: #ffdd00; outline: 3px solid #ffdd00; }
-    main { max-width: 1360px; margin: auto; padding: 28px 20px; }
-    .screens { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 24px; }
-    article { background: white; border: 1px solid #b1b4b6; min-width: 0; }
-    article h2, article p { padding: 18px; margin: 0; }
-    article > a { display: block; }
-    img { display: block; width: 100%; height: auto; border-top: 1px solid #b1b4b6; }
-    .preview { aspect-ratio: 4 / 3; object-fit: cover; object-position: top; }
-    .links { margin-top: 28px; line-height: 1.6; }
-    @media print { article { break-inside: avoid; } }
-  </style>
-</head>
-<body>
-      <header><nav><a href="../index.html">Training storyboards</a><a href="http://localhost:3000/san#prison-training">Start SAN Prison</a></nav>
-        <h1>SAN Prison training: section overview</h1></header>
-      <main><div class="screens"><article><h2><a href="http://localhost:3000/san-training/prison/accommodation">Accommodation</a></h2>
-        <a href="images/overview/accommodation.png"><img src="images/overview/accommodation.png" alt="Accommodation: opening question" loading="lazy"></a></article>
-<article><h2><a href="http://localhost:3000/san-training/prison/employment">Employment and education</a></h2>
-        <a href="images/overview/employment.png"><img src="images/overview/employment.png" alt="Employment and education: opening question" loading="lazy"></a></article>
-<article><h2><a href="http://localhost:3000/san-training/prison/finances">Finances</a></h2>
-        <a href="images/overview/finances.png"><img src="images/overview/finances.png" alt="Finances: opening question" loading="lazy"></a></article>
-<article><h2><a href="http://localhost:3000/san-training/prison/drugs">Drug use</a></h2>
-        <a href="images/overview/drugs.png"><img src="images/overview/drugs.png" alt="Drug use: opening question" loading="lazy"></a></article>
-<article><h2><a href="http://localhost:3000/san-training/prison/alcohol">Alcohol use</a></h2>
-        <a href="images/overview/alcohol.png"><img src="images/overview/alcohol.png" alt="Alcohol use: opening question" loading="lazy"></a></article>
-<article><h2><a href="http://localhost:3000/san-training/prison/health">Health and wellbeing</a></h2>
-        <a href="images/overview/health.png"><img src="images/overview/health.png" alt="Health and wellbeing: opening question" loading="lazy"></a></article>
-<article><h2><a href="http://localhost:3000/san-training/prison/personal-relationships-children">Personal relationships and community</a></h2>
-        <a href="images/overview/personal-relationships-children.png"><img src="images/overview/personal-relationships-children.png" alt="Personal relationships and community: opening question" loading="lazy"></a></article>
-<article><h2><a href="http://localhost:3000/san-training/prison/thinking-behaviours">Thinking, behaviours and attitudes</a></h2>
-        <a href="images/overview/thinking-behaviours.png"><img src="images/overview/thinking-behaviours.png" alt="Thinking, behaviours and attitudes: opening question" loading="lazy"></a></article>
-<article><h2><a href="http://localhost:3000/san-training/prison/offence-analysis">Offence analysis</a></h2>
-        <a href="images/overview/offence-analysis.png"><img src="images/overview/offence-analysis.png" alt="Offence analysis: opening question" loading="lazy"></a></article></div></main></body>
-</html>
+    body {
+      margin: 0;
+      padding: 24px 32px 64px;
+      font-family: "GDS Transport", arial, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    h1 { font-size: 28px; margin: 0 0 8px; }
+    h2 { font-size: 22px; margin: 0 0 8px; }
+    h3 { font-size: 16px; margin: 0 0 8px; }
+    p { margin: 0 0 8px; }
+    code { font-family: ui-monospace, monospace; }
+    .lede { color: var(--muted); max-width: 72ch; margin-bottom: 24px; }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      margin: 0 0 24px;
+      padding: 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .tabs__tab {
+      display: inline-block;
+      padding: 10px 16px;
+      color: var(--link);
+      text-decoration: none;
+      border: 1px solid transparent;
+      margin-bottom: -1px;
+    }
+    .tabs__tab[aria-selected="true"] {
+      background: var(--card);
+      color: var(--ink);
+      border-color: var(--line);
+      border-bottom-color: var(--card);
+      font-weight: 700;
+    }
+    .flow {
+      list-style: none;
+      margin: 0 0 32px;
+      padding: 16px 20px;
+      background: var(--card);
+      border: 1px solid var(--line);
+    }
+    .flow__item {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: baseline;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--paper);
+    }
+    .flow__item:last-child { border-bottom: 0; }
+    .flow__arrow { color: var(--muted); }
+    .flow__when { color: var(--muted); font-size: 14px; }
+    .journey { margin-bottom: 40px; }
+    .journey__header { margin-bottom: 16px; max-width: 80ch; }
+    .journey__header p { color: var(--muted); }
+    .journey__steps {
+      display: flex;
+      gap: 16px;
+      list-style: none;
+      margin: 0;
+      padding: 8px 0 16px;
+      overflow-x: auto;
+    }
+    .card {
+      flex: 0 0 420px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 12px;
+    }
+    .card__step {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .card__note, .card__file {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .card__file { font-family: ui-monospace, monospace; word-break: break-all; }
+    .card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--line);
+      margin-top: 12px;
+    }
+    .howto {
+      margin: 0 0 28px;
+      padding: 12px 16px;
+      background: var(--card);
+      border-left: 4px solid var(--link);
+      max-width: 80ch;
+    }
+    @media print {
+      body { padding: 0; background: #fff; }
+      .tabs, .howto { display: none; }
+      .tab-panel[hidden] { display: block !important; }
+      .journey__steps { overflow: visible; flex-wrap: wrap; }
+      .card { break-inside: avoid; }
+    }
+
+nav.links { display: flex; flex-wrap: wrap; gap: 24px; margin-bottom: 24px; }
+.card a { color: var(--link); }
+</style></head><body><nav class="links"><a href="../index.html">Training storyboards</a><a href="journeys.html">All Prison journeys</a></nav><h1>Prison training sections</h1><ul class="journey__steps"><li class="card"><h2><a href="journeys.html#accommodation">Accommodation</a></h2><a href="journeys.html#accommodation"><img src="images/accommodation/01-settled-with-concerns__01__accommodation.png" alt="Did Alex have somewhere to live before custody?"></a></li><li class="card"><h2><a href="journeys.html#employment">Employment and education</a></h2><a href="journeys.html#employment"><img src="images/employment/01-employed__01__employment.png" alt="What is Alex&#39;s current employment status?"></a></li><li class="card"><h2><a href="journeys.html#finances">Finances</a></h2><a href="journeys.html#finances"><img src="images/finances/01-full-follow-on__01__finances.png" alt="Where does Alex currently get their money from?"></a></li><li class="card"><h2><a href="journeys.html#drugs">Drug use</a></h2><a href="journeys.html#drugs"><img src="images/drugs/01-injects__01__drugs.png" alt="Has Alex ever used illegal drugs or misused medication?"></a></li><li class="card"><h2><a href="journeys.html#alcohol">Alcohol use</a></h2><a href="journeys.html#alcohol"><img src="images/alcohol/01-current-issues__01__alcohol.png" alt="Is there evidence that Alex has had any issues with alcohol in the last 6 months?"></a></li><li class="card"><h2><a href="journeys.html#health">Health and wellbeing</a></h2><a href="journeys.html#health"><img src="images/health/01-conditions__01__health.png" alt="Health and wellbeing"></a></li><li class="card"><h2><a href="journeys.html#relationships">Personal relationships and community</a></h2><a href="journeys.html#relationships"><img src="images/relationships/01-children-and-abuse__01__personal-relationships-children.png" alt="Are there any children in Alex&#39;s life?"></a></li><li class="card"><h2><a href="journeys.html#thinking">Thinking, behaviours and attitudes</a></h2><a href="journeys.html#thinking"><img src="images/thinking/01-no-sexual-harm__01__thinking-behaviours.png" alt="Thinking, behaviours and attitudes"></a></li><li class="card"><h2><a href="journeys.html#offence">Offence analysis</a></h2><a href="journeys.html#offence"><img src="images/offence/01-direct-victim__01__offence-analysis.png" alt="Offence analysis"></a></li></ul><script></script></body></html>

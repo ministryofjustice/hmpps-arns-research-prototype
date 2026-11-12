@@ -58,10 +58,50 @@ not call the shared server-side clear-data endpoint. The original `/san/`,
 Shared GOV.UK/MOJ components and application styling remain common foundations.
 Make training changes inside the training folders, not the research folders.
 
-Open `storyboards/san-training/index.html` for the training storyboards. Community's
-existing detailed snapshots and images are copied into this folder. Both variants
-also have fresh section-overview captures. Regenerate those overview captures with
-`node scripts/capture-san-training.mjs`; this writes only inside `storyboards/san-training/`.
+Prison training's drug last-used screen uses the question as its main heading.
+"Add another drug" is hidden. Selecting Other on the drug selection page still
+opens a name and last-used group; existing entries remain editable and saved.
+The before-custody wording applies when use in custody is No; Yes retains the
+last-six-months wording. Community training is unchanged.
+Prison training's injection timing screen also uses a "Drug use" caption and
+the question as its main heading, retaining the before-custody wording for No.
+
+Community training's current drug-support screen uses "Drug use" as its main
+heading, with the support and motivation questions as subheadings.
+
+Both training variants ask about changes to thinking, behaviours and attitudes
+on a separate page after the main questions and before the sexual-harm questions.
+
+Open `storyboards/san-training/index.html` for the training storyboards, then choose
+Community or Prison. Both use the research storyboard scenarios, captured directly
+from their own training routes with synthetic answers. Right-click any screenshot
+to copy its image into Miro, download its PNG, or drag the ordered PNGs from a
+section's images folder onto the board.
+
+Regenerate both journey storyboards with `node scripts/capture-san-training.mjs`.
+To refresh only one section of one variant, use
+`node scripts/capture-san-training.mjs --variant prison --section thinking`;
+other sections keep their existing captures.
+The generator checks the training route, loaded training modules and Beta banner
+before every capture, and records each PNG's source URL and SHA-256 in
+`captures.json` beside its storyboard. It never copies research or Community
+screenshots into Prison, and writes only inside `storyboards/san-training/`.
+Community's separate overview page has been removed.
+
+Card titles use the visible page heading (not hidden questions) and selected tab.
+Every scenario includes its completion flow: summary, practitioner analysis,
+three answered questions and the completed state with the blue navigation tick.
+The existing exceptions remain: no further financial assessment, no drug use and
+never drunk alcohol show "Practitioner analysis not required"; offence analysis
+completes directly without a practitioner-analysis tab. Completion is checked
+immediately after submission and again after refresh. Community training now
+updates the completed state immediately, matching Prison.
+
+Relationship captures include the victim-details screen after answering Yes to
+being a victim of domestic abuse; those details are entered on that screen rather
+than pre-filled before the branch. Both training variants check this sequence and
+the No-children/No-abuse route, which skips child details, perpetrator follow-ups
+and victim details.
 
 With the prototype running and Playwright installed, run
 `node --test scripts/test-san-training.mjs` for training, deep-link and isolation checks.

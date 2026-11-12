@@ -1453,6 +1453,7 @@ const initDrugs = () => {
       : []
     setSanSession({
       ...answers,
+      drugTypes: answers.extraDrugs.length ? [...new Set([...selectedDrugs(current), 'other'])] : selectedDrugs(current),
       drugFrequency: pruneExtraKeyed(previous.drugFrequency, extraIds),
       drugFrequencyDetails: pruneExtraKeyed(previous.drugFrequencyDetails, extraIds),
       injectedWhen: pruneExtraKeyed(previous.injectedWhen, extraIds),

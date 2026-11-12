@@ -620,7 +620,10 @@ const initThinking = () => {
     }
     clearErrors()
     setSanSession({ ...answers, thinkingComplete: true })
-    window.location.assign('thinking-behaviours-summary.html#practitioner-analysis')
+    const completedSession = getSanSession()
+    applyProgress(completedSession)
+    renderSummary(completedSession)
+    openAnalysisTab()
   })
 }
 

@@ -1,33 +1,122 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SAN training storyboards</title>
-  <style>
+<!DOCTYPE html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SAN training storyboards</title><style>
+    :root {
+      color-scheme: light;
+      --ink: #0b0c0c;
+      --muted: #505a5f;
+      --line: #b1b4b6;
+      --paper: #f3f2f1;
+      --card: #ffffff;
+      --link: #1d70b8;
+    }
     * { box-sizing: border-box; }
-    body { margin: 0; color: #0b0c0c; background: #f3f2f1; font-family: "GDS Transport", Arial, sans-serif; letter-spacing: 0; }
-    header { background: white; border-top: 10px solid #1d70b8; border-bottom: 1px solid #b1b4b6; padding: 28px max(20px, calc((100% - 1320px) / 2)); }
-    h1 { font-size: 32px; margin: 20px 0 0; }
-    h2 { font-size: 22px; margin: 0; overflow-wrap: anywhere; }
-    nav { display: flex; flex-wrap: wrap; gap: 12px 24px; }
-    a { color: #1d70b8; text-underline-offset: 3px; }
-    a:focus { color: #0b0c0c; background: #ffdd00; outline: 3px solid #ffdd00; }
-    main { max-width: 1360px; margin: auto; padding: 28px 20px; }
-    .screens { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 24px; }
-    article { background: white; border: 1px solid #b1b4b6; min-width: 0; }
-    article h2, article p { padding: 18px; margin: 0; }
-    article > a { display: block; }
-    img { display: block; width: 100%; height: auto; border-top: 1px solid #b1b4b6; }
-    .preview { aspect-ratio: 4 / 3; object-fit: cover; object-position: top; }
-    .links { margin-top: 28px; line-height: 1.6; }
-    @media print { article { break-inside: avoid; } }
-  </style>
-</head>
-<body>
-    <header><nav><a href="http://localhost:3000/san#community-training">Community training</a><a href="http://localhost:3000/san#prison-training">Prison training</a></nav><h1>SAN training storyboards</h1></header>
-    <main><div class="screens">
-      <article><h2><a href="community/overview.html">SAN Community</a></h2><p>Section overview</p><a href="community/overview.html"><img class="preview" src="community/images/overview/accommodation.png" alt="Community training accommodation question"></a></article>
-      <article><h2><a href="prison/index.html">SAN Prison</a></h2><p>Section overview</p><a href="prison/index.html"><img class="preview" src="prison/images/overview/accommodation.png" alt="Prison training accommodation question"></a></article>
-    </div><nav class="links"><a href="community/index.html">Community journey snapshots</a><a href="community/accommodation/index.html">Community accommodation snapshots</a></nav></main></body>
-</html>
+    body {
+      margin: 0;
+      padding: 24px 32px 64px;
+      font-family: "GDS Transport", arial, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    h1 { font-size: 28px; margin: 0 0 8px; }
+    h2 { font-size: 22px; margin: 0 0 8px; }
+    h3 { font-size: 16px; margin: 0 0 8px; }
+    p { margin: 0 0 8px; }
+    code { font-family: ui-monospace, monospace; }
+    .lede { color: var(--muted); max-width: 72ch; margin-bottom: 24px; }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      margin: 0 0 24px;
+      padding: 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .tabs__tab {
+      display: inline-block;
+      padding: 10px 16px;
+      color: var(--link);
+      text-decoration: none;
+      border: 1px solid transparent;
+      margin-bottom: -1px;
+    }
+    .tabs__tab[aria-selected="true"] {
+      background: var(--card);
+      color: var(--ink);
+      border-color: var(--line);
+      border-bottom-color: var(--card);
+      font-weight: 700;
+    }
+    .flow {
+      list-style: none;
+      margin: 0 0 32px;
+      padding: 16px 20px;
+      background: var(--card);
+      border: 1px solid var(--line);
+    }
+    .flow__item {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: baseline;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--paper);
+    }
+    .flow__item:last-child { border-bottom: 0; }
+    .flow__arrow { color: var(--muted); }
+    .flow__when { color: var(--muted); font-size: 14px; }
+    .journey { margin-bottom: 40px; }
+    .journey__header { margin-bottom: 16px; max-width: 80ch; }
+    .journey__header p { color: var(--muted); }
+    .journey__steps {
+      display: flex;
+      gap: 16px;
+      list-style: none;
+      margin: 0;
+      padding: 8px 0 16px;
+      overflow-x: auto;
+    }
+    .card {
+      flex: 0 0 420px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 12px;
+    }
+    .card__step {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .card__note, .card__file {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .card__file { font-family: ui-monospace, monospace; word-break: break-all; }
+    .card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--line);
+      margin-top: 12px;
+    }
+    .howto {
+      margin: 0 0 28px;
+      padding: 12px 16px;
+      background: var(--card);
+      border-left: 4px solid var(--link);
+      max-width: 80ch;
+    }
+    @media print {
+      body { padding: 0; background: #fff; }
+      .tabs, .howto { display: none; }
+      .tab-panel[hidden] { display: block !important; }
+      .journey__steps { overflow: visible; flex-wrap: wrap; }
+      .card { break-inside: avoid; }
+    }
+
+nav.links { display: flex; flex-wrap: wrap; gap: 24px; margin-bottom: 24px; }
+.card a { color: var(--link); }
+</style></head><body><h1>SAN training storyboards</h1><p class="lede">Fresh screenshots from each training prototype, using the research scenarios. Open a journey to copy or download individual screens for Miro.</p><ul class="journey__steps"><li class="card"><h2><a href="community/index.html">SAN Community journey snapshots</a></h2>
+<a href="community/index.html"><img src="community/images/accommodation/01-settled-with-concerns__01__accommodation.png" alt="Community training accommodation question"></a></li><li class="card"><h2><a href="prison/journeys.html">SAN Prison journey snapshots</a></h2>
+<a href="prison/journeys.html"><img src="prison/images/accommodation/01-settled-with-concerns__01__accommodation.png" alt="Prison training accommodation question"></a></li></ul><script></script></body></html>
