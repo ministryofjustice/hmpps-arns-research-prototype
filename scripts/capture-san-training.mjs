@@ -34,6 +34,7 @@ const answers = {
   finances: {
     financeIncome: ['employment', 'family'], financeOverreliant: 'yes',
     financeOverreliantDetails: 'Parents pay rent and give cash most weeks.',
+    financeCustodyIncome: ['employment', 'family'],
     financeFurtherAssessment: 'yes', financeMoneyManagement: 'necessities',
     financeDebt: ['own'], financeDebtTypes: { own: ['formal'] },
     financeDebtDetails: { own: { formal: 'Phone bill arrears.' } },
@@ -62,14 +63,17 @@ const answers = {
     healthChanges: 'maintain', healthChangesDetails: 'Continue attending GP appointments.'
   },
   relationships: {
-    relationshipsChildren: ['yes'],
-    relationshipsChildrenList: [{
-      name: 'Example child', age: '10', sex: 'unknown', relationship: 'parent',
-      livesWith: 'no', parentalResponsibility: 'yes',
-      parentalResponsibilityDetails: 'Shared parenting responsibilities.', contact: 'yes'
-    }],
+    relationshipsChildren: ['lived-with'],
+    relationshipsChildrenDetails: 'Example child, aged 10, sex unknown. Alex is their parent.',
+    relationshipsChildrenList: [],
+    relationshipsChildrenImpact: 'The child misses regular contact with Alex.',
+    relationshipsChildrenVisiting: 'yes',
+    relationshipsChildrenVisitingDetails: 'Example child, aged 10, visits their parent Alex once a month.',
+    relationshipsParenting: 'yes',
+    relationshipsParentingDetails: 'Shared parenting responsibilities.',
+    relationshipsParentingManagement: 'sometimes',
     relationshipsHistory: 'mixed', relationshipsPartner: 'apart',
-    relationshipsStatus: 'concerns', relationshipsParenting: 'sometimes',
+    relationshipsStatus: 'concerns',
     relationshipsFamily: 'mixed', relationshipsChildhood: 'some-challenges',
     relationshipsChildhoodBehaviour: 'no', relationshipsBelonging: 'yes',
     relationshipsBelongingDetails: 'Friends and a local community group.',
@@ -82,6 +86,7 @@ const answers = {
   thinking: {
     thinkingConsequences: 'yes', thinkingStable: 'sometimes', thinkingActivities: 'sometimes',
     thinkingPeers: 'sometimes', thinkingPeersDetails: 'Sometimes influenced by peers.',
+    thinkingContacts: 'A wing officer and peer mentor provide positive support.',
     thinkingProblems: 'limited', thinkingViews: 'assumes', thinkingManipulative: 'none',
     thinkingTemper: 'sometimes', thinkingViolence: 'some', thinkingImpulse: 'sometimes',
     thinkingHostile: 'some', thinkingSupervision: 'some', thinkingExcuse: 'sometimes',
@@ -118,6 +123,10 @@ const overrides = {
   '03-never': { alcoholUse: 'never' },
   '02-no-children': {
     relationshipsChildren: ['no'], relationshipsChildrenList: [],
+    relationshipsChildrenDetails: '', relationshipsChildrenImpact: '',
+    relationshipsChildrenVisiting: '', relationshipsChildrenVisitingDetails: '',
+    relationshipsParenting: '', relationshipsParentingDetails: '',
+    relationshipsParentingManagement: '',
     relationshipsBehaviour: 'no', relationshipsCoercive: 'no',
     relationshipsAbuseWho: [], relationshipsVictim: 'no', relationshipsVictimWho: []
   },
@@ -135,10 +144,10 @@ const escapeHtml = value => String(value).replace(/[&<>"']/g, character => ({
 const hash = data => createHash('sha256').update(data).digest('hex')
 const variants = [['community', 'Community', 'index.html'], ['prison', 'Prison', 'journeys.html']]
 const { values: filters } = parseArgs({
-  options: { variant: { type: 'string' }, section: { type: 'string' } }
+  options: { variant: { type: 'string' }, section: { type: 'string', multiple: true } }
 })
 assert.ok(!filters.variant || variants.some(([variant]) => variant === filters.variant), 'Unknown training variant')
-assert.ok(!filters.section || Object.hasOwn(sectionPages, filters.section), 'Unknown storyboard section')
+assert.ok(!filters.section || filters.section.every(section => Object.hasOwn(sectionPages, section)), 'Unknown storyboard section')
 const completeKeys = {
   accommodation: 'accommodationComplete', employment: 'employmentComplete',
   finances: 'financeComplete', drugs: 'drugComplete', alcohol: 'alcoholComplete',
@@ -228,7 +237,7 @@ ${step.note ? `<p class="card__note">${escapeHtml(step.note)}</p>` : ''}
     }
 
     for (const section of catalogue.sections) {
-      if (filters.section && section.id !== filters.section) {
+      if (filters.section && !filters.section.includes(section.id)) {
         const journeys = section.journeys.map(scenario => {
           const steps = previousCaptures.filter(capture => capture.section === section.id && capture.scenario === scenario.id)
           assert.ok(steps.length, `Missing existing captures: ${variant}/${section.id}/${scenario.id}`)
@@ -308,26 +317,21 @@ ${step.note ? `<p class="card__note">${escapeHtml(step.note)}</p>` : ''}
           assert.ok(!visited.has(url), `Journey loop: ${variant}/${section.id}/${scenario.id}: ${url}`)
           visited.add(url)
           const pathname = new URL(url).pathname.replace(/\.html$/, '')
-          const childList = pathname.endsWith('/personal-relationships-children-list')
           const victimList = pathname.endsWith('/offence-analysis-victim-details')
           if (pathname.endsWith('/personal-relationships-victim-who')) {
             await page.locator('#victim-who-partner').check()
             await page.locator('#victim-who-partner-details').fill('Reports abuse in a previous relationship.')
           }
-          if (childList || victimList) {
-            const detail = childList ? 'personal-relationships-child-details?child=0' : 'offence-analysis-victim?victim=0'
-            await page.goto(`${baseUrl}${prefix}${detail}`)
+          if (victimList) {
+            await page.goto(`${baseUrl}${prefix}offence-analysis-victim?victim=0`)
             await capture()
             await page.goto(url)
-            await page.locator(childList ? '#add-another-child-no' : '#add-another-victim-no').check()
           }
           await capture(pathname.endsWith('-summary') ? 'summary' : 'questions')
-          if (childList || victimList) {
-            const deletion = childList ? 'personal-relationships-child-delete?child=0' : 'offence-analysis-victim-delete?victim=0'
-            await page.goto(`${baseUrl}${prefix}${deletion}`)
+          if (victimList) {
+            await page.goto(`${baseUrl}${prefix}offence-analysis-victim-delete?victim=0`)
             await capture()
             await page.goto(url)
-            await page.locator(childList ? '#add-another-child-no' : '#add-another-victim-no').check()
           }
           if (pathname.endsWith('-summary')) break
           if (variant === 'prison' && section.id === 'drugs') {
@@ -398,7 +402,7 @@ ${renderSections(captured, variant)}`
     await writeFile(path.join(storyboardDir, variant, 'captures.json'), `${JSON.stringify(manifest, null, 2)}\n`)
     firstScreens[variant] = captured[0].journeys[0].steps[0]
 
-    if (variant === 'community' && (!filters.section || filters.section === 'accommodation')) {
+    if (variant === 'community' && (!filters.section || filters.section.includes('accommodation'))) {
       const accommodation = captured.filter(section => section.id === 'accommodation')
       const legacy = documentHtml('Community training accommodation', `<p><a href="../index.html#accommodation">All Community training journeys</a></p><h1>Community training accommodation</h1>${renderSections(accommodation, variant)}`, catalogue.script)
         .replaceAll('href="images/', 'href="../images/').replaceAll('src="images/', 'src="../images/')

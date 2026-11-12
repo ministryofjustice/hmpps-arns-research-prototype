@@ -88,7 +88,7 @@
   {
     id: "temper",
     name: "thinking_temper",
-    question: "How well does Alex manage anger, frustration and conflict?",
+    question: "Is Alex able to manage their anger, frustration and conflict?",
     options: [
       { value: "well", label: "Yes, manages these well", hint: "Recognises situations that make them angry or frustrated and deals with them effectively. Remains calm and does not lose control." },
       { value: "sometimes", label: "Yes, sometimes able to manage these", hint: "Occasionally loses control when angry or frustrated, or has difficulty dealing with conflict in some situations." },
@@ -161,6 +161,14 @@
 <form id="san-thinking-questions-form" novalidate data-tb-page="questions">
   {% for question in questions %}
   {% if not question.hidden %}
+  {% if question.id == "problems" %}
+  <div class="govuk-form-group san-question">
+    <label class="govuk-label govuk-label--m" for="thinking-contacts">Who are Alex's important contacts in custody? (optional)</label>
+    <div id="thinking-contacts-hint" class="govuk-hint">Includes positive and negative relationships. Give names and describe relationships, risks or protective factors.</div>
+    <textarea class="govuk-textarea" id="thinking-contacts" name="thinking_contacts" rows="5" maxlength="2000" aria-describedby="thinking-contacts-hint"></textarea>
+    <div class="govuk-hint san-character-count" data-san-character-count="thinking-contacts">You have 2,000 characters remaining</div>
+  </div>
+  {% endif %}
   <div class="govuk-form-group{% if not loop.first %} san-question{% endif %}" data-san-error-group="{{ question.id }}">
     <fieldset class="govuk-fieldset" id="{{ question.id }}"{% if question.hint %} aria-describedby="{{ question.id }}-hint"{% endif %}>
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">

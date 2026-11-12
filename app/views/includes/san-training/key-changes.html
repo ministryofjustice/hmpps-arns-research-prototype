@@ -1,0 +1,83 @@
+{% set changelogId = variant ~ "-training-changelog" %}
+{% set changelogHint = "Changes to the SAN " ~ label ~ " training prototype." %}
+{% set changelogHideA11y = true %}
+
+{% set thinkingChanges = [
+  { type: "IxD", text: "Updated the sexual harm page layout, with 'Risk of sexual harm' as the main heading (H1), using the same heading size as other training pages." },
+  { type: "CD", text: "Changed 'How well does Alex manage anger, frustration and conflict?' to 'Is Alex able to manage their anger, frustration and conflict?'" }
+] %}
+{% set relationshipChanges = [
+  { type: "IxD", text: "Replaced the first two children steps with a new way to collect child details, without listing individual children. Children's cards are no longer shown on the summary page." },
+  { type: "IxD", text: "Only show the parenting responsibilities question when 'Yes' is selected for 'Are there any children in Alex's life?' on the first page." }
+] %}
+{% set financeChanges = [
+  { type: "CD", text: "For 'What type of debt does Alex have?', the 'Debt to others' hint is now 'Include things like owing money to family, friends, people in prison or loan sharks.'" },
+  { type: "CD", text: "For 'What type of debt does Alex have?', the 'Formal debt' hint is now 'Include things like credit cards, phone bills or rent arrears.'" },
+  { type: "IxD", text: "Removed the 'or' divider from the options for 'Is Alex affected by debt?'" },
+  { type: "CD", text: "For 'Is Alex affected by debt?', changed the 'No' option to 'No, not affected by debt'." },
+  { type: "CD", text: "When 'No' is selected for 'Is there anything about Alex's financial situation that may need further assessment?', the hint is now 'Include who supports them, how often support is provided and why it is needed.'" }
+] %}
+{% set employmentChanges = [
+  { type: "CD", text: "For 'Does Alex need support with reading, writing or numeracy?', changed the 'No' option to 'No support needed with reading, writing or numeracy'." }
+] %}
+
+{% if variant == "prison" %}
+  {% set thinkingChanges = thinkingChanges.concat([
+    { type: "IxD", text: "Added 'Who are Alex's important contacts in custody? (optional)' above 'Is Alex able to solve problems in a positive way?'" }
+  ]) %}
+  {% set relationshipChanges = relationshipChanges.concat([
+    { type: "CD", text: "Changed 'Is Alex able to manage their parenting responsibilities?' to 'Was Alex able to manage their parenting responsibilities?'. The hint is 'If there were parenting concerns, it does not always mean there were child wellbeing concerns. They may have just required some help or support.'" },
+    { type: "CD", text: "For 'Does Alex currently have a partner?', the options are 'Yes, were living together', 'Yes, were not living together' and 'No'." }
+  ]) %}
+  {% set financeChanges = financeChanges.concat([
+    { type: "CD", text: "Changed 'Where does Alex currently get their money from?' to 'Where did Alex get their money from before custody?'" },
+    { type: "CD", text: "Changed 'Is Alex over-reliant on family or friends for money?' to 'Was Alex over-reliant on family or friends for money before custody?'" },
+    { type: "CD", text: "For 'Was Alex over-reliant on family or friends for money before custody?', the 'Yes' hint is now 'Include who supported them, how often support was provided and why it was needed.'" },
+    { type: "IxD", text: "Added 'Where does Alex get their money from in custody?' after 'Was Alex over-reliant on family or friends for money before custody?'." }
+  ]) %}
+  {% set employmentChanges = employmentChanges.concat([
+    { type: "IxD", text: "Removed 'Does Alex have any additional day-to-day commitments?'." },
+    { type: "CD", text: "Changed 'What is Alex's current employment status?' to 'What was Alex's employment status before custody?'." }
+  ]) %}
+{% else %}
+  {% set employmentChanges = employmentChanges.concat([
+    { type: "CD", text: "Restored 'What is Alex's current employment status?' on the question and summary pages. Community training uses current-employment wording." }
+  ]) %}
+  {% set relationshipChanges = relationshipChanges.concat([
+    { type: "CD", text: "The parenting question is 'Is Alex able to manage their parenting responsibilities?'. The hint is 'If there are parenting concerns, it does not always mean there are child wellbeing concerns. They may just require some help or support.'" },
+    { type: "CD", text: "TBC: change 'Is there evidence that Alex has used strangulation or suffocation?' to 'Is there evidence that Alex has perpetrated strangulation or suffocation?'." }
+  ]) %}
+{% endif %}
+
+{% set changelogIterations = [
+  {
+    id: "november-2026",
+    label: "November 2026",
+    sections: [
+      {
+        name: "Offence analysis",
+        changes: [
+          { type: "CD", text: "On the summary page victim cards, changed 'What is Alex's relationship to the victim?' to 'Who is the victim?'." },
+          { type: "IxD", text: "Changed the victim list to a card view. Each 'Change' link opens the relevant victim page." },
+          { type: "IxD", text: "Moved 'Why did the current index offences happen?' above 'Did the current index offences involve any of the following motivations?'." },
+          { type: "CD", text: "The offence description question is now 'Enter a brief description of their current index offences'." }
+        ]
+      },
+      { name: "Thinking, behaviours and attitudes", changes: thinkingChanges },
+      { name: "Personal relationships and community", changes: relationshipChanges },
+      { name: "Finances", changes: financeChanges },
+      { name: "Employment and education", changes: employmentChanges }
+    ]
+  }
+] %}
+{% set changelogSummary %}
+  <h4 class="govuk-heading-s">Key changes and impact</h4>
+  <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+    <li><strong>Offence analysis:</strong> victim cards with relevant Change links, clearer question wording and a revised question order.</li>
+    <li><strong>Thinking, behaviours and attitudes:</strong> a revised Risk of sexual harm layout and anger question{% if variant == "prison" %}, plus an optional question about important contacts in custody{% endif %}.</li>
+    <li><strong>Personal relationships and community:</strong> child details collected without individual lists or summary cards, and parenting questions only when there are children in Alex's life. {% if variant == "prison" %}Parenting wording uses the past tense and partner options reflect living arrangements before custody.{% else %}Parenting wording uses the present tense. The strangulation or suffocation wording change is marked TBC.{% endif %}</li>
+    <li><strong>Finances:</strong> clearer debt options and support hints{% if variant == "prison" %}, with separate questions about income before and during custody{% endif %}.</li>
+    <li><strong>Employment and education:</strong> a clearer no-support option for reading, writing or numeracy{% if variant == "prison" %}, employment status before custody and removal of the additional commitments question{% else %}, with current-employment wording restored on the question and summary pages{% endif %}.</li>
+  </ul>
+{% endset %}
+{% include "includes/san-research/changelog-ui.html" %}

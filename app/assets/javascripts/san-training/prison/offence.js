@@ -216,7 +216,7 @@ const victimRows = (victim, index, from, withActions = true) => {
   </div>`
   }
   return [
-    row("What is Alex's relationship to the victim?", relationship, 'victim-relationship'),
+    row('Who is the victim?', relationship, 'victim-relationship'),
     row("What is the victim's approximate age?", [labelled(AGE_LABELS, victim.age)], 'victim-age'),
     row("What is the victim's sex?", [labelled(SEX_LABELS, victim.sex)], 'victim-sex'),
     row("What is the victim's race or ethnicity?", [labelled(ETHNICITY_LABELS, victim.ethnicity)], 'victim-ethnicity')
@@ -257,13 +257,13 @@ const renderSummary = (session) => {
     }
     rows.push(summaryRow('Did the offences have any of the following elements?', lines, summaryChangeHref('offence-analysis', 'offence-elements')))
   }
+  if (session.offenceWhy) {
+    rows.push(summaryRow('Why did the offence happen?', [session.offenceWhy], summaryChangeHref('offence-analysis', 'offence-why')))
+  }
   if (Array.isArray(session.offenceMotivations) && session.offenceMotivations.length) {
     const lines = session.offenceMotivations.map((value) => labelled(MOTIVATION_LABELS, value))
     if (session.offenceMotivations.includes('other') && session.offenceMotivationOtherDetails) lines.push(session.offenceMotivationOtherDetails)
     rows.push(summaryRow('What was Alex trying to gain from the offence?', lines, summaryChangeHref('offence-analysis', 'offence-motivations')))
-  }
-  if (session.offenceWhy) {
-    rows.push(summaryRow('Why did the offence happen?', [session.offenceWhy], summaryChangeHref('offence-analysis', 'offence-why')))
   }
   if (Array.isArray(session.offenceCommittedAgainst) && session.offenceCommittedAgainst.length) {
     const lines = session.offenceCommittedAgainst.map((value) => labelled(COMMITTED_LABELS, value))
@@ -328,32 +328,11 @@ const renderSummary = (session) => {
   }
 }
 
-const victimsAddedHeading = (count) => (
-  count === 1 ? 'You have added 1 victim' : `You have added ${count} victims`
-)
-
 const victimListLabel = (victim, index) => {
   const relationship = labelled(RELATIONSHIP_LABELS, victim.relationship)
   if (victim.relationship === 'other' && victim.relationshipDetails) return `${relationship}: ${victim.relationshipDetails}`
   return relationship || victimTitle(index)
 }
-
-const victimNameListHtml = (session, from) => victims(session).map((victim, index) => {
-  const label = victimListLabel(victim, index)
-  return `<div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">${escapeHtml(label)}</dt>
-    <dd class="govuk-summary-list__actions">
-      <ul class="govuk-summary-list__actions-list">
-        <li class="govuk-summary-list__actions-list-item">
-          <a class="govuk-link" href="${victimFormHref(index, from)}">Change<span class="govuk-visually-hidden"> ${escapeHtml(label)}</span></a>
-        </li>
-        <li class="govuk-summary-list__actions-list-item">
-          <a class="govuk-link" href="${victimDeleteHref(index, from)}">Remove<span class="govuk-visually-hidden"> ${escapeHtml(label)}</span></a>
-        </li>
-      </ul>
-    </dd>
-  </div>`
-}).join('')
 
 const renderVictimDetails = (session) => {
   const mount = document.querySelector('[data-oa-victim-details]')
@@ -368,34 +347,19 @@ const renderVictimDetails = (session) => {
   const hint = document.querySelector('[data-oa-victims-hint]')
   const from = fromSummary() ? 'summary' : 'details'
   if (!list.length) {
-    if (heading) heading.textContent = "What are the victim's details?"
+    if (heading) heading.textContent = 'Victims'
     if (hint) hint.hidden = false
     mount.innerHTML = `<p class="govuk-body">Add victim's details to continue.</p>
       <a class="govuk-button govuk-button--secondary" href="${victimFormHref(-1, from)}" data-module="govuk-button">Add a victim</a>`
     return
   }
 
-  if (heading) heading.textContent = victimsAddedHeading(list.length)
+  if (heading) heading.textContent = 'Victims'
   if (hint) hint.hidden = true
-  mount.innerHTML = `<dl class="govuk-summary-list san-add-to-list">${victimNameListHtml(session, from)}</dl>
-    <div class="govuk-form-group govuk-!-margin-top-8" data-san-error-group="add-another-victim">
-      <fieldset class="govuk-fieldset" id="add-another-victim">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-          <h2 class="govuk-fieldset__heading">Do you need to add another victim?</h2>
-        </legend>
-        <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
-          <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="add-another-victim-yes" name="add_another_victim" type="radio" value="yes">
-            <label class="govuk-label govuk-radios__label" for="add-another-victim-yes">Yes</label>
-          </div>
-          <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="add-another-victim-no" name="add_another_victim" type="radio" value="no">
-            <label class="govuk-label govuk-radios__label" for="add-another-victim-no">No</label>
-          </div>
-        </div>
-      </fieldset>
-    </div>
-    <button type="button" class="govuk-button" data-module="govuk-button" data-oa-victims-continue>Save and continue</button>`
+  const cards = list.map((victim, index) => victimCardHtml(victim, index, from)).join('')
+  mount.innerHTML = `${cards}
+    <button type="button" class="govuk-button" data-module="govuk-button" data-oa-victims-continue>Save and continue</button>
+    <button type="button" class="govuk-button govuk-button--secondary govuk-!-margin-left-3" data-module="govuk-button" data-oa-add-victim>Add another victim</button>`
 }
 
 const requireText = (errors, group, href, value, text) => {
@@ -585,23 +549,16 @@ const initOffence = () => {
   if (details) {
     renderVictimDetails(session)
     details.addEventListener('click', (event) => {
-      const continueButton = event.target.closest('[data-oa-victims-continue]')
-      if (!continueButton) return
-      event.preventDefault()
-      const addAnother = checkedValue('add_another_victim')
-      if (!addAnother) {
-        showErrors([{
-          group: 'add-another-victim',
-          href: '#add-another-victim',
-          text: 'Select yes if you need to add another victim'
-        }])
-        return
-      }
-      clearErrors()
-      if (addAnother === 'yes') {
+      const addButton = event.target.closest('[data-oa-add-victim]')
+      if (addButton) {
+        event.preventDefault()
         window.location.assign(victimFormHref(-1, fromSummary() ? 'summary' : 'details'))
         return
       }
+      const continueButton = event.target.closest('[data-oa-victims-continue]')
+      if (!continueButton) return
+      event.preventDefault()
+      clearErrors()
       window.location.assign(fromSummary() ? 'offence-analysis-summary.html' : 'offence-analysis-involved-parties.html')
     })
   }
@@ -638,13 +595,10 @@ const initOffence = () => {
     }
     const cancelHref = cancelVictimDeleteHref()
     ensureBackLink(cancelHref)
-    const victimName = victimListLabel(victim, index)
     const deleteHeading = document.querySelector('[data-oa-page="victim-delete"] h1')
-    if (deleteHeading) deleteHeading.textContent = `Confirm you want to delete ${victimName}'s details`
+    if (deleteHeading) deleteHeading.textContent = "Confirm you want to delete this victim's details"
     const confirmDelete = document.querySelector('[data-oa-victim-delete-confirm]')
-    if (confirmDelete) {
-      confirmDelete.innerHTML = `Confirm<span class="govuk-visually-hidden"> you want to delete ${escapeHtml(victimName)}'s details</span>`
-    }
+    if (confirmDelete) confirmDelete.textContent = 'Confirm'
     document.querySelector('[data-oa-victim-delete-update]')?.setAttribute('href', victimFormHref(index, fromSummary() ? 'summary' : 'details'))
     document.querySelector('[data-oa-victim-delete-cancel]')?.setAttribute('href', cancelHref)
     const card = document.querySelector('[data-oa-victim-delete-card]')

@@ -39,7 +39,9 @@
       <button type="button" class="assessment-research-changelog__control" aria-pressed="true" data-changelog-filter="all">All</button>
       <button type="button" class="assessment-research-changelog__control assessment-research-changelog__control--cd" aria-pressed="false" data-changelog-filter="CD">CD</button>
       <button type="button" class="assessment-research-changelog__control assessment-research-changelog__control--ixd" aria-pressed="false" data-changelog-filter="IxD">IxD</button>
-      <button type="button" class="assessment-research-changelog__control assessment-research-changelog__control--a11y" aria-pressed="false" data-changelog-filter="A11y">A11y</button>
+      {% if not changelogHideA11y %}
+        <button type="button" class="assessment-research-changelog__control assessment-research-changelog__control--a11y" aria-pressed="false" data-changelog-filter="A11y">A11y</button>
+      {% endif %}
     </div>
   </div>
   <p class="govuk-body assessment-research-changelog__empty" data-changelog-empty hidden>No changes match this filter.</p>

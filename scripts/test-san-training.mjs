@@ -34,6 +34,99 @@ const seedSession = (page, key, session) => page.evaluate(({ key, session }) => 
 const savedSession = (page, key) => page.evaluate(key => JSON.parse(sessionStorage.getItem(key)), key)
 
 for (const variant of variants) {
+  test(`${variant.name}: employment status wording matches its setting on question, summary and edit`, async () => withPage(async page => {
+    const heading = variant.name === 'community'
+      ? "What is Alex's current employment status?"
+      : "What was Alex's employment status before custody?"
+    const prefix = `${baseUrl}/san-training/${variant.name}/employment`
+    await seedSession(page, variant.key, {
+      employmentStatus: 'employed-or-self-employed', employmentHistory: 'continuous',
+      commitments: ['none'], qualifications: 'yes', qualificationsDetails: 'GCSEs in English and maths.',
+      skills: 'some', difficulties: ['none'], difficultyLevels: {},
+      employmentChanges: 'active', employmentChangesDetails: 'Looking for further training.'
+    })
+    await page.goto(prefix)
+    assert.equal(await page.locator('main h1:visible').innerText(), heading)
+    await page.goto(`${prefix}-summary`)
+    const row = page.locator('[data-ee-summary] .govuk-summary-list__row').first()
+    assert.equal(await row.locator('dt').innerText(), heading)
+    assert.equal(await row.locator('.govuk-summary-list__value').innerText(), 'Employed or self-employed')
+    await row.getByRole('link', { name: `Change ${heading}`, exact: true }).click()
+    await page.waitForURL(/employment(?:\.html)?\?from=summary#employment-status$/)
+    assert.equal(await page.locator('main h1:visible').innerText(), heading)
+    assert.equal(await page.locator('#employment-employed-or-self-employed').isChecked(), true)
+    await page.getByRole('button', { name: 'Save and continue', exact: true }).click()
+    await page.waitForURL(/employment-summary(?:\.html)?$/)
+    assert.equal(await row.locator('dt').innerText(), heading)
+    assert.equal((await savedSession(page, variant.key)).employmentStatus, 'employed-or-self-employed')
+  }))
+
+  for (const width of [1280, 390]) {
+    test(`${variant.name}/${width}: training key changes expand, filter and stay variant-specific`, async () => withPage(async page => {
+      await page.goto(`${baseUrl}/san#${variant.name}-training`)
+      const root = page.locator(`#${variant.name}-training [data-changelog]`)
+      const details = root.locator('[data-changelog-details]')
+      const toggle = root.locator('[data-changelog-details-toggle]')
+      const counts = variant.name === 'prison' ? { all: 23, CD: 14, IxD: 9 } : { all: 17, CD: 11, IxD: 6 }
+      assert.equal(await details.isVisible(), false)
+      assert.equal(await toggle.getAttribute('aria-controls'), `${variant.name}-training-changelog-details`)
+      assert.equal(await toggle.getAttribute('aria-expanded'), 'false')
+      assert.equal(await toggle.locator('[data-changelog-details-label]').innerText(), 'Show details')
+      assert.deepEqual(await root.locator('[data-changelog-filter]').allTextContents(), ['All', 'CD', 'IxD'])
+      assert.equal(await root.locator('[data-a11y], .assessment-research-changelog__tag--a11y').count(), 0)
+
+      await toggle.click()
+      assert.equal(await details.isVisible(), true)
+      assert.equal(await toggle.getAttribute('aria-expanded'), 'true')
+      assert.equal(await toggle.locator('[data-changelog-details-label]').innerText(), 'Hide details')
+      assert.equal(await root.locator('[data-changelog-panel="summary"]').isVisible(), true)
+      const iteration = root.locator('[data-iteration-tab="november-2026"]')
+      assert.equal(await iteration.locator('[data-count-for]').innerText(), String(counts.all))
+      await iteration.click()
+      const rows = root.locator('[data-change]')
+      assert.deepEqual(await rows.evaluateAll(rows => [...new Set(rows.map(row => row.dataset.section))]), [
+        'Offence analysis', 'Thinking, behaviours and attitudes', 'Personal relationships and community',
+        'Finances', 'Employment and education'
+      ])
+      const text = (await rows.allTextContents()).join(' ')
+      assert.ok(text.includes("Each 'Change' link opens the relevant victim page."))
+      assert.ok(text.includes("Children's cards are no longer shown on the summary page."))
+      assert.ok(text.includes("Only show the parenting responsibilities question when 'Yes' is selected"))
+      assert.equal(text.includes('important contacts in custody'), variant.name === 'prison')
+      assert.equal(text.includes('before custody'), variant.name === 'prison')
+      assert.equal(text.includes('day-to-day commitments'), variant.name === 'prison')
+      assert.equal(text.includes('Yes, were living together'), variant.name === 'prison')
+      assert.equal(text.includes('perpetrated strangulation or suffocation'), variant.name === 'community')
+      assert.equal(text.includes('TBC:'), variant.name === 'community')
+      assert.equal(text.includes("Restored 'What is Alex's current employment status?'"), variant.name === 'community')
+
+      for (const filter of ['CD', 'IxD', 'all']) {
+        await root.locator(`[data-changelog-filter="${filter}"]`).click()
+        assert.equal(await root.locator('[data-change]:visible').count(), counts[filter])
+        assert.equal(await iteration.locator('[data-count-for]').innerText(), String(counts[filter]))
+        assert.equal(await root.locator('[data-changelog-filter][aria-pressed="true"]').getAttribute('data-changelog-filter'), filter)
+        if (filter !== 'all') {
+          assert.deepEqual(await root.locator('[data-change]:visible').evaluateAll(rows => [...new Set(rows.map(row => row.dataset.changeType))]), [filter])
+        }
+        assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false)
+      }
+      await toggle.click()
+      assert.equal(await details.isVisible(), false)
+      await toggle.click()
+      assert.equal(await root.locator('[data-change]:visible').count(), counts.all)
+      assert.equal(await page.locator('[id]').evaluateAll(elements => {
+        const ids = elements.map(element => element.id)
+        return ids.length === new Set(ids).size
+      }), true)
+      for (const name of ['community', 'prison']) {
+        assert.deepEqual(await page.locator(`#${name}-research [data-changelog-filter]`).allTextContents(), ['All', 'CD', 'IxD', 'A11y'])
+        assert.equal(await page.locator(`#${name}-research [data-changelog-filter][aria-pressed="true"]`).getAttribute('data-changelog-filter'), 'all')
+      }
+    }, { viewport: { width, height: 900 } }))
+  }
+}
+
+for (const variant of variants) {
   for (const risk of ['yes', 'no']) {
     test(`${variant.name} thinking changes/${risk}: standalone step, resume, back links, summary edits and completion`, async () => withPage(async page => {
       const prefix = `${baseUrl}/san-training/${variant.name}/thinking-behaviours`
@@ -72,6 +165,11 @@ for (const variant of variants) {
       assert.equal(await page.locator('#changes-thinking-details').inputValue(), 'Considering support with decision making.')
       await submit.click()
       await page.waitForURL(`${prefix}-sexual.html`)
+      for (const [width, fontSize] of [[390, '27px'], [1280, '36px']]) {
+        await page.setViewportSize({ width, height: 900 })
+        const heading = page.getByRole('heading', { name: 'Risk of sexual harm', level: 1, exact: true })
+        assert.equal(await heading.evaluate(element => getComputedStyle(element).fontSize), fontSize)
+      }
       await page.locator(`#sexual-concerns-${risk}`).check()
       await submit.click()
       if (risk === 'yes') {
@@ -610,16 +708,21 @@ test('every journey PNG is a verified capture of its own training variant, not a
       assert.deepEqual([...new Set(captures.filter(capture => capture.section === section.id).map(capture => capture.scenario))], section.scenarios)
       for (const scenario of section.scenarios) {
         const journey = captures.filter(capture => capture.section === section.id && capture.scenario === scenario)
+        if (section.id === 'employment') {
+          assert.equal(journey[0].title, variant === 'community'
+            ? "What is Alex's current employment status?"
+            : "What was Alex's employment status before custody?")
+        }
         if (section.id === 'relationships') {
           const screens = journey.filter(capture => capture.stage === 'questions').map(capture =>
             new URL(capture.url).pathname.split('/').pop().replace(/\.html$/, '').replace('personal-relationships-', ''))
           assert.deepEqual(screens, scenario === '01-children-and-abuse'
-            ? ['children', 'child-details', 'children-list', 'child-delete', 'questions', 'perpetrator',
+            ? ['children', 'child-details', 'questions', 'perpetrator',
                 'domestic-abuse', 'strangulation', 'victim', 'victim-who', 'changes']
             : ['children', 'questions', 'perpetrator', 'victim', 'changes'],
           `${variant}/${scenario}: incorrect relationship screen sequence`)
           if (scenario === '01-children-and-abuse') {
-            assert.equal(journey[9].title, 'Who committed the abuse against Alex?')
+            assert.equal(journey.find(capture => new URL(capture.url).pathname.endsWith('/personal-relationships-victim-who.html')).title, 'Who committed the abuse against Alex?')
           }
         }
         if (section.id === 'thinking') {
@@ -630,6 +733,7 @@ test('every journey PNG is a verified capture of its own training variant, not a
             ...(scenario === '02-risk-sexual-harm' ? ['thinking-behaviours-sexual-harm'] : [])
           ], `${variant}/${scenario}: incorrect thinking screen sequence`)
           assert.equal(journey[1].title, 'Does Alex want to make changes to their thinking, behaviours and attitudes?')
+          assert.equal(journey[2].title, 'Risk of sexual harm')
         }
         const final = journey.at(-1)
         assert.equal(final.stage, 'complete', `${variant}/${section.id}/${scenario}`)
@@ -669,7 +773,15 @@ test('every journey PNG is a verified capture of its own training variant, not a
     }
     if (variant === 'prison') {
       assert.ok(paths.some(path => path.endsWith('/drugs-custody')))
+      assert.equal(captures.filter(capture => capture.section === 'finances' && new URL(capture.url).pathname.replace(/\.html$/, '').endsWith('/finances-custody-income')).length, 2)
+      assert.ok(captures.some(capture => capture.title === 'Where does Alex get their money from in custody?'))
+      assert.ok(captures.some(capture => capture.title === "What was Alex's employment status before custody?"))
       assert.ok(captures.some(capture => new URL(capture.url).searchParams.get('step') === 'release-plans'))
+    }
+    for (const section of reference) {
+      const files = (await readdir(new URL(`images/${section.id}/`, directory))).filter(file => file.endsWith('.png')).sort()
+      assert.deepEqual(files, captures.filter(capture => capture.section === section.id).map(capture => capture.file).sort(),
+        `${variant}/${section.id}: stale or missing PNGs`)
     }
   }
 }))

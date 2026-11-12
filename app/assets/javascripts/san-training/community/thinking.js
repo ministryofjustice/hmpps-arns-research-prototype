@@ -47,7 +47,7 @@ const QUESTIONS = [
     some: 'Some indications',
     significant: 'Significant indications'
   }],
-  ['thinkingTemper', 'temper', 'thinking_temper', 'How well does Alex manage anger, frustration and conflict?', 'Select how well they manage anger, frustration and conflict', {
+  ['thinkingTemper', 'temper', 'thinking_temper', 'Is Alex able to manage their anger, frustration and conflict?', 'Select if they are able to manage their anger, frustration and conflict', {
     well: 'Yes, manages these well',
     sometimes: 'Yes, sometimes able to manage these',
     often: 'No, is not able to manage these'

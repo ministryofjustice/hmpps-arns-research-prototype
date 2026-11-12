@@ -56,45 +56,6 @@
     </fieldset>
   </div>
 
-  <div class="govuk-form-group" data-ee-question="commitments" data-san-error-group="commitments" hidden>
-    <fieldset class="govuk-fieldset" id="commitments" aria-describedby="commitments-hint">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Does Alex have any additional day-to-day commitments?</h2>
-      </legend>
-      <div id="commitments-hint" class="govuk-hint">Select all that apply.</div>
-      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-        {% set commitmentOptions = [
-          { id: "caring", label: "Caring responsibilities", details: true },
-          { id: "child", label: "Child responsibilities", details: true },
-          { id: "studying", label: "Studying", details: false },
-          { id: "volunteering", label: "Volunteering", details: true },
-          { id: "other", label: "Other", details: true },
-          { id: "unknown", label: "Unknown", details: false }
-        ] %}
-        {% for option in commitmentOptions %}
-        <div class="govuk-checkboxes__item">
-          <input class="govuk-checkboxes__input" id="commitment-{{ option.id }}" name="commitments" type="checkbox" value="{{ option.id }}"{% if option.details %} data-aria-controls="conditional-commitment-{{ option.id }}"{% endif %}>
-          <label class="govuk-label govuk-checkboxes__label" for="commitment-{{ option.id }}">{{ option.label }}</label>
-        </div>
-        {% if option.details %}
-        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-commitment-{{ option.id }}">
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="commitment-{{ option.id }}-details">Give details (optional)</label>
-            <textarea class="govuk-textarea" id="commitment-{{ option.id }}-details" name="commitment_{{ option.id }}_details" rows="5" maxlength="2000"></textarea>
-            <div class="govuk-hint san-character-count" data-san-character-count="commitment-{{ option.id }}-details">You have 2,000 characters remaining</div>
-          </div>
-        </div>
-        {% endif %}
-        {% endfor %}
-        <div class="govuk-checkboxes__divider">or</div>
-        <div class="govuk-checkboxes__item">
-          <input class="govuk-checkboxes__input" id="commitment-none" name="commitments" type="checkbox" value="none" data-behaviour="exclusive">
-          <label class="govuk-label govuk-checkboxes__label" for="commitment-none">No additional day-to-day commitments</label>
-        </div>
-      </div>
-    </fieldset>
-  </div>
-
   <div class="govuk-form-group" data-ee-question="qualifications" data-san-error-group="qualifications" hidden>
     <fieldset class="govuk-fieldset" id="qualifications" aria-describedby="qualifications-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
@@ -177,7 +138,7 @@
         <div class="govuk-checkboxes__divider">or</div>
         <div class="govuk-checkboxes__item">
           <input class="govuk-checkboxes__input" id="difficulty-none" name="difficulties" type="checkbox" value="none" data-behaviour="exclusive">
-          <label class="govuk-label govuk-checkboxes__label" for="difficulty-none">No</label>
+          <label class="govuk-label govuk-checkboxes__label" for="difficulty-none">No support needed with reading, writing or numeracy</label>
         </div>
       </div>
     </fieldset>

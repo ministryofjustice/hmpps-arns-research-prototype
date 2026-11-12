@@ -38,13 +38,13 @@
   <div class="govuk-form-group" data-pc-question="parenting" data-san-error-group="relationships-parenting" hidden>
     <fieldset class="govuk-fieldset" id="relationships-parenting" aria-describedby="relationships-parenting-hint">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">Is Alex able to manage their parenting responsibilities?</h2>
+        <h2 class="govuk-fieldset__heading">Was Alex able to manage their parenting responsibilities?</h2>
       </legend>
-      <div id="relationships-parenting-hint" class="govuk-hint">If there are parenting concerns, it does not always mean there are child wellbeing concerns. They may just require some help or support.</div>
+      <div id="relationships-parenting-hint" class="govuk-hint">If there were parenting concerns, it does not always mean there were child wellbeing concerns. They may have just required some help or support.</div>
       <div class="govuk-radios" data-module="govuk-radios">
-        {{ radioOption("relationships_parenting", "parenting-yes", "yes", "Yes, manages parenting responsibilities well", "", true, "") | safe }}
-        {{ radioOption("relationships_parenting", "parenting-sometimes", "sometimes", "Sometimes manages parenting responsibilities well", "", true, "") | safe }}
-        {{ radioOption("relationships_parenting", "parenting-no", "no", "No, is not able to manage parenting responsibilities", "", true, "") | safe }}
+        {{ radioOption("relationships_parenting", "parenting-yes", "yes", "Yes, managed parenting responsibilities well", "", true, "") | safe }}
+        {{ radioOption("relationships_parenting", "parenting-sometimes", "sometimes", "Sometimes managed parenting responsibilities well", "", true, "") | safe }}
+        {{ radioOption("relationships_parenting", "parenting-no", "no", "No, was not able to manage parenting responsibilities", "", true, "") | safe }}
         {{ radioOption("relationships_parenting", "parenting-unknown", "unknown", "Unknown", "", false, "") | safe }}
       </div>
     </fieldset>
@@ -112,8 +112,8 @@
         <h2 class="govuk-fieldset__heading">Does Alex currently have a partner?</h2>
       </legend>
       <div class="govuk-radios" data-module="govuk-radios">
-        {{ radioOption("relationships_partner", "partner-together", "together", "Yes, living together", "", false, "") | safe }}
-        {{ radioOption("relationships_partner", "partner-apart", "apart", "Yes, not living together", "", false, "") | safe }}
+        {{ radioOption("relationships_partner", "partner-together", "together", "Yes, were living together", "", false, "") | safe }}
+        {{ radioOption("relationships_partner", "partner-apart", "apart", "Yes, were not living together", "", false, "") | safe }}
         {{ radioOption("relationships_partner", "partner-none", "none", "No", "", false, "") | safe }}
       </div>
     </fieldset>

@@ -83,7 +83,7 @@ const DIFFICULTY_LABELS = {
   reading: 'Yes, with reading',
   writing: 'Yes, with writing',
   numeracy: 'Yes, with numeracy',
-  none: 'No'
+  none: 'No support needed with reading, writing or numeracy'
 }
 
 const LEVEL_LABELS = {
