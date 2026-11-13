@@ -961,6 +961,14 @@ $desktop: 48.0625em;
     font-size: 1.1875rem;
   }
 
+  &__start-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px 20px;
+    flex-wrap: wrap;
+  }
+
   &__start-card .assessment-research-changelog,
   &__start-card-meta {
     margin-top: 20px;
