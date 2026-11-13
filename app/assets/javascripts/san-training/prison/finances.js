@@ -2,7 +2,7 @@
 // Finances — Prototype 1 (Community) Strengths and needs.
 //
 // Pages: finances.html → finances-overreliant.html if income includes family
-// → finances-assessment.html. Further questions (money, debt, debt types, changes)
+// → finances-custody-income.html → finances-assessment.html. Further questions (money, debt, debt types, changes)
 // only run when the practitioner says a further assessment is needed.
 //
 
@@ -16,6 +16,8 @@ const EXAMPLE_COMPLETE = {
   financeIncomeOther: '',
   financeOverreliant: 'no',
   financeOverreliantDetails: '',
+  financeCustodyIncome: ['pension', 'unemployment-pay'],
+  financeCustodyIncomeOther: '',
   financeFurtherAssessment: 'yes',
   financeFurtherAssessmentDetails: '',
   financeMoneyManagement: 'necessities',
@@ -49,6 +51,16 @@ const INCOME_LABELS = {
   none: 'No current source of money'
 }
 
+const CUSTODY_INCOME_LABELS = {
+  employment: 'Employment',
+  family: 'Family and friends',
+  pension: 'Private pension',
+  'unemployment-pay': 'Unemployment pay',
+  other: 'Other',
+  none: 'No money',
+  unknown: 'Unknown'
+}
+
 const needsOverreliant = (session) => Array.isArray(session.financeIncome) && session.financeIncome.includes('family')
 
 const overreliantTriggerChanged = (next, previous) => needsOverreliant(next) !== needsOverreliant(previous)
@@ -74,7 +86,7 @@ const MONEY_LABELS = {
 const DEBT_LABELS = {
   own: 'Yes, their own debt',
   someone: "Yes, someone else's debt",
-  no: 'No',
+  no: 'No, not affected by debt',
   unknown: 'Unknown'
 }
 
@@ -111,6 +123,7 @@ const followOnAnswered = (session) => {
 const questionsAnswered = (session) => {
   if (!(Array.isArray(session.financeIncome) && session.financeIncome.length)) return false
   if (needsOverreliant(session) && !session.financeOverreliant) return false
+  if (!(Array.isArray(session.financeCustodyIncome) && session.financeCustodyIncome.length)) return false
   if (!session.financeFurtherAssessment) return false
   if (skipsFurtherFinance(session)) return true
   if (!followOnAnswered(session)) return false
@@ -130,6 +143,7 @@ const nextFollowOnPage = (session, fromSummaryFlow = false) => {
 const continueHref = (session) => {
   if (!(Array.isArray(session.financeIncome) && session.financeIncome.length)) return 'finances.html'
   if (needsOverreliant(session) && !session.financeOverreliant) return 'finances-overreliant.html'
+  if (!(Array.isArray(session.financeCustodyIncome) && session.financeCustodyIncome.length)) return 'finances-custody-income.html'
   if (!session.financeFurtherAssessment) return 'finances-assessment.html'
   if (session.financeFurtherAssessment === 'yes' && !followOnAnswered(session)) return nextFollowOnPage(session)
   return 'finances.html'
@@ -167,7 +181,7 @@ const financeRows = (session) => {
       if (value === 'other' && session.financeIncomeOther) lines.push(session.financeIncomeOther)
     })
     rows.push(summaryRow(
-      'Where does Alex currently get their money from?',
+      'Where did Alex get their money from before custody?',
       lines,
       summaryChangeHref('finances', 'income')
     ))
@@ -179,10 +193,23 @@ const financeRows = (session) => {
       overreliantLines.push(session.financeOverreliantDetails)
     }
     rows.push(summaryRow(
-      'Is Alex over-reliant on family or friends for money?',
+      'Was Alex over-reliant on family or friends for money before custody?',
       overreliantLines,
       summaryChangeHref('finances-overreliant', 'overreliant'),
       { secondaryFrom: 1 }
+    ))
+  }
+
+  if (Array.isArray(session.financeCustodyIncome) && session.financeCustodyIncome.length) {
+    const lines = []
+    session.financeCustodyIncome.forEach((value) => {
+      lines.push(labelled(CUSTODY_INCOME_LABELS, value))
+      if (value === 'other' && session.financeCustodyIncomeOther) lines.push(session.financeCustodyIncomeOther)
+    })
+    rows.push(summaryRow(
+      'Where does Alex get their money from in custody?',
+      lines,
+      summaryChangeHref('finances-custody-income', 'custody-income')
     ))
   }
 
@@ -400,6 +427,14 @@ const readQuestionAnswers = () => {
   }
 }
 
+const readCustodyIncomeAnswers = () => {
+  const financeCustodyIncome = checkedValues('custody_income')
+  return {
+    financeCustodyIncome,
+    financeCustodyIncomeOther: financeCustodyIncome.includes('other') ? fieldValue('custody-income-other-details') : ''
+  }
+}
+
 const readAssessmentAnswers = () => {
   const financeFurtherAssessment = checkedValue('further_assessment')
   const answers = {
@@ -570,16 +605,25 @@ const validateOverreliant = (answers) => {
     errors.push({
       group: 'overreliant',
       href: '#overreliant',
-      text: 'Select if Alex is over-reliant on family or friends for money'
+      text: 'Select if Alex was over-reliant on family or friends for money before custody'
     })
   } else if (answers.financeOverreliant === 'yes' && !answers.financeOverreliantDetails) {
     errors.push({
       group: 'overreliant-details',
       href: '#overreliant-yes-details',
-      text: 'Enter details about Alex being over-reliant on family or friends for money'
+      text: 'Enter details about Alex being over-reliant on family or friends for money before custody'
     })
   }
   return errors
+}
+
+const validateCustodyIncome = (answers) => {
+  if (answers.financeCustodyIncome.length) return []
+  return [{
+    group: 'custody-income',
+    href: '#custody-income',
+    text: "Select where Alex gets their money from in custody"
+  }]
 }
 
 const validateAnalysis = (answers) => {
@@ -647,6 +691,11 @@ const restoreOverreliant = (session) => {
   if (session.financeOverreliant === 'yes') setField('overreliant-yes-details', session.financeOverreliantDetails)
 }
 
+const restoreCustodyIncome = (session) => {
+  selectChecks('custody_income', session.financeCustodyIncome)
+  setField('custody-income-other-details', session.financeCustodyIncomeOther)
+}
+
 const restoreAnalysis = (session) => {
   selectRadio('analysis_strengths', session.financeAnalysisStrengths)
   if (session.financeAnalysisStrengths) setField(`analysis-strengths-${session.financeAnalysisStrengths}-details`, session.financeAnalysisStrengthsDetails)
@@ -700,6 +749,18 @@ const initFinances = () => {
     }
     restoreOverreliant(session)
   }
+  if (pageName === 'custody-income') {
+    if (!(Array.isArray(session.financeIncome) && session.financeIncome.length)) {
+      window.location.assign('finances.html')
+      return
+    }
+    if (!fromSummary() && needsOverreliant(session) && !session.financeOverreliant) {
+      window.location.assign('finances-overreliant')
+      return
+    }
+    restoreCustodyIncome(session)
+    if (!fromSummary()) ensureBackLink(needsOverreliant(session) ? 'finances-overreliant.html' : 'finances.html')
+  }
   if (pageName === 'assessment') {
     if (!(Array.isArray(session.financeIncome) && session.financeIncome.length)) {
       window.location.assign('finances.html')
@@ -707,6 +768,10 @@ const initFinances = () => {
     }
     if (!fromSummary() && needsOverreliant(session) && !session.financeOverreliant) {
       window.location.assign('finances-overreliant')
+      return
+    }
+    if (!fromSummary() && !(Array.isArray(session.financeCustodyIncome) && session.financeCustodyIncome.length)) {
+      window.location.assign('finances-custody-income')
       return
     }
     restoreAssessment(session)
@@ -798,6 +863,10 @@ const initFinances = () => {
     const next = { ...previous, ...nextAnswers }
     if (needsOverreliant(next) && (!fromSummary() || overreliantTriggerChanged(next, previous) || !next.financeOverreliant)) {
       window.location.assign(fromSummary() ? 'finances-overreliant?from=summary' : 'finances-overreliant')
+      return
+    }
+    if (!fromSummary() || !(Array.isArray(next.financeCustodyIncome) && next.financeCustodyIncome.length)) {
+      window.location.assign(fromSummary() ? 'finances-custody-income?from=summary' : 'finances-custody-income')
       return
     }
     if (!fromSummary() || !next.financeFurtherAssessment) {
@@ -920,6 +989,26 @@ const initFinances = () => {
     revealCheckedConditionals()
     const answers = readOverreliantAnswers()
     const errors = validateOverreliant(answers)
+    if (errors.length) {
+      showErrors(errors)
+      return
+    }
+    clearErrors()
+    const previous = getSanSession()
+    setSanSession({ ...answers, financeComplete: false })
+    if (!fromSummary() || !(Array.isArray(previous.financeCustodyIncome) && previous.financeCustodyIncome.length)) {
+      window.location.assign(fromSummary() ? 'finances-custody-income?from=summary' : 'finances-custody-income')
+      return
+    }
+    window.location.assign('finances-summary.html')
+  })
+
+  const custodyIncomeForm = document.getElementById('san-finances-custody-income-form')
+  custodyIncomeForm?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    revealCheckedConditionals()
+    const answers = readCustodyIncomeAnswers()
+    const errors = validateCustodyIncome(answers)
     if (errors.length) {
       showErrors(errors)
       return

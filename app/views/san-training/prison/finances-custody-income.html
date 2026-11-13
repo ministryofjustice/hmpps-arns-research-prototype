@@ -1,0 +1,67 @@
+{% extends "san-training/prison/layout.html" %}
+
+{% set pageName = "Finances" %}
+{% set sanCaption = "Finances" %}
+{% set sanSection = "finances" %}
+{% set backLinkHref = "finances.html" %}
+
+{% block content %}
+
+{% include "san-training/prison/includes/assessment-journey-page-open.html" %}
+
+<div data-san-error-summary hidden></div>
+{% include "san-training/prison/includes/content-header.html" %}
+
+<form id="san-finances-custody-income-form" novalidate data-fi-page="custody-income">
+  <div class="govuk-form-group" data-san-error-group="custody-income">
+    <fieldset class="govuk-fieldset" id="custody-income" aria-describedby="custody-income-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">Where does Alex get their money from in custody?</h1>
+      </legend>
+      <div id="custody-income-hint" class="govuk-hint">Select all that apply.</div>
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="custody-income-employment" name="custody_income" type="checkbox" value="employment">
+          <label class="govuk-label govuk-checkboxes__label" for="custody-income-employment">Employment</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="custody-income-family" name="custody_income" type="checkbox" value="family">
+          <label class="govuk-label govuk-checkboxes__label" for="custody-income-family">Family and friends</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="custody-income-pension" name="custody_income" type="checkbox" value="pension">
+          <label class="govuk-label govuk-checkboxes__label" for="custody-income-pension">Private pension</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="custody-income-unemployment-pay" name="custody_income" type="checkbox" value="unemployment-pay">
+          <label class="govuk-label govuk-checkboxes__label" for="custody-income-unemployment-pay">Unemployment pay</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="custody-income-other" name="custody_income" type="checkbox" value="other" data-aria-controls="conditional-custody-income-other">
+          <label class="govuk-label govuk-checkboxes__label" for="custody-income-other">Other</label>
+        </div>
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-custody-income-other">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="custody-income-other-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="custody-income-other-details" name="custody_income_other_details" rows="5" maxlength="400"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="custody-income-other-details">You have 400 characters remaining</div>
+          </div>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="custody-income-none" name="custody_income" type="checkbox" value="none" data-behaviour="exclusive">
+          <label class="govuk-label govuk-checkboxes__label" for="custody-income-none">No money</label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="custody-income-unknown" name="custody_income" type="checkbox" value="unknown">
+          <label class="govuk-label govuk-checkboxes__label" for="custody-income-unknown">Unknown</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <button type="submit" class="govuk-button" data-module="govuk-button">Save and continue</button>
+</form>
+
+{% include "san-training/prison/includes/assessment-page-close.html" %}
+
+{% endblock %}

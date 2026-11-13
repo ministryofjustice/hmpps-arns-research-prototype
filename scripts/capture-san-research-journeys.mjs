@@ -231,7 +231,7 @@ const sections = [
         steps: [
           {
             slug: 'status',
-            title: "What is Alex's current employment status?",
+            title: "What was Alex's employment status before custody?",
             note: 'Employed or self-employed',
             fill: async (page) => { await click(page, 'employment-employed-or-self-employed') }
           },
@@ -259,7 +259,7 @@ const sections = [
         steps: [
           {
             slug: 'status',
-            title: "What is Alex's current employment status?",
+            title: "What was Alex's employment status before custody?",
             note: 'Unemployed',
             fill: async (page) => { await click(page, 'employment-unemployed') }
           },

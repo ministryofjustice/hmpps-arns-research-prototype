@@ -297,7 +297,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "19f5ec632db4bbeec40ad372c1f9381123041532a8c422ffa020f0070ceda38f"
+    "sha256": "38cca79c0fbeeda01d1693a2a0de181c7cda73c79d72b3765956b6b1ead7eef8"
   },
   {
     "section": "employment",
@@ -327,7 +327,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "1801224ba09552b8d7d5656685baa0f0d62d661cdcee64ce184aa6733ddc03ae"
+    "sha256": "edcd2898913d35a2ffeae7801603ba7519a18e78c14f58eb85e34dcc9cfe919c"
   },
   {
     "section": "employment",
@@ -417,7 +417,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "459d9cbcb6ccb1dc579fc5e345cdd3da8ef3f90f97e8c55a7a7a7fe410bd73c5"
+    "sha256": "accde848c454277f3c02cc1534efc819cf8020e4b79cdb078a7b53aa36b7654d"
   },
   {
     "section": "employment",
@@ -447,7 +447,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "f2b2e0460aa594e06695852cdc562e750d89a1c66df9092b516d83f19d3d9c27"
+    "sha256": "01dc9663ea401e8d649bafd38c36af79a34a479e3575c4dde7d81f9578d04b44"
   },
   {
     "section": "employment",
@@ -522,7 +522,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "2211183c5462b74c6fa31e8f93b37678cebee9900d59884c3cf2b52a43f60938"
+    "sha256": "42376d80af5cecd5ec224f1805199cb241e6baa991e5cdc204bdb0c6cb0362b7"
   },
   {
     "section": "employment",
@@ -642,7 +642,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "69190b1f456acbaef16410fde254828e7a6da3236fa5c2061b99e408c6a4e368"
+    "sha256": "57b1b553b01a70502311672cc86c3780c6bf58bb0b577f786ec2d98ebc024763"
   },
   {
     "section": "finances",
@@ -672,7 +672,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "6749894ab8ac4c24856657c247e2a3444a575832208283889c7bac30798b9dfc"
+    "sha256": "3b20c4ed352cb97c143fa539758c612267c6ea9da67892ef9f4e429bee599228"
   },
   {
     "section": "finances",
@@ -687,7 +687,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "a1f80e00ad8b5aaeb52922d764c073a552da0f64e5aa96a23418413d5d7e9f24"
+    "sha256": "d5e8720bbe2d286a1c17a926be36dcbb87dafbc5fb4be9f70159b8a190b0773f"
   },
   {
     "section": "finances",
@@ -792,7 +792,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "7223a9a86adffc4f30b2b68d1b1b355e74c65033e125394acd0dc6789c179823"
+    "sha256": "b39614898dfbdb86742d80695b44cf9bb9ea477bec1f1b5b7e6d9542533a3362"
   },
   {
     "section": "finances",
@@ -1623,66 +1623,36 @@
     "section": "relationships",
     "scenario": "01-children-and-abuse",
     "file": "01-children-and-abuse__01__personal-relationships-children.png",
-    "title": "Are there any children in Alex's life?",
+    "title": "Are there any children in Alex’s life?",
     "url": "http://localhost:3000/san-training/community/personal-relationships-children",
     "note": "",
-    "heading": "Are there any children in Alex's life?",
+    "heading": "Are there any children in Alex’s life?",
     "tab": "",
     "stage": "questions",
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "035f5884d4068edbe8a606fc4128e1642aa9a38bb4dc441547816f04f4e364d1"
+    "sha256": "78dfd3107df5374e600c23d287459ef1467fe958ca32a1fa7f707211cf68abc9"
   },
   {
     "section": "relationships",
     "scenario": "01-children-and-abuse",
     "file": "01-children-and-abuse__02__personal-relationships-child-details.png",
-    "title": "What are the children's details?",
-    "url": "http://localhost:3000/san-training/community/personal-relationships-child-details?child=0",
+    "title": "Does Alex have any parenting responsibilities?",
+    "url": "http://localhost:3000/san-training/community/personal-relationships-child-details.html",
     "note": "",
-    "heading": "What are the children's details?",
+    "heading": "Does Alex have any parenting responsibilities?",
     "tab": "",
     "stage": "questions",
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "cc9749e828f4aebfbd308a943d8f26770cc2fee228371921a54b9f3625ff6d37"
+    "sha256": "4dad94e2d441a54a5837fed6762aed279aa6bdf75e537606ab1945ddb444b504"
   },
   {
     "section": "relationships",
     "scenario": "01-children-and-abuse",
-    "file": "01-children-and-abuse__03__personal-relationships-children-list.png",
-    "title": "You have added 1 child",
-    "url": "http://localhost:3000/san-training/community/personal-relationships-children-list.html",
-    "note": "",
-    "heading": "You have added 1 child",
-    "tab": "",
-    "stage": "questions",
-    "complete": false,
-    "answeredAnalysisQuestions": 0,
-    "phase": "beta",
-    "sha256": "2c21580a5c3a4c58dd77e67e52f971e128af0614fa0ebaa8af13f59a5b02d405"
-  },
-  {
-    "section": "relationships",
-    "scenario": "01-children-and-abuse",
-    "file": "01-children-and-abuse__04__personal-relationships-child-delete.png",
-    "title": "Confirm you want to delete Example child's details",
-    "url": "http://localhost:3000/san-training/community/personal-relationships-child-delete?child=0",
-    "note": "",
-    "heading": "Confirm you want to delete Example child's details",
-    "tab": "",
-    "stage": "questions",
-    "complete": false,
-    "answeredAnalysisQuestions": 0,
-    "phase": "beta",
-    "sha256": "26acf4bff6c6671360f3cacf5add2a33f90fa1f1916032c884ec14a0deb6c68d"
-  },
-  {
-    "section": "relationships",
-    "scenario": "01-children-and-abuse",
-    "file": "01-children-and-abuse__05__personal-relationships-questions.png",
+    "file": "01-children-and-abuse__03__personal-relationships-questions.png",
     "title": "Personal relationships and community",
     "url": "http://localhost:3000/san-training/community/personal-relationships-questions.html",
     "note": "",
@@ -1697,7 +1667,7 @@
   {
     "section": "relationships",
     "scenario": "01-children-and-abuse",
-    "file": "01-children-and-abuse__06__personal-relationships-perpetrator.png",
+    "file": "01-children-and-abuse__04__personal-relationships-perpetrator.png",
     "title": "Is there evidence that Alex has ever been a perpetrator of domestic abuse?",
     "url": "http://localhost:3000/san-training/community/personal-relationships-perpetrator.html",
     "note": "",
@@ -1712,7 +1682,7 @@
   {
     "section": "relationships",
     "scenario": "01-children-and-abuse",
-    "file": "01-children-and-abuse__07__personal-relationships-domestic-abuse.png",
+    "file": "01-children-and-abuse__05__personal-relationships-domestic-abuse.png",
     "title": "Personal relationships and community",
     "url": "http://localhost:3000/san-training/community/personal-relationships-domestic-abuse.html",
     "note": "",
@@ -1727,22 +1697,22 @@
   {
     "section": "relationships",
     "scenario": "01-children-and-abuse",
-    "file": "01-children-and-abuse__08__personal-relationships-strangulation.png",
-    "title": "Is there evidence that Alex has used strangulation or suffocation?",
+    "file": "01-children-and-abuse__06__personal-relationships-strangulation.png",
+    "title": "Is there evidence that Alex has perpetrated strangulation or suffocation?",
     "url": "http://localhost:3000/san-training/community/personal-relationships-strangulation.html",
     "note": "",
-    "heading": "Is there evidence that Alex has used strangulation or suffocation?",
+    "heading": "Is there evidence that Alex has perpetrated strangulation or suffocation?",
     "tab": "",
     "stage": "questions",
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "7d7becd2430dfa4fc495fb4f9c6d9fa4d73f7c2876710a3708d70418f79cc1df"
+    "sha256": "b3c8d64799eabc841677a60dd2c9b68093a5c8897c2bcf8a37ba4bee050fc057"
   },
   {
     "section": "relationships",
     "scenario": "01-children-and-abuse",
-    "file": "01-children-and-abuse__09__personal-relationships-victim.png",
+    "file": "01-children-and-abuse__07__personal-relationships-victim.png",
     "title": "Is there evidence that Alex has ever been a victim of domestic abuse?",
     "url": "http://localhost:3000/san-training/community/personal-relationships-victim.html",
     "note": "",
@@ -1757,7 +1727,7 @@
   {
     "section": "relationships",
     "scenario": "01-children-and-abuse",
-    "file": "01-children-and-abuse__10__personal-relationships-victim-who.png",
+    "file": "01-children-and-abuse__08__personal-relationships-victim-who.png",
     "title": "Who committed the abuse against Alex?",
     "url": "http://localhost:3000/san-training/community/personal-relationships-victim-who.html",
     "note": "",
@@ -1772,7 +1742,7 @@
   {
     "section": "relationships",
     "scenario": "01-children-and-abuse",
-    "file": "01-children-and-abuse__11__personal-relationships-changes.png",
+    "file": "01-children-and-abuse__09__personal-relationships-changes.png",
     "title": "Does Alex want to make changes to their personal relationships?",
     "url": "http://localhost:3000/san-training/community/personal-relationships-changes.html",
     "note": "",
@@ -1787,7 +1757,7 @@
   {
     "section": "relationships",
     "scenario": "01-children-and-abuse",
-    "file": "01-children-and-abuse__12__personal-relationships-summary-summary.png",
+    "file": "01-children-and-abuse__10__personal-relationships-summary-summary.png",
     "title": "Personal relationships and community - Summary",
     "url": "http://localhost:3000/san-training/community/personal-relationships-summary.html",
     "note": "",
@@ -1797,12 +1767,12 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "f5c195cda45840ed21b4b4b6e0bc6d1a3dc44fe8afebee300510baa90ad44e81"
+    "sha256": "138858394caf43c5729806e8b655d7e91ddddbeb70b15ba729cd6b49290a4a12"
   },
   {
     "section": "relationships",
     "scenario": "01-children-and-abuse",
-    "file": "01-children-and-abuse__13__personal-relationships-summary-analysis.png",
+    "file": "01-children-and-abuse__11__personal-relationships-summary-analysis.png",
     "title": "Personal relationships and community - Practitioner analysis",
     "url": "http://localhost:3000/san-training/community/personal-relationships-summary.html#practitioner-analysis",
     "note": "Practitioner analysis: answer the three questions.",
@@ -1817,7 +1787,7 @@
   {
     "section": "relationships",
     "scenario": "01-children-and-abuse",
-    "file": "01-children-and-abuse__14__personal-relationships-summary-analysis-answered.png",
+    "file": "01-children-and-abuse__12__personal-relationships-summary-analysis-answered.png",
     "title": "Personal relationships and community - Practitioner analysis",
     "url": "http://localhost:3000/san-training/community/personal-relationships-summary.html#practitioner-analysis",
     "note": "All three questions answered No. Select Mark as complete.",
@@ -1832,7 +1802,7 @@
   {
     "section": "relationships",
     "scenario": "01-children-and-abuse",
-    "file": "01-children-and-abuse__15__personal-relationships-summary-complete.png",
+    "file": "01-children-and-abuse__13__personal-relationships-summary-complete.png",
     "title": "Personal relationships and community - Practitioner analysis - Complete",
     "url": "http://localhost:3000/san-training/community/personal-relationships-summary.html#practitioner-analysis",
     "note": "Marked as complete. The blue tick confirms completion, which persists after refresh.",
@@ -1848,16 +1818,16 @@
     "section": "relationships",
     "scenario": "02-no-children",
     "file": "02-no-children__01__personal-relationships-children.png",
-    "title": "Are there any children in Alex's life?",
+    "title": "Are there any children in Alex’s life?",
     "url": "http://localhost:3000/san-training/community/personal-relationships-children",
     "note": "",
-    "heading": "Are there any children in Alex's life?",
+    "heading": "Are there any children in Alex’s life?",
     "tab": "",
     "stage": "questions",
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "5f934968eeb9e5332193ebb3ea8974dc519b989a48ff99004a996ec5f64b7835"
+    "sha256": "1f44d2134ae1b3f90cda19208db9549f2fa559bb0b5c8a4cea4c025fff2a165f"
   },
   {
     "section": "relationships",
@@ -1932,7 +1902,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "b646afa8f6b88ebedba0a62400282e5dec746ad11136c98466e5ded262409fe9"
+    "sha256": "e5f45c7276cecf986b00e8af50e0a21d655e7150b670460eae2810449e35a43e"
   },
   {
     "section": "relationships",
@@ -1992,7 +1962,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "153bf9173cd1c4b217758fbc52043d8c5d5834c4dd6cf887dbe99d74eec1ff8a"
+    "sha256": "e544f60eeab76c0bc4aa85e9ed60b196a73d590ec370dda6087df3592f3afbeb"
   },
   {
     "section": "thinking",
@@ -2013,16 +1983,16 @@
     "section": "thinking",
     "scenario": "01-no-sexual-harm",
     "file": "01-no-sexual-harm__03__thinking-behaviours-sexual.png",
-    "title": "Are there any concerns that Alex poses a risk of sexual harm to others?",
+    "title": "Risk of sexual harm",
     "url": "http://localhost:3000/san-training/community/thinking-behaviours-sexual.html",
     "note": "",
-    "heading": "Are there any concerns that Alex poses a risk of sexual harm to others?",
+    "heading": "Risk of sexual harm",
     "tab": "",
     "stage": "questions",
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "734307df9667b81cb44330f53e9e5e653da4253a83d0250392dda4459d1fbb5e"
+    "sha256": "d8262e5d45e6f6db454c1ab8d6e94cf2ea763623a3bfce282f679e2fe5ca9c84"
   },
   {
     "section": "thinking",
@@ -2037,7 +2007,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "ddfb442e42132c051732931601f7bf7432b995b89454e89afc090e637a90bea4"
+    "sha256": "8f77746efaa7677e891cfd80cdf87904ebe9e200aa4127dd84650e394123f6d0"
   },
   {
     "section": "thinking",
@@ -2097,7 +2067,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "153bf9173cd1c4b217758fbc52043d8c5d5834c4dd6cf887dbe99d74eec1ff8a"
+    "sha256": "e544f60eeab76c0bc4aa85e9ed60b196a73d590ec370dda6087df3592f3afbeb"
   },
   {
     "section": "thinking",
@@ -2118,16 +2088,16 @@
     "section": "thinking",
     "scenario": "02-risk-sexual-harm",
     "file": "02-risk-sexual-harm__03__thinking-behaviours-sexual.png",
-    "title": "Are there any concerns that Alex poses a risk of sexual harm to others?",
+    "title": "Risk of sexual harm",
     "url": "http://localhost:3000/san-training/community/thinking-behaviours-sexual.html",
     "note": "",
-    "heading": "Are there any concerns that Alex poses a risk of sexual harm to others?",
+    "heading": "Risk of sexual harm",
     "tab": "",
     "stage": "questions",
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "d4046654f82f2026c66bfceed52b01c300c9bad66226c96eb4a756ecea08099f"
+    "sha256": "92f8058a927290830d1d0d374b6e69c382b3009e41e0310e53ffa460bdeafaf5"
   },
   {
     "section": "thinking",
@@ -2157,7 +2127,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "7b3cd646ade789bb85fb457666fe5013bad5c7f815a5ab2bf8e504abbf53f427"
+    "sha256": "ce40b0e332b385eec8152bea0a9170e54d31d01472b3ce6be708a3d57a6cc870"
   },
   {
     "section": "thinking",
@@ -2217,7 +2187,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "0dbfa051f8e9334b80b5b9bf21e7ea0812e66464a65469b488fc32e2c09a3335"
+    "sha256": "148ecef8ca8999d5c6ae51847ccf34411c093d8e6fb0f2faff1694140139f48b"
   },
   {
     "section": "offence",
@@ -2238,31 +2208,31 @@
     "section": "offence",
     "scenario": "01-direct-victim",
     "file": "01-direct-victim__03__offence-analysis-victim-details.png",
-    "title": "You have added 1 victim",
+    "title": "Victims",
     "url": "http://localhost:3000/san-training/community/offence-analysis-victim-details.html",
     "note": "",
-    "heading": "You have added 1 victim",
+    "heading": "Victims",
     "tab": "",
     "stage": "questions",
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "5c69e602a760344edbf3bd9e1db7301771ba585315ea912e1192321fcb24af81"
+    "sha256": "06c093c3ed2cd2fd95e95e966546521d6f5ccff91097c4c4036a44bd8323f630"
   },
   {
     "section": "offence",
     "scenario": "01-direct-victim",
     "file": "01-direct-victim__04__offence-analysis-victim-delete.png",
-    "title": "Confirm you want to delete A stranger's details",
+    "title": "Confirm you want to delete this victim's details",
     "url": "http://localhost:3000/san-training/community/offence-analysis-victim-delete?victim=0",
     "note": "",
-    "heading": "Confirm you want to delete A stranger's details",
+    "heading": "Confirm you want to delete this victim's details",
     "tab": "",
     "stage": "questions",
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "4f8136c3c0e9390b2b8883c422f0c08e59f6e9645a8281919f86e799ef7488db"
+    "sha256": "d84e32ec026f77962507b4ce75e7aed60a32392b003a7c8325bd1c97b4a0c271"
   },
   {
     "section": "offence",
@@ -2307,7 +2277,7 @@
     "complete": true,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "5b1213489ae5d652421dac627116ea92daf92bd295ff0406811e4dd089809cfb"
+    "sha256": "1b179a2321f2f9405a7a3dbd539789d74cbd3d8e313fc964e0f086703f644501"
   },
   {
     "section": "offence",
@@ -2322,7 +2292,7 @@
     "complete": true,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "5b1213489ae5d652421dac627116ea92daf92bd295ff0406811e4dd089809cfb"
+    "sha256": "1b179a2321f2f9405a7a3dbd539789d74cbd3d8e313fc964e0f086703f644501"
   },
   {
     "section": "offence",
@@ -2337,7 +2307,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "6b65a35954bc22f13a2b8dd73f5875739476dcd124ad49e9b050b0745238efeb"
+    "sha256": "6135848c8b6d80de2e504bb9264671a4fc05bbb3e3c09ece8ae9354c8c6e70ac"
   },
   {
     "section": "offence",
@@ -2382,7 +2352,7 @@
     "complete": true,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "f1055d9f9b1d7181e4a0e2fde492f448be5956332eada2c10b0a8d2f77eeaeb9"
+    "sha256": "0f7b26a05bcd50e5ee1ef673d8633e94176a3ce8376d8f50adb3fc1a6823b8a1"
   },
   {
     "section": "offence",
@@ -2397,6 +2367,6 @@
     "complete": true,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "f1055d9f9b1d7181e4a0e2fde492f448be5956332eada2c10b0a8d2f77eeaeb9"
+    "sha256": "0f7b26a05bcd50e5ee1ef673d8633e94176a3ce8376d8f50adb3fc1a6823b8a1"
   }
 ]

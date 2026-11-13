@@ -13,8 +13,9 @@ import { applySanProgress } from './progress.js'
 
 // Display labels for children, people and domestic abuse answers.
 const CHILD_LABELS = {
-  yes: 'Yes',
-  no: 'No'
+  'lived-with': 'Yes, children they have lived with or plan to live with',
+  'not-lived-with': 'Yes, children they have not lived with or do not plan to live with',
+  no: 'No, there are no children in their life'
 }
 
 const CHILD_RELATIONSHIP_LABELS = {
@@ -106,13 +107,16 @@ const ABUSE_WHO_LABELS = {
 const applyProgress = (session) => applySanProgress(session, { current: 'relationships' })
 
 // Completeness for children cards, people, questions and the abuse branch.
-const hasChildren = (children) => (children || []).includes('yes')
+const hasChildren = (children) => (children || []).some((answer) => answer === 'lived-with' || answer === 'not-lived-with')
 
 const hasAnswers = (values) => Array.isArray(values) && values.length > 0
 
 const childrenList = (session) => Array.isArray(session.relationshipsChildrenList) ? session.relationshipsChildrenList : []
 
-const childrenDetailsComplete = (session) => !hasChildren(session.relationshipsChildren) || childrenList(session).length > 0
+const childrenDetailsComplete = (session) => (
+  !hasChildren(session.relationshipsChildren)
+  || !!session.relationshipsParenting
+)
 
 const childrenFlowComplete = (session) => hasAnswers(session.relationshipsChildren) && childrenDetailsComplete(session)
 
@@ -171,7 +175,7 @@ const focusChildField = (id) => {
 const questionsCoreAnswered = (session) => {
   if (!childrenFlowComplete(session)) return false
   if (!session.relationshipsHistory || !session.relationshipsPartner) return false
-  if (hasChildren(session.relationshipsChildren) && !session.relationshipsParenting) return false
+  if (hasChildren(session.relationshipsChildren) && !session.relationshipsParentingManagement) return false
   if (!session.relationshipsFamily || !session.relationshipsChildhood || !session.relationshipsChildhoodBehaviour || !session.relationshipsBelonging) return false
   return true
 }
@@ -245,14 +249,14 @@ const nextAfterDomesticAbuse = (session) => {
 }
 
 const questionsBackHref = (session) => (
-  hasChildren(session.relationshipsChildren) && childrenList(session).length
-    ? 'personal-relationships-children-list.html'
+  hasChildren(session.relationshipsChildren)
+    ? 'personal-relationships-child-details.html'
     : 'personal-relationships-children.html'
 )
 
 const nextIncompleteHref = (session) => {
   if (!hasAnswers(session.relationshipsChildren)) return 'personal-relationships-children.html'
-  if (hasChildren(session.relationshipsChildren) && !childrenList(session).length) return 'personal-relationships-child-details.html'
+  if (hasChildren(session.relationshipsChildren) && !childrenDetailsComplete(session)) return 'personal-relationships-child-details.html'
   if (!questionsCoreAnswered(session)) return 'personal-relationships-questions.html'
   if (!relationshipDescriptionComplete(session)) return 'personal-relationships-questions.html'
   if (!session.relationshipsBehaviour) return perpetratorHref
@@ -293,18 +297,31 @@ const childrenQuestionRow = (session) => {
   if (!Array.isArray(session.relationshipsChildren) || !session.relationshipsChildren.length) return ''
   return summaryRow(
     "Are there any children in Alex's life?",
-    [{ text: labelled(CHILD_LABELS, session.relationshipsChildren[0]) }],
+    session.relationshipsChildren.map((answer) => ({ text: labelled(CHILD_LABELS, answer) })),
     summaryChangeHref('personal-relationships-children', 'relationships-children')
   )
+}
+
+const childrenDetailRows = (session) => {
+  if (!hasChildren(session.relationshipsChildren)) return []
+  const rows = []
+  if (session.relationshipsParenting) {
+    rows.push(summaryRow(
+      'Does Alex have any parenting responsibilities?',
+      answerLines(labelled(YES_NO_UNKNOWN, session.relationshipsParenting), session.relationshipsParentingDetails),
+      summaryChangeHref('personal-relationships-child-details', 'relationships-parenting')
+    ))
+  }
+  return rows
 }
 
 const relationshipRows = (session) => {
   const rows = []
 
-  if (hasChildren(session.relationshipsChildren) && session.relationshipsParenting) {
+  if (hasChildren(session.relationshipsChildren) && session.relationshipsParentingManagement) {
     rows.push(summaryRow(
       'Is Alex able to manage their parenting responsibilities?',
-      answerLines(labelled(PARENTING_LABELS, session.relationshipsParenting), session.relationshipsParentingDetails),
+      answerLines(labelled(PARENTING_LABELS, session.relationshipsParentingManagement), session.relationshipsParentingManagementDetails),
       summaryChangeHref('personal-relationships-questions', 'relationships-parenting')
     ))
   }
@@ -393,7 +410,7 @@ const relationshipRows = (session) => {
 
   if (needsStrangulation(session) && session.relationshipsStrangulation) {
     rows.push(summaryRow(
-      'Is there evidence that Alex has used strangulation or suffocation?',
+      'Is there evidence that Alex has perpetrated strangulation or suffocation?',
       answerLines(labelled(YES_NO, session.relationshipsStrangulation), session.relationshipsStrangulationDetails),
       summaryChangeHref('personal-relationships-strangulation', 'relationships-strangulation')
     ))
@@ -462,10 +479,10 @@ const renderSummary = (session) => {
   const complete = !!session.relationshipsComplete
   const childrenRow = childrenQuestionRow(session)
   const rows = relationshipRows(session)
-  const cards = childrenCardsHtml(session)
+  const childrenRows = childrenDetailRows(session)
   const goButton = document.querySelector('[data-san-go-analysis]')
 
-  if (!childrenRow && !rows.length && !cards) {
+  if (!childrenRow && !childrenRows.length && !rows.length) {
     mount.innerHTML = `<p class="govuk-body">You have not answered these questions yet.</p>
       <p class="govuk-body"><a class="govuk-link" href="personal-relationships-children.html">Answer personal relationships and community questions</a></p>`
   } else {
@@ -474,7 +491,7 @@ const renderSummary = (session) => {
       followOn = `<p class="govuk-body"><a class="govuk-link" href="${nextIncompleteHref(session)}">Continue</a></p>`
     }
     const asList = (items) => items.length ? `<dl class="govuk-summary-list san-summary-list">${items.join('')}</dl>` : ''
-    mount.innerHTML = `${asList(childrenRow ? [childrenRow] : [])}${cards}${asList(rows)}${followOn}`
+    mount.innerHTML = `${asList(childrenRow ? [childrenRow] : [])}${asList(childrenRows)}${asList(rows)}${followOn}`
   }
 
   if (goButton) {
@@ -536,6 +553,8 @@ const emptyAnswers = () => ({
   relationshipsResolve: '',
   relationshipsParenting: '',
   relationshipsParentingDetails: '',
+  relationshipsParentingManagement: '',
+  relationshipsParentingManagementDetails: '',
   relationshipsFamily: '',
   relationshipsFamilyDetails: '',
   relationshipsChildhood: '',
@@ -570,90 +589,26 @@ const readPeople = () => {
 }
 
 const readChildren = () => {
-  const value = checkedValue('relationships_children')
-  return { relationshipsChildren: value ? [value] : [] }
+  return {
+    relationshipsChildren: checkedValues('relationships_children'),
+    relationshipsChildrenDetails: fieldValue('relationships-children-details')
+  }
 }
 
 const readChildDetails = () => ({
-  name: fieldValue('child-name'),
-  dobDay: fieldValue('child-dob-day'),
-  dobMonth: fieldValue('child-dob-month'),
-  dobYear: fieldValue('child-dob-year'),
-  age: fieldValue('child-age'),
-  sex: checkedValue('child_sex'),
-  address1: fieldValue('child-address1'),
-  address2: fieldValue('child-address2'),
-  town: fieldValue('child-town'),
-  county: fieldValue('child-county'),
-  postcode: fieldValue('child-postcode'),
-  livesWith: checkedValue('child_lives_with'),
-  parentalResponsibility: checkedValue('child_parental_responsibility'),
-  parentalResponsibilityDetails: checkedValue('child_parental_responsibility') === 'yes' ? fieldValue('child-parental-responsibility-details') : '',
-  relationship: checkedValue('child_relationship'),
-  relationshipDetails: checkedValue('child_relationship') === 'other' ? fieldValue('child-relationship-details') : '',
-  contact: checkedValue('child_contact')
+  relationshipsParenting: checkedValue('relationships_parenting'),
+  relationshipsParentingDetails: fieldValue('parenting-yes-details')
 })
 
-const validateChildDetails = (child) => {
+const validateChildDetails = (details) => {
   const errors = []
-  if (!child.name) {
-    errors.push({ group: 'child-name', href: '#child-name', text: "Enter the child's name, or enter 'Non-disclosable'" })
-  }
-  if (!child.relationship) {
-    errors.push({
-      group: 'child-relationship',
-      href: '#child-relationship',
-      text: "Select Alex's relationship or connection to this child"
-    })
-  }
-  if (!child.livesWith) {
-    errors.push({ group: 'child-lives-with', href: '#child-lives-with', text: 'Select yes if Alex lives with this child' })
-  }
-  if (!child.parentalResponsibility) {
-    errors.push({ group: 'child-parental-responsibility', href: '#child-parental-responsibility', text: 'Select yes if Alex has any parental responsibility for this child' })
-  } else if (child.parentalResponsibility === 'yes' && !child.parentalResponsibilityDetails) {
-    errors.push({
-      group: 'child-parental-responsibility-details',
-      href: '#child-parental-responsibility-details',
-      text: 'Give details of the parental responsibility'
-    })
-  }
-  if (child.relationship === 'other' && !child.relationshipDetails) {
-    errors.push({
-      group: 'child-relationship-details',
-      href: '#child-relationship-details',
-      text: 'Give details of the relationship or connection'
-    })
-  }
-  if (!child.contact) {
-    errors.push({
-      group: 'child-contact',
-      href: '#child-contact',
-      text: 'Select yes if they have contact or are seeking contact with this child'
-    })
-  }
+  if (!details.relationshipsParenting) errors.push({ group: 'relationships-parenting', href: '#relationships-parenting', text: 'Select if Alex had any parenting responsibilities' })
   return errors
 }
 
-const restoreChildDetails = (child) => {
-  if (!child) return
-  setField('child-name', child.name)
-  setField('child-dob-day', child.dobDay)
-  setField('child-dob-month', child.dobMonth)
-  setField('child-dob-year', child.dobYear)
-  setField('child-age', child.age)
-  selectRadio('child_sex', child.sex)
-  setField('child-address1', child.address1)
-  setField('child-address2', child.address2)
-  setField('child-town', child.town)
-  setField('child-county', child.county)
-  setField('child-postcode', child.postcode)
-  selectRadio('child_lives_with', child.livesWith)
-  selectRadio('child_parental_responsibility', child.parentalResponsibility)
-  setField('child-parental-responsibility-details', child.parentalResponsibilityDetails)
-  selectRadio('child_relationship', child.relationship)
-  setField('child-relationship-details', child.relationshipDetails)
-  selectRadio('child_contact', child.contact)
+const restoreChildDetails = (session) => {
+  selectRadio('relationships_parenting', session.relationshipsParenting)
+  setField('parenting-yes-details', session.relationshipsParentingDetails)
 }
 
 const childDetailsHref = (index, focus = '') => {
@@ -783,7 +738,7 @@ const detailsFor = (prefix, value) => (value ? fieldValue(`${prefix}-${value}-de
 
 const readQuestions = (showParenting) => {
   const relationshipsHistory = checkedValue('relationships_history')
-  const relationshipsParenting = showParenting ? checkedValue('relationships_parenting') : ''
+  const relationshipsParentingManagement = showParenting ? checkedValue('relationships_parenting') : ''
   const relationshipsFamily = checkedValue('relationships_family')
   const relationshipsChildhood = checkedValue('relationships_childhood')
   const relationshipsChildhoodBehaviour = checkedValue('relationships_childhood_behaviour')
@@ -791,8 +746,8 @@ const readQuestions = (showParenting) => {
     relationshipsHistory,
     relationshipsHistoryDetails: detailsFor('history', relationshipsHistory),
     relationshipsResolve: fieldValue('relationships-resolve'),
-    relationshipsParenting,
-    relationshipsParentingDetails: detailsFor('parenting', relationshipsParenting),
+    relationshipsParentingManagement,
+    relationshipsParentingManagementDetails: detailsFor('parenting', relationshipsParentingManagement),
     relationshipsFamily,
     relationshipsFamilyDetails: detailsFor('family', relationshipsFamily),
     relationshipsChildhood,
@@ -877,7 +832,7 @@ const readAnalysis = () => {
 
 const validateQuestions = (answers, showParenting) => {
   const errors = []
-  if (showParenting && !answers.relationshipsParenting) {
+  if (showParenting && !answers.relationshipsParentingManagement) {
     errors.push({ group: 'relationships-parenting', href: '#relationships-parenting', text: 'Select if Alex is able to manage their parenting responsibilities' })
   }
   if (!answers.relationshipsFamily) {
@@ -964,8 +919,8 @@ const restoreQuestions = (session) => {
   selectRadio('relationships_history', session.relationshipsHistory)
   if (session.relationshipsHistory) setField(`history-${session.relationshipsHistory}-details`, session.relationshipsHistoryDetails)
   setField('relationships-resolve', session.relationshipsResolve)
-  selectRadio('relationships_parenting', session.relationshipsParenting)
-  if (session.relationshipsParenting) setField(`parenting-${session.relationshipsParenting}-details`, session.relationshipsParentingDetails)
+  selectRadio('relationships_parenting', session.relationshipsParentingManagement)
+  if (session.relationshipsParentingManagement) setField(`parenting-${session.relationshipsParentingManagement}-details`, session.relationshipsParentingManagementDetails)
   selectRadio('relationships_family', session.relationshipsFamily)
   if (session.relationshipsFamily) setField(`family-${session.relationshipsFamily}-details`, session.relationshipsFamilyDetails)
   selectRadio('relationships_childhood', session.relationshipsChildhood)
@@ -1059,7 +1014,7 @@ const validateStrangulation = (answers) => {
     return [{
       group: 'relationships-strangulation',
       href: '#relationships-strangulation',
-      text: 'Select if there is evidence that Alex has used strangulation or suffocation'
+      text: 'Select if there is evidence that Alex has perpetrated strangulation or suffocation'
     }]
   }
   if (answers.relationshipsStrangulation === 'yes' && !answers.relationshipsStrangulationDetails) {
@@ -1133,7 +1088,8 @@ const initSanRelationships = () => {
   const pageName = page.getAttribute('data-pc-page')
 
   if (pageName === 'children') {
-    selectRadio('relationships_children', session.relationshipsChildren?.[0])
+    selectChecks('relationships_children', session.relationshipsChildren)
+    setField('relationships-children-details', session.relationshipsChildrenDetails)
   }
 
   if (pageName === 'child-details') {
@@ -1141,14 +1097,8 @@ const initSanRelationships = () => {
       window.location.assign('personal-relationships-children.html')
       return
     }
-    const index = childIndexFromQuery()
-    const list = childrenList(session)
-    if (index >= 0) restoreChildDetails(list[index])
-    if (!fromSummary()) {
-      ensureBackLink(list.length ? 'personal-relationships-children-list.html' : 'personal-relationships-children.html')
-    }
-    const focusId = childPageParams().get('focus')
-    if (focusId) window.setTimeout(() => focusChildField(focusId), 50)
+    restoreChildDetails(session)
+    if (!fromSummary()) ensureBackLink('personal-relationships-children.html')
   }
 
   if (pageName === 'children-list') {
@@ -1329,20 +1279,17 @@ const initSanRelationships = () => {
     const previous = getSanSession()
     const updates = { ...answers, relationshipsComplete: false }
     if (hasChildren(previous.relationshipsChildren) !== hasChildren(answers.relationshipsChildren)) {
+      updates.relationshipsParentingManagement = ''
+      updates.relationshipsParentingManagementDetails = ''
       updates.relationshipsParenting = ''
       updates.relationshipsParentingDetails = ''
     }
-    if (!hasChildren(answers.relationshipsChildren)) updates.relationshipsChildrenList = []
     setSanSession(updates)
     const sameRoute = hasChildren(previous.relationshipsChildren) === hasChildren(answers.relationshipsChildren)
     let next = 'personal-relationships-questions.html'
     if (hasChildren(answers.relationshipsChildren)) {
-      next = childrenList({ ...previous, ...updates }).length
-        ? 'personal-relationships-children-list.html'
-        : 'personal-relationships-child-details.html'
-      if (fromSummary() && sameRoute && childrenList({ ...previous, ...updates }).length) {
-        next = 'personal-relationships-summary.html'
-      }
+      next = 'personal-relationships-child-details.html'
+      if (fromSummary() && sameRoute && childrenDetailsComplete({ ...previous, ...updates })) next = 'personal-relationships-summary.html'
     } else if (fromSummary() && sameRoute) {
       next = 'personal-relationships-summary.html'
     }
@@ -1352,24 +1299,15 @@ const initSanRelationships = () => {
   document.getElementById('san-relationships-child-details-form')?.addEventListener('submit', (event) => {
     event.preventDefault()
     revealCheckedConditionals()
-    const child = readChildDetails()
-    const errors = validateChildDetails(child)
+    const details = readChildDetails()
+    const errors = validateChildDetails(details)
     if (errors.length) {
       showErrors(errors)
       return
     }
     clearErrors()
-    const previous = getSanSession()
-    const list = [...childrenList(previous)]
-    const index = childIndexFromQuery()
-    const saved = {
-      id: index >= 0 && list[index]?.id ? list[index].id : String(Date.now()),
-      ...child
-    }
-    if (index >= 0 && list[index]) list[index] = saved
-    else list.push(saved)
-    setSanSession({ relationshipsChildrenList: list, relationshipsComplete: false })
-    window.location.assign(childrenListHref())
+    setSanSession({ ...details, relationshipsComplete: false })
+    window.location.assign(fromSummary() ? 'personal-relationships-summary.html' : 'personal-relationships-questions.html')
   })
 
   document.querySelector('[data-pc-children-list]')?.addEventListener('click', (event) => {

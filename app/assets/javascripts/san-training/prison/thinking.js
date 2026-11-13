@@ -47,7 +47,7 @@ const QUESTIONS = [
     some: 'Some indications',
     significant: 'Significant indications'
   }],
-  ['thinkingTemper', 'temper', 'thinking_temper', 'How well does Alex manage anger, frustration and conflict?', 'Select how well they manage anger, frustration and conflict', {
+  ['thinkingTemper', 'temper', 'thinking_temper', 'Is Alex able to manage their anger, frustration and conflict?', 'Select if they are able to manage their anger, frustration and conflict', {
     well: 'Yes, manages these well',
     sometimes: 'Yes, sometimes able to manage these',
     often: 'No, is not able to manage these'
@@ -132,6 +132,7 @@ const EXAMPLE_COMPLETE = {
   thinkingActivities: 'sometimes',
   thinkingPeers: 'sometimes',
   thinkingPeersDetails: 'A Martini. Shaken, Not Stirred',
+  thinkingContacts: 'Wing officer Smith and peer mentor Jones. Positive support from both.',
   thinkingProblems: 'limited',
   thinkingViews: 'assumes',
   thinkingManipulative: 'none',
@@ -212,7 +213,14 @@ const questionRows = (session, definitions, page) => definitions.map(([key, id, 
 const thinkingRows = (session) => {
   if (!session.thinkingConsequences) return ''
 
-  const parts = [`<dl class="govuk-summary-list san-summary-list">${questionRows(session, visibleQuestions(), 'thinking-behaviours')}</dl>`]
+  const contacts = session.thinkingContacts
+    ? summaryRow(
+      "Who are Alex's important contacts in custody? (optional)",
+      [session.thinkingContacts],
+      summaryChangeHref('thinking-behaviours', 'thinking-contacts')
+    )
+    : ''
+  const parts = [`<dl class="govuk-summary-list san-summary-list">${contacts}${questionRows(session, visibleQuestions(), 'thinking-behaviours')}</dl>`]
 
   if (session.thinkingChanges) {
     const lines = [labelled(CHANGES_LABELS, session.thinkingChanges)]
@@ -341,6 +349,7 @@ const showAnalysisForm = (focusId) => {
 // Read and validate the current page.
 const readQuestionAnswers = () => {
   const answers = {}
+  answers.thinkingContacts = fieldValue('thinking-contacts')
   visibleQuestions().forEach(([key, id, name]) => {
     answers[key] = checkedValue(name)
     if (id === 'peers') answers.thinkingPeersDetails = fieldValue(`peers-${answers[key]}-details`)
@@ -418,6 +427,7 @@ const validateAnalysis = (answers) => {
 }
 
 const restoreQuestions = (session) => {
+  setField('thinking-contacts', session.thinkingContacts)
   QUESTIONS.forEach(([key, id, name]) => {
     selectRadio(name, session[key])
     if (id === 'peers' && session.thinkingPeers) setField(`peers-${session.thinkingPeers}-details`, session.thinkingPeersDetails)

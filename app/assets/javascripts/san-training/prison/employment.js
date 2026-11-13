@@ -19,8 +19,6 @@ const EXAMPLE_COMPLETE = {
   jobSector: 'Construction',
   employmentHistory: 'continuous',
   employmentHistoryDetails: 'Site labouring for a local firm.',
-  commitments: ['caring'],
-  commitmentDetails: { caring: 'Supports an elderly parent.' },
   qualifications: 'yes',
   qualificationsDetails: 'GCSEs including English and maths, CSCS card.',
   skills: 'strong',
@@ -63,16 +61,6 @@ const HISTORY_LABELS = {
   unknown: 'Unknown'
 }
 
-const COMMITMENT_LABELS = {
-  caring: 'Caring responsibilities',
-  child: 'Child responsibilities',
-  studying: 'Studying',
-  volunteering: 'Volunteering',
-  other: 'Other',
-  unknown: 'Unknown',
-  none: 'No additional day-to-day commitments'
-}
-
 const SKILLS_LABELS = {
   strong: 'Strong work-related skills',
   some: 'Some work-related skills',
@@ -83,7 +71,7 @@ const DIFFICULTY_LABELS = {
   reading: 'Yes, with reading',
   writing: 'Yes, with writing',
   numeracy: 'Yes, with numeracy',
-  none: 'No'
+  none: 'No support needed with reading, writing or numeracy'
 }
 
 const LEVEL_LABELS = {
@@ -111,10 +99,10 @@ const EXPERIENCE_LABELS = {
 // EF2 (job sector), overall experience of employment and overall experience of education are hidden in this prototype.
 // EF4 and EF5 are replaced by EF6 (qualifications), which is followed by EF7 (skills).
 const ROUTE_QUESTIONS = {
-  employed: ['history', 'commitments', 'qualifications', 'skills', 'difficulties'],
-  retired: ['history', 'commitments', 'qualifications', 'difficulties'],
-  'has-been-employed': ['history', 'commitments', 'qualifications', 'skills', 'difficulties'],
-  'never-employed': ['commitments', 'qualifications', 'skills', 'difficulties']
+  employed: ['history', 'qualifications', 'skills', 'difficulties'],
+  retired: ['history', 'qualifications', 'difficulties'],
+  'has-been-employed': ['history', 'qualifications', 'skills', 'difficulties'],
+  'never-employed': ['qualifications', 'skills', 'difficulties']
 }
 
 const employmentRoute = (session) => {
@@ -162,7 +150,6 @@ const detailsFormAnswered = (session) => {
   const route = employmentRoute(session)
   if (!route) return false
   if (routeShows(route, 'history') && !session.employmentHistory) return false
-  if (routeShows(route, 'commitments') && !(Array.isArray(session.commitments) && session.commitments.length)) return false
   if (routeShows(route, 'qualifications') && !session.qualifications) return false
   if (routeShows(route, 'qualifications') && session.qualifications === 'yes' && !session.qualificationsDetails) return false
   if (routeShows(route, 'skills') && !session.skills) return false
@@ -225,7 +212,7 @@ const employmentRows = (session) => {
 
   if (session.employmentStatus) {
     rows.push(summaryRow(
-      "What is Alex's current employment status?",
+      "What was Alex's employment status before custody?",
       [labelled(STATUS_LABELS, session.employmentStatus)],
       summaryChangeHref('employment', 'employment-status')
     ))
@@ -255,20 +242,6 @@ const employmentRows = (session) => {
       lines,
       summaryChangeHref('employment-details', 'history'),
       { secondaryFrom: 1 }
-    ))
-  }
-
-  if (routeShows(route, 'commitments') && Array.isArray(session.commitments) && session.commitments.length) {
-    const lines = []
-    session.commitments.forEach((value) => {
-      lines.push(labelled(COMMITMENT_LABELS, value))
-      const detail = session.commitmentDetails && session.commitmentDetails[value]
-      if (detail) lines.push(detail)
-    })
-    rows.push(summaryRow(
-      'Does Alex have any additional day-to-day commitments?',
-      lines,
-      summaryChangeHref('employment-details', 'commitments')
     ))
   }
 
@@ -498,8 +471,6 @@ const emptyDetailAnswers = () => ({
   jobSector: '',
   employmentHistory: '',
   employmentHistoryDetails: '',
-  commitments: [],
-  commitmentDetails: {},
   academicQualification: '',
   vocational: '',
   vocationalDetails: '',
@@ -529,16 +500,6 @@ const readDetailsAnswers = (route) => {
     answers.employmentHistoryDetails = answers.employmentHistory
       ? fieldValue(`history-${answers.employmentHistory}-details`)
       : ''
-  }
-
-  if (routeShows(route, 'commitments')) {
-    answers.commitments = checkedValues('commitments')
-    const details = {}
-    answers.commitments.forEach((value) => {
-      const text = fieldValue(`commitment-${value}-details`)
-      if (text) details[value] = text
-    })
-    answers.commitmentDetails = details
   }
 
   if (routeShows(route, 'qualifications')) {
@@ -630,13 +591,6 @@ const validateDetails = (answers, route) => {
       group: 'history',
       href: '#history',
       text: "Select Alex's employment history"
-    })
-  }
-  if (routeShows(route, 'commitments') && !answers.commitments.length) {
-    errors.push({
-      group: 'commitments',
-      href: '#commitments',
-      text: 'Select if Alex has any additional day-to-day commitments'
     })
   }
   if (routeShows(route, 'qualifications') && !answers.qualifications) {
@@ -738,12 +692,6 @@ const restoreDetails = (session) => {
   setField('job-sector', session.jobSector)
   selectRadio('employment_history', session.employmentHistory)
   if (session.employmentHistory) setField(`history-${session.employmentHistory}-details`, session.employmentHistoryDetails)
-  selectChecks('commitments', session.commitments)
-  if (session.commitmentDetails) {
-    Object.entries(session.commitmentDetails).forEach(([key, value]) => {
-      setField(`commitment-${key}-details`, value)
-    })
-  }
   selectRadio('qualifications', session.qualifications)
   if (session.qualifications === 'yes') setField('qualifications-yes-details', session.qualificationsDetails)
   selectRadio('skills', session.skills)

@@ -74,7 +74,7 @@ const MONEY_LABELS = {
 const DEBT_LABELS = {
   own: 'Yes, their own debt',
   someone: "Yes, someone else's debt",
-  no: 'No',
+  no: 'No, not affected by debt',
   unknown: 'Unknown'
 }
 

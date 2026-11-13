@@ -225,7 +225,7 @@ const employmentRows = (session) => {
 
   if (session.employmentStatus) {
     rows.push(summaryRow(
-      "What is Alex's current employment status?",
+      "What was Alex's employment status before custody?",
       [labelled(STATUS_LABELS, session.employmentStatus)],
       summaryChangeHref('employment', 'employment-status')
     ))

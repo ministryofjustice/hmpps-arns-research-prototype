@@ -25,6 +25,13 @@ Add pages under `app/views/`. Organise journeys by version folder:
 
 Each version has its own JavaScript under `app/assets/javascripts/02/` (version 01 scripts stay at `app/assets/javascripts/tiering-*.js`). Shared utilities (`offences-data.js`, `conviction-date.js`, etc.) live at the javascripts root and are imported by both versions.
 
+## SAN Community research navigation
+
+The `/san-research/` side navigation enables only the tested sections:
+Accommodation, Finances, Drug use and Alcohol use. Untested sections are greyed
+out and disabled using the same styling and behaviour as Prison research.
+The isolated drug practitioner-analysis links and training copies are unchanged.
+
 ## SAN Prison accommodation journey
 
 The `/san-prison/` journey stores its answers separately from the other prototypes.
@@ -71,6 +78,8 @@ heading, with the support and motivation questions as subheadings.
 
 Both training variants ask about changes to thinking, behaviours and attitudes
 on a separate page after the main questions and before the sexual-harm questions.
+Employment status uses current-employment wording in Community training and
+before-custody wording only in Prison training, including on summary pages.
 
 Open `storyboards/san-training/index.html` for the training storyboards, then choose
 Community or Prison. Both use the research storyboard scenarios, captured directly
@@ -82,6 +91,8 @@ Regenerate both journey storyboards with `node scripts/capture-san-training.mjs`
 To refresh only one section of one variant, use
 `node scripts/capture-san-training.mjs --variant prison --section thinking`;
 other sections keep their existing captures.
+Repeat `--section` to refresh several sections for both variants in one run:
+`node scripts/capture-san-training.mjs --section employment --section finances --section relationships --section thinking --section offence`.
 The generator checks the training route, loaded training modules and Beta banner
 before every capture, and records each PNG's source URL and SHA-256 in
 `captures.json` beside its storyboard. It never copies research or Community
@@ -102,6 +113,9 @@ being a victim of domestic abuse; those details are entered on that screen rathe
 than pre-filled before the branch. Both training variants check this sequence and
 the No-children/No-abuse route, which skips child details, perpetrator follow-ups
 and victim details.
+Children are described in the first two steps, without individual child-list or
+delete screens. Victim cards retain their detail and removal screens. Prison
+finance captures include the separate income-in-custody question.
 
 With the prototype running and Playwright installed, run
 `node --test scripts/test-san-training.mjs` for training, deep-link and isolation checks.
