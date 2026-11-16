@@ -8,7 +8,7 @@
 //
 
 import { getSanSession, isSanResearchJourney, replaceSanSession, setSanSession } from '../session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, showErrors, focusTargetField, labelled, scrollToHash, CHANGES_LABELS, YES_NO_UNKNOWN as YES_NO, revealSoon, checkedValue, checkedValues, fieldValue, selectRadio, selectChecks, setField, setHidden, fromSummary } from './form.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, showErrors, focusCompletedSection, focusTargetField, labelled, scrollToHash, CHANGES_LABELS, YES_NO_UNKNOWN as YES_NO, revealSoon, checkedValue, checkedValues, fieldValue, selectRadio, selectChecks, setField, setHidden, fromSummary } from './form.js'
 import { applySanProgress } from './progress.js'
 
 // Pre-filled session for ?example=complete.
@@ -1049,6 +1049,7 @@ const initSanAccommodation = () => {
     applyProgress(completedSession)
     renderSummary(completedSession)
     openAnalysisTab()
+    focusCompletedSection()
   })
 }
 

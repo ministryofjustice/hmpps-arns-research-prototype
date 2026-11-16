@@ -8,7 +8,7 @@
 //
 
 import { getSanSession, isSanPrisonJourney, setSanSession } from '../session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, showErrors, labelled, scrollToHash, YES_NO, revealSoon, checkedValue, checkedValues, fieldValue, selectRadio, selectChecks, setField, summaryChangeHref } from './form.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, showErrors, focusCompletedSection, labelled, scrollToHash, YES_NO, revealSoon, checkedValue, checkedValues, fieldValue, selectRadio, selectChecks, setField, summaryChangeHref } from './form.js'
 import { applySanProgress } from './progress.js'
 
 // Display labels for offence elements, motivations and victim details.
@@ -568,6 +568,7 @@ const initOffence = () => {
       setSanSession({ offenceComplete: true })
       applyProgress(getSanSession())
       renderSummary(getSanSession())
+      focusCompletedSection()
     })
   }
 

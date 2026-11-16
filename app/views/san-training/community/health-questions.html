@@ -199,8 +199,8 @@
       <div class="govuk-radios" data-module="govuk-radios">
         {% for option in [
           { id: "well", label: "Yes, able to cope well", hint: "Their day-to-day life is not significantly affected by stress, worries or emotional difficulties." },
-          { id: "some", label: "Sometimes unable to cope", hint: "Their day-to-day is sometimes affected by stress, worries or emotional difficulties.", details: true },
-          { id: "not", label: "Not able to cope", hint: "Their day-to-day life is significantly affected by stress, worries or emotional difficulties..", details: true }
+          { id: "some", label: "Sometimes unable to cope", hint: "Their day-to-day life is sometimes affected by stress, worries or emotional difficulties.", details: true },
+          { id: "not", label: "Not able to cope", hint: "Their day-to-day life is significantly affected by stress, worries or emotional difficulties.", details: true }
         ] %}
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="cope-{{ option.id }}" name="cope" type="radio" value="{{ option.id }}" aria-describedby="cope-{{ option.id }}-hint"{% if option.details %} data-aria-controls="conditional-cope-{{ option.id }}"{% endif %}>
@@ -245,10 +245,9 @@
           </div>
         </div>
         {% endfor %}
-        <div class="govuk-checkboxes__divider">or</div>
         <div class="govuk-checkboxes__item">
           <input class="govuk-checkboxes__input" id="gambling-no" name="gambling" type="checkbox" value="no" data-behaviour="exclusive">
-          <label class="govuk-label govuk-checkboxes__label" for="gambling-no">No</label>
+          <label class="govuk-label govuk-checkboxes__label" for="gambling-no">No, not affected by gambling</label>
         </div>
         <div class="govuk-checkboxes__item">
           <input class="govuk-checkboxes__input" id="gambling-unknown" name="gambling" type="checkbox" value="unknown" data-behaviour="exclusive">

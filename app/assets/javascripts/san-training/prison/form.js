@@ -4,6 +4,8 @@
 //
 
 import { isSanPrisonJourney } from '../session.js'
+import { updateAllCharacterCounts, characterCountErrors } from '../form-accessibility.js'
+export { updateCharacterCount, updateAllCharacterCounts, focusCompletedSection } from '../form-accessibility.js'
 
 export const escapeHtml = (value) => String(value)
   .replace(/&/g, '&amp;')
@@ -22,32 +24,6 @@ export const revealCheckedConditionals = () => {
       panel.classList.toggle('govuk-radios__conditional--hidden', hidden)
       panel.classList.toggle('govuk-checkboxes__conditional--hidden', hidden)
     })
-  })
-}
-
-const linkCharacterCount = (textarea, hint) => {
-  if (!hint.id) hint.id = `${textarea.id}-info`
-  const tokens = (textarea.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean)
-  if (!tokens.includes(hint.id)) {
-    tokens.push(hint.id)
-    textarea.setAttribute('aria-describedby', tokens.join(' '))
-  }
-}
-
-export const updateCharacterCount = (textarea) => {
-  const hint = document.querySelector(`[data-san-character-count="${CSS.escape(textarea.id)}"]`)
-  if (!hint) return
-  const max = Number(textarea.getAttribute('maxlength'))
-  if (!max) return
-  const remaining = Math.max(0, max - textarea.value.length)
-  const noun = remaining === 1 ? 'character' : 'characters'
-  hint.textContent = `You have ${remaining.toLocaleString('en-GB')} ${noun} remaining`
-  linkCharacterCount(textarea, hint)
-}
-
-export const updateAllCharacterCounts = () => {
-  document.querySelectorAll('textarea[maxlength]').forEach((textarea) => {
-    if (textarea instanceof HTMLTextAreaElement) updateCharacterCount(textarea)
   })
 }
 
@@ -122,7 +98,7 @@ export const clearErrors = () => {
   }
   document.querySelectorAll('[data-san-error-group]').forEach((group) => {
     group.classList.remove('govuk-form-group--error')
-    group.querySelectorAll('.govuk-error-message').forEach((node) => node.remove())
+    group.querySelectorAll('.govuk-error-message:not(.govuk-character-count__status)').forEach((node) => node.remove())
   })
 }
 
@@ -320,6 +296,16 @@ const syncSectionStatus = () => {
 window.GOVUKPrototypeKit.documentReady(() => {
   if (!isSanPrisonJourney()) return
   updateAllCharacterCounts()
+  document.addEventListener('submit', (event) => {
+    const form = event.target
+    if (!(form instanceof HTMLFormElement) || !form.id.startsWith('san-')) return
+    updateAllCharacterCounts()
+    const errors = characterCountErrors(form)
+    if (!errors.length) return
+    event.preventDefault()
+    event.stopImmediatePropagation()
+    showErrors(errors)
+  }, true)
   const nav = document.querySelector('.san-side-navigation')
   if (nav) {
     new MutationObserver(syncSectionStatus).observe(nav, {

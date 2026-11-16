@@ -350,17 +350,17 @@ const drugRows = (session) => {
   const older = olderDrugs(session)
 
   if (recent.length) {
-    parts.push('<h3 class="govuk-heading-m">Used in the last 6 months</h3>')
+    parts.push('<h2 class="govuk-heading-m">Used in the last 6 months</h2>')
     parts.push(recent.map((id) => drugCard(session, id)).join(''))
   }
 
   if (older.length) {
-    parts.push('<h3 class="govuk-heading-m">Used more than 6 months ago</h3>')
+    parts.push('<h2 class="govuk-heading-m">Used more than 6 months ago</h2>')
     parts.push(older.map((id) => drugCard(session, id)).join(''))
   }
 
   if (session.helpedReduce || (hasRecentDrugUse(session) && session.drugAnalysisMotivation) || session.drugChanges) {
-    parts.push('<h3 class="govuk-heading-m">More information</h3>')
+    parts.push('<h2 class="govuk-heading-m">More information</h2>')
     const rows = []
     if (session.helpedReduce) {
       const lines = [labelled(YES_NO, session.helpedReduce)]

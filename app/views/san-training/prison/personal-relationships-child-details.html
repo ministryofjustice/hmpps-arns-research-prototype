@@ -22,9 +22,12 @@
 
 <form id="san-relationships-child-details-form" novalidate data-pc-page="child-details">
   <div class="govuk-form-group">
-    <h2 class="govuk-heading-m govuk-!-margin-top-6">How are the children identified affected by Alex’s sentence?</h2>
-    <p class="govuk-hint">Give details (optional)</p>
-    {{ detailsTextarea("relationships-children-impact", "", "", 2000) | safe }}
+    <h2 class="govuk-heading-m govuk-!-margin-top-6">
+      <label class="govuk-label govuk-label--m" for="relationships-children-impact">How are the children identified affected by Alex’s sentence?</label>
+    </h2>
+    <p class="govuk-hint" id="relationships-children-impact-hint">Give details (optional)</p>
+    <textarea class="govuk-textarea" id="relationships-children-impact" name="relationships_children_impact" rows="5" maxlength="2000" aria-describedby="relationships-children-impact-hint"></textarea>
+    <div class="govuk-hint san-character-count" data-san-character-count="relationships-children-impact">You have 2,000 characters remaining</div>
   </div>
 
   <div class="govuk-form-group" data-san-error-group="relationships-children-visiting">

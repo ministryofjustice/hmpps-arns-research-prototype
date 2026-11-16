@@ -8,7 +8,7 @@
 //
 
 import { getSanSession, isSanPrisonJourney, setSanSession } from '../session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, showErrors, focusTargetField, labelled, scrollToHash, CHANGES_LABELS, YES_NO, YES_NO_UNKNOWN, revealSoon, checkedValue, checkedValues, fieldValue, selectRadio, selectChecks, setField, setHidden, summaryChangeHref } from './form.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, showErrors, focusCompletedSection, focusTargetField, labelled, scrollToHash, CHANGES_LABELS, YES_NO, YES_NO_UNKNOWN, revealSoon, checkedValue, checkedValues, fieldValue, selectRadio, selectChecks, setField, setHidden, summaryChangeHref } from './form.js'
 import { applySanProgress } from './progress.js'
 
 // Display labels for children, people and domestic abuse answers.
@@ -1584,6 +1584,7 @@ const initSanRelationships = () => {
     applyProgress(completedSession)
     renderSummary(completedSession)
     openAnalysisTab()
+    focusCompletedSection()
   })
 }
 

@@ -8,7 +8,7 @@
 //
 
 import { getSanSession, isSanPrisonJourney, replaceSanSession, setSanSession } from '../session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, showErrors, focusTargetField, labelled, scrollToHash, CHANGES_LABELS, YES_NO_UNKNOWN, revealSoon, checkedValue, checkedValues, fieldValue, selectRadio, selectChecks, setField, setHidden, fromSummary, summaryChangeHref } from './form.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, showErrors, focusCompletedSection, focusTargetField, labelled, scrollToHash, CHANGES_LABELS, YES_NO_UNKNOWN, revealSoon, checkedValue, checkedValues, fieldValue, selectRadio, selectChecks, setField, setHidden, fromSummary, summaryChangeHref } from './form.js'
 import { applySanProgress } from './progress.js'
 
 // Pre-filled session for ?example=complete.
@@ -971,6 +971,7 @@ const initEmployment = () => {
     applyProgress(completedSession)
     renderSummary(completedSession)
     openAnalysisTab()
+    focusCompletedSection()
   })
 }
 

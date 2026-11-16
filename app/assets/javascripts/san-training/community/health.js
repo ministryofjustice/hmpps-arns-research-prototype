@@ -8,7 +8,7 @@
 //
 
 import { getSanSession, isSanResearchJourney, setSanSession } from '../session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, showErrors, focusTargetField, labelled, scrollToHash, CHANGES_LABELS, YES_NO, YES_NO_UNKNOWN, revealSoon, checkedValue, checkedValues, fieldValue, selectRadio, selectChecks, setField, setHidden, fromSummary, summaryChangeHref } from './form.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, showErrors, focusCompletedSection, focusTargetField, labelled, scrollToHash, CHANGES_LABELS, YES_NO, YES_NO_UNKNOWN, revealSoon, checkedValue, checkedValues, fieldValue, selectRadio, selectChecks, setField, setHidden, fromSummary, summaryChangeHref } from './form.js'
 import { applySanProgress } from './progress.js'
 
 // Display labels and which follow-on questions are shown.
@@ -736,6 +736,7 @@ const initHealth = () => {
     applyProgress(completedSession)
     renderSummary(completedSession)
     openAnalysisTab()
+    focusCompletedSection()
   })
 }
 

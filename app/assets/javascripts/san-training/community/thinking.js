@@ -7,7 +7,7 @@
 //
 
 import { getSanSession, isSanResearchJourney, replaceSanSession, setSanSession } from '../session.js'
-import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, showErrors, focusTargetField, labelled, scrollToHash, CHANGES_LABELS, YES_NO, revealSoon, checkedValue, fieldValue, selectRadio, setField, setHidden, fromSummary, summaryChangeHref } from './form.js'
+import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllCharacterCounts, clearErrors, showErrors, focusCompletedSection, focusTargetField, labelled, scrollToHash, CHANGES_LABELS, YES_NO, revealSoon, checkedValue, fieldValue, selectRadio, setField, setHidden, fromSummary, summaryChangeHref } from './form.js'
 import { applySanProgress } from './progress.js'
 
 // Each row: [sessionKey, stepId, inputName, question, missingError, labels].
@@ -624,6 +624,7 @@ const initThinking = () => {
     applyProgress(completedSession)
     renderSummary(completedSession)
     openAnalysisTab()
+    focusCompletedSection()
   })
 }
 
