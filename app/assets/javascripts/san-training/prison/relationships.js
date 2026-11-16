@@ -334,7 +334,7 @@ const relationshipRows = (session) => {
 
   if (hasChildren(session.relationshipsChildren) && session.relationshipsParentingManagement) {
     rows.push(summaryRow(
-      'Was Alex able to manage their parenting responsibilities?',
+      'Was Alex able to manage their parenting responsibilities before custody?',
       answerLines(labelled(PARENTING_LABELS, session.relationshipsParentingManagement), session.relationshipsParentingManagementDetails),
       summaryChangeHref('personal-relationships-questions', 'relationships-parenting')
     ))
@@ -424,7 +424,7 @@ const relationshipRows = (session) => {
 
   if (needsStrangulation(session) && session.relationshipsStrangulation) {
     rows.push(summaryRow(
-      'Is there evidence that Alex has used strangulation or suffocation?',
+      'Is there evidence that Alex has perpetrated strangulation or suffocation?',
       answerLines(labelled(YES_NO, session.relationshipsStrangulation), session.relationshipsStrangulationDetails),
       summaryChangeHref('personal-relationships-strangulation', 'relationships-strangulation')
     ))

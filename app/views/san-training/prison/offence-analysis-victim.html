@@ -35,6 +35,10 @@
           <label class="govuk-label govuk-radios__label" for="relationship-staff">Criminal justice staff</label>
         </div>
         <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="relationship-friend" name="victim_relationship" type="radio" value="friend">
+          <label class="govuk-label govuk-radios__label" for="relationship-friend">Alex's friend</label>
+        </div>
+        <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="relationship-parent" name="victim_relationship" type="radio" value="parent">
           <label class="govuk-label govuk-radios__label" for="relationship-parent">Alex's parent or step-parent</label>
         </div>
@@ -53,10 +57,6 @@
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="relationship-family" name="victim_relationship" type="radio" value="family">
           <label class="govuk-label govuk-radios__label" for="relationship-family">Other family member</label>
-        </div>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="relationship-friend" name="victim_relationship" type="radio" value="friend">
-          <label class="govuk-label govuk-radios__label" for="relationship-friend">Alex's friend</label>
         </div>
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="relationship-other" name="victim_relationship" type="radio" value="other" data-aria-controls="conditional-relationship-other">
@@ -101,11 +101,10 @@
   </div>
 
   <div class="govuk-form-group san-question" data-san-error-group="sex">
-    <fieldset class="govuk-fieldset" id="victim-sex" aria-describedby="victim-sex-hint">
+    <fieldset class="govuk-fieldset" id="victim-sex">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
         <h2 class="govuk-fieldset__heading">What is the victim's sex?</h2>
       </legend>
-      <div id="victim-sex-hint" class="govuk-hint">Childhood is the period up to and including 18 years old.</div>
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="victim-sex-male" name="victim_sex" type="radio" value="male">
