@@ -34,7 +34,7 @@ const MOTIVATION_LABELS = {
   sexual: 'Sexual motivation',
   thrill: 'Thrill seeking',
   other: 'Other',
-  none: 'None'
+  none: 'No, none of these motivations'
 }
 
 const COMMITTED_LABELS = {
