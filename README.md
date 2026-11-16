@@ -27,10 +27,11 @@ Each version has its own JavaScript under `app/assets/javascripts/02/` (version 
 
 ## SAN Community research navigation
 
-The `/san-research/` side navigation enables only the tested sections:
-Accommodation, Finances, Drug use and Alcohol use. Untested sections are greyed
-out and disabled using the same styling and behaviour as Prison research.
-The isolated drug practitioner-analysis links and training copies are unchanged.
+The `/san-research/` side navigation enables all nine sections, including
+Employment and education, Health and wellbeing, Personal relationships and
+community, Thinking, behaviours and attitudes, and Offence analysis.
+Existing section progress and resume logic is unchanged. Prison research,
+isolated drug practitioner-analysis links and training copies are unchanged.
 
 ## SAN Prison accommodation journey
 
@@ -120,6 +121,50 @@ finance captures include the separate income-in-custody question.
 With the prototype running and Playwright installed, run
 `node --test scripts/test-san-training.mjs` for training, deep-link and isolation checks.
 Both scripts accept `BASE_URL` (default `http://localhost:3000`).
+
+### Training accessibility
+
+Both training variants use GOV.UK's character-count JavaScript component for
+static and dynamically generated textareas. The shared training form helper
+preserves each field's label, hints and existing character limit. With JavaScript,
+users can type or paste beyond that limit without losing text; the component
+provides visible feedback and polite, delayed screen-reader announcements.
+Overlong visible answers prevent form submission and show linked summary and
+inline errors. Hidden conditional answers do not block submission.
+
+Children's details have associated labels and hints. Training layouts have one
+banner and a footer landmark, and drug summaries use H2 group headings with H3
+drug-card headings. In-place section completion focuses the updated H1, including
+its accessible "Complete" status; completion flows that navigate or reload retain
+their existing behaviour. Research and reference copies are unchanged.
+
+Run `node --test scripts/test-san-training-accessibility.mjs` with the prototype
+running for label, counter, validation, keyboard, focus, landmark, heading,
+reflow and isolation checks.
+
+The axe warning about `aria-expanded` on conditional radios is a
+[known GOV.UK component issue](https://accessibility-manual.dwp.gov.uk/tools-and-resources/known-accessibility-issues#aria-attributes-not-allowed-on-conditional-reveals).
+Keep the library-generated ARIA: it communicates revealed content to assistive
+technology. The tests check keyboard access, expanded state and the browser
+accessibility tree, but do not verify spoken screen-reader output or suppress
+axe findings.
+
+Before accessibility sign-off, manually test both variants with NVDA on Windows
+and VoiceOver with Safari on macOS:
+
+- Read the children questions and instructions, reveal their details, and
+  navigate by fields and headings.
+- Type and paste around the 128, 400 and 2,000-character limits. Pause to hear
+  count feedback, submit an overlong answer, follow its error link and correct it.
+- Select conditional radio options, confirm the follow-up input is discoverable,
+  and check that collapsed inputs are absent from reading and keyboard order.
+- Complete practitioner analysis and confirm the updated heading and completion
+  status are announced; navigate the resulting summary and its Change links.
+- Navigate the banner, main content and footer by landmarks.
+
+Character-count behaviour follows the
+[GOV.UK component guidance](https://design-system.service.gov.uk/components/character-count/).
+Automated checks are not a substitute for these screen-reader sessions.
 
 ## Deploy
 

@@ -25,6 +25,23 @@ const journey = async (run) => {
 const submit = (page) => page.getByRole('button', { name: 'Save and continue', exact: true }).click()
 const choose = (page, id) => page.locator(`label[for="${id}"]`).click()
 
+test('Community research side navigation enables keyboard access to all nine sections', async () => journey(async (page) => {
+  const sections = [
+    'accommodation', 'employment', 'finances', 'drugs', 'alcohol',
+    'health', 'relationships', 'thinking', 'offence'
+  ]
+  for (const section of sections) {
+    const navigation = page.getByRole('navigation', { name: 'Strengths and Needs', exact: true })
+    assert.equal(await navigation.locator('a[href][data-san-section-link]').count(), 9)
+    assert.equal(await navigation.locator('[data-san-nav-disabled], [aria-disabled="true"], .san-side-navigation__link--disabled').count(), 0)
+    const link = navigation.locator(`[data-san-section-link="${section}"]`)
+    await link.focus()
+    await page.keyboard.press('Enter')
+    await page.locator(`[data-san-section-link="${section}"][aria-current="location"]`).waitFor()
+    assert.ok(new URL(page.url()).pathname.startsWith('/san-research/'))
+  }
+}))
+
 const answerQuestions = async (page) => {
   const names = await page.locator('#san-thinking-questions-form fieldset input[type="radio"]').evaluateAll(
     (inputs) => [...new Set(inputs.map((input) => input.name))]

@@ -24,22 +24,23 @@
       <div class="govuk-checkboxes" data-module="govuk-checkboxes">
         <div class="govuk-checkboxes__item">
           <input class="govuk-checkboxes__input" id="children-lived-with" name="relationships_children" type="checkbox" value="lived-with" data-aria-controls="conditional-children-lived-with">
-          <label class="govuk-label govuk-checkboxes__label" for="children-lived-with">Yes, children they have lived with or plan to live with</label>
+          <label class="govuk-label govuk-checkboxes__label" for="children-lived-with">Yes, children that live with them</label>
           <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-children-lived-with">
-            <div class="govuk-hint">Include the name, age and sex of any children, and their relationship to Alex</div>
-            <textarea class="govuk-textarea" id="relationships-children-details" name="relationships_children_details" rows="5" maxlength="400" aria-describedby="relationships-children-details-info"></textarea>
+            <label class="govuk-label" for="relationships-children-details">Details of children living with Alex</label>
+            <div class="govuk-hint" id="relationships-children-details-hint">Include the name, age and sex of any children, and their relationship to Alex.</div>
+            <textarea class="govuk-textarea" id="relationships-children-details" name="relationships_children_details" rows="5" maxlength="400" aria-describedby="relationships-children-details-hint relationships-children-details-info"></textarea>
             <div class="govuk-hint san-character-count" data-san-character-count="relationships-children-details" id="relationships-children-details-info">You have 400 characters remaining</div>
           </div>
         </div>
         <div class="govuk-checkboxes__item">
           <input class="govuk-checkboxes__input" id="children-not-lived-with" name="relationships_children" type="checkbox" value="not-lived-with">
-          <label class="govuk-label govuk-checkboxes__label" for="children-not-lived-with">Yes, children they have not lived with or do not plan to live with</label>
+          <label class="govuk-label govuk-checkboxes__label" for="children-not-lived-with">Yes, children they have regular contact with, but do not live with</label>
         </div>
         <div class="govuk-checkboxes__divider">or</div>
         <div class="govuk-checkboxes__item">
-          <input class="govuk-checkboxes__input" id="children-no" name="relationships_children" type="checkbox" value="no" data-behaviour="exclusive">
-          <label class="govuk-label govuk-checkboxes__label" for="children-no">No</label>
-          <div class="govuk-hint govuk-checkboxes__hint">Includes having biological children that are not in their life.</div>
+          <input class="govuk-checkboxes__input" id="children-no" name="relationships_children" type="checkbox" value="no" data-behaviour="exclusive" aria-describedby="children-no-hint">
+          <label class="govuk-label govuk-checkboxes__label" for="children-no">No, there are no children in their life</label>
+          <div class="govuk-hint govuk-checkboxes__hint" id="children-no-hint">Includes having biological children that are not in their life.</div>
         </div>
       </div>
     </fieldset>
