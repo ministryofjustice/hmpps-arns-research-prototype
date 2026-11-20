@@ -6,12 +6,12 @@
 {% set sanSection = "relationships" %}
 {% set backLinkHref = "personal-relationships-children.html" %}
 
-{% macro detailsTextarea(id, label, hint, maxLength) %}
+{% macro detailsTextarea(id, label, hint) %}
 <div class="govuk-form-group">
   <label class="govuk-label" for="{{ id }}">{{ label }}</label>
   {% if hint %}<div id="{{ id }}-hint" class="govuk-hint">{{ hint }}</div>{% endif %}
-  <textarea class="govuk-textarea" id="{{ id }}" name="{{ id | replace('-', '_') }}" rows="5" maxlength="{{ maxLength or 2000 }}"{% if hint %} aria-describedby="{{ id }}-hint"{% endif %}></textarea>
-  <div class="govuk-hint san-character-count" data-san-character-count="{{ id }}">You have {{ maxLength or 2000 }} characters remaining</div>
+  <textarea class="govuk-textarea" id="{{ id }}" name="{{ id | replace('-', '_') }}" rows="5" maxlength="2000"{% if hint %} aria-describedby="{{ id }}-hint"{% endif %}></textarea>
+  <div class="govuk-hint san-character-count" data-san-character-count="{{ id }}">You have 2,000 characters remaining</div>
 </div>
 {% endmacro %}
 
@@ -23,9 +23,9 @@
 <form id="san-relationships-child-details-form" novalidate data-pc-page="child-details">
   <div class="govuk-form-group">
     <h2 class="govuk-heading-m govuk-!-margin-top-6">
-      <label class="govuk-label govuk-label--m" for="relationships-children-impact">How are the children identified affected by Alex’s sentence?</label>
+      <label class="govuk-label govuk-label--m" for="relationships-children-impact">How are the children identified affected by Alex's sentence? (optional)</label>
     </h2>
-    <p class="govuk-hint" id="relationships-children-impact-hint">Give details (optional)</p>
+    <p class="govuk-hint" id="relationships-children-impact-hint">Give details</p>
     <textarea class="govuk-textarea" id="relationships-children-impact" name="relationships_children_impact" rows="5" maxlength="2000" aria-describedby="relationships-children-impact-hint"></textarea>
     <div class="govuk-hint san-character-count" data-san-character-count="relationships-children-impact">You have 2,000 characters remaining</div>
   </div>

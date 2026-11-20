@@ -472,8 +472,10 @@ const analysisRows = (session) => {
 }
 
 // Check-your-answers for the questions tab and analysis tab.
-const renderSummary = (session) => {
-  const mount = document.querySelector('[data-san-summary]')
+export const sectionQuestionsComplete = (session) => questionsAnswered(session)
+
+export const renderSectionSummary = (session, target) => {
+  const mount = target || document.querySelector('[data-san-summary]')
   if (!mount) return
 
   const complete = !!session.relationshipsComplete
@@ -1244,7 +1246,7 @@ const initSanRelationships = () => {
 
   if (pageName === 'summary') {
     restoreAnalysis(session)
-    renderSummary(session)
+    renderSectionSummary(session)
     document.querySelector('[data-san-go-analysis]')?.addEventListener('click', openAnalysisTab)
     document.querySelector('[data-san-analysis-summary]')?.addEventListener('click', (event) => {
       const link = event.target.closest('[data-pc-edit-analysis]')
@@ -1558,7 +1560,7 @@ const initSanRelationships = () => {
     setSanSession({ ...answers, relationshipsComplete: true })
     const completedSession = getSanSession()
     applyProgress(completedSession)
-    renderSummary(completedSession)
+    renderSectionSummary(completedSession)
     openAnalysisTab()
     focusCompletedSection()
   })

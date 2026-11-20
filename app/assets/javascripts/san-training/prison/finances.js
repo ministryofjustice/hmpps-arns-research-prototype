@@ -11,7 +11,7 @@ import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllC
 import { applySanProgress } from './progress.js'
 
 // Pre-filled session for ?example=complete.
-const EXAMPLE_COMPLETE = {
+export const EXAMPLE_COMPLETE = {
   financeIncome: ['employment', 'family'],
   financeIncomeOther: '',
   financeOverreliant: 'no',
@@ -313,8 +313,10 @@ const analysisRows = (session) => {
 }
 
 // Check-your-answers for the questions tab and analysis tab.
-const renderSummary = (session) => {
-  const mount = document.querySelector('[data-fi-summary]')
+export const sectionQuestionsComplete = (session) => questionsAnswered(session)
+
+export const renderSectionSummary = (session, target) => {
+  const mount = target || document.querySelector('[data-fi-summary]')
   if (!mount) return
 
   const complete = !!session.financeComplete
@@ -825,7 +827,7 @@ const initFinances = () => {
   }
   if (pageName === 'summary') {
     restoreAnalysis(session)
-    renderSummary(session)
+    renderSectionSummary(session)
     document.querySelector('[data-fi-go-analysis]')?.addEventListener('click', () => {
       openAnalysisTab()
     })

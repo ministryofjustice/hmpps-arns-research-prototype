@@ -67,7 +67,7 @@ for (const variant of variants) {
       const root = page.locator(`#${variant.name}-training [data-changelog]`)
       const details = root.locator('[data-changelog-details]')
       const toggle = root.locator('[data-changelog-details-toggle]')
-      const counts = variant.name === 'prison' ? { all: 23, CD: 14, IxD: 9 } : { all: 17, CD: 11, IxD: 6 }
+      const counts = variant.name === 'prison' ? { all: 34, CD: 17, IxD: 17 } : { all: 24, CD: 12, IxD: 12 }
       assert.equal(await details.isVisible(), false)
       assert.equal(await toggle.getAttribute('aria-controls'), `${variant.name}-training-changelog-details`)
       assert.equal(await toggle.getAttribute('aria-expanded'), 'false')
@@ -85,15 +85,20 @@ for (const variant of variants) {
       await iteration.click()
       const rows = root.locator('[data-change]')
       assert.deepEqual(await rows.evaluateAll(rows => [...new Set(rows.map(row => row.dataset.section))]), [
-        'Offence analysis', 'Thinking, behaviours and attitudes', 'Personal relationships and community',
+        'Offence analysis', 'Assessment overview', 'Drug use',
+        ...(variant.name === 'prison' ? ['Accommodation'] : []),
+        'Thinking, behaviours and attitudes', 'Personal relationships and community',
         'Finances', 'Employment and education'
       ])
       const text = (await rows.allTextContents()).join(' ')
       assert.ok(text.includes("Each 'Change' link opens the relevant victim page."))
       assert.ok(text.includes("Children's cards are no longer shown on the summary page."))
       assert.ok(text.includes("Only show the parenting responsibilities question when 'Yes' is selected"))
+      assert.ok(text.includes("Added 'View all answers'"))
+      assert.ok(text.includes("Selecting 'Other' reveals a required drug name field."))
+      assert.equal(text.includes("proposed accommodation not suitable"), variant.name === 'prison')
       assert.equal(text.includes('important contacts in custody'), variant.name === 'prison')
-      assert.equal(text.includes('before custody'), variant.name === 'prison')
+      assert.equal(text.includes("Where did Alex get their money from before custody?"), variant.name === 'prison')
       assert.equal(text.includes('day-to-day commitments'), variant.name === 'prison')
       assert.equal(text.includes('Yes, were living together'), variant.name === 'prison')
       assert.equal(text.includes('perpetrated strangulation or suffocation'), variant.name === 'community')
@@ -218,12 +223,11 @@ for (const width of [1280, 390]) {
     await page.goto(`${prefix}drugs-help.html`)
     const heading = page.locator('main h1:visible')
     assert.equal(await heading.count(), 1)
-    assert.equal(await heading.evaluate(node => node.childNodes[0].textContent.trim()), 'Drug use')
+    assert.equal((await heading.innerText()).trim(), 'Does anything help Alex to stop or reduce their drug use?')
     assert.deepEqual(await page.locator('#san-drugs-help-form h2').allTextContents(), [
-      'Does anything help Alex to stop or reduce their drug use?',
       'Does Alex seem motivated to stop or reduce their drug use?'
     ])
-    assert.equal(await page.locator('#san-drugs-help-form .govuk-fieldset__legend--m').count(), 2)
+    assert.equal(await page.locator('#san-drugs-help-form .govuk-fieldset__legend--m').count(), 1)
     assert.equal(await page.locator('#helped-reduce-hint').innerText(), 'Consider any treatment, support networks or lifestyle changes.')
     assert.deepEqual(await page.locator('#analysis-motivation label').allTextContents(), [
       'Does not show motivation to stop or reduce', 'Shows some motivation to stop or reduce',
@@ -253,16 +257,20 @@ for (const width of [1280, 390]) {
     await submit.click()
     await page.waitForURL(/drugs-changes\.html$/)
     assert.equal((await savedSession(page, key)).helpedReduceDetails, '')
-    await seedSession(page, key, { ...session, drugLastUsed: { heroin: 'more-than-six' } })
+    await seedSession(page, key, {
+      ...session,
+      drugLastUsed: { heroin: 'more-than-six' },
+      injectedWhen: { heroin: ['more-than-six'] }
+    })
     await page.goto(`${prefix}drugs-help-past.html`)
-    assert.equal(await page.locator('main h1:visible').innerText(), 'Did anything help Alex to stop or reduce their drug use?')
+    assert.equal(await page.locator('main h1:visible').innerText(), 'Has anything helped Alex to stop or reduce their drug use in the past?')
     assert.equal(await page.locator('#analysis-motivation').count(), 0)
   }, { viewport: { width, height: 900 } }))
 }
 
 for (const custody of ['yes', 'no']) {
   for (const width of [1280, 390]) {
-    test(`prison drugs-injected/${custody}/${width}: reference layout preserves wording, validation and checkbox answers`, async () => withPage(async page => {
+    test(`prison drugs-injected/${custody}/${width}: reference layout preserves wording, validation and radio answers`, async () => withPage(async page => {
       const key = 'sanTrainingPrisonAssessment'
       await seedSession(page, key, {
         drugUse: 'yes', drugsInCustody: custody, drugTypes: ['heroin'],
@@ -274,26 +282,27 @@ for (const custody of ['yes', 'no']) {
       const heading = page.locator('main h1:visible')
       assert.equal(await heading.count(), 1)
       assert.equal(await heading.getAttribute('class'), 'govuk-heading-l')
-      assert.equal(await heading.innerText(), custody === 'yes' ? 'When has Alex injected drugs?' : 'When did Alex inject drugs?')
+      assert.equal(await heading.innerText(), 'When did Alex inject drugs?')
       assert.match(await page.locator('.san-content-header .govuk-caption-l').innerText(), /^Drug use/)
       const group = page.locator('[data-du-injected-when="heroin"]')
       assert.equal(await group.locator('legend').innerText(), 'Heroin')
-      assert.equal(await group.locator('.govuk-hint').innerText(), 'Select one or both.')
-      assert.deepEqual(await group.locator('label').allTextContents(), custody === 'yes'
-        ? ['In the last 6 months', 'More than 6 months ago']
-        : ['In the 6 months before custody', 'More than 6 months before custody'])
+      assert.equal(await group.locator('.govuk-hint').count(), 0)
+      assert.deepEqual(await group.locator('label').allTextContents(), ['In the 6 months before custody', 'More than 6 months before custody'])
       assert.equal(await page.locator('[data-du-injected-when]:visible').count(), 1)
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true)
       const submit = page.getByRole('button', { name: 'Save and continue', exact: true })
       await submit.click()
       assert.equal(await page.locator('.govuk-error-summary__list a').innerText(), 'Select when Alex injected Heroin')
       await group.locator('input[value="last-six"]').check()
-      await group.locator('input[value="more-than-six"]').check()
       await submit.click()
       await page.waitForURL(/drugs-help\.html$/)
-      assert.deepEqual((await savedSession(page, key)).injectedWhen, { heroin: ['last-six', 'more-than-six'] })
+      assert.deepEqual((await savedSession(page, key)).injectedWhen, { heroin: ['last-six'] })
       await page.goto(url)
-      assert.equal(await group.locator('input:checked').count(), 2)
+      assert.equal(await group.locator('input:checked').count(), 1)
+      await group.locator('input[value="more-than-six"]').check()
+      await submit.click()
+      await page.waitForURL(/drugs-help-past\.html$/)
+      assert.deepEqual((await savedSession(page, key)).injectedWhen, { heroin: ['more-than-six'] })
     }, { viewport: { width, height: 900 } }))
   }
 }
@@ -306,8 +315,7 @@ for (const custody of ['yes', 'no']) {
       await seedSession(page, key, {
         drugUse: 'yes', drugsInCustody: custody, drugTypes: ['heroin', 'other'],
         extraDrugs: [
-          { id: 'extra-1', name: '', lastUsed: '' },
-          { id: 'extra-2', name: 'Second example substance', lastUsed: 'more-than-six' }
+          { id: 'extra-1', name: 'First example substance', lastUsed: '' }
         ]
       })
       const prefix = `${baseUrl}/san-training/prison/`
@@ -315,50 +323,42 @@ for (const custody of ['yes', 'no']) {
       assert.equal(await page.locator('main h1').count(), 1)
       assert.equal(await page.locator('main h1').innerText(), 'When did Alex last use these drugs?')
       assert.match(await page.locator('.san-content-header .govuk-caption-l').innerText(), /^Drug use/)
-      const labels = custody === 'no'
-        ? ['In the 6 months before custody', 'More than 6 months before custody']
-        : ['In the last 6 months', 'More than 6 months ago']
+      const labels = ['In the 6 months before custody', 'More than 6 months before custody']
       assert.deepEqual(await page.locator('[data-du-when="heroin"] label').allTextContents(), labels)
       await page.locator('#last-used-heroin-last-six').check()
       const add = page.locator('[data-du-add-drug]')
       assert.equal(await add.isVisible(), false)
       assert.equal(await page.getByRole('button', { name: 'Add another drug', exact: true }).count(), 0)
       const extras = page.locator('[data-du-extra-item]')
-      assert.equal(await extras.count(), 2)
-      assert.equal(await extras.first().getByLabel('Drug name').inputValue(), '')
+      assert.equal(await extras.count(), 1)
+      assert.equal(await extras.first().locator('h3').innerText(), 'First example substance')
       assert.equal(await extras.first().locator('input:checked').count(), 0)
       assert.deepEqual(await extras.first().locator('.govuk-radios__label').allTextContents(), labels)
       const submit = page.getByRole('button', { name: 'Save and continue', exact: true })
       await submit.click()
-      assert.equal(await page.locator('.govuk-error-summary__list a').count(), 2)
-      await extras.first().getByLabel('Drug name').fill('First example substance')
+      assert.equal(await page.locator('.govuk-error-summary__list a').count(), 1)
       await extras.first().locator('input[value="last-six"]').check()
-      assert.equal(await extras.count(), 2)
-      assert.equal(await extras.first().getByLabel('Drug name').inputValue(), 'First example substance')
+      assert.equal(await extras.count(), 1)
+      assert.equal(await extras.first().locator('h3').innerText(), 'First example substance')
       assert.equal(await extras.first().locator('input[value="last-six"]').isChecked(), true)
       assert.equal(await page.locator('#last-used-heroin-last-six').isChecked(), true)
-      await extras.nth(1).getByLabel('Drug name').fill('Second example substance')
-      await extras.nth(1).locator('input[value="more-than-six"]').check()
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true)
       await submit.click()
       await page.waitForURL(/drugs-before(?:\.html)?$/)
       const saved = await savedSession(page, key)
       assert.deepEqual(saved.drugTypes, ['heroin', 'other'])
       assert.deepEqual(saved.extraDrugs, [
-        { id: 'extra-1', name: 'First example substance', lastUsed: 'last-six' },
-        { id: 'extra-2', name: 'Second example substance', lastUsed: 'more-than-six' }
+        { id: 'extra-1', name: 'First example substance', lastUsed: 'last-six' }
       ])
-      assert.equal(await page.locator('[data-du-frequency-extra-item]').count(), 2)
+      assert.equal(await page.locator('[data-du-frequency-extra-item]').count(), 1)
       await page.goto(`${prefix}drugs-summary`)
       assert.match(await page.locator('main').innerText(), /First example substance/)
-      assert.match(await page.locator('main').innerText(), /Second example substance/)
       await page.goto(`${prefix}drugs-types`)
       assert.equal(await page.locator('input[name="drug_types"][value="other"]').isChecked(), true)
       await submit.click()
       await page.waitForURL(/drugs-when(?:\.html)?$/)
       await page.reload()
-      assert.deepEqual(await extras.locator('input[type="text"]').evaluateAll(inputs => inputs.map(input => input.value)),
-        ['First example substance', 'Second example substance'])
+      assert.equal(await extras.locator('h3').innerText(), 'First example substance')
       assert.equal(await add.isVisible(), false)
       for (const otherKey of sessionKeys.filter(value => value !== key)) {
         assert.deepEqual(await savedSession(page, otherKey), { sentinel: otherKey })
@@ -405,40 +405,40 @@ for (const variant of variants) {
       await page.locator('input[name="drug_types"][value="heroin"]').check()
       await page.locator('input[name="drug_types"][value="other"]').check()
       await page.getByRole('button', { name: 'Save and continue', exact: true }).click()
+      await page.locator('.govuk-error-summary__list a').getByText('Enter the drug name').waitFor()
+      await page.getByLabel('Drug name', { exact: true }).fill('Example substance')
+      await page.getByRole('button', { name: 'Save and continue', exact: true }).click()
       await page.waitForURL(/drugs-when(?:\.html)?$/)
       const extra = page.locator('[data-du-extra-item]')
       await extra.waitFor({ state: 'visible' })
       assert.equal(await extra.count(), 1)
-      assert.equal(await page.locator('[data-du-add-drug]').count(), variant.name === 'prison' ? 1 : 0)
-      assert.equal(await page.locator('[data-du-add-drug]:visible').count(), 0)
+      assert.equal(await page.locator('[data-du-add-drug]').count(), 0)
       assert.equal(await page.locator('[data-du-remove-drug]').count(), 0)
-      await page.getByRole('heading', { name: 'Add \u2018other\u2019 drug', exact: true }).waitFor()
-      await extra.getByRole('heading', { name: 'When was this drug last used?', exact: true }).waitFor()
-      assert.equal(await extra.getByRole('heading', { name: /^Drug \d/ }).count(), 0)
+      await extra.getByRole('heading', { name: 'Example substance', exact: true }).waitFor()
+      assert.equal(await extra.getByLabel('Drug name', { exact: true }).count(), 0)
       assert.equal(await extra.locator('hr').count(), 0)
       assert.deepEqual(await extra.locator('.govuk-radios__label').allTextContents(), await page.locator('[data-du-when="heroin"] .govuk-radios__label').allTextContents())
       await page.locator('#last-used-heroin-last-six').check()
-      await page.getByRole('button', { name: 'Save and continue', exact: true }).click()
-      assert.equal(await page.locator('.govuk-error-summary__list a').count(), 2)
-      await page.getByLabel('Drug name', { exact: true }).fill('Example substance')
       await extra.locator('input[value="last-six"]').check()
       await page.getByRole('button', { name: 'Save and continue', exact: true }).click()
       await page.waitForURL(/drugs-before(?:\.html)?$/)
       const saved = await savedSession(page, variant.key)
       assert.deepEqual(saved.extraDrugs, [{ id: 'extra-1', name: 'Example substance', lastUsed: 'last-six' }])
       await page.goto(`${baseUrl}/san-training/${variant.name}/drugs-when`)
-      assert.equal(await page.getByLabel('Drug name', { exact: true }).inputValue(), 'Example substance')
+      assert.equal(await extra.getByRole('heading', { level: 3 }).innerText(), 'Example substance')
       assert.equal(await extra.locator('input[value="last-six"]').isChecked(), true)
       for (const key of sessionKeys.filter(key => key !== variant.key)) assert.deepEqual(await savedSession(page, key), { sentinel: key })
     }))
   }
 
   test(`${variant.name}: Other drug is available alone and removed by deselecting Other`, async () => withPage(async page => {
-    await seedSession(page, variant.key, { drugUse: 'yes', drugsInCustody: 'no', drugTypes: ['other'] })
+    await seedSession(page, variant.key, {
+      drugUse: 'yes', drugsInCustody: 'no', drugTypes: ['other'],
+      extraDrugs: [{ id: 'extra-1', name: 'Example substance', lastUsed: '' }]
+    })
     await page.goto(`${baseUrl}/san-training/${variant.name}/drugs-when`)
-    await page.getByRole('heading', { name: 'Add \u2018other\u2019 drug', exact: true }).waitFor()
     assert.equal(await page.locator('[data-du-extra-item]').count(), 1)
-    await page.getByLabel('Drug name', { exact: true }).fill('Example substance')
+    assert.equal(await page.locator('[data-du-extra-item] h3').innerText(), 'Example substance')
     await page.locator('[data-du-extra-item] input[value="more-than-six"]').check()
     await page.getByRole('button', { name: 'Save and continue', exact: true }).click()
     await page.waitForURL(/drugs-before(?:\.html)?$/)
@@ -450,8 +450,7 @@ for (const variant of variants) {
     await page.waitForURL(/drugs-when(?:\.html)?$/)
     assert.equal(await page.locator('[data-du-extra-drugs]').isVisible(), false)
     assert.equal(await page.locator('[data-du-extra-item], [data-du-remove-drug]').count(), 0)
-    assert.equal(await page.locator('[data-du-add-drug]').count(), variant.name === 'prison' ? 1 : 0)
-    assert.equal(await page.locator('[data-du-add-drug]:visible').count(), 0)
+    assert.equal(await page.locator('[data-du-add-drug]').count(), 0)
     assert.deepEqual((await savedSession(page, variant.key)).extraDrugs, [])
     await page.locator('#last-used-heroin-last-six').check()
     await page.getByRole('button', { name: 'Save and continue', exact: true }).click()
@@ -471,12 +470,15 @@ for (const variant of variants) {
     await page.goto(`${baseUrl}/san-training/${variant.name}/drugs-summary`)
     await page.locator('a[href*="drugs-when"][href*="extra-1"]').first().click()
     await page.waitForURL(/drugs-when/)
-    await page.getByLabel('Drug name', { exact: true }).fill('Updated substance')
     assert.equal(await page.locator('[data-du-extra-item]').count(), 1)
-    assert.equal(await page.locator('[data-du-add-drug]:visible, [data-du-remove-drug]').count(), 0)
+    assert.equal(await page.locator('[data-du-extra-item] h3').innerText(), 'First substance')
+    await page.locator('[data-du-extra-item] input[value="more-than-six"]').check()
+    assert.equal(await page.locator('[data-du-add-drug], [data-du-remove-drug]').count(), 0)
     await page.getByRole('button', { name: 'Save and continue', exact: true }).click()
     await page.waitForURL(/drugs-summary(?:\.html)?$/)
-    assert.deepEqual((await savedSession(page, variant.key)).extraDrugs, [{ ...extras[0], name: 'Updated substance' }, extras[1]])
+    assert.deepEqual((await savedSession(page, variant.key)).extraDrugs, [
+      { ...extras[0], lastUsed: 'more-than-six' }, extras[1]
+    ])
   }))
 
   for (const width of [1280, 390]) {
@@ -666,8 +668,8 @@ test('training storyboards have local images and training-only prototype links',
     await page.goto(new URL(file, root).href)
     await page.locator('img').evaluateAll(images => images.forEach(image => { image.loading = 'eager' }))
     await page.waitForFunction(() => [...document.images].every(image => image.complete && image.naturalWidth > 0))
-    assert.equal(await page.locator('[role="tab"]').count(), 9)
-    assert.equal(await page.locator('.journey__header').count(), 20)
+    assert.equal(await page.locator('[role="tab"]').count(), 10)
+    assert.equal(await page.locator('.journey__header').count(), 22)
     await page.getByRole('tab', { name: 'Drug use', exact: true }).click()
     assert.equal(await page.locator('#drugs').isVisible(), true)
     assert.equal(await page.locator('#accommodation').isVisible(), false)
@@ -735,10 +737,14 @@ test('every journey PNG is a verified capture of its own training variant, not a
           assert.equal(journey[1].title, 'Does Alex want to make changes to their thinking, behaviours and attitudes?')
           assert.equal(journey[2].title, 'Risk of sexual harm')
         }
-        const final = journey.at(-1)
+        const final = journey.findLast(capture => capture.stage === 'complete')
+        assert.ok(final, `${variant}/${section.id}/${scenario}: missing completed capture`)
         assert.equal(final.stage, 'complete', `${variant}/${section.id}/${scenario}`)
         assert.equal(final.complete, true)
         assert.ok(journey.some(capture => capture.stage === 'summary'))
+        if (section.id === 'drugs' && scenario === '02-no-inject') {
+          assert.equal(journey.find(capture => capture.stage === 'previous-help').title, 'Has anything helped Alex to stop or reduce their drug use in the past?')
+        }
         if (section.id === 'offence') {
           assert.equal(journey.filter(capture => capture.stage.startsWith('analysis')).length, 0)
         } else if (['02-no-further', '03-none', '03-never'].includes(scenario)) {
@@ -746,10 +752,11 @@ test('every journey PNG is a verified capture of its own training variant, not a
           assert.equal(exempt.tab, 'Practitioner analysis')
           assert.equal(exempt.answeredAnalysisQuestions, 0)
         } else {
-          assert.deepEqual(journey.slice(-3).map(capture => capture.stage), ['analysis', 'analysis-answered', 'complete'])
-          assert.equal(journey.at(-3).answeredAnalysisQuestions, 0)
-          assert.equal(journey.at(-2).answeredAnalysisQuestions, 3)
-          assert.equal(journey.at(-2).complete, false)
+          const completionStages = journey.filter(capture => ['analysis', 'analysis-answered', 'complete'].includes(capture.stage))
+          assert.deepEqual(completionStages.map(capture => capture.stage), ['analysis', 'analysis-answered', 'complete'])
+          assert.equal(completionStages[0].answeredAnalysisQuestions, 0)
+          assert.equal(completionStages[1].answeredAnalysisQuestions, 3)
+          assert.equal(completionStages[1].complete, false)
           assert.equal(final.tab, 'Practitioner analysis')
         }
       }
@@ -760,7 +767,9 @@ test('every journey PNG is a verified capture of its own training variant, not a
       assert.ok(new URL(capture.url).pathname.startsWith(`/san-training/${variant}/`), capture.url)
       assert.equal(capture.phase, 'beta')
       assert.ok(capture.heading.trim())
-      const title = `${capture.heading}${capture.tab && capture.heading !== capture.tab ? ` - ${capture.tab}` : ''}${capture.stage === 'complete' ? ' - Complete' : ''}`
+      const title = capture.stage === 'assessment-view'
+        ? capture.title
+        : `${capture.heading}${capture.tab && capture.heading !== capture.tab ? ` - ${capture.tab}` : ''}${capture.stage === 'complete' ? ' - Complete' : ''}`
       assert.equal(capture.title, title)
       assert.deepEqual(cards[index], { title, alt: title })
       const image = await readFile(new URL(asset, directory))

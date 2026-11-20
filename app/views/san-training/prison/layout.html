@@ -6,7 +6,7 @@
 {% extends "layouts/assessment.html" %}
 
 {% set showReturnToOasysButton = true %}
-{% set hideSideNav = false %}
+{% set hideSideNav = sanHideSideNav | default(false) %}
 {% set hideJourneyServiceHeader = true %}
 {% set contentColumnPageHeader = true %}
 {% set stickySideNav = false %}

@@ -49,7 +49,6 @@ const getUxHandoverLastUpdatedLabel = () => {
 /** Alex's date of birth – keep in sync with assessment offender header / JS session helpers */
 const OFFENDER_DATE_OF_BIRTH = { day: 2, month: 10, year: 1969 }
 const DEFAULT_FIRST_SANCTION_DATE = { day: '15', month: '5', year: '2012' }
-
 const normaliseDatePart = (value) => String(value == null ? '' : value).trim()
 
 const isValidDateParts = (parts) => {

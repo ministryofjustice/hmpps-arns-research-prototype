@@ -1,0 +1,16 @@
+{% extends "san-training/community/layout.html" %}
+
+{% set pageName = "Alex's Strengths and Needs" %}
+{% set sanHideSideNav = true %}
+{% set hideOffenderHeader = true %}
+{% set backLinkHref = "accommodation.html" %}
+
+{% block content %}
+
+{% include "san-training/community/includes/assessment-journey-page-open.html" %}
+
+{% include "san-training/all-answers.html" %}
+
+{% include "san-training/community/includes/assessment-page-close.html" %}
+
+{% endblock %}

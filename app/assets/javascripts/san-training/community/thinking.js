@@ -126,7 +126,7 @@ const HARM_HINTS = {
   }
 }
 
-const EXAMPLE_COMPLETE = {
+export const EXAMPLE_COMPLETE = {
   thinkingConsequences: 'yes',
   thinkingStable: 'sometimes',
   thinkingActivities: 'sometimes',
@@ -292,8 +292,10 @@ const renderAnalysisSummary = (session) => {
 }
 
 // Check-your-answers for the questions tab and analysis tab.
-const renderSummary = (session) => {
-  const mount = document.querySelector('[data-tb-summary]')
+export const sectionQuestionsComplete = (session) => questionsAnswered(session) && sexualHarmAnswered(session)
+
+export const renderSectionSummary = (session, target) => {
+  const mount = target || document.querySelector('[data-tb-summary]')
   if (!mount) return
 
   const html = thinkingRows(session)
@@ -520,7 +522,7 @@ const initThinking = () => {
   }
   if (pageName === 'summary') {
     restoreAnalysis(session)
-    renderSummary(session)
+    renderSectionSummary(session)
     document.querySelector('[data-tb-go-analysis]')?.addEventListener('click', openAnalysisTab)
     document.querySelector('[data-tb-analysis-summary]')?.addEventListener('click', (event) => {
       const link = event.target.closest('[data-tb-edit-analysis]')
@@ -622,7 +624,7 @@ const initThinking = () => {
     setSanSession({ ...answers, thinkingComplete: true })
     const completedSession = getSanSession()
     applyProgress(completedSession)
-    renderSummary(completedSession)
+    renderSectionSummary(completedSession)
     openAnalysisTab()
     focusCompletedSection()
   })

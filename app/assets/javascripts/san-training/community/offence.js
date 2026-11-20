@@ -240,8 +240,24 @@ const victimCardHtml = (victim, index, from, withActions = true) => {
 }
 
 // Check-your-answers for the questions tab.
-const renderSummary = (session) => {
-  const mount = document.querySelector('[data-oa-summary]')
+export const sectionQuestionsComplete = (session) => Boolean(
+  session.offenceDescription &&
+  Array.isArray(session.offenceElements) && session.offenceElements.length &&
+  session.offenceWhy &&
+  Array.isArray(session.offenceMotivations) && session.offenceMotivations.length &&
+  Array.isArray(session.offenceCommittedAgainst) && session.offenceCommittedAgainst.length &&
+  session.offenceInvolved &&
+  session.offenceLeader &&
+  session.offenceRecognise &&
+  session.offenceResponsibility &&
+  session.offenceEscalation &&
+  session.offencePatterns &&
+  session.offenceLinked &&
+  (!session.offenceCommittedAgainst.includes('people') || victims(session).length)
+)
+
+export const renderSectionSummary = (session, target) => {
+  const mount = target || document.querySelector('[data-oa-summary]')
   if (!mount) return
   const rows = []
   if (session.offenceDescription) {
@@ -563,11 +579,11 @@ const initOffence = () => {
     })
   }
   if (summary) {
-    renderSummary(session)
+    renderSectionSummary(session)
     document.querySelector('[data-oa-mark-complete]')?.addEventListener('click', () => {
       setSanSession({ offenceComplete: true })
       applyProgress(getSanSession())
-      renderSummary(getSanSession())
+      renderSectionSummary(getSanSession())
       focusCompletedSection()
     })
   }
