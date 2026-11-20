@@ -100,7 +100,7 @@ const MOTIVATION_LABELS = {
 }
 
 // Pre-filled session for ?example=complete.
-const EXAMPLE_COMPLETE = {
+export const EXAMPLE_COMPLETE = {
   drugUse: 'yes',
   drugTypes: ['heroin', 'cannabis', 'hallucinogens'],
   drugLastUsed: {
@@ -200,6 +200,11 @@ const injectedWhenComplete = (session) => injectedDrugIds(session).every((id) =>
   Array.isArray(session.injectedWhen && session.injectedWhen[id]) && session.injectedWhen[id].length
 ))
 
+const hasRecentInjectedUse = (session) => injectedDrugIds(session).some((id) => (
+  Array.isArray(session.injectedWhen && session.injectedWhen[id])
+    && session.injectedWhen[id].includes('last-six')
+))
+
 const beforeFieldsAnswered = (session) => {
   if (!typesAnswered(session)) return false
   if (assessedDrugs(session).some((id) => !(session.drugFrequency && session.drugFrequency[id]))) return false
@@ -224,16 +229,20 @@ const beforeAnswered = (session) => {
 
 const hasRecentDrugUse = (session) => recentDrugs(session).length > 0
 
-const helpPage = (session) => hasRecentDrugUse(session) ? 'drugs-help.html' : 'drugs-help-past.html'
+const hasRecentHelpContext = (session) => (
+  injectedWhenNeeded(session) ? hasRecentInjectedUse(session) : hasRecentDrugUse(session)
+)
 
-const helpQuestion = (session) => hasRecentDrugUse(session)
+const helpQuestion = (session) => hasRecentHelpContext(session)
   ? 'Does anything help Alex to stop or reduce their drug use?'
-  : 'Did anything help Alex to stop or reduce their drug use?'
+  : 'Has anything helped Alex to stop or reduce their drug use in the past?'
+
+const helpPage = (session) => hasRecentHelpContext(session) ? 'drugs-help.html' : 'drugs-help-past.html'
 
 const helpAnswered = (session) => {
   if (!session.helpedReduce) return false
   if (session.helpedReduce === 'yes' && !session.helpedReduceDetails) return false
-  return !hasRecentDrugUse(session) || !!session.drugAnalysisMotivation
+  return !hasRecentHelpContext(session) || !!session.drugAnalysisMotivation
 }
 
 const backgroundAnswered = (session) => {
@@ -307,7 +316,7 @@ const drugCard = (session, id) => {
     if (injected) {
       const when = session.injectedWhen && session.injectedWhen[id]
       rows.push(summaryRow(
-        'When has Alex injected this drug?',
+        'When did Alex inject this drug?',
         Array.isArray(when) ? when.map((value) => labelled(INJECTED_WHEN_LABELS, value)) : [],
         summaryChangeHref('drugs-injected', `injected-when-${id}`)
       ))
@@ -359,7 +368,7 @@ const drugRows = (session) => {
     parts.push(older.map((id) => drugCard(session, id)).join(''))
   }
 
-  if (session.helpedReduce || (hasRecentDrugUse(session) && session.drugAnalysisMotivation) || session.drugChanges) {
+  if (session.helpedReduce || (hasRecentHelpContext(session) && session.drugAnalysisMotivation) || session.drugChanges) {
     parts.push('<h2 class="govuk-heading-m">More information</h2>')
     const rows = []
     if (session.helpedReduce) {
@@ -368,15 +377,15 @@ const drugRows = (session) => {
       rows.push(summaryRow(
         helpQuestion(session),
         lines,
-        summaryChangeHref(hasRecentDrugUse(session) ? 'drugs-help' : 'drugs-help-past', 'helped-reduce'),
+        summaryChangeHref(hasRecentHelpContext(session) ? 'drugs-help' : 'drugs-help-past', 'helped-reduce'),
         { secondaryFrom: 1 }
       ))
     }
-    if (hasRecentDrugUse(session) && session.drugAnalysisMotivation) {
+    if (hasRecentHelpContext(session) && session.drugAnalysisMotivation) {
       rows.push(summaryRow(
         'Does Alex seem motivated to stop or reduce their drug use?',
         [labelled(MOTIVATION_LABELS, session.drugAnalysisMotivation)],
-        summaryChangeHref(hasRecentDrugUse(session) ? 'drugs-help' : 'drugs-help-past', 'analysis-motivation')
+        summaryChangeHref(hasRecentHelpContext(session) ? 'drugs-help' : 'drugs-help-past', 'analysis-motivation')
       ))
     }
     if (session.drugChanges) {
@@ -425,8 +434,10 @@ const analysisRows = (session) => {
 }
 
 // Check-your-answers for the questions tab and analysis tab.
-const renderSummary = (session) => {
-  const mount = document.querySelector('[data-du-summary]')
+export const sectionQuestionsComplete = (session) => questionsAnswered(session)
+
+export const renderSectionSummary = (session, target) => {
+  const mount = target || document.querySelector('[data-du-summary]')
   if (!mount) return
 
   const complete = !!session.drugComplete
@@ -555,7 +566,7 @@ const readUseAnswers = () => ({
 
 const readTypesAnswers = () => ({
   drugTypes: checkedValues('drug_types'),
-  otherDrugDetails: ''
+  otherDrugDetails: fieldValue('other-drug-name')
 })
 
 const summaryFocusDrugId = () => {
@@ -619,8 +630,8 @@ const readBeforeAnswers = (session) => {
 const readInjectedWhenAnswers = (session) => {
   const injectedWhen = {}
   injectedDrugIds(session).forEach((id) => {
-    const when = checkedValues(`injected_when_${id}`)
-    if (when.length) injectedWhen[id] = when
+    const when = checkedValue(`injected_when_${id}`)
+    if (when) injectedWhen[id] = [when]
   })
   return { injectedWhen }
 }
@@ -678,12 +689,18 @@ const validateUse = (answers) => {
 }
 
 const validateTypes = (answers) => {
-  if (answers.drugTypes.length) return []
-  return [{
+  const errors = []
+  if (!answers.drugTypes.length) errors.push({
     group: 'drug-types',
     href: '#drug-types',
     text: 'Select which drugs Alex has used'
-  }]
+  })
+  if (answers.drugTypes.includes('other') && !answers.otherDrugDetails) errors.push({
+    group: 'other-drug-name',
+    href: '#other-drug-name',
+    text: 'Enter the drug name'
+  })
+  return errors
 }
 
 const validateWhen = (answers, session) => {
@@ -767,7 +784,7 @@ const validateHelp = (answers, session) => {
     errors.push({
       group: 'helped-reduce',
       href: '#helped-reduce',
-      text: hasRecentDrugUse(session)
+      text: hasRecentHelpContext(session)
         ? 'Select if anything helps Alex to stop or reduce their drug use'
         : 'Select if anything helped Alex to stop or reduce their drug use'
     })
@@ -778,7 +795,7 @@ const validateHelp = (answers, session) => {
       text: 'Enter details'
     })
   }
-  if (hasRecentDrugUse(session) && !answers.drugAnalysisMotivation) {
+  if (hasRecentHelpContext(session) && !answers.drugAnalysisMotivation) {
     errors.push({
       group: 'analysis-motivation',
       href: '#analysis-motivation',
@@ -864,19 +881,18 @@ const injectedWhenHtml = (id, label) => {
   const safeId = escapeHtml(id)
   const safeLabel = escapeHtml(label)
   return `<div class="govuk-form-group" data-du-injected-when="${safeId}" data-du-injected-extra-item data-san-error-group="injected-when-${safeId}">
-      <fieldset class="govuk-fieldset" id="injected-when-${safeId}" aria-describedby="injected-when-${safeId}-hint">
+      <fieldset class="govuk-fieldset" id="injected-when-${safeId}">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
           <h2 class="govuk-fieldset__heading">${safeLabel}</h2>
         </legend>
-        <div id="injected-when-${safeId}-hint" class="govuk-hint">Select one or both.</div>
-        <div class="govuk-checkboxes">
-          <div class="govuk-checkboxes__item">
-            <input class="govuk-checkboxes__input" id="injected-when-${safeId}-last-six" name="injected_when_${safeId}" type="checkbox" value="last-six">
-            <label class="govuk-label govuk-checkboxes__label" for="injected-when-${safeId}-last-six">In the last 6 months</label>
+        <div class="govuk-radios">
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="injected-when-${safeId}-last-six" name="injected_when_${safeId}" type="radio" value="last-six">
+            <label class="govuk-label govuk-radios__label" for="injected-when-${safeId}-last-six">${INJECTED_WHEN_LABELS['last-six']}</label>
           </div>
-          <div class="govuk-checkboxes__item">
-            <input class="govuk-checkboxes__input" id="injected-when-${safeId}-more-than-six" name="injected_when_${safeId}" type="checkbox" value="more-than-six">
-            <label class="govuk-label govuk-checkboxes__label" for="injected-when-${safeId}-more-than-six">More than 6 months ago</label>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="injected-when-${safeId}-more-than-six" name="injected_when_${safeId}" type="radio" value="more-than-six">
+            <label class="govuk-label govuk-radios__label" for="injected-when-${safeId}-more-than-six">${INJECTED_WHEN_LABELS['more-than-six']}</label>
           </div>
         </div>
       </fieldset>
@@ -967,16 +983,17 @@ const restoreUse = (session) => {
 
 const restoreTypes = (session) => {
   selectChecks('drug_types', session.drugTypes)
+  setField('other-drug-name', session.otherDrugDetails || extraDrugs(session)[0]?.name)
 }
 
 const readExtraDrugsFromForm = () => {
   return Array.from(document.querySelectorAll('[data-du-extra-item]')).map((item) => {
     const id = item.getAttribute('data-extra-id') || nextExtraDrugId()
-    const nameInput = item.querySelector('input[type="text"]')
+    const name = item.getAttribute('data-extra-name') || ''
     const lastUsed = item.querySelector(`input[name="last_used_${CSS.escape(id)}"]:checked`)
     return {
       id,
-      name: nameInput instanceof HTMLInputElement ? nameInput.value.trim() : '',
+      name,
       lastUsed: lastUsed instanceof HTMLInputElement ? lastUsed.value : ''
     }
   })
@@ -987,15 +1004,11 @@ const extraDrugItemHtml = (drug) => {
   const name = escapeHtml(drug.name || '')
   const lastSix = drug.lastUsed === 'last-six' ? ' checked' : ''
   const moreThan = drug.lastUsed === 'more-than-six' ? ' checked' : ''
-  return `<div class="san-extra-drugs__item" data-du-extra-item data-extra-id="${id}">
-    <div class="govuk-form-group" data-san-error-group="extra-name-${id}">
-      <label class="govuk-label" for="extra-name-${id}">Drug name</label>
-      <input class="govuk-input" id="extra-name-${id}" name="extra_name_${id}" type="text" value="${name}" autocomplete="off" spellcheck="false">
-    </div>
+  return `<div class="san-extra-drugs__item" data-du-extra-item data-extra-id="${id}" data-extra-name="${name}">
     <div class="govuk-form-group" data-san-error-group="last-used-${id}">
       <fieldset class="govuk-fieldset" id="last-used-${id}">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-          <h3 class="govuk-fieldset__heading">When was this drug last used?</h3>
+          <h3 class="govuk-fieldset__heading">${name}</h3>
         </legend>
         <div class="govuk-radios" data-module="govuk-radios">
           <div class="govuk-radios__item">
@@ -1017,13 +1030,12 @@ const renderExtraDrugList = (extras) => {
   const list = document.querySelector('[data-du-extra-list]')
   if (!list) return
   list.innerHTML = extras.map((drug) => extraDrugItemHtml(drug)).join('')
-  setHidden(heading, extras.length === 0)
+  setHidden(heading, true)
 }
 
 const extrasForWhenPage = (session) => {
   const extras = extraDrugs(session).map((drug) => ({ ...drug }))
   syncExtraDrugSeq(extras)
-  if (otherSelected(session) && extras.length === 0) extras.push(emptyExtraDrug())
   return extras
 }
 
@@ -1090,7 +1102,7 @@ const restoreBefore = (session) => {
 const restoreInjectedWhen = (session) => {
   if (!session.injectedWhen) return
   Object.entries(session.injectedWhen).forEach(([id, values]) => {
-    selectChecks(`injected_when_${id}`, values)
+    selectRadio(`injected_when_${id}`, Array.isArray(values) ? values[0] : values)
   })
 }
 
@@ -1257,7 +1269,7 @@ const initDrugs = () => {
   }
   if (pageName === 'summary') {
     restoreAnalysis(session)
-    renderSummary(session)
+    renderSectionSummary(session)
     document.querySelector('[data-du-go-analysis]')?.addEventListener('click', () => {
       openAnalysisTab()
     })
@@ -1317,7 +1329,11 @@ const initDrugs = () => {
       const value = previous.drugLastUsed && previous.drugLastUsed[id]
       if (value) drugLastUsed[id] = value
     })
-    setSanSession({ ...answers, drugLastUsed, extraDrugs: answers.drugTypes.includes('other') ? extraDrugs(previous) : [], drugComplete: false })
+    const previousExtra = extraDrugs(previous)[0]
+    const otherExtras = answers.drugTypes.includes('other')
+      ? [{ ...(previousExtra || emptyExtraDrug()), name: answers.otherDrugDetails }]
+      : []
+    setSanSession({ ...answers, drugLastUsed, extraDrugs: otherExtras, drugComplete: false })
     const next = getSanSession()
     window.location.assign(fromSummary() && beforeAnswered(next) ? 'drugs-summary.html' : 'drugs-when.html')
   })

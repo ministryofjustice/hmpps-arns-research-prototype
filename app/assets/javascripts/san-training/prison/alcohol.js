@@ -39,7 +39,7 @@ const EVIDENCE_HINTS = {
   detrimental: 'There is a detrimental effect on other areas of their life and is often directly related to offending.'
 }
 
-const EXAMPLE_COMPLETE = {
+export const EXAMPLE_COMPLETE = {
   alcoholUse: 'significant',
   alcoholEvidence: 'some',
   alcoholPastIssues: 'yes',
@@ -286,8 +286,10 @@ const renderAnalysisSummary = (session) => {
   setHidden(form, true)
 }
 
-const renderSummary = (session) => {
-  const mount = document.querySelector('[data-al-summary]')
+export const sectionQuestionsComplete = (session) => questionsAnswered(session)
+
+export const renderSectionSummary = (session, target) => {
+  const mount = target || document.querySelector('[data-al-summary]')
   if (!mount) return
 
   const complete = !!session.alcoholComplete
@@ -658,7 +660,7 @@ const initAlcohol = () => {
   }
   if (pageName === 'summary') {
     restoreAnalysis(session)
-    renderSummary(session)
+    renderSectionSummary(session)
     document.querySelector('[data-al-go-analysis]')?.addEventListener('click', openAnalysisTab)
     document.querySelector('[data-al-analysis-summary]')?.addEventListener('click', (event) => {
       const link = event.target.closest('[data-al-edit-analysis]')

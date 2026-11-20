@@ -20,12 +20,26 @@
       </legend>
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="drugs-in-custody-yes" name="drugs_in_custody" type="radio" value="yes">
+          <input class="govuk-radios__input" id="drugs-in-custody-yes" name="drugs_in_custody" type="radio" value="yes" data-aria-controls="conditional-drugs-in-custody-yes">
           <label class="govuk-label govuk-radios__label" for="drugs-in-custody-yes">Yes</label>
         </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-drugs-in-custody-yes">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="drugs-in-custody-yes-details">Give details</label>
+            <textarea class="govuk-textarea" id="drugs-in-custody-yes-details" name="drugs_in_custody_yes_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="drugs-in-custody-yes-details">You have 2,000 characters remaining</div>
+          </div>
+        </div>
         <div class="govuk-radios__item">
-          <input class="govuk-radios__input" id="drugs-in-custody-no" name="drugs_in_custody" type="radio" value="no">
+          <input class="govuk-radios__input" id="drugs-in-custody-no" name="drugs_in_custody" type="radio" value="no" data-aria-controls="conditional-drugs-in-custody-no">
           <label class="govuk-label govuk-radios__label" for="drugs-in-custody-no">No</label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-drugs-in-custody-no">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="drugs-in-custody-no-details">Give details (optional)</label>
+            <textarea class="govuk-textarea" id="drugs-in-custody-no-details" name="drugs_in_custody_no_details" rows="5" maxlength="2000"></textarea>
+            <div class="govuk-hint san-character-count" data-san-character-count="drugs-in-custody-no-details">You have 2,000 characters remaining</div>
+          </div>
         </div>
       </div>
     </fieldset>

@@ -78,16 +78,16 @@
     "section": "accommodation",
     "scenario": "01-settled-with-concerns",
     "file": "01-settled-with-concerns__06__accommodation-concerns-location.png",
-    "title": "Why is the location of Alex's accommodation not suitable? (optional)",
+    "title": "Why is the location of Alex's proposed accommodation not suitable? (optional)",
     "url": "http://localhost:3000/san-training/prison/accommodation-concerns?step=location",
     "note": "",
-    "heading": "Why is the location of Alex's accommodation not suitable? (optional)",
+    "heading": "Why is the location of Alex's proposed accommodation not suitable? (optional)",
     "tab": "",
     "stage": "questions",
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "4b7dee7dc9b1496438e97305e388efa4a12de3e562a18c495dfacd7530e5a973"
+    "sha256": "587b0467c08f5c7f7b7b57ba89a787cb41313580f761f3aa639a254ae6b665f6"
   },
   {
     "section": "accommodation",
@@ -132,7 +132,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "979ecc1d72fa0ed03b0c9e018e1cd53fc86a7f2b9df12209c86f3e59ad860a07"
+    "sha256": "88833254c7bf614faa280942ded04b1dc1cb2b05818f698e64fde198447ee433"
   },
   {
     "section": "accommodation",
@@ -147,7 +147,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "bd9fc84cca95cf6cec48a75a42d58171014869f5871adb4b9e886f35c44dedad"
+    "sha256": "4bbe72b4610bdf10248685a0a966f0b96b54cdc1fd8186adf7bc23da081ffa64"
   },
   {
     "section": "accommodation",
@@ -177,7 +177,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 3,
     "phase": "beta",
-    "sha256": "2b5d5eff5a612d5737860519b90ca1baa011419c029c7ede3286d2b8cbb1f706"
+    "sha256": "4cacc115877e26fbeeeec958e7ba868e24d8d5ad17b61f6af63f31f963fc3259"
   },
   {
     "section": "accommodation",
@@ -252,7 +252,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "979ecc1d72fa0ed03b0c9e018e1cd53fc86a7f2b9df12209c86f3e59ad860a07"
+    "sha256": "88833254c7bf614faa280942ded04b1dc1cb2b05818f698e64fde198447ee433"
   },
   {
     "section": "accommodation",
@@ -297,7 +297,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 3,
     "phase": "beta",
-    "sha256": "2b5d5eff5a612d5737860519b90ca1baa011419c029c7ede3286d2b8cbb1f706"
+    "sha256": "4cacc115877e26fbeeeec958e7ba868e24d8d5ad17b61f6af63f31f963fc3259"
   },
   {
     "section": "accommodation",
@@ -342,7 +342,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "5da0aa754aef27c57d5d2e622b86dac2837a4fca95b96fea6dad055a3dc20d76"
+    "sha256": "60724e18596b7e44f3c9c227031795040c5e88de8a0f9cdc2c05c706ecad1679"
   },
   {
     "section": "employment",
@@ -357,7 +357,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "384b7cd89dbb1935980824b61e596241f2842c2bcf7ca526761b35b7f10d6a49"
+    "sha256": "d6d11aad6da64cee339f126130bf35016505209df016a29a3d35fcaf78ea16e4"
   },
   {
     "section": "employment",
@@ -402,7 +402,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 3,
     "phase": "beta",
-    "sha256": "eb6cf7ca363ea38073b1e90eb3827dac96df40346de49ba20053a045830e939a"
+    "sha256": "1c92af8b02c2e40679740cc1fc08d80337592336d0d6fffe38f0b7dae5d52035"
   },
   {
     "section": "employment",
@@ -462,7 +462,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "fd6aba03cc6b5fb5d2f7873507faa4442a23c8544e29775c35d5c7b4081f2a6b"
+    "sha256": "ee8ea02c53c9c9fb1fafd9a3f55fcc65badc1761ef8596444eebf1311abf4c7d"
   },
   {
     "section": "employment",
@@ -477,7 +477,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "384b7cd89dbb1935980824b61e596241f2842c2bcf7ca526761b35b7f10d6a49"
+    "sha256": "d6d11aad6da64cee339f126130bf35016505209df016a29a3d35fcaf78ea16e4"
   },
   {
     "section": "employment",
@@ -522,7 +522,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 3,
     "phase": "beta",
-    "sha256": "eb6cf7ca363ea38073b1e90eb3827dac96df40346de49ba20053a045830e939a"
+    "sha256": "1c92af8b02c2e40679740cc1fc08d80337592336d0d6fffe38f0b7dae5d52035"
   },
   {
     "section": "employment",
@@ -567,7 +567,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "99af27db61d342790153c387da33c3838fb43b6ac143376d33ce9cca54f60a05"
+    "sha256": "f5e38ffc91ab5d42f81227e1f964f32b4233a5d997d03aedf3c6e5d91d785888"
   },
   {
     "section": "employment",
@@ -597,7 +597,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "384b7cd89dbb1935980824b61e596241f2842c2bcf7ca526761b35b7f10d6a49"
+    "sha256": "d6d11aad6da64cee339f126130bf35016505209df016a29a3d35fcaf78ea16e4"
   },
   {
     "section": "employment",
@@ -642,7 +642,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 3,
     "phase": "beta",
-    "sha256": "eb6cf7ca363ea38073b1e90eb3827dac96df40346de49ba20053a045830e939a"
+    "sha256": "1c92af8b02c2e40679740cc1fc08d80337592336d0d6fffe38f0b7dae5d52035"
   },
   {
     "section": "employment",
@@ -687,7 +687,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "0fcdc307a55274f4e55f21986d889d37f68cf57eee12d843dbedb59364e6c083"
+    "sha256": "fb04b8f8688b207465c42c668d734ab69cea412bbb665ab04bec361467cc976b"
   },
   {
     "section": "finances",
@@ -732,7 +732,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "3b20c4ed352cb97c143fa539758c612267c6ea9da67892ef9f4e429bee599228"
+    "sha256": "c73773d6876919622bd2c8e271ae09dbccfc405158879e7febb98f76af8ab32b"
   },
   {
     "section": "finances",
@@ -747,7 +747,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "b9a9ec8c067be733b396977b1b59a67b961e0a392753a0ef304f63a41f071ed8"
+    "sha256": "aa7a3dc2db8dce984304ebcab68a3fa92cb89206d9658199181e3133948c1fed"
   },
   {
     "section": "finances",
@@ -762,7 +762,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "c371caea2d991f4fdc160b0bccedf257bd0d35cea5b4377281e65a793c0bd8e1"
+    "sha256": "aed32e824caa2ca1dc18a7150462e2b1a05a656fd343af066c313bec99be3b81"
   },
   {
     "section": "finances",
@@ -807,7 +807,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 3,
     "phase": "beta",
-    "sha256": "27359ba112e6529188dcee70df7546245703a8cc046b716d7df2a6597cce8524"
+    "sha256": "665489332cf88f6f854f6d4869b5a53538014c494ace4bca09c80e881a40d176"
   },
   {
     "section": "finances",
@@ -867,7 +867,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "b39614898dfbdb86742d80695b44cf9bb9ea477bec1f1b5b7e6d9542533a3362"
+    "sha256": "3bb868b4b3416f65c467c101637213ce369a312904118b4e6282036cce18ed5a"
   },
   {
     "section": "finances",
@@ -942,7 +942,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "5587dc4bb1da6baf303b4cf6cbf2557bd4f6f88449a7808323c63c031a1f6da7"
+    "sha256": "aafbd3830d3757a45d37ba4e56729b386964534de8f84482b1dad68518b1613a"
   },
   {
     "section": "drugs",
@@ -957,7 +957,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "87403901129a9059eef9f499f4c5c5087ec847be2cf29dbbdbd2f92d84948220"
+    "sha256": "b3df9b70ddc38ea69aced44a5bc76c3b2f4904e1822b50d8236bdcd748ce742d"
   },
   {
     "section": "drugs",
@@ -972,52 +972,52 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "31fbfc3d8f163f3127ef60cb459418e22b9ceccd867017a1d3ab2bdf025eb0e9"
+    "sha256": "2eaeb87e42a312bd83a3b69e7e9ea00282575edceae47dbf3a88c1b318b6ebf7"
   },
   {
     "section": "drugs",
     "scenario": "01-injects",
     "file": "01-injects__05__drugs-before.png",
-    "title": "Drug use",
+    "title": "Drug use background",
     "url": "http://localhost:3000/san-training/prison/drugs-before.html",
     "note": "",
-    "heading": "Drug use",
+    "heading": "Drug use background",
     "tab": "",
     "stage": "questions",
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "01006baea11e565d11f0e3dd395ee18688bf3587d7d06667f69896671860d92d"
+    "sha256": "eaa208649c37114dcc7ff1c01d689a7dcb44ad5e3d165289c6827ba646691fd4"
   },
   {
     "section": "drugs",
     "scenario": "01-injects",
     "file": "01-injects__06__drugs-injected.png",
-    "title": "When has Alex injected drugs?",
+    "title": "When did Alex inject drugs?",
     "url": "http://localhost:3000/san-training/prison/drugs-injected.html",
     "note": "",
-    "heading": "When has Alex injected drugs?",
+    "heading": "When did Alex inject drugs?",
     "tab": "",
     "stage": "questions",
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "bb0ca7339a436dcfda00b68a7c70980d6d480ea6c9ab1d8dd0bbd0ae834c197e"
+    "sha256": "e054f489dcac0a4fde6f35d5308a221d34917d1514e2060fbd2e073786361657"
   },
   {
     "section": "drugs",
     "scenario": "01-injects",
     "file": "01-injects__07__drugs-help.png",
-    "title": "Drug use",
+    "title": "Does anything help Alex to stop or reduce their drug use?",
     "url": "http://localhost:3000/san-training/prison/drugs-help.html",
     "note": "",
-    "heading": "Drug use",
+    "heading": "Does anything help Alex to stop or reduce their drug use?",
     "tab": "",
     "stage": "questions",
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "edd8561e654a5e7ecf1fc36671d9d757bd7d4ae5201196e98b6558dda4dbd165"
+    "sha256": "5fadd8bd1d25b6cff52a90426f759f97501b623e91554d37ffafedbefc0cf904"
   },
   {
     "section": "drugs",
@@ -1032,7 +1032,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "f1ba9662a1dbad7e6d3fe8a4ee932500d41a89b1320c1d1028228f1931a0d306"
+    "sha256": "920274e06ae310e92415f7679d6228c27151784409f613a341ca3107d159694b"
   },
   {
     "section": "drugs",
@@ -1047,7 +1047,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "ac3bce91ff5b4500571f80d5f1082b7db7b513589b62422deba19843b42a8f46"
+    "sha256": "b85732e1a56f98ea3cd97fdc153e233408529c488178082c8538e4417ed0a6e4"
   },
   {
     "section": "drugs",
@@ -1077,7 +1077,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 3,
     "phase": "beta",
-    "sha256": "e12cfb73623366b774902d53cadc7e28ba5551595d8d4822f328164e41b960f5"
+    "sha256": "ee096ef26d8cc82d53fe405e894f7be475f72e84919a195e44e5721d5208f374"
   },
   {
     "section": "drugs",
@@ -1122,7 +1122,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "0d1a84cf8fd374b3ba06b06e4119f53aa6fbb62a411b1a3dc483be7ff8a71f11"
+    "sha256": "92fa0a4d291957212c5f7599df609e621ecd995f96bf6e7e81a52886abd5ab76"
   },
   {
     "section": "drugs",
@@ -1137,7 +1137,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "06c844659c75e44199d68cd5838d1a370f932bd3eda22e1b17d9818a9e4afbee"
+    "sha256": "b736108bf07e516e401aa2b4414f2634d76727ba17a70975feac544a9f3560cb"
   },
   {
     "section": "drugs",
@@ -1158,31 +1158,31 @@
     "section": "drugs",
     "scenario": "02-no-inject",
     "file": "02-no-inject__05__drugs-before.png",
-    "title": "Drug use",
+    "title": "Drug use background",
     "url": "http://localhost:3000/san-training/prison/drugs-before.html",
     "note": "",
-    "heading": "Drug use",
+    "heading": "Drug use background",
     "tab": "",
     "stage": "questions",
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "8aaa070632cae18729de29a24ce806b1f4181066b0da8efa99ee60a52d142c08"
+    "sha256": "4aa0cdbd1d5201b16a14e4d5ee2070577b86fdf32a7495eccef71ef671a43196"
   },
   {
     "section": "drugs",
     "scenario": "02-no-inject",
     "file": "02-no-inject__06__drugs-help-past.png",
-    "title": "Did anything help Alex to stop or reduce their drug use?",
+    "title": "Has anything helped Alex to stop or reduce their drug use in the past?",
     "url": "http://localhost:3000/san-training/prison/drugs-help-past.html",
     "note": "",
-    "heading": "Did anything help Alex to stop or reduce their drug use?",
+    "heading": "Has anything helped Alex to stop or reduce their drug use in the past?",
     "tab": "",
     "stage": "questions",
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "95e7bd0c50183e5d5ede212478e531725abefd89df37a6e4aecb752d7aa2286d"
+    "sha256": "5c68ca28b389f2f64cf2d03a695098e8e2f325387d0c6d51784f4c67bce2835e"
   },
   {
     "section": "drugs",
@@ -1197,7 +1197,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "f1ba9662a1dbad7e6d3fe8a4ee932500d41a89b1320c1d1028228f1931a0d306"
+    "sha256": "920274e06ae310e92415f7679d6228c27151784409f613a341ca3107d159694b"
   },
   {
     "section": "drugs",
@@ -1212,7 +1212,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "dacc84e96bc581256ffc7718150f53dedb89685f9f2832900f15b085f2fa3817"
+    "sha256": "43aa481a01fa85418793eb83ad4c6b264b5f6a3bc88be178e537a35a8ab5c430"
   },
   {
     "section": "drugs",
@@ -1242,7 +1242,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 3,
     "phase": "beta",
-    "sha256": "e12cfb73623366b774902d53cadc7e28ba5551595d8d4822f328164e41b960f5"
+    "sha256": "ee096ef26d8cc82d53fe405e894f7be475f72e84919a195e44e5721d5208f374"
   },
   {
     "section": "drugs",
@@ -1258,6 +1258,96 @@
     "answeredAnalysisQuestions": 3,
     "phase": "beta",
     "sha256": "9713fdca6ea49452b4f34b58851ed3a30c451a137a183ede7c5e3572456f291f"
+  },
+  {
+    "section": "drugs",
+    "scenario": "02-no-inject",
+    "file": "02-no-inject__12__drugs-custody-previous-custody.png",
+    "title": "Is there evidence Alex has been using drugs in custody?",
+    "url": "http://localhost:3000/san-training/prison/drugs-custody.html",
+    "note": "Alternate route: no evidence of drug use in custody. The No radio and optional details are restored.",
+    "heading": "Is there evidence Alex has been using drugs in custody?",
+    "tab": "",
+    "stage": "previous-custody",
+    "complete": false,
+    "answeredAnalysisQuestions": 0,
+    "phase": "beta",
+    "sha256": "92fa0a4d291957212c5f7599df609e621ecd995f96bf6e7e81a52886abd5ab76"
+  },
+  {
+    "section": "drugs",
+    "scenario": "02-no-inject",
+    "file": "02-no-inject__13__drugs-types-previous-types.png",
+    "title": "Which drugs did Alex use before custody?",
+    "url": "http://localhost:3000/san-training/prison/drugs-types.html",
+    "note": "With custody use set to No, the heading refers to use before custody and the custody hint is removed.",
+    "heading": "Which drugs did Alex use before custody?",
+    "tab": "",
+    "stage": "previous-types",
+    "complete": false,
+    "answeredAnalysisQuestions": 0,
+    "phase": "beta",
+    "sha256": "47b3b2740952cc779d68721e6c3c198ed2b2183422c74ed7bccc9ad85944d15d"
+  },
+  {
+    "section": "drugs",
+    "scenario": "02-no-inject",
+    "file": "02-no-inject__14__drugs-injected-previous-injection.png",
+    "title": "When did Alex inject drugs?",
+    "url": "http://localhost:3000/san-training/prison/drugs-injected.html",
+    "note": "Alternate route: the injection timing question uses radios and no longer has the select hint.",
+    "heading": "When did Alex inject drugs?",
+    "tab": "",
+    "stage": "previous-injection",
+    "complete": false,
+    "answeredAnalysisQuestions": 0,
+    "phase": "beta",
+    "sha256": "c089ab9c81ba3786be9032510053112731ff2375f2ca2124db16020748e1e078"
+  },
+  {
+    "section": "drugs",
+    "scenario": "02-no-inject",
+    "file": "02-no-inject__15__drugs-help-past-previous-help.png",
+    "title": "Has anything helped Alex to stop or reduce their drug use in the past?",
+    "url": "http://localhost:3000/san-training/prison/drugs-help-past.html",
+    "note": "More than 6 months before custody routes to the past-help page with the past-tense question as the H1.",
+    "heading": "Has anything helped Alex to stop or reduce their drug use in the past?",
+    "tab": "",
+    "stage": "previous-help",
+    "complete": false,
+    "answeredAnalysisQuestions": 0,
+    "phase": "beta",
+    "sha256": "5c68ca28b389f2f64cf2d03a695098e8e2f325387d0c6d51784f4c67bce2835e"
+  },
+  {
+    "section": "drugs",
+    "scenario": "02-no-inject",
+    "file": "02-no-inject__16__drugs-types-other-selected.png",
+    "title": "Which drugs did Alex use before custody?",
+    "url": "http://localhost:3000/san-training/prison/drugs-types.html",
+    "note": "Selecting Other reveals a drug name field. Save and continue adds the named drug to the next page.",
+    "heading": "Which drugs did Alex use before custody?",
+    "tab": "",
+    "stage": "other-selected",
+    "complete": false,
+    "answeredAnalysisQuestions": 0,
+    "phase": "beta",
+    "sha256": "22edeef86459b3ad7f9e995c8d8173d0a976e28c5d0471ebaefd178e4f0c9da8"
+  },
+  {
+    "section": "drugs",
+    "scenario": "02-no-inject",
+    "file": "02-no-inject__17__drugs-when-other-when.png",
+    "title": "What other drugs did Alex use before custody?",
+    "url": "http://localhost:3000/san-training/prison/drugs-when.html",
+    "note": "The named drug appears as a normal item in the list with radios. The Add another drug button is hidden.",
+    "heading": "What other drugs did Alex use before custody?",
+    "tab": "",
+    "stage": "other-when",
+    "complete": false,
+    "answeredAnalysisQuestions": 0,
+    "phase": "beta",
+    "sha256": "4811c85e238634e0c0b547a6c65d13184e0f4913a767166e307737f46ccac6da"
   },
   {
     "section": "drugs",
@@ -1347,7 +1437,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "3c949baee704d084a99ab9de5408b20b1cdccdad820f7e67c8a69a264b71fb68"
+    "sha256": "0f15537106015bacaba7229bae024de8cce220acf1c4b3f6f47d09ae978ffc72"
   },
   {
     "section": "alcohol",
@@ -1377,7 +1467,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "64e2512d489e38912b8cf650a57055706a09a627e095b01982cd0c08a93f20fc"
+    "sha256": "de027192f8cf83a17fd8ce16e2c4f4e793d5b066bf7125a67211aa2b7d9aa233"
   },
   {
     "section": "alcohol",
@@ -1422,7 +1512,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 3,
     "phase": "beta",
-    "sha256": "a5cfc5e0a4481954e05d02c4b647b9f75028241a7bf452d15f3cf6c006d572af"
+    "sha256": "420c7b78d7b9aebb306335439f461919035484255163b3367957e3c658c141dd"
   },
   {
     "section": "alcohol",
@@ -1467,7 +1557,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "6e26c1da283c72dd6ce708ee3e528e2394d107de3e325a3f78ff1e5858343534"
+    "sha256": "b66c07ee8e0585c9c6c8bea008a595d85e6d78c215a1ee33e9ed8d7012b806a8"
   },
   {
     "section": "alcohol",
@@ -1497,7 +1587,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "64e2512d489e38912b8cf650a57055706a09a627e095b01982cd0c08a93f20fc"
+    "sha256": "de027192f8cf83a17fd8ce16e2c4f4e793d5b066bf7125a67211aa2b7d9aa233"
   },
   {
     "section": "alcohol",
@@ -1542,7 +1632,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 3,
     "phase": "beta",
-    "sha256": "a5cfc5e0a4481954e05d02c4b647b9f75028241a7bf452d15f3cf6c006d572af"
+    "sha256": "420c7b78d7b9aebb306335439f461919035484255163b3367957e3c658c141dd"
   },
   {
     "section": "alcohol",
@@ -1632,7 +1722,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "a4bd35e24d31ca4fc828cb42ff30fc84d7d347b57a46eaa58224db0eb323be1d"
+    "sha256": "d6b552306a08e7bd535908629f40573886dcc791fafe49f73168a917e05bf893"
   },
   {
     "section": "health",
@@ -1647,7 +1737,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "9e0434d07ea3f93fd1cf39bb5051c5503d47a44c16f4ae18e6109108c97bfe42"
+    "sha256": "5aa326a87c8048166b29937321dcefa0abe3fa03ec2cc21d79b890e28c747aca"
   },
   {
     "section": "health",
@@ -1662,7 +1752,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "ae09adb8e70c6367a4bb56b6fc685fffafbe1f48747cbb39294d169cdcdb6870"
+    "sha256": "db1bf1f3f0f86f64a1000fc02564d0f8936bf0519aea6361de8dafa441d04a06"
   },
   {
     "section": "health",
@@ -1707,7 +1797,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 3,
     "phase": "beta",
-    "sha256": "d6834317399bf5535d2e178f6ffee16c33780a3d4b4104740f20fab9597243a4"
+    "sha256": "17d8298d771f6e3bc6b32e535071f575a9c30c73263a40c68754f05e4869af08"
   },
   {
     "section": "health",
@@ -1737,7 +1827,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "b9fd1e43ee4ed6cb337461af516a7e0ff0ec5bb23147575cbef3823218cfaee6"
+    "sha256": "2f14bbb35d0ea2a4d81efcdc361522b2b34cd2547cabaaefad45ec2ffd857681"
   },
   {
     "section": "relationships",
@@ -1752,7 +1842,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "ef2677c11523c5ba4c1890dc39ffb6c80f8b4c878e06d9cf9f8ffe95d85d198e"
+    "sha256": "fdbd4a28e8ab314ed655e55eafc141972bf93d6667091917262a66b24d857345"
   },
   {
     "section": "relationships",
@@ -1767,7 +1857,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "f98bd7a02333e96f104c401d44d5ee03495b0d352af88687a016dd5c9a95a92b"
+    "sha256": "d1893e65656039927c99836885470a2b44d23b54f4058e16c475bc58ee114b32"
   },
   {
     "section": "relationships",
@@ -1797,7 +1887,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "457731ee073458d67986c6f3967e01ebc71cb587c5df38a47907126f24bc29ec"
+    "sha256": "10b60a5846bc4e3708b8a2056bf98233c7c8f2ec3e5b81b7d11577f2c74e6b2a"
   },
   {
     "section": "relationships",
@@ -1812,7 +1902,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "86578c8313cdb332caf6d2244911013759dafcf5caf591166949b3b6b4a57a1d"
+    "sha256": "ea26d7853407871c89bca514bce31b636db2f80d7deebd0f31a2f232c2ee2635"
   },
   {
     "section": "relationships",
@@ -1842,7 +1932,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "6cd1d4a8a4186f8e05bd382f8a67f7e8ec275b7a0586660b5682dcce79b71432"
+    "sha256": "1207db5f9f151d520cbde2ec99b4ec7c615833b660a1b684564566da34ab6793"
   },
   {
     "section": "relationships",
@@ -1857,7 +1947,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "3c012f809067dc3702909d64adc42e3212adcb0eb9b35bcc07b07707edd1f806"
+    "sha256": "2bd66c692f3fab3ec3d0fd9ae492ab706eb946e88c7145376f33462e41ce749e"
   },
   {
     "section": "relationships",
@@ -1872,7 +1962,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "941758e8acf1d71c61ac52db682e008f2eda4f6046b1fc9045a70f4d3d1ed089"
+    "sha256": "23f6b927e6c2d7e0d3fc776efcc43143b0c7b65d53b230fb5adae499c6fd9e3c"
   },
   {
     "section": "relationships",
@@ -1902,7 +1992,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 3,
     "phase": "beta",
-    "sha256": "4b0e58711670189acfc77d43648aa0b4919cf0b91980380e28e87973d1456464"
+    "sha256": "24721415161719463bafbd940c10ce74d6850fc65141eff286625b4f38e62569"
   },
   {
     "section": "relationships",
@@ -1947,7 +2037,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "142ba5dace8e605bbb6045af84a065695b95f62f5c0eb8d02b08773ec581feaa"
+    "sha256": "8e2666866dfe287be717098ae2d828f2a7bbeb87e0eed0fafb5f2b369de3c970"
   },
   {
     "section": "relationships",
@@ -1992,7 +2082,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "3c012f809067dc3702909d64adc42e3212adcb0eb9b35bcc07b07707edd1f806"
+    "sha256": "2bd66c692f3fab3ec3d0fd9ae492ab706eb946e88c7145376f33462e41ce749e"
   },
   {
     "section": "relationships",
@@ -2037,7 +2127,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 3,
     "phase": "beta",
-    "sha256": "4b0e58711670189acfc77d43648aa0b4919cf0b91980380e28e87973d1456464"
+    "sha256": "24721415161719463bafbd940c10ce74d6850fc65141eff286625b4f38e62569"
   },
   {
     "section": "relationships",
@@ -2067,7 +2157,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "d2955ea769a1a08f5ab16f7dca9719caab7a076983c1202ed4362565d5e27f7e"
+    "sha256": "452efe294f143e476c4b5315943fb609032d0fa09635ff8c208fc830116c8b2d"
   },
   {
     "section": "thinking",
@@ -2082,7 +2172,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "cc67093dfc2a61437f967f7c967fc4bcfc8bdb943d2aa13a619a771c1b8a37dd"
+    "sha256": "833311a42a0f9be2be4d5743206be25ba8461558f6e4edf0f9d31abb9284f7b7"
   },
   {
     "section": "thinking",
@@ -2142,7 +2232,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 3,
     "phase": "beta",
-    "sha256": "a6c796e25bc3f5813061112065e13d5e129832dc96913af1b010f42e9f036c4c"
+    "sha256": "4e13bf0ae73a0939d4feefc9fab13f613afccd59fef0aade2777208a611dcfed"
   },
   {
     "section": "thinking",
@@ -2172,7 +2262,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "d2955ea769a1a08f5ab16f7dca9719caab7a076983c1202ed4362565d5e27f7e"
+    "sha256": "452efe294f143e476c4b5315943fb609032d0fa09635ff8c208fc830116c8b2d"
   },
   {
     "section": "thinking",
@@ -2187,7 +2277,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "cc67093dfc2a61437f967f7c967fc4bcfc8bdb943d2aa13a619a771c1b8a37dd"
+    "sha256": "833311a42a0f9be2be4d5743206be25ba8461558f6e4edf0f9d31abb9284f7b7"
   },
   {
     "section": "thinking",
@@ -2262,7 +2352,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 3,
     "phase": "beta",
-    "sha256": "a6c796e25bc3f5813061112065e13d5e129832dc96913af1b010f42e9f036c4c"
+    "sha256": "4e13bf0ae73a0939d4feefc9fab13f613afccd59fef0aade2777208a611dcfed"
   },
   {
     "section": "thinking",
@@ -2292,7 +2382,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "832dfe8b7674eef1367d1a1584ce97b6e8b7a3666bf5d3f8508b99079a9a54af"
+    "sha256": "414bb3ae9dfc3ca82cf1a4e9b4a394052e707e1fc84e2d9d9e4058667a475d28"
   },
   {
     "section": "offence",
@@ -2307,7 +2397,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "951e1f46402f8419d87e5eec160e65bb9b23446b162cf0df6de6f6975b38c55f"
+    "sha256": "6f7d7750632c1d5793902cd3304388a891ded4d26fb2bd839246c1233c949555"
   },
   {
     "section": "offence",
@@ -2367,7 +2457,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "f542bd96ef0f347750ecf80b071465bf760e2bc6692651c7065ead8dbb87d85f"
+    "sha256": "fb5f595de65a8b40ef59be6d4010e7c647b247fecf754e918358bb94723cc161"
   },
   {
     "section": "offence",
@@ -2412,7 +2502,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "04a4b06e2d952ecdf7558cc48495610f60b98515bd38d31a7f57bbd97ce0d124"
+    "sha256": "7fe5a6027eece863adf5dde9d1801165c34044f4e1f21a907da2455c2835d4f9"
   },
   {
     "section": "offence",
@@ -2442,7 +2532,7 @@
     "complete": false,
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
-    "sha256": "f542bd96ef0f347750ecf80b071465bf760e2bc6692651c7065ead8dbb87d85f"
+    "sha256": "fb5f595de65a8b40ef59be6d4010e7c647b247fecf754e918358bb94723cc161"
   },
   {
     "section": "offence",
@@ -2473,5 +2563,110 @@
     "answeredAnalysisQuestions": 0,
     "phase": "beta",
     "sha256": "0f7b26a05bcd50e5ee1ef673d8633e94176a3ce8376d8f50adb3fc1a6823b8a1"
+  },
+  {
+    "section": "assessment",
+    "scenario": "01-all-answers",
+    "file": "01-all-answers__01__all-answers.png",
+    "title": "Alex's Strengths and Needs",
+    "url": "http://localhost:3000/san-training/prison/all-answers?section=offence&returnTo=%2Fsan-training%2Fprison%2Foffence-analysis-summary.html",
+    "note": "Completed question flows show their summary answers without requiring the section to be marked complete. Incomplete sections show only the header.",
+    "heading": "Alex's Strengths and Needs",
+    "tab": "",
+    "stage": "assessment-view",
+    "complete": false,
+    "answeredAnalysisQuestions": 0,
+    "phase": "beta",
+    "sha256": "219cb069919b2231d173e1a9dd9a869fc87ef0896357550a326c39ac9cd9d221"
+  },
+  {
+    "section": "assessment",
+    "scenario": "02-previous-versions",
+    "file": "02-previous-versions__01__previous-versions.png",
+    "title": "Previous versions",
+    "url": "http://localhost:3000/san-training/prison/previous-versions?returnTo=%2Fsan-training%2Fprison%2Faccommodation.html",
+    "note": "Assessment history with active Assessment View links and inactive Plan View links.",
+    "heading": "Previous versions",
+    "tab": "",
+    "stage": "assessment-view",
+    "complete": false,
+    "answeredAnalysisQuestions": 0,
+    "phase": "beta",
+    "sha256": "370d91b247b48b0358e689c4f0da78609f1a96e49f39c6bb23a8754c939a061f"
+  },
+  {
+    "section": "assessment",
+    "scenario": "02-previous-versions",
+    "file": "02-previous-versions__02__previous-version-2026-11-18.png",
+    "title": "Alex's Strengths and Needs - Assessment from 18 November 2026",
+    "url": "http://localhost:3000/san-training/prison/previous-version-2026-11-18.html",
+    "note": "Completed historical assessment from 2026-11-18; answer details vary between dated snapshots.",
+    "heading": "Alex's Strengths and Needs",
+    "tab": "",
+    "stage": "assessment-view",
+    "complete": false,
+    "answeredAnalysisQuestions": 0,
+    "phase": "beta",
+    "sha256": "b9e54a49557ce9a8548edc903f855c0bfedef83d97d254e51ccf7b39b25f88c8"
+  },
+  {
+    "section": "assessment",
+    "scenario": "02-previous-versions",
+    "file": "02-previous-versions__03__previous-version-2026-11-17.png",
+    "title": "Alex's Strengths and Needs - Assessment from 17 November 2026",
+    "url": "http://localhost:3000/san-training/prison/previous-version-2026-11-17.html",
+    "note": "Completed historical assessment from 2026-11-17; answer details vary between dated snapshots.",
+    "heading": "Alex's Strengths and Needs",
+    "tab": "",
+    "stage": "assessment-view",
+    "complete": false,
+    "answeredAnalysisQuestions": 0,
+    "phase": "beta",
+    "sha256": "6e9b93a2bae29b60f46a44488592d366c644e2a30e159f4c2845ee682c442957"
+  },
+  {
+    "section": "assessment",
+    "scenario": "02-previous-versions",
+    "file": "02-previous-versions__04__previous-version-2026-11-16.png",
+    "title": "Alex's Strengths and Needs - Assessment from 16 November 2026",
+    "url": "http://localhost:3000/san-training/prison/previous-version-2026-11-16.html",
+    "note": "Completed historical assessment from 2026-11-16; answer details vary between dated snapshots.",
+    "heading": "Alex's Strengths and Needs",
+    "tab": "",
+    "stage": "assessment-view",
+    "complete": false,
+    "answeredAnalysisQuestions": 0,
+    "phase": "beta",
+    "sha256": "e415945e89785f06c557f48590b0eb781bc6dc21ad46f63843647b39d8fdc00c"
+  },
+  {
+    "section": "assessment",
+    "scenario": "02-previous-versions",
+    "file": "02-previous-versions__05__previous-version-2026-11-13.png",
+    "title": "Alex's Strengths and Needs - Assessment from 13 November 2026",
+    "url": "http://localhost:3000/san-training/prison/previous-version-2026-11-13.html",
+    "note": "Completed historical assessment from 2026-11-13; answer details vary between dated snapshots.",
+    "heading": "Alex's Strengths and Needs",
+    "tab": "",
+    "stage": "assessment-view",
+    "complete": false,
+    "answeredAnalysisQuestions": 0,
+    "phase": "beta",
+    "sha256": "162d84258cf217d86c8b094eae8f7a65bc15342e507199ecc75f8acbde10c393"
+  },
+  {
+    "section": "assessment",
+    "scenario": "02-previous-versions",
+    "file": "02-previous-versions__06__previous-version-2026-11-10.png",
+    "title": "Alex's Strengths and Needs - Assessment from 10 November 2026",
+    "url": "http://localhost:3000/san-training/prison/previous-version-2026-11-10.html",
+    "note": "Completed historical assessment from 2026-11-10; answer details vary between dated snapshots.",
+    "heading": "Alex's Strengths and Needs",
+    "tab": "",
+    "stage": "assessment-view",
+    "complete": false,
+    "answeredAnalysisQuestions": 0,
+    "phase": "beta",
+    "sha256": "cf8f6be90192d1e7f1149c421aee696e62ecba2ef9c152830907b313029c512e"
   }
 ]

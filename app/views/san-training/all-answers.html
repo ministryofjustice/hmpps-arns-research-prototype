@@ -1,0 +1,32 @@
+<div class="san-all-answers" data-san-all-answers>
+  <h1 class="govuk-heading-l">Alex's Strengths and Needs</h1>
+
+  {% set sections = [
+    ["accommodation", "Accommodation"],
+    ["employment", "Employment and education"],
+    ["finances", "Finances"],
+    ["drugs", "Drug use"],
+    ["alcohol", "Alcohol use"],
+    ["health", "Health and wellbeing"],
+    ["relationships", "Personal relationships and community"],
+    ["thinking", "Thinking, behaviours and attitudes"],
+    ["offence", "Offence analysis"]
+  ] %}
+
+  {% for section in sections %}
+  <section class="san-all-answers__section" data-all-answers-section="{{ section[0] }}" aria-labelledby="all-answers-{{ section[0] }}">
+    <div class="san-all-answers__header">
+      <h2 class="govuk-heading-m govuk-!-margin-bottom-0" id="all-answers-{{ section[0] }}">{{ section[1] }}</h2>
+      <strong class="govuk-tag govuk-tag--light-grey" data-all-answers-status>Incomplete</strong>
+    </div>
+    <div data-all-answers-content hidden>
+      <h3 class="govuk-heading-s">Summary</h3>
+      <div data-all-answers-mount></div>
+    </div>
+  </section>
+  {% endfor %}
+
+  <p class="govuk-body govuk-!-margin-top-6">
+    <a class="govuk-link" href="#top"><span aria-hidden="true">↑</span> Back to top</a>
+  </p>
+</div>

@@ -269,8 +269,10 @@ const analysisRows = (session) => {
 }
 
 // Check-your-answers for the questions tab and analysis tab.
-const renderSummary = (session) => {
-  const mount = document.querySelector('[data-hw-summary]')
+export const sectionQuestionsComplete = (session) => questionsAnswered(session)
+
+export const renderSectionSummary = (session, target) => {
+  const mount = target || document.querySelector('[data-hw-summary]')
   if (!mount) return
 
   const complete = !!session.healthComplete
@@ -647,7 +649,7 @@ const initHealth = () => {
   }
   if (pageName === 'summary') {
     restoreAnalysis(session)
-    renderSummary(session)
+    renderSectionSummary(session)
     document.querySelector('[data-hw-go-analysis]')?.addEventListener('click', openAnalysisTab)
     document.querySelector('[data-hw-analysis-summary]')?.addEventListener('click', (event) => {
       const link = event.target.closest('[data-hw-edit-analysis]')
@@ -734,7 +736,7 @@ const initHealth = () => {
     setSanSession({ ...answers, healthComplete: true })
     const completedSession = getSanSession()
     applyProgress(completedSession)
-    renderSummary(completedSession)
+    renderSectionSummary(completedSession)
     openAnalysisTab()
     focusCompletedSection()
   })

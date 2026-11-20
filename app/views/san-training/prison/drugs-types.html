@@ -38,17 +38,25 @@
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
         <h1 class="govuk-fieldset__heading" data-du-types-heading>Which drugs has Alex used?</h1>
       </legend>
-      <div id="drug-types-custody-hint" class="govuk-hint">Consider use from before and during custody.</div>
+      <div id="drug-types-custody-hint" class="govuk-hint">Consider use before and during custody.</div>
       <div id="drug-types-hint" class="govuk-hint">Select all that apply.</div>
       <div class="govuk-checkboxes" data-module="govuk-checkboxes">
         {% for drug in drugOptions %}
         <div class="govuk-checkboxes__item">
-          <input class="govuk-checkboxes__input" id="drug-type-{{ drug.id }}" name="drug_types" type="checkbox" value="{{ drug.id }}"{% if drug.hint %} aria-describedby="drug-type-{{ drug.id }}-hint"{% endif %}>
+          <input class="govuk-checkboxes__input" id="drug-type-{{ drug.id }}" name="drug_types" type="checkbox" value="{{ drug.id }}"{% if drug.hint %} aria-describedby="drug-type-{{ drug.id }}-hint"{% endif %}{% if drug.id == "other" %} data-aria-controls="conditional-drug-type-other"{% endif %}>
           <label class="govuk-label govuk-checkboxes__label" for="drug-type-{{ drug.id }}">{{ drug.label }}</label>
           {% if drug.hint %}
           <div id="drug-type-{{ drug.id }}-hint" class="govuk-hint govuk-checkboxes__hint">{{ drug.hint }}</div>
           {% endif %}
         </div>
+        {% if drug.id == "other" %}
+        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-drug-type-other">
+          <div class="govuk-form-group" data-san-error-group="other-drug-name">
+            <label class="govuk-label" for="other-drug-name">Drug name</label>
+            <input class="govuk-input" id="other-drug-name" name="other_drug_name" type="text" autocomplete="off" spellcheck="false">
+          </div>
+        </div>
+        {% endif %}
         {% endfor %}
       </div>
     </fieldset>
