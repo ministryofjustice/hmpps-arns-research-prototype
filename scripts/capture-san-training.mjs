@@ -44,7 +44,9 @@ const answers = {
     drugUse: 'yes', drugTypes: ['heroin'], drugLastUsed: { heroin: 'last-six' },
     drugFrequency: { heroin: 'daily' }, injectedDrugs: ['heroin'],
     injectedWhen: { heroin: ['last-six'] }, extraDrugs: [],
-    drugsInCustody: 'yes', treatment: 'no', whyDrugUse: ['curiosity'],
+    drugsInCustody: 'yes',
+    drugsInCustodyDetails: 'Reports from prison staff show recent drug use in custody.',
+    treatment: 'no', whyDrugUse: ['curiosity'],
     drugAffect: ['behaviour'], helpedReduce: 'no', drugAnalysisMotivation: 'unknown', drugChanges: 'thinking',
     drugChangesDetails: 'Considering support to reduce drug use.'
   },
@@ -116,7 +118,8 @@ const overrides = {
   '02-no-inject': {
     drugTypes: ['cannabis'], drugLastUsed: { cannabis: 'more-than-six' },
     drugFrequency: { cannabis: 'weekly' }, injectedDrugs: ['none'], injectedWhen: {},
-    drugsInCustody: 'no'
+    drugsInCustody: 'no',
+    drugsInCustodyDetails: 'No reports or evidence of drug use during custody.'
   },
   '03-none': { drugUse: 'no', drugTypes: [], injectedDrugs: [] },
   '02-past-issues': { alcoholUse: 'none' },
@@ -384,6 +387,53 @@ ${step.note ? `<p class="card__note">${escapeHtml(step.note)}</p>` : ''}
         await capture('complete', section.id === 'offence'
           ? 'Offence analysis completes directly from the final questions, without a practitioner-analysis tab. The blue tick confirms completion.'
           : 'Marked as complete. The blue tick confirms completion, which persists after refresh.')
+        if (section.id === 'drugs' && scenario.id === '02-no-inject') {
+          const previousInjectionSession = {
+            ...answers.drugs,
+            ...session,
+            drugTypes: ['heroin'],
+            drugLastUsed: { heroin: 'more-than-six' },
+            drugFrequency: { heroin: 'weekly' },
+            injectedDrugs: ['heroin'],
+            injectedWhen: {},
+            drugComplete: false
+          }
+          await page.evaluate(({ key, session }) => {
+            sessionStorage.setItem(key, JSON.stringify(session))
+          }, { key, session: previousInjectionSession })
+          if (variant === 'prison') {
+            await page.goto(`${baseUrl}${prefix}drugs-custody.html`)
+            await capture('previous-custody', 'Alternate route: no evidence of drug use in custody. The No radio and optional details are restored.')
+            await page.goto(`${baseUrl}${prefix}drugs-types.html`)
+            await capture('previous-types', 'With custody use set to No, the heading refers to use before custody and the custody hint is removed.')
+          }
+          await page.goto(`${baseUrl}${prefix}drugs-injected.html`)
+          await capture('previous-injection', 'Alternate route: the injection timing question uses radios and no longer has the select hint.')
+          await page.locator('input[name="injected_when_heroin"][value="more-than-six"]').check()
+          await page.getByRole('button', { name: 'Save and continue', exact: true }).click()
+          await page.waitForURL(/drugs-help-past\.html$/)
+          await capture('previous-help', 'More than 6 months before custody routes to the past-help page with the past-tense question as the H1.')
+
+          await page.evaluate(({ key }) => {
+            sessionStorage.setItem(key, JSON.stringify({
+              drugUse: 'yes',
+              drugsInCustody: 'no',
+              drugTypes: [],
+              drugLastUsed: {},
+              extraDrugs: [],
+              drugFrequency: {},
+              drugFrequencyDetails: {},
+              injectedDrugs: []
+            }))
+          }, { key })
+          await page.goto(`${baseUrl}${prefix}drugs-types.html`)
+          await page.locator('input[name="drug_types"][value="other"]').check()
+          await page.locator('#other-drug-name').fill('Gabapentin')
+          await capture('other-selected', 'Selecting Other reveals a drug name field. Save and continue adds the named drug to the next page.')
+          await page.getByRole('button', { name: 'Save and continue', exact: true }).click()
+          await page.waitForURL(/drugs-when(?:\.html)?$/)
+          await capture('other-when', 'The named drug appears as a normal item in the list with radios. The Add another drug button is hidden.')
+        }
         journeys.push({ ...scenario, steps })
         console.log(`${variant}/${section.id}/${scenario.id}: ${steps.length} training screens`)
       }
@@ -391,6 +441,99 @@ ${step.note ? `<p class="card__note">${escapeHtml(step.note)}</p>` : ''}
         if (file.endsWith('.png') && !kept.has(file)) await rm(path.join(imagesDir, file))
       }
       captured.push({ ...section, journeys })
+    }
+
+    if (filters.section) {
+      const assessmentCaptures = previousCaptures.filter(capture => capture.section === 'assessment')
+      if (assessmentCaptures.length) {
+        const journeyDefinitions = [
+          ['01-all-answers', 'View all answers'],
+          ['02-previous-versions', 'Previous versions']
+        ]
+        captured.push({
+          id: 'assessment',
+          title: 'Assessment views',
+          journeys: journeyDefinitions.map(([id, journeyTitle]) => ({
+            id,
+            title: journeyTitle,
+            steps: assessmentCaptures.filter(capture => capture.scenario === id)
+          }))
+        })
+      }
+    } else {
+      const overviewId = 'assessment'
+      const imagesDir = path.join(storyboardDir, variant, 'images', overviewId)
+      await mkdir(imagesDir, { recursive: true })
+      const captureStandalone = async (journey, pageUrl, note = '') => {
+        await page.goto(`${baseUrl}${prefix}${pageUrl}`)
+        await page.waitForLoadState('load')
+        await page.evaluate(async () => {
+          await document.fonts.ready
+          document.querySelectorAll('.govuk-cookie-banner, #global-cookie-message').forEach(node => node.remove())
+          if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
+          window.scrollTo(0, 0)
+        })
+        assert.ok(new URL(page.url()).pathname.startsWith(prefix), `Not a ${variant} training screen: ${page.url()}`)
+        assert.equal((await page.locator('.govuk-phase-banner__content strong').innerText()).trim().toLowerCase(), 'beta', page.url())
+        const heading = page.locator('main h1:visible')
+        assert.equal(await heading.count(), 1, `Expected one visible heading on ${page.url()}`)
+        const headingText = (await heading.innerText()).replace(/\s+/g, ' ').trim()
+        const historyCaption = page.locator('[data-san-history-version] .govuk-caption-l')
+        const title = await historyCaption.count()
+          ? `${headingText} - ${(await historyCaption.innerText()).replace(/\s+/g, ' ').trim()}`
+          : headingText
+        const pathname = new URL(page.url()).pathname.split('/').pop().replace(/\.html$/, '')
+        const file = `${journey.id}__${String(journey.steps.length + 1).padStart(2, '0')}__${pathname}.png`
+        const image = await page.screenshot({ path: path.join(imagesDir, file), fullPage: true })
+        const step = { file, title, url: page.url(), note }
+        journey.steps.push(step)
+        manifest.push({
+          section: overviewId,
+          scenario: journey.id,
+          ...step,
+          heading: headingText,
+          tab: '',
+          stage: 'assessment-view',
+          complete: false,
+          answeredAnalysisQuestions: 0,
+          phase: 'beta',
+          sha256: hash(image)
+        })
+      }
+      const mixedSession = Object.values(answers).reduce((session, section) => ({ ...session, ...section }), {})
+      Object.values(completeKeys).forEach(completeKey => { mixedSession[completeKey] = false })
+      delete mixedSession.healthPhysical
+      delete mixedSession.healthMental
+      await page.evaluate(({ key, session }) => {
+        sessionStorage.clear()
+        sessionStorage.setItem(key, JSON.stringify(session))
+      }, { key, session: mixedSession })
+      const allAnswersJourney = {
+        id: '01-all-answers',
+        title: "View all answers",
+        steps: []
+      }
+      await captureStandalone(
+        allAnswersJourney,
+        'all-answers?section=offence&returnTo=%2Fsan-training%2F' + variant + '%2Foffence-analysis-summary.html',
+        'Completed question flows show their summary answers without requiring the section to be marked complete. Incomplete sections show only the header.'
+      )
+      const historyJourney = {
+        id: '02-previous-versions',
+        title: 'Previous versions',
+        steps: []
+      }
+      await captureStandalone(historyJourney, `previous-versions?returnTo=%2Fsan-training%2F${variant}%2Faccommodation.html`,
+        'Assessment history with active Assessment View links and inactive Plan View links.')
+      for (const version of ['2026-11-18', '2026-11-17', '2026-11-16', '2026-11-13', '2026-11-10']) {
+        await captureStandalone(historyJourney, `previous-version-${version}.html`,
+          `Completed historical assessment from ${version}; answer details vary between dated snapshots.`)
+      }
+      captured.push({
+        id: overviewId,
+        title: 'Assessment views',
+        journeys: [allAnswersJourney, historyJourney]
+      })
     }
 
     const title = `SAN ${label} training storyboard`

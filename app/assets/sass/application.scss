@@ -813,6 +813,8 @@ $desktop: 48.0625em;
 
   &__table {
     margin-bottom: 0;
+    table-layout: fixed;
+    overflow-wrap: anywhere;
   }
 
   &__panel .govuk-heading-s:first-child {
@@ -825,6 +827,16 @@ $desktop: 48.0625em;
 
   &__type-col {
     width: 110px;
+  }
+
+  @media (max-width: $tablet) {
+    &__section-col {
+      width: 32%;
+    }
+
+    &__type-col {
+      width: 50px;
+    }
   }
 
   &__section-name.is-continued {
@@ -4840,6 +4852,57 @@ body.assessment-page {
   flex-shrink: 0;
 }
 
+.san-all-answers__section {
+  margin-bottom: 35px;
+}
+
+.san-all-answers__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.san-all-answers {
+  .govuk-summary-list__actions,
+  .govuk-summary-card__actions {
+    display: none;
+  }
+
+  .govuk-summary-list__key {
+    width: 38%;
+  }
+
+  .govuk-summary-list + .govuk-heading-m {
+    margin-top: 40px;
+  }
+}
+
+.san-previous-versions {
+  &__date {
+    font-weight: 400;
+  }
+
+  &__status {
+    font-weight: 400;
+  }
+
+  .govuk-table__header:first-child {
+    width: 28%;
+  }
+
+  .govuk-table__header:nth-child(2),
+  .govuk-table__cell:nth-child(2) {
+    width: 28%;
+  }
+
+  .govuk-table__header,
+  .govuk-table__cell {
+    vertical-align: top;
+  }
+}
+
 .san-question {
   margin-top: 45px;
 }
@@ -4936,7 +4999,8 @@ body.assessment-page {
 @media (max-width: $tablet) {
   .san-offender-header__meta,
   .san-offender-header__identity,
-  .san-content-header__row {
+  .san-content-header__row,
+  .san-all-answers__header {
     flex-direction: column;
     align-items: flex-start;
   }

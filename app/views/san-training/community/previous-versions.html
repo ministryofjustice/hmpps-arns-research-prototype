@@ -1,0 +1,11 @@
+{% extends "san-training/community/layout.html" %}
+{% set pageName = "Previous versions" %}
+{% set sanHideSideNav = true %}
+{% set hideViewPreviousVersionsLink = true %}
+{% set hideViewAllAnswersLink = true %}
+{% set backLinkHref = sanPreviousReturnTo | default("accommodation.html") %}
+{% block content %}
+{% include "san-training/community/includes/assessment-journey-page-open.html" %}
+{% include "san-training/previous-versions.html" %}
+{% include "san-training/community/includes/assessment-page-close.html" %}
+{% endblock %}

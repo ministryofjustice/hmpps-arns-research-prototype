@@ -4,8 +4,12 @@
       CRN: W174793 | PNC: {{ sanResearchPnc | default("1992/7318694Y") }} | Date of birth: 29 May 1971
     </p>
     <p class="san-offender-header__links">
-      <a class="govuk-link" href="#" data-predictors-inactive-link>View previous versions</a>
-      <a class="govuk-link" href="#" data-predictors-inactive-link>View all answers</a>
+      {% if not hideViewPreviousVersionsLink %}
+      <a class="govuk-link" href="{{ sanResearchBase | default('/san-training/community') }}/previous-versions" data-san-view-previous-versions>View previous versions</a>
+      {% endif %}
+      {% if not hideViewAllAnswersLink %}
+      <a class="govuk-link" href="{{ sanResearchBase | default('/san-training/community') }}/all-answers?section={{ sanSection | default('accommodation') }}" data-san-view-all-answers>View all answers</a>
+      {% endif %}
     </p>
   </div>
   <div class="san-offender-header__identity">

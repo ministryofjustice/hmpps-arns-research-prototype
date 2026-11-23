@@ -20,6 +20,18 @@
 {% set employmentChanges = [
   { type: "CD", text: "For 'Does Alex need support with reading, writing or numeracy?', changed the 'No' option to 'No support needed with reading, writing or numeracy'." }
 ] %}
+{% set drugChanges = [
+  { type: "IxD", text: "Selecting 'Other' reveals a required drug name field. After saving, the named drug appears with the other drugs on the next page." },
+  { type: "IxD", text: "Removed the 'Add another drug' button from the drug timing page." },
+  { type: "IxD", text: "Changed injection timing from checkboxes to radios, with separate routes for recent use and use more than 6 months before custody." },
+  { type: "CD", text: "The past-use help question is now 'Has anything helped Alex to stop or reduce their drug use in the past?' and is shown as the page heading." }
+] %}
+{% set assessmentChanges = [
+  { type: "IxD", text: "Added 'View all answers' to show completed section summaries together, while incomplete sections show only their heading." },
+  { type: "IxD", text: "Added 'View previous versions' with dated assessment history, completed read-only snapshots and inactive Plan links." },
+  { type: "IxD", text: "Added Back to top links to the consolidated and historical answer pages." }
+] %}
+{% set accommodationChanges = [] %}
 
 {% if variant == "prison" %}
   {% set thinkingChanges = thinkingChanges.concat([
@@ -39,6 +51,16 @@
     { type: "IxD", text: "Removed 'Does Alex have any additional day-to-day commitments?'." },
     { type: "CD", text: "Changed 'What is Alex's current employment status?' to 'What was Alex's employment status before custody?'." }
   ]) %}
+  {% set drugChanges = drugChanges.concat([
+    { type: "IxD", text: "Added conditional detail fields for both Yes and No on the drug use in custody question." },
+    { type: "CD", text: "When drug use in custody is No, the drug list asks about use before custody and removes the custody hint. When it is Yes, the hint covers use before and during custody." }
+  ]) %}
+  {% set relationshipChanges = relationshipChanges.concat([
+    { type: "IxD", text: "Updated the child details page with sentence-impact, custody-visiting and past-parenting questions, including conditional detail fields and 2,000-character limits." }
+  ]) %}
+  {% set accommodationChanges = [
+    { type: "CD", text: "Changed the concern question to 'Why is the location of Alex's proposed accommodation not suitable? (optional)'." }
+  ] %}
 {% else %}
   {% set employmentChanges = employmentChanges.concat([
     { type: "CD", text: "Restored 'What is Alex's current employment status?' on the question and summary pages. Community training uses current-employment wording." }
@@ -49,30 +71,39 @@
   ]) %}
 {% endif %}
 
-{% set changelogIterations = [
+{% set changelogSections = [
   {
-    id: "november-2026",
-    label: "November 2026",
-    sections: [
-      {
-        name: "Offence analysis",
-        changes: [
-          { type: "CD", text: "On the summary page victim cards, changed 'What is Alex's relationship to the victim?' to 'Who is the victim?'." },
-          { type: "IxD", text: "Changed the victim list to a card view. Each 'Change' link opens the relevant victim page." },
-          { type: "IxD", text: "Moved 'Why did the current index offences happen?' above 'Did the current index offences involve any of the following motivations?'." },
-          { type: "CD", text: "The offence description question is now 'Enter a brief description of the current index offences'." }
-        ]
-      },
-      { name: "Thinking, behaviours and attitudes", changes: thinkingChanges },
-      { name: "Personal relationships and community", changes: relationshipChanges },
-      { name: "Finances", changes: financeChanges },
-      { name: "Employment and education", changes: employmentChanges }
+    name: "Offence analysis",
+    changes: [
+      { type: "CD", text: "On the summary page victim cards, changed 'What is Alex's relationship to the victim?' to 'Who is the victim?'." },
+      { type: "IxD", text: "Changed the victim list to a card view. Each 'Change' link opens the relevant victim page." },
+      { type: "IxD", text: "Moved 'Why did the current index offences happen?' above 'Did the current index offences involve any of the following motivations?'." },
+      { type: "CD", text: "The offence description question is now 'Enter a brief description of the current index offences'." }
     ]
-  }
+  },
+  { name: "Assessment overview", changes: assessmentChanges },
+  { name: "Drug use", changes: drugChanges }
 ] %}
+{% if variant == "prison" %}
+  {% set changelogSections = changelogSections.concat([{ name: "Accommodation", changes: accommodationChanges }]) %}
+{% endif %}
+{% set changelogSections = changelogSections.concat([
+  { name: "Thinking, behaviours and attitudes", changes: thinkingChanges },
+  { name: "Personal relationships and community", changes: relationshipChanges },
+  { name: "Finances", changes: financeChanges },
+  { name: "Employment and education", changes: employmentChanges }
+]) %}
+{% set changelogIterations = [{
+  id: "november-2026",
+  label: "November 2026",
+  sections: changelogSections
+}] %}
 {% set changelogSummary %}
   <h4 class="govuk-heading-s">Key changes and impact</h4>
   <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+    <li><strong>Assessment overview:</strong> consolidated current answers, previous-version history, dated completed snapshots and Back to top links.</li>
+    <li><strong>Drug use:</strong> named Other drugs on the selection page, radios and separate routes for injection timing, updated past-help wording{% if variant == "prison" %}, plus custody-specific hints and detail fields{% endif %}.</li>
+    {% if variant == "prison" %}<li><strong>Accommodation:</strong> proposed-accommodation wording now reflects the prison journey.</li>{% endif %}
     <li><strong>Offence analysis:</strong> victim cards with relevant Change links, clearer question wording and a revised question order.</li>
     <li><strong>Thinking, behaviours and attitudes:</strong> a revised Risk of sexual harm layout and anger question{% if variant == "prison" %}, plus an optional question about important contacts in custody{% endif %}.</li>
     <li><strong>Personal relationships and community:</strong> child details collected without individual lists or summary cards, and parenting questions only when there are children in Alex's life. {% if variant == "prison" %}Parenting wording uses the past tense and partner options reflect living arrangements before custody.{% else %}Parenting wording uses the present tense. The strangulation or suffocation wording change is marked TBC.{% endif %}</li>

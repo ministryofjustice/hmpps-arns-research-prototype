@@ -12,7 +12,7 @@ import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllC
 import { applySanProgress } from './progress.js'
 
 // Pre-filled session for ?example=complete.
-const EXAMPLE_COMPLETE = {
+export const EXAMPLE_COMPLETE = {
   employmentStatus: 'employed-or-self-employed',
   employmentSubtype: '',
   employedBefore: '',
@@ -389,8 +389,10 @@ const showSelectedDifficulties = (areas) => {
 }
 
 // Check-your-answers for the questions tab and analysis tab.
-const renderSummary = (session) => {
-  const mount = document.querySelector('[data-ee-summary]')
+export const sectionQuestionsComplete = (session) => detailsAnswered(session)
+
+export const renderSectionSummary = (session, target) => {
+  const mount = target || document.querySelector('[data-ee-summary]')
   if (!mount) return
 
   const complete = !!session.employmentComplete
@@ -820,7 +822,7 @@ const initEmployment = () => {
   }
   if (pageName === 'summary') {
     restoreAnalysis(session)
-    renderSummary(session)
+    renderSectionSummary(session)
     document.querySelector('[data-ee-go-analysis]')?.addEventListener('click', openAnalysisTab)
     document.querySelector('[data-ee-analysis-summary]')?.addEventListener('click', (event) => {
       const link = event.target.closest('[data-ee-edit-analysis]')
@@ -969,7 +971,7 @@ const initEmployment = () => {
     setSanSession({ ...answers, employmentComplete: true })
     const completedSession = getSanSession()
     applyProgress(completedSession)
-    renderSummary(completedSession)
+    renderSectionSummary(completedSession)
     openAnalysisTab()
     focusCompletedSection()
   })

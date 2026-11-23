@@ -11,7 +11,7 @@ import { escapeHtml, revealCheckedConditionals, updateCharacterCount, updateAllC
 import { applySanProgress } from './progress.js'
 
 // Pre-filled session for ?example=complete.
-const EXAMPLE_COMPLETE = {
+export const EXAMPLE_COMPLETE = {
   hasSomewhereToLive: 'yes',
   accommodationSettled: 'yes',
   releasePlans: 'yes',
@@ -402,7 +402,7 @@ const accommodationRows = (session) => {
       const reasons = Array.isArray(session.locationReasons) ? session.locationReasons : []
       const lines = reasonLines(LOCATION_REASON_LABELS, reasons, session.locationOtherDetails)
       rows.push(summaryRow(
-        "Why is the location of Alex's accommodation not suitable? (optional)",
+        "Why is the location of Alex's proposed accommodation not suitable? (optional)",
         lines.length ? lines : ['Not provided'],
         summaryChangeHref('accommodation-concerns', 'location'),
         lines.length ? { secondaryFrom: reasons.length } : {}
@@ -488,8 +488,10 @@ const analysisRows = (session) => {
 }
 
 // Check-your-answers for the questions tab and analysis tab.
-const renderSummary = (session) => {
-  const mount = document.querySelector('[data-san-summary]')
+export const sectionQuestionsComplete = (session) => detailsAnswered(session)
+
+export const renderSectionSummary = (session, target) => {
+  const mount = target || document.querySelector('[data-san-summary]')
   if (!mount) return
 
   const complete = !!session.accommodationComplete
@@ -885,7 +887,7 @@ const initSanAccommodation = () => {
   }
   if (pageName === 'summary') {
     restoreAnalysis(session)
-    renderSummary(session)
+    renderSectionSummary(session)
     document.querySelector('[data-san-go-analysis]')?.addEventListener('click', openAnalysisTab)
     document.querySelector('[data-san-analysis-summary]')?.addEventListener('click', (event) => {
       const link = event.target.closest('[data-san-edit-analysis]')
@@ -1010,7 +1012,7 @@ const initSanAccommodation = () => {
     setSanSession({ ...answers, accommodationComplete: true })
     const completedSession = getSanSession()
     applyProgress(completedSession)
-    renderSummary(completedSession)
+    renderSectionSummary(completedSession)
     openAnalysisTab()
     focusCompletedSection()
   })
