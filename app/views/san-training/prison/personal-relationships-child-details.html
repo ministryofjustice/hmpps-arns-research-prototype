@@ -9,7 +9,7 @@
 {% macro detailsTextarea(id, label, hint) %}
 <div class="govuk-form-group">
   <label class="govuk-label" for="{{ id }}">{{ label }}</label>
-  {% if hint %}<div id="{{ id }}-hint" class="govuk-hint">{{ hint }}</div>{% endif %}
+  {% if hint %}<div id="{{ id }}-hint" class="govuk-hint">{{ hint | safe }}</div>{% endif %}
   <textarea class="govuk-textarea" id="{{ id }}" name="{{ id | replace('-', '_') }}" rows="5" maxlength="2000"{% if hint %} aria-describedby="{{ id }}-hint"{% endif %}></textarea>
   <div class="govuk-hint san-character-count" data-san-character-count="{{ id }}">You have 2,000 characters remaining</div>
 </div>
@@ -31,15 +31,16 @@
   </div>
 
   <div class="govuk-form-group" data-san-error-group="relationships-children-visiting">
-    <fieldset class="govuk-fieldset" id="relationships-children-visiting">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m"><h2 class="govuk-fieldset__heading">Are there any children visiting Alex in custody?</h2></legend>
+    <fieldset class="govuk-fieldset" id="relationships-children-visiting" aria-describedby="relationships-children-visiting-hint">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m"><h2 class="govuk-fieldset__heading">Does Alex have contact with any children while in custody?</h2></legend>
+      <div id="relationships-children-visiting-hint" class="govuk-hint">This includes prison visits, video calls and phone calls.</div>
       <div class="govuk-radios" data-module="govuk-radios">
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="children-visiting-yes" name="relationships_children_visiting" type="radio" value="yes" data-aria-controls="conditional-children-visiting-yes">
           <label class="govuk-label govuk-radios__label" for="children-visiting-yes">Yes</label>
         </div>
         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-children-visiting-yes">
-          {{ detailsTextarea("children-visiting-yes-details", "Give details", "Include the name, age and sex of all children, how often they visit, and their relationship to Alex.") | safe }}
+          {{ detailsTextarea("children-visiting-yes-details", "Give details", "Include each child’s name and how often Alex has contact with them.<br>For any children not already recorded in this assessment, also include their age, sex and relationship to Alex.") | safe }}
         </div>
         <div class="govuk-radios__item">
           <input class="govuk-radios__input" id="children-visiting-no" name="relationships_children_visiting" type="radio" value="no">

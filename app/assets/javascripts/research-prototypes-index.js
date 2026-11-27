@@ -43,6 +43,40 @@ const resolvePrototypeHref = (version, href) => {
   return `${basePath}/${pagePath}`
 }
 
+const syncTabsWithLocation = (tabsRoot) => {
+  const requestedPanelId = window.location.hash.slice(1)
+  if (!requestedPanelId) return
+
+  const requestedPanel = tabsRoot.querySelector(`#${CSS.escape(requestedPanelId)}`)
+  const requestedTab = tabsRoot.querySelector(
+    `.govuk-tabs__tab[href="#${CSS.escape(requestedPanelId)}"]`
+  )
+  if (!requestedPanel || !requestedTab) return
+
+  tabsRoot.querySelectorAll('.govuk-tabs__tab').forEach((tab) => {
+    const selected = tab === requestedTab
+    tab.setAttribute('aria-selected', String(selected))
+    tab.setAttribute('tabindex', selected ? '0' : '-1')
+    tab.closest('.govuk-tabs__list-item')?.classList.toggle(
+      'govuk-tabs__list-item--selected',
+      selected
+    )
+  })
+
+  tabsRoot.querySelectorAll(':scope > .govuk-tabs__panel').forEach((panel) => {
+    panel.classList.toggle(
+      'govuk-tabs__panel--hidden',
+      panel !== requestedPanel
+    )
+  })
+}
+
+const setupIndexTabs = (tabsRoot) => {
+  const sync = () => syncTabsWithLocation(tabsRoot)
+  sync()
+  window.addEventListener('hashchange', sync)
+}
+
 const countWord = (count) => (count === 1 ? "change" : "changes")
 
 const visibleChanges = (container) => [...container.querySelectorAll("[data-change]")].filter((change) => !change.hidden)
@@ -156,6 +190,11 @@ const setupChangelog = (root) => {
 
 window.GOVUKPrototypeKit.documentReady(() => {
   document.querySelectorAll("[data-changelog]").forEach(setupChangelog)
+})
+
+window.GOVUKPrototypeKit.documentReady(() => {
+  document.querySelectorAll('.assessment-home-tabs[data-module="govuk-tabs"]')
+    .forEach(setupIndexTabs)
 })
 
 window.GOVUKPrototypeKit.documentReady(() => {

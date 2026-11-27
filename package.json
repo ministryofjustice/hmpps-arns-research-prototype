@@ -2,6 +2,7 @@
   "name": "hmpps-arns-prison-prototype",
   "description": "GOV.UK Prototype Kit prototype for the Tiering assessment (ARNS service)",
   "scripts": {
+    "postinstall": "node scripts/patch-prototype-kit.cjs",
     "dev": "govuk-prototype-kit dev",
     "serve": "govuk-prototype-kit serve",
     "start": "govuk-prototype-kit start",
